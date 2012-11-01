@@ -1,0 +1,122 @@
+\hypertarget{class_chunk}{\section{Référence de la classe Chunk}
+\label{class_chunk}\index{Chunk@{Chunk}}
+}
+
+
+\hyperlink{class_chunk}{Chunk}, partie de monde.  
+
+
+
+
+{\ttfamily \#include $<$Chunk.\-h$>$}
+
+Graphe d'héritage de Chunk\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_chunk}
+\end{center}
+\end{figure}
+\subsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_chunk_acc32e1562cad6664c98ee07edecdbdf9}{Chunk} ()
+\item 
+void \hyperlink{class_chunk_a07695d2f852efdda11d3150e674b4455}{Remove\-Bloc} (int x, int y, int z)
+\item 
+void \hyperlink{class_chunk_a82df93930a6014da19eb998e01013935}{Set\-Bloc} (int x, int y, int z, Bloc\-Type type)
+\item 
+Bloc\-Type \hyperlink{class_chunk_a24561023834375cccd736e01c0de0396}{Get\-Bloc} (int x, int y, int z)
+\item 
+\hyperlink{class_chunk_ad21b515f41c9a1d21740b9e7e3f8eede}{$\sim$\-Chunk} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Description détaillée}
+\hyperlink{class_chunk}{Chunk}, partie de monde. 
+
+Partie de monde chargee en memoire pour creer un monde infini. Herite de \hyperlink{class_bloc_array3d}{Bloc\-Array3d} 
+
+\subsection{Documentation des constructeurs et destructeur}
+\hypertarget{class_chunk_acc32e1562cad6664c98ee07edecdbdf9}{\index{Chunk@{Chunk}!Chunk@{Chunk}}
+\index{Chunk@{Chunk}!Chunk@{Chunk}}
+\subsubsection[{Chunk}]{\setlength{\rightskip}{0pt plus 5cm}Chunk\-::\-Chunk (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_chunk_acc32e1562cad6664c98ee07edecdbdf9}
+Constructeur avec les dimentions des constantes C\-H\-U\-N\-K\-\_\-\-S\-I\-Z\-E \hypertarget{class_chunk_ad21b515f41c9a1d21740b9e7e3f8eede}{\index{Chunk@{Chunk}!$\sim$\-Chunk@{$\sim$\-Chunk}}
+\index{$\sim$\-Chunk@{$\sim$\-Chunk}!Chunk@{Chunk}}
+\subsubsection[{$\sim$\-Chunk}]{\setlength{\rightskip}{0pt plus 5cm}Chunk\-::$\sim$\-Chunk (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_chunk_ad21b515f41c9a1d21740b9e7e3f8eede}
+Destructeur 
+
+\subsection{Documentation des fonctions membres}
+\hypertarget{class_chunk_a24561023834375cccd736e01c0de0396}{\index{Chunk@{Chunk}!Get\-Bloc@{Get\-Bloc}}
+\index{Get\-Bloc@{Get\-Bloc}!Chunk@{Chunk}}
+\subsubsection[{Get\-Bloc}]{\setlength{\rightskip}{0pt plus 5cm}Bloc\-Type Chunk\-::\-Get\-Bloc (
+\begin{DoxyParamCaption}
+\item[{int}]{x, }
+\item[{int}]{y, }
+\item[{int}]{z}
+\end{DoxyParamCaption}
+)}}\label{class_chunk_a24561023834375cccd736e01c0de0396}
+Get un bloc 
+\begin{DoxyParams}{Paramètres}
+{\em x} & position en x \\
+\hline
+{\em y} & position en y \\
+\hline
+{\em z} & position en z \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+Bloc\-Type 
+\end{DoxyReturn}
+\hypertarget{class_chunk_a07695d2f852efdda11d3150e674b4455}{\index{Chunk@{Chunk}!Remove\-Bloc@{Remove\-Bloc}}
+\index{Remove\-Bloc@{Remove\-Bloc}!Chunk@{Chunk}}
+\subsubsection[{Remove\-Bloc}]{\setlength{\rightskip}{0pt plus 5cm}void Chunk\-::\-Remove\-Bloc (
+\begin{DoxyParamCaption}
+\item[{int}]{x, }
+\item[{int}]{y, }
+\item[{int}]{z}
+\end{DoxyParamCaption}
+)}}\label{class_chunk_a07695d2f852efdda11d3150e674b4455}
+Enleve un bloc 
+\begin{DoxyParams}{Paramètres}
+{\em x} & position en x \\
+\hline
+{\em y} & position en y \\
+\hline
+{\em z} & position en z \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_chunk_a82df93930a6014da19eb998e01013935}{\index{Chunk@{Chunk}!Set\-Bloc@{Set\-Bloc}}
+\index{Set\-Bloc@{Set\-Bloc}!Chunk@{Chunk}}
+\subsubsection[{Set\-Bloc}]{\setlength{\rightskip}{0pt plus 5cm}void Chunk\-::\-Set\-Bloc (
+\begin{DoxyParamCaption}
+\item[{int}]{x, }
+\item[{int}]{y, }
+\item[{int}]{z, }
+\item[{Bloc\-Type}]{type}
+\end{DoxyParamCaption}
+)}}\label{class_chunk_a82df93930a6014da19eb998e01013935}
+Set un bloc 
+\begin{DoxyParams}{Paramètres}
+{\em x} & position en x \\
+\hline
+{\em y} & position en y \\
+\hline
+{\em z} & position en z \\
+\hline
+{\em type} & type de bloc \\
+\hline
+\end{DoxyParams}
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \-:\begin{DoxyCompactItemize}
+\item 
+Love\-Craft/\-Love\-Craft/Chunk.\-h\item 
+Love\-Craft/\-Love\-Craft/Chunk.\-cpp\end{DoxyCompactItemize}

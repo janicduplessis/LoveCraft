@@ -78,10 +78,14 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="BlocInfo.cpp" />
+    <ClCompile Include="BlocArray3d.cpp" />
+    <ClCompile Include="Chunk.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BlocArray3d.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="BlocInfo.h" />
+    <ClInclude Include="Chunk.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

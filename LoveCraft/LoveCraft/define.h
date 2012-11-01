@@ -1,15 +1,22 @@
-#ifndef BLOCK_TYPE
-#define BLOCK_TYPE
-enum BlockType
+#ifndef BLOC_TYPE
+#define BLOC_TYPE
+enum BlocType
 {
 	BTYPE_AIR,
 	BTYPE_DIRT,
 	BTYPE_GRASS
 };
-#endif // !BLOCK_TYPE
+#endif // !BLOC_TYPE
 
-#define CHUNK_SIZE_X = 16
-#define CHUNK_SIZE_Y = 128
-#define CHUNK_SIZE_Z = 16
+#ifndef CHUNK_SIZE_X
+#define CHUNK_SIZE_X 16
+#endif // !CHUNK_SIZE_X
 
+#ifndef CHUNK_SIZE_Y
+#define CHUNK_SIZE_Y 128
+#endif // !CHUNK_SIZE_Y
+
+#ifndef CHUNK_SIZE_Z
+#define CHUNK_SIZE_Z 16
+#endif // !CHUNK_SIZE_Z
 

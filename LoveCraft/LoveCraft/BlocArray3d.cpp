@@ -6,6 +6,7 @@
  */
 
 #include "BlocArray3d.h"
+#include <iostream>
 
 BlocArray3d::BlocArray3d(int x, int y, int z) : m_lenght(x * y * z), m_x(x), m_y(y), m_z(z)
 {
@@ -14,6 +15,15 @@ BlocArray3d::BlocArray3d(int x, int y, int z) : m_lenght(x * y * z), m_x(x), m_y
 
 	// Initialiser avec des BTYPE_AIR
 	Reset(BTYPE_AIR);
+}
+
+BlocArray3d::BlocArray3d(const BlocArray3d &blockArray) : m_lenght(blockArray.m_lenght)
+{
+	m_blocs = new BlocType[m_lenght];
+	for (int i = 0; i < m_lenght; i++)
+	{
+		m_blocs[i] = blockArray.m_blocs[i];
+	}
 }
 
 void BlocArray3d::Set(int x, int y, int z, BlocType type)
@@ -29,7 +39,7 @@ BlocType BlocArray3d::Get(int x, int y, int z) const
 void BlocArray3d::Reset(BlocType type)
 {
 	// Set tous les blocs au type donne
-	for (int i = 0; i < m_lenght; ++i)
+	for (int i = 0; i < m_lenght ; ++i)
 	{
 		m_blocs[i] = type;
 	}
@@ -37,5 +47,5 @@ void BlocArray3d::Reset(BlocType type)
 
 BlocArray3d::~BlocArray3d()
 {
-	delete[] m_blocs;
+	delete [] m_blocs;
 }

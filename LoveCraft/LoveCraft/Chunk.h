@@ -27,6 +27,11 @@ public:
 	Chunk();
 
 	/**
+	 * Constructeur de copie
+	 */
+	Chunk(const Chunk& chunk);
+
+	/**
 	 * Enleve un bloc
 	 * @param x		position en x
 	 * @param y		position en y
@@ -51,7 +56,7 @@ public:
 	 * @param z		position en z
 	 * @return		BlocType
 	 */
-	BlocType GetBloc(int x, int y , int z);
+	BlocType GetBloc(int x, int y , int z) const;
 
 	/**
 	 * Destructeur

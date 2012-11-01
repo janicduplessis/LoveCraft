@@ -30,8 +30,21 @@ int BlocInfo::GetDurabilite() const
 
 void BlocInfo::Afficher() const
 {
+	std::string strType;
+	switch (m_type)
+	{
+	case BTYPE_AIR:
+		strType = "Air";
+		break;
+	case BTYPE_DIRT:
+		strType = "Dirt";
+		break;
+	case BTYPE_GRASS:
+		strType = "Grass";
+		break;
+	}
 	std::cout << "Nom" << " : " << m_nom << std::endl;
-	std::cout << "Type" << " : " << m_type << std::endl;
+	std::cout << "Type" << " : " << strType << std::endl;
 	std::cout << "Durabilite" << " : " << m_durabilite << std::endl;
 }
 

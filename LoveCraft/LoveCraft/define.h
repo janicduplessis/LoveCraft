@@ -1,3 +1,5 @@
+#include <iostream>
+
 #ifndef BLOC_TYPE
 #define BLOC_TYPE
 enum BlocType
@@ -7,6 +9,10 @@ enum BlocType
 	BTYPE_GRASS
 };
 #endif // !BLOC_TYPE
+
+#ifndef TRACE
+#define TRACE(x) std::cout << __FILE__ << ":" << __LINE__ << ": " << x << std::endl
+#endif // !TRACE
 
 #ifndef CHUNK_SIZE_X
 #define CHUNK_SIZE_X 16

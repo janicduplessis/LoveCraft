@@ -17,7 +17,8 @@ BlocArray3d::BlocArray3d(int x, int y, int z) : m_lenght(x * y * z), m_x(x), m_y
 	Reset(BTYPE_AIR);
 }
 
-BlocArray3d::BlocArray3d(const BlocArray3d &blockArray) : m_lenght(blockArray.m_lenght)
+BlocArray3d::BlocArray3d(const BlocArray3d& blockArray) : 
+	m_lenght(blockArray.m_lenght), m_x(blockArray.m_x), m_y(blockArray.m_y), m_z(blockArray.m_z)
 {
 	m_blocs = new BlocType[m_lenght];
 	for (int i = 0; i < m_lenght; i++)
@@ -47,5 +48,5 @@ void BlocArray3d::Reset(BlocType type)
 
 BlocArray3d::~BlocArray3d()
 {
-	delete [] m_blocs;
+	delete[] m_blocs;
 }

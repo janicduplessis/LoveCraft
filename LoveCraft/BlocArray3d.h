@@ -27,7 +27,7 @@ public:
 	/**
 	 * Constructeur de copie
 	 */
-	BlocArray3d(const BlocArray3d &);
+	BlocArray3d(const BlocArray3d& blockArray);
 
 	/**
 	 * Set le type d'un bloc à la position specifiée

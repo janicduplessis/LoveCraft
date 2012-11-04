@@ -8,9 +8,8 @@
 #include "BlocInfo.h"
 #include <iostream>
 
-BlocInfo::BlocInfo(BlocType type, const std::string& nom) : m_type(type), m_nom(nom)
+BlocInfo::BlocInfo(BlocType type, const std::string& nom) : m_type(type), m_nom(nom), m_durabilite(1)
 {
-	m_durabilite = 0;
 }
 
 BlocType BlocInfo::GetType() const

@@ -11,6 +11,16 @@
 
 int main()
 {
+	int * test20 = new int[20];
+	test20[19] = NULL;
+	int i = 0;
+	while(test20 != NULL) {
+		std::cout << *test20 << "    " << i << std::endl;
+		test20++;
+		i++;
+	}
+
+
 	Chunk c;
 	c.GetBloc(9,9,9);
 	c.GetBloc(0,0,0);

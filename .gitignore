@@ -1,4 +1,9 @@
 *.suo
 *.sdf
-[Dd]ebug*/
-[Bb]in*/
+*.exe
+*.ilk
+*.pdb
+*.obj
+*.idb
+*.log
+*.tlog

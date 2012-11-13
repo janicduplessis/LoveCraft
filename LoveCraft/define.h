@@ -1,3 +1,10 @@
+/*
+ *	define.h
+ *
+ *	Created on: 2012-10-31
+ *	Author: Janic Duplessis
+ */
+
 #include <iostream>
 
 #ifndef BLOC_TYPE

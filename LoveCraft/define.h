@@ -1,35 +1,34 @@
-/*
- *	define.h
- *
- *	Created on: 2012-10-31
- *	Author: Janic Duplessis
- */
+#ifndef DEFINE_H__
+#define DEFINE_H__
 
-#include <iostream>
+#include <SFML/Window.hpp>
 
-#ifndef BLOC_TYPE
-#define BLOC_TYPE
-enum BlocType
-{
-	BTYPE_AIR,
-	BTYPE_DIRT,
-	BTYPE_GRASS
-};
-#endif // !BLOC_TYPE
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
-#ifndef TRACE
-#define TRACE(x) std::cout << __FILE__ << ":" << __LINE__ << ": " << x << std::endl
-#endif // !TRACE
+#include <gl/GL.h>
+#include <gl/GLU.h>
 
-#ifndef CHUNK_SIZE_X
+typedef unsigned char uint8;
+typedef unsigned short uint16;
+typedef unsigned int uint32;
+typedef unsigned long long uint64;
+
+typedef char int8;
+typedef short int16;
+typedef int int32;
+typedef long long int64;
+
+
 #define CHUNK_SIZE_X 16
-#endif // !CHUNK_SIZE_X
-
-#ifndef CHUNK_SIZE_Y
 #define CHUNK_SIZE_Y 128
-#endif // !CHUNK_SIZE_Y
-
-#ifndef CHUNK_SIZE_Z
 #define CHUNK_SIZE_Z 16
-#endif // !CHUNK_SIZE_Z
 
+enum BlockType {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS};
+
+
+#define TEXTURE_PATH        "../LoveCraft/media/textures/"
+#define VIEW_DISTANCE       128
+
+#endif // DEFINE_H__

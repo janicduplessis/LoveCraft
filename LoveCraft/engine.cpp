@@ -40,6 +40,8 @@ void Engine::Init()
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0Diff);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0Spec);
 
+	m_player = Player();
+
 	CenterMouse();
 	HideCursor();
 }
@@ -64,11 +66,16 @@ void Engine::Render(float elapsedTime)
 
 	gameTime += elapsedTime;
 
+	m_player.Move(m_dirFront, m_dirBack, m_dirLeft, m_dirRight, gameTime);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Transformations initiales
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
+	m_player.ApplyRotation();
+	m_player.ApplyTranslation();
 
 	// Plancher
 	m_textureFloor.Bind();
@@ -121,7 +128,7 @@ void Engine::Render(float elapsedTime)
 	glTexCoord2f(0, nbRep);
 	glVertex3f(4.f, 100.f, -100.f);
 	glEnd();
-	
+
 	//Cube
 	m_textureCube.Bind();
 
@@ -212,6 +219,18 @@ void Engine::KeyPressEvent(unsigned char key)
 {
 	switch(key)
 	{
+	case 0:    // A
+		m_dirLeft = true;
+		break;
+	case 3:    // D
+		m_dirRight = true;
+		break;
+	case 22:   // W
+		m_dirFront = true;
+		break;
+	case 18:   // S
+		m_dirBack = true;
+		break;
 	case 36:	// ESC
 		Stop();
 		break;
@@ -228,6 +247,18 @@ void Engine::KeyReleaseEvent(unsigned char key)
 {
 	switch(key)
 	{
+	case 0:    // A
+		m_dirLeft = false;
+		break;
+	case 3:    // D
+		m_dirRight = false;
+		break;
+	case 22:   // W
+		m_dirFront = false;
+		break;
+	case 18:   // S
+		m_dirBack = false;
+		break;
 	case 24:       // Y
 		m_wireframe = !m_wireframe;
 		if(m_wireframe)

@@ -3,6 +3,7 @@
 #include "define.h"
 #include "openglcontext.h"
 #include "texture.h"
+#include "Player.h"
 
 class Engine : public OpenglContext
 {
@@ -29,6 +30,12 @@ private:
 
     Texture m_textureFloor;
 	Texture m_textureCube;
+	Player m_player;
+
+	bool m_dirLeft;
+	bool m_dirRight;
+	bool m_dirFront;
+	bool m_dirBack;
 };
 
 #endif // ENGINE_H__

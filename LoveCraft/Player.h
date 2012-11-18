@@ -4,7 +4,8 @@
 class Player
 {
 public:
-	Player(float posX = 0, float posY = 0, float posZ = 0, float rotX = 0, float rotY = 0);
+	Player();
+	Player(float posX, float posY, float posZ, float rotX, float rotY);
 	~Player();
 
 	void TurnLeftRight ( float value );

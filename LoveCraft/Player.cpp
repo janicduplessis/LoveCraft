@@ -3,10 +3,14 @@
 #include <cmath>
 
 
-Player::Player(float posX, float posY, float posZ, float rotX, float rotY)
+Player::Player() :m_posX(0.f), m_posY(0.f), m_posZ(0.f), m_rotX(0.f), m_rotY(0.f)
 {
 }
 
+Player::Player(float posX, float posY, float posZ, float rotX, float rotY)
+	:m_posX(posX), m_posY(posY), m_posZ(posZ), m_rotX(rotX), m_rotY(rotY)
+{
+}
 
 Player::~Player()
 {

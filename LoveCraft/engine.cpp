@@ -55,6 +55,8 @@ void Engine::LoadResource()
 {
 	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
 	LoadTexture(m_textureCube, TEXTURE_PATH "cu_default.png");
+	LoadTexture(m_textureWall, TEXTURE_PATH "wall-red.bmp");
+	LoadTexture(m_textureCeiling, TEXTURE_PATH "checker-gold.bmp");
 }
 
 void Engine::UnloadResource()
@@ -94,6 +96,9 @@ void Engine::Render(float elapsedTime)
 	glVertex3f(-100.f, -2.f, -100.f);
 	glEnd();
 
+	//Plafond
+
+	m_textureCeiling.Bind();
 	glBegin(GL_QUADS);
 	glNormal3f(1, 1, 1);
 	glTexCoord2f(0, 0);
@@ -107,28 +112,54 @@ void Engine::Render(float elapsedTime)
 	glEnd();
 
 	//Murs
+	m_textureWall.Bind();
+	//Gauche
 	glBegin(GL_QUADS);
 	glNormal3f(1, 1, 1);
 	glTexCoord2f(0, 0);
-	glVertex3f(-4.f, -2.f, -100.f);
-	glTexCoord2f(5, 0);
-	glVertex3f(-4.f, -2.f, 100.f);
-	glTexCoord2f(5, 5);
-	glVertex3f(-4.f, 2.f, 100.f);
-	glTexCoord2f(0, 5);
-	glVertex3f(-4.f, 2.f, -100.f);
+	glVertex3f(-8.f, -2.f, -100.f);
+	glTexCoord2f(1, 0);
+	glVertex3f(-8.f, -2.f, 100.f);
+	glTexCoord2f(1, 1);
+	glVertex3f(-8.f, 2.f, 100.f);
+	glTexCoord2f(0, 1);
+	glVertex3f(-8.f, 2.f, -100.f);
 	glEnd();
-
+	//Droite
 	glBegin(GL_QUADS);
 	glNormal3f(1, 1, 1);
 	glTexCoord2f(0, 0);
-	glVertex3f(4.f, -2.f, -100.f);
-	glTexCoord2f(5, 0);
-	glVertex3f(4.f, 2.f, -100.f);
-	glTexCoord2f(5, 5);
-	glVertex3f(4.f, 2.f, 100.f);
-	glTexCoord2f(0, 5);
-	glVertex3f(4.f, -2.f, 100.f);
+	glVertex3f(8.f, -2.f, -100.f);
+	glTexCoord2f(0, 1);
+	glVertex3f(8.f, 2.f, -100.f);
+	glTexCoord2f(1, 1);
+	glVertex3f(8.f, 2.f, 100.f);
+	glTexCoord2f(1, 0);
+	glVertex3f(8.f, -2.f, 100.f);
+	glEnd();
+	//Front
+	glBegin(GL_QUADS);
+	glNormal3f(1, 1, 1);
+	glTexCoord2f(0, 0);
+	glVertex3f(-8.f, -2.f, -16.f);
+	glTexCoord2f(1, 0);
+	glVertex3f(8.f, -2.f, -16.f);
+	glTexCoord2f(1, 1);
+	glVertex3f(8.f, 2.f, -16.f);
+	glTexCoord2f(0, 1);
+	glVertex3f(-8.f, 2.f, -16.f);
+	glEnd();
+	//Back
+	glBegin(GL_QUADS);
+	glNormal3f(1, 1, 1);
+	glTexCoord2f(0, 0);
+	glVertex3f(-8.f, -2.f, 8.f);
+	glTexCoord2f(0, 1);
+	glVertex3f(-8.f, 2.f, 8.f);
+	glTexCoord2f(1, 1);
+	glVertex3f(8.f, 2.f, 8.f);
+	glTexCoord2f(1, 0);
+	glVertex3f(8.f, -2.f, 8.f);
 	glEnd();
 
 	//Cube
@@ -136,7 +167,7 @@ void Engine::Render(float elapsedTime)
 
 	glTranslatef(0, 0, -8.f);
 	glRotatef(m_angle, -0.5f, 0.7f, 1.f);
-	m_angle+= 5.f;
+	m_angle+= 3.f;
 
 	//Première face à z = -1
 	glBegin(GL_QUADS);

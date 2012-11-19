@@ -120,24 +120,24 @@ void Engine::Render(float elapsedTime)
 	glNormal3f(1, 1, 1);
 	glTexCoord2f(0, 0);
 	glVertex3f(-8.f, -2.f, -100.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(-8.f, -2.f, 100.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(-8.f, 2.f, 100.f);
 	glTexCoord2f(0, 1);
 	glVertex3f(-8.f, 2.f, -100.f);
+	glTexCoord2f(1, 1);
+	glVertex3f(-8.f, 2.f, 100.f);
+	glTexCoord2f(1, 0);
+	glVertex3f(-8.f, -2.f, 100.f);
 	glEnd();
 	//Droite
 	glBegin(GL_QUADS);
 	glNormal3f(1, 1, 1);
 	glTexCoord2f(0, 0);
 	glVertex3f(8.f, -2.f, -100.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(8.f, 2.f, -100.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(8.f, 2.f, 100.f);
 	glTexCoord2f(1, 0);
 	glVertex3f(8.f, -2.f, 100.f);
+	glTexCoord2f(1, 1);
+	glVertex3f(8.f, 2.f, 100.f);
+	glTexCoord2f(0, 1);
+	glVertex3f(8.f, 2.f, -100.f);
 	glEnd();
 	//Front
 	glBegin(GL_QUADS);

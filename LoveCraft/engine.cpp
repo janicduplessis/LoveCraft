@@ -5,7 +5,8 @@
 
 
 
-Engine::Engine() : m_wireframe(false), m_angle(0)
+Engine::Engine() : m_wireframe(false), m_angle(0), m_dirBack(false), m_dirFront(false), m_dirLeft(false), m_dirRight(false),
+	m_run(false), m_ghostMode(false)
 {
 }
 
@@ -66,7 +67,7 @@ void Engine::Render(float elapsedTime)
 
 	gameTime += elapsedTime;
 
-	m_player.Move(m_dirFront, m_dirBack, m_dirLeft, m_dirRight, gameTime);
+	m_player.Move(m_dirFront, m_dirBack, m_dirLeft, m_dirRight, m_run, m_ghostMode, elapsedTime);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -82,7 +83,7 @@ void Engine::Render(float elapsedTime)
 	float nbRep = 200.f;
 
 	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);            // Normal vector
+	glNormal3f(1, 1, 1);
 	glTexCoord2f(0, 0);
 	glVertex3f(-100.f, -2.f, 100.f);
 	glTexCoord2f(nbRep, 0);
@@ -94,7 +95,7 @@ void Engine::Render(float elapsedTime)
 	glEnd();
 
 	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);            // Normal vector
+	glNormal3f(1, 1, 1);
 	glTexCoord2f(0, 0);
 	glVertex3f(-100.f, 2.f, 100.f);
 	glTexCoord2f(nbRep, 0);
@@ -105,28 +106,29 @@ void Engine::Render(float elapsedTime)
 	glVertex3f(-100.f, 2.f, -100.f);
 	glEnd();
 
+	//Murs
 	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);            // Normal vector
+	glNormal3f(1, 1, 1);
 	glTexCoord2f(0, 0);
-	glVertex3f(-4.f, -100.f, 100.f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(-4.f, 100.f, 100.f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(-4.f, -100.f, -100.f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(-4.f, 100.f, -100.f);
+	glVertex3f(-4.f, -2.f, -100.f);
+	glTexCoord2f(5, 0);
+	glVertex3f(-4.f, -2.f, 100.f);
+	glTexCoord2f(5, 5);
+	glVertex3f(-4.f, 2.f, 100.f);
+	glTexCoord2f(0, 5);
+	glVertex3f(-4.f, 2.f, -100.f);
 	glEnd();
 
 	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);            // Normal vector
+	glNormal3f(1, 1, 1);
 	glTexCoord2f(0, 0);
-	glVertex3f(4.f, -100.f, 100.f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(4.f, 100.f, 100.f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(4.f, -100.f, -100.f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(4.f, 100.f, -100.f);
+	glVertex3f(4.f, -2.f, -100.f);
+	glTexCoord2f(5, 0);
+	glVertex3f(4.f, 2.f, -100.f);
+	glTexCoord2f(5, 5);
+	glVertex3f(4.f, 2.f, 100.f);
+	glTexCoord2f(0, 5);
+	glVertex3f(4.f, -2.f, 100.f);
 	glEnd();
 
 	//Cube
@@ -231,6 +233,21 @@ void Engine::KeyPressEvent(unsigned char key)
 	case 18:   // S
 		m_dirBack = true;
 		break;
+	case 38:   // Shift
+		m_run = true;
+		break;
+	case 71:   // Left arrow
+		m_player.TurnLeftRight(-3.f);
+		break;
+	case 72:   // Right arrow
+		m_player.TurnLeftRight(3.f);
+		break;
+	case 73:   // Up arrow
+		m_player.TurnTopBottom(3.f);
+		break;
+	case 74:   // Down arrow
+		m_player.TurnTopBottom(-3.f);
+		break;
 	case 36:	// ESC
 		Stop();
 		break;
@@ -259,12 +276,19 @@ void Engine::KeyReleaseEvent(unsigned char key)
 	case 18:   // S
 		m_dirBack = false;
 		break;
+	case 38:   // Shift
+		m_run = false;
+		break;
 	case 24:       // Y
 		m_wireframe = !m_wireframe;
 		if(m_wireframe)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		else
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		break;
+	case 6:		   // G
+		m_ghostMode = !m_ghostMode;
+		std::cout << "Ghost Mode set to: " << m_ghostMode << std::endl;
 		break;
 	}
 }
@@ -278,6 +302,9 @@ void Engine::MouseMoveEvent(int x, int y)
 	// MouseMoveEvent, etc
 	if(x == (Width() / 2) && y == (Height() / 2))
 		return;
+	MakeRelativeToCenter(x, y);
+	m_player.TurnLeftRight((float)x);
+	m_player.TurnTopBottom((float)y);
 	CenterMouse();
 }
 

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['blocarray3d',['BlocArray3d',['../class_bloc_array3d.html#a2373a99394ee13b3993f1957f95ae855',1,'BlocArray3d::BlocArray3d(int x, int y, int z)'],['../class_bloc_array3d.html#ac429cd0a7edce542d9b104d1d1fd14a6',1,'BlocArray3d::BlocArray3d(const BlocArray3d &amp;blocArray)']]],
-  ['blocinfo',['BlocInfo',['../class_bloc_info.html#af3d37558770983e57ec830853320bc70',1,'BlocInfo']]]
+  ['begin',['begin',['../classsf_1_1_string.html#a8ec30ddc08e3a6bd11c99aed782f6dfe',1,'sf::String::begin()'],['../classsf_1_1_string.html#a09bbf7704847ed35bf1c18aca6fba2a2',1,'sf::String::begin() const ']]],
+  ['bind',['bind',['../classsf_1_1_shader.html#ab170f43610b4fcc7c69a55575650fb95',1,'sf::Shader::bind()'],['../classsf_1_1_texture.html#ae4063cbdf35eb24645bf5f267ac5b78d',1,'sf::Texture::bind()'],['../classsf_1_1_udp_socket.html#ab0bf8d32849836f92beb2fd734565481',1,'sf::UdpSocket::bind()']]]
 ];

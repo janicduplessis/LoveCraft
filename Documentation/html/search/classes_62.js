@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['blocarray3d',['BlocArray3d',['../class_bloc_array3d.html',1,'']]],
-  ['blocinfo',['BlocInfo',['../class_bloc_info.html',1,'']]]
+  ['blockarray3d',['BlockArray3d',['../class_block_array3d.html',1,'']]],
+  ['blockinfo',['BlockInfo',['../class_block_info.html',1,'']]]
 ];

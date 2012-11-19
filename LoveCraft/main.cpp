@@ -11,5 +11,5 @@ int main()
 
     Engine engine;
     engine.SetMaxFps(60);
-    engine.Start("mcclone", 800, 600, false);
+    engine.Start("LoveCraft", 800, 600, false);
 }

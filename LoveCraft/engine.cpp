@@ -97,7 +97,6 @@ void Engine::Render(float elapsedTime)
 	glEnd();
 
 	//Plafond
-
 	m_textureCeiling.Bind();
 	glBegin(GL_QUADS);
 	glNormal3f(1, 1, 1);

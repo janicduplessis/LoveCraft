@@ -9,8 +9,6 @@ class Engine : public OpenglContext
 {
 public:
 	/**
-	* DESCRIPTION
-	*
 	* Constructeur par défaut de la classe
 	*
 	*/

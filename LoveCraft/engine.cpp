@@ -178,11 +178,11 @@ void Engine::Render(float elapsedTime)
 	glNormal3f(0, 1, 0);
 	glTexCoord2f(0, 0);
 	glVertex3f(-0.5f, 0.5f, -0.5f);
-	glTexCoord2f(nbRep, 0);
+	glTexCoord2f(0, nbRep);
 	glVertex3f(-0.5f, 0.5f, 0.5f);
 	glTexCoord2f(nbRep, nbRep);
 	glVertex3f(0.5f, 0.5f, 0.5f);
-	glTexCoord2f(0, nbRep);
+	glTexCoord2f(nbRep, 0);
 	glVertex3f(0.5f, 0.5f, -0.5f);
 	glEnd();
 
@@ -204,11 +204,11 @@ void Engine::Render(float elapsedTime)
 	glNormal3f(0, 0, 1);
 	glTexCoord2f(0, 0);
 	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glTexCoord2f(nbRep, 0);
+	glTexCoord2f(0, nbRep);
 	glVertex3f(-0.5f, -0.5f, 0.5f);
 	glTexCoord2f(nbRep, nbRep);
 	glVertex3f(0.5f, -0.5f, 0.5f);
-	glTexCoord2f(0, nbRep);
+	glTexCoord2f(nbRep, 0);
 	glVertex3f(0.5f, 0.5f, 0.5f);
 	glEnd();
 
@@ -217,11 +217,11 @@ void Engine::Render(float elapsedTime)
 	glNormal3f(0, 0, 1);
 	glTexCoord2f(0, 0);
 	glVertex3f(-0.5f, 0.5f, -0.5f);
-	glTexCoord2f(0, nbRep);
+	glTexCoord2f(nbRep, 0);
 	glVertex3f(0.5f, 0.5f, -0.5f);
 	glTexCoord2f(nbRep, nbRep);
 	glVertex3f(0.5f, -0.5f, -0.5f);
-	glTexCoord2f(nbRep, 0);
+	glTexCoord2f(0, nbRep);
 	glVertex3f(-0.5f, -0.5f, -0.5f);
 	glEnd();
 
@@ -230,11 +230,11 @@ void Engine::Render(float elapsedTime)
 	glNormal3f(-1, 0, 0);
 	glTexCoord2f(0, 0);
 	glVertex3f(-0.5f, 0.5f, -0.5f);
-	glTexCoord2f(nbRep, 0);
+	glTexCoord2f(0, nbRep);
 	glVertex3f(-0.5f, -0.5f, -0.5f);
 	glTexCoord2f(nbRep, nbRep);
 	glVertex3f(-0.5f, -0.5f, 0.5f);
-	glTexCoord2f(0, nbRep);
+	glTexCoord2f(nbRep, 0);
 	glVertex3f(-0.5f, 0.5f, 0.5f);
 	glEnd();
 
@@ -243,11 +243,11 @@ void Engine::Render(float elapsedTime)
 	glNormal3f(1, 0, 0);
 	glTexCoord2f(0, 0);
 	glVertex3f(0.5f, 0.5f, -0.5f);
-	glTexCoord2f(0, nbRep);
+	glTexCoord2f(nbRep, 0);
 	glVertex3f(0.5f, 0.5f, 0.5f);
 	glTexCoord2f(nbRep, nbRep);
 	glVertex3f(0.5f, -0.5f, 0.5f);
-	glTexCoord2f(nbRep, 0);
+	glTexCoord2f(0, nbRep);
 	glVertex3f(0.5f, -0.5f, -0.5f);
 	glEnd();
 }
@@ -272,16 +272,16 @@ void Engine::KeyPressEvent(unsigned char key)
 		m_run = true;
 		break;
 	case 71:   // Left arrow
-		m_player.TurnLeftRight(-3.f);
+		m_player.TurnLeftRight(-20.f);
 		break;
 	case 72:   // Right arrow
-		m_player.TurnLeftRight(3.f);
+		m_player.TurnLeftRight(20.f);
 		break;
 	case 73:   // Up arrow
-		m_player.TurnTopBottom(3.f);
+		m_player.TurnTopBottom(20.f);
 		break;
 	case 74:   // Down arrow
-		m_player.TurnTopBottom(-3.f);
+		m_player.TurnTopBottom(-20.f);
 		break;
 	case 36:	// ESC
 		Stop();

@@ -27,6 +27,9 @@ void Engine::Init()
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_LIGHTING);
 	glEnable (GL_LINE_SMOOTH);
+	glFrontFace( GL_CCW );
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
 
 
 	// Light
@@ -102,15 +105,15 @@ void Engine::Render(float elapsedTime)
 	glNormal3f(1, 1, 1);
 	glTexCoord2f(0, 0);
 	glVertex3f(-100.f, 2.f, 100.f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(100.f, 2.f, 100.f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(100.f, 2.f, -100.f);
 	glTexCoord2f(0, nbRep);
 	glVertex3f(-100.f, 2.f, -100.f);
+	glTexCoord2f(nbRep, nbRep);
+	glVertex3f(100.f, 2.f, -100.f);
+	glTexCoord2f(nbRep, 0);
+	glVertex3f(100.f, 2.f, 100.f);
 	glEnd();
 
-	//Murs
+	// Murs
 	m_textureWall.Bind();
 	//Gauche
 	glBegin(GL_QUADS);
@@ -168,82 +171,84 @@ void Engine::Render(float elapsedTime)
 	glRotatef(m_angle, -0.5f, 0.7f, 1.f);
 	m_angle+= 3.f;
 
-	//Première face à z = -1
+	// Face dessus
+	nbRep = 1.f;
+	m_textureCube.Bind();
 	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
+	glNormal3f(0, 1, 0);
 	glTexCoord2f(0, 0);
-	glVertex3f(-1.f, -1.f, -1.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(1.f, -1.f, -1.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(1.f, 1.f, -1.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(-1.f, 1.f, -1.f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(nbRep, 0);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(nbRep, nbRep);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glTexCoord2f(0, nbRep);
+	glVertex3f(0.5f, 0.5f, -0.5f);
 	glEnd();
 
-	//Deuxième face à z = 1
+	// Face dessous
 	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
+	glNormal3f(0, -1, 0);
 	glTexCoord2f(0, 0);
-	glVertex3f(-1.f, -1.f, 1.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(-1.f, 1.f, 1.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(1.f, 1.f, 1.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(1.f, -1.f, 1.f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(0, nbRep);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glTexCoord2f(nbRep, nbRep);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(nbRep, 0);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
 	glEnd();
 
-	//Troisième face à y = 1
+	// Face devant
 	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
+	glNormal3f(0, 0, 1);
 	glTexCoord2f(0, 0);
-	glVertex3f(-1.f, 1.f, -1.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(1.f, 1.f, -1.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(1.f, 1.f, 1.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(-1.f, 1.f, 1.f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(nbRep, 0);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glTexCoord2f(nbRep, nbRep);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(0, nbRep);
+	glVertex3f(0.5f, 0.5f, 0.5f);
 	glEnd();
 
-	//Quatrième face à y = -1
+	// Face arriere
 	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
+	glNormal3f(0, 0, 1);
 	glTexCoord2f(0, 0);
-	glVertex3f(-1.f, -1.f, -1.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(-1.f, -1.f, 1.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(1.f, -1.f, 1.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(1.f, -1.f, -1.f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0, nbRep);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(nbRep, nbRep);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glTexCoord2f(nbRep, 0);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
 	glEnd();
 
-	//Cinquième face à x = 1
+	// Face gauche
 	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
+	glNormal3f(-1, 0, 0);
 	glTexCoord2f(0, 0);
-	glVertex3f(1.f, -1.f, -1.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(1.f, -1.f, 1.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(1.f, 1.f, 1.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(1.f, 1.f, -1.f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(nbRep, 0);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(nbRep, nbRep);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glTexCoord2f(0, nbRep);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
 	glEnd();
 
-	//Sixième face à x = -1
+	// Face droite
 	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
+	glNormal3f(1, 0, 0);
 	glTexCoord2f(0, 0);
-	glVertex3f(-1.f, -1.f, -1.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(-1.f, 1.f, -1.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(-1.f, 1.f, 1.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(-1.f, -1.f, 1.f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0, nbRep);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glTexCoord2f(nbRep, nbRep);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(nbRep, 0);
+	glVertex3f(0.5f, -0.5f, -0.5f);
 	glEnd();
 }
 

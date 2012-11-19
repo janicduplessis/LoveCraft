@@ -9,92 +9,74 @@ class Engine : public OpenglContext
 {
 public:
 	/**
-	* Constructeur par défaut de la classe
-	*
-	*/
+	 * Constructeur par défaut de la classe
+	 */
 	Engine();
+
 	/**
-	* DESCRIPTION
-	*
-	* Destructeur par défaut de la classe
-	*
-	*/
+	 * Destructeur par défaut de la classe
+	 */
 	virtual ~Engine();
+
 	/**
-	* DESCRIPTION
-	*
-	* Initialisation des composantes du jeu
-	*
-	*/
+	 * Initialisation des composantes du jeu
+	 */
 	virtual void Init();
+
 	virtual void DeInit();
 	/**
-	* DESCRIPTION
-	*
-	* Chargement des ressources en mémoire
-	*
-	*/
+	 * Chargement des ressources en mémoire
+	 */
 	virtual void LoadResource();
+
 	virtual void UnloadResource();
+
 	/**
-	* DESCRIPTION
-	*
-	* Render tous les vertex du jeu
-	*
-	* @param elapsedTime Temps en millisecondes depuis la dernier
-	* tour de boucle
-	*
-	*/
+	 * Render tous les vertex du jeu (Game loop)
+	 *
+	 * @param elapsedTime	Temps en millisecondes depuis le dernier
+	 *						tour de boucle
+	 */
 	virtual void Render(float elapsedTime);
+
 	/**
-	* DESCRIPTION
-	*
-	* Évènement appelé lorsqu'une touche du clavier est enfoncée
-	*
-	* @param key Touche qui a déclenché l'évènement
-	*
-	*/
+	 * Évènement appelé lorsqu'une touche du clavier est enfoncée
+	 *
+	 * @param key	 Touche qui a déclenché l'évènement
+	 */
 	virtual void KeyPressEvent(unsigned char key);
+
 	/**
-	* DESCRIPTION
-	*
-	* Évènement appelé lorsqu'une touche du clavier est relâchée
-	*
-	* @param key Touche qui a déclenché l'évènement
-	*
-	*/
+	 * Évènement appelé lorsqu'une touche du clavier est relâchée
+	 *
+	 * @param key	Touche qui a déclenché l'évènement
+	 */
 	virtual void KeyReleaseEvent(unsigned char key);
+
 	/**
-	* DESCRIPTION
-	*
-	* Évènement appelé lorsque la position de la souris est modifiée
-	*
-	* @param x Position en X de la souris au moment du déclenchement de l'évènement
-	* @param y Position en Y de la souris au moment du déclenchement de l'évènement
-	*
-	*/
+	 * Évènement appelé lorsque la position de la souris est modifiée
+	 *
+	 * @param x Position en X de la souris au moment du déclenchement de l'évènement
+	 * @param y Position en Y de la souris au moment du déclenchement de l'évènement
+	 */
 	virtual void MouseMoveEvent(int x, int y);
+
 	/**
-	* DESCRIPTION
-	*
-	* Évènement appelé lorsqu'une touche de la souris est enfoncée
-	*
-	* @param button Bouton qui a déclenché l'évènement
-	* @param x Coordonnée en X de l'endroit d'où l'évènement a été déclenché
-	* @param y Coordonnée en Y de l'endroit d'où l'évènement a été déclenché
-	*
-	*/
+	 * Évènement appelé lorsqu'une touche de la souris est enfoncée
+	 *
+	 * @param button Bouton qui a déclenché l'évènement
+	 * @param x Coordonnée en X de l'endroit d'où l'évènement a été déclenché
+	 * @param y Coordonnée en Y de l'endroit d'où l'évènement a été déclenché
+	 */
 	virtual void MousePressEvent(const MOUSE_BUTTON &button, int x, int y);
+
 	/**
-	* DESCRIPTION
-	*
-	* Évènement appelé lorsqu'une touche de la souris est relâchée
-	*
-	* @param button Bouton qui a déclenché l'évènement
-	* @param x Coordonnée en X de l'endroit d'où l'évènement a été déclenché
-	* @param y Coordonnée en Y de l'endroit d'où l'évènement a été déclenché
-	*
-	*/
+	 * Évènement appelé lorsqu'une touche de la souris est relâchée
+	 *
+	 * @param button Bouton qui a déclenché l'évènement
+	 * @param x Coordonnée en X de l'endroit d'où l'évènement a été déclenché
+	 * @param y Coordonnée en Y de l'endroit d'où l'évènement a été déclenché
+	 */
 	virtual void MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y);
 
 private:

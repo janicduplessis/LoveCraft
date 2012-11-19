@@ -28,7 +28,7 @@ typedef long long int64;
 enum BlockType {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS};
 
 
-#define TEXTURE_PATH        "../LoveCraft/media/textures/"
+#define TEXTURE_PATH        "../lovecraft/media/textures/"
 #define VIEW_DISTANCE       128
 
 #endif // DEFINE_H__

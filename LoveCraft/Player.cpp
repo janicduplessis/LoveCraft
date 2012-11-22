@@ -3,8 +3,8 @@
 #include <cmath>
 #include <iostream>
 
-Player::Player(float posX, float posY, float posZ, float rotX, float rotY)
-	:m_posX(posX), m_posY(posY), m_posZ(posZ), m_rotX(rotX), m_rotY(rotY)
+Player::Player(Vector3f position, float rotX, float rotY)
+	:m_pos(position), m_rotX(rotX), m_rotY(rotY)
 {
 }
 
@@ -33,10 +33,10 @@ void Player::Move ( bool front , bool back , bool left , bool right , bool run, 
 		float xRotRad, yRotRad;
 		yRotRad = (m_rotY / 180 * PII);
 		xRotRad = (m_rotX / 180 * PII);
-		m_posX += float(sin(yRotRad)) * (run? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (1.f + elapsedTime);
-		m_posZ -= float(cos(yRotRad)) * (run? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (1.f + elapsedTime);
+		m_pos.x += float(sin(yRotRad)) * (run? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (1.f + elapsedTime);
+		m_pos.z -= float(cos(yRotRad)) * (run? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (1.f + elapsedTime);
 		if (ghost)
-			m_posY -= float(sin(xRotRad)) * (run? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (1.f + elapsedTime);
+			m_pos.y -= float(sin(xRotRad)) * (run? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (1.f + elapsedTime);
 	}
 
 	if (back)
@@ -44,25 +44,25 @@ void Player::Move ( bool front , bool back , bool left , bool right , bool run, 
 		float xRotRad, yRotRad;
 		yRotRad = (m_rotY / 180 * PII);
 		xRotRad = (m_rotX / 180 * PII);
-		m_posX -= float(sin(yRotRad)) * MOUVEMENT_SPEED_BACKWARD * (1.f + elapsedTime);
-		m_posZ += float(cos(yRotRad)) * MOUVEMENT_SPEED_BACKWARD * (1.f + elapsedTime);
+		m_pos.x -= float(sin(yRotRad)) * MOUVEMENT_SPEED_BACKWARD * (1.f + elapsedTime);
+		m_pos.z += float(cos(yRotRad)) * MOUVEMENT_SPEED_BACKWARD * (1.f + elapsedTime);
 		if (ghost)
-			m_posY += float(sin(xRotRad)) * MOUVEMENT_SPEED_BACKWARD * (1.f + elapsedTime);
+			m_pos.y += float(sin(xRotRad)) * MOUVEMENT_SPEED_BACKWARD * (1.f + elapsedTime);
 	}
 	if (right)
 	{
 		float yRotRad;
 		yRotRad = (m_rotY / 180 * PII);
-		m_posX += float(cos(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
-		m_posZ += float(sin(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
+		m_pos.x += float(cos(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
+		m_pos.z += float(sin(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
 	}
 
 	if (left)
 	{
 		float yRotRad;
 		yRotRad = (m_rotY / 180 * PII);
-		m_posX -= float(cos(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
-		m_posZ -= float(sin(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
+		m_pos.x -= float(cos(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
+		m_pos.z -= float(sin(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
 	}
 }
 
@@ -73,5 +73,10 @@ void Player::ApplyRotation () const
 }
 void Player::ApplyTranslation () const
 {
-	glTranslatef(-m_posX, -m_posY, -m_posZ);
+	glTranslatef(- m_pos.x, - m_pos.y, - m_pos.z);
+}
+
+Vector3f Player::GetPosition() const
+{
+	return m_pos;
 }

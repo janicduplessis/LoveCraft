@@ -16,6 +16,13 @@ Engine::~Engine()
 
 void Engine::Init()
 {
+	GLenum err = glewInit ();
+	if( err != GLEW_OK )
+	{
+		std :: cerr << " Error while initializing glew .. abording (" << glewGetErrorString ( err) << ")" << std :: endl ;
+		abort ();
+	}
+
 	glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
 	glEnable( GL_TEXTURE_2D );
 
@@ -27,8 +34,6 @@ void Engine::Init()
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_LIGHTING);
 	glEnable (GL_LINE_SMOOTH);
-	glFrontFace( GL_CCW );
-	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
 
 
@@ -95,131 +100,6 @@ void Engine::Render(float elapsedTime)
 	glVertex3f(100.f, -2.f, -100.f);
 	glTexCoord2f(0, nbRep);
 	glVertex3f(-100.f, -2.f, -100.f);
-	glEnd();
-
-	// Plafond
-	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(-100.f, 2.f, 100.f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(-100.f, 2.f, -100.f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(100.f, 2.f, -100.f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(100.f, 2.f, 100.f);
-	glEnd();
-
-	// Murs
-	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(-4.f, -2.f, -100.f);
-	glTexCoord2f(0, 5);
-	glVertex3f(-4.f, 2.f, -100.f);
-	glTexCoord2f(5, 5);
-	glVertex3f(-4.f, 2.f, 100.f);
-	glTexCoord2f(5, 0);
-	glVertex3f(-4.f, -2.f, 100.f);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(4.f, -2.f, -100.f);
-	glTexCoord2f(0, 5);
-	glVertex3f(4.f, -2.f, 100.f);
-	glTexCoord2f(5, 5);
-	glVertex3f(4.f, 2.f, 100.f);
-	glTexCoord2f(5, 0);
-	glVertex3f(4.f, 2.f, -100.f);
-	glEnd();
-
-	//Cube
-	m_textureCube.Bind();
-
-	glTranslatef(0, 0, -8.f);
-	glRotatef(m_angle, -0.5f, 0.7f, 1.f);
-	m_angle+= 5.f;
-
-	// Face dessus
-	nbRep = 1.f;
-	m_textureCube.Bind();
-	glBegin(GL_QUADS);
-	glNormal3f(0, 1, 0);
-	glTexCoord2f(0, 0);
-	glVertex3f(-0.5f, 0.5f, -0.5f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(0.5f, 0.5f, 0.5f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(0.5f, 0.5f, -0.5f);
-	glEnd();
-
-	// Face dessous
-	glBegin(GL_QUADS);
-	glNormal3f(0, -1, 0);
-	glTexCoord2f(0, 0);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(0.5f, -0.5f, -0.5f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(-0.5f, -0.5f, 0.5f);
-	glEnd();
-
-	// Face devant
-	glBegin(GL_QUADS);
-	glNormal3f(0, 0, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(-0.5f, -0.5f, 0.5f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(0.5f, 0.5f, 0.5f);
-	glEnd();
-
-	// Face arriere
-	glBegin(GL_QUADS);
-	glNormal3f(0, 0, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(-0.5f, 0.5f, -0.5f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(0.5f, 0.5f, -0.5f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(0.5f, -0.5f, -0.5f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glEnd();
-
-	// Face gauche
-	glBegin(GL_QUADS);
-	glNormal3f(-1, 0, 0);
-	glTexCoord2f(0, 0);
-	glVertex3f(-0.5f, 0.5f, -0.5f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(-0.5f, -0.5f, 0.5f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glEnd();
-
-	// Face droite
-	glBegin(GL_QUADS);
-	glNormal3f(1, 0, 0);
-	glTexCoord2f(0, 0);
-	glVertex3f(0.5f, 0.5f, -0.5f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(0.5f, 0.5f, 0.5f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(0.5f, -0.5f, -0.5f);
 	glEnd();
 }
 

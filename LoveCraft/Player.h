@@ -1,6 +1,8 @@
 #ifndef PLAYER_H__
 #define PLAYER_H__
 
+#include "vector3.h"
+
 #define MOUSE_SENSIBILITY 0.1f
 #define MOUVEMENT_SPEED 0.2f
 #define MOUVEMENT_SPEED_RUN 0.35f
@@ -22,12 +24,18 @@ public:
 	 * @param rotX Angle de rotation initial en X du joueur
 	 * @param rotY Angle de rotation initial en Y du joueur
 	 */
-	Player(float posX = 0, float posY = 0, float posZ = 0, float rotX = 0, float rotY = 0);
+	Player(Vector3f position = Vector3f(), float rotX = 0, float rotY = 0);
 
 	/**
 	 * Destructeur par défaut de la classe
 	 */
 	~Player();
+
+	/**
+	 * Position du joueur
+	 * @return Vector3f
+	 */
+	Vector3f GetPosition() const;
 
 	/**
 	 * Applique les valeurs de l'angle de rotation sur l'axe des Y
@@ -70,9 +78,7 @@ public:
 	void ApplyTranslation () const ;
 
 private:
-	float m_posX;	// Position en X du joueur
-	float m_posY;	// Position en Y du joueur
-	float m_posZ;	// Position en Z du joueur
+	Vector3f m_pos; // Position du joueur
 
 	float m_rotX;	// Angle de rotation en X du joueur
 	float m_rotY;	// Angle de rotation en Y du joueur

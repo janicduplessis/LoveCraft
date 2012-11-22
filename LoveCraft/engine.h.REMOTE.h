@@ -88,8 +88,6 @@ private:
 
 	Texture m_textureFloor;
 	Texture m_textureCube;
-	Texture m_textureWall;
-	Texture m_textureCeiling;
 	Player m_player;
 
 	bool m_dirLeft;

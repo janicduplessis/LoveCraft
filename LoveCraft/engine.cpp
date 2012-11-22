@@ -63,6 +63,8 @@ void Engine::LoadResource()
 {
 	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
 	LoadTexture(m_textureCube, TEXTURE_PATH "cu_default.png");
+	LoadTexture(m_textureWall, TEXTURE_PATH "wall-red.bmp");
+	LoadTexture(m_textureCeiling, TEXTURE_PATH "checker-gold.bmp");
 }
 
 void Engine::UnloadResource()
@@ -101,6 +103,158 @@ void Engine::Render(float elapsedTime)
 	glTexCoord2f(0, nbRep);
 	glVertex3f(-100.f, -2.f, -100.f);
 	glEnd();
+
+	//Plafond
+	m_textureCeiling.Bind();
+	glBegin(GL_QUADS);
+	glNormal3f(1, 1, 1);
+	glTexCoord2f(0, 0);
+	glVertex3f(-100.f, 2.f, 100.f);
+	glTexCoord2f(0, nbRep);
+	glVertex3f(-100.f, 2.f, -100.f);
+	glTexCoord2f(nbRep, nbRep);
+	glVertex3f(100.f, 2.f, -100.f);
+	glTexCoord2f(nbRep, 0);
+	glVertex3f(100.f, 2.f, 100.f);
+	glEnd();
+
+	// Murs
+	m_textureWall.Bind();
+	//Gauche
+	glBegin(GL_QUADS);
+	glNormal3f(1, 1, 1);
+	glTexCoord2f(0, 0);
+	glVertex3f(-8.f, -2.f, -100.f);
+	glTexCoord2f(0, 1);
+	glVertex3f(-8.f, 2.f, -100.f);
+	glTexCoord2f(1, 1);
+	glVertex3f(-8.f, 2.f, 100.f);
+	glTexCoord2f(1, 0);
+	glVertex3f(-8.f, -2.f, 100.f);
+	glEnd();
+	//Droite
+	glBegin(GL_QUADS);
+	glNormal3f(1, 1, 1);
+	glTexCoord2f(0, 0);
+	glVertex3f(8.f, -2.f, -100.f);
+	glTexCoord2f(1, 0);
+	glVertex3f(8.f, -2.f, 100.f);
+	glTexCoord2f(1, 1);
+	glVertex3f(8.f, 2.f, 100.f);
+	glTexCoord2f(0, 1);
+	glVertex3f(8.f, 2.f, -100.f);
+	glEnd();
+	//Front
+	glBegin(GL_QUADS);
+	glNormal3f(1, 1, 1);
+	glTexCoord2f(0, 0);
+	glVertex3f(-8.f, -2.f, -16.f);
+	glTexCoord2f(1, 0);
+	glVertex3f(8.f, -2.f, -16.f);
+	glTexCoord2f(1, 1);
+	glVertex3f(8.f, 2.f, -16.f);
+	glTexCoord2f(0, 1);
+	glVertex3f(-8.f, 2.f, -16.f);
+	glEnd();
+	//Back
+	glBegin(GL_QUADS);
+	glNormal3f(1, 1, 1);
+	glTexCoord2f(0, 0);
+	glVertex3f(-8.f, -2.f, 8.f);
+	glTexCoord2f(0, 1);
+	glVertex3f(-8.f, 2.f, 8.f);
+	glTexCoord2f(1, 1);
+	glVertex3f(8.f, 2.f, 8.f);
+	glTexCoord2f(1, 0);
+	glVertex3f(8.f, -2.f, 8.f);
+	glEnd();
+
+	//Cube
+	m_textureCube.Bind();
+
+	glTranslatef(0, 0, -8.f);
+	glRotatef(m_angle, -0.5f, 0.7f, 1.f);
+	m_angle+= 3.f;
+
+	// Face dessus
+	nbRep = 1.f;
+	m_textureCube.Bind();
+	glBegin(GL_QUADS);
+	glNormal3f(0, 1, 0);
+	glTexCoord2f(0, 0);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0, nbRep);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(nbRep, nbRep);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glTexCoord2f(nbRep, 0);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glEnd();
+
+	// Face dessous
+	glBegin(GL_QUADS);
+	glNormal3f(0, -1, 0);
+	glTexCoord2f(0, 0);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(0, nbRep);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glTexCoord2f(nbRep, nbRep);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(nbRep, 0);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glEnd();
+
+	// Face devant
+	glBegin(GL_QUADS);
+	glNormal3f(0, 0, 1);
+	glTexCoord2f(0, 0);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(0, nbRep);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glTexCoord2f(nbRep, nbRep);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(nbRep, 0);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glEnd();
+
+	// Face arriere
+	glBegin(GL_QUADS);
+	glNormal3f(0, 0, 1);
+	glTexCoord2f(0, 0);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(nbRep, 0);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(nbRep, nbRep);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glTexCoord2f(0, nbRep);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glEnd();
+
+	// Face gauche
+	glBegin(GL_QUADS);
+	glNormal3f(-1, 0, 0);
+	glTexCoord2f(0, 0);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0, nbRep);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(nbRep, nbRep);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glTexCoord2f(nbRep, 0);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glEnd();
+
+	// Face droite
+	glBegin(GL_QUADS);
+	glNormal3f(1, 0, 0);
+	glTexCoord2f(0, 0);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(nbRep, 0);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glTexCoord2f(nbRep, nbRep);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(0, nbRep);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glEnd();
 }
 
 void Engine::KeyPressEvent(unsigned char key)
@@ -123,16 +277,16 @@ void Engine::KeyPressEvent(unsigned char key)
 		m_run = true;
 		break;
 	case 71:   // Left arrow
-		m_player.TurnLeftRight(-3.f);
+		m_player.TurnLeftRight(-20.f);
 		break;
 	case 72:   // Right arrow
-		m_player.TurnLeftRight(3.f);
+		m_player.TurnLeftRight(20.f);
 		break;
 	case 73:   // Up arrow
-		m_player.TurnTopBottom(3.f);
+		m_player.TurnTopBottom(20.f);
 		break;
 	case 74:   // Down arrow
-		m_player.TurnTopBottom(-3.f);
+		m_player.TurnTopBottom(-20.f);
 		break;
 	case 36:	// ESC
 		Stop();

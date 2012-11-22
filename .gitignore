@@ -7,3 +7,5 @@
 *.idb
 *.log
 *.tlog
+*.lastbuildstate
+*.opensdf

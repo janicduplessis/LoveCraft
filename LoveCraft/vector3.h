@@ -3,6 +3,9 @@
 
 #include "define.h"
 
+/**
+ * @brief Template class pour manipuler des vecteurs 3d
+ */
 template <class T>
 class Vector3 : public sf::Vector3<T>
 {

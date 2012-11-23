@@ -13,12 +13,12 @@ void Chunk::RemoveBloc(int x, int y, int z)
     m_blocks.Set(x, y, z, BTYPE_AIR);
 }
 
-void Chunk::SetBloc(int x, int y, int z, BlockType type)
+void Chunk::SetBloc(int x, int y, int z, BLOCK_TYPE type)
 {
     m_blocks.Set(x, y, z, type);
 }
 
-BlockType Chunk::GetBloc(int x, int y, int z)
+BLOCK_TYPE Chunk::GetBloc(int x, int y, int z)
 {
     return m_blocks.Get(x, y, z);
 }

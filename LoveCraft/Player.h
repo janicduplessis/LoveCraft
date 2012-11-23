@@ -2,6 +2,7 @@
 #define PLAYER_H__
 
 #include "vector3.h"
+#include "vector2.h"
 
 #define MOUSE_SENSIBILITY 0.1f
 #define MOUVEMENT_SPEED 0.2f
@@ -24,7 +25,7 @@ public:
 	 * @param rotX Angle de rotation initial en X du joueur
 	 * @param rotY Angle de rotation initial en Y du joueur
 	 */
-	Player(Vector3f position = Vector3f(), float rotX = 0, float rotY = 0);
+	Player(Vector3f position = Vector3f(), Vector2f rotation = Vector2f());
 
 	/**
 	 * Destructeur par défaut de la classe
@@ -79,9 +80,7 @@ public:
 
 private:
 	Vector3f m_pos; // Position du joueur
-
-	float m_rotX;	// Angle de rotation en X du joueur
-	float m_rotY;	// Angle de rotation en Y du joueur
+	Vector2f m_rot; // Rotation en x et y;
 };
 
 #endif // PLAYER_H__

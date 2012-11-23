@@ -1,7 +1,7 @@
 #include "blockinfo.h"
 #include <iostream>
 
-BlockInfo::BlockInfo(BlockType type, const std::string& nom) : m_type(type), m_nom(nom), m_durabilite(1)
+BlockInfo::BlockInfo(T type, const std::string& nom) : m_type(type), m_nom(nom), m_durabilite(1)
 {
 }
 
@@ -9,7 +9,7 @@ BlockInfo::~BlockInfo()
 {
 }
 
-BlockType BlockInfo::GetType() const
+T BlockInfo::GetType() const
 {
     return m_type;
 }

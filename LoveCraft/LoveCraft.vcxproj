@@ -54,13 +54,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Janic\Documents\LoveCraft\lovecraft\external\glew-1.7.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Janic\Documents\LoveCraft\lovecraft\external\Assimp\include;C:\Users\Janic\Documents\LoveCraft\lovecraft\external\glew-1.7.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>sfml-main-d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;GlU32.Lib;OpenGL32.Lib;DevIL.lib;ILU.lib;ILUT.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Janic\Documents\LoveCraft\lovecraft\external\glew-1.7.0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-main-d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;GlU32.Lib;assimp.lib;OpenGL32.Lib;DevIL.lib;ILU.lib;ILUT.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Janic\Documents\LoveCraft\lovecraft\external\Assimp\lib\x86;C:\Users\Janic\Documents\LoveCraft\lovecraft\external\glew-1.7.0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -82,10 +82,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="blockinfo.cpp" />
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="chunk.cpp" />
     <ClCompile Include="chunkmesh.cpp" />
+    <ClCompile Include="mesh.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="model.cpp" />
     <ClCompile Include="openglcontext.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="shader.cpp" />
@@ -95,16 +98,19 @@
   <ItemGroup>
     <ClInclude Include="array3d.h" />
     <ClInclude Include="blockinfo.h" />
+    <ClInclude Include="camera.h" />
     <ClInclude Include="chunk.h" />
     <ClInclude Include="chunkmesh.h" />
+    <ClInclude Include="mesh.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="array2d.h" />
+    <ClInclude Include="model.h" />
     <ClInclude Include="vector2.h" />
     <ClInclude Include="openglcontext.h" />
     <ClInclude Include="player.h" />
-    <ClInclude Include="gl\shader.h" />
-    <ClInclude Include="gl\texture.h" />
+    <ClInclude Include="shader.h" />
+    <ClInclude Include="texture.h" />
     <ClInclude Include="tool.h" />
     <ClInclude Include="vector3.h" />
   </ItemGroup>

@@ -12,6 +12,11 @@ Player::~Player()
 {
 }
 
+void Player::Init()
+{
+	m_model.Load("../lovecraft/models/monkey.obj");
+}
+
 void Player::TurnLeftRight ( float value )
 {
 	m_rot.y += value * MOUSE_SENSIBILITY;
@@ -60,23 +65,23 @@ void Player::Move ( bool front , bool back , bool left , bool right , bool run, 
 	if (left)
 	{
 		float yRotRad;
-		yRotRad = (m_rot.x / 180 * PII);
+		yRotRad = (m_rot.y / 180 * PII);
 		m_pos.x -= float(cos(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
 		m_pos.z -= float(sin(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
 	}
 }
 
-void Player::ApplyRotation () const
+void Player::DrawModel() const 
 {
-	glRotatef(m_rot.x, 1.f, 0.f, 0.f);
-	glRotatef(m_rot.y, 0.f, 1.f, 0.f);
-}
-void Player::ApplyTranslation () const
-{
-	glTranslatef(- m_pos.x, - m_pos.y, - m_pos.z);
+	m_model.Render();
 }
 
 Vector3f Player::GetPosition() const
 {
 	return m_pos;
+}
+
+Vector2f Player::GetRotation() const
+{
+	return m_rot;
 }

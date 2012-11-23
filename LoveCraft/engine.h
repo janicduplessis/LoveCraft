@@ -4,6 +4,7 @@
 #include "openglcontext.h"
 #include "texture.h"
 #include "Player.h"
+#include "camera.h"
 
 class Engine : public OpenglContext
 {
@@ -90,7 +91,9 @@ private:
 	Texture m_textureCube;
 	Texture m_textureWall;
 	Texture m_textureCeiling;
+
 	Player m_player;
+	Camera m_camera;
 
 	bool m_dirLeft;
 	bool m_dirRight;

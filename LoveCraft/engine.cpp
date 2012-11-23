@@ -36,7 +36,6 @@ void Engine::Init()
 	glEnable (GL_LINE_SMOOTH);
 	glEnable(GL_CULL_FACE);
 
-
 	// Light
 	GLfloat light0Pos[4]  = {0.0f, CHUNK_SIZE_Y, 0.0f, 1.0f};
 	GLfloat light0Amb[4]  = {0.9f, 0.9f, 0.9f, 1.0f};
@@ -49,7 +48,7 @@ void Engine::Init()
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0Diff);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0Spec);
 
-	m_player = Player();
+	m_player.Init();
 
 	CenterMouse();
 	HideCursor();
@@ -78,6 +77,7 @@ void Engine::Render(float elapsedTime)
 	gameTime += elapsedTime;
 
 	m_player.Move(m_dirFront, m_dirBack, m_dirLeft, m_dirRight, m_run, m_ghostMode, elapsedTime);
+	m_camera.SetPosition(m_player.GetPosition());
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -85,8 +85,10 @@ void Engine::Render(float elapsedTime)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	m_player.ApplyRotation();
-	m_player.ApplyTranslation();
+	m_camera.ApplyRotation();
+	m_camera.ApplyTranslation();
+
+	m_player.DrawModel();
 
 	// Plancher
 	m_textureFloor.Bind();
@@ -97,163 +99,10 @@ void Engine::Render(float elapsedTime)
 	glTexCoord2f(0, 0);
 	glVertex3f(-100.f, -2.f, 100.f);
 	glTexCoord2f(nbRep, 0);
-	glVertex3f(100.f, -2.f, 100.f);
-	glTexCoord2f(nbRep, nbRep);
+	glVertex3f(100.f, -2.f, 100.f);	glTexCoord2f(nbRep, nbRep);
 	glVertex3f(100.f, -2.f, -100.f);
 	glTexCoord2f(0, nbRep);
 	glVertex3f(-100.f, -2.f, -100.f);
-	glEnd();
-
-	//Plafond
-	m_textureCeiling.Bind();
-	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(-100.f, 2.f, 100.f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(-100.f, 2.f, -100.f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(100.f, 2.f, -100.f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(100.f, 2.f, 100.f);
-	glEnd();
-
-	// Murs
-	m_textureWall.Bind();
-	//Gauche
-	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(-8.f, -2.f, -100.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(-8.f, 2.f, -100.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(-8.f, 2.f, 100.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(-8.f, -2.f, 100.f);
-	glEnd();
-	//Droite
-	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(8.f, -2.f, -100.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(8.f, -2.f, 100.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(8.f, 2.f, 100.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(8.f, 2.f, -100.f);
-	glEnd();
-	//Front
-	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(-8.f, -2.f, -16.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(8.f, -2.f, -16.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(8.f, 2.f, -16.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(-8.f, 2.f, -16.f);
-	glEnd();
-	//Back
-	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(-8.f, -2.f, 8.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(-8.f, 2.f, 8.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(8.f, 2.f, 8.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(8.f, -2.f, 8.f);
-	glEnd();
-
-	//Cube
-	m_textureCube.Bind();
-
-	glTranslatef(0, 0, -8.f);
-	glRotatef(m_angle, -0.5f, 0.7f, 1.f);
-	m_angle+= 3.f;
-
-	// Face dessus
-	nbRep = 1.f;
-	m_textureCube.Bind();
-	glBegin(GL_QUADS);
-	glNormal3f(0, 1, 0);
-	glTexCoord2f(0, 0);
-	glVertex3f(-0.5f, 0.5f, -0.5f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(0.5f, 0.5f, 0.5f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(0.5f, 0.5f, -0.5f);
-	glEnd();
-
-	// Face dessous
-	glBegin(GL_QUADS);
-	glNormal3f(0, -1, 0);
-	glTexCoord2f(0, 0);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(0.5f, -0.5f, -0.5f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(-0.5f, -0.5f, 0.5f);
-	glEnd();
-
-	// Face devant
-	glBegin(GL_QUADS);
-	glNormal3f(0, 0, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(-0.5f, -0.5f, 0.5f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(0.5f, 0.5f, 0.5f);
-	glEnd();
-
-	// Face arriere
-	glBegin(GL_QUADS);
-	glNormal3f(0, 0, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(-0.5f, 0.5f, -0.5f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(0.5f, 0.5f, -0.5f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(0.5f, -0.5f, -0.5f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glEnd();
-
-	// Face gauche
-	glBegin(GL_QUADS);
-	glNormal3f(-1, 0, 0);
-	glTexCoord2f(0, 0);
-	glVertex3f(-0.5f, 0.5f, -0.5f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(-0.5f, -0.5f, 0.5f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glEnd();
-
-	// Face droite
-	glBegin(GL_QUADS);
-	glNormal3f(1, 0, 0);
-	glTexCoord2f(0, 0);
-	glVertex3f(0.5f, 0.5f, -0.5f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(0.5f, 0.5f, 0.5f);
-	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(0.5f, -0.5f, -0.5f);
 	glEnd();
 }
 
@@ -345,6 +194,9 @@ void Engine::MouseMoveEvent(int x, int y)
 	MakeRelativeToCenter(x, y);
 	m_player.TurnLeftRight((float)x);
 	m_player.TurnTopBottom((float)y);
+
+	m_camera.SetRotation(m_player.GetRotation());
+
 	CenterMouse();
 }
 

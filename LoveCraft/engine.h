@@ -5,6 +5,7 @@
 #include "texture.h"
 #include "Player.h"
 #include "camera.h"
+#include "shader.h"
 
 class Engine : public OpenglContext
 {
@@ -94,6 +95,8 @@ private:
 
 	Player m_player;
 	Camera m_camera;
+
+	Shader m_shader01;
 
 	bool m_dirLeft;
 	bool m_dirRight;

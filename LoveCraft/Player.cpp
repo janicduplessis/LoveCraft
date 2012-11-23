@@ -14,7 +14,7 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_model.Load("../lovecraft/models/monkey.obj");
+	m_model.Load(MODEL_PATH "monkey.obj");
 }
 
 void Player::TurnLeftRight ( float value )
@@ -71,7 +71,7 @@ void Player::Move ( bool front , bool back , bool left , bool right , bool run, 
 	}
 }
 
-void Player::DrawModel() const 
+void Player::Render() const 
 {
 	m_model.Render();
 }

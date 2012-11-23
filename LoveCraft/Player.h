@@ -4,6 +4,7 @@
 #include "vector3.h"
 #include "vector2.h"
 #include "model.h"
+#include "define.h"
 
 #define MOUSE_SENSIBILITY 0.1f
 #define MOUVEMENT_SPEED 0.2f
@@ -70,7 +71,7 @@ public:
 	 */
 	void Move ( bool front , bool back , bool left , bool right , bool run, bool ghost, float elapsedTime );
 
-	void DrawModel () const;
+	void Render () const;
 
 private:
 	Vector3f m_pos; // Position du joueur

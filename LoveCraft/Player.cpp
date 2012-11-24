@@ -1,4 +1,4 @@
-#include "Player.h"
+#include "player.h"
 #include "openglcontext.h"
 #include <cmath>
 #include <iostream>
@@ -72,11 +72,10 @@ void Player::Move ( bool front , bool back , bool left , bool right , bool run, 
 	}
 }
 
-void Player::Render(bool wireFrame, bool rotateModel)
+void Player::Render(bool wireFrame)
 {
 	m_model.SetPosition(m_pos);
-	if (rotateModel)
-		m_model.SetRotation(Vector3f(0, m_rot.y + 180, 0));
+	m_model.SetRotation(Vector3f(0, m_rot.y + 180, 0));
 	m_model.Render(wireFrame);
 }
 
@@ -88,4 +87,9 @@ Vector3f Player::GetPosition() const
 Vector2f Player::GetRotation() const
 {
 	return m_rot;
+}
+
+void Player::SetRotation( Vector2f rot )
+{
+	m_rot = rot;
 }

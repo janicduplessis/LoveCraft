@@ -87,6 +87,7 @@ private:
 private:
 	bool m_wireframe;
 	float m_angle;
+	float m_camRadius;
 
 	Texture m_textureFloor;
 	Texture m_textureCube;

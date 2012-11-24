@@ -83,6 +83,21 @@ void OpenglContext::CenterMouse()
 	sf::Mouse::setPosition(sf::Vector2i(Width() / 2, Height() / 2), m_app);
 }
 
+void OpenglContext::ResetMouse()
+{
+	sf::Mouse::setPosition(m_mousePos, m_app);
+}
+
+void OpenglContext::SetMousePos(int x, int y) 
+{
+	m_mousePos = sf::Vector2i(x, y);
+}
+
+bool OpenglContext::MousePosChanged(int x, int y)
+{
+	return x != m_mousePos.x || y != m_mousePos.y;
+}
+
 int OpenglContext::Width() const
 {
 	return m_app.getSize().x;
@@ -125,6 +140,12 @@ void OpenglContext::MakeRelativeToCenter(int& x, int& y) const
 {
     x = x - (Width() / 2);
     y = y - (Height() / 2);
+}
+
+void OpenglContext::MakeRelativeToMouse(int& x, int& y) const
+{
+	x = x - m_mousePos.x;
+	y = y - m_mousePos.y;
 }
 
 void OpenglContext::ShowCursor()

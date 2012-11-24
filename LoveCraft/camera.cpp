@@ -5,6 +5,20 @@ Camera::Camera( Vector3f position, Vector2f rotation) : m_pos(position), m_rot(r
 
 }
 
+void Camera::TurnLeftRight ( float value )
+{
+	m_rot.y += value * MOUSE_SENSIBILITY;
+}
+
+void Camera::TurnTopBottom ( float value )
+{
+	//Assignation de la nouvelle rotation
+	float newRotation = m_rot.x + value * MOUSE_SENSIBILITY;
+	//Test de la rotation entre les limites établies
+	if (newRotation >= -85.f && newRotation <= 85.f)
+		m_rot.x = newRotation;
+}
+
 Vector2f Camera::GetRotation() const
 {
 	return m_rot;

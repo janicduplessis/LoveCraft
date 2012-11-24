@@ -6,7 +6,7 @@
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_dirBack(false), m_dirFront(false), m_dirLeft(false), m_dirRight(false),
-	m_run(false), m_ghostMode(false), m_rightClick(false), m_leftClick(false)
+	m_run(false), m_ghostMode(false), m_rightClick(false), m_leftClick(false), m_camRadius(10)
 {
 }
 
@@ -103,14 +103,13 @@ void Engine::Render(float elapsedTime)
 			HideCursor();
 
 		// recule la camera
-		glTranslatef(0,0,-10);
+		glTranslatef(0,0,-m_camRadius);
 		// applique les transformations normales de la camera
 		m_camera.ApplyRotation();
 		m_camera.ApplyTranslation();
 
 		// render le modele du player
-		// si right clic le modele tourne avec la camera
-		m_player.Render(m_wireframe, m_rightClick);
+		m_player.Render(m_wireframe);
 
 	} 
 	// first person
@@ -162,7 +161,7 @@ void Engine::KeyPressEvent(unsigned char key)
 	case 94:	// F10
 		SetFullscreen(!IsFullscreen());
 		break;
-	case 21:
+	case 21:	// V
 		if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
 			m_camera.SetMode(Camera::CAM_THIRD_PERSON);
 		else
@@ -214,8 +213,25 @@ void Engine::MouseMoveEvent(int x, int y)
 	// dans une boucle infinie où l'appel à CenterMouse génère un
 	// MouseMoveEvent, qui rapelle CenterMouse qui rapelle un autre 
 	// MouseMoveEvent, etc
-	// Seulement calculer la rotation lorsque left ou right clic est actif en 3rd person view
-	if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON || m_rightClick || m_leftClick)
+
+	// Camera 3rd person
+	if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON && m_rightClick || m_leftClick)
+	{
+		if (!MousePosChanged(x, y))
+			return;
+		MakeRelativeToMouse(x, y);
+		m_camera.TurnLeftRight((float)x);
+		m_camera.TurnTopBottom((float)y);
+
+		if (m_rightClick) 
+		{
+			m_player.SetRotation(m_camera.GetRotation());
+		}
+
+		ResetMouse();
+	}
+	// Camera first person
+	else if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
 	{
 		if(x == (Width() / 2) && y == (Height() / 2))
 			return;
@@ -227,6 +243,7 @@ void Engine::MouseMoveEvent(int x, int y)
 
 		CenterMouse();
 	}
+
 }
 
 void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
@@ -234,13 +251,40 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 	switch (button)
 	{
 	case MOUSE_BUTTON_RIGHT:
-		m_rightClick = true;
+		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
+		{
+			m_rightClick = true;
+			SetMousePos(x, y);
+		}
 		break;
-
 	case MOUSE_BUTTON_LEFT:
-		m_leftClick = true;
+		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
+		{
+			m_leftClick = true;
+			m_camera.SetRotation(m_player.GetRotation());
+			SetMousePos(x, y);
+		}
 		break;
-
+	case MOUSE_BUTTON_WHEEL_UP:
+		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
+		{
+			// Zoom in camera
+			if (m_camRadius > 0)
+			{
+				m_camRadius -= 1;
+			}
+		}
+		break;
+	case MOUSE_BUTTON_WHEEL_DOWN:
+		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
+		{
+			// Zoom out camera
+			if (m_camRadius < 20)
+			{
+				m_camRadius += 1;
+			}
+		}
+		break;
 	}
 }
 
@@ -251,7 +295,6 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 	case MOUSE_BUTTON_RIGHT:
 		m_rightClick = false;
 		break;
-
 	case MOUSE_BUTTON_LEFT:
 		m_leftClick = false;
 		break;

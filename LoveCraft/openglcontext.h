@@ -47,7 +47,11 @@ public:
 
 protected:
     void CenterMouse();
+	void ResetMouse();
+	void SetMousePos(int x, int y);
+	bool MousePosChanged(int x, int y);
     void MakeRelativeToCenter(int& x, int& y) const;
+	void MakeRelativeToMouse(int& x, int& y) const;
 
     void ShowCursor();
     void HideCursor();
@@ -63,6 +67,7 @@ private:
     bool		m_fullscreen;
     std::string m_title;
 	float m_lastFrameTime;
+	sf::Vector2i m_mousePos; // position de la souris pour calculer la position relative
 };
 
 #endif // OPENGLCONTEXT_H__

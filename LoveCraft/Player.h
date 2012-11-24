@@ -6,10 +6,6 @@
 #include "model.h"
 #include "define.h"
 
-#define MOUSE_SENSIBILITY 0.1f
-#define MOUVEMENT_SPEED 0.2f
-#define MOUVEMENT_SPEED_RUN 0.35f
-#define MOUVEMENT_SPEED_BACKWARD 0.1f
 #define PII 3.141592654f
 
 /**
@@ -71,8 +67,8 @@ public:
 	 */
 	void Move ( bool front , bool back , bool left , bool right , bool run, bool ghost, float elapsedTime );
 
-	void Render (bool wireFrame = false, bool rotateModel = false);
-
+	void Render (bool wireFrame = false);
+	void SetRotation( Vector2f rot );
 private:
 	Vector3f m_pos; // Position du joueur
 	Vector2f m_rot; // Rotation en x et y;

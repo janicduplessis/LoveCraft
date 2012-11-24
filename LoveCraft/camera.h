@@ -3,6 +3,7 @@
 
 #include "vector2.h"
 #include "vector3.h"
+#include "define.h"
 
 class Camera
 {
@@ -46,8 +47,10 @@ public:
 	Mode GetMode() const;
 	void SetMode(Mode mode);
 
-	~Camera();
+	void TurnTopBottom ( float value );
+	void TurnLeftRight ( float value );
 
+	~Camera();
 private:
 	Vector3f m_pos;
 	Vector2f m_rot;

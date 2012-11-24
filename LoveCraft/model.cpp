@@ -73,6 +73,50 @@ void Model::SetMeshData( VertexData* vd, int vertexCount )
 
 void Model::Render(bool wireFrame) const
 {
+	glPushMatrix();
+	glTranslatef(m_pos.x, m_pos.y, m_pos.z);
+	glRotatef(-m_rot.x, 1.f, 0.f, 0.f);
+	glRotatef(-m_rot.y, 0.f, 1.f, 0.f);
+	glRotatef(-m_rot.z, 0.f, 0.f, 1.f);
 	Mesh::Render(wireFrame);
+	glPopMatrix();
+}
+
+void Model::Rotate( float x, float y, float z )
+{
+	Rotate(Vector3f(x, y, z));
+}
+
+void Model::Rotate( Vector3f rot )
+{
+	m_rot += rot;
+}
+
+void Model::Translate( float x, float y, float z )
+{
+	Translate(Vector3f(x, y, z));
+}
+
+void Model::Translate( Vector3f trans )
+{
+	m_pos += trans;
+}
+
+void Model::SetPosition(const Vector3f& pos) {
+	m_pos = pos;
+}
+
+Vector3f Model::GetPosition() const
+{
+	return m_pos;
+}
+
+void Model::SetRotation(const Vector3f& rot) {
+	m_rot = rot;
+}
+
+Vector3f Model::GetRotation() const
+{
+	return m_rot;
 }
 

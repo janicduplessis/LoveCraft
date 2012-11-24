@@ -104,6 +104,8 @@ private:
 	bool m_dirBack;
 	bool m_run;
 	bool m_ghostMode;
+	bool m_rightClick;
+	bool m_leftClick;
 };
 
 #endif // ENGINE_H__

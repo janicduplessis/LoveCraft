@@ -6,7 +6,7 @@
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_dirBack(false), m_dirFront(false), m_dirLeft(false), m_dirRight(false),
-	m_run(false), m_ghostMode(false)
+	m_run(false), m_ghostMode(false), m_rightClick(false), m_leftClick(false)
 {
 }
 
@@ -84,6 +84,7 @@ void Engine::Render(float elapsedTime)
 
 	gameTime += elapsedTime;
 
+	// calcul la position du joueur et de la camera
 	m_player.Move(m_dirFront, m_dirBack, m_dirLeft, m_dirRight, m_run, m_ghostMode, elapsedTime);
 	m_camera.SetPosition(m_player.GetPosition());
 
@@ -93,25 +94,32 @@ void Engine::Render(float elapsedTime)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+	// 3rd person
+	if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON ) {
+		// hide/show cursor
+		if (!m_rightClick && !m_leftClick)
+			ShowCursor();
+		else
+			HideCursor();
 
-	m_shader01.Use();
-	if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON) {
+		// recule la camera
+		glTranslatef(0,0,-10);
+		// applique les transformations normales de la camera
+		m_camera.ApplyRotation();
+		m_camera.ApplyTranslation();
 
-		glTranslatef(0.f, 0.f, -10.f);
-		glRotatef(m_camera.GetRotation().x, 1.0, 0.0, 0.0);
+		// render le modele du player
+		// si right clic le modele tourne avec la camera
+		m_player.Render(m_wireframe, m_rightClick);
 
-		m_player.Render(m_wireframe);
-
-		glRotatef(m_camera.GetRotation().y, 0.f, 1.f, 0.f); 
-		glTranslatef(- m_camera.GetPosition().x, 0.f, - m_camera.GetPosition().z);
-
-	}
+	} 
+	// first person
 	else
 	{
 		m_camera.ApplyRotation();
 		m_camera.ApplyTranslation();
 	}
-	Shader::Disable();
+
 
 	// Plancher
 	m_textureFloor.Bind();
@@ -206,23 +214,49 @@ void Engine::MouseMoveEvent(int x, int y)
 	// dans une boucle infinie où l'appel à CenterMouse génère un
 	// MouseMoveEvent, qui rapelle CenterMouse qui rapelle un autre 
 	// MouseMoveEvent, etc
-	if(x == (Width() / 2) && y == (Height() / 2))
-		return;
-	MakeRelativeToCenter(x, y);
-	m_player.TurnLeftRight((float)x);
-	m_player.TurnTopBottom((float)y);
+	// Seulement calculer la rotation lorsque left ou right clic est actif en 3rd person view
+	if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON || m_rightClick || m_leftClick)
+	{
+		if(x == (Width() / 2) && y == (Height() / 2))
+			return;
+		MakeRelativeToCenter(x, y);
+		m_player.TurnLeftRight((float)x);
+		m_player.TurnTopBottom((float)y);
 
-	m_camera.SetRotation(m_player.GetRotation());
+		m_camera.SetRotation(m_player.GetRotation());
 
-	CenterMouse();
+		CenterMouse();
+	}
 }
 
 void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 {
+	switch (button)
+	{
+	case MOUSE_BUTTON_RIGHT:
+		m_rightClick = true;
+		break;
+
+	case MOUSE_BUTTON_LEFT:
+		m_leftClick = true;
+		break;
+
+	}
 }
 
 void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 {
+	switch (button)
+	{
+	case MOUSE_BUTTON_RIGHT:
+		m_rightClick = false;
+		break;
+
+	case MOUSE_BUTTON_LEFT:
+		m_leftClick = false;
+		break;
+
+	}
 }
 
 bool Engine::LoadTexture(Texture& texture, const std::string& filename, bool stopOnError)

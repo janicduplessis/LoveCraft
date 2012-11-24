@@ -15,6 +15,7 @@ Player::~Player()
 void Player::Init()
 {
 	m_model.Load(MODEL_PATH "monkey.dae");
+	m_model.Rotate(0.f, 180.f, 0.f);
 }
 
 void Player::TurnLeftRight ( float value )
@@ -71,13 +72,12 @@ void Player::Move ( bool front , bool back , bool left , bool right , bool run, 
 	}
 }
 
-void Player::Render(bool wireFrame) const 
+void Player::Render(bool wireFrame, bool rotateModel)
 {
-	glPushMatrix();
-	glRotatef(180, 0.f, 1.f, 0.f);
+	m_model.SetPosition(m_pos);
+	if (rotateModel)
+		m_model.SetRotation(Vector3f(0, m_rot.y + 180, 0));
 	m_model.Render(wireFrame);
-	glPopMatrix();
-	
 }
 
 Vector3f Player::GetPosition() const

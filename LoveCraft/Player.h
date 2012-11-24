@@ -71,7 +71,7 @@ public:
 	 */
 	void Move ( bool front , bool back , bool left , bool right , bool run, bool ghost, float elapsedTime );
 
-	void Render (bool wireFrame = false) const;
+	void Render (bool wireFrame = false, bool rotateModel = false);
 
 private:
 	Vector3f m_pos; // Position du joueur

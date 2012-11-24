@@ -14,6 +14,7 @@ public:
         float x, y, z;
         float r, g, b;
         float u, v;
+		float n1, n2, n3;
 
         VertexData() {}
         VertexData(float _x, float _y, float _z, float _r, float _g, float _b, float _u, float _v) : x(_x), y(_y), z(_z), r(_r), g(_g), b(_b), u(_u), v(_v) {}
@@ -25,7 +26,7 @@ public:
     
     virtual bool IsValid() const;
     virtual void SetMeshData(VertexData* vd, int vertexCount);
-    virtual void Render() const;
+    virtual void Render(bool wireFrame = false) const;
 
     virtual int Count() const;
 

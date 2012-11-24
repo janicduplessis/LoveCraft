@@ -34,7 +34,8 @@ void Engine::Init()
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_LIGHTING);
 	glEnable (GL_LINE_SMOOTH);
-	glEnable(GL_CULL_FACE);
+	if (!m_wireframe)
+		glEnable(GL_CULL_FACE);
 
 	// Light
 	GLfloat light0Pos[4]  = {0.0f, CHUNK_SIZE_Y, 0.0f, 1.0f};
@@ -92,11 +93,24 @@ void Engine::Render(float elapsedTime)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	m_camera.ApplyRotation();
-	m_camera.ApplyTranslation();
 
 	m_shader01.Use();
-	m_player.Render();
+	if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON) {
+
+		glTranslatef(0.f, 0.f, -10.f);
+		glRotatef(m_camera.GetRotation().x, 1.0, 0.0, 0.0);
+
+		m_player.Render(m_wireframe);
+
+		glRotatef(m_camera.GetRotation().y, 0.f, 1.f, 0.f); 
+		glTranslatef(- m_camera.GetPosition().x, 0.f, - m_camera.GetPosition().z);
+
+	}
+	else
+	{
+		m_camera.ApplyRotation();
+		m_camera.ApplyTranslation();
+	}
 	Shader::Disable();
 
 	// Plancher
@@ -134,23 +148,17 @@ void Engine::KeyPressEvent(unsigned char key)
 	case 38:   // Shift
 		m_run = true;
 		break;
-	case 71:   // Left arrow
-		m_player.TurnLeftRight(-20.f);
-		break;
-	case 72:   // Right arrow
-		m_player.TurnLeftRight(20.f);
-		break;
-	case 73:   // Up arrow
-		m_player.TurnTopBottom(20.f);
-		break;
-	case 74:   // Down arrow
-		m_player.TurnTopBottom(-20.f);
-		break;
 	case 36:	// ESC
 		Stop();
 		break;
 	case 94:	// F10
 		SetFullscreen(!IsFullscreen());
+		break;
+	case 21:
+		if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
+			m_camera.SetMode(Camera::CAM_THIRD_PERSON);
+		else
+			m_camera.SetMode(Camera::CAM_FIRST_PERSON);
 		break;
 	default:
 		std::cout << "Unhandled key: " << (int)key << std::endl;

@@ -1,6 +1,6 @@
 #include "camera.h"
 
-Camera::Camera( Vector3f position, Vector2f rotation) : m_pos(position), m_rot(rotation)
+Camera::Camera( Vector3f position, Vector2f rotation) : m_pos(position), m_rot(rotation), m_mode(CAM_FIRST_PERSON)
 {
 
 }
@@ -34,6 +34,16 @@ void Camera::ApplyRotation() const
 void Camera::ApplyTranslation() const
 {
 	glTranslatef(- m_pos.x, - m_pos.y, - m_pos.z);
+}
+
+Camera::Mode Camera::GetMode() const
+{
+	return m_mode;
+}
+
+void Camera::SetMode( Mode mode )
+{
+	m_mode = mode;
 }
 
 Camera::~Camera()

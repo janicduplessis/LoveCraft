@@ -55,7 +55,7 @@ void Mesh::SetMeshData(VertexData* vd, int vertexCount){
     m_isValid = true;
 }
 
-void Mesh::Render() const
+void Mesh::Render(bool wireFrame) const
 {
     if(IsValid())
     {
@@ -67,9 +67,11 @@ void Mesh::Render() const
         glColorPointer(3, GL_FLOAT, sizeof(VertexData), (char*)12);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glTexCoordPointer(2, GL_FLOAT, sizeof(VertexData), (char*)24);
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glNormalPointer(GL_FLOAT, sizeof(VertexData), (char*)32);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
-        glDrawElements(GL_QUADS, m_vertexCount, GL_UNSIGNED_SHORT, (char*)0);
+        glDrawElements(wireFrame ? GL_LINES : GL_QUADS, m_vertexCount, GL_UNSIGNED_SHORT, (char*)0);
         // TODO
         //glDrawRangeElements(GL_TRIANGLES, 0, 3, 3, GL_UNSIGNED_SHORT, (char*)0);
 

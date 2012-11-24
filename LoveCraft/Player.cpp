@@ -14,7 +14,7 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_model.Load(MODEL_PATH "monkey.obj");
+	m_model.Load(MODEL_PATH "monkey.dae");
 }
 
 void Player::TurnLeftRight ( float value )
@@ -71,9 +71,13 @@ void Player::Move ( bool front , bool back , bool left , bool right , bool run, 
 	}
 }
 
-void Player::Render() const 
+void Player::Render(bool wireFrame) const 
 {
-	m_model.Render();
+	glPushMatrix();
+	glRotatef(180, 0.f, 1.f, 0.f);
+	m_model.Render(wireFrame);
+	glPopMatrix();
+	
 }
 
 Vector3f Player::GetPosition() const

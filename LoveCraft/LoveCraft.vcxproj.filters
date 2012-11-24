@@ -9,6 +9,10 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{50568266-686c-4aa6-a6f5-cef18f7fe1e9}</UniqueIdentifier>
+      <Extensions>frag;vert</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -103,5 +107,13 @@
     <ClInclude Include="chunkmesh.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="media\shader\shader01.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="media\shader\shader01.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -11,5 +11,8 @@ int main()
 
     Engine engine;
     engine.SetMaxFps(60);
-    engine.Start("LoveCraft", 800, 600, false);
+	int resX = GetSystemMetrics(SM_CXSCREEN);
+	int resY = GetSystemMetrics(SM_CYSCREEN);
+	std::cout << "Screen resolution : " << resX << " x " << resY << std::endl; 
+    engine.Start("LoveCraft", resX, resY, true);
 }

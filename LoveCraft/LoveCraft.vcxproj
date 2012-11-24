@@ -114,6 +114,10 @@
     <ClInclude Include="tool.h" />
     <ClInclude Include="vector3.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="media\shader\shader01.frag" />
+    <None Include="media\shader\shader01.vert" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

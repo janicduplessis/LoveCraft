@@ -1,15 +1,10 @@
 #include "model.h"
+#include <iostream>
 
 
-Model::Model() : Mesh()
-{
+Model::Model() {}
 
-}
-
-Model::~Model()
-{
-
-}
+Model::~Model() {}
 
 bool Model::Load( const std::string filePath )
 {
@@ -21,6 +16,7 @@ bool Model::Load( const std::string filePath )
 	// If the import failed
 	if( !scene)
 	{
+		std::cout << "failed to load model : " << filePath << std::endl;
 		return false;
 	}
 
@@ -31,7 +27,7 @@ bool Model::Load( const std::string filePath )
 		VertexData* vertices = new VertexData[mesh->mNumVertices];
 
 		// Converti en struct VertexData
-		for (int j = 0; j < mesh->mNumVertices; j++)
+		for (uint32 j = 0; j < mesh->mNumVertices; j++)
 		{
 			VertexData& v = vertices[j];
 
@@ -50,9 +46,16 @@ bool Model::Load( const std::string filePath )
 				v.u = mesh->mTextureCoords[j]->x;
 				v.v = mesh->mTextureCoords[j]->y;
 			}
+
+			if (mesh->HasNormals()) {
+				v.n1 = mesh->mNormals[j].x;
+				v.n2 = mesh->mNormals[j].x;
+				v.n3 = mesh->mNormals[j].x;
+			}
+
 		}
 
-		Mesh::SetMeshData(vertices, mesh->mNumVertices);
+		SetMeshData(vertices, mesh->mNumVertices);
 
 		if (vertices)
 			delete [] vertices;
@@ -61,3 +64,15 @@ bool Model::Load( const std::string filePath )
 	return true;
 
 }
+
+void Model::SetMeshData( VertexData* vd, int vertexCount )
+{
+
+	Mesh::SetMeshData(vd, vertexCount);
+}
+
+void Model::Render(bool wireFrame) const
+{
+	Mesh::Render(wireFrame);
+}
+

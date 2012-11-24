@@ -7,6 +7,8 @@
 class Camera
 {
 public:
+	enum Mode {CAM_FIRST_PERSON, CAM_THIRD_PERSON};
+
 	/**
 	 * Constructeur de la classe.  Valeurs par defaut a 0
 	 * 
@@ -41,11 +43,16 @@ public:
 	 */
 	void ApplyTranslation () const ;
 
+	Mode GetMode() const;
+	void SetMode(Mode mode);
+
 	~Camera();
 
 private:
 	Vector3f m_pos;
 	Vector2f m_rot;
+
+	Mode m_mode;
 };
 
 #endif // !CAMERA_H__

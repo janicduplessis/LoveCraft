@@ -162,10 +162,15 @@ void Engine::KeyPressEvent(unsigned char key)
 		SetFullscreen(!IsFullscreen());
 		break;
 	case 21:	// V
-		if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
+		if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON) 
+		{
 			m_camera.SetMode(Camera::CAM_THIRD_PERSON);
-		else
+		}
+		else 
+		{
+			HideCursor();
 			m_camera.SetMode(Camera::CAM_FIRST_PERSON);
+		}
 		break;
 	default:
 		std::cout << "Unhandled key: " << (int)key << std::endl;
@@ -254,6 +259,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
 		{
 			m_rightClick = true;
+			m_player.SetRotation(m_camera.GetRotation());
 			SetMousePos(x, y);
 		}
 		break;
@@ -261,7 +267,6 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
 		{
 			m_leftClick = true;
-			m_camera.SetRotation(m_player.GetRotation());
 			SetMousePos(x, y);
 		}
 		break;

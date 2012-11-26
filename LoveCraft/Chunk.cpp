@@ -83,7 +83,7 @@ void Chunk::Render() const
 	m_chunkMesh.Render();
 }
 
-void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& count ,BLOCK_TYPE bt, int x, int y, int z)
+void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& count, BLOCK_TYPE bt, int x, int y, int z)
 {
 	// front		Color: Magenta
 	vd[ count ++] = ChunkMesh::VertexData (x - .5f, y - .5f, z + .5f, 1.f, 0.f, 1.f, 0.f, 0.f);

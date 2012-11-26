@@ -62,15 +62,11 @@ void Engine::DeInit()
 void Engine::LoadResource()
 {
 	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
-	LoadTexture(m_textureCube, TEXTURE_PATH "cu_default.png");
-	LoadTexture(m_textureWall, TEXTURE_PATH "wall-red.bmp");
-	LoadTexture(m_textureCeiling, TEXTURE_PATH "checker-gold.bmp");
-
-	std::cout << " Loading and compiling shaders ..." << std::endl ;
-	if (! m_shader01 . Load ( SHADER_PATH "shader01.vert", SHADER_PATH "shader01.frag", true ))
+	std::cout << " Loading and compiling shaders ..." << std::endl;
+	if (!m_shader01.Load(SHADER_PATH "shader01.vert", SHADER_PATH "shader01.frag", true))
 	{
-		std::cout << " Failed to load shader " << std::endl ;
-		exit (1) ;
+		std::cout << " Failed to load shader " << std::endl;
+		exit(1) ;
 	}
 }
 
@@ -135,6 +131,7 @@ void Engine::Render(float elapsedTime)
 	glVertex3f(-100.f, -2.f, -100.f);
 	glEnd();
 
+	// Test du chunk
 	if(m_testChunk.IsDirty())
 		m_testChunk.Update();
 	m_shader01.Use();

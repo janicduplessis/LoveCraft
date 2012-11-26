@@ -26,10 +26,11 @@ typedef long long int64;
 #define CHUNK_SIZE_Y 128
 #define CHUNK_SIZE_Z 16
 
-#define MOUSE_SENSIBILITY			0.1f
-#define MOUVEMENT_SPEED				0.2f
-#define MOUVEMENT_SPEED_RUN			0.35f
-#define MOUVEMENT_SPEED_BACKWARD	0.1f
+#define MOUSE_SENSIBILITY			0.075f
+#define MOUVEMENT_SPEED				0.15f
+#define MOUVEMENT_SPEED_RUN			0.3f
+#define MOUVEMENT_SPEED_BACKWARD	0.075f
+#define PII							3.141592654f
 
 typedef uint8 T;
 enum BLOCK_TYPE {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS};

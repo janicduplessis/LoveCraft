@@ -136,6 +136,12 @@ void Engine::Render(float elapsedTime)
 	glEnd();
 }
 
+void Engine::Render2D( float elapsedTime )
+{
+
+}
+
+
 void Engine::KeyPressEvent(unsigned char key)
 {
 	switch(key)

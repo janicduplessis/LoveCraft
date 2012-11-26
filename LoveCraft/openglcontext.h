@@ -26,6 +26,7 @@ public:
     virtual void LoadResource() = 0;
     virtual void UnloadResource() = 0;
     virtual void Render(float elapsedTime) = 0;
+	virtual void Render2D( float elapsedTime ) = 0;
     virtual void KeyPressEvent(unsigned char key) = 0;
     virtual void KeyReleaseEvent(unsigned char key) = 0;
     virtual void MouseMoveEvent(int x, int y) = 0;
@@ -60,7 +61,6 @@ protected:
 private:
     void InitWindow(int width, int height);
     MOUSE_BUTTON ConvertMouseButton(sf::Mouse::Button button) const;
-
 private:
     sf::Window	m_app;
     int			m_maxFps;

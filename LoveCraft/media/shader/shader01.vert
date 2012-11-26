@@ -1,4 +1,5 @@
 varying vec4 diffuse;
+varying vec4 color;
 
 void main()
 {
@@ -8,6 +9,8 @@ void main()
 	vec3 normal = gl_Normal.xyz;
 	vec3 lightVector = normalize(gl_LightSource[0].position.xyz);
 	float nxDir = max(0.0, dot(normal, lightVector));
+
+	color = gl_Color;
 
 	diffuse = gl_LightSource[0].diffuse * nxDir;
 }

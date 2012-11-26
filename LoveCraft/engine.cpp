@@ -134,6 +134,13 @@ void Engine::Render(float elapsedTime)
 	glTexCoord2f(0, nbRep);
 	glVertex3f(-100.f, -2.f, -100.f);
 	glEnd();
+
+	if(m_testChunk.IsDirty())
+		m_testChunk.Update();
+	m_shader01.Use();
+	m_testChunk.Render();
+	Shader::Disable();
+
 }
 
 void Engine::Render2D( float elapsedTime )

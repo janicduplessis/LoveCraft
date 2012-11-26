@@ -13,20 +13,20 @@ ChunkMesh::~ChunkMesh()
 
 bool ChunkMesh::IsValid() const
 {
-	throw std::exception("The method or operation is not implemented.");
+	return Mesh::IsValid();
 }
 
 void ChunkMesh::SetMeshData( VertexData* vd, int vertexCount )
 {
-	throw std::exception("The method or operation is not implemented.");
+	return Mesh::SetMeshData(vd, vertexCount);
 }
 
 void ChunkMesh::Render() const
 {
-	throw std::exception("The method or operation is not implemented.");
+	Mesh::Render();
 }
 
 int ChunkMesh::Count() const
 {
-	throw std::exception("The method or operation is not implemented.");
+	return Mesh::Count();
 }

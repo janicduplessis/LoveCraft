@@ -32,7 +32,8 @@ void Player::TurnTopBottom ( float value )
 		m_rot.x = newRotation;
 }
 
-void Player::Move ( bool front , bool back , bool left , bool right , bool run, bool ghost, float elapsedTime )
+void Player::Move(bool front, bool back, bool left, bool right, bool space, bool ctrl, 
+				  bool run, bool ghost, float elapsedTime )
 {
 	if (front)
 	{
@@ -69,6 +70,24 @@ void Player::Move ( bool front , bool back , bool left , bool right , bool run, 
 		yRotRad = (m_rot.y / 180 * PII);
 		m_pos.x -= float(cos(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
 		m_pos.z -= float(sin(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
+	}
+	if (space)
+	{
+		if (ghost)
+			m_pos.y += MOUVEMENT_SPEED * (1.f + elapsedTime);
+		else
+		{
+			//Code du jump ici
+		}
+	}
+	if (ctrl)
+	{
+		if (ghost)
+			m_pos.y -= MOUVEMENT_SPEED * (1.f + elapsedTime);
+		else
+		{
+			//Code du crouch ici
+		}
 	}
 }
 

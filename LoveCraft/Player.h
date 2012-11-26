@@ -9,63 +9,64 @@
 #define PII 3.141592654f
 
 /**
- * @brief classe représentent le joueur dans l'environnement 3D
- */
+* @brief classe représentent le joueur dans l'environnement 3D
+*/
 class Player
 {
 public:
 	/**
-	 * Constructeur de la classe.  Valeurs par defaut a 0
-	 * 
-	 * @param posX Position initiale du joueur
-	 * @param rotY Angle de rotation initial du joueur
-	 */
+	* Constructeur de la classe.  Valeurs par defaut a 0
+	* 
+	* @param posX Position initiale du joueur
+	* @param rotY Angle de rotation initial du joueur
+	*/
 	Player(Vector3f position = Vector3f(), Vector2f rotation = Vector2f());
 
 	/**
-	 * Destructeur par défaut de la classe
-	 */
+	* Destructeur par défaut de la classe
+	*/
 	~Player();
 
 	void Init();
 
 	/**
-	 * Position du joueur
-	 * @return Vector3f
-	 */
+	* Position du joueur
+	* @return Vector3f
+	*/
 	Vector3f GetPosition() const;
 
 	/**
-	 * Rotation du joueur
-	 * @return Vector2f
-	 */
+	* Rotation du joueur
+	* @return Vector2f
+	*/
 	Vector2f GetRotation() const;
 
 	/**
-	 * Applique les valeurs de l'angle de rotation sur l'axe des Y
-	 * 
-	 * @param value Valeur de l'angle à modifier
-	 */
+	* Applique les valeurs de l'angle de rotation sur l'axe des Y
+	* 
+	* @param value Valeur de l'angle à modifier
+	*/
 	void TurnLeftRight ( float value );
 
 	/**
-	 * Applique les valeurs de l'angle de rotation sur l'axe des X
-	 * 
-	 * @param value Valeur de l'angle à modifier
-	 */
+	* Applique les valeurs de l'angle de rotation sur l'axe des X
+	* 
+	* @param value Valeur de l'angle à modifier
+	*/
 	void TurnTopBottom ( float value );
 
 	/**
-	 * Fait bouger le personnage en fonction des touches enfoncées
-	 * 
-	 * @param front			Si la touche pour avancer est enfoncée
-	 * @param back			Si la touche pour reculer est enfoncée
-	 * @param left			Si la touche pour strafer à gauche est enfoncée
-	 * @param right			Si la touche pour strafer à droite est enfoncée
-	 * @param run			Si la touche pour courir est enfoncée
-	 * @param elapsedTime	Temps écoulé depuis le dernier loop de jeu
-	 */
-	void Move ( bool front , bool back , bool left , bool right , bool run, bool ghost, float elapsedTime );
+	* Fait bouger le personnage en fonction des touches enfoncées
+	* 
+	* @param front			Si la touche pour avancer est enfoncée
+	* @param back			Si la touche pour reculer est enfoncée
+	* @param left			Si la touche pour strafer à gauche est enfoncée
+	* @param right			Si la touche pour strafer à droite est enfoncée
+	* @param run			Si la touche pour courir est enfoncée
+	* @param elapsedTime	Temps écoulé depuis le dernier loop de jeu
+	*/
+	void Move(bool front, bool back, bool left, bool right, bool space, bool ctrl, 
+		bool run, bool ghost, float elapsedTime );
 
 	void Render (bool wireFrame = false);
 	void SetRotation( Vector2f rot );

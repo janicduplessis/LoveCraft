@@ -5,8 +5,8 @@
 
 
 
-Engine::Engine() : m_wireframe(false), m_angle(0), m_dirBack(false), m_dirFront(false), m_dirLeft(false), m_dirRight(false),
-	m_run(false), m_ghostMode(false), m_rightClick(false), m_leftClick(false), m_camRadius(10)
+Engine::Engine() : m_wireframe(false), m_angle(0), m_dirBack(false), m_dirFront(false), m_dirLeft(false), m_dirRight(false), 
+	m_space(false), m_ctrl(false), m_run(false), m_ghostMode(false), m_rightClick(false), m_leftClick(false), m_camRadius(10)
 {
 }
 
@@ -85,7 +85,7 @@ void Engine::Render(float elapsedTime)
 	gameTime += elapsedTime;
 
 	// calcul la position du joueur et de la camera
-	m_player.Move(m_dirFront, m_dirBack, m_dirLeft, m_dirRight, m_run, m_ghostMode, elapsedTime);
+	m_player.Move(m_dirFront, m_dirBack, m_dirLeft, m_dirRight, m_space, m_ctrl, m_run, m_ghostMode, elapsedTime);
 	m_camera.SetPosition(m_player.GetPosition());
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -159,6 +159,12 @@ void Engine::KeyPressEvent(unsigned char key)
 	case 18:   // S
 		m_dirBack = true;
 		break;
+	case 57:   // Space
+		m_space = true;
+		break;
+	case 37:   // CTRL
+		m_ctrl = true;
+		break;
 	case 38:   // Shift
 		m_run = true;
 		break;
@@ -200,6 +206,12 @@ void Engine::KeyReleaseEvent(unsigned char key)
 		break;
 	case 18:   // S
 		m_dirBack = false;
+		break;
+	case 57:   // Space
+		m_space = false;
+		break;
+	case 37:   // CTRL
+		m_ctrl = false;
 		break;
 	case 38:   // Shift
 		m_run = false;

@@ -4,5 +4,5 @@ varying vec4 color;
 
 void main()
 {
-	gl_FragColor = (gl_LightSource[0].ambient + diffuse) * color;
+	gl_FragColor = (gl_LightSource[0].ambient + diffuse) * texture2D(tex,gl_TexCoord[0].st);
 }

@@ -6,8 +6,6 @@
 #include "model.h"
 #include "define.h"
 
-#define PII 3.141592654f
-
 /**
 * @brief classe représentent le joueur dans l'environnement 3D
 */
@@ -62,6 +60,8 @@ public:
 	* @param back			Si la touche pour reculer est enfoncée
 	* @param left			Si la touche pour strafer à gauche est enfoncée
 	* @param right			Si la touche pour strafer à droite est enfoncée
+	* @param space			Si la touche pour sauter est enfoncée
+	* @param ctrl			Si la touche pour se pencher est enfoncée
 	* @param run			Si la touche pour courir est enfoncée
 	* @param elapsedTime	Temps écoulé depuis le dernier loop de jeu
 	*/

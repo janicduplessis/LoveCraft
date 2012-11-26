@@ -113,6 +113,8 @@ private:
 	bool m_dirRight;
 	bool m_dirFront;
 	bool m_dirBack;
+	bool m_space;
+	bool m_ctrl;
 	bool m_run;
 	bool m_ghostMode;
 	bool m_rightClick;

@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "camera.h"
 #include "shader.h"
+#include "Chunk.h"
 
 class Engine : public OpenglContext
 {
@@ -98,6 +99,7 @@ private:
 	Camera m_camera;
 
 	Shader m_shader01;
+	Chunk m_testChunk;
 
 	bool m_dirLeft;
 	bool m_dirRight;

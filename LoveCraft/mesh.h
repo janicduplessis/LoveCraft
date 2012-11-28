@@ -25,7 +25,7 @@ public:
     virtual ~Mesh();
     
     virtual bool IsValid() const;
-    virtual void SetMeshData(VertexData* vd, int vertexCount);
+    virtual void SetMeshData(VertexData* vd, int vertexCount, uint16* indexData = 0, int indexCount = 0);
     virtual void Render(bool wireFrame = false) const;
 
     virtual int Count() const;
@@ -34,7 +34,7 @@ public:
 
 protected:
     bool m_isValid;
-    int m_vertexCount;
+    int m_indicesCount;
     GLuint m_vertexVboId;
     GLuint m_indexVboId;
 };

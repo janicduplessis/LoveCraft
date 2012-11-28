@@ -44,12 +44,31 @@ void Mesh::SetMeshData(VertexData* vd, int vertexCount){
     // Idealement cet array devrait etre utiliser pour reutiliser les vertex et ainsi
     // sauver du temps en envoyant moins de donnees a la carte (il devrait etre construit
     // en meme temps que le buffer vd est rempli..)
-    uint16* idx = new uint16[vertexCount];
-    for(int i = 0; i < vertexCount; ++i)
-        idx[i] = i;
+    
+	int nbIndex = (int)(vertexCount / 4.f * 6);
+    uint16* idx = new uint16[nbIndex];
+	uint16 j = 0;
+    for(uint16 i = 0; i < nbIndex; ++i)
+	{
+		switch (nbIndex % 6)
+		{
+		case 0:
+			idx[i] = i;
+		default:
+			break;
+		}
+        idx[j++] = i;
+		idx[j++] = i + 1;
+		idx[j++] = i + 2;
+		idx[j++] = i;
+		idx[j++] = i + 2;
+		idx[j++] = i + 3;
+		if (!(j < nbIndex + 1))
+			j = j;
+	}
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16) * vertexCount, idx, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16) * nbIndex, idx, GL_STATIC_DRAW);
     delete [] idx;
 
     m_isValid = true;
@@ -71,9 +90,8 @@ void Mesh::Render(bool wireFrame) const
 		glNormalPointer(GL_FLOAT, sizeof(VertexData), (char*)32);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
-        glDrawElements(wireFrame ? GL_LINES : GL_QUADS, m_vertexCount, GL_UNSIGNED_SHORT, (char*)0);
-        // TODO
-        //glDrawRangeElements(GL_TRIANGLES, 0, 3, 3, GL_UNSIGNED_SHORT, (char*)0);
+        //glDrawElements(wireFrame ? GL_LINES : GL_QUADS, m_vertexCount, GL_UNSIGNED_SHORT, (char*)0);
+        glDrawElements(GL_TRIANGLES, m_vertexCount, GL_UNSIGNED_SHORT, (char*)0);
 
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);

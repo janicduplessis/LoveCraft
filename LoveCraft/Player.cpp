@@ -14,7 +14,7 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_model.Load(MODEL_PATH "monkey.dae");
+	m_model.Load(MODEL_PATH "monkey.obj");
 	m_model.Rotate(0.f, 180.f, 0.f);
 }
 

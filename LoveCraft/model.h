@@ -5,10 +5,6 @@
 #include "vector2.h"
 #include "vector3.h"
 
-#include <assimp/Importer.hpp>      
-#include <assimp/scene.h>       
-#include <assimp/postprocess.h>
-
 #include <string>
 
 class Model : public Mesh
@@ -19,9 +15,8 @@ public:
 
 	bool Load(const std::string filePath);
 
-	virtual void SetMeshData(VertexData* vd, int vertexCount);
-
 	virtual void Render(bool wireFrame = false) const;
+	virtual void SetMeshData(VertexData* vd, int vertexCount, uint16* indexData = 0, int indexCount = 0);
 
 	void Rotate(float x, float y, float z);
 	void Translate(float x, float y, float z);

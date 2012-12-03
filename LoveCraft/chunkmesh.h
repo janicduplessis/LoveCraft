@@ -13,9 +13,9 @@ public:
 
 	virtual bool IsValid() const;
 
-	virtual void SetMeshData( VertexData* vd, int vertexCount );
+	virtual void SetMeshData(VertexData* vd, int vertexCount, uint16* indexData = 0, int indexCount = 0);
 
-	virtual void Render() const;
+	virtual void Render(bool wireFrame = false) const;
 
 	virtual int Count() const;
 

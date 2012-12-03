@@ -61,6 +61,7 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 
         m_app.setActive();
         Render(m_lastFrameTime);
+		Render2D(m_lastFrameTime);
         m_app.display();
 
 		m_lastFrameTime = clock.getElapsedTime().asSeconds();
@@ -181,4 +182,3 @@ OpenglContext::MOUSE_BUTTON OpenglContext::ConvertMouseButton(sf::Mouse::Button 
         return MOUSE_BUTTON_NONE;
     }
 }
-

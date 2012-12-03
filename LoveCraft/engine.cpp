@@ -34,8 +34,8 @@ void Engine::Init()
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_LIGHTING);
 	glEnable (GL_LINE_SMOOTH);
-	if (!m_wireframe)
-		glEnable(GL_CULL_FACE);
+	//if (!m_wireframe)
+		//glEnable(GL_CULL_FACE);
 
 	// Light
 	GLfloat light0Pos[4]  = {0.0f, CHUNK_SIZE_Y, 0.0f, 1.0f};
@@ -105,8 +105,9 @@ void Engine::Render(float elapsedTime)
 		m_camera.ApplyTranslation();
 
 		// render le modele du player
+		m_shader01.Use();
 		m_player.Render(m_wireframe);
-
+		Shader::Disable();
 	} 
 	// first person
 	else
@@ -139,6 +140,12 @@ void Engine::Render(float elapsedTime)
 	Shader::Disable();
 
 }
+
+void Engine::Render2D( float elapsedTime )
+{
+
+}
+
 
 void Engine::KeyPressEvent(unsigned char key)
 {

@@ -64,7 +64,7 @@ T Array3d<T>::Get(uint32 x, uint32 y, uint32 z) const
 template <class T>
 void Array3d<T>::Reset(T value)
 {
-	for(int i = 0; i < m_size.x * m_size.y * m_size.z; ++i)
+	for(uint32 i = 0; i < m_size.x * m_size.y * m_size.z; ++i)
 		m_values[i] = value;
 }
 

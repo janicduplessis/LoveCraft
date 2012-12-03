@@ -38,6 +38,8 @@ bool Texture::Load(const std::string& filename)
     glGenTextures(1, &m_textureId);
     glBindTexture(GL_TEXTURE_2D, m_textureId);
 
+	m_dimensions = Vector2i(ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT));
+
     gluBuild2DMipmaps(GL_TEXTURE_2D, 3, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -56,5 +58,15 @@ void Texture::Bind() const
 {
     assert(IsValid());
     glBindTexture(GL_TEXTURE_2D, m_textureId);
+}
+
+float Texture::GetWidth()
+{
+	return m_dimensions.x;
+}
+
+float Texture::GetHeight()
+{
+	return m_dimensions.y;
 }
 

@@ -4,6 +4,7 @@
 #include "define.h"
 #include <IL/il.h>
 #include <string>
+#include "vector2.h"
 
 class Texture
 {
@@ -15,9 +16,13 @@ public:
     bool IsValid() const;
     void Bind() const;
 
+	float GetWidth();
+	float GetHeight();
+
 private:
     GLuint  m_textureId;
     bool    m_isValid;
+	Vector2i m_dimensions;
 };
 
 #endif // TEXTURE_H__

@@ -85,41 +85,13 @@ void Chunk::Render() const
 
 void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& count, BLOCK_TYPE bt, int x, int y, int z)
 {
-	// front		Color: Magenta
-	vd[ count ++] = ChunkMesh::VertexData (x - .5f, y - .5f, z + .5f, 1.f, 0.f, 1.f, 0.f, 0.f);
-	vd[ count ++] = ChunkMesh::VertexData (x + .5f, y - .5f, z + .5f, 1.f, 0.f, 1.f, 1.f, 0.f);
-	vd[ count ++] = ChunkMesh::VertexData (x + .5f, y + .5f, z + .5f, 1.f, 0.f, 1.f, 1.f, 1.f);
-	vd[ count ++] = ChunkMesh::VertexData (x - .5f, y + .5f, z + .5f, 1.f, 0.f, 1.f, 0.f, 1.f);
-
-	// back			Color: Pale Blue
-	vd[ count ++] = ChunkMesh::VertexData (x - .5f, y - .5f, z - .5f, 0.f, 1.f, 1.f, 0.f, 0.f);
-	vd[ count ++] = ChunkMesh::VertexData (x - .5f, y + .5f, z - .5f, 0.f, 1.f, 1.f, 0.f, 1.f);
-	vd[ count ++] = ChunkMesh::VertexData (x + .5f, y + .5f, z - .5f, 0.f, 1.f, 1.f, 1.f, 1.f);
-	vd[ count ++] = ChunkMesh::VertexData (x + .5f, y - .5f, z - .5f, 0.f, 1.f, 1.f, 1.f, 0.f);
-
-	//side (l)		Color: Yellow
-	vd[ count ++] = ChunkMesh::VertexData (x - .5f, y - .5f, z - .5f, 1.f, 1.f, 0.f, 0.f, 0.f);
-	vd[ count ++] = ChunkMesh::VertexData (x - .5f, y - .5f, z + .5f, 1.f, 1.f, 0.f, 1.f, 0.f);
-	vd[ count ++] = ChunkMesh::VertexData (x - .5f, y + .5f, z + .5f, 1.f, 1.f, 0.f, 1.f, 1.f);
-	vd[ count ++] = ChunkMesh::VertexData (x - .5f, y + .5f, z - .5f, 1.f, 1.f, 0.f, 0.f, 1.f);
-
-	//side (r)		Color: Blue
-	vd[ count ++] = ChunkMesh::VertexData (x + .5f, y - .5f, z - .5f, 0.f, 0.f, 1.f, 0.f, 0.f);
-	vd[ count ++] = ChunkMesh::VertexData (x + .5f, y + .5f, z - .5f, 0.f, 0.f, 1.f, 0.f, 1.f);
-	vd[ count ++] = ChunkMesh::VertexData (x + .5f, y + .5f, z + .5f, 0.f, 0.f, 1.f, 1.f, 1.f);
-	vd[ count ++] = ChunkMesh::VertexData (x + .5f, y - .5f, z + .5f, 0.f, 0.f, 1.f, 1.f, 0.f);
-
-	//bottom		Color: Red
-	vd[ count ++] = ChunkMesh::VertexData (x - .5f, y - .5f, z - .5f, 1.f, 0.f, 0.f, 0.f, 0.f);
-	vd[ count ++] = ChunkMesh::VertexData (x + .5f, y - .5f, z - .5f, 1.f, 0.f, 0.f, 1.f, 0.f);
-	vd[ count ++] = ChunkMesh::VertexData (x + .5f, y - .5f, z + .5f, 1.f, 0.f, 0.f, 1.f, 1.f);
-	vd[ count ++] = ChunkMesh::VertexData (x - .5f, y - .5f, z + .5f, 1.f, 0.f, 0.f, 0.f, 1.f);
-
-	//top			Color: Vert
-	vd[ count ++] = ChunkMesh::VertexData (x - .5f, y + .5f, z - .5f, 0.f, 1.f, 0.f, 0.f, 0.f);
-	vd[ count ++] = ChunkMesh::VertexData (x - .5f, y + .5f, z + .5f, 0.f, 1.f, 0.f, 0.f, 1.f);
-	vd[ count ++] = ChunkMesh::VertexData (x + .5f, y + .5f, z + .5f, 0.f, 1.f, 0.f, 1.f, 1.f);
-	vd[ count ++] = ChunkMesh::VertexData (x + .5f, y + .5f, z - .5f, 0.f, 1.f, 0.f, 1.f, 0.f);
-
-	// Continuer le code pour afficher les autres faces du cube ...
+	// vertices pour utiliser avec index
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + 0.5f, 0.f, 1.f, 0.f, 1.f, 0.f);		//1
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + 0.5f, 0.f, 1.f, 0.f, 1.f, 0.f);	//2
+	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + -0.5f, z + 0.5f, 0.f, 1.f, 0.f, 1.f, 0.f);		//3
+	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 0.f, 1.f, 0.f, 1.f, 0.f);		//4
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + -0.5f, 0.f, 1.f, 0.f, 1.f, 0.f);	//5
+	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + -0.5f, 0.f, 1.f, 0.f, 1.f, 0.f);		//6
+	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + -0.5f, z + -0.5f, 0.f, 1.f, 0.f, 1.f, 0.f);	//7
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + -0.5f, 0.f, 1.f, 0.f, 1.f, 0.f);	//8
 }

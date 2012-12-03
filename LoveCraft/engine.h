@@ -43,6 +43,14 @@ public:
 	virtual void Render(float elapsedTime);
 
 	/**
+	 * Render les elements 2D en premier plan
+	 * 
+	 * @param elapsedTime	Temps en millisecondes depuis le dernier
+	 *						tour de boucle
+	 */
+	virtual void Render2D(float elapsedTime);
+
+	/**
 	 * Évènement appelé lorsqu'une touche du clavier est enfoncée
 	 *
 	 * @param key	 Touche qui a déclenché l'évènement

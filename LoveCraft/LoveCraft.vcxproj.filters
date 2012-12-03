@@ -107,10 +107,10 @@
     <ClInclude Include="chunkmesh.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="arraybool.h">
+    <ClInclude Include="Array.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="array.h">
+    <ClInclude Include="ArrayBool.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

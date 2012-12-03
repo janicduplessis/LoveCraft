@@ -7,6 +7,7 @@
 #include "camera.h"
 #include "shader.h"
 #include "Chunk.h"
+#include "ArrayBool.h"
 
 class Engine : public OpenglContext
 {
@@ -102,17 +103,11 @@ private:
 
 	Player m_player;
 	Camera m_camera;
+	Array<bool> m_controls;
 
 	Shader m_shader01;
 	Chunk m_testChunk;
 
-	bool m_dirLeft;
-	bool m_dirRight;
-	bool m_dirFront;
-	bool m_dirBack;
-	bool m_space;
-	bool m_ctrl;
-	bool m_run;
 	bool m_ghostMode;
 	bool m_rightClick;
 	bool m_leftClick;

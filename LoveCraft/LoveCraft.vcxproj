@@ -96,9 +96,9 @@
     <ClCompile Include="tool.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="array.h" />
+    <ClInclude Include="Array.h" />
     <ClInclude Include="array3d.h" />
-    <ClInclude Include="arraybool.h" />
+    <ClInclude Include="ArrayBool.h" />
     <ClInclude Include="blockinfo.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="chunk.h" />

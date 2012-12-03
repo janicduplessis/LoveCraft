@@ -5,6 +5,7 @@
 #include "vector2.h"
 #include "model.h"
 #include "define.h"
+#include "ArrayBool.h"
 
 /**
 * @brief classe représentent le joueur dans l'environnement 3D
@@ -56,17 +57,10 @@ public:
 	/**
 	* Fait bouger le personnage en fonction des touches enfoncées
 	* 
-	* @param front			Si la touche pour avancer est enfoncée
-	* @param back			Si la touche pour reculer est enfoncée
-	* @param left			Si la touche pour strafer à gauche est enfoncée
-	* @param right			Si la touche pour strafer à droite est enfoncée
-	* @param space			Si la touche pour sauter est enfoncée
-	* @param ctrl			Si la touche pour se pencher est enfoncée
-	* @param run			Si la touche pour courir est enfoncée
+	* @param controls		Le Array de touches
 	* @param elapsedTime	Temps écoulé depuis le dernier loop de jeu
 	*/
-	void Move(bool front, bool back, bool left, bool right, bool space, bool ctrl, 
-		bool run, bool ghost, float elapsedTime );
+	void Move(Array<bool>& controls, bool ghost, float elapsedTime );
 
 	void Render (bool wireFrame = false);
 	void SetRotation( Vector2f rot );

@@ -2,11 +2,12 @@
 #include <iostream>
 #include <algorithm>
 #include <cmath>
+#include "ArrayBool.h"
 
 
 
-Engine::Engine() : m_wireframe(false), m_angle(0), m_dirBack(false), m_dirFront(false), m_dirLeft(false), m_dirRight(false), 
-	m_space(false), m_ctrl(false), m_run(false), m_ghostMode(false), m_rightClick(false), m_leftClick(false), m_camRadius(10)
+Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false), m_controls(Array<bool>(256, false)),
+	m_rightClick(false), m_leftClick(false), m_camRadius(10)
 {
 }
 
@@ -81,7 +82,7 @@ void Engine::Render(float elapsedTime)
 	gameTime += elapsedTime;
 
 	// calcul la position du joueur et de la camera
-	m_player.Move(m_dirFront, m_dirBack, m_dirLeft, m_dirRight, m_space, m_ctrl, m_run, m_ghostMode, elapsedTime);
+	m_player.Move(m_controls, m_ghostMode, elapsedTime);
 	m_camera.SetPosition(m_player.GetPosition());
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -149,29 +150,30 @@ void Engine::Render2D( float elapsedTime )
 
 void Engine::KeyPressEvent(unsigned char key)
 {
+	m_controls.Set(key, true);
 	switch(key)
 	{
-	case 0:    // A
-		m_dirLeft = true;
-		break;
-	case 3:    // D
-		m_dirRight = true;
-		break;
-	case 22:   // W
-		m_dirFront = true;
-		break;
-	case 18:   // S
-		m_dirBack = true;
-		break;
-	case 57:   // Space
-		m_space = true;
-		break;
-	case 37:   // CTRL
-		m_ctrl = true;
-		break;
-	case 38:   // Shift
-		m_run = true;
-		break;
+	//case 0:    // A
+	//	m_dirLeft = true;
+	//	break;
+	//case 3:    // D
+	//	m_dirRight = true;
+	//	break;
+	//case 22:   // W
+	//	m_dirFront = true;
+	//	break;
+	//case 18:   // S
+	//	m_dirBack = true;
+	//	break;
+	//case 57:   // Space
+	//	m_space = true;
+	//	break;
+	//case 37:   // CTRL
+	//	m_ctrl = true;
+	//	break;
+	//case 38:   // Shift
+	//	m_run = true;
+	//	break;
 	case 36:	// ESC
 		Stop();
 		break;
@@ -197,29 +199,30 @@ void Engine::KeyPressEvent(unsigned char key)
 
 void Engine::KeyReleaseEvent(unsigned char key)
 {
+	m_controls.Set(key, false);
 	switch(key)
 	{
-	case 0:    // A
-		m_dirLeft = false;
-		break;
-	case 3:    // D
-		m_dirRight = false;
-		break;
-	case 22:   // W
-		m_dirFront = false;
-		break;
-	case 18:   // S
-		m_dirBack = false;
-		break;
-	case 57:   // Space
-		m_space = false;
-		break;
-	case 37:   // CTRL
-		m_ctrl = false;
-		break;
-	case 38:   // Shift
-		m_run = false;
-		break;
+	//case 0:    // A
+	//	m_dirLeft = false;
+	//	break;
+	//case 3:    // D
+	//	m_dirRight = false;
+	//	break;
+	//case 22:   // W
+	//	m_dirFront = false;
+	//	break;
+	//case 18:   // S
+	//	m_dirBack = false;
+	//	break;
+	//case 57:   // Space
+	//	m_space = false;
+	//	break;
+	//case 37:   // CTRL
+	//	m_ctrl = false;
+	//	break;
+	//case 38:   // Shift
+	//	m_run = false;
+	//	break;
 	case 24:       // Y
 		m_wireframe = !m_wireframe;
 		if(m_wireframe)

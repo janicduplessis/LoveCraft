@@ -32,21 +32,20 @@ void Player::TurnTopBottom ( float value )
 		m_rot.x = newRotation;
 }
 
-void Player::Move(bool front, bool back, bool left, bool right, bool space, bool ctrl, 
-				  bool run, bool ghost, float elapsedTime )
+void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 {
-	if (front)
+	if (controls.Get(22))	// W
 	{
 		float xRotRad, yRotRad;
 		yRotRad = (m_rot.y / 180 * PII);
 		xRotRad = (m_rot.x / 180 * PII);
-		m_pos.x += float(sin(yRotRad)) * (run? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (1.f + elapsedTime);
-		m_pos.z -= float(cos(yRotRad)) * (run? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (1.f + elapsedTime);
+		m_pos.x += float(sin(yRotRad)) * (controls.Get(38) ? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (1.f + elapsedTime);
+		m_pos.z -= float(cos(yRotRad)) * (controls.Get(38) ? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (1.f + elapsedTime);
 		if (ghost)
-			m_pos.y -= float(sin(xRotRad)) * (run? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (1.f + elapsedTime);
+			m_pos.y -= float(sin(xRotRad)) * (controls.Get(38) ? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (1.f + elapsedTime);
 	}
 
-	if (back)
+	if (controls.Get(18))	// S
 	{
 		float xRotRad, yRotRad;
 		yRotRad = (m_rot.y / 180 * PII);
@@ -56,7 +55,7 @@ void Player::Move(bool front, bool back, bool left, bool right, bool space, bool
 		if (ghost)
 			m_pos.y += float(sin(xRotRad)) * MOUVEMENT_SPEED_BACKWARD * (1.f + elapsedTime);
 	}
-	if (right)
+	if (controls.Get(3))	// D
 	{
 		float yRotRad;
 		yRotRad = (m_rot.y / 180 * PII);
@@ -64,14 +63,14 @@ void Player::Move(bool front, bool back, bool left, bool right, bool space, bool
 		m_pos.z += float(sin(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
 	}
 
-	if (left)
+	if (controls.Get(0))	// A
 	{
 		float yRotRad;
 		yRotRad = (m_rot.y / 180 * PII);
 		m_pos.x -= float(cos(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
 		m_pos.z -= float(sin(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
 	}
-	if (space)
+	if (controls.Get(57))	// Space
 	{
 		if (ghost)
 			m_pos.y += MOUVEMENT_SPEED * (1.f + elapsedTime);
@@ -80,7 +79,7 @@ void Player::Move(bool front, bool back, bool left, bool right, bool space, bool
 			//Code du jump ici
 		}
 	}
-	if (ctrl)
+	if (controls.Get(37))	// Ctrl
 	{
 		if (ghost)
 			m_pos.y -= MOUVEMENT_SPEED * (1.f + elapsedTime);

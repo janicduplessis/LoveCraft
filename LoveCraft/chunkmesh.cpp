@@ -133,7 +133,7 @@ void ChunkMesh::Render(bool wireFrame) const
 		glNormalPointer(GL_FLOAT, sizeof(VertexData), (char*)32);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
-		glDrawElements(GL_TRIANGLES, m_indicesCount, GL_UNSIGNED_SHORT, (char*)0);
+		glDrawElements(wireFrame ? GL_LINES : GL_TRIANGLES, m_indicesCount, GL_UNSIGNED_SHORT, (char*)0);
 
 		//glDrawRangeElements(GL_TRIANGLES, 0, m_indicesCount, m_indicesCount, GL_UNSIGNED_SHORT, (char*)0);
 

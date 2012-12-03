@@ -1,17 +1,8 @@
-varying vec4 diffuse;
-varying vec4 color;
+varying vec4 light;
 
 void main()
 {
-    gl_Position = ftransform(); 
-	gl_TexCoord[0] = gl_MultiTexCoord0;  
-	color = gl_Color;
-	 
-	vec3 normal = gl_Normal.xyz;
-	vec3 lightVector = normalize(gl_LightSource[0].position.xyz);
-	float nxDir = max(0.0, dot(normal, lightVector));
-
-	color = gl_Color;
-
-	diffuse = gl_LightSource[0].diffuse * nxDir;
+    light = gl_Color;
+    gl_TexCoord[0] = gl_MultiTexCoord0;
+    gl_Position = ftransform();
 }

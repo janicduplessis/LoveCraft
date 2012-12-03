@@ -1,101 +1,141 @@
-<LCMMeshes>
-	<Mesh HasNormals="1">
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="1.000000" y="1.000000" z="-1.000000"/>
-			<Normals x="0.000000" y="0.000000" z="-1.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="1.000000" y="-1.000000" z="-1.000000"/>
-			<Normals x="0.000000" y="0.000000" z="-1.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="-1.000000" y="-1.000000" z="-1.000000"/>
-			<Normals x="0.000000" y="0.000000" z="-1.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="-1.000000" y="1.000000" z="-1.000000"/>
-			<Normals x="0.000000" y="0.000000" z="-1.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="1.000000" y="1.000000" z="1.000000"/>
-			<Normals x="0.000000" y="0.000000" z="1.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="-1.000000" y="1.000000" z="1.000000"/>
-			<Normals x="0.000000" y="0.000000" z="1.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="-1.000000" y="-1.000000" z="1.000000"/>
-			<Normals x="0.000000" y="0.000000" z="1.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="0.999999" y="-1.000001" z="1.000000"/>
-			<Normals x="0.000000" y="0.000000" z="1.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="1.000000" y="1.000000" z="-1.000000"/>
-			<Normals x="1.000000" y="-0.000000" z="0.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="1.000000" y="1.000000" z="1.000000"/>
-			<Normals x="1.000000" y="-0.000000" z="0.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="0.999999" y="-1.000001" z="1.000000"/>
-			<Normals x="1.000000" y="-0.000000" z="0.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="1.000000" y="-1.000000" z="-1.000000"/>
-			<Normals x="1.000000" y="-0.000000" z="0.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="1.000000" y="-1.000000" z="-1.000000"/>
-			<Normals x="-0.000000" y="-1.000000" z="0.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="0.999999" y="-1.000001" z="1.000000"/>
-			<Normals x="-0.000000" y="-1.000000" z="0.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="-1.000000" y="-1.000000" z="1.000000"/>
-			<Normals x="-0.000000" y="-1.000000" z="0.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="-1.000000" y="-1.000000" z="-1.000000"/>
-			<Normals x="-0.000000" y="-1.000000" z="0.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="-1.000000" y="-1.000000" z="-1.000000"/>
-			<Normals x="-1.000000" y="0.000000" z="-0.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="-1.000000" y="-1.000000" z="1.000000"/>
-			<Normals x="-1.000000" y="0.000000" z="-0.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="-1.000000" y="1.000000" z="1.000000"/>
-			<Normals x="-1.000000" y="0.000000" z="-0.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="-1.000000" y="1.000000" z="-1.000000"/>
-			<Normals x="-1.000000" y="0.000000" z="-0.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="1.000000" y="1.000000" z="1.000000"/>
-			<Normals x="0.000000" y="1.000000" z="0.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="1.000000" y="1.000000" z="-1.000000"/>
-			<Normals x="0.000000" y="1.000000" z="0.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="-1.000000" y="1.000000" z="-1.000000"/>
-			<Normals x="0.000000" y="1.000000" z="0.000000"/>
-		</Vertex>
-		<Vertex HasColors="0" HasTexCoords="0">
-			<Coords x="-1.000000" y="1.000000" z="1.000000"/>
-			<Normals x="0.000000" y="1.000000" z="0.000000"/>
-		</Vertex>
+<LCMMeshes NumMeshes="1.000000">
+	<Mesh HasNormals="1" NumVertices="24.000000">
+		<Vertices>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="1.000000" y="-1.000000" z="-1.000000"/>
+				<Normals x="0.000000" y="-1.000000" z="0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="1.000000" y="-1.000000" z="1.000000"/>
+				<Normals x="0.000000" y="-1.000000" z="0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="-1.000000" y="-1.000000" z="1.000000"/>
+				<Normals x="0.000000" y="-1.000000" z="0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="-1.000000" y="-1.000000" z="-1.000000"/>
+				<Normals x="0.000000" y="-1.000000" z="0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="1.000000" y="1.000000" z="-0.999999"/>
+				<Normals x="0.000000" y="1.000000" z="0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="-1.000000" y="1.000000" z="-1.000000"/>
+				<Normals x="0.000000" y="1.000000" z="0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="-1.000000" y="1.000000" z="1.000000"/>
+				<Normals x="0.000000" y="1.000000" z="0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="0.999999" y="1.000000" z="1.000001"/>
+				<Normals x="0.000000" y="1.000000" z="0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="1.000000" y="-1.000000" z="-1.000000"/>
+				<Normals x="1.000000" y="0.000000" z="0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="1.000000" y="1.000000" z="-0.999999"/>
+				<Normals x="1.000000" y="0.000000" z="0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="0.999999" y="1.000000" z="1.000001"/>
+				<Normals x="1.000000" y="0.000000" z="0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="1.000000" y="-1.000000" z="1.000000"/>
+				<Normals x="1.000000" y="0.000000" z="0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="1.000000" y="-1.000000" z="1.000000"/>
+				<Normals x="-0.000000" y="-0.000000" z="1.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="0.999999" y="1.000000" z="1.000001"/>
+				<Normals x="-0.000000" y="-0.000000" z="1.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="-1.000000" y="1.000000" z="1.000000"/>
+				<Normals x="-0.000000" y="-0.000000" z="1.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="-1.000000" y="-1.000000" z="1.000000"/>
+				<Normals x="-0.000000" y="-0.000000" z="1.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="-1.000000" y="-1.000000" z="1.000000"/>
+				<Normals x="-1.000000" y="-0.000000" z="-0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="-1.000000" y="1.000000" z="1.000000"/>
+				<Normals x="-1.000000" y="-0.000000" z="-0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="-1.000000" y="1.000000" z="-1.000000"/>
+				<Normals x="-1.000000" y="-0.000000" z="-0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="-1.000000" y="-1.000000" z="-1.000000"/>
+				<Normals x="-1.000000" y="-0.000000" z="-0.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="1.000000" y="1.000000" z="-0.999999"/>
+				<Normals x="0.000000" y="0.000000" z="-1.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="1.000000" y="-1.000000" z="-1.000000"/>
+				<Normals x="0.000000" y="0.000000" z="-1.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="-1.000000" y="-1.000000" z="-1.000000"/>
+				<Normals x="0.000000" y="0.000000" z="-1.000000"/>
+			</Vertex>
+			<Vertex HasColors="0" HasTexCoords="0">
+				<Coords x="-1.000000" y="1.000000" z="-1.000000"/>
+				<Normals x="0.000000" y="0.000000" z="-1.000000"/>
+			</Vertex>
+		</Vertices>
+		<Indices NumIndices="36.000000">
+			<Indice>0.000000</Indice>
+			<Indice>1.000000</Indice>
+			<Indice>2.000000</Indice>
+			<Indice>0.000000</Indice>
+			<Indice>2.000000</Indice>
+			<Indice>3.000000</Indice>
+			<Indice>4.000000</Indice>
+			<Indice>5.000000</Indice>
+			<Indice>6.000000</Indice>
+			<Indice>4.000000</Indice>
+			<Indice>6.000000</Indice>
+			<Indice>7.000000</Indice>
+			<Indice>8.000000</Indice>
+			<Indice>9.000000</Indice>
+			<Indice>10.000000</Indice>
+			<Indice>8.000000</Indice>
+			<Indice>10.000000</Indice>
+			<Indice>11.000000</Indice>
+			<Indice>12.000000</Indice>
+			<Indice>13.000000</Indice>
+			<Indice>14.000000</Indice>
+			<Indice>12.000000</Indice>
+			<Indice>14.000000</Indice>
+			<Indice>15.000000</Indice>
+			<Indice>16.000000</Indice>
+			<Indice>17.000000</Indice>
+			<Indice>18.000000</Indice>
+			<Indice>16.000000</Indice>
+			<Indice>18.000000</Indice>
+			<Indice>19.000000</Indice>
+			<Indice>20.000000</Indice>
+			<Indice>21.000000</Indice>
+			<Indice>22.000000</Indice>
+			<Indice>20.000000</Indice>
+			<Indice>22.000000</Indice>
+			<Indice>23.000000</Indice>
+		</Indices>
 	</Mesh>
 </LCMMeshes>
 

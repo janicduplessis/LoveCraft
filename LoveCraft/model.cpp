@@ -43,7 +43,7 @@ bool Model::Load( const std::string filePath )
 			rapidxml::xml_node<>* prop = vertex->first_node();
 			vd1[j].x = atof(prop->first_attribute()->value());
 			vd1[j].y = atof(prop->first_attribute()->next_attribute()->value());
-			vd1[j].y = atof(prop->first_attribute()->next_attribute()->next_attribute()->value());
+			vd1[j].z = atof(prop->first_attribute()->next_attribute()->next_attribute()->value());
 
 			prop = prop->next_sibling();
 			if (hasColors)
@@ -156,7 +156,7 @@ void Model::Render(bool wireFrame) const
 		glNormalPointer(GL_FLOAT, sizeof(VertexData), (char*)32);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
-		glDrawElements(wireFrame ? GL_LINES : GL_TRIANGLES, m_indicesCount, GL_UNSIGNED_SHORT, (char*)0);
+		glDrawElements(GL_TRIANGLES, m_indicesCount, GL_UNSIGNED_SHORT, (char*)0);
 
 		//glDrawRangeElements(GL_TRIANGLES, 0, m_indicesCount, m_indicesCount, GL_UNSIGNED_SHORT, (char*)0);
 

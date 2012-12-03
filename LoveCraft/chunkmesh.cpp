@@ -102,9 +102,6 @@ void ChunkMesh::SetMeshData(VertexData* vd, int vertexCount, uint16* indexData, 
 		idx[j++] = 8*i + 5;
 	}
 
-	uint16 test = idx[m_indicesCount - 1];
-	float test2 = vd[vertexCount - 1].x;
-
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
 
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16) * m_indicesCount, idx, GL_STATIC_DRAW);

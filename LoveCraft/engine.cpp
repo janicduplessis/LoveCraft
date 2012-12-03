@@ -2,12 +2,22 @@
 #include <iostream>
 #include <algorithm>
 #include <cmath>
+#include "arraybool.h"
 
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_dirBack(false), m_dirFront(false), m_dirLeft(false), m_dirRight(false), 
 	m_space(false), m_ctrl(false), m_run(false), m_ghostMode(false), m_rightClick(false), m_leftClick(false), m_camRadius(10)
 {
+	Array<bool> a01(128);
+	a01.Reset(false);
+	a01.Set(0, true);
+	a01.Set(3, true);
+
+	std::cout << a01.Get(0) << std::endl;
+	std::cout << a01.Get(1) << std::endl;
+	std::cout << a01.Get(3) << std::endl;
+
 }
 
 Engine::~Engine()
@@ -34,8 +44,8 @@ void Engine::Init()
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_LIGHTING);
 	glEnable (GL_LINE_SMOOTH);
-	//if (!m_wireframe)
-		//glEnable(GL_CULL_FACE);
+	if (!m_wireframe)
+		glEnable(GL_CULL_FACE);
 
 	// Light
 	GLfloat light0Pos[4]  = {0.0f, CHUNK_SIZE_Y, 0.0f, 1.0f};

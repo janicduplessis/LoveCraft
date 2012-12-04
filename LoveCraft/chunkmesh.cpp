@@ -48,58 +48,58 @@ void ChunkMesh::SetMeshData(VertexData* vd, int vertexCount, uint16* indexData, 
 
 	uint16* idx;
 
-	m_indicesCount = (int)(36 * vertexCount / 8.f);
+	m_indicesCount = (int)(36 * vertexCount / 12.f);
 
 	idx = new uint16[m_indicesCount];
 	int j = 0;
-	for(uint16 i = 0; i < vertexCount / 8 ; ++i) {
+	for(uint16 i = 0; i < vertexCount / 12; ++i) {
 		//front face
-		idx[j++] = 8*i;
-		idx[j++] = 8*i + 1;
-		idx[j++] = 8*i + 2;
-		idx[j++] = 8*i;
-		idx[j++] = 8*i + 2;
-		idx[j++] = 8*i + 3;
+		idx[j++] = 12*i + 8;
+		idx[j++] = 12*i + 9;
+		idx[j++] = 12*i + 2;
+		idx[j++] = 12*i + 8;
+		idx[j++] = 12*i + 2;
+		idx[j++] = 12*i + 3;
 
 		//back face
-		idx[j++] = 8*i + 4;
-		idx[j++] = 8*i + 5;
-		idx[j++] = 8*i + 6;
-		idx[j++] = 8*i + 4;
-		idx[j++] = 8*i + 6;
-		idx[j++] = 8*i + 7;
+		idx[j++] = 12*i + 10;
+		idx[j++] = 12*i + 11;
+		idx[j++] = 12*i + 6;
+		idx[j++] = 12*i + 10;
+		idx[j++] = 12*i + 6;
+		idx[j++] = 12*i + 7;
 
 		//top face
-		idx[j++] = 8*i + 4;
-		idx[j++] = 8*i;
-		idx[j++] = 8*i + 3;
-		idx[j++] = 8*i + 4;
-		idx[j++] = 8*i + 3;
-		idx[j++] = 8*i + 5;
+		idx[j++] = 12*i + 4;
+		idx[j++] = 12*i;
+		idx[j++] = 12*i + 3;
+		idx[j++] = 12*i + 4;
+		idx[j++] = 12*i + 3;
+		idx[j++] = 12*i + 5;
 
 		//bot face
-		idx[j++] = 8*i + 1;
-		idx[j++] = 8*i + 7;
-		idx[j++] = 8*i + 2;
-		idx[j++] = 8*i + 2;
-		idx[j++] = 8*i + 7;
-		idx[j++] = 8*i + 6;
+		idx[j++] = 12*i + 1;
+		idx[j++] = 12*i + 7;
+		idx[j++] = 12*i + 2;
+		idx[j++] = 12*i + 2;
+		idx[j++] = 12*i + 7;
+		idx[j++] = 12*i + 6;
 
 		//left face
-		idx[j++] = 8*i + 1;
-		idx[j++] = 8*i + 0;
-		idx[j++] = 8*i + 7;
-		idx[j++] = 8*i + 0;
-		idx[j++] = 8*i + 4;
-		idx[j++] = 8*i + 7;
+		idx[j++] = 12*i + 1;
+		idx[j++] = 12*i + 0;
+		idx[j++] = 12*i + 7;
+		idx[j++] = 12*i + 0;
+		idx[j++] = 12*i + 4;
+		idx[j++] = 12*i + 7;
 
 		//right face
-		idx[j++] = 8*i + 2;
-		idx[j++] = 8*i + 6;
-		idx[j++] = 8*i + 3;
-		idx[j++] = 8*i + 3;
-		idx[j++] = 8*i + 6;
-		idx[j++] = 8*i + 5;
+		idx[j++] = 12*i + 2;
+		idx[j++] = 12*i + 6;
+		idx[j++] = 12*i + 3;
+		idx[j++] = 12*i + 3;
+		idx[j++] = 12*i + 6;
+		idx[j++] = 12*i + 5;
 	}
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);

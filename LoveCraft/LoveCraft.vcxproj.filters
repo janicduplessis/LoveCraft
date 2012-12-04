@@ -54,6 +54,12 @@
     <ClCompile Include="chunkmesh.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="projectile.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="quaternion.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="define.h">
@@ -113,12 +119,27 @@
     <ClInclude Include="ArrayBool.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="projectile.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="quaternion.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="matrix4.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="media\shader\shader01.frag">
+    <None Include="media\shader\modelshader.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="media\shader\shader01.vert">
+    <None Include="media\shader\modelshader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="media\shader\cubeshader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="media\shader\cubeshader.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

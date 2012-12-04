@@ -1,5 +1,4 @@
 #include "mesh.h"
-#include <cassert>
 #include <climits>
 #include <iostream>
 

@@ -1,5 +1,5 @@
-#ifndef ARRAY_2D_H__
-#define ARRAY_2D_H__
+#ifndef ARRAY2D_H__
+#define ARRAY2D_H__
 
 #include <cassert>
 #include "vector2.h"
@@ -76,4 +76,4 @@ void Array2d<T>::Reset(T value)
 		m_values[i] = type;
 }
 
-#endif // BLOCKARRAY2D_H__
+#endif // ARRAY2D_H__

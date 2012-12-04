@@ -106,6 +106,7 @@ private:
 	Array<bool> m_controls;
 
 	Shader m_shader01;
+	Shader m_shaderModel;
 	Chunk m_testChunk;
 
 	bool m_ghostMode;

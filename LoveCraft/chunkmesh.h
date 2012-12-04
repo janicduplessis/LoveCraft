@@ -1,5 +1,5 @@
-#ifndef CHUNK_MESH_H__
-#define CHUNK_MESH_H__
+#ifndef CHUNKMESH_H__
+#define CHUNKMESH_H__
 
 #include "mesh.h"
 #include "texture.h"

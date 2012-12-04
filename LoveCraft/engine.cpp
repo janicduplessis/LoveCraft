@@ -73,9 +73,14 @@ void Engine::LoadResource()
 {
 	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
 	std::cout << " Loading and compiling shaders ..." << std::endl;
-	if (!m_shader01.Load(SHADER_PATH "shader01.vert", SHADER_PATH "shader01.frag", true))
+	if (!m_shader01.Load(SHADER_PATH "cubeshader.vert", SHADER_PATH "cubeshader.frag", true))
 	{
-		std::cout << " Failed to load shader " << std::endl;
+		std::cout << " Failed to load cubes shader " << std::endl;
+		exit(1) ;
+	}
+	if (!m_shaderModel.Load(SHADER_PATH "modelshader.vert", SHADER_PATH "modelshader.frag", true))
+	{
+		std::cout << " Failed to load model shader" << std::endl;
 		exit(1) ;
 	}
 }
@@ -115,7 +120,7 @@ void Engine::Render(float elapsedTime)
 		m_camera.ApplyTranslation();
 
 		// render le modele du player
-		m_shader01.Use();
+		m_shaderModel.Use();
 		m_player.Render(m_wireframe);
 		Shader::Disable();
 	} 

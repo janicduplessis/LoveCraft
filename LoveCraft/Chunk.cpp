@@ -85,13 +85,19 @@ void Chunk::Render() const
 
 void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& count, BLOCK_TYPE bt, int x, int y, int z)
 {
+	// cube 12 vertex!!!
 	// vertices pour utiliser avec index
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + 0.5f, 0.f, 0.f, 1.f, 0.f, 0.f);		//1
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + 0.5f, 1.f, 0.f, 0.f, 1.f, 0.f);	//2
-	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + -0.5f, z + 0.5f, 1.f, 1.f, 0.f, 1.f, 1.f);		//3
-	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 0.f, 1.f, 0.f, 0.f, 1.f);		//4
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + -0.5f, 0.f, 0.f, 0.f, 0.f, 0.f);	//5
-	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + -0.5f, 1.f, 0.f, 0.f, 1.f, 0.f);		//6
-	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + -0.5f, z + -0.5f, 1.f, 1.f, 0.f, 1.f, 1.f);	//7
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + -0.5f, 0.f, 1.f, 0.f, 0.f, 1.f);	//8
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + 0.5f, 0.f, 0.f, 1.f, 1.f, 1.f);		//0
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + 0.5f, 1.f, 0.f, 0.f, 1.f, 0.f);	//1
+	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + -0.5f, z + 0.5f, 1.f, 1.f, 0.f, 1.f, 1.f);		//2
+	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 0.f, 1.f, 0.f, 1.f, 0.f);		//3
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + -0.5f, 0.f, 0.f, 0.f, 0.f, 1.f);	//4
+	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + -0.5f, 1.f, 0.f, 0.f, 0.f, 0.f);		//5
+	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + -0.5f, z + -0.5f, 1.f, 1.f, 0.f, 0.f, 1.f);	//6
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + -0.5f, 0.f, 1.f, 0.f, 0.f, 0.f);	//7
+	// vertices additionnels pour uv
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + 0.5f, 0.f, 0.f, 1.f, 0.f, 0.f);		//8
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + 0.5f, 1.f, 0.f, 0.f, 0.f, 1.f);	//9
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + -0.5f, 0.f, 0.f, 0.f, 1.f, 0.f);	//10
+	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + -0.5f, 1.f, 0.f, 0.f, 1.f, 1.f);		//11
 }

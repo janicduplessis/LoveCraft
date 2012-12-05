@@ -92,7 +92,7 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 void Player::Render(bool wireFrame)
 {
 	m_model.SetPosition(m_pos);
-	m_model.SetRotation(Vector3f(0, m_rot.y));
+	m_model.SetRotation(Vector3f(0, m_rot.y, 0));
 	m_model.Render(wireFrame);
 }
 

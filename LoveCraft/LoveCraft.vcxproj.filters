@@ -130,16 +130,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="media\shader\modelshader.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="media\shader\modelshader.vert">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="media\shader\cubeshader.frag">
       <Filter>Shaders</Filter>
     </None>
     <None Include="media\shader\cubeshader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="media\shader\modelshader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="media\shader\modelshader.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

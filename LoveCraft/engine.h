@@ -8,6 +8,7 @@
 #include "shader.h"
 #include "Chunk.h"
 #include "ArrayBool.h"
+#include "testprojectile.h"
 
 class Engine : public OpenglContext
 {
@@ -108,6 +109,8 @@ private:
 	Shader m_shader01;
 	Shader m_shaderModel;
 	Chunk m_testChunk;
+
+	TestProjectile m_projectile;
 
 	bool m_ghostMode;
 	bool m_rightClick;

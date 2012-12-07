@@ -60,6 +60,10 @@ void Engine::Init()
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0Spec);
 
 	m_player.Init();
+	m_projectile.Init();
+	m_projectile.SetDestination(Vector3f(120,30,100));
+	m_projectile.SetInitialSpeed(Vector3f(1,1,0));
+	m_projectile.SetPosition(Vector3f(0,0,0));
 
 	CenterMouse();
 	HideCursor();
@@ -154,6 +158,10 @@ void Engine::Render(float elapsedTime)
 	m_testChunk.Render();
 	Shader::Disable();
 
+	m_projectile.Move(elapsedTime);
+	m_projectile.Render();
+
+
 }
 
 void Engine::Render2D( float elapsedTime )
@@ -204,6 +212,9 @@ void Engine::KeyPressEvent(unsigned char key)
 			HideCursor();
 			m_camera.SetMode(Camera::CAM_FIRST_PERSON);
 		}
+		break;
+	case 57:
+		m_projectile.Shoot();
 		break;
 	default:
 		std::cout << "Unhandled key: " << (int)key << std::endl;

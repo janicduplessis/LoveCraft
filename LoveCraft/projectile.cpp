@@ -1,5 +1,7 @@
 #include "projectile.h"
+#include "matrix4.h"
 #include <cmath>
+#include <iostream>
 
 
 Projectile::Projectile() : m_speedIni(0), m_hasMass(false), m_timeToLive(999999999999), 
@@ -34,30 +36,35 @@ void Projectile::Move(float elapsedTime)
 
 	// si le projectile ne se dirige pas directement vers sa destination
 	// (vecteur distance perpendiculaire a vitesse)
-	if (m_speed.Cross(distance) != Vector3f())
+	if (m_speed.Cross(distance) != Vector3f(0,0,0))
 	{
 		// calculer l'angle entre les 2 vecteurs
-		float a = sqrt(distance.x * distance.x + distance.y * distance.y + distance.z * distance.z);
-		float b = sqrt(m_speed.x * m_speed.x + m_speed.y * m_speed.y + m_speed.z * m_speed.z);
-
-		float angleA = std::acosf(distance.Dot(m_speed) / (a * b));
-
-		Vector3f axis = distance.Cross(m_speed);
-
-		// calculer angle a ajouter ou soustraire
-		// utiliser sens de l'axe
-
+		float angleA = std::acosf(distance.Dot(m_speedIni) / (distance.Lenght() * m_speedIni.Lenght()));
+		Vector3f axis = distance.Cross(m_speedIni);
+		axis.Normalize();
+		// rotation autour de laxe
 		Quaternion q;
 		Quaternion l;
-		l.SetRotation(angleA, axis);
-
+		l.SetRotation(0.02, axis);
 		q = l * q;
+		Matrix4f rot = q.RotationMatrix();
 
-		//q.RotationMatrix() * m_speed;
+		std::cout << "-----------------------" << std::endl;
+		std::cout << rot.Get11() << std::endl;
+		std::cout << rot.Get12() << std::endl;
+		std::cout << rot.Get13() << std::endl;
+		std::cout << rot.Get21() << std::endl;
+		std::cout << rot.Get22() << std::endl;
+		std::cout << rot.Get23() << std::endl;
+
+		// matrice de rotation * speed
+		m_speed.x = rot.Get11() * m_speed.x + rot.Get12() * m_speed.y + rot.Get13() * m_speed.z;
+		m_speed.y = rot.Get21() * m_speed.x + rot.Get22() * m_speed.y + rot.Get23() * m_speed.z;
+		m_speed.z = rot.Get31() * m_speed.x + rot.Get32() * m_speed.y + rot.Get33() * m_speed.z;
+		m_speed.Afficher();
+		// calcul la nouvelle position
+		m_pos += m_speed * elapsedTime;
 	}
-		
-	
-
 }
 
 void Projectile::Shoot() 
@@ -69,10 +76,6 @@ void Projectile::Shoot()
 		m_acceleration.y -= 9.8f;
 
 	m_speed = m_speedIni;
-
-	float x = std::abs(m_pos.x - m_destination.x);
-	float y = std::abs(m_pos.z - m_destination.z);
-
 }
 
 void Projectile::SetInitialSpeed( const Vector3f& iniSpeed )

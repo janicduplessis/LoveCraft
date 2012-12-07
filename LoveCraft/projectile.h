@@ -11,18 +11,18 @@ class Projectile
 {
 public:
 	Projectile();
-	~Projectile();
+	virtual ~Projectile();
 
 	/**
 	 * Deplace le projectile en fonction de ses parametres
 	 * et du temps depuis la derniere execution de move
 	 */
-	void Move(float elapsedTime);
+	virtual void Move(float elapsedTime);
 
 	/**
 	 * Lance le projectile
 	 */
-	void Shoot();
+	virtual void Shoot();
 
 	/**
 	 * Vitesse Initiale

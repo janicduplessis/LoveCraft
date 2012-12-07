@@ -2,6 +2,7 @@
 #define VECTOR_3_H__
 
 #include "define.h"
+#include <iostream>
 
 /**
  * @brief Template class pour manipuler des vecteurs 3d
@@ -154,13 +155,14 @@ Vector3<T>& Vector3<T>::operator+=( const Vector3<T>& v )
 template <class T>
 bool Vector3<T>::operator!=( const Vector3<T>& v ) const
 {
-	return (x == v.x && y == v.y && z == v.z);
+	return !(*this == v);
 }
 
 template <class T>
 bool Vector3<T>::operator==( const Vector3<T>& v ) const
 {
-	return !(*this == v);
+	
+	return (x == v.x && y == v.y && z == v.z);
 }
 
 template <class T>
@@ -188,7 +190,7 @@ template <class T>
 void Vector3<T>::Normalize()
 {
 	T len = Lenght();
-	if(len != 0)
+	if(len == 0)
 		return;
 	x /= len;
 	y /= len;

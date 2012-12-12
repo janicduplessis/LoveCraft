@@ -105,7 +105,7 @@ void Engine::Render(float elapsedTime)
 
 	// calcul la position du joueur et de la camera
 	m_player.Move(m_controls, m_ghostMode, elapsedTime);
-	m_camera.SetPosition(m_player.GetPosition());
+	m_camera.SetPosition(m_player.Position());
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -192,13 +192,13 @@ void Engine::Render2D(float elapsedTime)
 	// Bind de la texture pour le font
 	m_textureFont.Bind();
 	std::ostringstream ss;
-	ss << " Fps : " << std::setprecision(5) << elapsedTime * 3000;
-	PrinText(10, Height() - 25, ss. str());
+	ss << "Position : " << std::setprecision(3) << m_player.Position().x << ", " 
+		<< std::setprecision(3) << m_player.Position().y << ", " << 
+		std::setprecision(3) << m_player.Position().z;
+	PrinText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 20, ss. str());
 	ss.str("");
-	ss << " Position : " << std::setprecision(3) << m_player.GetPosition().x << ", " 
-		<< std::setprecision(3) << m_player.GetPosition().y << ", " << 
-		std::setprecision(3) << m_player.GetPosition().z;
-	PrinText(10, 10, ss.str());
+	ss << "Fps : " << std::setprecision(5) << 1 / elapsedTime;
+	PrinText(Width() - INTERFACE_SIDE_RIGHT_WIDTH - 120, Height() - INTERFACE_TOP_HEIGHT - 20, ss.str());
 	//Affichage du crosshair
 	if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
 	{
@@ -216,6 +216,19 @@ void Engine::Render2D(float elapsedTime)
 		glVertex2i(0, CROSSHAIR_SIZE);
 		glEnd();
 	}
+	//Optimisation possible par la surcharge d'opérateurs
+	if (m_controls.Get(38))		//Mode course
+		RenderSquare(
+		m_playScreenBotLeft,
+		Vector2<float>(m_textureCthulhu.GetWidth(), m_textureCthulhu.GetHeight()),
+		m_textureCthulhu);
+	if (m_ghostMode)			//Mode ghost
+		RenderSquare(
+		Vector2<float>(Width() / 2 - m_textureGhost.GetWidth() /2, m_playScreenBotLeft.y),
+		Vector2<float>(m_textureGhost.GetWidth(), m_textureGhost.GetHeight()),
+		m_textureGhost);
+
+	glDisable(GL_BLEND);
 	//Affichage de l'interface
 	//Bottom
 	RenderSquare(
@@ -238,20 +251,7 @@ void Engine::Render2D(float elapsedTime)
 		Vector2<float>(Width(), Height() - INTERFACE_TOP_HEIGHT * 3),
 		m_textureInterface);
 
-	//Optimisation par la surcharge d'opérateurs
-	if (m_controls.Get(38))
-		RenderSquare(
-		m_playScreenBotLeft,
-		Vector2<float>(m_textureCthulhu.GetWidth(), m_textureCthulhu.GetHeight()),
-		m_textureCthulhu);
-	if (m_ghostMode)
-		RenderSquare(
-		Vector2<float>(Width() / 2 - m_textureGhost.GetWidth() /2, m_playScreenBotLeft.y),
-		Vector2<float>(m_textureGhost.GetWidth(), m_textureGhost.GetHeight()),
-		m_textureGhost);
-
 	glEnable(GL_LIGHTING);
-	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
@@ -431,7 +431,7 @@ void Engine::MouseMoveEvent(int x, int y)
 		m_player.TurnLeftRight((float)x);
 		m_player.TurnTopBottom((float)y);
 
-		m_camera.SetRotation(m_player.GetRotation());
+		m_camera.SetRotation(m_player.Rotation());
 
 		CenterMouse();
 	}

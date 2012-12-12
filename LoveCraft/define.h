@@ -45,7 +45,7 @@ typedef long long int64;
 #define MOUSE_SENSIBILITY			0.075f
 #define CROSSHAIR_SIZE				64
 
-typedef uint8 T;
+typedef uint8 BlockType;
 enum BLOCK_TYPE {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS, BTYPE_BRICK, BTYPE_SAND, BTYPE_EMPTY};
 
 

@@ -34,7 +34,7 @@ Vector3f Camera::GetPosition() const
 	return m_pos;
 }
 
-void Camera::SetPosition( Vector3f pos )
+void Camera::SetPosition(Vector3f pos)
 {
 	m_pos = pos;
 }
@@ -47,7 +47,7 @@ void Camera::ApplyRotation() const
 
 void Camera::ApplyTranslation() const
 {
-	glTranslatef(- m_pos.x, - m_pos.y, - m_pos.z);
+	glTranslatef(-m_pos.x, -m_pos.y, -m_pos.z);
 }
 
 Camera::Mode Camera::GetMode() const

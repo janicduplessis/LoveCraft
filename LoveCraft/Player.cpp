@@ -96,12 +96,12 @@ void Player::Render(bool wireFrame)
 	m_model.Render(wireFrame);
 }
 
-Vector3f Player::GetPosition() const
+Vector3f Player::Position() const
 {
 	return m_pos;
 }
 
-Vector2f Player::GetRotation() const
+Vector2f Player::Rotation() const
 {
 	return m_rot;
 }

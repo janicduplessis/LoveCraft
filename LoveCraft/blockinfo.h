@@ -7,10 +7,10 @@
 class BlockInfo
 {
     public:
-    BlockInfo(T type, const std::string& nom);
+    BlockInfo(BlockType type, const std::string& nom);
     ~BlockInfo();
 
-    T GetType() const;
+    BlockType GetType() const;
 
     void SetDurabilite(int durabilite);
     int GetDurabilite() const;
@@ -18,7 +18,7 @@ class BlockInfo
     void Afficher() const;
 
     private:
-    T m_type;
+    BlockType m_type;
     std::string m_nom;
     int m_durabilite;
 

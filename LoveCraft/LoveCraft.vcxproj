@@ -96,6 +96,7 @@
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="testprojectile.cpp" />
     <ClCompile Include="texture.cpp" />
+    <ClCompile Include="textureatlas.cpp" />
     <ClCompile Include="tool.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +116,7 @@
     <ClInclude Include="projectile.h" />
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="testprojectile.h" />
+    <ClInclude Include="textureatlas.h" />
     <ClInclude Include="vector2.h" />
     <ClInclude Include="openglcontext.h" />
     <ClInclude Include="player.h" />

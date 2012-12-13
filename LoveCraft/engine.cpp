@@ -1,22 +1,20 @@
 #include "engine.h"
 #include <iostream>
 #include <algorithm>
+#include <iomanip>
 #include <cmath>
 #include "ArrayBool.h"
 
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false), m_controls(Array<bool>(256, false)),
-	m_rightClick(false), m_leftClick(false), m_camRadius(10)
+	m_rightClick(false), m_leftClick(false), m_camRadius(10),
+	m_playScreenBotLeft(Vector2<float>(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
+	m_playScreenTopLeft(Vector2<float>(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
+	m_playScreenTopRight(Vector2<float>(Width() - INTERFACE_SIDE_RIGHT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
+	m_playScreenBotRight(Vector2<float>(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
+	m_playScreenSize(Vector2<float>(m_playScreenTopRight.x - m_playScreenTopLeft.x, m_playScreenTopLeft.y - m_playScreenBotLeft.y))
 {
-	Array<bool> a01(128);
-	a01.Reset(false);
-	a01.Set(0, true);
-	a01.Set(3, true);
-
-	std::cout << a01.Get(0) << std::endl;
-	std::cout << a01.Get(1) << std::endl;
-	std::cout << a01.Get(3) << std::endl;
 
 }
 
@@ -76,6 +74,12 @@ void Engine::DeInit()
 void Engine::LoadResource()
 {
 	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
+	LoadTexture(m_textureInterface, TEXTURE_PATH "rock.jpg");
+	LoadTexture(m_textureCrosshair, TEXTURE_PATH "cross.bmp");
+	LoadTexture(m_textureFont, TEXTURE_PATH "font.bmp");
+	LoadTexture(m_textureCthulhu, TEXTURE_PATH "bewareofcthulhu.png");
+	LoadTexture(m_textureGhost, TEXTURE_PATH "boo.png");
+
 	std::cout << " Loading and compiling shaders ..." << std::endl;
 	if (!m_shader01.Load(SHADER_PATH "cubeshader.vert", SHADER_PATH "cubeshader.frag", true))
 	{
@@ -101,7 +105,7 @@ void Engine::Render(float elapsedTime)
 
 	// calcul la position du joueur et de la camera
 	m_player.Move(m_controls, m_ghostMode, elapsedTime);
-	m_camera.SetPosition(m_player.GetPosition());
+	m_camera.SetPosition(m_player.Position());
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -158,44 +162,176 @@ void Engine::Render(float elapsedTime)
 	//m_testChunk.Render();
 	Shader::Disable();
 
+	// HUD
+	if (m_wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	Render2D(elapsedTime);
+	if (m_wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 	m_projectile.Move(elapsedTime);
 	m_projectile.Render();
 
 
 }
 
-void Engine::Render2D( float elapsedTime )
+void Engine::Render2D(float elapsedTime)
 {
+	// Setter le blend function , tout ce qui sera noir sera transparent
+	glDisable(GL_LIGHTING);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0, Width(), 0, Height(), -1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	// Bind de la texture pour le font
+	m_textureFont.Bind();
+	std::ostringstream ss;
+	ss << "Position : " << std::setprecision(3) << m_player.Position().x << ", " 
+		<< std::setprecision(3) << m_player.Position().y << ", " << 
+		std::setprecision(3) << m_player.Position().z;
+	PrinText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 20, ss. str());
+	ss.str("");
+	ss << "Fps : " << std::setprecision(5) << 1 / elapsedTime;
+	PrinText(Width() - INTERFACE_SIDE_RIGHT_WIDTH - 120, Height() - INTERFACE_TOP_HEIGHT - 20, ss.str());
+	//Affichage du crosshair
+	if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
+	{
+		m_textureCrosshair.Bind();
+		glLoadIdentity();
+		glTranslated(Width() / 2 - CROSSHAIR_SIZE / 2, Height() / 2 - CROSSHAIR_SIZE / 2, 0);
+		glBegin(GL_QUADS);
+		glTexCoord2f(0, 0);
+		glVertex2i(0, 0);
+		glTexCoord2f(1, 0);
+		glVertex2i(CROSSHAIR_SIZE, 0);
+		glTexCoord2f(1, 1);
+		glVertex2i(CROSSHAIR_SIZE, CROSSHAIR_SIZE);
+		glTexCoord2f(0, 1);
+		glVertex2i(0, CROSSHAIR_SIZE);
+		glEnd();
+	}
+	//Optimisation possible par la surcharge d'opérateurs
+	if (m_controls.Get(38))		//Mode course
+		RenderSquare(
+		m_playScreenBotLeft,
+		Vector2<float>(m_textureCthulhu.GetWidth(), m_textureCthulhu.GetHeight()),
+		m_textureCthulhu);
+	if (m_ghostMode)			//Mode ghost
+		RenderSquare(
+		Vector2<float>(Width() / 2 - m_textureGhost.GetWidth() /2, m_playScreenBotLeft.y),
+		Vector2<float>(m_textureGhost.GetWidth(), m_textureGhost.GetHeight()),
+		m_textureGhost);
+
+	glDisable(GL_BLEND);
+	//Affichage de l'interface
+	//Bottom
+	RenderSquare(
+		Vector2<float>(0, 0), 
+		Vector2<float>(Width(), INTERFACE_BOTTOM_HEIGHT), 
+		m_textureInterface);
+	//Left
+	RenderSquare(
+		Vector2<float>(0, INTERFACE_BOTTOM_HEIGHT), 
+		Vector2<float>(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3), 
+		m_textureInterface);
+	//Top
+	RenderSquare(
+		Vector2<float>(0, Height() - INTERFACE_TOP_HEIGHT),
+		Vector2<float>(Width(), INTERFACE_TOP_HEIGHT),
+		m_textureInterface);
+	//Right
+	RenderSquare(
+		Vector2<float>(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
+		Vector2<float>(Width(), Height() - INTERFACE_TOP_HEIGHT * 3),
+		m_textureInterface);
+
+	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 
 }
 
+void Engine::RenderSquare(const Vector2<float>& position, const Vector2<float>& size, Texture& texture)
+{
+	texture.Bind();
+	glLoadIdentity();
+	glTranslated(position.x, position.y, 0);
+
+	glBegin(GL_QUADS);
+
+	glTexCoord2f(0, size.y / texture.GetHeight());
+	glVertex2f(0, 0);
+
+	glTexCoord2f(size.x / texture.GetWidth(), size.y / texture.GetHeight());
+	glVertex2f(size.x, 0);
+
+	glTexCoord2f(size.x / texture.GetWidth(), 0);
+	glVertex2f(size.x, size.y);
+
+	glTexCoord2f(0, 0);
+	glVertex2f(0, size.y);
+
+	glEnd();
+}
+
+void Engine::PrinText(unsigned int x, unsigned int y, const std::string& t)
+{
+	glLoadIdentity();
+	glTranslated(x, y, 0);
+	for (unsigned int i = 0; i < t.length(); ++i)
+	{
+		float left = (float)((t[i] - 32) % 16) / 16.0f;
+		float top = (float)((t[i] - 32) / 16) / 16.0f;
+		top += 0.5f;
+		glBegin(GL_QUADS);
+		glTexCoord2f(left, 1.0f - top - 0.0625f);
+		glVertex2i(0, 0);
+		glTexCoord2f(left + 0.0625f, 1.0f - top - 0.0625f);
+		glVertex2i(12 , 0);
+		glTexCoord2f(left + 0.0625f, 1.0f - top);
+		glVertex2i(12, 12);
+		glTexCoord2f(left , 1.0f - top );
+		glVertex2i(0, 12);
+		glEnd();
+		glTranslated(8, 0, 0);
+	}
+}
 
 void Engine::KeyPressEvent(unsigned char key)
 {
 	m_controls.Set(key, true);
 	switch(key)
 	{
-	//case 0:    // A
-	//	m_dirLeft = true;
-	//	break;
-	//case 3:    // D
-	//	m_dirRight = true;
-	//	break;
-	//case 22:   // W
-	//	m_dirFront = true;
-	//	break;
-	//case 18:   // S
-	//	m_dirBack = true;
-	//	break;
-	//case 57:   // Space
-	//	m_space = true;
-	//	break;
-	//case 37:   // CTRL
-	//	m_ctrl = true;
-	//	break;
-	//case 38:   // Shift
-	//	m_run = true;
-	//	break;
+		//case 0:    // A
+		//	m_dirLeft = true;
+		//	break;
+		//case 3:    // D
+		//	m_dirRight = true;
+		//	break;
+		//case 22:   // W
+		//	m_dirFront = true;
+		//	break;
+		//case 18:   // S
+		//	m_dirBack = true;
+		//	break;
+		//case 57:   // Space
+		//	m_space = true;
+		//	break;
+		//case 37:   // CTRL
+		//	m_ctrl = true;
+		//	break;
+		//case 38:   // Shift
+		//	m_run = true;
+		//	break;
 	case 36:	// ESC
 		Stop();
 		break;
@@ -227,27 +363,27 @@ void Engine::KeyReleaseEvent(unsigned char key)
 	m_controls.Set(key, false);
 	switch(key)
 	{
-	//case 0:    // A
-	//	m_dirLeft = false;
-	//	break;
-	//case 3:    // D
-	//	m_dirRight = false;
-	//	break;
-	//case 22:   // W
-	//	m_dirFront = false;
-	//	break;
-	//case 18:   // S
-	//	m_dirBack = false;
-	//	break;
-	//case 57:   // Space
-	//	m_space = false;
-	//	break;
-	//case 37:   // CTRL
-	//	m_ctrl = false;
-	//	break;
-	//case 38:   // Shift
-	//	m_run = false;
-	//	break;
+		//case 0:    // A
+		//	m_dirLeft = false;
+		//	break;
+		//case 3:    // D
+		//	m_dirRight = false;
+		//	break;
+		//case 22:   // W
+		//	m_dirFront = false;
+		//	break;
+		//case 18:   // S
+		//	m_dirBack = false;
+		//	break;
+		//case 57:   // Space
+		//	m_space = false;
+		//	break;
+		//case 37:   // CTRL
+		//	m_ctrl = false;
+		//	break;
+		//case 38:   // Shift
+		//	m_run = false;
+		//	break;
 	case 24:       // Y
 		m_wireframe = !m_wireframe;
 		if(m_wireframe)
@@ -295,7 +431,7 @@ void Engine::MouseMoveEvent(int x, int y)
 		m_player.TurnLeftRight((float)x);
 		m_player.TurnTopBottom((float)y);
 
-		m_camera.SetRotation(m_player.GetRotation());
+		m_camera.SetRotation(m_player.Rotation());
 
 		CenterMouse();
 	}

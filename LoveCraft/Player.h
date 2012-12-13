@@ -32,13 +32,13 @@ public:
 	* Position du joueur
 	* @return Vector3f
 	*/
-	Vector3f GetPosition() const;
+	Vector3f Position() const;
 
 	/**
 	* Rotation du joueur
 	* @return Vector2f
 	*/
-	Vector2f GetRotation() const;
+	Vector2f Rotation() const;
 
 	/**
 	* Applique les valeurs de l'angle de rotation sur l'axe des Y

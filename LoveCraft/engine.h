@@ -10,6 +10,7 @@
 #include "ArrayBool.h"
 #include "testprojectile.h"
 #include "vector2.h"
+#include "info.h"
 
 class Engine : public OpenglContext
 {

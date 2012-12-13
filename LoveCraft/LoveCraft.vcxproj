@@ -85,6 +85,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="chunk.cpp" />
     <ClCompile Include="chunkmesh.cpp" />
+    <ClCompile Include="info.cpp" />
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="main.cpp" />
@@ -107,6 +108,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="chunk.h" />
     <ClInclude Include="chunkmesh.h" />
+    <ClInclude Include="info.h" />
     <ClInclude Include="matrix4.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="define.h" />

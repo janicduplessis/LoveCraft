@@ -46,7 +46,7 @@ typedef long long int64;
 #define CROSSHAIR_SIZE				64
 
 typedef uint8 BlockType;
-enum BLOCK_TYPE {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS, BTYPE_BRICK, BTYPE_SAND, BTYPE_EMPTY};
+enum BLOCK_TYPE {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS, BTYPE_BRICK, BTYPE_SAND, BTYPE_COUNT};
 
 
 #define TEXTURE_PATH        "../lovecraft/media/textures/"

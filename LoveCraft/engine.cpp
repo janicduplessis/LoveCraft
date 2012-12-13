@@ -63,6 +63,8 @@ void Engine::Init()
 	m_projectile.SetInitialSpeed(Vector3f(1,1,0));
 	m_projectile.SetPosition(Vector3f(0,0,0));
 
+	//Info::Get().GetBlocInfo(BTYPE_AIR)->Afficher();
+
 	CenterMouse();
 	HideCursor();
 }

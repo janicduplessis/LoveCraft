@@ -6,7 +6,7 @@
 
 class BlockInfo
 {
-    public:
+public:
     BlockInfo(BlockType type, const std::string& nom);
     ~BlockInfo();
 

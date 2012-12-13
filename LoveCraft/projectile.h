@@ -64,7 +64,7 @@ public:
 	 */
 	void SetHasMass(bool hasMass);
 	bool HasMass() const;
-
+	void TestRotation();
 private:
 	Vector3f m_speed;
 	Vector3f m_speedIni;

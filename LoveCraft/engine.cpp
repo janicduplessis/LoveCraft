@@ -158,9 +158,8 @@ void Engine::Render(float elapsedTime)
 	m_testChunk.Render();
 	Shader::Disable();
 
-	m_projectile.Move(elapsedTime);
+	m_projectile.TestRotation();
 	m_projectile.Render();
-
 
 }
 

@@ -44,8 +44,8 @@ void Engine::Init()
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_LIGHTING);
 	glEnable (GL_LINE_SMOOTH);
-	if (!m_wireframe)
-		glEnable(GL_CULL_FACE);
+	//if (!m_wireframe)
+		//glEnable(GL_CULL_FACE);
 
 	// Light
 	GLfloat light0Pos[4]  = {0.0f, CHUNK_SIZE_Y, 0.0f, 1.0f};
@@ -61,7 +61,7 @@ void Engine::Init()
 
 	m_player.Init();
 	m_projectile.Init();
-	m_projectile.SetDestination(Vector3f(120,30,100));
+	m_projectile.SetDestination(Vector3f(10,10,10));
 	m_projectile.SetInitialSpeed(Vector3f(1,1,0));
 	m_projectile.SetPosition(Vector3f(0,0,0));
 
@@ -155,7 +155,7 @@ void Engine::Render(float elapsedTime)
 	if(m_testChunk.IsDirty())
 		m_testChunk.Update();
 	m_shader01.Use();
-	m_testChunk.Render();
+	//m_testChunk.Render();
 	Shader::Disable();
 
 	m_projectile.Move(elapsedTime);

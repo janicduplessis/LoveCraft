@@ -39,32 +39,26 @@ void Projectile::Move(float elapsedTime)
 	if (m_speed.Cross(distance) != Vector3f(0,0,0))
 	{
 		// calculer l'angle entre les 2 vecteurs
-		float angleA = std::acosf(distance.Dot(m_speedIni) / (distance.Lenght() * m_speedIni.Lenght()));
-		Vector3f axis = distance.Cross(m_speedIni);
+		float angleA = std::acosf(distance.Dot(m_speed) / (distance.Lenght() * m_speed.Lenght()));
+		Vector3f axis = distance.Cross(m_speed);
 		axis.Normalize();
 		// rotation autour de laxe
 		Quaternion q;
 		Quaternion l;
-		l.SetRotation(0.02, axis);
+		//l.SetRotation((angleA * elapsedTime < 0.02f) ? angleA * elapsedTime : 0.02f, axis);
+		l.SetRotation(-0.02f, axis);
 		q = l * q;
-		Matrix4f rot = q.RotationMatrix();
-
-		std::cout << "-----------------------" << std::endl;
-		std::cout << rot.Get11() << std::endl;
-		std::cout << rot.Get12() << std::endl;
-		std::cout << rot.Get13() << std::endl;
-		std::cout << rot.Get21() << std::endl;
-		std::cout << rot.Get22() << std::endl;
-		std::cout << rot.Get23() << std::endl;
+		Matrix4f& rot = q.RotationMatrix();
 
 		// matrice de rotation * speed
 		m_speed.x = rot.Get11() * m_speed.x + rot.Get12() * m_speed.y + rot.Get13() * m_speed.z;
 		m_speed.y = rot.Get21() * m_speed.x + rot.Get22() * m_speed.y + rot.Get23() * m_speed.z;
 		m_speed.z = rot.Get31() * m_speed.x + rot.Get32() * m_speed.y + rot.Get33() * m_speed.z;
-		m_speed.Afficher();
-		// calcul la nouvelle position
-		m_pos += m_speed * elapsedTime;
 	}
+
+	m_speed.Afficher();
+	// calcul la nouvelle position
+	m_pos += m_speed * elapsedTime;
 }
 
 void Projectile::Shoot() 

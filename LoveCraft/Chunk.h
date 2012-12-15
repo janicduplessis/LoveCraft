@@ -4,6 +4,7 @@
 #include "array3d.h"
 #include "define.h"
 #include "chunkmesh.h"
+#include "info.h"
 
 class Chunk
 {
@@ -20,8 +21,12 @@ public:
 	bool IsDirty() const;
 	void AddBlockToMesh(ChunkMesh::VertexData* vd, int& count, BlockType bt, int x, int y, int z);
 
+	Vector2i GetPosition() const;
+	void SetPosition(Vector2i pos);
+
 private:
 	bool m_isDirty;
+	Vector2i m_pos;
 	Array3d<BlockType> m_blocks;
 	ChunkMesh m_chunkMesh;
 };

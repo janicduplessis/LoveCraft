@@ -1,20 +1,8 @@
 #include "chunk.h"
 
-Chunk::Chunk() : m_blocks(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z)
+Chunk::Chunk() : m_blocks(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z), m_pos(0)
 {
 	m_blocks.Reset(BTYPE_AIR);
-
-	for ( int x = 0; x < CHUNK_SIZE_X ; ++x)
-	{
-		for ( int z = 0; z < CHUNK_SIZE_Z ; ++z)
-		{
-			for ( int y = 0; y < 32; ++y)
-			{
-				if(x % 2 == 0 && y % 2 == 0 && z % 2 == 0)
-					SetBloc(x, y, z, BTYPE_DIRT );
-			}
-		}
-	}
 }
 
 Chunk::~Chunk()
@@ -48,7 +36,7 @@ void Chunk::Update()
 	// Update mesh
 	if( m_isDirty )
 	{
-		int maxVertexCount = ( CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z ) * (6 * 4);
+		int maxVertexCount = ( CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z ) * 12;
 		ChunkMesh :: VertexData * vd = new ChunkMesh :: VertexData [ maxVertexCount ];
 		int count = 0;
 		for ( int x = 0; x < CHUNK_SIZE_X ; ++x)
@@ -85,19 +73,35 @@ void Chunk::Render() const
 
 void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& count, BlockType bt, int x, int y, int z)
 {
+	//determine les coords de la texture du type de bloc
+	BlockInfo::TextureCoords coords = Info::Get().GetBlocInfo(bt)->GetTextureCoords();
+	float x0 = coords.u;
+	float y0 = coords.v;
+	float x1 = coords.u + coords.w;
+	float y1 = coords.v + coords.h;
 	// cube 12 vertex!!!
 	// vertices pour utiliser avec index
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + 0.5f, 0.f, 0.f, 1.f, 1.f, 1.f);		//0
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + 0.5f, 1.f, 0.f, 0.f, 1.f, 0.f);	//1
-	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + -0.5f, z + 0.5f, 1.f, 1.f, 0.f, 1.f, 1.f);		//2
-	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 0.f, 1.f, 0.f, 1.f, 0.f);		//3
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + -0.5f, 0.f, 0.f, 0.f, 0.f, 1.f);	//4
-	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + -0.5f, 1.f, 0.f, 0.f, 0.f, 0.f);		//5
-	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + -0.5f, z + -0.5f, 1.f, 1.f, 0.f, 0.f, 1.f);	//6
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + -0.5f, 0.f, 1.f, 0.f, 0.f, 0.f);	//7
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + 0.5f, 0.f, 0.f, 1.f, x1, y1);		//0
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + 0.5f, 1.f, 0.f, 0.f, x1, y0);		//1
+	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + -0.5f, z + 0.5f, 1.f, 1.f, 0.f, x1, y1);		//2
+	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 0.f, 1.f, 0.f, x1, y0);		//3
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + -0.5f, 0.f, 0.f, 0.f, x0, y1);		//4
+	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + -0.5f, 1.f, 0.f, 0.f, x0, y0);		//5
+	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + -0.5f, z + -0.5f, 1.f, 1.f, 0.f, x0, y1);		//6
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + -0.5f, 0.f, 1.f, 0.f, x0, y0);		//7
 	// vertices additionnels pour uv
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + 0.5f, 0.f, 0.f, 1.f, 0.f, 0.f);		//8
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + 0.5f, 1.f, 0.f, 0.f, 0.f, 1.f);	//9
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + -0.5f, 0.f, 0.f, 0.f, 1.f, 0.f);	//10
-	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + -0.5f, 1.f, 0.f, 0.f, 1.f, 1.f);		//11
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + 0.5f, 0.f, 0.f, 1.f, x0, y0);		//8
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + 0.5f, 1.f, 0.f, 0.f, x0, y1);		//9
+	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + -0.5f, 0.f, 0.f, 0.f, x1, y0);		//10
+	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + -0.5f, 1.f, 0.f, 0.f, x1, y1);		//11
+}
+
+Vector2i Chunk::GetPosition() const
+{
+	return m_pos;
+}
+
+void Chunk::SetPosition( Vector2i pos )
+{
+	m_pos = pos;
 }

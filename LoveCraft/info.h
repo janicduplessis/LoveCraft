@@ -12,15 +12,29 @@
 class Info
 {
 public:
+	/**
+	 * Retourne une reference vers l'instance Info
+	 */
 	static Info& Get();
+
+	/**
+	 * Retourne un pointeur vers l'instance Info
+	 */
 	static Info* GetPtr();
+
+	/**
+	 * Retourne le bloc info pour le type donné
+	 * 
+	 * @param type type
+	 * @return BlocInfo
+	 */
 	BlockInfo* GetBlocInfo(BlockType type);
 
 private:
 	Info();
 	~Info();
-	Info(Info const& copy);            // Not Implemented
-	Info& operator=(Info const& copy); // Not Implemented
+	Info(Info const& copy);
+	Info& operator=(Info const& copy); 
 	void GenerateBlocInfos();
 
 private:

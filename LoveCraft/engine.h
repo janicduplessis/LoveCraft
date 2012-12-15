@@ -1,16 +1,19 @@
 #ifndef ENGINE_H__
 #define ENGINE_H__
+
 #include "define.h"
 #include "openglcontext.h"
 #include "texture.h"
-#include "Player.h"
+#include "player.h"
 #include "camera.h"
 #include "shader.h"
 #include "Chunk.h"
-#include "ArrayBool.h"
+#include "arraybool.h"
+#include "array2d.h"
 #include "testprojectile.h"
 #include "vector2.h"
 #include "info.h"
+#include "textureatlas.h"
 
 class Engine : public OpenglContext
 {
@@ -73,7 +76,7 @@ public:
 	* @param y		coordonnée en Y
 	* @param t		texte à afficher
 	*/
-	virtual void PrinText(unsigned int x, unsigned int y, const std::string& t);
+	virtual void PrintText(unsigned int x, unsigned int y, const std::string& t);
 
 	/**
 	* Évènement appelé lorsqu'une touche du clavier est enfoncée
@@ -117,7 +120,7 @@ public:
 
 private:
 	bool LoadTexture(Texture& texture, const std::string& filename, bool stopOnError = true);
-
+	void LoadBlocTexture(BLOCK_TYPE type, std::string path);
 private:
 	bool m_wireframe;
 	float m_angle;
@@ -133,6 +136,8 @@ private:
 	Vector2<float> m_playScreenBotLeft;
 	Vector2<float> m_playScreenSize;
 
+	TextureAtlas* m_textureAtlas;
+
 	Texture m_textureFloor;
 	Texture m_textureInterface;
 	Texture m_textureFont;
@@ -146,6 +151,9 @@ private:
 
 	Shader m_shader01;
 	Shader m_shaderModel;
+
+	Array2d<Chunk>* m_chunks;
+
 	Chunk m_testChunk;
 
 	TestProjectile m_projectile;

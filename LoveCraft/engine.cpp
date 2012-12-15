@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <iomanip>
 #include <cmath>
-#include "ArrayBool.h"
 
 
 
@@ -20,6 +19,7 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false), m_control
 
 Engine::~Engine()
 {
+	delete m_textureAtlas;
 }
 
 void Engine::Init()
@@ -63,6 +63,20 @@ void Engine::Init()
 	m_projectile.SetInitialSpeed(Vector3f(1,1,0));
 	m_projectile.SetPosition(Vector3f(0,0,0));
 
+	//m_chunks = new Array2d<Chunk>(VIEW_DISTANCE / CHUNK_SIZE_X, VIEW_DISTANCE / CHUNK_SIZE_Z);
+
+	/*Chunk chunk;
+	for (int i = 0; i < CHUNK_SIZE_X; ++i)
+	{
+	for (int j = 0; j < CHUNK_SIZE_Z; ++j)
+	{
+	chunk.SetBloc(i, 0, j, BTYPE_DIRT);
+	}
+	}*/
+	//m_chunks->Reset(chunk);
+	Chunk chunk;
+	//m_chunks.Set(0,0,0,chunk);
+
 	CenterMouse();
 	HideCursor();
 }
@@ -73,6 +87,15 @@ void Engine::DeInit()
 
 void Engine::LoadResource()
 {
+	m_textureAtlas = new TextureAtlas(16);
+
+	LoadBlocTexture(BTYPE_BRICK, TEXTURE_PATH "brick_red.jpg");
+	LoadBlocTexture(BTYPE_DIRT, TEXTURE_PATH "dirt.bmp");
+	LoadBlocTexture(BTYPE_GRASS, TEXTURE_PATH "grass.bmp");
+	LoadBlocTexture(BTYPE_SAND, TEXTURE_PATH "sand.jpg");
+
+	m_textureAtlas->Generate(128, false);
+
 	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
 	LoadTexture(m_textureInterface, TEXTURE_PATH "rock.jpg");
 	LoadTexture(m_textureCrosshair, TEXTURE_PATH "cross.bmp");
@@ -91,7 +114,14 @@ void Engine::LoadResource()
 		std::cout << " Failed to load model shader" << std::endl;
 		exit(1) ;
 	}
-	Info::Get().GetBlocInfo(BTYPE_BRICK);
+}
+
+void Engine::LoadBlocTexture(BLOCK_TYPE type, std::string path)
+{
+	TextureAtlas::TextureIndex id = m_textureAtlas->AddTexture(path);
+	BlockInfo::TextureCoords coords;
+	m_textureAtlas->TextureIndexToCoord(id, coords.u, coords.v, coords.w, coords.h);
+	Info::Get().GetBlocInfo(type)->SetTextureCoords(coords);
 }
 
 void Engine::UnloadResource()
@@ -160,7 +190,19 @@ void Engine::Render(float elapsedTime)
 	if(m_testChunk.IsDirty())
 		m_testChunk.Update();
 	m_shader01.Use();
-	//m_testChunk.Render();
+	m_textureAtlas->Bind();
+	/*for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X; i++)
+	{
+		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z; ++j)
+		{
+			Chunk &c = m_chunks->Get(i,j);
+			c.Update();
+			c.Render();
+		}
+	}*/
+	//Chunk& c = m_chunks.Get(0,0,0);
+	//c.Update();
+	//c.Render();
 	Shader::Disable();
 
 	// HUD
@@ -196,10 +238,10 @@ void Engine::Render2D(float elapsedTime)
 	ss << "Position : " << std::setprecision(3) << m_player.Position().x << ", " 
 		<< std::setprecision(3) << m_player.Position().y << ", " << 
 		std::setprecision(3) << m_player.Position().z;
-	PrinText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 20, ss. str());
+	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 20, ss. str());
 	ss.str("");
 	ss << "Fps : " << std::setprecision(5) << 1 / elapsedTime;
-	PrinText(Width() - INTERFACE_SIDE_RIGHT_WIDTH - 120, Height() - INTERFACE_TOP_HEIGHT - 20, ss.str());
+	PrintText(Width() - INTERFACE_SIDE_RIGHT_WIDTH - 120, Height() - INTERFACE_TOP_HEIGHT - 20, ss.str());
 	//Affichage du crosshair
 	if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
 	{
@@ -284,7 +326,7 @@ void Engine::RenderSquare(const Vector2<float>& position, const Vector2<float>& 
 	glEnd();
 }
 
-void Engine::PrinText(unsigned int x, unsigned int y, const std::string& t)
+void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 {
 	glLoadIdentity();
 	glTranslated(x, y, 0);

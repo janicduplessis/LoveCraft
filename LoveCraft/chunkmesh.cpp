@@ -4,15 +4,7 @@
 
 ChunkMesh::ChunkMesh()
 {
-	//Chargement des textures
-	m_texFloor.Load(TEXTURE_PATH "checker.bmp");
-	m_texOctoFace.Load(TEXTURE_PATH "cu_default.png");
-	m_texWall.Load(TEXTURE_PATH "wall-red.bmp");
-	m_texCeilling.Load(TEXTURE_PATH "checker-gold.bmp");
-	m_texDirt.Load(TEXTURE_PATH "dirt.bmp");
-	m_texGrass.Load(TEXTURE_PATH "grass.bmp");
-	m_texBrickRed.Load(TEXTURE_PATH "brick_red.jpg");
-	m_texSand.Load(TEXTURE_PATH "sand.jpg");
+
 }
 
 ChunkMesh::~ChunkMesh()
@@ -117,8 +109,6 @@ void ChunkMesh::SetMeshData(VertexData* vd, int vertexCount, uint16* indexData, 
 
 void ChunkMesh::Render(bool wireFrame) const
 {
-	m_texDirt.Bind();
-
 	if(IsValid())
 	{
 		glClientActiveTexture(GL_TEXTURE0);
@@ -142,7 +132,6 @@ void ChunkMesh::Render(bool wireFrame) const
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
 	}
-
 }
 
 int ChunkMesh::Count() const

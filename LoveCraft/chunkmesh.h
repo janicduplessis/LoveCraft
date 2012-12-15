@@ -20,15 +20,7 @@ public:
 	virtual int Count() const;
 
 private:
-	Texture m_texFloor;
-	Texture m_texDirt;
-	Texture m_texGrass;
-	Texture m_texOctoFace;
-	Texture m_texWall;
-	Texture m_texCeilling;
-	Texture m_texBrickRed;
-	Texture m_texSand;
-	Texture m_texRock;
+
 };
 
 

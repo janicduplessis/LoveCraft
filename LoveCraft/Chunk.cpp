@@ -50,7 +50,8 @@ void Chunk::Update()
 					BlockType bt = GetBloc (x, y, z);
 					if(bt != BTYPE_AIR )
 					{
-						AddBlockToMesh (vd , count , bt , x, y, z);
+						//ajoute le block a la position relative au chunk + la position du chunk dans le monde
+						AddBlockToMesh (vd , count , bt , x + m_pos.x, y - 2, z + m_pos.y);
 					}
 				}
 			}

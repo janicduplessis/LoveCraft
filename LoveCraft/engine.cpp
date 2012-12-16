@@ -63,8 +63,9 @@ void Engine::Init()
 	m_projectile.SetInitialSpeed(Vector3f(1,1,0));
 	m_projectile.SetPosition(Vector3f(0,0,0));
 
-	m_chunks = new Array2d<Chunk>(VIEW_DISTANCE / CHUNK_SIZE_X, VIEW_DISTANCE / CHUNK_SIZE_Z);
+	m_chunks = new Array2d<Chunk>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
 
+	//Genere un chunk plancher
 	Chunk chunk;
 	for (int i = 0; i < CHUNK_SIZE_X; ++i)
 	{
@@ -74,7 +75,15 @@ void Engine::Init()
 		}
 	}
 
-	m_chunks->Reset(chunk);
+	//Place les chunks
+	for (int i = -VIEW_DISTANCE / CHUNK_SIZE_X; i < VIEW_DISTANCE / CHUNK_SIZE_X; i++)
+	{
+		for (int j = -VIEW_DISTANCE / CHUNK_SIZE_Z; j < VIEW_DISTANCE / CHUNK_SIZE_Z; ++j)
+		{
+			chunk.SetPosition(Vector2i(CHUNK_SIZE_X * i, CHUNK_SIZE_Z * j));
+			m_chunks->Set(i + VIEW_DISTANCE / CHUNK_SIZE_X, j + VIEW_DISTANCE / CHUNK_SIZE_Z, chunk);
+		}
+	}
 
 	CenterMouse();
 	HideCursor();
@@ -169,27 +178,11 @@ void Engine::Render(float elapsedTime)
 		m_camera.ApplyTranslation();
 	}
 
-
-	// Plancher
-	m_textureFloor.Bind();
-	float nbRep = 200.f;
-
-	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(-100.f, -2.f, 100.f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(100.f, -2.f, 100.f);	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(100.f, -2.f, -100.f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(-100.f, -2.f, -100.f);
-	glEnd();
-
 	m_shader01.Use();
 	m_textureAtlas->Bind();
-	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X; i++)
+	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
 	{
-		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z; ++j)
+		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
 		{
 			Chunk &c = m_chunks->Get(i,j);
 			if (c.IsDirty())

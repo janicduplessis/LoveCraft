@@ -84,7 +84,7 @@ inline void Array<bool>::Resize(unsigned int size)
 
 	unsigned char* arr = m_data;
 	m_data = new unsigned char[TailleReelle(size)];
-	for (int i = 0; i < TailleReelle(std::min(size, m_size)); i++)
+	for (unsigned int i = 0; i < TailleReelle(std::min(size, m_size)); i++)
 		m_data[i] = arr[i];
 	m_size = size;
 	delete [] arr;

@@ -12,7 +12,10 @@ Info::Info( Info const& copy )
 
 Info::~Info()
 {
-	delete [] m_blocInfos;
+	for (int i = 0; i < BTYPE_COUNT; ++i)
+	{
+		delete m_blocInfos[i];
+	}
 	delete m_info;
 }
 

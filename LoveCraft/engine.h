@@ -67,7 +67,7 @@ public:
 	* @param texture		Texture qui doit être utiliser avec l'element
 	* 
 	*/
-	virtual void RenderSquare(const Vector2<float>& position, const Vector2<float>& size, Texture& texture);
+	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture);
 
 	/**
 	* Affiche le texte donné à l'écran 
@@ -130,11 +130,11 @@ private:
 	//dans la zone de jeu (sprite, images, etc)
 	//À utiliser au lieu de Height() et Width() comme
 	//point de départ.
-	Vector2<float> m_playScreenTopLeft;
-	Vector2<float> m_playScreenTopRight;
-	Vector2<float> m_playScreenBotRight;
-	Vector2<float> m_playScreenBotLeft;
-	Vector2<float> m_playScreenSize;
+	Vector2i m_playScreenTopLeft;
+	Vector2i m_playScreenTopRight;
+	Vector2i m_playScreenBotRight;
+	Vector2i m_playScreenBotLeft;
+	Vector2i m_playScreenSize;
 
 	TextureAtlas* m_textureAtlas;
 
@@ -153,6 +153,7 @@ private:
 	Shader m_shaderModel;
 
 	Array2d<Chunk>* m_chunks;
+	Chunk* m_test;
 
 	Chunk m_testChunk;
 

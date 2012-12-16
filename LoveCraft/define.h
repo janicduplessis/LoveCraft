@@ -27,10 +27,10 @@ typedef long long int64;
 #define CHUNK_SIZE_Z 16
 
 //Valeurs de l'interface
-#define INTERFACE_BOTTOM_HEIGHT		64.f
-#define INTERFACE_SIDE_LEFT_WIDTH	64.f
-#define INTERFACE_SIDE_RIGHT_WIDTH	32.f
-#define INTERFACE_TOP_HEIGHT		32.f
+#define INTERFACE_BOTTOM_HEIGHT		64
+#define INTERFACE_SIDE_LEFT_WIDTH	64
+#define INTERFACE_SIDE_RIGHT_WIDTH	32
+#define INTERFACE_TOP_HEIGHT		32
 
 
 //Valeurs quelconques

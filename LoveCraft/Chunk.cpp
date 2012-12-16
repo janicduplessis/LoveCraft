@@ -1,6 +1,6 @@
 #include "chunk.h"
 
-Chunk::Chunk() : m_blocks(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z), m_pos(0)
+Chunk::Chunk() : m_pos(0), m_blocks(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z)
 {
 	m_blocks.Reset(BTYPE_AIR);
 }
@@ -9,19 +9,19 @@ Chunk::~Chunk()
 {
 }
 
-void Chunk::RemoveBloc(int x, int y, int z)
+void Chunk::RemoveBloc(uint32 x, uint32 y, uint32 z)
 {
 	m_blocks.Set(x, y, z, BTYPE_AIR);
 	m_isDirty = true;
 }
 
-void Chunk::SetBloc(int x, int y, int z, BlockType type)
+void Chunk::SetBloc(uint32 x, uint32 y, uint32 z, BlockType type)
 {
 	m_blocks.Set(x, y, z, type);
 	m_isDirty = true;
 }
 
-BlockType Chunk::GetBloc(int x, int y, int z)
+BlockType Chunk::GetBloc(uint32 x, uint32 y, uint32 z)
 {
 	return m_blocks.Get(x, y, z);
 }
@@ -105,3 +105,4 @@ void Chunk::SetPosition( Vector2i pos )
 {
 	m_pos = pos;
 }
+

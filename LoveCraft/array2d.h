@@ -16,7 +16,7 @@ public:
 	Array2d(const Array2d& array);
 
 	void Set(uint32 x, uint32 y, const T& value);
-	T Get(uint32 x, uint32 y) const;
+	T& Get(uint32 x, uint32 y);
 
 	/**
 	 * Assigne une valeur a tout le tableau
@@ -36,19 +36,17 @@ Array2d<T>::Array2d(uint32 x, uint32 y) : m_size(x, y)
 }
 
 template <class T>
-Array2d<T>::~Array2d()
+Array2d<T>::Array2d(const Array2d& array) : m_size(array.m_size)
 {
-	delete [] m_values;
-}
-
-template <class T>
-Array2d<T>::Array2d(const Array2d& array)
-{
-	m_size = array.m_size;
-
 	m_values = new T[m_size.x * m_size.y];
 	for(int i = 0; i < m_size.x * m_size.y; ++i)
 		m_values[i] = array.m_values[i];
+}
+
+template <class T>
+Array2d<T>::~Array2d()
+{
+	delete [] m_values;
 }
 
 template <class T>
@@ -58,10 +56,11 @@ void Array2d<T>::Set(uint32 x, uint32 y, const T& value)
 	assert(x < m_size.x && y < m_size.y);
 	// assigne la valeur
 	m_values[x + (y * m_size.x)] = value;
+	
 }
 
 template <class T>
-T Array2d<T>::Get(uint32 x, uint32 y) const
+T& Array2d<T>::Get(uint32 x, uint32 y)
 {
 	// valide le size
 	assert(x < m_size.x && y < m_size.y);

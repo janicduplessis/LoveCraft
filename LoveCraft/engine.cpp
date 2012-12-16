@@ -8,11 +8,11 @@
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false), m_controls(Array<bool>(256, false)),
 	m_rightClick(false), m_leftClick(false), m_camRadius(10),
-	m_playScreenBotLeft(Vector2<float>(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
-	m_playScreenTopLeft(Vector2<float>(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
-	m_playScreenTopRight(Vector2<float>(Width() - INTERFACE_SIDE_RIGHT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
-	m_playScreenBotRight(Vector2<float>(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
-	m_playScreenSize(Vector2<float>(m_playScreenTopRight.x - m_playScreenTopLeft.x, m_playScreenTopLeft.y - m_playScreenBotLeft.y))
+	m_playScreenBotLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
+	m_playScreenTopLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
+	m_playScreenTopRight(Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
+	m_playScreenBotRight(Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
+	m_playScreenSize(Vector2i(m_playScreenTopRight.x - m_playScreenTopLeft.x, m_playScreenTopLeft.y - m_playScreenBotLeft.y))
 {
 
 }
@@ -63,19 +63,18 @@ void Engine::Init()
 	m_projectile.SetInitialSpeed(Vector3f(1,1,0));
 	m_projectile.SetPosition(Vector3f(0,0,0));
 
-	//m_chunks = new Array2d<Chunk>(VIEW_DISTANCE / CHUNK_SIZE_X, VIEW_DISTANCE / CHUNK_SIZE_Z);
+	m_chunks = new Array2d<Chunk>(VIEW_DISTANCE / CHUNK_SIZE_X, VIEW_DISTANCE / CHUNK_SIZE_Z);
 
-	/*Chunk chunk;
+	Chunk chunk;
 	for (int i = 0; i < CHUNK_SIZE_X; ++i)
 	{
-	for (int j = 0; j < CHUNK_SIZE_Z; ++j)
-	{
-	chunk.SetBloc(i, 0, j, BTYPE_DIRT);
+		for (int j = 0; j < CHUNK_SIZE_Z; ++j)
+		{
+			chunk.SetBloc(i, 0, j, BTYPE_DIRT);
+		}
 	}
-	}*/
-	//m_chunks->Reset(chunk);
-	Chunk chunk;
-	//m_chunks.Set(0,0,0,chunk);
+
+	m_chunks->Reset(chunk);
 
 	CenterMouse();
 	HideCursor();
@@ -186,23 +185,19 @@ void Engine::Render(float elapsedTime)
 	glVertex3f(-100.f, -2.f, -100.f);
 	glEnd();
 
-	// Test du chunk
-	if(m_testChunk.IsDirty())
-		m_testChunk.Update();
 	m_shader01.Use();
 	m_textureAtlas->Bind();
-	/*for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X; i++)
+	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X; i++)
 	{
 		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z; ++j)
 		{
 			Chunk &c = m_chunks->Get(i,j);
-			c.Update();
+			if (c.IsDirty())
+				c.Update();
 			c.Render();
 		}
-	}*/
-	//Chunk& c = m_chunks.Get(0,0,0);
-	//c.Update();
-	//c.Render();
+	}
+
 	Shader::Disable();
 
 	// HUD
@@ -263,35 +258,35 @@ void Engine::Render2D(float elapsedTime)
 	if (m_controls.Get(38))		//Mode course
 		RenderSquare(
 		m_playScreenBotLeft,
-		Vector2<float>(m_textureCthulhu.GetWidth(), m_textureCthulhu.GetHeight()),
+		Vector2i(m_textureCthulhu.GetWidth(), m_textureCthulhu.GetHeight()),
 		m_textureCthulhu);
 	if (m_ghostMode)			//Mode ghost
 		RenderSquare(
-		Vector2<float>(Width() / 2 - m_textureGhost.GetWidth() /2, m_playScreenBotLeft.y),
-		Vector2<float>(m_textureGhost.GetWidth(), m_textureGhost.GetHeight()),
+		Vector2i(Width() / 2 - m_textureGhost.GetWidth() /2, m_playScreenBotLeft.y),
+		Vector2i(m_textureGhost.GetWidth(), m_textureGhost.GetHeight()),
 		m_textureGhost);
 
 	glDisable(GL_BLEND);
 	//Affichage de l'interface
 	//Bottom
 	RenderSquare(
-		Vector2<float>(0, 0), 
-		Vector2<float>(Width(), INTERFACE_BOTTOM_HEIGHT), 
+		Vector2i(0, 0), 
+		Vector2i(Width(), INTERFACE_BOTTOM_HEIGHT), 
 		m_textureInterface);
 	//Left
 	RenderSquare(
-		Vector2<float>(0, INTERFACE_BOTTOM_HEIGHT), 
-		Vector2<float>(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3), 
+		Vector2i(0, INTERFACE_BOTTOM_HEIGHT), 
+		Vector2i(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3), 
 		m_textureInterface);
 	//Top
 	RenderSquare(
-		Vector2<float>(0, Height() - INTERFACE_TOP_HEIGHT),
-		Vector2<float>(Width(), INTERFACE_TOP_HEIGHT),
+		Vector2i(0, Height() - INTERFACE_TOP_HEIGHT),
+		Vector2i(Width(), INTERFACE_TOP_HEIGHT),
 		m_textureInterface);
 	//Right
 	RenderSquare(
-		Vector2<float>(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
-		Vector2<float>(Width(), Height() - INTERFACE_TOP_HEIGHT * 3),
+		Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
+		Vector2i(Width(), Height() - INTERFACE_TOP_HEIGHT * 3),
 		m_textureInterface);
 
 	glEnable(GL_LIGHTING);
@@ -303,7 +298,7 @@ void Engine::Render2D(float elapsedTime)
 
 }
 
-void Engine::RenderSquare(const Vector2<float>& position, const Vector2<float>& size, Texture& texture)
+void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture)
 {
 	texture.Bind();
 	glLoadIdentity();
@@ -315,13 +310,13 @@ void Engine::RenderSquare(const Vector2<float>& position, const Vector2<float>& 
 	glVertex2f(0, 0);
 
 	glTexCoord2f(size.x / texture.GetWidth(), size.y / texture.GetHeight());
-	glVertex2f(size.x, 0);
+	glVertex2i(size.x, 0);
 
 	glTexCoord2f(size.x / texture.GetWidth(), 0);
-	glVertex2f(size.x, size.y);
+	glVertex2i(size.x, size.y);
 
 	glTexCoord2f(0, 0);
-	glVertex2f(0, size.y);
+	glVertex2i(0, size.y);
 
 	glEnd();
 }

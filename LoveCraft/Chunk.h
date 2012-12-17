@@ -23,12 +23,12 @@ public:
 
 	Vector2i GetPosition() const;
 	void SetPosition(Vector2i pos);
-
+	void OptimizeTopFaces(ChunkMesh::VertexData* vd, int& vertexCount, uint16* id, int& indexCount, int x, int y, int z, BlockType bt, Array3d<bool>& blocOptimized);
+	void AddRectangleToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* id, int& indexCount, int x, int y, int z, int w, int h, BlockType bt);
 private:
 	bool m_isDirty;
 	Vector2i m_pos;
 	Array3d<BlockType> m_blocks;
 	ChunkMesh m_chunkMesh;
 };
-
 #endif // CHUNK_H__

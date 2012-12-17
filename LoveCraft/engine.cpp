@@ -31,7 +31,7 @@ void Engine::Init()
 		abort ();
 	}
 
-	glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+	glClearColor( 0.f, 0.75f, 1.f, 1.0f );
 	glEnable( GL_TEXTURE_2D );
 
 	glMatrixMode(GL_PROJECTION);
@@ -57,7 +57,9 @@ void Engine::Init()
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0Diff);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0Spec);
 
-	glFogf(GL_FOG_DENSITY, 0.01f);
+	glFogf(GL_FOG_DENSITY, 1.f / VIEW_DISTANCE);
+	float fogCol[3] = {0.8f, 0.8f, 0.8f};
+	glFogfv(GL_FOG_COLOR, fogCol);
 	
 
 	m_player.Init();
@@ -79,6 +81,7 @@ void Engine::Init()
 	}
 
 	chunk.SetBloc(0,3,0, BTYPE_BRICK);
+	chunk.SetBloc(5,1,5, BTYPE_DIRT);
 
 	//Place les chunks
 	for (int i = -VIEW_DISTANCE / CHUNK_SIZE_X; i < VIEW_DISTANCE / CHUNK_SIZE_X; i++)

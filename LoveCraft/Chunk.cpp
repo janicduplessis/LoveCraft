@@ -41,6 +41,9 @@ void Chunk::Update()
 		uint16* id = new uint16[3 * maxVertexCount / 2]; 
 		int vertexCount = 0;
 		int indexCount = 0;
+		Array3d<bool> blocOptimized(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z);
+		blocOptimized.Reset(false);
+		OptimizeTopFaces(vd, vertexCount, id, indexCount, 0, 0, 0, GetBloc (0, 0, 0), blocOptimized);
 		for ( int x = 0; x < CHUNK_SIZE_X ; ++x)
 		{
 			for ( int z = 0; z < CHUNK_SIZE_Z ; ++z)
@@ -72,6 +75,80 @@ void Chunk::Update()
 void Chunk::Render() const
 {
 	m_chunkMesh.Render();
+}
+
+void Chunk::OptimizeTopFaces(ChunkMesh::VertexData* vd, int& vertexCount, uint16* id, int& indexCount, int x, int y, int z, BlockType bt, Array3d<bool>& blocOptimized)
+{
+	int endX = -1;
+	int loopStart = x;
+	int loopEnd = CHUNK_SIZE_X - 1;
+	bool added = false;
+	int step = 1;
+	// parcourt les cubes en S
+	for (int j = z; j < CHUNK_SIZE_Z; ++j)
+	{
+		if (loopStart == loopEnd)
+			return;
+		for (int i = loopStart; i != loopEnd + 1; i += step)
+		{
+			if ((i != loopEnd) && (GetBloc(i + step, y, z + j) != GetBloc(i, y, z + j) || GetBloc(i + step, y + 1, z + j) != BTYPE_AIR))
+			{
+				if (endX == -1)
+				{
+					endX = i;
+					loopEnd = endX;
+				}
+				else
+				{
+					AddRectangleToMesh(vd, vertexCount, id, indexCount, x, y, z, endX - x + 1, j - y, bt);
+					added = true;
+				}
+				break;
+			}
+		}
+		//si on arrive a la fin le mesh aura la dimention x maximum
+		if (endX == -1) 
+			endX = loopEnd;
+		//inverse la boucle
+		step = -step;
+		int l = loopEnd;
+		loopEnd = loopStart;
+		loopStart = l;
+	}
+	if (!added)
+	{
+		AddRectangleToMesh(vd, vertexCount, id, indexCount, x, y, z, endX - x + 1, CHUNK_SIZE_Z, bt);
+	}
+}
+
+void Chunk::AddRectangleToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* id, int& indexCount, int x, int y, int z, int w, int h, BlockType bt)
+{
+	// place le chunk a sa position dans le monde
+	x += m_pos.x;
+	y -= 2.f;
+	z += m_pos.y;
+
+	//determine les coords de la texture du type de bloc
+	BlockInfo::TextureCoords coords = Info::Get().GetBlocInfo(bt)->GetTextureCoords();
+	float x0 = coords.u;
+	float y0 = coords.v;
+	float x1 = coords.u + coords.w;
+	float y1 = coords.v + coords.h;
+
+	//top face
+	int v = vertexCount;
+
+	vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + h-1 + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
+	vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f, y + 0.5f, z + h-1 + 0.5f, 1.f, 1.f, 1.f, x1, y0);	//3
+	vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
+	vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y1);				//1
+
+	id[indexCount++] = v;
+	id[indexCount++] = v + 1;
+	id[indexCount++] = v + 2;
+	id[indexCount++] = v;
+	id[indexCount++] = v + 2;
+	id[indexCount++] = v + 3;
 }
 
 void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* id, int& indexCount, BlockType bt, int x, int y, int z)
@@ -109,7 +186,7 @@ void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* 
 		renderRightFace = false;
 
 	// plancher
-	if (y==0)
+	if (y == 0)
 		renderBottomFace = renderLeftFace = renderRightFace = renderFrontFace = renderBackFace = false;
 
 	//determine les coords de la texture du type de bloc
@@ -162,23 +239,6 @@ void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* 
 		id[indexCount++] = v + 3;
 	}
 
-	//top face
-	if (renderTopFace)
-	{
-		v = vertexCount;
-
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x1, y0);		//3
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y1);		//1
-
-		id[indexCount++] = v;
-		id[indexCount++] = v + 1;
-		id[indexCount++] = v + 2;
-		id[indexCount++] = v;
-		id[indexCount++] = v + 2;
-		id[indexCount++] = v + 3;
-	}
 
 	//bot face
 	if (renderBottomFace)
@@ -233,7 +293,6 @@ void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* 
 		id[indexCount++] = v + 2;
 		id[indexCount++] = v + 3;
 	}
-
 }
 
 Vector2i Chunk::GetPosition() const
@@ -245,4 +304,3 @@ void Chunk::SetPosition( Vector2i pos )
 {
 	m_pos = pos;
 }
-

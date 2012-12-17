@@ -32,7 +32,8 @@ void Engine::Init()
 		abort ();
 	}
 
-	glClearColor( 0.f, 0.75f, 1.f, 1.0f );
+	//glClearColor( 0.f, 0.75f, 1.f, 1.0f );
+	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glEnable( GL_TEXTURE_2D );
 
 	glMatrixMode(GL_PROJECTION);
@@ -59,8 +60,9 @@ void Engine::Init()
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0Spec);
 
 	glFogf(GL_FOG_DENSITY, 1.f / VIEW_DISTANCE);
-	float fogCol[3] = {0.8f, 0.8f, 0.8f};
-	glFogfv(GL_FOG_COLOR, fogCol);
+	//glFogf(GL_FOG_DENSITY, 1.f / 3);
+	//float fogCol[3] = {0.8f, 0.8f, 0.8f};
+	//glFogfv(GL_FOG_COLOR, fogCol);
 	
 
 	m_player.Init();
@@ -318,16 +320,16 @@ void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Textur
 
 	glBegin(GL_QUADS);
 
-	glTexCoord2f(0, size.y / texture.GetHeight());
+	glTexCoord2f(0, 0);
 	glVertex2f(0, 0);
 
-	glTexCoord2f(size.x / texture.GetWidth(), size.y / texture.GetHeight());
+	glTexCoord2f(size.x / texture.GetWidth(), 0);
 	glVertex2i(size.x, 0);
 
-	glTexCoord2f(size.x / texture.GetWidth(), 0);
+	glTexCoord2f(size.x / texture.GetWidth(), size.y / texture.GetHeight());
 	glVertex2i(size.x, size.y);
 
-	glTexCoord2f(0, 0);
+	glTexCoord2f(0, size.y / texture.GetHeight());
 	glVertex2i(0, size.y);
 
 	glEnd();

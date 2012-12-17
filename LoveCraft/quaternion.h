@@ -55,6 +55,8 @@ public:
 	 */
 	void SetRotation(float angle, Vector3f axis);
 
+	void Afficher() const;
+
 private:
 	float m_w;
 	float m_x;

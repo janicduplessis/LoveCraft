@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-Projectile::Projectile() : m_speedIni(0), m_hasMass(false), m_timeToLive(999999999999), 
+Projectile::Projectile() : m_speedIni(0), m_hasMass(false), m_timeToLive(99999999), 
 	m_destination(0), m_acceleration(0), m_shot(false)
 {
 
@@ -13,6 +13,31 @@ Projectile::Projectile() : m_speedIni(0), m_hasMass(false), m_timeToLive(9999999
 Projectile::~Projectile()
 {
 
+}
+
+void Projectile::TestRotation()
+{
+	if (!m_shot)
+		return;
+	Quaternion l;
+	l.SetRotation(0.01, Vector3f(1, 0, 0));
+	
+	m_rotation = l * m_rotation;
+	m_rotation.Normalize();
+	//m_rotation.Afficher();
+
+	Matrix4f rot = m_rotation.RotationMatrix();
+	m_speed = Vector3f(1,0,0);
+	m_speed.x = rot.Get11() * m_speed.x + rot.Get12() * m_speed.y + rot.Get13() * m_speed.z;
+	m_speed.y = rot.Get21() * m_speed.x + rot.Get22() * m_speed.y + rot.Get23() * m_speed.z;
+	m_speed.z = rot.Get31() * m_speed.x + rot.Get32() * m_speed.y + rot.Get33() * m_speed.z;
+	m_pos = m_pos + m_speed;
+	/*std::cout << rot.Get11() << std::endl;
+	std::cout << rot.Get21() << std::endl;
+	std::cout << rot.Get31() << std::endl;
+	std::cout << rot.Get41() << std::endl;*/
+	m_speed.Afficher();
+	m_rotation.Afficher();
 }
 
 void Projectile::Move(float elapsedTime) 
@@ -69,7 +94,8 @@ void Projectile::Shoot()
 	if (m_hasMass)
 		m_acceleration.y -= 9.8f;
 
-	m_speed = m_speedIni;
+	//m_speed = m_speedIni;
+	m_speed = Vector3f(1, 0, 0);
 }
 
 void Projectile::SetInitialSpeed( const Vector3f& iniSpeed )

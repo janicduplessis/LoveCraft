@@ -108,6 +108,7 @@ void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* 
 	if (x < CHUNK_SIZE_X - 1 && GetBloc(x + 1, y, z) != BTYPE_AIR)
 		renderRightFace = false;
 
+	// plancher
 	if (y==0)
 		renderBottomFace = renderLeftFace = renderRightFace = renderFrontFace = renderBackFace = false;
 
@@ -130,10 +131,10 @@ void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* 
 	{
 		v = vertexCount;
 
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x1, y0);		//1
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y1);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 0.9f, 0.9f, 0.9f, x0, y0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z + 0.5f, 0.9f, 0.9f, 0.9f, x0, y1);		//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z + 0.5f, 0.9f, 0.9f, 0.9f, x1, y1);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 0.9f, 0.9f, 0.9f, x1, y0);		//3
 
 		id[indexCount++] = v;
 		id[indexCount++] = v + 1;
@@ -148,10 +149,10 @@ void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* 
 	{
 		v = vertexCount;
 
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y0);		//1
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y1);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x0, y0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x1, y0);		//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x1, y1);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x0, y1);		//3
 
 		id[indexCount++] = v;
 		id[indexCount++] = v + 1;
@@ -167,9 +168,9 @@ void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* 
 		v = vertexCount;
 
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y1);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x1, y0);		//3
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y0);		//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y1);		//1
 
 		id[indexCount++] = v;
 		id[indexCount++] = v + 1;
@@ -184,10 +185,10 @@ void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* 
 	{
 		v = vertexCount;
 
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y0);		//3
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y1);		//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z + 0.5f, 0.6f, 0.6f, 0.6f, x0, y0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x0, y1);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x1, y1);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z + 0.5f, 0.6f, 0.6f, 0.6f, x1, y0);		//1
 
 		id[indexCount++] = v;
 		id[indexCount++] = v + 1;
@@ -202,10 +203,10 @@ void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* 
 	{
 		v = vertexCount;
 
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x1, y0);		//3
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y1);		//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z + 0.5f, 0.8f, 0.8f, 0.8f, x0, y0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 0.8f, 0.8f, 0.8f, x0, y1);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 0.8f, 0.8f, 0.8f, x1, y1);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z - 0.5f, 0.8f, 0.8f, 0.8f, x1, y0);		//1
 
 		id[indexCount++] = v;
 		id[indexCount++] = v + 1;
@@ -220,10 +221,10 @@ void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* 
 	{
 		v = vertexCount;
 
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y1);		//3
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x1, y0);		//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z + 0.5f, 0.6f, 0.6f, 0.6f, x0, y0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x1, y0);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x1, y1);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 0.6f, 0.6f, 0.6f, x0, y1);		//1
 
 		id[indexCount++] = v;
 		id[indexCount++] = v + 1;

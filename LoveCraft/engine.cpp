@@ -43,6 +43,7 @@ void Engine::Init()
 	glEnable(GL_LIGHTING);
 	glEnable (GL_LINE_SMOOTH);
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_FOG);
 
 	// Light
 	GLfloat light0Pos[4]  = {0.0f, CHUNK_SIZE_Y, 0.0f, 1.0f};
@@ -55,6 +56,9 @@ void Engine::Init()
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light0Amb);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0Diff);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0Spec);
+
+	glFogf(GL_FOG_DENSITY, 0.01f);
+	
 
 	m_player.Init();
 	m_projectile.Init();

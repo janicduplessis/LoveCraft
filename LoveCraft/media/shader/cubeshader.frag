@@ -1,5 +1,6 @@
 uniform sampler2D tex;
 varying vec4 light;
+varying float fogFactor;
 
 void main()
 {
@@ -8,5 +9,5 @@ void main()
 
     texel *= light;
 
-    gl_FragColor = texel;
+    gl_FragColor = mix(gl_Fog.color, texel, fogFactor);
 }

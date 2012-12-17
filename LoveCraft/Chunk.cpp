@@ -43,7 +43,7 @@ void Chunk::Update()
 		int indexCount = 0;
 		Array3d<bool> blocOptimized(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z);
 		blocOptimized.Reset(false);
-		OptimizeTopFaces(vd, vertexCount, id, indexCount, 0, 0, 0, GetBloc (0, 0, 0), blocOptimized);
+		//OptimizeTopFaces(vd, vertexCount, id, indexCount, 0, 0, 0, GetBloc (0, 0, 0), blocOptimized);
 		for ( int x = 0; x < CHUNK_SIZE_X ; ++x)
 		{
 			for ( int z = 0; z < CHUNK_SIZE_Z ; ++z)
@@ -239,7 +239,23 @@ void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* 
 		id[indexCount++] = v + 3;
 	}
 
+	if (renderTopFace)
+	{
 
+		v = vertexCount;
+
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x1, y0);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y1);		//1
+
+		id[indexCount++] = v;
+		id[indexCount++] = v + 1;
+		id[indexCount++] = v + 2;
+		id[indexCount++] = v;
+		id[indexCount++] = v + 2;
+		id[indexCount++] = v + 3;
+	}
 	//bot face
 	if (renderBottomFace)
 	{

@@ -31,7 +31,8 @@ void Engine::Init()
 		abort ();
 	}
 
-	glClearColor( 0.f, 0.75f, 1.f, 1.0f );
+	//glClearColor( 0.f, 0.75f, 1.f, 1.0f );
+	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glEnable( GL_TEXTURE_2D );
 
 	glMatrixMode(GL_PROJECTION);
@@ -58,8 +59,9 @@ void Engine::Init()
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0Spec);
 
 	glFogf(GL_FOG_DENSITY, 1.f / VIEW_DISTANCE);
-	float fogCol[3] = {0.8f, 0.8f, 0.8f};
-	glFogfv(GL_FOG_COLOR, fogCol);
+	//glFogf(GL_FOG_DENSITY, 1.f / 3);
+	//float fogCol[3] = {0.8f, 0.8f, 0.8f};
+	//glFogfv(GL_FOG_COLOR, fogCol);
 	
 
 	m_player.Init();

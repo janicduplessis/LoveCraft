@@ -11,6 +11,8 @@ ChunkMesh::ChunkMesh()
 	m_texCeilling.Load(TEXTURE_PATH "checker-gold.bmp");
 	m_texDirt.Load(TEXTURE_PATH "dirt.bmp");
 	m_texGrass.Load(TEXTURE_PATH "grass.bmp");
+	m_texBrickRed.Load(TEXTURE_PATH "brick_red.jpg");
+	m_texSand.Load(TEXTURE_PATH "sand.jpg");
 }
 
 ChunkMesh::~ChunkMesh()
@@ -52,7 +54,8 @@ void ChunkMesh::SetMeshData(VertexData* vd, int vertexCount, uint16* indexData, 
 
 	idx = new uint16[m_indicesCount];
 	int j = 0;
-	for(uint16 i = 0; i < vertexCount / 12; ++i) {
+	for(uint16 i = 0; i < vertexCount / 12; ++i)
+	{
 		//front face
 		idx[j++] = 12*i + 8;
 		idx[j++] = 12*i + 9;

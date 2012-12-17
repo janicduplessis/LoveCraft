@@ -26,6 +26,9 @@ private:
 	Texture m_texOctoFace;
 	Texture m_texWall;
 	Texture m_texCeilling;
+	Texture m_texBrickRed;
+	Texture m_texSand;
+	Texture m_texRock;
 };
 
 

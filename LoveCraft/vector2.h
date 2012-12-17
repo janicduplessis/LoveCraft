@@ -4,8 +4,8 @@
 #include <SFML/System/Vector2.hpp>
 
 /**
- * @brief Template class pour manipuler des vecteurs 2d
- */
+* @brief Template class pour manipuler des vecteurs 2d
+*/
 template <class T>
 class Vector2 : public sf::Vector2<T>
 {

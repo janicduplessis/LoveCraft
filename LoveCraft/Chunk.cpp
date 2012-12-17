@@ -27,13 +27,13 @@ void Chunk::RemoveBloc(int x, int y, int z)
 	m_isDirty = true;
 }
 
-void Chunk::SetBloc(int x, int y, int z, BLOCK_TYPE type)
+void Chunk::SetBloc(int x, int y, int z, BlockType type)
 {
 	m_blocks.Set(x, y, z, type);
 	m_isDirty = true;
 }
 
-BLOCK_TYPE Chunk::GetBloc(int x, int y, int z)
+BlockType Chunk::GetBloc(int x, int y, int z)
 {
 	return m_blocks.Get(x, y, z);
 }
@@ -59,7 +59,7 @@ void Chunk::Update()
 				{
 					if( count > USHRT_MAX )
 						break ;
-					BLOCK_TYPE bt = GetBloc (x, y, z);
+					BlockType bt = GetBloc (x, y, z);
 					if(bt != BTYPE_AIR )
 					{
 						AddBlockToMesh (vd , count , bt , x, y, z);
@@ -83,7 +83,7 @@ void Chunk::Render() const
 	m_chunkMesh.Render();
 }
 
-void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& count, BLOCK_TYPE bt, int x, int y, int z)
+void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& count, BlockType bt, int x, int y, int z)
 {
 	// cube 12 vertex!!!
 	// vertices pour utiliser avec index

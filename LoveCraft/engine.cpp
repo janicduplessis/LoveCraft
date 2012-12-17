@@ -309,16 +309,16 @@ void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Textur
 
 	glBegin(GL_QUADS);
 
-	glTexCoord2f(0, size.y / texture.GetHeight());
+	glTexCoord2f(0, 0);
 	glVertex2f(0, 0);
 
-	glTexCoord2f(size.x / texture.GetWidth(), size.y / texture.GetHeight());
+	glTexCoord2f(size.x / texture.GetWidth(), 0);
 	glVertex2i(size.x, 0);
 
-	glTexCoord2f(size.x / texture.GetWidth(), 0);
+	glTexCoord2f(size.x / texture.GetWidth(), size.y / texture.GetHeight());
 	glVertex2i(size.x, size.y);
 
-	glTexCoord2f(0, 0);
+	glTexCoord2f(0, size.y / texture.GetHeight());
 	glVertex2i(0, size.y);
 
 	glEnd();

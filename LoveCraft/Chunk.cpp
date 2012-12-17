@@ -36,33 +36,35 @@ void Chunk::Update()
 	// Update mesh
 	if( m_isDirty )
 	{
-		int maxVertexCount = ( CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z ) * 12;
+		int maxVertexCount = ( CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z ) * 24;
 		ChunkMesh :: VertexData * vd = new ChunkMesh :: VertexData [ maxVertexCount ];
-		int count = 0;
+		uint16* id = new uint16[3 * maxVertexCount / 2]; 
+		int vertexCount = 0;
+		int indexCount = 0;
 		for ( int x = 0; x < CHUNK_SIZE_X ; ++x)
 		{
 			for ( int z = 0; z < CHUNK_SIZE_Z ; ++z)
 			{
 				for ( int y = 0; y < CHUNK_SIZE_Y ; ++y)
 				{
-					if( count > USHRT_MAX )
+					if( vertexCount > USHRT_MAX )
 						break ;
 					BlockType bt = GetBloc (x, y, z);
 					if(bt != BTYPE_AIR )
 					{
-						//ajoute le block a la position relative au chunk + la position du chunk dans le monde
-						AddBlockToMesh (vd , count , bt , x + m_pos.x, y - 2, z + m_pos.y);
+						AddBlockToMesh (vd , vertexCount , id, indexCount, bt , x, y, z);
 					}
 				}
 			}
 		}
-		if( count > USHRT_MAX )
+		if( vertexCount > USHRT_MAX )
 		{
-			count = USHRT_MAX ;
+			vertexCount = USHRT_MAX ;
 			std :: cout << "[ Chunk :: Update ] Chunk data truncaned , too much vertices to have a 16 bit index " << std :: endl ;
 		}
-		m_chunkMesh . SetMeshData (vd , count );
+		m_chunkMesh . SetMeshData (vd , vertexCount, id, indexCount);
 		delete [] vd;
+		delete [] id;
 	}
 	m_isDirty = false ;
 }
@@ -72,29 +74,165 @@ void Chunk::Render() const
 	m_chunkMesh.Render();
 }
 
-void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& count, BlockType bt, int x, int y, int z)
+void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* id, int& indexCount, BlockType bt, int x, int y, int z)
 {
+	// Optimisation faces cubes
+	bool renderFrontFace = true;
+	bool renderBackFace = true;
+	bool renderTopFace = true;
+	bool renderBottomFace = true;
+	bool renderLeftFace = true;
+	bool renderRightFace = true;
+
+	// front
+	if (z != 0 && GetBloc(x, y, z - 1) != BTYPE_AIR)
+		renderFrontFace = false;
+
+	// back
+	if (z < CHUNK_SIZE_Z - 1 && GetBloc(x, y, z + 1) != BTYPE_AIR)
+		renderBackFace = false;
+
+	// top
+	if (y < CHUNK_SIZE_Y - 1 && GetBloc(x, y + 1, z) != BTYPE_AIR)
+		renderTopFace = false;
+
+	// bottom
+	if (y != 0 && GetBloc(x, y - 1, z) != BTYPE_AIR)
+		renderBottomFace = false;
+
+	// left
+	if (x != 0 && GetBloc(x - 1, y, z) != BTYPE_AIR)
+		renderLeftFace = false;
+
+	// right
+	if (x < CHUNK_SIZE_X - 1 && GetBloc(x + 1, y, z) != BTYPE_AIR)
+		renderRightFace = false;
+
+	if (y==0)
+		renderBottomFace = renderLeftFace = renderRightFace = renderFrontFace = renderBackFace = false;
+
 	//determine les coords de la texture du type de bloc
 	BlockInfo::TextureCoords coords = Info::Get().GetBlocInfo(bt)->GetTextureCoords();
 	float x0 = coords.u;
 	float y0 = coords.v;
 	float x1 = coords.u + coords.w;
 	float y1 = coords.v + coords.h;
-	// cube 12 vertex!!!
-	// vertices pour utiliser avec index
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + 0.5f, 0.f, 0.f, 1.f, x1, y1);		//0
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + 0.5f, 1.f, 0.f, 0.f, x1, y0);		//1
-	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + -0.5f, z + 0.5f, 1.f, 1.f, 0.f, x1, y1);		//2
-	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 0.f, 1.f, 0.f, x1, y0);		//3
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + -0.5f, 0.f, 0.f, 0.f, x0, y1);		//4
-	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + -0.5f, 1.f, 0.f, 0.f, x0, y0);		//5
-	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + -0.5f, z + -0.5f, 1.f, 1.f, 0.f, x0, y1);		//6
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + -0.5f, 0.f, 1.f, 0.f, x0, y0);		//7
-	// vertices additionnels pour uv
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + 0.5f, 0.f, 0.f, 1.f, x0, y0);		//8
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + -0.5f, z + 0.5f, 1.f, 0.f, 0.f, x0, y1);		//9
-	vd[ count ++] = ChunkMesh::VertexData (x + -0.5f, y + 0.5f, z + -0.5f, 0.f, 0.f, 0.f, x1, y0);		//10
-	vd[ count ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + -0.5f, 1.f, 0.f, 0.f, x1, y1);		//11
+
+	// place le chunk a sa position dans le monde
+	x += m_pos.x;
+	y -= 2.f;
+	z += m_pos.y;
+
+	int v;
+
+	//front face
+	if (renderFrontFace)
+	{
+		v = vertexCount;
+
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x1, y0);		//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y1);		//3
+
+		id[indexCount++] = v;
+		id[indexCount++] = v + 1;
+		id[indexCount++] = v + 2;
+		id[indexCount++] = v;
+		id[indexCount++] = v + 2;
+		id[indexCount++] = v + 3;
+	}
+
+	//back face
+	if (renderBackFace)
+	{
+		v = vertexCount;
+
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y0);		//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y1);		//3
+
+		id[indexCount++] = v;
+		id[indexCount++] = v + 1;
+		id[indexCount++] = v + 2;
+		id[indexCount++] = v;
+		id[indexCount++] = v + 2;
+		id[indexCount++] = v + 3;
+	}
+
+	//top face
+	if (renderTopFace)
+	{
+		v = vertexCount;
+
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y1);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y0);		//1
+
+		id[indexCount++] = v;
+		id[indexCount++] = v + 1;
+		id[indexCount++] = v + 2;
+		id[indexCount++] = v;
+		id[indexCount++] = v + 2;
+		id[indexCount++] = v + 3;
+	}
+
+	//bot face
+	if (renderBottomFace)
+	{
+		v = vertexCount;
+
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y0);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y1);		//1
+
+		id[indexCount++] = v;
+		id[indexCount++] = v + 1;
+		id[indexCount++] = v + 2;
+		id[indexCount++] = v;
+		id[indexCount++] = v + 2;
+		id[indexCount++] = v + 3;
+	}
+
+	//left face
+	if (renderLeftFace)
+	{
+		v = vertexCount;
+
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x1, y0);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y1);		//1
+
+		id[indexCount++] = v;
+		id[indexCount++] = v + 1;
+		id[indexCount++] = v + 2;
+		id[indexCount++] = v;
+		id[indexCount++] = v + 2;
+		id[indexCount++] = v + 3;
+	}
+
+	//right face
+	if (renderRightFace)
+	{
+		v = vertexCount;
+
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y1);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x1, y0);		//1
+
+		id[indexCount++] = v;
+		id[indexCount++] = v + 1;
+		id[indexCount++] = v + 2;
+		id[indexCount++] = v;
+		id[indexCount++] = v + 2;
+		id[indexCount++] = v + 3;
+	}
+
 }
 
 Vector2i Chunk::GetPosition() const

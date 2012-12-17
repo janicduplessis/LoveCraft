@@ -19,7 +19,7 @@ public:
 	void Update();
 	void Render() const;
 	bool IsDirty() const;
-	void AddBlockToMesh(ChunkMesh::VertexData* vd, int& count, BlockType bt, int x, int y, int z);
+	void AddBlockToMesh(ChunkMesh::VertexData* vd, int& count, uint16* id, int& indexCount, BlockType bt, int x, int y, int z);
 
 	Vector2i GetPosition() const;
 	void SetPosition(Vector2i pos);

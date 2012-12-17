@@ -42,8 +42,7 @@ void Engine::Init()
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_LIGHTING);
 	glEnable (GL_LINE_SMOOTH);
-	if (!m_wireframe)
-		glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 
 	// Light
 	GLfloat light0Pos[4]  = {0.0f, CHUNK_SIZE_Y, 0.0f, 1.0f};
@@ -74,6 +73,8 @@ void Engine::Init()
 			chunk.SetBloc(i, 0, j, BTYPE_DIRT);
 		}
 	}
+
+	chunk.SetBloc(0,3,0, BTYPE_BRICK);
 
 	//Place les chunks
 	for (int i = -VIEW_DISTANCE / CHUNK_SIZE_X; i < VIEW_DISTANCE / CHUNK_SIZE_X; i++)
@@ -418,9 +419,15 @@ void Engine::KeyReleaseEvent(unsigned char key)
 	case 24:       // Y
 		m_wireframe = !m_wireframe;
 		if(m_wireframe)
+		{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glDisable(GL_CULL_FACE);
+		}
 		else
+		{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			glEnable(GL_CULL_FACE);
+		}
 		break;
 	case 6:		   // G
 		m_ghostMode = !m_ghostMode;

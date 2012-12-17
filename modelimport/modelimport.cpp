@@ -23,7 +23,7 @@ bool ConvertToLCM(const aiScene* scene, std::string outputFile)
 	rapidxml::xml_attribute<>* lcmMeshCount = doc.allocate_attribute("NumMeshes", ToChar(scene->mNumMeshes, doc));
 	lcmMeshes->append_attribute(lcmMeshCount);
 
-	for (int i = 0; i < scene->mNumMeshes; ++i)
+	for (unsigned int i = 0; i < scene->mNumMeshes; ++i)
 	{
 		const aiMesh* mesh = scene->mMeshes[i];
 
@@ -36,7 +36,7 @@ bool ConvertToLCM(const aiScene* scene, std::string outputFile)
 
 		rapidxml::xml_node<>* lcmVertices = doc.allocate_node(rapidxml::node_element, "Vertices");
 
-		for (int j = 0; j < mesh->mNumVertices; j++)
+		for (unsigned int j = 0; j < mesh->mNumVertices; j++)
 		{
 			rapidxml::xml_node<>* lcmVertex = doc.allocate_node(rapidxml::node_element, "Vertex");
 			rapidxml::xml_attribute<>* lcmHasColors = doc.allocate_attribute("HasColors", (mesh->HasVertexColors(j)) ? "1" : "0");
@@ -101,7 +101,7 @@ bool ConvertToLCM(const aiScene* scene, std::string outputFile)
 
 		rapidxml::xml_node<>* lcmIndices = doc.allocate_node(rapidxml::node_element, "Indices");
 		int numIndices = 0;
-		for (int j = 0; j < mesh->mNumFaces; j++)
+		for (unsigned int j = 0; j < mesh->mNumFaces; j++)
 		{
 			if (mesh->mFaces[j].mNumIndices == 3) 
 			{

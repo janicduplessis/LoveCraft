@@ -88,6 +88,4 @@ void Array<T>::Resize(unsigned int size)
 	delete [] arr;
 }
 
-
-
 #endif

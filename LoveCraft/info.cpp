@@ -2,6 +2,7 @@
 
 Info::Info()
 {
+	GenerateBlocInfos();
 }
 
 Info::Info( Info const& copy )
@@ -9,14 +10,22 @@ Info::Info( Info const& copy )
 
 }
 
+Info::~Info()
+{
+	for (int i = 0; i < BTYPE_COUNT; ++i)
+	{
+		delete m_blocInfos[i];
+	}
+	delete m_info;
+}
 
-Info Info::Get()
+
+Info& Info::Get()
 {
 	// Si info n'est pas instancié
 	if (!m_info) {
 		// instancie
 		m_info = new Info;
-		m_info->GenerateBlocInfos();
 	}
 
 	return *m_info;
@@ -28,7 +37,6 @@ Info* Info::GetPtr()
 	if (!m_info) {
 		// instancie
 		m_info = new Info;
-		m_info->GenerateBlocInfos();
 	}
 
 	return m_info;
@@ -51,11 +59,5 @@ void Info::GenerateBlocInfos()
 
 	m_blocInfos[4] = new BlockInfo(BTYPE_SAND, "Sand");
 }
-
-void Info::Kill()
-{
-
-}
-
 
 Info* Info::m_info = 0;

@@ -3,23 +3,23 @@
 #include <algorithm>
 #include <iomanip>
 #include <cmath>
-#include "ArrayBool.h"
 
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false), m_controls(Array<bool>(256, false)),
 	m_rightClick(false), m_leftClick(false), m_camRadius(10),
-	m_playScreenBotLeft(Vector2<float>(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
-	m_playScreenTopLeft(Vector2<float>(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
-	m_playScreenTopRight(Vector2<float>(Width() - INTERFACE_SIDE_RIGHT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
-	m_playScreenBotRight(Vector2<float>(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
-	m_playScreenSize(Vector2<float>(m_playScreenTopRight.x - m_playScreenTopLeft.x, m_playScreenTopLeft.y - m_playScreenBotLeft.y))
+	m_playScreenBotLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
+	m_playScreenTopLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
+	m_playScreenTopRight(Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
+	m_playScreenBotRight(Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
+	m_playScreenSize(Vector2i(m_playScreenTopRight.x - m_playScreenTopLeft.x, m_playScreenTopLeft.y - m_playScreenBotLeft.y))
 {
 
 }
 
 Engine::~Engine()
 {
+	delete m_textureAtlas;
 }
 
 void Engine::Init()
@@ -31,7 +31,7 @@ void Engine::Init()
 		abort ();
 	}
 
-	glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+	glClearColor( 0.f, 0.75f, 1.f, 1.0f );
 	glEnable( GL_TEXTURE_2D );
 
 	glMatrixMode(GL_PROJECTION);
@@ -42,8 +42,8 @@ void Engine::Init()
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_LIGHTING);
 	glEnable (GL_LINE_SMOOTH);
-	//if (!m_wireframe)
-		//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_FOG);
 
 	// Light
 	GLfloat light0Pos[4]  = {0.0f, CHUNK_SIZE_Y, 0.0f, 1.0f};
@@ -57,13 +57,41 @@ void Engine::Init()
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0Diff);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0Spec);
 
+	glFogf(GL_FOG_DENSITY, 1.f / VIEW_DISTANCE);
+	float fogCol[3] = {0.8f, 0.8f, 0.8f};
+	glFogfv(GL_FOG_COLOR, fogCol);
+	
+
 	m_player.Init();
 	m_projectile.Init();
 	m_projectile.SetDestination(Vector3f(10,10,10));
 	m_projectile.SetInitialSpeed(Vector3f(1,1,0));
 	m_projectile.SetPosition(Vector3f(0,0,0));
 
-	//Info::Get().GetBlocInfo(BTYPE_AIR)->Afficher();
+	m_chunks = new Array2d<Chunk>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
+
+	//Genere un chunk plancher
+	Chunk chunk;
+	for (int i = 0; i < CHUNK_SIZE_X; ++i)
+	{
+		for (int j = 0; j < CHUNK_SIZE_Z; ++j)
+		{
+			chunk.SetBloc(i, 0, j, BTYPE_DIRT);
+		}
+	}
+
+	chunk.SetBloc(0,3,0, BTYPE_BRICK);
+	chunk.SetBloc(5,1,5, BTYPE_DIRT);
+
+	//Place les chunks
+	for (int i = -VIEW_DISTANCE / CHUNK_SIZE_X; i < VIEW_DISTANCE / CHUNK_SIZE_X; i++)
+	{
+		for (int j = -VIEW_DISTANCE / CHUNK_SIZE_Z; j < VIEW_DISTANCE / CHUNK_SIZE_Z; ++j)
+		{
+			chunk.SetPosition(Vector2i(CHUNK_SIZE_X * i, CHUNK_SIZE_Z * j));
+			m_chunks->Set(i + VIEW_DISTANCE / CHUNK_SIZE_X, j + VIEW_DISTANCE / CHUNK_SIZE_Z, chunk);
+		}
+	}
 
 	CenterMouse();
 	HideCursor();
@@ -75,6 +103,15 @@ void Engine::DeInit()
 
 void Engine::LoadResource()
 {
+	m_textureAtlas = new TextureAtlas(16);
+
+	LoadBlocTexture(BTYPE_BRICK, TEXTURE_PATH "brick_red.jpg");
+	LoadBlocTexture(BTYPE_DIRT, TEXTURE_PATH "dirt.bmp");
+	LoadBlocTexture(BTYPE_GRASS, TEXTURE_PATH "grass.bmp");
+	LoadBlocTexture(BTYPE_SAND, TEXTURE_PATH "sand.jpg");
+
+	m_textureAtlas->Generate(128, false);
+
 	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
 	LoadTexture(m_textureInterface, TEXTURE_PATH "rock.jpg");
 	LoadTexture(m_textureCrosshair, TEXTURE_PATH "cross.bmp");
@@ -93,6 +130,14 @@ void Engine::LoadResource()
 		std::cout << " Failed to load model shader" << std::endl;
 		exit(1) ;
 	}
+}
+
+void Engine::LoadBlocTexture(BLOCK_TYPE type, std::string path)
+{
+	TextureAtlas::TextureIndex id = m_textureAtlas->AddTexture(path);
+	BlockInfo::TextureCoords coords;
+	m_textureAtlas->TextureIndexToCoord(id, coords.u, coords.v, coords.w, coords.h);
+	Info::Get().GetBlocInfo(type)->SetTextureCoords(coords);
 }
 
 void Engine::UnloadResource()
@@ -141,27 +186,19 @@ void Engine::Render(float elapsedTime)
 		m_camera.ApplyTranslation();
 	}
 
-
-	// Plancher
-	m_textureFloor.Bind();
-	float nbRep = 200.f;
-
-	glBegin(GL_QUADS);
-	glNormal3f(1, 1, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(-100.f, -2.f, 100.f);
-	glTexCoord2f(nbRep, 0);
-	glVertex3f(100.f, -2.f, 100.f);	glTexCoord2f(nbRep, nbRep);
-	glVertex3f(100.f, -2.f, -100.f);
-	glTexCoord2f(0, nbRep);
-	glVertex3f(-100.f, -2.f, -100.f);
-	glEnd();
-
-	// Test du chunk
-	if(m_testChunk.IsDirty())
-		m_testChunk.Update();
 	m_shader01.Use();
-	//m_testChunk.Render();
+	m_textureAtlas->Bind();
+	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
+	{
+		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
+		{
+			Chunk &c = m_chunks->Get(i,j);
+			if (c.IsDirty())
+				c.Update();
+			c.Render();
+		}
+	}
+
 	Shader::Disable();
 
 	// HUD
@@ -171,8 +208,8 @@ void Engine::Render(float elapsedTime)
 	if (m_wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	m_projectile.Move(elapsedTime);
-	m_projectile.Render();
+	//m_projectile.Move(elapsedTime);
+	//m_projectile.Render();
 
 
 }
@@ -197,10 +234,10 @@ void Engine::Render2D(float elapsedTime)
 	ss << "Position : " << std::setprecision(3) << m_player.Position().x << ", " 
 		<< std::setprecision(3) << m_player.Position().y << ", " << 
 		std::setprecision(3) << m_player.Position().z;
-	PrinText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 20, ss. str());
+	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 20, ss. str());
 	ss.str("");
 	ss << "Fps : " << std::setprecision(5) << 1 / elapsedTime;
-	PrinText(Width() - INTERFACE_SIDE_RIGHT_WIDTH - 120, Height() - INTERFACE_TOP_HEIGHT - 20, ss.str());
+	PrintText(Width() - INTERFACE_SIDE_RIGHT_WIDTH - 120, Height() - INTERFACE_TOP_HEIGHT - 20, ss.str());
 	//Affichage du crosshair
 	if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
 	{
@@ -222,35 +259,35 @@ void Engine::Render2D(float elapsedTime)
 	if (m_controls.Get(38))		//Mode course
 		RenderSquare(
 		m_playScreenBotLeft,
-		Vector2<float>(m_textureCthulhu.GetWidth(), m_textureCthulhu.GetHeight()),
+		Vector2i(m_textureCthulhu.GetWidth(), m_textureCthulhu.GetHeight()),
 		m_textureCthulhu);
 	if (m_ghostMode)			//Mode ghost
 		RenderSquare(
-		Vector2<float>(Width() / 2 - m_textureGhost.GetWidth() /2, m_playScreenBotLeft.y),
-		Vector2<float>(m_textureGhost.GetWidth(), m_textureGhost.GetHeight()),
+		Vector2i(Width() / 2 - m_textureGhost.GetWidth() /2, m_playScreenBotLeft.y),
+		Vector2i(m_textureGhost.GetWidth(), m_textureGhost.GetHeight()),
 		m_textureGhost);
 
 	glDisable(GL_BLEND);
 	//Affichage de l'interface
 	//Bottom
 	RenderSquare(
-		Vector2<float>(0, 0), 
-		Vector2<float>(Width(), INTERFACE_BOTTOM_HEIGHT), 
+		Vector2i(0, 0), 
+		Vector2i(Width(), INTERFACE_BOTTOM_HEIGHT), 
 		m_textureInterface);
 	//Left
 	RenderSquare(
-		Vector2<float>(0, INTERFACE_BOTTOM_HEIGHT), 
-		Vector2<float>(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3), 
+		Vector2i(0, INTERFACE_BOTTOM_HEIGHT), 
+		Vector2i(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3), 
 		m_textureInterface);
 	//Top
 	RenderSquare(
-		Vector2<float>(0, Height() - INTERFACE_TOP_HEIGHT),
-		Vector2<float>(Width(), INTERFACE_TOP_HEIGHT),
+		Vector2i(0, Height() - INTERFACE_TOP_HEIGHT),
+		Vector2i(Width(), INTERFACE_TOP_HEIGHT),
 		m_textureInterface);
 	//Right
 	RenderSquare(
-		Vector2<float>(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
-		Vector2<float>(Width(), Height() - INTERFACE_TOP_HEIGHT * 3),
+		Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
+		Vector2i(Width(), Height() - INTERFACE_TOP_HEIGHT * 3),
 		m_textureInterface);
 
 	glEnable(GL_LIGHTING);
@@ -262,7 +299,7 @@ void Engine::Render2D(float elapsedTime)
 
 }
 
-void Engine::RenderSquare(const Vector2<float>& position, const Vector2<float>& size, Texture& texture)
+void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture)
 {
 	texture.Bind();
 	glLoadIdentity();
@@ -274,18 +311,18 @@ void Engine::RenderSquare(const Vector2<float>& position, const Vector2<float>& 
 	glVertex2f(0, 0);
 
 	glTexCoord2f(size.x / texture.GetWidth(), size.y / texture.GetHeight());
-	glVertex2f(size.x, 0);
+	glVertex2i(size.x, 0);
 
 	glTexCoord2f(size.x / texture.GetWidth(), 0);
-	glVertex2f(size.x, size.y);
+	glVertex2i(size.x, size.y);
 
 	glTexCoord2f(0, 0);
-	glVertex2f(0, size.y);
+	glVertex2i(0, size.y);
 
 	glEnd();
 }
 
-void Engine::PrinText(unsigned int x, unsigned int y, const std::string& t)
+void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 {
 	glLoadIdentity();
 	glTranslated(x, y, 0);
@@ -389,9 +426,15 @@ void Engine::KeyReleaseEvent(unsigned char key)
 	case 24:       // Y
 		m_wireframe = !m_wireframe;
 		if(m_wireframe)
+		{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glDisable(GL_CULL_FACE);
+		}
 		else
+		{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			glEnable(GL_CULL_FACE);
+		}
 		break;
 	case 6:		   // G
 		m_ghostMode = !m_ghostMode;

@@ -3,7 +3,6 @@
 
 #include "Array.h"
 
-#if 0
 template <>
 class Array<bool>
 {
@@ -26,13 +25,13 @@ private:
 	unsigned int TailleReelle(unsigned int taille);
 };
 
-Array<bool>::Array(unsigned int size, const bool& valeur) : m_size(size)
+inline Array<bool>::Array(unsigned int size, const bool& valeur) : m_size(size)
 {
 	m_data = new unsigned char[TailleReelle(size)];
 	Reset(valeur);
 }
 
-Array<bool>::Array(const Array<bool>& array) : m_size(array.m_size)
+inline Array<bool>::Array(const Array<bool>& array) : m_size(array.m_size)
 {
 	m_data = new unsigned char[TailleReelle(m_size)];
 	for (unsigned int i = 0; i < TailleReelle(m_size); i++)
@@ -41,18 +40,18 @@ Array<bool>::Array(const Array<bool>& array) : m_size(array.m_size)
 	}
 }
 
-Array<bool>::~Array()
+inline Array<bool>::~Array()
 {
 	if (m_data)
 		delete [] m_data;
 }
 
-unsigned int Array<bool>::Size() const
+inline unsigned int Array<bool>::Size() const
 {
 	return m_size;
 }
 
-void Array<bool>::Reset(const bool& valeur)
+inline void Array<bool>::Reset(const bool& valeur)
 {
 	for (unsigned int i = 0; i < TailleReelle(m_size); i++)
 	{
@@ -60,7 +59,7 @@ void Array<bool>::Reset(const bool& valeur)
 	}
 }
 
-bool Array<bool>::Get(unsigned int position) const
+inline bool Array<bool>::Get(unsigned int position) const
 {
 	assert(position < m_size);
 	unsigned int positionOctet = position / 8;
@@ -68,7 +67,7 @@ bool Array<bool>::Get(unsigned int position) const
 	return (m_data[positionOctet] & (1 << positionBit)) != 0;
 }
 
-void Array<bool>::Set(unsigned int position, const bool& valeur)
+inline void Array<bool>::Set(unsigned int position, const bool& valeur)
 {
 	assert(position < m_size);
 	unsigned int positionOctet = position / 8;
@@ -78,20 +77,20 @@ void Array<bool>::Set(unsigned int position, const bool& valeur)
 	else m_data[positionOctet] &= ~(1 << positionBit);
 }
 
-void Array<bool>::Resize(unsigned int size)
+inline void Array<bool>::Resize(unsigned int size)
 {
 	if (size == m_size)
 		return;
 
 	unsigned char* arr = m_data;
 	m_data = new unsigned char[TailleReelle(size)];
-	for (int i = 0; i < TailleReelle(std::min(size, m_size)); i++)
+	for (unsigned int i = 0; i < TailleReelle(std::min(size, m_size)); i++)
 		m_data[i] = arr[i];
 	m_size = size;
 	delete [] arr;
 }
 
-unsigned int Array<bool>::TailleReelle(unsigned int size)
+inline unsigned int Array<bool>::TailleReelle(unsigned int size)
 {
 	unsigned int taille = size / 8;
 	if (size % 8 != 0)
@@ -101,4 +100,3 @@ unsigned int Array<bool>::TailleReelle(unsigned int size)
 
 #endif
 
-#endif

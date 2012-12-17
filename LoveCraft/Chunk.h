@@ -4,6 +4,7 @@
 #include "array3d.h"
 #include "define.h"
 #include "chunkmesh.h"
+#include "info.h"
 
 class Chunk
 {
@@ -11,19 +12,23 @@ public:
 	Chunk();
 	~Chunk();
 
-	void RemoveBloc(int x, int y, int z);
-	void SetBloc(int x, int y, int z, BlockType type);
-	BlockType GetBloc(int x, int y, int z);
+	void RemoveBloc(uint32 x, uint32 y, uint32 z);
+	void SetBloc(uint32 x, uint32 y, uint32 z, BlockType type);
+	BlockType GetBloc(uint32 x, uint32 y, uint32 z);
 
 	void Update();
 	void Render() const;
 	bool IsDirty() const;
-	void AddBlockToMesh(ChunkMesh::VertexData* vd, int& count, BlockType bt, int x, int y, int z);
+	void AddBlockToMesh(ChunkMesh::VertexData* vd, int& count, uint16* id, int& indexCount, BlockType bt, int x, int y, int z);
 
+	Vector2i GetPosition() const;
+	void SetPosition(Vector2i pos);
+	void OptimizeTopFaces(ChunkMesh::VertexData* vd, int& vertexCount, uint16* id, int& indexCount, int x, int y, int z, BlockType bt, Array3d<bool>& blocOptimized);
+	void AddRectangleToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* id, int& indexCount, int x, int y, int z, int w, int h, BlockType bt);
 private:
 	bool m_isDirty;
+	Vector2i m_pos;
 	Array3d<BlockType> m_blocks;
 	ChunkMesh m_chunkMesh;
 };
-
 #endif // CHUNK_H__

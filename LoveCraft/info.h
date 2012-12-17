@@ -5,20 +5,36 @@
 #include "define.h"
 
 /**
- * Singleton qui contient tout les informations générales du jeu
+ * @brief Singleton qui contient tout les informations générales du jeu
+ * 
+ * Initialise les données dans le constructeur
  */
 class Info
 {
 public:
-	static Info Get();
+	/**
+	 * Retourne une reference vers l'instance Info
+	 */
+	static Info& Get();
+
+	/**
+	 * Retourne un pointeur vers l'instance Info
+	 */
 	static Info* GetPtr();
+
+	/**
+	 * Retourne le bloc info pour le type donné
+	 * 
+	 * @param type type
+	 * @return BlocInfo
+	 */
 	BlockInfo* GetBlocInfo(BlockType type);
-	void Kill();
 
 private:
 	Info();
-	Info(Info const& copy);            // Not Implemented
-	Info& operator=(Info const& copy); // Not Implemented
+	~Info();
+	Info(Info const& copy);
+	Info& operator=(Info const& copy); 
 	void GenerateBlocInfos();
 
 private:

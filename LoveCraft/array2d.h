@@ -15,14 +15,14 @@ public:
 	~Array2d();
 	Array2d(const Array2d& array);
 
-	void Set(uint32 x, uint32 y, T value);
-	T Get(uint32 x, uint32 y) const;
+	void Set(uint32 x, uint32 y, const T& value);
+	T& Get(uint32 x, uint32 y);
 
 	/**
 	 * Assigne une valeur a tout le tableau
 	 * @param value		valeur assignée
 	 */
-	void Reset(T value);
+	void Reset(const T& value);
 
 private:
 	Vector2<uint32> m_size;
@@ -36,32 +36,31 @@ Array2d<T>::Array2d(uint32 x, uint32 y) : m_size(x, y)
 }
 
 template <class T>
-Array2d<T>::~Array2d()
+Array2d<T>::Array2d(const Array2d& array) : m_size(array.m_size)
 {
-	delete [] m_values;
-}
-
-template <class T>
-Array2d<T>::Array2d(const Array2d& array)
-{
-	m_size = array.m_size;
-
 	m_values = new T[m_size.x * m_size.y];
 	for(int i = 0; i < m_size.x * m_size.y; ++i)
 		m_values[i] = array.m_values[i];
 }
 
 template <class T>
-void Array2d<T>::Set(uint32 x, uint32 y, T type)
+Array2d<T>::~Array2d()
+{
+	delete [] m_values;
+}
+
+template <class T>
+void Array2d<T>::Set(uint32 x, uint32 y, const T& value)
 {
 	// valide le size
 	assert(x < m_size.x && y < m_size.y);
 	// assigne la valeur
-	m_values[x + (y * m_size.x)] = type;
+	m_values[x + (y * m_size.x)] = value;
+	
 }
 
 template <class T>
-T Array2d<T>::Get(uint32 x, uint32 y) const
+T& Array2d<T>::Get(uint32 x, uint32 y)
 {
 	// valide le size
 	assert(x < m_size.x && y < m_size.y);
@@ -70,10 +69,10 @@ T Array2d<T>::Get(uint32 x, uint32 y) const
 }
 
 template <class T>
-void Array2d<T>::Reset(T value)
+void Array2d<T>::Reset(const T& value)
 {
 	for(int i = 0; i < m_size.x * m_size.y; ++i)
-		m_values[i] = type;
+		m_values[i] = value;
 }
 
 #endif // ARRAY2D_H__

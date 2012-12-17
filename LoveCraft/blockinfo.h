@@ -7,6 +7,15 @@
 class BlockInfo
 {
 public:
+	struct TextureCoords
+	{
+		float u;
+		float v;
+		float h;
+		float w;
+	};
+
+public:
     BlockInfo(BlockType type, const std::string& nom);
     ~BlockInfo();
 
@@ -15,13 +24,16 @@ public:
     void SetDurabilite(int durabilite);
     int GetDurabilite() const;
 
+	void SetTextureCoords(TextureCoords coords);
+	TextureCoords GetTextureCoords() const;
+
     void Afficher() const;
 
-    private:
+private:
     BlockType m_type;
     std::string m_nom;
     int m_durabilite;
-
+	TextureCoords m_textureCoords;
 };
 
 #endif // BLOCKINFO_H__

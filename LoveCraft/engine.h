@@ -1,16 +1,19 @@
 #ifndef ENGINE_H__
 #define ENGINE_H__
+
 #include "define.h"
 #include "openglcontext.h"
 #include "texture.h"
-#include "Player.h"
+#include "player.h"
 #include "camera.h"
 #include "shader.h"
 #include "Chunk.h"
-#include "ArrayBool.h"
+#include "arraybool.h"
+#include "array2d.h"
 #include "testprojectile.h"
 #include "vector2.h"
 #include "info.h"
+#include "textureatlas.h"
 
 class Engine : public OpenglContext
 {
@@ -64,7 +67,7 @@ public:
 	* @param texture		Texture qui doit être utiliser avec l'element
 	* 
 	*/
-	virtual void RenderSquare(const Vector2<float>& position, const Vector2<float>& size, Texture& texture);
+	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture);
 
 	/**
 	* Affiche le texte donné à l'écran 
@@ -73,7 +76,7 @@ public:
 	* @param y		coordonnée en Y
 	* @param t		texte à afficher
 	*/
-	virtual void PrinText(unsigned int x, unsigned int y, const std::string& t);
+	virtual void PrintText(unsigned int x, unsigned int y, const std::string& t);
 
 	/**
 	* Évènement appelé lorsqu'une touche du clavier est enfoncée
@@ -117,7 +120,7 @@ public:
 
 private:
 	bool LoadTexture(Texture& texture, const std::string& filename, bool stopOnError = true);
-
+	void LoadBlocTexture(BLOCK_TYPE type, std::string path);
 private:
 	bool m_wireframe;
 	float m_angle;
@@ -127,11 +130,13 @@ private:
 	//dans la zone de jeu (sprite, images, etc)
 	//À utiliser au lieu de Height() et Width() comme
 	//point de départ.
-	Vector2<float> m_playScreenTopLeft;
-	Vector2<float> m_playScreenTopRight;
-	Vector2<float> m_playScreenBotRight;
-	Vector2<float> m_playScreenBotLeft;
-	Vector2<float> m_playScreenSize;
+	Vector2i m_playScreenTopLeft;
+	Vector2i m_playScreenTopRight;
+	Vector2i m_playScreenBotRight;
+	Vector2i m_playScreenBotLeft;
+	Vector2i m_playScreenSize;
+
+	TextureAtlas* m_textureAtlas;
 
 	Texture m_textureFloor;
 	Texture m_textureInterface;
@@ -146,6 +151,10 @@ private:
 
 	Shader m_shader01;
 	Shader m_shaderModel;
+
+	Array2d<Chunk>* m_chunks;
+	Chunk* m_test;
+
 	Chunk m_testChunk;
 
 	TestProjectile m_projectile;

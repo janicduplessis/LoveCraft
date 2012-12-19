@@ -19,7 +19,7 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false), m_control
 
 Engine::~Engine()
 {
-	delete m_textureAtlas;
+	delete m_textureArray;
 }
 
 const Engine& Engine::Get() const
@@ -84,7 +84,7 @@ void Engine::Init()
 	Info::Get().SetChunkArray(m_chunks);
 
 	//Genere un chunk plancher
-	Chunk chunk;
+	Chunk chunk(&m_shaderCube);
 	for (int i = 0; i < CHUNK_SIZE_X; ++i)
 	{
 		for (int j = 0; j < CHUNK_SIZE_Z; ++j)
@@ -94,7 +94,7 @@ void Engine::Init()
 	}
 
 	chunk.SetBloc(0,1,0, BTYPE_BRICK);
-	chunk.SetBloc(3,1,3, BTYPE_BRICK);
+	chunk.SetBloc(0,1,1, BTYPE_BRICK);
 	chunk.SetBloc(5,3,5, BTYPE_DIRT);
 
 	//Place les chunks
@@ -117,14 +117,14 @@ void Engine::DeInit()
 
 void Engine::LoadResource()
 {
-	m_textureAtlas = new TextureAtlas(16);
+	m_textureArray = new TextureArray(128);
 
 	LoadBlocTexture(BTYPE_BRICK, TEXTURE_PATH "brick_red.jpg");
 	LoadBlocTexture(BTYPE_DIRT, TEXTURE_PATH "dirt.bmp");
 	LoadBlocTexture(BTYPE_GRASS, TEXTURE_PATH "grass.bmp");
 	LoadBlocTexture(BTYPE_SAND, TEXTURE_PATH "sand.jpg");
 
-	m_textureAtlas->Generate(128, false);
+	m_textureArray->Init();
 
 	m_music.openFromFile(SOUND_PATH "overworld.mp3");
 	m_music.setVolume(100);
@@ -144,11 +144,7 @@ void Engine::LoadResource()
 	LoadTexture(m_textureGhost, TEXTURE_PATH "boo.png");
 
 	std::cout << " Loading and compiling shaders ..." << std::endl;
-	if (!m_shader01.Load(SHADER_PATH "cubeshader.vert", SHADER_PATH "cubeshader.frag", true))
-	{
-		std::cout << " Failed to load cubes shader " << std::endl;
-		exit(1) ;
-	}
+	
 	if (!m_shaderModel.Load(SHADER_PATH "modelshader.vert", SHADER_PATH "modelshader.frag", true))
 	{
 		std::cout << " Failed to load model shader" << std::endl;
@@ -158,9 +154,9 @@ void Engine::LoadResource()
 
 void Engine::LoadBlocTexture(BLOCK_TYPE type, std::string path)
 {
-	TextureAtlas::TextureIndex id = m_textureAtlas->AddTexture(path);
+	TextureArray::TextureIndex id = m_textureArray->AddTexture(path);
 	BlockInfo::TextureCoords coords;
-	m_textureAtlas->TextureIndexToCoord(id, coords.u, coords.v, coords.w, coords.h);
+	coords.h = id;
 	Info::Get().GetBlocInfo(type)->SetTextureCoords(coords);
 }
 
@@ -210,8 +206,7 @@ void Engine::Render(float elapsedTime)
 		m_camera.ApplyTranslation();
 	}
 
-	m_shader01.Use();
-	m_textureAtlas->Bind();
+	m_textureArray->Use();
 	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
 	{
 		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)

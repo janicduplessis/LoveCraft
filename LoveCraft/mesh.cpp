@@ -20,8 +20,6 @@ bool Mesh::IsValid() const
     return m_isValid;
 }
 
-void Mesh::SetMeshData(VertexData* vd, int vertexCount, uint16* indexData, int indexCount) {}
-
 void Mesh::Render(bool wireFrame) const {}
 
 int Mesh::Count() const

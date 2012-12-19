@@ -13,7 +13,7 @@
 #include "testprojectile.h"
 #include "vector2.h"
 #include "info.h"
-#include "textureatlas.h"
+#include "texturearray.h"
 
 class Engine : public OpenglContext
 {
@@ -146,7 +146,7 @@ private:
 	Vector2i m_playScreenBotLeft;
 	Vector2i m_playScreenSize;
 
-	TextureAtlas* m_textureAtlas;
+	TextureArray* m_textureArray;
 
 	Texture m_textureFloor;
 	Texture m_textureInterface;
@@ -167,8 +167,8 @@ private:
 	sf::Sound m_sndChan1;
 	sf::Sound m_sndChan2;
 	
-	Shader m_shader01;
 	Shader m_shaderModel;
+	Shader m_shaderCube;
 
 	Array2d<Chunk>* m_chunks;
 

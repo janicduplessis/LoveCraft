@@ -2,7 +2,7 @@
 #include <cassert>
 
 
-ChunkMesh::ChunkMesh()
+ChunkMesh::ChunkMesh(Shader* shader) : m_shader(shader)
 {
 
 }
@@ -17,7 +17,7 @@ bool ChunkMesh::IsValid() const
 	return Mesh::IsValid();
 }
 
-void ChunkMesh::SetMeshData(VertexData* vd, int vertexCount, uint16* indexData, int indexCount)
+void ChunkMesh::SetMeshData(VertexData* vd, int vertexCount, TextureData* td)
 {
 	glewInit();
 
@@ -25,7 +25,9 @@ void ChunkMesh::SetMeshData(VertexData* vd, int vertexCount, uint16* indexData, 
 	if(vertexCount == 0)
 		return;
 
-	indexCount = 0;
+	int indexCount = 0;
+	uint16* indexData = new uint16[3 * vertexCount / 2];
+
 	int faceCount = vertexCount / 4.f;
 	// Genere les index
 	for (int i = 0; i < faceCount; ++i)
@@ -45,16 +47,19 @@ void ChunkMesh::SetMeshData(VertexData* vd, int vertexCount, uint16* indexData, 
 		glGenBuffers(1, &m_indexVboId);
 	}
 
+	m_textureVboId = glGetAttribLocation(m_shader->m_program, "Texture");
+	glVertexAttribPointer(m_textureVboId, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexVboId);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexData) * vertexCount, vd, GL_STATIC_DRAW);
 
+	glBindBuffer(GL_ARRAY_BUFFER, m_textureVboId);
+	glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(TextureData), td, GL_STATIC_DRAW);
+	
 	m_indicesCount = indexCount;
 
-
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
-
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16) * m_indicesCount, indexData, GL_STATIC_DRAW);
-
 
 	m_isValid = true;
 }
@@ -70,20 +75,14 @@ void ChunkMesh::Render(bool wireFrame) const
 		glVertexPointer(3, GL_FLOAT, sizeof(VertexData), (char*)0);
 		glEnableClientState(GL_COLOR_ARRAY);
 		glColorPointer(3, GL_FLOAT, sizeof(VertexData), (char*)12);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glTexCoordPointer(2, GL_FLOAT, sizeof(VertexData), (char*)24);
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glNormalPointer(GL_FLOAT, sizeof(VertexData), (char*)32);
+		glEnableVertexAttribArray(m_textureVboId);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
 		glDrawElements(wireFrame ? GL_LINES : GL_TRIANGLES, m_indicesCount, GL_UNSIGNED_SHORT, (char*)0);
 
-		//glDrawRangeElements(GL_TRIANGLES, 0, m_indicesCount, m_indicesCount, GL_UNSIGNED_SHORT, (char*)0);
-
+		glDisableVertexAttribArray(m_indexVboId);
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_COLOR_ARRAY);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_NORMAL_ARRAY);
 	}
 }
 

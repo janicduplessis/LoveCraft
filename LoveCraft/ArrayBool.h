@@ -25,6 +25,7 @@ private:
 	unsigned int TailleReelle(unsigned int taille);
 };
 
+
 inline Array<bool>::Array(unsigned int size, const bool& valeur) : m_size(size)
 {
 	m_data = new unsigned char[TailleReelle(size)];

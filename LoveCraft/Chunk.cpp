@@ -43,7 +43,6 @@ void Chunk::Update()
 		int indexCount = 0;
 		Array3d<bool> blocOptimized(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z);
 		blocOptimized.Reset(false);
-		//OptimizeTopFaces(vd, vertexCount, id, indexCount, 0, 0, 0, GetBloc (0, 0, 0), blocOptimized);
 		for ( int x = 0; x < CHUNK_SIZE_X ; ++x)
 		{
 			for ( int z = 0; z < CHUNK_SIZE_Z ; ++z)
@@ -53,6 +52,15 @@ void Chunk::Update()
 					if( vertexCount > USHRT_MAX )
 						break ;
 					BlockType bt = GetBloc (x, y, z);
+					if (y == CHUNK_SIZE_Y || bt == BTYPE_AIR || GetBloc(x, y + 1, z) != BTYPE_AIR)
+					{
+						blocOptimized.Set(x,y,z,true);
+					}
+
+					if (!blocOptimized.Get(x,y,z))	
+					{
+						OptimizeTopFaces(vd, vertexCount, id, indexCount, x, y, z, bt, blocOptimized);
+					}
 					if(bt != BTYPE_AIR )
 					{
 						AddBlockToMesh (vd , vertexCount , id, indexCount, bt , x, y, z);
@@ -91,7 +99,7 @@ void Chunk::OptimizeTopFaces(ChunkMesh::VertexData* vd, int& vertexCount, uint16
 			return;
 		for (int i = loopStart; i != loopEnd + 1; i += step)
 		{
-			if ((i != loopEnd) && (GetBloc(i + step, y, z + j) != GetBloc(i, y, z + j) || GetBloc(i + step, y + 1, z + j) != BTYPE_AIR))
+			if ((i != loopEnd) && (GetBloc(i + step, y, j) != GetBloc(i, y, j) || GetBloc(i + step, y + 1, j) != BTYPE_AIR))
 			{
 				if (endX == -1)
 				{
@@ -109,6 +117,14 @@ void Chunk::OptimizeTopFaces(ChunkMesh::VertexData* vd, int& vertexCount, uint16
 		//si on arrive a la fin le mesh aura la dimention x maximum
 		if (endX == -1) 
 			endX = loopEnd;
+
+		if (!added) {
+			for (int i = x; i <= endX; i++)
+			{
+				blocOptimized.Set(i, y, j, true);
+			}
+		}
+
 		//inverse la boucle
 		step = -step;
 		int l = loopEnd;
@@ -239,23 +255,23 @@ void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* 
 		id[indexCount++] = v + 3;
 	}
 
-	if (renderTopFace)
+	/*if (renderTopFace)
 	{
 
-		v = vertexCount;
+	v = vertexCount;
 
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x1, y0);		//3
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y1);		//1
+	vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
+	vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x1, y0);		//3
+	vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
+	vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y1);		//1
 
-		id[indexCount++] = v;
-		id[indexCount++] = v + 1;
-		id[indexCount++] = v + 2;
-		id[indexCount++] = v;
-		id[indexCount++] = v + 2;
-		id[indexCount++] = v + 3;
-	}
+	id[indexCount++] = v;
+	id[indexCount++] = v + 1;
+	id[indexCount++] = v + 2;
+	id[indexCount++] = v;
+	id[indexCount++] = v + 2;
+	id[indexCount++] = v + 3;
+	}*/
 	//bot face
 	if (renderBottomFace)
 	{

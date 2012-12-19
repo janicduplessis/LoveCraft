@@ -7,7 +7,7 @@
 #include "player.h"
 #include "camera.h"
 #include "shader.h"
-#include "Chunk.h"
+#include "chunk.h"
 #include "arraybool.h"
 #include "array2d.h"
 #include "testprojectile.h"

@@ -36,7 +36,7 @@ void Projectile::TestRotation()
 	std::cout << rot.Get21() << std::endl;
 	std::cout << rot.Get31() << std::endl;
 	std::cout << rot.Get41() << std::endl;*/
-	m_speed.Afficher();
+	std::cout << m_speed << std::endl;
 	m_rotation.Afficher();
 }
 

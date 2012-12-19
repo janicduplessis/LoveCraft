@@ -82,8 +82,9 @@ void Engine::Init()
 		}
 	}
 
-	chunk.SetBloc(0,3,0, BTYPE_BRICK);
-	chunk.SetBloc(5,1,5, BTYPE_DIRT);
+	chunk.SetBloc(0,1,0, BTYPE_BRICK);
+	chunk.SetBloc(1,1,0, BTYPE_BRICK);
+	//chunk.SetBloc(5,1,5, BTYPE_DIRT);
 
 	//Place les chunks
 	for (int i = -VIEW_DISTANCE / CHUNK_SIZE_X; i < VIEW_DISTANCE / CHUNK_SIZE_X; i++)

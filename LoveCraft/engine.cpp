@@ -22,6 +22,16 @@ Engine::~Engine()
 	delete m_textureAtlas;
 }
 
+const Engine& Engine::Get() const
+{
+	return *this;
+}
+
+Engine& Engine::Get()
+{
+	return *this;
+}
+
 void Engine::Init()
 {
 	GLenum err = glewInit ();
@@ -71,6 +81,7 @@ void Engine::Init()
 	m_projectile.SetPosition(Vector3f(0,0,0));
 
 	m_chunks = new Array2d<Chunk>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
+	Info::Get().SetChunkArray(m_chunks);
 
 	//Genere un chunk plancher
 	Chunk chunk;
@@ -84,15 +95,15 @@ void Engine::Init()
 
 	chunk.SetBloc(0,1,0, BTYPE_BRICK);
 	chunk.SetBloc(3,1,3, BTYPE_BRICK);
-	chunk.SetBloc(5,1,5, BTYPE_DIRT);
+	chunk.SetBloc(5,3,5, BTYPE_DIRT);
 
 	//Place les chunks
-	for (int i = -VIEW_DISTANCE / CHUNK_SIZE_X; i < VIEW_DISTANCE / CHUNK_SIZE_X; i++)
+	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
 	{
-		for (int j = -VIEW_DISTANCE / CHUNK_SIZE_Z; j < VIEW_DISTANCE / CHUNK_SIZE_Z; ++j)
+		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
 		{
-			chunk.SetPosition(Vector2i(CHUNK_SIZE_X * i, CHUNK_SIZE_Z * j));
-			m_chunks->Set(i + VIEW_DISTANCE / CHUNK_SIZE_X, j + VIEW_DISTANCE / CHUNK_SIZE_Z, chunk);
+			chunk.SetPosition(Vector2i(i, j));
+			m_chunks->Set(i, j, chunk);
 		}
 	}
 

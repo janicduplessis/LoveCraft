@@ -29,6 +29,16 @@ public:
 	virtual ~Engine();
 
 	/**
+	 * Retourne une reference en lecture seule vers l'engine
+	 */
+	virtual const Engine& Get() const;
+
+	/**
+	 * Retourne une reference vers l'engine
+	 */
+	virtual Engine& Get();
+
+	/**
 	* Initialisation des composantes du jeu
 	*/
 	virtual void Init();
@@ -161,9 +171,6 @@ private:
 	Shader m_shaderModel;
 
 	Array2d<Chunk>* m_chunks;
-	Chunk* m_test;
-
-	Chunk m_testChunk;
 
 	TestProjectile m_projectile;
 

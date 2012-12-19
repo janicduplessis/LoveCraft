@@ -36,13 +36,45 @@ void Chunk::Update()
 	// Update mesh
 	if( m_isDirty )
 	{
+		Chunk* leftChunk = 0;
+		Chunk* rightChunk = 0;
+		Chunk* frontChunk = 0;
+		Chunk* backChunk = 0;
+
+		Array2d<Chunk>* chunks = Info::Get().GetChunkArray();
+
+		if (m_pos.x != 0)
+			leftChunk = &chunks->Get(m_pos.x - 1, m_pos.y);
+
+		if(m_pos.x != VIEW_DISTANCE / CHUNK_SIZE_X * 2 - 1)
+			rightChunk = &chunks->Get(m_pos.x + 1, m_pos.y);
+
+		if (m_pos.y != 0)
+			frontChunk = &chunks->Get(m_pos.x, m_pos.y - 1);
+
+		if(m_pos.y != VIEW_DISTANCE / CHUNK_SIZE_Z * 2 - 1)
+			backChunk = &chunks->Get(m_pos.x, m_pos.y + 1);
+
 		int maxVertexCount = ( CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z ) * 24;
 		ChunkMesh :: VertexData * vd = new ChunkMesh :: VertexData [ maxVertexCount ];
 		uint16* id = new uint16[3 * maxVertexCount / 2]; 
 		int vertexCount = 0;
 		int indexCount = 0;
-		Array3d<bool> blocOptimized(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z);
-		blocOptimized.Reset(false);
+
+		Array3d<bool> topFacesOptimized(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z);
+		Array3d<bool> bottomFacesOptimized(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z);
+		Array3d<bool> frontFacesOptimized(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z);
+		Array3d<bool> backFacesOptimized(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z);
+		Array3d<bool> leftFacesOptimized(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z);
+		Array3d<bool> rightFacesOptimized(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z);
+
+		topFacesOptimized.Reset(false);
+		bottomFacesOptimized.Reset(false);
+		frontFacesOptimized.Reset(false);
+		backFacesOptimized.Reset(false);
+		leftFacesOptimized.Reset(false);
+		rightFacesOptimized.Reset(false);
+
 		for ( int x = 0; x < CHUNK_SIZE_X ; ++x)
 		{
 			for ( int z = 0; z < CHUNK_SIZE_Z ; ++z)
@@ -51,19 +83,104 @@ void Chunk::Update()
 				{
 					if( vertexCount > USHRT_MAX )
 						break ;
+
 					BlockType bt = GetBloc (x, y, z);
-					if (y == CHUNK_SIZE_Y - 1 || bt == BTYPE_AIR || GetBloc(x, y + 1, z) != BTYPE_AIR)
+
+					// Regarde si chaque face à besoin d'être optimisé car
+					// l'algorithme d'optimisation doit commencer sur une face
+					// visible
+					if (bt == BTYPE_AIR)
 					{
-						blocOptimized.Set(x,y,z,true);
+						topFacesOptimized.Set(x,y,z,true);
+						bottomFacesOptimized.Set(x,y,z,true);
+						frontFacesOptimized.Set(x,y,z,true);
+						backFacesOptimized.Set(x,y,z,true);
+						leftFacesOptimized.Set(x,y,z,true);
+						rightFacesOptimized.Set(x,y,z,true);
+					}
+					else
+					{
+						// Bottom
+						if (y == 0 || GetBloc(x, y - 1, z) != BTYPE_AIR)
+						{
+							bottomFacesOptimized.Set(x,y,z,true);
+						}
+
+						// Top
+						if (y == CHUNK_SIZE_Y - 1 || GetBloc(x, y + 1, z) != BTYPE_AIR)
+						{
+							topFacesOptimized.Set(x,y,z,true);
+						}
+
+						// Front
+						if (z == 0)
+						{
+							if(!frontChunk || frontChunk->GetBloc(x, y, CHUNK_SIZE_Z - 1) != BTYPE_AIR)
+								frontFacesOptimized.Set(x,y,z,true);
+						}
+						else if (GetBloc(x, y, z - 1) != BTYPE_AIR)
+						{
+							frontFacesOptimized.Set(x,y,z,true);
+						}
+
+						// Back
+						if (z == CHUNK_SIZE_Z - 1)
+						{
+							if(!backChunk || backChunk->GetBloc(x, y, 0) != BTYPE_AIR)
+								backFacesOptimized.Set(x,y,z,true);
+						}
+						else if (GetBloc(x, y, z + 1) != BTYPE_AIR)
+						{
+							backFacesOptimized.Set(x,y,z,true);
+						}
+
+						// Left
+						if (x == 0)
+						{
+							if(!leftChunk || leftChunk->GetBloc(CHUNK_SIZE_X - 1, y, z) != BTYPE_AIR)
+								leftFacesOptimized.Set(x,y,z,true);
+						}
+						else if (GetBloc(x - 1, y, z) != BTYPE_AIR)
+						{
+							leftFacesOptimized.Set(x,y,z,true);
+						}
+
+						// Right
+						if (x == CHUNK_SIZE_X - 1)
+						{
+							if(!rightChunk || rightChunk->GetBloc(0, y, z) != BTYPE_AIR)
+								rightFacesOptimized.Set(x,y,z,true);
+						}
+						else if (GetBloc(x + 1, y, z) != BTYPE_AIR)
+						{
+							rightFacesOptimized.Set(x,y,z,true);
+						}
 					}
 
-					if (!blocOptimized.Get(x,y,z))	
+					// Optimise les faces qui en ont besoin
+					if (!topFacesOptimized.Get(x,y,z))	
 					{
-						OptimizeTopFaces(vd, vertexCount, id, indexCount, x, y, z, bt, blocOptimized);
+						CreateOptimizedTopBottomFace(FACE_TOP, vd, vertexCount, x, y, z, bt, topFacesOptimized);
 					}
-					if(bt != BTYPE_AIR )
+					if (!bottomFacesOptimized.Get(x,y,z))	
 					{
-						AddBlockToMesh (vd , vertexCount , id, indexCount, bt , x, y, z);
+						CreateOptimizedTopBottomFace(FACE_BOTTOM, vd, vertexCount, x, y, z, bt, topFacesOptimized);
+					}
+					if (!frontFacesOptimized.Get(x,y,z))
+					{
+						CreateOptimizedFrontBackFace(FACE_FRONT, vd, vertexCount, x, y, z, bt, topFacesOptimized);
+					}
+					if (!backFacesOptimized.Get(x,y,z))
+					{
+						CreateOptimizedFrontBackFace(FACE_BACK, vd, vertexCount, x, y, z, bt, topFacesOptimized);
+					}
+					if (!leftFacesOptimized.Get(x,y,z))
+					{
+						CreateOptimizedLeftRightFace(FACE_LEFT, vd, vertexCount, x, y, z, bt, topFacesOptimized);
+					}
+					if (!rightFacesOptimized.Get(x,y,z))
+					{
+						CreateOptimizedLeftRightFace(FACE_RIGHT, vd, vertexCount, x, y, z, bt, topFacesOptimized);
 					}
 				}
 			}
@@ -85,7 +202,7 @@ void Chunk::Render() const
 	m_chunkMesh.Render();
 }
 
-void Chunk::OptimizeTopFaces(ChunkMesh::VertexData* vd, int& vertexCount, uint16* id, int& indexCount, int x, int y, int z, BlockType bt, Array3d<bool>& blocOptimized)
+void Chunk::CreateOptimizedTopBottomFace(MeshFace face, ChunkMesh::VertexData* vd, int& vertexCount, int x, int y, int z, BlockType bt, Array3d<bool>& facesOptimized)
 {
 	// Itérateurs : i = x, j = z
 	// Conditions d'arrêt : 
@@ -93,28 +210,27 @@ void Chunk::OptimizeTopFaces(ChunkMesh::VertexData* vd, int& vertexCount, uint16
 	//  - Le prochain bloc n'est pas du même type que @bt
 	//  - Le bloc au dessus du prochain bloc n'est pas de l'air
 	//  - Le prochain bloc est déja optimisé
-	
-	int endX = -1;
-	int endY = -1;
 
-	BlockType btest = GetBloc(3, 1, 3);
+	int endX = -1;
+	int endZ = -1;
 
 	// Parcourt le chunk en x
 	for(int i = x; i < CHUNK_SIZE_X; ++i)
 	{
+		// Parcourt le chunk en z
 		for(int j = z; j < CHUNK_SIZE_Z; ++j)
 		{
 			// Si une des conditions d'arrêt est vraie
-			if ((j == CHUNK_SIZE_Z - 1) || (GetBloc(i, y, j + 1) != bt) || (GetBloc(i, y + 1, j + 1) != BTYPE_AIR) || blocOptimized.Get(i, y, j + 1))
+			if ((j == CHUNK_SIZE_Z - 1) || (GetBloc(i, y, j + 1) != bt) || (GetBloc(i, y + 1, j + 1) != BTYPE_AIR) || facesOptimized.Get(i, y, j + 1))
 			{
 				// Trouve la plus petite position en Y qui répond à la condition d'arrêt
-				if (endY == -1 || j < endY)
-					endY = j;
+				if (endZ == -1 || j < endZ)
+					endZ = j;
 				break;
 			}
 		}
 		// Si une des conditions d'arrêt est vraie
-		if ((i == CHUNK_SIZE_X - 1) || (GetBloc(i + 1, y, z) != bt) || (GetBloc(i + 1, y + 1, z) != BTYPE_AIR) || blocOptimized.Get(i + 1, y, z))
+		if ((i == CHUNK_SIZE_X - 1) || (GetBloc(i + 1, y, z) != bt) || (GetBloc(i + 1, y + 1, z) != BTYPE_AIR) || facesOptimized.Get(i + 1, y, z))
 		{
 			endX = i;
 			break;
@@ -124,210 +240,222 @@ void Chunk::OptimizeTopFaces(ChunkMesh::VertexData* vd, int& vertexCount, uint16
 	// Update le tableau avec les nouveaux blocs optimisés
 	for (int i = x; i <= endX; ++i)
 	{
-		for (int j = z; j <= endY; ++j)
+		for (int j = z; j <= endZ; ++j)
 		{
-			blocOptimized.Set(i, y, j, true);
+			facesOptimized.Set(i, y, j, true);
 		}
 	}
 
-	// Crée le rectangle
-	AddRectangleToMesh(vd, vertexCount, id, indexCount, x, y, z, endX - x + 1, endY - z + 1, bt);
+	// Dimensions du rectangle
+	int w = endX - x + 1;
+	int h = endZ - z + 1;
 
-}
-
-void Chunk::AddRectangleToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* id, int& indexCount, int x, int y, int z, int w, int h, BlockType bt)
-{
-	// place le chunk a sa position dans le monde
-	x += m_pos.x;
+	// Place la face relativement au monde
+	Vector2f pos = GetRealPosition();
+	x += pos.x;
 	y -= 2.f;
-	z += m_pos.y;
+	z += pos.y;
 
-	//determine les coords de la texture du type de bloc
+	// Détermine les coords de la texture du type de bloc
 	BlockInfo::TextureCoords coords = Info::Get().GetBlocInfo(bt)->GetTextureCoords();
 	float x0 = coords.u;
 	float y0 = coords.v;
 	float x1 = coords.u + coords.w;
 	float y1 = coords.v + coords.h;
 
-	//top face
-	int v = vertexCount;
-
-	vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + h-1 + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
-	vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f, y + 0.5f, z + h-1 + 0.5f, 1.f, 1.f, 1.f, x1, y0);	//3
-	vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
-	vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y1);				//1
-
-	id[indexCount++] = v;
-	id[indexCount++] = v + 1;
-	id[indexCount++] = v + 2;
-	id[indexCount++] = v;
-	id[indexCount++] = v + 2;
-	id[indexCount++] = v + 3;
-}
-
-void Chunk::AddBlockToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* id, int& indexCount, BlockType bt, int x, int y, int z)
-{
-	// Optimisation faces cubes
-	bool renderFrontFace = true;
-	bool renderBackFace = true;
-	bool renderTopFace = true;
-	bool renderBottomFace = true;
-	bool renderLeftFace = true;
-	bool renderRightFace = true;
-
-	// front
-	if (z != 0 && GetBloc(x, y, z - 1) != BTYPE_AIR)
-		renderFrontFace = false;
-
-	// back
-	if (z < CHUNK_SIZE_Z - 1 && GetBloc(x, y, z + 1) != BTYPE_AIR)
-		renderBackFace = false;
-
-	// top
-	if (y < CHUNK_SIZE_Y - 1 && GetBloc(x, y + 1, z) != BTYPE_AIR)
-		renderTopFace = false;
-
-	// bottom
-	if (y != 0 && GetBloc(x, y - 1, z) != BTYPE_AIR)
-		renderBottomFace = false;
-
-	// left
-	if (x != 0 && GetBloc(x - 1, y, z) != BTYPE_AIR)
-		renderLeftFace = false;
-
-	// right
-	if (x < CHUNK_SIZE_X - 1 && GetBloc(x + 1, y, z) != BTYPE_AIR)
-		renderRightFace = false;
-
-	// plancher
-	if (y == 0)
-		renderBottomFace = renderLeftFace = renderRightFace = renderFrontFace = renderBackFace = false;
-
-	//determine les coords de la texture du type de bloc
-	BlockInfo::TextureCoords coords = Info::Get().GetBlocInfo(bt)->GetTextureCoords();
-	float x0 = coords.u;
-	float y0 = coords.v;
-	float x1 = coords.u + coords.w;
-	float y1 = coords.v + coords.h;
-
-	// place le chunk a sa position dans le monde
-	x += m_pos.x;
-	y -= 2.f;
-	z += m_pos.y;
-
-	int v;
-
-	//front face
-	if (renderFrontFace)
+	// Crée les vertices de la face
+	if(face == FACE_TOP)
 	{
-		v = vertexCount;
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + h-1 + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f, y + 0.5f, z + h-1 + 0.5f, 1.f, 1.f, 1.f, x1, y0);	//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y1);				//3
+	}
+	else if(face == FACE_BOTTOM)
+	{
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z + 0.5f, 0.6f, 0.6f, 0.6f, x0, y0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x0, y1);		//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x1, y1);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z + 0.5f, 0.6f, 0.6f, 0.6f, x1, y0);		//3
+	}
+	else
+	{
+		std::cout << "invalid face" << std::endl;
+	}
+}
 
+void Chunk::CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* vd, int& vertexCount, int x, int y, int z, BlockType bt, Array3d<bool>& facesOptimized)
+{
+	// Itérateurs : i = x, j = y
+	// Conditions d'arrêt : 
+	//  - On est arrivé à la fin du chunk (CHUNK_SIZE - 1)
+	//  - Le prochain bloc n'est pas du même type que @bt
+	//  - Le bloc au dessus du prochain bloc n'est pas de l'air
+	//  - Le prochain bloc est déja optimisé
+
+	int endX = -1;
+	int endY = -1;
+
+	// Parcourt le chunk en x
+	for(int i = x; i < CHUNK_SIZE_X; ++i)
+	{
+		// Parcourt le chunk en y
+		for(int j = y; j < CHUNK_SIZE_Y; ++j)
+		{
+			// Si une des conditions d'arrêt est vraie
+			if ((j == CHUNK_SIZE_Y - 1) || (GetBloc(i, j + 1, z) != bt) || (GetBloc(i, j + 1, z) != BTYPE_AIR) || facesOptimized.Get(i, j + 1, z))
+			{
+				// Trouve la plus petite position en Y qui répond à la condition d'arrêt
+				if (endY == -1 || j < endY)
+					endY = j;
+				break;
+			}
+		}
+		// Si une des conditions d'arrêt est vraie
+		if ((i == CHUNK_SIZE_X - 1) || (GetBloc(i + 1, y, z) != bt) || (GetBloc(i + 1, y + 1, z) != BTYPE_AIR) || facesOptimized.Get(i + 1, y, z))
+		{
+			endX = i;
+			break;
+		}
+	}
+
+	// Update le tableau avec les nouveaux blocs optimisés
+	for (int i = x; i <= endX; ++i)
+	{
+		for (int j = y; j <= endY; ++j)
+		{
+			facesOptimized.Set(i, j, z, true);
+		}
+	}
+
+	// Dimensions du rectangle
+	int w = endX - x + 1;
+	int h = endY - y + 1;
+
+	// Place la face relativement au monde
+	Vector2f pos = GetRealPosition();
+	x += pos.x;
+	y -= 2.f;
+	z += pos.y;
+
+	// Détermine les coords de la texture du type de bloc
+	BlockInfo::TextureCoords coords = Info::Get().GetBlocInfo(bt)->GetTextureCoords();
+	float x0 = coords.u;
+	float y0 = coords.v;
+	float x1 = coords.u + coords.w;
+	float y1 = coords.v + coords.h;
+
+	// Crée les vertices de la face
+	if(face == FACE_FRONT)
+	{
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 0.9f, 0.9f, 0.9f, x0, y0);		//0
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z + 0.5f, 0.9f, 0.9f, 0.9f, x0, y1);		//1
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z + 0.5f, 0.9f, 0.9f, 0.9f, x1, y1);		//2
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 0.9f, 0.9f, 0.9f, x1, y0);		//3
-
-		id[indexCount++] = v;
-		id[indexCount++] = v + 1;
-		id[indexCount++] = v + 2;
-		id[indexCount++] = v;
-		id[indexCount++] = v + 2;
-		id[indexCount++] = v + 3;
 	}
-
-	//back face
-	if (renderBackFace)
+	else if(face == FACE_BACK)
 	{
-		v = vertexCount;
-
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x0, y0);		//0
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x1, y0);		//1
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x1, y1);		//2
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x0, y1);		//3
+	}
+	else
+	{
+		std::cout << "invalid face" << std::endl;
+	}
+}
 
-		id[indexCount++] = v;
-		id[indexCount++] = v + 1;
-		id[indexCount++] = v + 2;
-		id[indexCount++] = v;
-		id[indexCount++] = v + 2;
-		id[indexCount++] = v + 3;
+void Chunk::CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* vd, int& vertexCount, int x, int y, int z, BlockType bt, Array3d<bool>& facesOptimized)
+{
+	// Itérateurs : i = z, j = y
+	// Conditions d'arrêt : 
+	//  - On est arrivé à la fin du chunk (CHUNK_SIZE - 1)
+	//  - Le prochain bloc n'est pas du même type que @bt
+	//  - Le bloc au dessus du prochain bloc n'est pas de l'air
+	//  - Le prochain bloc est déja optimisé
+
+	int endZ = -1;
+	int endY = -1;
+
+	// Parcourt le chunk en z
+	for(int i = z; i < CHUNK_SIZE_Z; ++i)
+	{
+		// Parcourt le chunk en y
+		for(int j = y; j < CHUNK_SIZE_Y; ++j)
+		{
+			// Si une des conditions d'arrêt est vraie
+			if ((j == CHUNK_SIZE_Y - 1) || (GetBloc(i, j + 1, z) != bt) || (GetBloc(i, j + 1, z) != BTYPE_AIR) || facesOptimized.Get(i, j + 1, z))
+			{
+				// Trouve la plus petite position en Y qui répond à la condition d'arrêt
+				if (endY == -1 || j < endY)
+					endY = j;
+				break;
+			}
+		}
+		// Si une des conditions d'arrêt est vraie
+		if ((i == CHUNK_SIZE_Z - 1) || (GetBloc(x, y, i + 1) != bt) || (GetBloc(x, y + 1, i + 1) != BTYPE_AIR) || facesOptimized.Get(x, y, i + 1))
+		{
+			endZ = i;
+			break;
+		}
 	}
 
-	/*if (renderTopFace)
+	// Update le tableau avec les nouveaux blocs optimisés
+	for (int i = z; i <= endZ; ++i)
 	{
-
-	v = vertexCount;
-
-	vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x0, y0);		//0
-	vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 1.f, 1.f, 1.f, x1, y0);		//3
-	vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x1, y1);		//2
-	vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 1.f, 1.f, 1.f, x0, y1);		//1
-
-	id[indexCount++] = v;
-	id[indexCount++] = v + 1;
-	id[indexCount++] = v + 2;
-	id[indexCount++] = v;
-	id[indexCount++] = v + 2;
-	id[indexCount++] = v + 3;
-	}*/
-	//bot face
-	if (renderBottomFace)
-	{
-		v = vertexCount;
-
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z + 0.5f, 0.6f, 0.6f, 0.6f, x0, y0);		//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x0, y1);		//3
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x1, y1);		//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z + 0.5f, 0.6f, 0.6f, 0.6f, x1, y0);		//1
-
-		id[indexCount++] = v;
-		id[indexCount++] = v + 1;
-		id[indexCount++] = v + 2;
-		id[indexCount++] = v;
-		id[indexCount++] = v + 2;
-		id[indexCount++] = v + 3;
+		for (int j = y; j <= endY; ++j)
+		{
+			facesOptimized.Set(x, j, i, true);
+		}
 	}
 
-	//left face
-	if (renderLeftFace)
-	{
-		v = vertexCount;
+	// Dimensions du rectangle
+	int w = endZ - z + 1;
+	int h = endY - y + 1;
 
+	// Place la face relativement au monde
+	Vector2f pos = GetRealPosition();
+	x += pos.x;
+	y -= 2.f;
+	z += pos.y;
+
+	// Détermine les coords de la texture du type de bloc
+	BlockInfo::TextureCoords coords = Info::Get().GetBlocInfo(bt)->GetTextureCoords();
+	float x0 = coords.u;
+	float y0 = coords.v;
+	float x1 = coords.u + coords.w;
+	float y1 = coords.v + coords.h;
+
+	// Crée les vertices de la face
+	if(face == FACE_LEFT)
+	{
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z + 0.5f, 0.8f, 0.8f, 0.8f, x0, y0);		//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 0.8f, 0.8f, 0.8f, x0, y1);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z + 0.5f, 0.8f, 0.8f, 0.8f, x0, y1);		//1
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + 0.5f, z - 0.5f, 0.8f, 0.8f, 0.8f, x1, y1);		//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z - 0.5f, 0.8f, 0.8f, 0.8f, x1, y0);		//1
-
-		id[indexCount++] = v;
-		id[indexCount++] = v + 1;
-		id[indexCount++] = v + 2;
-		id[indexCount++] = v;
-		id[indexCount++] = v + 2;
-		id[indexCount++] = v + 3;
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z - 0.5f, 0.8f, 0.8f, 0.8f, x1, y0);		//3
 	}
-
-	//right face
-	if (renderRightFace)
+	else if(face == FACE_RIGHT)
 	{
-		v = vertexCount;
-
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z + 0.5f, 0.6f, 0.6f, 0.6f, x0, y0);		//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x1, y0);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x1, y0);		//1
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f, x1, y1);		//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 0.6f, 0.6f, 0.6f, x0, y1);		//1
-
-		id[indexCount++] = v;
-		id[indexCount++] = v + 1;
-		id[indexCount++] = v + 2;
-		id[indexCount++] = v;
-		id[indexCount++] = v + 2;
-		id[indexCount++] = v + 3;
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + 0.5f, z + 0.5f, 0.6f, 0.6f, 0.6f, x0, y1);		//3
+	}
+	else
+	{
+		std::cout << "invalid face" << std::endl;
 	}
 }
 
 Vector2i Chunk::GetPosition() const
 {
 	return m_pos;
+}
+
+Vector2f Chunk::GetRealPosition() const
+{
+	return Vector2f(m_pos.x * CHUNK_SIZE_X - VIEW_DISTANCE, m_pos.y * CHUNK_SIZE_Z - VIEW_DISTANCE);
 }
 
 void Chunk::SetPosition( Vector2i pos )

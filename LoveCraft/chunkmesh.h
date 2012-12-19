@@ -20,7 +20,6 @@ public:
 	virtual int Count() const;
 
 private:
-
 };
 
 #endif

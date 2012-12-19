@@ -25,6 +25,20 @@ void ChunkMesh::SetMeshData(VertexData* vd, int vertexCount, uint16* indexData, 
 	if(vertexCount == 0)
 		return;
 
+	indexCount = 0;
+	int faceCount = vertexCount / 4.f;
+	// Genere les index
+	for (int i = 0; i < faceCount; ++i)
+	{
+		int v = i * 4;
+		indexData[indexCount++] = v;
+		indexData[indexCount++] = v + 1;
+		indexData[indexCount++] = v + 2;
+		indexData[indexCount++] = v;
+		indexData[indexCount++] = v + 2;
+		indexData[indexCount++] = v + 3;
+	}
+
 	if(!m_isValid)
 	{
 		glGenBuffers(1, &m_vertexVboId);

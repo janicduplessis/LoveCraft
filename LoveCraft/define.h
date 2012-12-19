@@ -54,6 +54,6 @@ enum BLOCK_TYPE {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS, BTYPE_BRICK, BTYPE_SAND, BT
 #define SHADER_PATH			"../lovecraft/media/shader/"
 #define MODEL_PATH			"../lovecraft/media/models/"
 #define SOUND_PATH			"../lovecraft/media/sound/"
-#define VIEW_DISTANCE       128
+#define VIEW_DISTANCE       512
 
 #endif // DEFINE_H__

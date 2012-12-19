@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -52,6 +53,7 @@ enum BLOCK_TYPE {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS, BTYPE_BRICK, BTYPE_SAND, BT
 #define TEXTURE_PATH        "../lovecraft/media/textures/"
 #define SHADER_PATH			"../lovecraft/media/shader/"
 #define MODEL_PATH			"../lovecraft/media/models/"
+#define SOUND_PATH			"../lovecraft/media/sound/"
 #define VIEW_DISTANCE       128
 
 #endif // DEFINE_H__

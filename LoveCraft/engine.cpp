@@ -8,13 +8,14 @@
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false), m_controls(Array<bool>(256, false)),
 	m_rightClick(false), m_leftClick(false), m_camRadius(10),
+	m_sndFootStep(2, sf::SoundBuffer()),
 	m_playScreenBotLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
 	m_playScreenTopLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
 	m_playScreenTopRight(Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
 	m_playScreenBotRight(Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
 	m_playScreenSize(Vector2i(m_playScreenTopRight.x - m_playScreenTopLeft.x, m_playScreenTopLeft.y - m_playScreenBotLeft.y))
 {
-
+	 
 }
 
 Engine::~Engine()
@@ -114,6 +115,16 @@ void Engine::LoadResource()
 	LoadBlocTexture(BTYPE_SAND, TEXTURE_PATH "sand.jpg");
 
 	m_textureAtlas->Generate(128, false);
+
+	m_music.openFromFile(SOUND_PATH "overworld.mp3");
+	m_music.setVolume(100);
+	m_music.setLoop(true);
+	m_music.play();
+
+	m_sndFootStep.Get(0).loadFromFile(SOUND_PATH "foot1.wav");
+	m_sndFootStep.Get(1).loadFromFile(SOUND_PATH "foot2.wav");
+	m_sndClick.loadFromFile(SOUND_PATH "click.wav");
+	m_sndJump.loadFromFile(SOUND_PATH "jump.wav");
 
 	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
 	LoadTexture(m_textureInterface, TEXTURE_PATH "rock.jpg");
@@ -354,20 +365,16 @@ void Engine::KeyPressEvent(unsigned char key)
 	switch(key)
 	{
 		//case 0:    // A
-		//	m_dirLeft = true;
-		//	break;
 		//case 3:    // D
-		//	m_dirRight = true;
-		//	break;
 		//case 22:   // W
-		//	m_dirFront = true;
-		//	break;
 		//case 18:   // S
-		//	m_dirBack = true;
+		//	m_sndChan1.setBuffer(m_sndFootStep.Get(1));
+		//	m_sndChan1.play();
 		//	break;
-		//case 57:   // Space
-		//	m_space = true;
-		//	break;
+		case 57:   // Space
+			m_sndChan2.setBuffer(m_sndJump);
+			m_sndChan2.play();
+			break;
 		//case 37:   // CTRL
 		//	m_ctrl = true;
 		//	break;
@@ -391,7 +398,7 @@ void Engine::KeyPressEvent(unsigned char key)
 			m_camera.SetMode(Camera::CAM_FIRST_PERSON);
 		}
 		break;
-	case 57:
+	case 37:
 		m_projectile.Shoot();
 		break;
 	default:
@@ -441,7 +448,7 @@ void Engine::KeyReleaseEvent(unsigned char key)
 		break;
 	case 6:		   // G
 		m_ghostMode = !m_ghostMode;
-		std::cout << "Ghost Mode set to: " << m_ghostMode << std::endl;
+		std::cout << "Ghost Mode set to: " << (m_ghostMode ? "True" : "False") << std::endl;
 		break;
 	}
 }
@@ -504,6 +511,8 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 			m_leftClick = true;
 			SetMousePos(x, y);
 		}
+		m_sndChan2.setBuffer(m_sndClick);
+		m_sndChan2.play();
 		break;
 	case MOUSE_BUTTON_WHEEL_UP:
 		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)

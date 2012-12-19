@@ -8,7 +8,6 @@
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false), m_controls(Array<bool>(256, false)),
 	m_rightClick(false), m_leftClick(false), m_camRadius(10),
-	m_sndFootStep(2, sf::SoundBuffer()),
 	m_playScreenBotLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
 	m_playScreenTopLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
 	m_playScreenTopRight(Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
@@ -84,8 +83,8 @@ void Engine::Init()
 	}
 
 	chunk.SetBloc(0,1,0, BTYPE_BRICK);
-	chunk.SetBloc(1,1,0, BTYPE_BRICK);
-	//chunk.SetBloc(5,1,5, BTYPE_DIRT);
+	chunk.SetBloc(3,1,3, BTYPE_BRICK);
+	chunk.SetBloc(5,1,5, BTYPE_DIRT);
 
 	//Place les chunks
 	for (int i = -VIEW_DISTANCE / CHUNK_SIZE_X; i < VIEW_DISTANCE / CHUNK_SIZE_X; i++)
@@ -121,8 +120,8 @@ void Engine::LoadResource()
 	m_music.setLoop(true);
 	m_music.play();
 
-	m_sndFootStep.Get(0).loadFromFile(SOUND_PATH "foot1.wav");
-	m_sndFootStep.Get(1).loadFromFile(SOUND_PATH "foot2.wav");
+	//m_sndFootStep.Get(0).loadFromFile(SOUND_PATH "foot1.wav");
+	//m_sndFootStep.Get(1).loadFromFile(SOUND_PATH "foot2.wav");
 	m_sndClick.loadFromFile(SOUND_PATH "click.wav");
 	m_sndJump.loadFromFile(SOUND_PATH "jump.wav");
 

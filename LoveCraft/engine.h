@@ -151,7 +151,7 @@ private:
 
 	sf::Music m_music;
 	sf::SoundBuffer m_sndJump;
-	Array<sf::SoundBuffer> m_sndFootStep;
+	//Array<sf::SoundBuffer> m_sndFootStep;
 	sf::SoundBuffer m_sndClick;
 
 	sf::Sound m_sndChan1;

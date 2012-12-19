@@ -1,7 +1,7 @@
 #ifndef ARRAYBOOL_H__
 #define ARRAYBOOL_H__
 
-#include "Array.h"
+#include "array.h"
 
 template <>
 class Array<bool>

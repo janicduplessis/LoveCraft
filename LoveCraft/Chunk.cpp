@@ -52,7 +52,7 @@ void Chunk::Update()
 					if( vertexCount > USHRT_MAX )
 						break ;
 					BlockType bt = GetBloc (x, y, z);
-					if (y == CHUNK_SIZE_Y || bt == BTYPE_AIR || GetBloc(x, y + 1, z) != BTYPE_AIR)
+					if (y == CHUNK_SIZE_Y - 1 || bt == BTYPE_AIR || GetBloc(x, y + 1, z) != BTYPE_AIR)
 					{
 						blocOptimized.Set(x,y,z,true);
 					}
@@ -87,54 +87,52 @@ void Chunk::Render() const
 
 void Chunk::OptimizeTopFaces(ChunkMesh::VertexData* vd, int& vertexCount, uint16* id, int& indexCount, int x, int y, int z, BlockType bt, Array3d<bool>& blocOptimized)
 {
+	// Itérateurs : i = x, j = z
+	// Conditions d'arrêt : 
+	//  - On est arrivé à la fin du chunk (CHUNK_SIZE - 1)
+	//  - Le prochain bloc n'est pas du même type que @bt
+	//  - Le bloc au dessus du prochain bloc n'est pas de l'air
+	//  - Le prochain bloc est déja optimisé
+	
 	int endX = -1;
-	int loopStart = x;
-	int loopEnd = CHUNK_SIZE_X - 1;
-	bool added = false;
-	int step = 1;
-	// parcourt les cubes en S
-	for (int j = z; j < CHUNK_SIZE_Z; ++j)
+	int endY = -1;
+
+	BlockType btest = GetBloc(3, 1, 3);
+
+	// Parcourt le chunk en x
+	for(int i = x; i < CHUNK_SIZE_X; ++i)
 	{
-		if (loopStart == loopEnd)
-			return;
-		for (int i = loopStart; i != loopEnd + 1; i += step)
+		for(int j = z; j < CHUNK_SIZE_Z; ++j)
 		{
-			if ((i != loopEnd) && (GetBloc(i + step, y, j) != GetBloc(i, y, j) || GetBloc(i + step, y + 1, j) != BTYPE_AIR))
+			// Si une des conditions d'arrêt est vraie
+			if ((j == CHUNK_SIZE_Z - 1) || (GetBloc(i, y, j + 1) != bt) || (GetBloc(i, y + 1, j + 1) != BTYPE_AIR) || blocOptimized.Get(i, y, j + 1))
 			{
-				if (endX == -1)
-				{
-					endX = i;
-					loopEnd = endX;
-				}
-				else
-				{
-					AddRectangleToMesh(vd, vertexCount, id, indexCount, x, y, z, endX - x + 1, j - y, bt);
-					added = true;
-				}
+				// Trouve la plus petite position en Y qui répond à la condition d'arrêt
+				if (endY == -1 || j < endY)
+					endY = j;
 				break;
 			}
 		}
-		//si on arrive a la fin le mesh aura la dimention x maximum
-		if (endX == -1) 
-			endX = loopEnd;
-
-		if (!added) {
-			for (int i = x; i <= endX; i++)
-			{
-				blocOptimized.Set(i, y, j, true);
-			}
+		// Si une des conditions d'arrêt est vraie
+		if ((i == CHUNK_SIZE_X - 1) || (GetBloc(i + 1, y, z) != bt) || (GetBloc(i + 1, y + 1, z) != BTYPE_AIR) || blocOptimized.Get(i + 1, y, z))
+		{
+			endX = i;
+			break;
 		}
+	}
 
-		//inverse la boucle
-		step = -step;
-		int l = loopEnd;
-		loopEnd = loopStart;
-		loopStart = l;
-	}
-	if (!added)
+	// Update le tableau avec les nouveaux blocs optimisés
+	for (int i = x; i <= endX; ++i)
 	{
-		AddRectangleToMesh(vd, vertexCount, id, indexCount, x, y, z, endX - x + 1, CHUNK_SIZE_Z, bt);
+		for (int j = z; j <= endY; ++j)
+		{
+			blocOptimized.Set(i, y, j, true);
+		}
 	}
+
+	// Crée le rectangle
+	AddRectangleToMesh(vd, vertexCount, id, indexCount, x, y, z, endX - x + 1, endY - z + 1, bt);
+
 }
 
 void Chunk::AddRectangleToMesh(ChunkMesh::VertexData* vd, int& vertexCount, uint16* id, int& indexCount, int x, int y, int z, int w, int h, BlockType bt)

@@ -14,6 +14,7 @@
 #include "vector2.h"
 #include "info.h"
 #include "textureatlas.h"
+#include "son.h"
 
 class Engine : public OpenglContext
 {
@@ -149,13 +150,7 @@ private:
 	Camera m_camera;
 	Array<bool> m_controls;
 
-	sf::Music m_music;
-	sf::SoundBuffer m_sndJump;
-	Array<sf::SoundBuffer> m_sndFootStep;
-	sf::SoundBuffer m_sndClick;
-
-	sf::Sound m_sndChan1;
-	sf::Sound m_sndChan2;
+	Son m_sound;
 	
 	Shader m_shader01;
 	Shader m_shaderModel;

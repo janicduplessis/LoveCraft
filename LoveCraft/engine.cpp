@@ -7,15 +7,13 @@
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false), m_controls(Array<bool>(256, false)),
-	m_rightClick(false), m_leftClick(false), m_camRadius(10),
-	m_sndFootStep(2, sf::SoundBuffer()),
+	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_sound(Son()),
 	m_playScreenBotLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
 	m_playScreenTopLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
 	m_playScreenTopRight(Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
 	m_playScreenBotRight(Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
 	m_playScreenSize(Vector2i(m_playScreenTopRight.x - m_playScreenTopLeft.x, m_playScreenTopLeft.y - m_playScreenBotLeft.y))
 {
-	 
 }
 
 Engine::~Engine()
@@ -63,7 +61,7 @@ void Engine::Init()
 	//glFogf(GL_FOG_DENSITY, 1.f / 3);
 	//float fogCol[3] = {0.8f, 0.8f, 0.8f};
 	//glFogfv(GL_FOG_COLOR, fogCol);
-	
+
 
 	m_player.Init();
 	m_projectile.Init();
@@ -115,15 +113,8 @@ void Engine::LoadResource()
 
 	m_textureAtlas->Generate(128, false);
 
-	m_music.openFromFile(SOUND_PATH "overworld.mp3");
-	m_music.setVolume(100);
-	m_music.setLoop(true);
-	m_music.play();
-
-	m_sndFootStep.Get(0).loadFromFile(SOUND_PATH "foot1.wav");
-	m_sndFootStep.Get(1).loadFromFile(SOUND_PATH "foot2.wav");
-	m_sndClick.loadFromFile(SOUND_PATH "click.wav");
-	m_sndJump.loadFromFile(SOUND_PATH "jump.wav");
+	if (!m_sound.LoadSounds())
+		std::cout << "Une erreur est survenue lors du chargement des sons en memoire" << std::endl;
 
 	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
 	LoadTexture(m_textureInterface, TEXTURE_PATH "rock.jpg");
@@ -363,17 +354,15 @@ void Engine::KeyPressEvent(unsigned char key)
 	m_controls.Set(key, true);
 	switch(key)
 	{
-		//case 0:    // A
-		//case 3:    // D
-		//case 22:   // W
-		//case 18:   // S
-		//	m_sndChan1.setBuffer(m_sndFootStep.Get(1));
-		//	m_sndChan1.play();
-		//	break;
-		case 57:   // Space
-			m_sndChan2.setBuffer(m_sndJump);
-			m_sndChan2.play();
-			break;
+	case 0:    // A
+	case 3:    // D
+	case 22:   // W
+	case 18:   // S
+		m_sound.PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP);
+		break;
+	case 57:   // Space
+		m_sound.PlaySnd(Son::SON_JUMP, Son::CHANNEL_PLAYER);
+		break;
 		//case 37:   // CTRL
 		//	m_ctrl = true;
 		//	break;
@@ -510,8 +499,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 			m_leftClick = true;
 			SetMousePos(x, y);
 		}
-		m_sndChan2.setBuffer(m_sndClick);
-		m_sndChan2.play();
+		m_sound.PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE);
 		break;
 	case MOUSE_BUTTON_WHEEL_UP:
 		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
@@ -532,6 +520,9 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 				m_camRadius += 1;
 			}
 		}
+		break;
+	case MOUSEEVENTF_MIDDLEDOWN:
+		m_sound.PlayMusic();
 		break;
 	}
 }

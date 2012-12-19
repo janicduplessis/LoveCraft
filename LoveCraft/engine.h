@@ -14,7 +14,6 @@
 #include "vector2.h"
 #include "info.h"
 #include "textureatlas.h"
-#include "son.h"
 
 class Engine : public OpenglContext
 {
@@ -78,7 +77,7 @@ public:
 	* @param texture		Texture qui doit être utiliser avec l'element
 	* 
 	*/
-	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture);
+	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat = true);
 
 	/**
 	* Affiche le texte donné à l'écran 
@@ -159,8 +158,6 @@ private:
 	Player m_player;
 	Camera m_camera;
 	Array<bool> m_controls;
-
-	Son m_sound;
 	
 	Shader m_shader01;
 	Shader m_shaderModel;

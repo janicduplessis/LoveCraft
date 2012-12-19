@@ -3,11 +3,11 @@
 #include <algorithm>
 #include <iomanip>
 #include <cmath>
-
+#include "son.h"
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false), m_controls(Array<bool>(256, false)),
-	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_sound(Son()),
+	m_rightClick(false), m_leftClick(false), m_camRadius(10),
 	m_playScreenBotLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
 	m_playScreenTopLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
 	m_playScreenTopRight(Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
@@ -124,9 +124,6 @@ void Engine::LoadResource()
 	LoadBlocTexture(BTYPE_SAND, TEXTURE_PATH "sand.jpg");
 
 	m_textureAtlas->Generate(128, false);
-
-	if (!m_sound.LoadSounds())
-		std::cout << "Une erreur est survenue lors du chargement des sons en memoire" << std::endl;
 
 	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
 	LoadTexture(m_textureInterface, TEXTURE_PATH "rock.jpg");
@@ -257,19 +254,10 @@ void Engine::Render2D(float elapsedTime)
 	//Affichage du crosshair
 	if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
 	{
-		m_textureCrosshair.Bind();
-		glLoadIdentity();
-		glTranslated(Width() / 2 - CROSSHAIR_SIZE / 2, Height() / 2 - CROSSHAIR_SIZE / 2, 0);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0, 0);
-		glVertex2i(0, 0);
-		glTexCoord2f(1, 0);
-		glVertex2i(CROSSHAIR_SIZE, 0);
-		glTexCoord2f(1, 1);
-		glVertex2i(CROSSHAIR_SIZE, CROSSHAIR_SIZE);
-		glTexCoord2f(0, 1);
-		glVertex2i(0, CROSSHAIR_SIZE);
-		glEnd();
+		RenderSquare(
+			Vector2i(Width() / 2 - CROSSHAIR_SIZE / 2, Height() / 2 - CROSSHAIR_SIZE / 2),
+			Vector2i(CROSSHAIR_SIZE, CROSSHAIR_SIZE),
+			m_textureCrosshair, false);
 	}
 	//Optimisation possible par la surcharge d'opérateurs
 	if (m_controls.Get(38))		//Mode course
@@ -315,7 +303,7 @@ void Engine::Render2D(float elapsedTime)
 
 }
 
-void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture)
+void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat)
 {
 	texture.Bind();
 	glLoadIdentity();
@@ -326,13 +314,13 @@ void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Textur
 	glTexCoord2f(0, 0);
 	glVertex2f(0, 0);
 
-	glTexCoord2f(size.x / texture.GetWidth(), 0);
+	glTexCoord2f((repeat ? size.x / texture.GetWidth() : 1), 0);
 	glVertex2i(size.x, 0);
 
-	glTexCoord2f(size.x / texture.GetWidth(), size.y / texture.GetHeight());
+	glTexCoord2f((repeat ? size.x / texture.GetWidth() : 1), (repeat ? size.y / texture.GetHeight() : 1));
 	glVertex2i(size.x, size.y);
 
-	glTexCoord2f(0, size.y / texture.GetHeight());
+	glTexCoord2f(0, (repeat ? size.y / texture.GetHeight() : 1));
 	glVertex2i(0, size.y);
 
 	glEnd();
@@ -363,23 +351,20 @@ void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 
 void Engine::KeyPressEvent(unsigned char key)
 {
+	Son& sound = Info::Get().Sound();
 	m_controls.Set(key, true);
 	switch(key)
 	{
-	case 0:    // A
-	case 3:    // D
-	case 22:   // W
-	case 18:   // S
-		m_sound.PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP);
-		break;
-	case 57:   // Space
-		m_sound.PlaySnd(Son::SON_JUMP, Son::CHANNEL_PLAYER);
-		break;
+		//case 0:    // A
+		//case 3:    // D
+		//case 22:   // W
+		//case 18:   // S
+		//	break;
+		//case 57:   // Space
+		//	break;
 		//case 37:   // CTRL
-		//	m_ctrl = true;
 		//	break;
 		//case 38:   // Shift
-		//	m_run = true;
 		//	break;
 	case 36:	// ESC
 		Stop();
@@ -397,6 +382,36 @@ void Engine::KeyPressEvent(unsigned char key)
 			HideCursor();
 			m_camera.SetMode(Camera::CAM_FIRST_PERSON);
 		}
+		break;
+	case 27:
+		sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
+		break;
+	case 28:
+		sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
+		break;
+	case 29:
+		sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
+		break;
+	case 30:
+		sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
+		break;
+	case 31:
+		sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
+		break;
+	case 32:
+		sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
+		break;
+	case 33:
+		sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
+		break;
+	case 34:
+		sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
+		break;
+	case 35:
+		sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
+		break;
+	case 26:
+		sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
 		break;
 	case 37:
 		m_projectile.Shoot();
@@ -511,7 +526,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 			m_leftClick = true;
 			SetMousePos(x, y);
 		}
-		m_sound.PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE);
+		Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE);
 		break;
 	case MOUSE_BUTTON_WHEEL_UP:
 		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
@@ -534,7 +549,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		}
 		break;
 	case MOUSEEVENTF_MIDDLEDOWN:
-		m_sound.PlayMusic();
+		Info::Get().Sound().PlayMusic();
 		break;
 	}
 }

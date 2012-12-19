@@ -5,7 +5,7 @@
 #include "vector2.h"
 #include "model.h"
 #include "define.h"
-#include "ArrayBool.h"
+#include "arraybool.h"
 
 /**
 * @brief classe représentent le joueur dans l'environnement 3D

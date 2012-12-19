@@ -3,6 +3,10 @@
 
 #include "blockinfo.h"
 #include "define.h"
+#include "array2d.h"
+#include "chunk.h"
+
+class Chunk;
 
 /**
  * @brief Singleton qui contient tout les informations générales du jeu
@@ -30,6 +34,9 @@ public:
 	 */
 	BlockInfo* GetBlocInfo(BlockType type);
 
+	void SetChunkArray(Array2d<Chunk>* arrayPtr);
+	Array2d<Chunk>* GetChunkArray() const;
+
 private:
 	Info();
 	~Info();
@@ -38,8 +45,8 @@ private:
 	void GenerateBlocInfos();
 
 private:
+	Array2d<Chunk>* m_chunks;
 	static Info* m_info;
-
 	BlockInfo* m_blocInfos[BTYPE_COUNT];
 };
 

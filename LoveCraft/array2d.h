@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include "vector2.h"
+#include "chunk.h"
 
 /**
  * @brief Template class tableau 2 dimentions

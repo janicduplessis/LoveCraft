@@ -3,6 +3,7 @@
 Info::Info()
 {
 	GenerateBlocInfos();
+	Array2d<Chunk>* c;
 }
 
 Info::Info( Info const& copy )
@@ -59,5 +60,16 @@ void Info::GenerateBlocInfos()
 
 	m_blocInfos[4] = new BlockInfo(BTYPE_SAND, "Sand");
 }
+
+void Info::SetChunkArray( Array2d<Chunk>* arrayPtr )
+{
+	m_chunks = arrayPtr;
+}
+
+Array2d<Chunk>* Info::GetChunkArray() const
+{
+	return m_chunks;
+}
+
 
 Info* Info::m_info = 0;

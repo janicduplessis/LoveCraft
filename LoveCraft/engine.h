@@ -7,7 +7,7 @@
 #include "player.h"
 #include "camera.h"
 #include "shader.h"
-#include "Chunk.h"
+#include "chunk.h"
 #include "arraybool.h"
 #include "array2d.h"
 #include "testprojectile.h"
@@ -28,6 +28,16 @@ public:
 	* Destructeur par défaut de la classe
 	*/
 	virtual ~Engine();
+
+	/**
+	 * Retourne une reference en lecture seule vers l'engine
+	 */
+	virtual const Engine& Get() const;
+
+	/**
+	 * Retourne une reference vers l'engine
+	 */
+	virtual Engine& Get();
 
 	/**
 	* Initialisation des composantes du jeu
@@ -156,9 +166,6 @@ private:
 	Shader m_shaderModel;
 
 	Array2d<Chunk>* m_chunks;
-	Chunk* m_test;
-
-	Chunk m_testChunk;
 
 	TestProjectile m_projectile;
 

@@ -1,7 +1,7 @@
 #ifndef ARRAYBOOL_H__
 #define ARRAYBOOL_H__
 
-#include "Array.h"
+#include "array.h"
 
 template <>
 class Array<bool>
@@ -24,6 +24,7 @@ private:
 
 	unsigned int TailleReelle(unsigned int taille);
 };
+
 
 inline Array<bool>::Array(unsigned int size, const bool& valeur) : m_size(size)
 {

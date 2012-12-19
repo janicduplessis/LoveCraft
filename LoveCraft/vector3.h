@@ -212,5 +212,11 @@ void Vector3<T>::Afficher() const
 template <class T>
 Vector3<T>::~Vector3() {}
 
+template <class T>
+std::ostream& operator<<(std::ostream& out, const Vector3<T>& vec)
+{
+	out << "( " << vec.x << ", " << vec.y << ", " << vec.z << " )";
+	return out;
+}
 
 #endif

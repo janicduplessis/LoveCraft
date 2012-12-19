@@ -95,6 +95,7 @@
     <ClCompile Include="projectile.cpp" />
     <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="shader.cpp" />
+    <ClCompile Include="son.cpp" />
     <ClCompile Include="testprojectile.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="texturearray.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="model.h" />
     <ClInclude Include="projectile.h" />
     <ClInclude Include="quaternion.h" />
+    <ClInclude Include="son.h" />
     <ClInclude Include="testprojectile.h" />
     <ClInclude Include="texturearray.h" />
     <ClInclude Include="textureatlas.h" />

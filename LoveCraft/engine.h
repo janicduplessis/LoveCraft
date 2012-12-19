@@ -77,7 +77,7 @@ public:
 	* @param texture		Texture qui doit être utiliser avec l'element
 	* 
 	*/
-	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture);
+	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat = true);
 
 	/**
 	* Affiche le texte donné à l'écran 
@@ -158,14 +158,6 @@ private:
 	Player m_player;
 	Camera m_camera;
 	Array<bool> m_controls;
-
-	sf::Music m_music;
-	sf::SoundBuffer m_sndJump;
-	//Array<sf::SoundBuffer> m_sndFootStep;
-	sf::SoundBuffer m_sndClick;
-
-	sf::Sound m_sndChan1;
-	sf::Sound m_sndChan2;
 	
 	Shader m_shaderModel;
 	Shader m_shaderCube;

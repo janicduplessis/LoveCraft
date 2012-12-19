@@ -27,6 +27,8 @@ typedef long long int64;
 #define CHUNK_SIZE_Y 128
 #define CHUNK_SIZE_Z 16
 
+#define VIEW_DISTANCE				32
+
 //Valeurs de l'interface
 #define INTERFACE_BOTTOM_HEIGHT		64
 #define INTERFACE_SIDE_LEFT_WIDTH	64
@@ -41,6 +43,9 @@ typedef long long int64;
 #define MOUVEMENT_SPEED				0.15f
 #define MOUVEMENT_SPEED_RUN			0.3f
 #define MOUVEMENT_SPEED_BACKWARD	0.075f
+#define MOUVEMENT_ACCELERATION_DOWN	9.81f
+#define MOUVEMENT_ACCELERATION_UP	-7.5f
+#define MOUVEMENT_WEIGHT_RATIO		1.5f		
 
 //Valeurs des options
 #define MOUSE_SENSIBILITY			0.075f
@@ -54,6 +59,6 @@ enum BLOCK_TYPE {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS, BTYPE_BRICK, BTYPE_SAND, BT
 #define SHADER_PATH			"../lovecraft/media/shader/"
 #define MODEL_PATH			"../lovecraft/media/models/"
 #define SOUND_PATH			"../lovecraft/media/sound/"
-#define VIEW_DISTANCE       128
+#define SOUND_FOOT_PATH		SOUND_PATH "footsteps/"
 
 #endif // DEFINE_H__

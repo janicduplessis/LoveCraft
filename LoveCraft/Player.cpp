@@ -1,10 +1,12 @@
 #include "player.h"
 #include "openglcontext.h"
+#include "son.h"
+#include "info.h"
 #include <cmath>
 #include <iostream>
 
 Player::Player(Vector3f position, Vector2f rotation)
-	:m_pos(position), m_rot(rotation)
+	:m_pos(position), m_rot(rotation), m_speed(Vector3f())
 {
 }
 
@@ -33,8 +35,27 @@ void Player::TurnTopBottom ( float value )
 
 void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 {
+	//Calcul de la position en fonction de la gravité
+	if (!ghost)
+	{
+		float distance = (m_speed.y * elapsedTime) + (MOUVEMENT_ACCELERATION_DOWN * MOUVEMENT_WEIGHT_RATIO * elapsedTime * elapsedTime / 2.0f);
+		if (Position().y - distance > 0)
+		{
+			m_pos.y -= distance;
+			m_speed.y = m_speed.y + (MOUVEMENT_ACCELERATION_DOWN * MOUVEMENT_WEIGHT_RATIO * elapsedTime);
+		}
+		else
+		{
+			if (m_speed.y != 0)
+				Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
+			m_speed.y = 0;
+			m_pos.y = 0;
+		}
+	}
 	if (controls.Get(22))	// W
 	{
+		if (!ghost && m_speed.y == 0)
+			Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
 		float xRotRad, yRotRad;
 		yRotRad = (m_rot.y / 180 * PII);
 		xRotRad = (m_rot.x / 180 * PII);
@@ -46,6 +67,8 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 
 	if (controls.Get(18))	// S
 	{
+		if (!ghost && m_speed.y == 0)
+			Info::Get().Sound().PlaySnd(Son::SON_FOOT2, Son::CHANNEL_STEP, false);
 		float xRotRad, yRotRad;
 		yRotRad = (m_rot.y / 180 * PII);
 		xRotRad = (m_rot.x / 180 * PII);
@@ -56,6 +79,8 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 	}
 	if (controls.Get(3))	// D
 	{
+		if (!ghost && m_speed.y == 0)
+			Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
 		float yRotRad;
 		yRotRad = (m_rot.y / 180 * PII);
 		m_pos.x += float(cos(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
@@ -64,6 +89,8 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 
 	if (controls.Get(0))	// A
 	{
+		if (!ghost && m_speed.y == 0)
+			Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
 		float yRotRad;
 		yRotRad = (m_rot.y / 180 * PII);
 		m_pos.x -= float(cos(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
@@ -72,10 +99,16 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 	if (controls.Get(57))	// Space
 	{
 		if (ghost)
+		{
 			m_pos.y += MOUVEMENT_SPEED * (1.f + elapsedTime);
+		}
 		else
 		{
-			//Code du jump ici
+			if (m_speed.y == 0)
+			{
+				m_speed.y = MOUVEMENT_ACCELERATION_UP;
+				Info::Get().Sound().PlaySnd(Son::SON_JUMP, Son::CHANNEL_PLAYER, false);
+			}
 		}
 	}
 	if (controls.Get(37))	// Ctrl

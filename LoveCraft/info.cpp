@@ -3,7 +3,8 @@
 Info::Info()
 {
 	GenerateBlocInfos();
-	Array2d<Chunk>* c;
+	if (!m_sound.LoadSounds())
+		std::cout << "Une erreur est survenue lors du chargement des sons en memoire" << std::endl;
 }
 
 Info::Info( Info const& copy )
@@ -41,6 +42,11 @@ Info* Info::GetPtr()
 	}
 
 	return m_info;
+}
+
+Son& Info::Sound()
+{
+	return m_sound;
 }
 
 BlockInfo* Info::GetBlocInfo( BlockType type )

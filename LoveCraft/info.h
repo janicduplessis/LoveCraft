@@ -5,6 +5,7 @@
 #include "define.h"
 #include "array2d.h"
 #include "chunk.h"
+#include "son.h"
 
 class Chunk;
 
@@ -25,6 +26,11 @@ public:
 	 * Retourne un pointeur vers l'instance Info
 	 */
 	static Info* GetPtr();
+
+	/**
+	 * Retourne une référence vers l'instance de son
+	 */
+	Son& Sound();
 
 	/**
 	 * Retourne le bloc info pour le type donné
@@ -48,6 +54,7 @@ private:
 	Array2d<Chunk>* m_chunks;
 	static Info* m_info;
 	BlockInfo* m_blocInfos[BTYPE_COUNT];
+	Son m_sound;
 };
 
 #endif

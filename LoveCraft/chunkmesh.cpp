@@ -41,7 +41,7 @@ void ChunkMesh::SetMeshData(VertexData* vd, int vertexCount, TextureData* td)
 		indexData[indexCount++] = v + 2;
 		indexData[indexCount++] = v + 3;
 	}
-
+	CHECK_GL_ERROR();
 	if(!m_isValid)
 	{
 		glGenBuffers(1, &m_vertexVboId);
@@ -49,7 +49,6 @@ void ChunkMesh::SetMeshData(VertexData* vd, int vertexCount, TextureData* td)
 	}
 
 	m_textureVboId = glGetAttribLocation(m_shader->m_program, "Texture");
-	glVertexAttribPointer(m_textureVboId, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexVboId);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexData) * vertexCount, vd, GL_STATIC_DRAW);
@@ -70,6 +69,8 @@ void ChunkMesh::Render(bool wireFrame) const
 {
 	if(IsValid())
 	{
+		glBindBuffer(GL_ARRAY_BUFFER, m_textureVboId);
+		glVertexAttribPointer(m_textureVboId, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		//glClientActiveTexture(GL_TEXTURE0);
 		glBindBuffer(GL_ARRAY_BUFFER, m_vertexVboId);
 		glEnableClientState(GL_VERTEX_ARRAY);

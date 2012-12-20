@@ -76,7 +76,7 @@ void Tool::CheckGLError(const char* file, int line)
         }
         std::cerr << ")" << std::endl;
         std::cerr << "ATTENTION: this error might come from anywhere in the code since the previous call to CHECK_GL_ERROR" << std::endl;
-        exit(1);
+        //exit(1);
     }
 }
 

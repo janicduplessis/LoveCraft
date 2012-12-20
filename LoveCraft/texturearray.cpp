@@ -1,4 +1,5 @@
 #include "texturearray.h"
+#include "tool.h"
 
 
 TextureArray::TextureArray(int textureSize ) : m_textureSize(textureSize)
@@ -71,6 +72,8 @@ void TextureArray::Init()
 	glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
 
 	glTexImage3D(GL_TEXTURE_2D_ARRAY,0,GL_RGBA,m_textureSize,m_textureSize,sliceCount,0,GL_RGBA,GL_UNSIGNED_BYTE,m_data);
+
+	CHECK_GL_ERROR();
 }
 
 TextureArray::TextureIndex TextureArray::AddTexture(const std::string& fname)

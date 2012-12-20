@@ -31,7 +31,7 @@ bool Model::Load( const std::string filePath )
 		int hasNormals = atoi(mesh->first_attribute()->value());
 		int verticesCount = atoi(mesh->first_attribute()->next_attribute()->value());
 
-		Mesh::VertexData* vd1 = new VertexData[verticesCount];
+		Model::VertexData* vd1 = new VertexData[verticesCount];
 
 		rapidxml::xml_node<>* vertices = mesh->first_node();
 		rapidxml::xml_node<>* vertex = vertices->first_node();

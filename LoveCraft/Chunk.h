@@ -5,6 +5,7 @@
 #include "define.h"
 #include "chunkmesh.h"
 #include "info.h"
+#include "shader.h"
 
 class Chunk
 {
@@ -19,7 +20,7 @@ class Chunk
 	};
 
 public:
-	Chunk();
+	Chunk(Shader* shader = 0);
 	~Chunk();
 
 	void RemoveBloc(uint32 x, uint32 y, uint32 z);
@@ -35,9 +36,9 @@ public:
 	void SetPosition(Vector2i pos);
 	
 private:
-	void CreateOptimizedTopBottomFace(MeshFace face, ChunkMesh::VertexData* vd, int& vertexCount, int x, int y, int z, BlockType bt, Array3d<bool>& facesOptimized);
-	void CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* vd, int& vertexCount, int x, int y, int z, BlockType bt, Array3d<bool>& facesOptimized);
-	void CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* vd, int& vertexCount, int x, int y, int z, BlockType bt, Array3d<bool>& facesOptimized);
+	void CreateOptimizedTopBottomFace(MeshFace face, ChunkMesh::VertexData* vd, int& vertexCount, ChunkMesh::TextureData* td, int x, int y, int z, BlockType bt, Array3d<bool>& facesOptimized);
+	void CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* vd, int& vertexCount, ChunkMesh::TextureData* td, int x, int y, int z, BlockType bt, Array3d<bool>& facesOptimized);
+	void CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* vd, int& vertexCount, ChunkMesh::TextureData* td, int x, int y, int z, BlockType bt, Array3d<bool>& facesOptimized);
 
 private:
 	bool m_isDirty;

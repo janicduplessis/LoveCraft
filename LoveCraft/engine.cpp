@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <iomanip>
 #include <cmath>
-
+#include "son.h"
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false), m_controls(Array<bool>(256, false)),
@@ -14,12 +14,11 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false), m_control
 	m_playScreenBotRight(Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
 	m_playScreenSize(Vector2i(m_playScreenTopRight.x - m_playScreenTopLeft.x, m_playScreenTopLeft.y - m_playScreenBotLeft.y))
 {
-	 
 }
 
 Engine::~Engine()
 {
-	delete m_textureAtlas;
+	delete m_textureArray;
 }
 
 const Engine& Engine::Get() const
@@ -72,7 +71,7 @@ void Engine::Init()
 	//glFogf(GL_FOG_DENSITY, 1.f / 3);
 	//float fogCol[3] = {0.8f, 0.8f, 0.8f};
 	//glFogfv(GL_FOG_COLOR, fogCol);
-	
+
 
 	m_player.Init();
 	m_projectile.Init();
@@ -84,7 +83,7 @@ void Engine::Init()
 	Info::Get().SetChunkArray(m_chunks);
 
 	//Genere un chunk plancher
-	Chunk chunk;
+	Chunk chunk(&m_shaderCube);
 	for (int i = 0; i < CHUNK_SIZE_X; ++i)
 	{
 		for (int j = 0; j < CHUNK_SIZE_Z; ++j)
@@ -94,7 +93,7 @@ void Engine::Init()
 	}
 
 	chunk.SetBloc(0,1,0, BTYPE_BRICK);
-	chunk.SetBloc(3,1,3, BTYPE_BRICK);
+	chunk.SetBloc(0,1,1, BTYPE_BRICK);
 	chunk.SetBloc(5,3,5, BTYPE_DIRT);
 
 	//Place les chunks
@@ -117,24 +116,14 @@ void Engine::DeInit()
 
 void Engine::LoadResource()
 {
-	m_textureAtlas = new TextureAtlas(16);
+	m_textureArray = new TextureArray(128);
 
 	LoadBlocTexture(BTYPE_BRICK, TEXTURE_PATH "brick_red.jpg");
 	LoadBlocTexture(BTYPE_DIRT, TEXTURE_PATH "dirt.bmp");
 	LoadBlocTexture(BTYPE_GRASS, TEXTURE_PATH "grass.bmp");
 	LoadBlocTexture(BTYPE_SAND, TEXTURE_PATH "sand.jpg");
 
-	m_textureAtlas->Generate(128, false);
-
-	m_music.openFromFile(SOUND_PATH "overworld.mp3");
-	m_music.setVolume(100);
-	m_music.setLoop(true);
-	m_music.play();
-
-	//m_sndFootStep.Get(0).loadFromFile(SOUND_PATH "foot1.wav");
-	//m_sndFootStep.Get(1).loadFromFile(SOUND_PATH "foot2.wav");
-	m_sndClick.loadFromFile(SOUND_PATH "click.wav");
-	m_sndJump.loadFromFile(SOUND_PATH "jump.wav");
+	m_textureArray->Init();
 
 	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
 	LoadTexture(m_textureInterface, TEXTURE_PATH "rock.jpg");
@@ -144,23 +133,25 @@ void Engine::LoadResource()
 	LoadTexture(m_textureGhost, TEXTURE_PATH "boo.png");
 
 	std::cout << " Loading and compiling shaders ..." << std::endl;
-	if (!m_shader01.Load(SHADER_PATH "cubeshader.vert", SHADER_PATH "cubeshader.frag", true))
-	{
-		std::cout << " Failed to load cubes shader " << std::endl;
-		exit(1) ;
-	}
+	
 	if (!m_shaderModel.Load(SHADER_PATH "modelshader.vert", SHADER_PATH "modelshader.frag", true))
 	{
 		std::cout << " Failed to load model shader" << std::endl;
+		exit(1) ;
+	}
+
+	if (!m_shaderCube.Load(SHADER_PATH "cubeshader.vert", SHADER_PATH "cubeshader.frag", true))
+	{
+		std::cout << " Failed to load cube shader" << std::endl;
 		exit(1) ;
 	}
 }
 
 void Engine::LoadBlocTexture(BLOCK_TYPE type, std::string path)
 {
-	TextureAtlas::TextureIndex id = m_textureAtlas->AddTexture(path);
+	TextureArray::TextureIndex id = m_textureArray->AddTexture(path);
 	BlockInfo::TextureCoords coords;
-	m_textureAtlas->TextureIndexToCoord(id, coords.u, coords.v, coords.w, coords.h);
+	coords.h = id;
 	Info::Get().GetBlocInfo(type)->SetTextureCoords(coords);
 }
 
@@ -210,8 +201,7 @@ void Engine::Render(float elapsedTime)
 		m_camera.ApplyTranslation();
 	}
 
-	m_shader01.Use();
-	m_textureAtlas->Bind();
+	m_textureArray->Use();
 	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
 	{
 		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
@@ -265,19 +255,10 @@ void Engine::Render2D(float elapsedTime)
 	//Affichage du crosshair
 	if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
 	{
-		m_textureCrosshair.Bind();
-		glLoadIdentity();
-		glTranslated(Width() / 2 - CROSSHAIR_SIZE / 2, Height() / 2 - CROSSHAIR_SIZE / 2, 0);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0, 0);
-		glVertex2i(0, 0);
-		glTexCoord2f(1, 0);
-		glVertex2i(CROSSHAIR_SIZE, 0);
-		glTexCoord2f(1, 1);
-		glVertex2i(CROSSHAIR_SIZE, CROSSHAIR_SIZE);
-		glTexCoord2f(0, 1);
-		glVertex2i(0, CROSSHAIR_SIZE);
-		glEnd();
+		RenderSquare(
+			Vector2i(Width() / 2 - CROSSHAIR_SIZE / 2, Height() / 2 - CROSSHAIR_SIZE / 2),
+			Vector2i(CROSSHAIR_SIZE, CROSSHAIR_SIZE),
+			m_textureCrosshair, false);
 	}
 	//Optimisation possible par la surcharge d'opérateurs
 	if (m_controls.Get(38))		//Mode course
@@ -323,7 +304,7 @@ void Engine::Render2D(float elapsedTime)
 
 }
 
-void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture)
+void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat)
 {
 	texture.Bind();
 	glLoadIdentity();
@@ -334,13 +315,13 @@ void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Textur
 	glTexCoord2f(0, 0);
 	glVertex2f(0, 0);
 
-	glTexCoord2f(size.x / texture.GetWidth(), 0);
+	glTexCoord2f((repeat ? size.x / texture.GetWidth() : 1), 0);
 	glVertex2i(size.x, 0);
 
-	glTexCoord2f(size.x / texture.GetWidth(), size.y / texture.GetHeight());
+	glTexCoord2f((repeat ? size.x / texture.GetWidth() : 1), (repeat ? size.y / texture.GetHeight() : 1));
 	glVertex2i(size.x, size.y);
 
-	glTexCoord2f(0, size.y / texture.GetHeight());
+	glTexCoord2f(0, (repeat ? size.y / texture.GetHeight() : 1));
 	glVertex2i(0, size.y);
 
 	glEnd();
@@ -371,6 +352,7 @@ void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 
 void Engine::KeyPressEvent(unsigned char key)
 {
+	Son& sound = Info::Get().Sound();
 	m_controls.Set(key, true);
 	switch(key)
 	{
@@ -378,18 +360,12 @@ void Engine::KeyPressEvent(unsigned char key)
 		//case 3:    // D
 		//case 22:   // W
 		//case 18:   // S
-		//	m_sndChan1.setBuffer(m_sndFootStep.Get(1));
-		//	m_sndChan1.play();
 		//	break;
-		case 57:   // Space
-			m_sndChan2.setBuffer(m_sndJump);
-			m_sndChan2.play();
-			break;
+		//case 57:   // Space
+		//	break;
 		//case 37:   // CTRL
-		//	m_ctrl = true;
 		//	break;
 		//case 38:   // Shift
-		//	m_run = true;
 		//	break;
 	case 36:	// ESC
 		Stop();
@@ -407,6 +383,36 @@ void Engine::KeyPressEvent(unsigned char key)
 			HideCursor();
 			m_camera.SetMode(Camera::CAM_FIRST_PERSON);
 		}
+		break;
+	case 27:
+		sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
+		break;
+	case 28:
+		sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
+		break;
+	case 29:
+		sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
+		break;
+	case 30:
+		sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
+		break;
+	case 31:
+		sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
+		break;
+	case 32:
+		sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
+		break;
+	case 33:
+		sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
+		break;
+	case 34:
+		sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
+		break;
+	case 35:
+		sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
+		break;
+	case 26:
+		sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
 		break;
 	case 37:
 		m_projectile.Shoot();
@@ -521,8 +527,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 			m_leftClick = true;
 			SetMousePos(x, y);
 		}
-		m_sndChan2.setBuffer(m_sndClick);
-		m_sndChan2.play();
+		Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE);
 		break;
 	case MOUSE_BUTTON_WHEEL_UP:
 		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
@@ -543,6 +548,9 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 				m_camRadius += 1;
 			}
 		}
+		break;
+	case MOUSEEVENTF_MIDDLEDOWN:
+		Info::Get().Sound().PlayMusic();
 		break;
 	}
 }

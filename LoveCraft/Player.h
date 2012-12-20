@@ -60,7 +60,7 @@ public:
 	* @param controls		Le Array de touches
 	* @param elapsedTime	Temps écoulé depuis le dernier loop de jeu
 	*/
-	void Move(Array<bool>& controls, bool ghost, float elapsedTime );
+	void Move(Array<bool>& controls, bool ghost, float elapsedTime);
 
 	void Render (bool wireFrame = false);
 	void SetRotation( Vector2f rot );
@@ -69,6 +69,8 @@ private:
 	Vector2f m_rot; // Rotation en x et y;
 
 	Model m_model;
+
+	Vector3f m_speed;
 };
 
 #endif // PLAYER_H__

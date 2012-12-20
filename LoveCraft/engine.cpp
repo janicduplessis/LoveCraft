@@ -95,9 +95,9 @@ void Engine::Init()
 	chunk.SetBloc(0,1,0, BTYPE_BRICK);
 	chunk.SetBloc(0,1,1, BTYPE_BRICK);
 	chunk.SetBloc(5,3,5, BTYPE_DIRT);
-	chunk.SetBloc(1,1,0, BTYPE_DIRT);
+	chunk.SetBloc(1,1,0, BTYPE_BRICK);
 	chunk.SetBloc(2,1,0, BTYPE_DIRT);
-	chunk.SetBloc(3,1,0, BTYPE_DIRT);
+	chunk.SetBloc(3,1,0, BTYPE_GRASS);
 	chunk.SetBloc(5,3,6, BTYPE_DIRT);
 	chunk.SetBloc(6,3,5, BTYPE_DIRT);
 	chunk.SetBloc(5,4,6, BTYPE_DIRT);
@@ -105,6 +105,12 @@ void Engine::Init()
 	chunk.SetBloc(6,3,6, BTYPE_DIRT);
 	chunk.SetBloc(6,4,6, BTYPE_DIRT);
 	chunk.SetBloc(5,4,5, BTYPE_DIRT);
+
+	chunk.SetBloc(5,0,5, BTYPE_SAND);
+	chunk.SetBloc(6,0,5, BTYPE_SAND);
+	chunk.SetBloc(7,0,5, BTYPE_SAND);
+	chunk.SetBloc(8,0,5, BTYPE_SAND);
+	chunk.SetBloc(9,0,5, BTYPE_SAND);
 
 	//Place les chunks
 	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)

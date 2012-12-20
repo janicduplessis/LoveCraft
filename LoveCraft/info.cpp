@@ -54,6 +54,23 @@ BlockInfo* Info::GetBlocInfo( BlockType type )
 	return m_blocInfos[type];
 }
 
+BlockType Info::GetBlocFromWorld(Vector3f pos)
+{
+	pos -= 0.5f;
+	pos += VIEW_DISTANCE;
+	Vector3i iPos(pos.x, pos.y, pos.z);
+	int chunkX, chunkZ;
+	chunkX = iPos.x / CHUNK_SIZE_X;
+	chunkZ = iPos.z / CHUNK_SIZE_Z;
+	Chunk& c = GetChunkArray()->Get(chunkX, chunkZ);
+	int blocX, blocY, blocZ;
+	blocX = iPos.x - chunkX * CHUNK_SIZE_X;
+	blocY = iPos.y;
+	blocZ = iPos.z - chunkZ * CHUNK_SIZE_Z;
+
+	return c.GetBloc(blocX, blocY, blocZ);
+}
+
 void Info::GenerateBlocInfos()
 {
 	m_blocInfos[0] = new BlockInfo(BTYPE_AIR, "Air");

@@ -41,7 +41,10 @@ public:
 	BlockInfo* GetBlocInfo(BlockType type);
 
 	void SetChunkArray(Array2d<Chunk>* arrayPtr);
+
 	Array2d<Chunk>* GetChunkArray() const;
+
+	BlockType GetBlocFromWorld(Vector3f pos);
 
 private:
 	Info();

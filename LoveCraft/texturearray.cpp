@@ -2,7 +2,7 @@
 #include "tool.h"
 
 
-TextureArray::TextureArray(int textureSize ) : m_textureSize(textureSize)
+TextureArray::TextureArray(int textureSize ) : m_textureSize(textureSize), m_currentTextureIndex(0)
 {
 	
 }
@@ -55,6 +55,8 @@ void TextureArray::Init()
 			it->second.texId = texid;
 
 			memcpy(m_data + (count * slotSize), ilGetData(), slotSize);
+
+			count++;
 
 			ilDeleteImages(1, &texid);
 		}

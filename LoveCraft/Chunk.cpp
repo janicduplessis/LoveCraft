@@ -255,10 +255,7 @@ void Chunk::CreateOptimizedTopBottomFace(MeshFace face, ChunkMesh::VertexData* v
 	y -= 2.f;
 	z += pos.y;
 
-	// Détermine les coords de la texture du type de bloc
-	BlockInfo::TextureCoords coords = Info::Get().GetBlocInfo(bt)->GetTextureCoords();
-
-	int index = coords.w;
+	float index = Info::Get().GetBlocInfo(bt)->GetTextureIndex();
 
 	// Crée les vertices de la face
 	if(face == FACE_TOP)
@@ -343,9 +340,7 @@ void Chunk::CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* v
 	y -= 2.f;
 	z += pos.y;
 
-	// Détermine les coords de la texture du type de bloc
-	BlockInfo::TextureCoords coords = Info::Get().GetBlocInfo(bt)->GetTextureCoords();
-	int index = coords.w;
+	float index = Info::Get().GetBlocInfo(bt)->GetTextureIndex();
 
 	// Crée les vertices de la face
 	if(face == FACE_FRONT)
@@ -362,13 +357,13 @@ void Chunk::CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* v
 	}
 	else if(face == FACE_BACK)
 	{
-		td[vertexCount] = ChunkMesh::TextureData(0, 0, index);
+		td[vertexCount] = ChunkMesh::TextureData(w, 0, index);
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + h-1 + 0.5f, z + 0.5f, 0.6f, 0.6f, 0.6f);				//0
-		td[vertexCount] = ChunkMesh::TextureData(h, 0, index);
+		td[vertexCount] = ChunkMesh::TextureData(w, h, index);
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z + 0.5f, 0.6f, 0.6f, 0.6f);					//1
-		td[vertexCount] = ChunkMesh::TextureData(h, w, index);
+		td[vertexCount] = ChunkMesh::TextureData(0, h, index);
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f, y - 0.5f, z + 0.5f, 0.6f, 0.6f, 0.6f);				//2
-		td[vertexCount] = ChunkMesh::TextureData(0, w, index);
+		td[vertexCount] = ChunkMesh::TextureData(0, 0, index);
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f, y + h-1 + 0.5f, z + 0.5f, 0.6f, 0.6f, 0.6f);		//3
 	}
 	else
@@ -429,9 +424,7 @@ void Chunk::CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* v
 	int w = endZ - z + 1;
 	int h = endY - y + 1;
 
-	// Détermine les coords de la texture du type de bloc
-	BlockInfo::TextureCoords coords = Info::Get().GetBlocInfo(bt)->GetTextureCoords();
-	int index = coords.w;
+	float index = Info::Get().GetBlocInfo(bt)->GetTextureIndex();
 
 	// Place la face relativement au monde
 	Vector2f pos = GetRealPosition();
@@ -439,34 +432,28 @@ void Chunk::CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* v
 	y -= 2.f;
 	z += pos.y;
 
-	// Détermine les coords de la texture du type de bloc
-	float x0 = coords.u;
-	float y0 = coords.v;
-	float x1 = coords.u + coords.w;
-	float y1 = coords.v + coords.h;
-
 	// Crée les vertices de la face
 	if(face == FACE_LEFT)
 	{
 		td[vertexCount] = ChunkMesh::TextureData(0, 0, index);
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z + w-1 + 0.5f, 0.8f, 0.8f, 0.8f);			//0
-		td[vertexCount] = ChunkMesh::TextureData(h, 0, index);
+		td[vertexCount] = ChunkMesh::TextureData(0, h, index);
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + h-1 + 0.5f, z + w-1 + 0.5f, 0.8f, 0.8f, 0.8f);	//1
-		td[vertexCount] = ChunkMesh::TextureData(h, w, index);
+		td[vertexCount] = ChunkMesh::TextureData(w, h, index);
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + h-1 + 0.5f, z - 0.5f, 0.8f, 0.8f, 0.8f);			//2
-		td[vertexCount] = ChunkMesh::TextureData(0, w, index);
+		td[vertexCount] = ChunkMesh::TextureData(w, 0, index);
 		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f, z - 0.5f, 0.8f, 0.8f, 0.8f);				//3
 	}
 	else if(face == FACE_RIGHT)
 	{
 		td[vertexCount] = ChunkMesh::TextureData(0, 0, index);
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z + w-1 + 0.5f, 0.6f, 0.6f, 0.6f);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z + w-1 + 0.5f, 0.6f, 0.6f, 0.6f);			//0
 		td[vertexCount] = ChunkMesh::TextureData(w, 0, index);
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f);		//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f);				//1
 		td[vertexCount] = ChunkMesh::TextureData(w, h, index);
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + h-1 + 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + h-1 + 0.5f, z - 0.5f, 0.6f, 0.6f, 0.6f);			//2
 		td[vertexCount] = ChunkMesh::TextureData(0, h, index);
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + h-1 + 0.5f, z + w-1 + 0.5f, 0.6f, 0.6f, 0.6f);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + h-1 + 0.5f, z + w-1 + 0.5f, 0.6f, 0.6f, 0.6f);	//3
 	}
 	else
 	{

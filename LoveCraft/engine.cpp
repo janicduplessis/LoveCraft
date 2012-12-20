@@ -159,10 +159,7 @@ void Engine::LoadResource()
 
 void Engine::LoadBlocTexture(BLOCK_TYPE type, std::string path)
 {
-	TextureArray::TextureIndex id = m_textureArray->AddTexture(path);
-	BlockInfo::TextureCoords coords;
-	coords.h = id;
-	Info::Get().GetBlocInfo(type)->SetTextureCoords(coords);
+	Info::Get().GetBlocInfo(type)->SetTextureIndex(m_textureArray->AddTexture(path));
 }
 
 void Engine::UnloadResource()

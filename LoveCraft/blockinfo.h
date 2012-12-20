@@ -3,18 +3,10 @@
 
 #include <string>
 #include "define.h"
+#include "texturearray.h"
 
 class BlockInfo
 {
-public:
-	struct TextureCoords
-	{
-		float u;
-		float v;
-		float h;
-		float w;
-	};
-
 public:
     BlockInfo(BlockType type, const std::string& nom);
     ~BlockInfo();
@@ -24,8 +16,8 @@ public:
     void SetDurabilite(int durabilite);
     int GetDurabilite() const;
 
-	void SetTextureCoords(TextureCoords coords);
-	TextureCoords GetTextureCoords() const;
+	void SetTextureIndex(TextureArray::TextureIndex index);
+	TextureArray::TextureIndex GetTextureIndex() const;
 
     void Afficher() const;
 
@@ -33,7 +25,7 @@ private:
     BlockType m_type;
     std::string m_nom;
     int m_durabilite;
-	TextureCoords m_textureCoords;
+	TextureArray::TextureIndex m_textureIndex;
 };
 
 #endif // BLOCKINFO_H__

@@ -145,7 +145,7 @@ void Engine::LoadBlocTexture(BLOCK_TYPE type, std::string path)
 {
 	TextureArray::TextureIndex id = m_textureArray->AddTexture(path);
 	BlockInfo::TextureCoords coords;
-	coords.h = id;
+	coords.w = id;
 	Info::Get().GetBlocInfo(type)->SetTextureCoords(coords);
 }
 

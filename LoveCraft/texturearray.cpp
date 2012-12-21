@@ -1,4 +1,5 @@
 #include "texturearray.h"
+#include "tool.h"
 
 
 TextureArray::TextureArray(int textureSize ) : m_textureSize(textureSize), m_currentTextureIndex(0)
@@ -8,7 +9,6 @@ TextureArray::TextureArray(int textureSize ) : m_textureSize(textureSize), m_cur
 
 void TextureArray::Use()
 {
-
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, m_texture);
 }
@@ -55,15 +55,16 @@ void TextureArray::Init()
 
 			memcpy(m_data + (count * slotSize), ilGetData(), slotSize);
 
-			ilDeleteImages(1, &texid);
 			count++;
+
+			ilDeleteImages(1, &texid);
 		}
 	}
 
 	int sliceCount = m_textureList.size();
 
-	glGenTextures(1,&m_texture);
-	glBindTexture(GL_TEXTURE_2D_ARRAY,m_texture);
+	glGenTextures(1, &m_texture);
+	glBindTexture(GL_TEXTURE_2D_ARRAY, m_texture);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_S,GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_T,GL_REPEAT);
@@ -72,6 +73,8 @@ void TextureArray::Init()
 	glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
 
 	glTexImage3D(GL_TEXTURE_2D_ARRAY,0,GL_RGBA,m_textureSize,m_textureSize,sliceCount,0,GL_RGBA,GL_UNSIGNED_BYTE,m_data);
+
+	CHECK_GL_ERROR();
 }
 
 TextureArray::TextureIndex TextureArray::AddTexture(const std::string& fname)

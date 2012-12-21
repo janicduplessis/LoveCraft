@@ -71,6 +71,7 @@ private:
 	Model m_model;
 
 	Vector3f m_speed;
+	Vector3f m_accel;
 };
 
 #endif // PLAYER_H__

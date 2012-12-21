@@ -6,7 +6,8 @@
 #include <iostream>
 
 Player::Player(Vector3f position, Vector2f rotation)
-	:m_pos(position), m_rot(rotation), m_speed(Vector3f())
+	:m_pos(position), m_rot(rotation), m_speed(Vector3f()), 
+	m_accel(Vector3f(MOUVEMENT_ACCELERATION, MOUVEMENT_ACCELERATION, MOUVEMENT_ACCELERATION))
 {
 }
 
@@ -56,13 +57,28 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 	{
 		if (!ghost && m_speed.y == 0)
 			Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
+
+		// Regarde si la vitesse dépasse la vitesse max
+		if (m_speed.z >= MOUVEMENT_SPEED) {
+			m_speed.z = MOUVEMENT_SPEED;
+			m_accel.z = 0;
+		}
+		else m_accel.z = MOUVEMENT_ACCELERATION;
+
+		float distance = (m_speed.z * elapsedTime) + (MOUVEMENT_ACCELERATION * elapsedTime * elapsedTime / 2.0f);
+		m_speed.z = m_speed.z + (MOUVEMENT_ACCELERATION * elapsedTime);
+
 		float xRotRad, yRotRad;
 		yRotRad = (m_rot.y / 180 * PII);
 		xRotRad = (m_rot.x / 180 * PII);
-		m_pos.x += float(sin(yRotRad)) * (controls.Get(38) ? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (1.f + elapsedTime);
-		m_pos.z -= float(cos(yRotRad)) * (controls.Get(38) ? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (1.f + elapsedTime);
+		m_pos.x += float(sin(yRotRad)) * (controls.Get(38) ? MOUVEMENT_SPEED_RUN * elapsedTime : distance);
+		m_pos.z -= float(cos(yRotRad)) * (controls.Get(38) ? MOUVEMENT_SPEED_RUN * elapsedTime: distance);
 		if (ghost)
-			m_pos.y -= float(sin(xRotRad)) * (controls.Get(38) ? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (1.f + elapsedTime);
+			m_pos.y -= float(sin(xRotRad)) * (controls.Get(38) ? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (elapsedTime);
+	}
+	else
+	{
+		m_speed.z = 0;
 	}
 
 	if (controls.Get(18))	// S

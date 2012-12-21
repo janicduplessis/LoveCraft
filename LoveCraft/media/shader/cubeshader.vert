@@ -2,7 +2,7 @@ varying vec4 light;
 varying float fogFactor;
 varying vec3 texpos;
 
-uniform vec3 Texture;
+attribute vec3 Texture;
 
 void main()
 {

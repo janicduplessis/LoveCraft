@@ -43,7 +43,6 @@ private:
 	TextureList m_textureList;
 
 	TextureIndex m_currentTextureIndex;
-	GLuint  m_textureId;
 
 	int m_textureSize;
 	unsigned char* m_data;

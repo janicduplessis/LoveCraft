@@ -40,12 +40,13 @@ typedef long long int64;
 #define PII							3.141592654f
 
 //Valeurs du jeu
-#define MOUVEMENT_SPEED				0.15f
-#define MOUVEMENT_SPEED_RUN			0.3f
+#define MOUVEMENT_SPEED				4.15f
+#define MOUVEMENT_ACCELERATION		2.f
+#define MOUVEMENT_SPEED_RUN			4.3f
 #define MOUVEMENT_SPEED_BACKWARD	0.075f
 #define MOUVEMENT_ACCELERATION_DOWN	9.81f
 #define MOUVEMENT_ACCELERATION_UP	-7.5f
-#define MOUVEMENT_WEIGHT_RATIO		1.5f		
+#define MOUVEMENT_WEIGHT_RATIO		1.0f		
 
 //Valeurs des options
 #define MOUSE_SENSIBILITY			0.075f

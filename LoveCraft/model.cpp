@@ -4,8 +4,9 @@
 #include <fstream>
 #include <vector>
 #include <cassert>
+#include "tool.h"
 
-Model::Model() {}
+Model::Model() : m_scale(Vector3f(1,1,1)), m_rot(Vector3f(0,0,0)), m_pos(Vector3f(0,0,0)) {}
 
 Model::~Model() {}
 
@@ -120,12 +121,6 @@ void Model::SetMeshData(VertexData* vd, int vertexCount, uint16* indexData, int 
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexVboId);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexData) * vertexCount, vd, GL_STATIC_DRAW);
 
-	// Pour le moment, generer le index array pour inclure tout les vertex, sans 
-	// optimisation pour reduire le nombre de vertex envoyes a la carte
-	// Idealement cet array devrait etre utiliser pour reutiliser les vertex et ainsi
-	// sauver du temps en envoyant moins de donnees a la carte (il devrait etre construit
-	// en meme temps que le buffer vd est rempli..)
-
 	m_indicesCount = indexCount;
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
@@ -141,10 +136,11 @@ void Model::Render(bool wireFrame) const
 	glRotatef(-m_rot.x, 1.f, 0.f, 0.f);
 	glRotatef(-m_rot.y, 0.f, 1.f, 0.f);
 	glRotatef(-m_rot.z, 0.f, 0.f, 1.f);
+	glScalef(m_scale.x, m_scale.y, m_scale.z);
 
 	if(IsValid())
 	{
-		//glClientActiveTexture(GL_TEXTURE0);
+		glClientActiveTexture(GL_TEXTURE0);
 		glBindBuffer(GL_ARRAY_BUFFER, m_vertexVboId);
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glVertexPointer(3, GL_FLOAT, sizeof(VertexData), (char*)0);
@@ -158,12 +154,11 @@ void Model::Render(bool wireFrame) const
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
 		glDrawElements(GL_TRIANGLES, m_indicesCount, GL_UNSIGNED_SHORT, (char*)0);
 
-		//glDrawRangeElements(GL_TRIANGLES, 0, m_indicesCount, m_indicesCount, GL_UNSIGNED_SHORT, (char*)0);
-
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_COLOR_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
+		CHECK_GL_ERROR();
 	}
 
 	glPopMatrix();
@@ -174,7 +169,7 @@ void Model::Rotate( float x, float y, float z )
 	Rotate(Vector3f(x, y, z));
 }
 
-void Model::Rotate( Vector3f rot )
+void Model::Rotate( const Vector3f& rot )
 {
 	m_rot += rot;
 }
@@ -184,9 +179,21 @@ void Model::Translate( float x, float y, float z )
 	Translate(Vector3f(x, y, z));
 }
 
-void Model::Translate( Vector3f trans )
+void Model::Translate( const Vector3f& trans )
 {
 	m_pos += trans;
+}
+
+void Model::Scale( float x, float y, float z )
+{
+	Scale(Vector3f(x, y, z));
+}
+
+void Model::Scale( const Vector3f& scale )
+{
+	m_scale.x *= scale.x;
+	m_scale.y *= scale.y;
+	m_scale.z *= scale.z;
 }
 
 void Model::SetPosition(const Vector3f& pos) {
@@ -206,4 +213,5 @@ Vector3f Model::GetRotation() const
 {
 	return m_rot;
 }
+
 

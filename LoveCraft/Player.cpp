@@ -18,6 +18,7 @@ Player::~Player()
 void Player::Init()
 {
 	m_model.Load(MODEL_PATH "monkey.lcm");
+	m_model.Scale(0.5f, 0.9f, 0.5f);
 }
 
 void Player::TurnLeftRight ( float value )
@@ -233,9 +234,10 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 
 void Player::Render(bool wireFrame)
 {
-	m_model.SetPosition(m_pos);
+	m_model.SetPosition(Vector3f(m_pos.x, m_pos.y - 0.5, m_pos.z));
 	m_model.SetRotation(Vector3f(0, m_rot.y, 0));
 	m_model.Render(wireFrame);
+	
 }
 
 Vector3f Player::Position() const

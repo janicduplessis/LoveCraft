@@ -36,9 +36,11 @@ public:
 
 	void Rotate(float x, float y, float z);
 	void Translate(float x, float y, float z);
+	void Scale(float x, float y, float z);
 
-	void Rotate(Vector3f rot);
-	void Translate(Vector3f trans);
+	void Rotate(const Vector3f& rot);
+	void Translate(const Vector3f& trans);
+	void Scale(const Vector3f& scale);
 
 	Vector3f GetPosition() const;
 	void SetPosition(const Vector3f& pos);
@@ -48,6 +50,7 @@ public:
 private:
 	Vector3f m_pos;
 	Vector3f m_rot;
+	Vector3f m_scale;
 };
 
 #endif

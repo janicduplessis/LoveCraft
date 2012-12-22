@@ -46,6 +46,7 @@ public:
 private:
 	Shader* m_shader;
 	GLuint m_textureVboId;
+	GLuint m_textureLoc;
 };
 
 #endif

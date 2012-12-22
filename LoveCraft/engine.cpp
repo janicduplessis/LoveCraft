@@ -541,7 +541,8 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 			m_leftClick = true;
 			SetMousePos(x, y);
 		}
-		Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE);
+		if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
+			Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE);
 		break;
 	case MOUSE_BUTTON_WHEEL_UP:
 		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)

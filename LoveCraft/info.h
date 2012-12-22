@@ -40,11 +40,25 @@ public:
 	 */
 	BlockInfo* GetBlocInfo(BlockType type);
 
+	/**
+	 * Set le pointeur vers l'array 2d de chunks
+	 */
 	void SetChunkArray(Array2d<Chunk>* arrayPtr);
 
+	/**
+	 * Retourne un pointeur vers l'array 2d de chunks
+	 */
 	Array2d<Chunk>* GetChunkArray() const;
 
-	BlockType GetBlocFromWorld(Vector3f pos);
+	/**
+	 * Retourne le bloc à la position donné en 
+	 * considérent un offset
+	 * 
+	 * @param pos position
+	 * @param offset décalage
+	 * @return type du bloc à la position
+	 */
+	BlockType GetBlocFromWorld(Vector3f pos, const Vector3f& offset = Vector3f(0,0,0)) const;
 
 private:
 	Info();

@@ -39,18 +39,18 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 	//Calcul de la position en fonction de la gravité
 	if (!ghost)
 	{
-		float distance = (m_speed.y * elapsedTime) + (MOUVEMENT_ACCELERATION_DOWN * MOUVEMENT_WEIGHT_RATIO * elapsedTime * elapsedTime / 2.0f);
-		if (Position().y - distance > 0)
+		float distance = (m_speed.y * elapsedTime) + (GRAVITY * elapsedTime * elapsedTime / 2.0f);
+		std::cout << distance << std::endl;
+		if (!CheckCollision(Vector3f(m_pos.x, m_pos.y - distance, m_pos.z)))
 		{
 			m_pos.y -= distance;
-			m_speed.y = m_speed.y + (MOUVEMENT_ACCELERATION_DOWN * MOUVEMENT_WEIGHT_RATIO * elapsedTime);
+			m_speed.y = m_speed.y + (GRAVITY * elapsedTime);
 		}
 		else
 		{
 			if (m_speed.y != 0)
 				Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
 			m_speed.y = 0;
-			m_pos.y = 0;
 		}
 	}
 	if (controls.Get(22))	// W
@@ -58,23 +58,37 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 		if (!ghost && m_speed.y == 0)
 			Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
 
+		// Détermine la vitesse max et l'acceleration en fontion de si run est activé
+		float speedMax = controls.Get(38) ? MOUVEMENT_SPEED_MAX_RUN : MOUVEMENT_SPEED_MAX;
+		float accel = controls.Get(38) ? MOUVEMENT_ACCELERATION_RUN : MOUVEMENT_ACCELERATION;
+
+		// Applique la vitesse initiale
+		if (m_speed.z == 0)
+			m_speed.z += MOUVEMENT_SPEED_INI;
+
 		// Regarde si la vitesse dépasse la vitesse max
-		if (m_speed.z >= MOUVEMENT_SPEED) {
-			m_speed.z = MOUVEMENT_SPEED;
+		if (m_speed.z >= speedMax) {
+			m_speed.z = speedMax;
 			m_accel.z = 0;
 		}
-		else m_accel.z = MOUVEMENT_ACCELERATION;
+		else m_accel.z = accel;
 
-		float distance = (m_speed.z * elapsedTime) + (MOUVEMENT_ACCELERATION * elapsedTime * elapsedTime / 2.0f);
-		m_speed.z = m_speed.z + (MOUVEMENT_ACCELERATION * elapsedTime);
+		// Calcul la nouvelle position et la nouvelle vitesse
+		Vector3f newPos;
+		float distance = (m_speed.z * elapsedTime) + (m_accel.z * elapsedTime * elapsedTime / 2.0f);
+		float xRotRad = (m_rot.x / 180 * PII);
+		float yRotRad = (m_rot.y / 180 * PII);
 
-		float xRotRad, yRotRad;
-		yRotRad = (m_rot.y / 180 * PII);
-		xRotRad = (m_rot.x / 180 * PII);
-		m_pos.x += float(sin(yRotRad)) * (controls.Get(38) ? MOUVEMENT_SPEED_RUN * elapsedTime : distance);
-		m_pos.z -= float(cos(yRotRad)) * (controls.Get(38) ? MOUVEMENT_SPEED_RUN * elapsedTime: distance);
-		if (ghost)
-			m_pos.y -= float(sin(xRotRad)) * (controls.Get(38) ? MOUVEMENT_SPEED_RUN : MOUVEMENT_SPEED) * (elapsedTime);
+		newPos.x = m_pos.x + float(sin(yRotRad)) * distance;
+		newPos.z = m_pos.z - float(cos(yRotRad)) * distance;
+		newPos.y = m_pos.y - ((ghost) ? float(sin(xRotRad)) * distance : 0);
+
+		// Si pas de collision affecter la nouvelle position et vitesse
+		if (!CheckCollision(newPos))
+		{
+			m_speed.z = m_speed.z + (m_accel.z * elapsedTime);
+			m_pos = newPos;
+		}
 	}
 	else
 	{
@@ -85,44 +99,123 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 	{
 		if (!ghost && m_speed.y == 0)
 			Info::Get().Sound().PlaySnd(Son::SON_FOOT2, Son::CHANNEL_STEP, false);
-		float xRotRad, yRotRad;
-		yRotRad = (m_rot.y / 180 * PII);
-		xRotRad = (m_rot.x / 180 * PII);
-		m_pos.x -= float(sin(yRotRad)) * MOUVEMENT_SPEED_BACKWARD * (1.f + elapsedTime);
-		m_pos.z += float(cos(yRotRad)) * MOUVEMENT_SPEED_BACKWARD * (1.f + elapsedTime);
-		if (ghost)
-			m_pos.y += float(sin(xRotRad)) * MOUVEMENT_SPEED_BACKWARD * (1.f + elapsedTime);
+
+		// Détermine la vitesse max et l'acceleration en fontion de si run est activé
+		float speedMax = controls.Get(38) ? MOUVEMENT_SPEED_MAX_RUN : MOUVEMENT_SPEED_MAX;
+		float accel = controls.Get(38) ? MOUVEMENT_ACCELERATION_RUN : MOUVEMENT_ACCELERATION;
+
+		// Applique la vitesse initiale
+		if (m_speed.z == 0)
+			m_speed.z += MOUVEMENT_SPEED_INI;
+
+		// Regarde si la vitesse dépasse la vitesse max
+		if (m_speed.z >= speedMax) {
+			m_speed.z = speedMax;
+			m_accel.z = 0;
+		}
+		else m_accel.z = accel;
+
+		// Calcul la nouvelle position et la nouvelle vitesse
+		Vector3f newPos;
+		float distance = (m_speed.z * elapsedTime) + (m_accel.z * elapsedTime * elapsedTime / 2.0f);
+		float xRotRad = (m_rot.x / 180 * PII);
+		float yRotRad = (m_rot.y / 180 * PII);
+
+		newPos.x = m_pos.x - float(sin(yRotRad)) * distance;
+		newPos.z = m_pos.z + float(cos(yRotRad)) * distance;
+		newPos.y = m_pos.y + ((ghost) ? float(sin(xRotRad)) * distance : 0);
+
+		// Si pas de collision affecter la nouvelle position et vitesse
+		if (!CheckCollision(newPos))
+		{
+			m_speed.z = m_speed.z + (m_accel.z * elapsedTime);
+			m_pos = newPos;
+		}
 	}
 	if (controls.Get(3))	// D
 	{
 		if (!ghost && m_speed.y == 0)
 			Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
-		float yRotRad;
-		yRotRad = (m_rot.y / 180 * PII);
-		m_pos.x += float(cos(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
-		m_pos.z += float(sin(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
+
+		// Détermine la vitesse max et l'acceleration en fontion de si run est activé
+		float speedMax = controls.Get(38) ? MOUVEMENT_SPEED_MAX_RUN : MOUVEMENT_SPEED_MAX;
+		float accel = controls.Get(38) ? MOUVEMENT_ACCELERATION_RUN : MOUVEMENT_ACCELERATION;
+
+		// Applique la vitesse initiale
+		if (m_speed.x == 0)
+			m_speed.x += MOUVEMENT_SPEED_INI;
+
+		// Regarde si la vitesse dépasse la vitesse max
+		if (m_speed.x >= speedMax) {
+			m_speed.x = speedMax;
+			m_accel.x = 0;
+		}
+		else m_accel.x = accel;
+
+		// Calcul la nouvelle position et la nouvelle vitesse
+		Vector3f newPos;
+		float distance = (m_speed.x * elapsedTime) + (m_accel.x * elapsedTime * elapsedTime / 2.0f);
+		float yRotRad = (m_rot.y / 180 * PII);
+
+		newPos.x = m_pos.x + float(cos(yRotRad)) * distance;
+		newPos.z = m_pos.z + float(sin(yRotRad)) * distance;
+		newPos.y = m_pos.y;
+
+		// Si pas de collision affecter la nouvelle position et vitesse
+		if (!CheckCollision(newPos))
+		{
+			m_speed.x = m_speed.x + (m_accel.x * elapsedTime);
+			m_pos = newPos;
+		}
 	}
 
 	if (controls.Get(0))	// A
 	{
 		if (!ghost && m_speed.y == 0)
 			Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
-		float yRotRad;
-		yRotRad = (m_rot.y / 180 * PII);
-		m_pos.x -= float(cos(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
-		m_pos.z -= float(sin(yRotRad)) * MOUVEMENT_SPEED * (1.f + elapsedTime);
+
+		// Détermine la vitesse max et l'acceleration en fontion de si run est activé
+		float speedMax = controls.Get(38) ? MOUVEMENT_SPEED_MAX_RUN : MOUVEMENT_SPEED_MAX;
+		float accel = controls.Get(38) ? MOUVEMENT_ACCELERATION_RUN : MOUVEMENT_ACCELERATION;
+
+		// Applique la vitesse initiale
+		if (m_speed.x == 0)
+			m_speed.x += MOUVEMENT_SPEED_INI;
+
+		// Regarde si la vitesse dépasse la vitesse max
+		if (m_speed.x >= speedMax) {
+			m_speed.x = speedMax;
+			m_accel.x = 0;
+		}
+		else m_accel.x = accel;
+
+		// Calcul la nouvelle position et la nouvelle vitesse
+		Vector3f newPos;
+		float distance = (m_speed.x * elapsedTime) + (m_accel.x * elapsedTime * elapsedTime / 2.0f);
+		float yRotRad = (m_rot.y / 180 * PII);
+
+		newPos.x = m_pos.x - float(cos(yRotRad)) * distance;
+		newPos.z = m_pos.z - float(sin(yRotRad)) * distance;
+		newPos.y = m_pos.y;
+
+		// Si pas de collision affecter la nouvelle position et vitesse
+		if (!CheckCollision(newPos))
+		{
+			m_speed.x = m_speed.x + (m_accel.x * elapsedTime);
+			m_pos = newPos;
+		}
 	}
 	if (controls.Get(57))	// Space
 	{
 		if (ghost)
 		{
-			m_pos.y += MOUVEMENT_SPEED * (1.f + elapsedTime);
+			m_pos.y += MOUVEMENT_SPEED_MAX * elapsedTime;
 		}
 		else
 		{
 			if (m_speed.y == 0)
 			{
-				m_speed.y = MOUVEMENT_ACCELERATION_UP;
+				m_speed.y = -MOUVEMENT_SPEED_JUMP;
 				Info::Get().Sound().PlaySnd(Son::SON_JUMP, Son::CHANNEL_PLAYER, false);
 			}
 		}
@@ -130,7 +223,7 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 	if (controls.Get(37))	// Ctrl
 	{
 		if (ghost)
-			m_pos.y -= MOUVEMENT_SPEED * (1.f + elapsedTime);
+			m_pos.y -= MOUVEMENT_SPEED_MAX * elapsedTime;
 		else
 		{
 			//Code du crouch ici
@@ -158,4 +251,22 @@ Vector2f Player::Rotation() const
 void Player::SetRotation( Vector2f rot )
 {
 	m_rot = rot;
+}
+
+bool Player::CheckCollision(const Vector3f& pos) const
+{
+	float offset = 0.2f;
+
+	if(pos.y >=0 
+		&& Info::Get().GetBlocFromWorld(pos, Vector3f(offset, 1, offset)) == BTYPE_AIR
+		&& Info::Get().GetBlocFromWorld(pos, Vector3f(-offset, 1, offset)) == BTYPE_AIR
+		&& Info::Get().GetBlocFromWorld(pos, Vector3f(-offset, 1, -offset)) == BTYPE_AIR
+		&& Info::Get().GetBlocFromWorld(pos, Vector3f(offset, 1, -offset)) == BTYPE_AIR
+		&& Info::Get().GetBlocFromWorld(pos, Vector3f(offset, 2.8f, offset)) == BTYPE_AIR
+		&& Info::Get().GetBlocFromWorld(pos, Vector3f(-offset, 2.8f, offset)) == BTYPE_AIR
+		&& Info::Get().GetBlocFromWorld(pos, Vector3f(-offset, 2.8f, -offset)) == BTYPE_AIR
+		&& Info::Get().GetBlocFromWorld(pos, Vector3f(offset, 2.8f, -offset)) == BTYPE_AIR)
+		return false;
+	else 
+		return true;
 }

@@ -22,33 +22,41 @@ typedef short int16;
 typedef int int32;
 typedef long long int64;
 
-//Chunk size
+// Chunk size
 #define CHUNK_SIZE_X 16
 #define CHUNK_SIZE_Y 128
 #define CHUNK_SIZE_Z 16
 
 #define VIEW_DISTANCE				32
 
-//Valeurs de l'interface
+// Valeurs de l'interface
 #define INTERFACE_BOTTOM_HEIGHT		64
 #define INTERFACE_SIDE_LEFT_WIDTH	64
 #define INTERFACE_SIDE_RIGHT_WIDTH	32
 #define INTERFACE_TOP_HEIGHT		32
 
 
-//Valeurs quelconques
+// Valeurs quelconques
 #define PII							3.141592654f
 
-//Valeurs du jeu
-#define MOUVEMENT_SPEED				4.15f
-#define MOUVEMENT_ACCELERATION		2.f
-#define MOUVEMENT_SPEED_RUN			4.3f
-#define MOUVEMENT_SPEED_BACKWARD	0.075f
-#define MOUVEMENT_ACCELERATION_DOWN	9.81f
-#define MOUVEMENT_ACCELERATION_UP	-7.5f
-#define MOUVEMENT_WEIGHT_RATIO		1.0f		
+// Valeurs du jeu
+// Valeurs de vitesse (m/s)
+#define MOUVEMENT_SPEED_INI			2.f
+#define MOUVEMENT_SPEED_MAX			4.f
+#define MOUVEMENT_SPEED_MAX_RUN		6.f
+#define MOUVEMENT_SPEED_BACKWARD	2.f
+#define MOUVEMENT_SPEED_JUMP		7.f
 
-//Valeurs des options
+// Valeurs d'acceleration (m/s^2)
+#define MOUVEMENT_ACCELERATION		6.f
+#define MOUVEMENT_ACCELERATION_RUN	12.f
+#define GRAVITY						9.81f
+
+// Energie (e/s)
+#define ENERGY_REGEN				2
+#define ENERGY_SPENDING				4
+
+// Valeurs des options
 #define MOUSE_SENSIBILITY			0.075f
 #define CROSSHAIR_SIZE				64
 

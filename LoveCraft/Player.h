@@ -64,7 +64,12 @@ public:
 
 	void Render (bool wireFrame = false);
 	void SetRotation( Vector2f rot );
+
+	bool CheckCollision(const Vector3f& pos) const;
+
 private:
+	float m_energy; // Energie pour pouvoir courir (0 à 100)
+
 	Vector3f m_pos; // Position du joueur
 	Vector2f m_rot; // Rotation en x et y;
 

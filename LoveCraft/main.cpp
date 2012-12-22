@@ -14,5 +14,5 @@ int main()
 	int resX = GetSystemMetrics(SM_CXSCREEN);
 	int resY = GetSystemMetrics(SM_CYSCREEN);
 	std::cout << "Screen resolution : " << resX << " x " << resY << std::endl; 
-    engine.Start("LoveCraft", resX, resY, true);
+    engine.Start("LoveCraft", resX, resY, false);
 }

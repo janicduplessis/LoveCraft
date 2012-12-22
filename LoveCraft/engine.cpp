@@ -92,10 +92,10 @@ void Engine::Init()
 		}
 	}
 
-	chunk.SetBloc(0,1,0, BTYPE_BRICK);
-	chunk.SetBloc(0,1,1, BTYPE_BRICK);
 	chunk.SetBloc(5,3,5, BTYPE_DIRT);
 	chunk.SetBloc(1,1,0, BTYPE_BRICK);
+	chunk.SetBloc(1,2,0, BTYPE_DIRT);
+	chunk.SetBloc(1,3,0, BTYPE_DIRT);
 	chunk.SetBloc(2,1,0, BTYPE_DIRT);
 	chunk.SetBloc(3,1,0, BTYPE_GRASS);
 	chunk.SetBloc(5,3,6, BTYPE_DIRT);

@@ -54,15 +54,21 @@ BlockInfo* Info::GetBlocInfo( BlockType type )
 	return m_blocInfos[type];
 }
 
-BlockType Info::GetBlocFromWorld(Vector3f pos)
+BlockType Info::GetBlocFromWorld(Vector3f pos, const Vector3f& offset) const
 {
-	pos -= 0.5f;
-	pos += VIEW_DISTANCE;
+	// Ajoute le offset
+	pos += offset;
+	// Replace la position par rapport au premier cube
+	pos.x += VIEW_DISTANCE + 0.5f;
+	pos.z += VIEW_DISTANCE + 0.5f;
+	// Enleve la partie decimale
 	Vector3i iPos(pos.x, pos.y, pos.z);
+	// Calcul dans quel chunk la position est
 	int chunkX, chunkZ;
 	chunkX = iPos.x / CHUNK_SIZE_X;
 	chunkZ = iPos.z / CHUNK_SIZE_Z;
 	Chunk& c = GetChunkArray()->Get(chunkX, chunkZ);
+	// Calcul dans quel bloc la position est
 	int blocX, blocY, blocZ;
 	blocX = iPos.x - chunkX * CHUNK_SIZE_X;
 	blocY = iPos.y;

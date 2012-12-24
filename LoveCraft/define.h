@@ -27,7 +27,7 @@ typedef long long int64;
 #define CHUNK_SIZE_Y 128
 #define CHUNK_SIZE_Z 16
 
-#define VIEW_DISTANCE				32
+#define VIEW_DISTANCE				64
 
 // Valeurs de l'interface
 #define INTERFACE_BOTTOM_HEIGHT		64

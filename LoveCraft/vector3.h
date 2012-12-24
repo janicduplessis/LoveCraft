@@ -219,4 +219,9 @@ std::ostream& operator<<(std::ostream& out, const Vector3<T>& vec)
 	return out;
 }
 
+template <class T>
+T Vec3Lenght(T x, T y, T z) {
+	return sqrt(x * x + y * y + z * z);
+}
+
 #endif

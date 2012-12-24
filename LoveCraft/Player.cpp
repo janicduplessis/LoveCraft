@@ -54,31 +54,36 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 			m_speed.y = 0;
 		}
 	}
-	if (controls.Get(22))	// W
+	if (controls.Get(22))	// W -z
 	{
 		if (!ghost && m_speed.y == 0)
 			Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
 
 		// Détermine la vitesse max et l'acceleration en fontion de si run est activé
-		float speedMax = controls.Get(38) ? MOUVEMENT_SPEED_MAX_RUN : MOUVEMENT_SPEED_MAX;
+		float xRotRad = (m_rot.x / 180 * PII);
+		float yRotRad = (m_rot.y / 180 * PII);
+		float speedMaxX = sin(yRotRad) * controls.Get(38) ? MOUVEMENT_SPEED_MAX_RUN : MOUVEMENT_SPEED_MAX;
+		float speedMaxY = cos(yRotRad) * controls.Get(38) ? MOUVEMENT_SPEED_MAX_RUN : MOUVEMENT_SPEED_MAX;
 		float accel = controls.Get(38) ? MOUVEMENT_ACCELERATION_RUN : MOUVEMENT_ACCELERATION;
 
+		m_speed.x += sin(yRotRad) * m_accel.x * elapsedTime;
+		m_speed.z -= cos(yRotRad) * m_accel.z * elapsedTime;
+
 		// Applique la vitesse initiale
-		if (m_speed.z == 0)
-			m_speed.z += MOUVEMENT_SPEED_INI;
+		//if (m_speed.z == 0)
+		//	m_speed.z += MOUVEMENT_SPEED_INI;
 
 		// Regarde si la vitesse dépasse la vitesse max
-		if (m_speed.z >= speedMax) {
-			m_speed.z = speedMax;
-			m_accel.z = 0;
+		if (m_speed.x <= speedMaxX) {
+			m_accel.x = 0;
+			m_speed.x = speedMaxX;
+		} else {
+			m_accel.x = accel;
 		}
-		else m_accel.z = accel;
 
 		// Calcul la nouvelle position et la nouvelle vitesse
 		Vector3f newPos;
 		float distance = (m_speed.z * elapsedTime) + (m_accel.z * elapsedTime * elapsedTime / 2.0f);
-		float xRotRad = (m_rot.x / 180 * PII);
-		float yRotRad = (m_rot.y / 180 * PII);
 
 		newPos.x = m_pos.x + float(sin(yRotRad)) * distance;
 		newPos.z = m_pos.z - float(cos(yRotRad)) * distance;
@@ -96,7 +101,7 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 		m_speed.z = 0;
 	}
 
-	if (controls.Get(18))	// S
+	if (controls.Get(18))	// S +z
 	{
 		if (!ghost && m_speed.y == 0)
 			Info::Get().Sound().PlaySnd(Son::SON_FOOT2, Son::CHANNEL_STEP, false);
@@ -133,7 +138,7 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 			m_pos = newPos;
 		}
 	}
-	if (controls.Get(3))	// D
+	if (controls.Get(3))	// D +x
 	{
 		if (!ghost && m_speed.y == 0)
 			Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
@@ -170,7 +175,7 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 		}
 	}
 
-	if (controls.Get(0))	// A
+	if (controls.Get(0))	// A -x
 	{
 		if (!ghost && m_speed.y == 0)
 			Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);

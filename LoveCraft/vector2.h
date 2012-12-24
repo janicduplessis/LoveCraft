@@ -23,4 +23,9 @@ Vector2<T>::Vector2(const T& x, const T& y) : sf::Vector2<T>(x, y)
 
 }
 
+template <class T>
+T Vec2Lenght(T x, T y) {
+	return sqrt(x * x + y * y);
+}
+
 #endif

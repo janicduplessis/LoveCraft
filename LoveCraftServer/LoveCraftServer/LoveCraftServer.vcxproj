@@ -42,9 +42,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryWPath>$(WindowsSDK_MetadataPath)</LibraryWPath>
-    <IncludePath>../../LoveCraft/external\sfml20_vstudio2k10\include;$(IncludePath)</IncludePath>
+    <IncludePath>external\sfml20_vstudio2k10\include;$(IncludePath)</IncludePath>
     <ReferencePath>$(VCInstallDir)atlmfc\lib;$(VCInstallDir)lib</ReferencePath>
-    <LibraryPath>../../LoveCraft/external\sfml20_vstudio2k10\external\sfml20_vstudio2k10\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>external\sfml20_vstudio2k10\external\sfml20_vstudio2k10\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -56,7 +56,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.../LoveCraft/external\sfml20_vstudio2k10\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external\sfml20_vstudio2k10\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

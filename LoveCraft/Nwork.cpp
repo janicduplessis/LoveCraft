@@ -13,13 +13,15 @@ Nwork::~Nwork()
 
 bool Nwork::Send(sf::Packet& pack)
 {
+	//Test en Udp
 	if (m_socket.send(pack, m_adress, m_port) != sf::Socket::Done)
 		return false;
 	return true;
 }
 bool Nwork::Receive(sf::Packet& packet)
 {
-	//Bind du socket (pres a recevoir les données)
+	//Test en Udp
+	//Bind du socket (près a recevoir les données)
 	m_socket.bind(m_port);
 	//Instanciation des variables de l'envoyeur
 	sf::Packet pack;
@@ -36,5 +38,6 @@ bool Nwork::Receive(sf::Packet& packet)
 }
 bool Nwork::StartServer()
 {
+	//Seulement en TCP
 	return true;
 }

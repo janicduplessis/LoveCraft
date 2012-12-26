@@ -70,16 +70,22 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 		m_speed.x += sin(yRotRad) * m_accel.x * elapsedTime;
 		m_speed.z -= cos(yRotRad) * m_accel.z * elapsedTime;
 
-		// Applique la vitesse initiale
-		//if (m_speed.z == 0)
-		//	m_speed.z += MOUVEMENT_SPEED_INI;
+		//Applique la vitesse initiale
+		if (m_speed.z == 0)
+		{
+			m_speed.z += MOUVEMENT_SPEED_INI;
+			m_accel.z = MOUVEMENT_ACCELERATION;
+		}
 
 		// Regarde si la vitesse dépasse la vitesse max
-		if (m_speed.x <= speedMaxX) {
-			m_accel.x = 0;
-			m_speed.x = speedMaxX;
-		} else {
-			m_accel.x = accel;
+		if (m_speed.z >= speedMaxX) 
+		{
+			m_accel.z = 0;
+			m_speed.z = speedMaxX;
+		} 
+		else 
+		{
+			m_accel.z = accel;
 		}
 
 		// Calcul la nouvelle position et la nouvelle vitesse
@@ -99,7 +105,19 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 	}
 	else
 	{
-		m_speed.z = 0;
+		// note Alex ~ Au lieu de mettre le speed à zéro immédiatement
+		//			   lorsque le joueur arrête, on pourrait décrémenter la vitesse
+		//			   progressivement jusqu'à atteindre 0
+
+		//JD
+		//m_speed.z = 0;
+
+		//AB
+		if (m_speed.z > 0)
+			m_speed.z -= 0.5f;
+		else if (m_speed.z < 0)
+			m_speed.z = 0;
+
 	}
 
 	if (controls.Get(18))	// S +z
@@ -253,6 +271,16 @@ Vector3f Player::Position() const
 Vector2f Player::Rotation() const
 {
 	return m_rot;
+}
+
+Vector3f Player::Speed() const
+{
+	return m_speed;
+}
+
+Vector3f Player::Acceleration() const
+{
+	return m_accel;
 }
 
 void Player::SetRotation( Vector2f rot )

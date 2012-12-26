@@ -34,22 +34,22 @@ typedef long long int64;
 #define INTERFACE_SIDE_LEFT_WIDTH	64
 #define INTERFACE_SIDE_RIGHT_WIDTH	32
 #define INTERFACE_TOP_HEIGHT		32
-
+#define SPELL_BAR_SPELL_NUMBER		10
 
 // Valeurs quelconques
 #define PII							3.141592654f
 
 // Valeurs du jeu
 // Valeurs de vitesse (m/s)
-#define MOUVEMENT_SPEED_INI			2.f
-#define MOUVEMENT_SPEED_MAX			4.f
-#define MOUVEMENT_SPEED_MAX_RUN		6.f
+#define MOUVEMENT_SPEED_INI			4.f
+#define MOUVEMENT_SPEED_MAX			8.f
+#define MOUVEMENT_SPEED_MAX_RUN		12.f
 #define MOUVEMENT_SPEED_BACKWARD	2.f
-#define MOUVEMENT_SPEED_JUMP		7.f
+#define MOUVEMENT_SPEED_JUMP		12.f
 
 // Valeurs d'acceleration (m/s^2)
-#define MOUVEMENT_ACCELERATION		6.f
-#define MOUVEMENT_ACCELERATION_RUN	12.f
+#define MOUVEMENT_ACCELERATION		12.f
+#define MOUVEMENT_ACCELERATION_RUN	24.f
 #define GRAVITY						9.81f
 
 // Energie (e/s)

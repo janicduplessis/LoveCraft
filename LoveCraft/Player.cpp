@@ -4,6 +4,7 @@
 #include "info.h"
 #include <cmath>
 #include <iostream>
+#include <SFML/Network.hpp>
 
 Player::Player(Vector3f position, Vector2f rotation)
 	:m_pos(position), m_rot(rotation), m_speed(Vector3f()), 
@@ -213,11 +214,7 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 	}
 	if (controls.Get(57))	// Space
 	{
-		if (ghost)
-		{
-			m_pos.y += MOUVEMENT_SPEED_MAX * elapsedTime;
-		}
-		else
+		if (!ghost)
 		{
 			if (m_speed.y == 0)
 			{
@@ -225,16 +222,20 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 				Info::Get().Sound().PlaySnd(Son::SON_JUMP, Son::CHANNEL_PLAYER, false);
 			}
 		}
+		else m_pos.y += MOUVEMENT_SPEED_MAX * elapsedTime;
 	}
 	if (controls.Get(37))	// Ctrl
 	{
-		if (ghost)
-			m_pos.y -= MOUVEMENT_SPEED_MAX * elapsedTime;
-		else
+		if (!ghost)
 		{
 			//Code du crouch ici
 		}
+		else m_pos.y -= MOUVEMENT_SPEED_MAX * elapsedTime;
 	}
+	//Test réseau - Envoie d'un paquet contenant les coordonnées du joueur sur le réseau
+	//sf::Packet pack;
+	//pack << m_pos.x << m_pos.y << m_pos.z;
+	//Info::Get().Network().Send(pack);
 }
 
 void Player::Render(bool wireFrame)
@@ -242,7 +243,6 @@ void Player::Render(bool wireFrame)
 	m_model.SetPosition(Vector3f(m_pos.x, m_pos.y - 0.5, m_pos.z));
 	m_model.SetRotation(Vector3f(0, m_rot.y, 0));
 	m_model.Render(wireFrame);
-	
 }
 
 Vector3f Player::Position() const
@@ -262,7 +262,7 @@ void Player::SetRotation( Vector2f rot )
 
 bool Player::CheckCollision(const Vector3f& pos) const
 {
-	float offset = 0.2f;
+	static float offset = 0.2f;
 
 	if(pos.y >=0 
 		&& Info::Get().GetBlocFromWorld(pos, Vector3f(offset, 1, offset)) == BTYPE_AIR

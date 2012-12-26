@@ -6,6 +6,7 @@
 #include "array2d.h"
 #include "chunk.h"
 #include "son.h"
+#include "Nwork.h"
 
 class Chunk;
 
@@ -31,6 +32,11 @@ public:
 	 * Retourne une référence vers l'instance de son
 	 */
 	Son& Sound();
+
+	/**
+	 * Retourne une référence vers l'instance de réseau
+	 */
+	Nwork& Network();
 
 	/**
 	 * Retourne le bloc info pour le type donné
@@ -72,6 +78,7 @@ private:
 	static Info* m_info;
 	BlockInfo* m_blocInfos[BTYPE_COUNT];
 	Son m_sound;
+	Nwork m_network;
 };
 
 #endif

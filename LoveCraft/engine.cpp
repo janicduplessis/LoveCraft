@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <cmath>
 #include "son.h"
+#include <SFML/Network.hpp>
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false), m_controls(Array<bool>(256, false)),
@@ -149,7 +150,7 @@ void Engine::LoadResource()
 	LoadTexture(m_textureGhost, TEXTURE_PATH "boo.png");
 
 	std::cout << " Loading and compiling shaders ..." << std::endl;
-	
+
 	if (!m_shaderModel.Load(SHADER_PATH "modelshader.vert", SHADER_PATH "modelshader.frag", true))
 	{
 		std::cout << " Failed to load model shader" << std::endl;
@@ -239,7 +240,33 @@ void Engine::Render(float elapsedTime)
 	//m_projectile.Move(elapsedTime);
 	//m_projectile.Render();
 
+	//Test réseau - Dessigne un carré en haut de la position du joueur
+	//sf::Packet p;
+	//if (Info::Get().Network().Receive(p))
+	//{
+	//	float x;
+	//	float y;
+	//	float z;
+	//	p >> x >> y >> z;
+	//	glLoadIdentity();
+	//	glTranslated(x, y+5, z);
+	//	m_textureFloor.Bind();
+	//	glBegin(GL_QUADS);
 
+	//	glTexCoord2f(0, 0);
+	//	glVertex3f(x - 0.5f, y, z - 0.5f);
+
+	//	glTexCoord2f(0, 1);
+	//	glVertex3f(x + 0.5f, y, z - 0.5f);
+
+	//	glTexCoord2f(1, 1);
+	//	glVertex3f(x + 0.5f, y, z + 0.5f);
+
+	//	glTexCoord2f(1, 0);
+	//	glVertex3f(x - 0.5f, y, z + 0.5f);
+
+	//	glEnd();
+	//}
 }
 
 void Engine::Render2D(float elapsedTime)

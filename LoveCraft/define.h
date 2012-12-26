@@ -63,11 +63,15 @@ typedef long long int64;
 typedef uint8 BlockType;
 enum BLOCK_TYPE {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS, BTYPE_BRICK, BTYPE_SAND, BTYPE_COUNT};
 
-
+//Chemins d'accès
 #define TEXTURE_PATH        "../lovecraft/media/textures/"
 #define SHADER_PATH			"../lovecraft/media/shader/"
 #define MODEL_PATH			"../lovecraft/media/models/"
 #define SOUND_PATH			"../lovecraft/media/sound/"
 #define SOUND_FOOT_PATH		SOUND_PATH "footsteps/"
+
+//Network
+#define NW_PORT				10512
+#define NW_SERVER_ADDRESS	"127.0.0.1"
 
 #endif // DEFINE_H__

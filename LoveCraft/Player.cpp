@@ -71,16 +71,15 @@ void Player::Move(const Controls& controls, bool ghost, float elapsedTime )
 		}
 
 		// Regarde si la vitesse dépasse la vitesse max
-		if (m_speed.z >= speedMaxX) 
+		if (m_speed.z >= speedMax) 
 		{
 			m_accel.z = 0;
-			m_speed.z = speedMaxX;
+			m_speed.z = speedMax;
 		} 
 		else 
 		{
 			m_accel.z = accel;
 		}
-		else m_accel.z = accel;
 
 		// Calcul la nouvelle position et la nouvelle vitesse
 		Vector3f newPos;

@@ -160,6 +160,7 @@ private:
 	Texture m_textureGhost;
 	Texture m_textureHealth;
 	Texture m_textureEnergy;
+	Texture m_textureMana;
 	Texture m_textureNoir;
 
 	Player m_player;
@@ -174,6 +175,7 @@ private:
 
 	ProgressBar m_healthBar;
 	ProgressBar m_energyBar;
+	ProgressBar m_manaBar;
 
 	bool m_ghostMode;
 	bool m_rightClick;

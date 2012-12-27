@@ -113,9 +113,9 @@ void Engine::Init()
 	//Blocs en escalier
 	for (int k = 1; k <= 3; k++)
 	{
-		for (int j = 1; j < CHUNK_SIZE_Z-1; j++)
+		for (int j = 1; j < CHUNK_SIZE_Z-2; j++)
 		{
-			for (int i = 1; i < CHUNK_SIZE_X-1; i++)
+			for (int i = 1; i < CHUNK_SIZE_X-2; i++)
 			{
 				if (i <= j)
 					chunk.SetBloc(k,i,j, BTYPE_BRICK);
@@ -193,10 +193,12 @@ void Engine::LoadResource()
 	LoadTexture(m_textureNoir, TEXTURE_PATH "noir.jpg");
 	LoadTexture(m_textureHealth, TEXTURE_PATH "health.png");
 	LoadTexture(m_textureEnergy, TEXTURE_PATH "energy.png");
+	LoadTexture(m_textureMana, TEXTURE_PATH "mana.png");
 
 	//Initialisation des éléments de l'interface
 	m_healthBar = ProgressBar(Vector2i(400, 20), Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 35));
 	m_energyBar = ProgressBar(Vector2i(400, 20), Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 10));
+	m_manaBar = ProgressBar(Vector2i(400, 20), Vector2i(Width() - (INTERFACE_SIDE_RIGHT_WIDTH + m_manaBar.Size().x), 35));
 
 	// Load et compile les shaders
 	std::cout << " Loading and compiling shaders ..." << std::endl;
@@ -231,6 +233,7 @@ void Engine::Render(float elapsedTime)
 	// calcul la position du joueur et de la camera
 	m_player.Move(m_ghostMode, healthValue, energyValue, elapsedTime);
 	m_camera.SetPosition(m_player.Position());
+	m_manaBar.SetValue(m_manaBar.Value() + MANA_PASSIVE_REGEN);
 	m_healthBar.SetValue(healthValue);
 	m_energyBar.SetValue(energyValue);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -539,7 +542,12 @@ void Engine::KeyPressEvent(unsigned char key)
 		sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
 		break;
 	case 33:
-		sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
+		if (m_manaBar.Value() - 15 >= 0)
+		{
+			sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
+			m_healthBar.SetValue(m_healthBar.Value() + 5);
+			m_manaBar.SetValue(m_manaBar.Value() - 15);
+		}
 		break;
 	case 34:
 		sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);

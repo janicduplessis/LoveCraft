@@ -75,7 +75,7 @@ void Player::Move(bool ghost, float &health, float &energy, float elapsedTime )
 				Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
 			//Perte de vie quand on tombe de trop haut
 			if (m_speed.y > 8)
-				health -= (int)(m_speed.y * HEALTH_GRAVITY_LOST);
+				health -= (int)(m_speed.y * m_speed.y * HEALTH_GRAVITY_LOST);
 			m_speed.y = 0;
 		}
 	}
@@ -274,9 +274,12 @@ void Player::Move(bool ghost, float &health, float &energy, float elapsedTime )
 
 #pragma endregion
 
+	//Dépenses d'énergie lorsque le joueur se déplace et tient shift
 	if (shift && m_speed.z > 1)
 		energy -= ENERGY_SPENDING;
-	else energy += ENERGY_REGEN;
+	//Commence la régénération de l'énergie que si le joueur bouge presque pas
+	if (!shift && fabs(m_speed.z) + fabs(m_speed.x) <= ENERGY_REGEN_THRESHOLD)
+		energy += ENERGY_REGEN;
 	health += HEALTH_PASSIVE_REGEN;
 #pragma endregion
 

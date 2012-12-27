@@ -12,7 +12,7 @@ ProgressBar::~ProgressBar()
 }
 
 ProgressBar::ProgressBar(Vector2i &size, Vector2i &position) : m_minimum(0), m_maximum(100), 
-	m_value(50), m_size(size), m_position(position)
+	m_value(80), m_size(size), m_position(position)
 {
 }
 
@@ -20,9 +20,10 @@ void ProgressBar::Render(const Vector2i &position)
 {
 
 }
-void ProgressBar::SetValue(float &value)
+void ProgressBar::SetValue(const float value)
 {
-	m_value = value <= m_maximum ? value : m_maximum;
+	//Validation des valeurs
+	m_value = value > m_maximum ? m_maximum : (value <= m_minimum ? m_minimum : value);
 }
 float ProgressBar::Value() const
 {

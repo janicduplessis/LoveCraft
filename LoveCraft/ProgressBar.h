@@ -16,7 +16,7 @@ public:
 	ProgressBar(Vector2i &size, Vector2i &position);
 	~ProgressBar();
 	void Render(const Vector2i &position);	//Ne fonctionne pas pour l'instant
-	void SetValue(float &value);
+	void SetValue(const float value);
 	float Value() const;
 	float Maximum() const;
 	float Minimum() const;

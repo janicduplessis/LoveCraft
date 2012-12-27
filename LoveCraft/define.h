@@ -65,7 +65,7 @@ typedef long long int64;
 // Perte de vitesse à chaque tour de boucle. Modifier cette valeur changera la vitesse à laquelle le joueur ralenti
 #define MOUVEMENT_SPEED_DECAY		0.5f
 // Vitesse initiale acquise en santant
-#define MOUVEMENT_SPEED_JUMP		7.f
+#define MOUVEMENT_SPEED_JUMP		6.5f
 
 // Valeurs d'acceleration (m/s^2)
 // Accélération de base
@@ -81,7 +81,7 @@ typedef long long int64;
 // Régénération passive de la vie
 #define HEALTH_PASSIVE_REGEN		0.01f
 // Multiplicateur de perte de vie en fonction de la vitesse lors d'un saut trop haut
-#define HEALTH_GRAVITY_LOST			0.5f
+#define HEALTH_GRAVITY_LOST			0.2f
 
 // Energie (e/s)
 // Minimum d'énergie
@@ -89,9 +89,15 @@ typedef long long int64;
 // Maximum d'énergie
 #define ENERGY_MAXIMUM				100
 // Vitesse de régénération de l'énergie
-#define ENERGY_REGEN				0.5f
+#define ENERGY_REGEN				0.3f
+// Vitesse que le joueur ne doit pas dépasser s'il veut regagner l'énergie
+#define ENERGY_REGEN_THRESHOLD		5.f
 // Vitesse de dépense de l'énergie
-#define ENERGY_SPENDING				1.0f
+#define ENERGY_SPENDING				0.5f
+
+// Mana (m/s)
+// Régénération passive de la mana
+#define MANA_PASSIVE_REGEN			0.1f
 
 // Valeurs des options
 #define MOUSE_SENSIBILITY			0.075f

@@ -8,13 +8,21 @@ Quaternion::Quaternion( float w, float x, float y, float z ) :
 
 }
 
-void Quaternion::Normalize()
+void Quaternion::Normalise()
 {
-	float magnitude = sqrt(Magnitude());
-	m_w /= magnitude;
-	m_x /= magnitude;
-	m_y /= magnitude;
-	m_z /= magnitude;
+	float mag2 = Magnitude();
+	if (fabs(mag2) > TOLERANCE && fabs(mag2 - 1.0f) > TOLERANCE) {
+		float mag = sqrt(mag2);
+		m_w /= mag;
+		m_x /= mag;
+		m_y /= mag;
+		m_z /= mag;
+	}
+}
+
+Quaternion Quaternion::GetConjugate() const
+{
+	return Quaternion(m_w, -m_x, -m_y, -m_z);
 }
 
 float Quaternion::Magnitude()
@@ -25,52 +33,60 @@ float Quaternion::Magnitude()
 
 Matrix4f Quaternion::RotationMatrix()
 {
-	return Matrix4f(
-		1 - 2 * m_y * m_y - 2 * m_z * m_z,	2 * m_x * m_y - 2 * m_w * m_z,		2 * m_x * m_z + 2 * m_w * m_y,		0,
-		2 * m_x * m_y + 2 * m_w * m_z,		1 - 2 * m_x * m_x - 2 * m_z * m_z,	2 * m_y * m_z - 2 * m_w * m_x,		0,
-		2 * m_x * m_z - 2 * m_w * m_y,		2 * m_y * m_z + 2 * m_w * m_x,		1 - 2 * m_x * m_x - 2 * m_y * m_y,	0,
-		0,									0,									0,									1 );
+	float x2 = m_x * m_x;
+	float y2 = m_y * m_y;
+	float z2 = m_z * m_z;
+	float xy = m_x * m_y;
+	float xz = m_x * m_z;
+	float yz = m_y * m_z;
+	float wx = m_w * m_x;
+	float wy = m_w * m_y;
+	float wz = m_w * m_z;
+
+	return Matrix4f( 1.0f - 2.0f * (y2 + z2), 2.0f * (xy - wz), 2.0f * (xz + wy), 0.0f,
+		2.0f * (xy + wz), 1.0f - 2.0f * (x2 + z2), 2.0f * (yz - wx), 0.0f,
+		2.0f * (xz - wy), 2.0f * (yz + wx), 1.0f - 2.0f * (x2 + y2), 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-Quaternion Quaternion::operator*( const Quaternion& q ) const
+Quaternion Quaternion::operator* ( const Quaternion& q ) const
 {
-	Quaternion tmp;
-
-	tmp.m_w = (q.m_w * m_w) - (q.m_x * m_x) - (q.m_y * m_y) - (q.m_z * m_z);
-	tmp.m_x = (q.m_w * m_x) + (q.m_x * m_w) + (q.m_y * m_z) - (q.m_z * m_y);
-	tmp.m_y = (q.m_w * m_y) + (q.m_y * m_w) + (q.m_z * m_x) - (q.m_x * m_z);
-	tmp.m_z = (q.m_w * m_z) + (q.m_z * m_w) + (q.m_x * m_y) - (q.m_y * m_x);
-
-	return tmp;
+	return Quaternion(q.m_w * m_w - q.m_x * m_x - q.m_y * m_y - q.m_z * m_z,
+					  q.m_w * m_x + q.m_x * m_w + q.m_y * m_z - q.m_z * m_y,
+					  q.m_w * m_y + q.m_y * m_w + q.m_z * m_x - q.m_x * m_z,
+					  q.m_w * m_z + q.m_z * m_w + q.m_x * m_y - q.m_y * m_x);
 }
 
-void Quaternion::SetRotation( float angle, Vector3f axis )
+Vector3f Quaternion::operator* ( const Vector3f &vec ) const
 {
-	/*
-	m_w = cosf(-angle / 2);
-	m_x = axis.x * sinf(angle / 2);
-	m_y = axis.y * sinf(angle / 2);
-	m_z = axis.z * sinf(angle / 2);
-	Normalize();*/
-	float omega, s, c;
+	Vector3f vn = vec;
+	vn.Normalise();
 
-	s = sqrt(axis.x*axis.x + axis.y*axis.y + axis.z*axis.z);
+	Quaternion vecQuat, resQuat;
+	vecQuat.m_x = vn.x;
+	vecQuat.m_y = vn.y;
+	vecQuat.m_z = vn.z;
+	vecQuat.m_w = 0.0f;
 
-	c = 1.0/s;
+	resQuat = vecQuat * GetConjugate();
+	resQuat = *this * resQuat;
 
-	axis.x *= c;
-	axis.y *= c;
-	axis.z *= c;
+	return (Vector3f(resQuat.m_x, resQuat.m_y, resQuat.m_z));
+}
 
-	omega = -0.5f * angle;
-	s = (float)sin(omega);
+void Quaternion::FromAxis( float angle, const Vector3f& axis )
+{
+	float sinAngle;
+	angle *= 0.5f;
+	Vector3f vn = axis;
+	vn.Normalise();
 
-	m_x = s*axis.x;
-	m_y = s*axis.y;
-	m_z = s*axis.z;
-	m_w = (float)cos(omega);
+	sinAngle = sin(angle);
 
-	Normalize();
+	m_x = (vn.x * sinAngle);
+	m_y = (vn.y * sinAngle);
+	m_z = (vn.z * sinAngle);
+	m_w = cos(angle);
 }
 
 void Quaternion::Afficher() const

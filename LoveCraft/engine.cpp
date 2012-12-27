@@ -79,8 +79,7 @@ void Engine::Init()
 
 	m_player.Init();
 	m_projectile.Init();
-	m_projectile.SetDestination(Vector3f(10,10,10));
-	m_projectile.SetInitialSpeed(Vector3f(1,1,0));
+	m_projectile.SetInitialSpeed(Vector3f(1,0,0));
 	m_projectile.SetPosition(Vector3f(0,0,0));
 
 	m_chunks = new Array2d<Chunk>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
@@ -262,9 +261,8 @@ void Engine::Render(float elapsedTime)
 	if (m_wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	//m_projectile.Move(elapsedTime);
-	//m_projectile.Render();
-	m_projectile.TestRotation();
+	m_projectile.SetDestination(m_player.Position());
+	m_projectile.Move(elapsedTime);
 	m_projectile.Render();
 
 	//Test réseau - Dessigne un carré en haut de la position du joueur

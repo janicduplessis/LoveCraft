@@ -18,7 +18,7 @@ public:
 	~Vector3();
 
 	T Lenght() const;
-	void Normalize();
+	void Normalise();
 	void Zero();
 
 	T Dot(const Vector3<T>& v) const;
@@ -165,8 +165,7 @@ bool Vector3<T>::operator!=( const Vector3<T>& v ) const
 template <class T>
 bool Vector3<T>::operator==( const Vector3<T>& v ) const
 {
-
-	return (x == v.x && y == v.y && z == v.z);
+	return (abs(x - v.x) < FLT_EPSILON && abs(y - v.y) < FLT_EPSILON && abs(z - v.z) < FLT_EPSILON);
 }
 
 template <class T>
@@ -191,7 +190,7 @@ void Vector3<T>::Zero()
 }
 
 template <class T>
-void Vector3<T>::Normalize()
+void Vector3<T>::Normalise()
 {
 	T len = Lenght();
 	if(len == 0)

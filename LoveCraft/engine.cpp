@@ -43,7 +43,6 @@ void Engine::Init()
 		std :: cerr << " Error while initializing glew .. abording (" << glewGetErrorString ( err) << ")" << std :: endl ;
 		abort ();
 	}
-
 	//glClearColor( 0.f, 0.75f, 1.f, 1.0f );
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glEnable( GL_TEXTURE_2D );
@@ -544,12 +543,17 @@ void Engine::KeyPressEvent(unsigned char key)
 		if (m_manaBar.Value() - 15 >= 0)
 		{
 			sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
-			m_healthBar.SetValue(m_healthBar.Value() + 5);
+			m_healthBar.SetValue(m_healthBar.Value() + 10);
 			m_manaBar.SetValue(m_manaBar.Value() - 15);
 		}
 		break;
 	case 34:
-		sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
+		if (m_manaBar.Value() - 5 >= 0)
+		{
+			sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
+			m_energyBar.SetValue(m_energyBar.Value() + 15);
+			m_manaBar.SetValue(m_manaBar.Value() - 5);
+		}
 		break;
 	case 35:
 		sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);

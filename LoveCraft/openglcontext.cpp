@@ -11,71 +11,70 @@ OpenglContext::~OpenglContext()
 
 bool OpenglContext::Start(const std::string& title, int width, int height, bool fullscreen)
 {
-    m_title = title;
-    m_fullscreen = fullscreen;
-    InitWindow(width, height);
+	m_title = title;
+	m_fullscreen = fullscreen;
+	InitWindow(width, height);
 
-    Init();
-    LoadResource();
+	Init();
+	LoadResource();
 
 	sf::Clock clock;
 
 	while (m_app.isOpen())
-    {
+	{
 		clock.restart();
 
-        sf::Event Event;
-        while (m_app.pollEvent(Event))
-        {
-            switch(Event.type)
-            {
-            case sf::Event::Closed:
-                m_app.close();
-                break;
-            case sf::Event::Resized:
-                glViewport(0, 0, Event.size.width, Event.size.height);
-                break;
-            case sf::Event::KeyPressed:
-                KeyPressEvent(Event.key.code);
-                break;
-            case sf::Event::KeyReleased:
-                KeyReleaseEvent(Event.key.code);
-                break;
-            case sf::Event::MouseMoved:
-                MouseMoveEvent(Event.mouseMove.x, Event.mouseMove.y);
-                break;
-            case sf::Event::MouseButtonPressed:
-                MousePressEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
-                break;
-            case sf::Event::MouseButtonReleased:
-                MouseReleaseEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
-                break;
-            case sf::Event::MouseWheelMoved:
-                if(Event.mouseWheel.delta > 0)
-                    MousePressEvent(MOUSE_BUTTON_WHEEL_UP, Event.mouseButton.x, Event.mouseButton.y);
-                else
-                    MousePressEvent(MOUSE_BUTTON_WHEEL_DOWN, Event.mouseButton.x, Event.mouseButton.y);
-                break;
-            }
-        }
-
-        m_app.setActive();
-        Render(m_lastFrameTime);
-        m_app.display();
+		sf::Event Event;
+		while (m_app.pollEvent(Event))
+		{
+			switch(Event.type)
+			{
+			case sf::Event::Closed:
+				m_app.close();
+				break;
+			case sf::Event::Resized:
+				glViewport(0, 0, Event.size.width, Event.size.height);
+				break;
+			case sf::Event::KeyPressed:
+				KeyPressEvent(Event.key.code);
+				break;
+			case sf::Event::KeyReleased:
+				KeyReleaseEvent(Event.key.code);
+				break;
+			case sf::Event::MouseMoved:
+				MouseMoveEvent(Event.mouseMove.x, Event.mouseMove.y);
+				break;
+			case sf::Event::MouseButtonPressed:
+				MousePressEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
+				break;
+			case sf::Event::MouseButtonReleased:
+				MouseReleaseEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
+				break;
+			case sf::Event::MouseWheelMoved:
+				if(Event.mouseWheel.delta > 0)
+					MousePressEvent(MOUSE_BUTTON_WHEEL_UP, Event.mouseButton.x, Event.mouseButton.y);
+				else
+					MousePressEvent(MOUSE_BUTTON_WHEEL_DOWN, Event.mouseButton.x, Event.mouseButton.y);
+				break;
+			}
+		}
+		m_app.setActive();
+		Render(m_lastFrameTime);
+		m_app.display();
 
 		m_lastFrameTime = clock.getElapsedTime().asSeconds();
-    }
+	}
 
-    UnloadResource();
-    DeInit();
+	UnloadResource();
+	DeInit();
 
-    return true;
+	return true;
 }
 
 bool OpenglContext::Stop()
 {
-    m_app.close();
-    return true;
+	m_app.close();
+	return true;
 }
 
 void OpenglContext::CenterMouse()
@@ -110,36 +109,36 @@ int OpenglContext::Height() const
 
 void OpenglContext::SetMaxFps(int maxFps)
 {
-    m_maxFps = maxFps;
+	m_maxFps = maxFps;
 	m_app.setFramerateLimit(maxFps);
 }
 
 int OpenglContext::GetMaxFps() const
 {
-    return m_maxFps;
+	return m_maxFps;
 }
 
 void OpenglContext::SetFullscreen(bool fullscreen)
 {
-    if(m_fullscreen == fullscreen)
-        return;
+	if(m_fullscreen == fullscreen)
+		return;
 
-    m_fullscreen = !m_fullscreen;
+	m_fullscreen = !m_fullscreen;
 
-    DeInit();
-    InitWindow(Width(), Height());
-    Init();
+	DeInit();
+	InitWindow(Width(), Height());
+	Init();
 }
 
 bool OpenglContext::IsFullscreen() const
 {
-    return m_fullscreen;
+	return m_fullscreen;
 }
 
 void OpenglContext::MakeRelativeToCenter(int& x, int& y) const
 {
-    x = x - (Width() / 2);
-    y = y - (Height() / 2);
+	x = x - (Width() / 2);
+	y = y - (Height() / 2);
 }
 
 void OpenglContext::MakeRelativeToMouse(int& x, int& y) const
@@ -169,15 +168,15 @@ void OpenglContext::InitWindow(int width, int height)
 
 OpenglContext::MOUSE_BUTTON OpenglContext::ConvertMouseButton(sf::Mouse::Button button) const
 {
-    switch(button)
-    {
-    case sf::Mouse::Left:
-        return MOUSE_BUTTON_LEFT;
-    case sf::Mouse::Middle:
-        return MOUSE_BUTTON_MIDDLE;
-    case sf::Mouse::Right:
-        return MOUSE_BUTTON_RIGHT;
-    default:
-        return MOUSE_BUTTON_NONE;
-    }
+	switch(button)
+	{
+	case sf::Mouse::Left:
+		return MOUSE_BUTTON_LEFT;
+	case sf::Mouse::Middle:
+		return MOUSE_BUTTON_MIDDLE;
+	case sf::Mouse::Right:
+		return MOUSE_BUTTON_RIGHT;
+	default:
+		return MOUSE_BUTTON_NONE;
+	}
 }

@@ -15,50 +15,14 @@ Projectile::~Projectile()
 
 }
 
-void Projectile::TestRotation()
-{
-	if (!m_shot)
-		return;
-	Quaternion l;
-	l.SetRotation(0.01, Vector3f(0, 1, 0));
-	BAQuat l2;
-	static int angle = 0;
-	angle = (angle + 1) % 360;
-	l2.FromAxis(angle * PI / 180.f, 1, 0, 0);
-	
-	m_rotation = l * m_rotation;
-	m_rotation.Normalize();
-
-	float mat[3][3];
-	l2.ToMatrix(mat);
-
-	Matrix4f rot = m_rotation.RotationMatrix();
-	m_speed = Vector3f(2,1,2);
-	/*m_speed.x = rot.Get11() * m_speed.x + rot.Get12() * m_speed.y + rot.Get13() * m_speed.z;
-	m_speed.y = rot.Get21() * m_speed.x + rot.Get22() * m_speed.y + rot.Get23() * m_speed.z;
-	m_speed.z = rot.Get31() * m_speed.x + rot.Get32() * m_speed.y + rot.Get33() * m_speed.z;*/
-
-	m_speed.x = mat[0][0] * m_speed.x + mat[0][1] * m_speed.y + mat[0][2] * m_speed.z;
-	m_speed.y = mat[1][0] * m_speed.x + mat[1][1] * m_speed.y + mat[1][2] * m_speed.z;
-	m_speed.z = mat[2][0] * m_speed.x + mat[2][1] * m_speed.y + mat[2][2] * m_speed.z;
-
-	m_pos = m_speed;
-	std::cout << "Quat1" << std::endl;
-	//std::cout << rot.Get11() << ", " << rot.Get12() << ", " << rot.Get13() << std::endl;
-	//std::cout << rot.Get21() << ", " << rot.Get22() << ", " << rot.Get23() << std::endl;
-	//std::cout << rot.Get31() << ", " << rot.Get32() << ", " << rot.Get33() << std::endl;
-	m_rotation.Afficher();
-	std::cout << "Quat2" << std::endl;
-	//std::cout << mat[0][0] << ", " << mat[0][1] << ", " << mat[0][2] << std::endl;
-	//std::cout << mat[1][0] << ", " << mat[1][1] << ", " << mat[1][2] << std::endl;
-	//std::cout << mat[2][0] << ", " << mat[2][1] << ", " << mat[2][2] << std::endl;
-	m_rot2.PrintOn();
-}
-
 void Projectile::Move(float elapsedTime) 
 {
 	// Test si les conditions de fin du projectile sont vraies
-	if (m_timeToLive <= 0 || m_pos == m_destination || !m_shot)
+	if (m_timeToLive <= 0 || !m_shot)
+		return;
+
+	// Test si atteint la cible
+	if(abs(m_destination.x - m_pos.x) < 0.01 && abs(m_destination.y - m_pos.y) < 0.01 && abs(m_destination.z - m_pos.z) < 0.01)
 		return;
 
 	// Met a jour la valeur de la vitesse en 
@@ -70,35 +34,36 @@ void Projectile::Move(float elapsedTime)
 	// distance entre le projectile et sa destination
 	// chemin le plus court
 	Vector3f distance;
-	distance.x = abs(m_pos.x - m_destination.x);
-	distance.y = abs(m_pos.y - m_destination.y);
-	distance.z = abs(m_pos.z - m_destination.z);
+	distance.x = m_pos.x - m_destination.x;
+	distance.y = m_pos.y - m_destination.y;
+	distance.z = m_pos.z - m_destination.z;
 
-	// si le projectile ne se dirige pas directement vers sa destination
-	// (vecteur distance perpendiculaire a vitesse)
-	if (m_speed.Cross(distance) != Vector3f(0,0,0))
-	{
-		// calculer l'angle entre les 2 vecteurs
-		float angleA = std::acosf(distance.Dot(m_speed) / (distance.Lenght() * m_speed.Lenght()));
-		Vector3f axis = distance.Cross(m_speed);
-		axis.Normalize();
-		// rotation autour de laxe
-		Quaternion q;
-		Quaternion l;
-		//l.SetRotation((angleA * elapsedTime < 0.02f) ? angleA * elapsedTime : 0.02f, axis);
-		l.SetRotation(-0.02f, axis);
-		q = l * q;
-		Matrix4f& rot = q.RotationMatrix();
+	// calculer l'angle entre les 2 vecteurs
+	// fix imprecision float
+	float n = distance.Dot(m_speed) / (distance.Lenght() * m_speed.Lenght());
+	if (n > 1)
+		n = 1;
+	else if (n < -1)
+		n = -1;
+	float angleA = acos(n);
+	Vector3f axis = distance.Cross(m_speed);
+	axis.Normalise();
+	//axis.Afficher();
+	// rotation autour de laxe
+	float rotation;
+	if (abs(angleA) >= 0.02)
+		rotation = (angleA > 0) ? -0.02f : 0.02f;
+	else
+		rotation = angleA;
+	Quaternion q;
+	q.FromAxis(rotation, axis);
+	q.Normalise();
 
-		// matrice de rotation * speed
-		m_speed.x = rot.Get11() * m_speed.x + rot.Get12() * m_speed.y + rot.Get13() * m_speed.z;
-		m_speed.y = rot.Get21() * m_speed.x + rot.Get22() * m_speed.y + rot.Get23() * m_speed.z;
-		m_speed.z = rot.Get31() * m_speed.x + rot.Get32() * m_speed.y + rot.Get33() * m_speed.z;
-	}
+	m_speed = q * m_speed;
 
-	m_speed.Afficher();
 	// calcul la nouvelle position
 	m_pos += m_speed * elapsedTime;
+	m_pos.Afficher();
 }
 
 void Projectile::Shoot() 

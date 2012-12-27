@@ -13,7 +13,6 @@ public:
 	void Init();
 	void Move(float elapsedTime);
 	void Render() const;
-	void TestRotation();
 private:
 	Model m_model;
 };

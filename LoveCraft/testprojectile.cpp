@@ -22,12 +22,6 @@ void TestProjectile::Move( float elapsedTime )
 	m_model.SetPosition(GetPosition());
 }
 
-void TestProjectile::TestRotation()
-{
-	Projectile::TestRotation();
-	m_model.SetPosition(GetPosition());
-}
-
 void TestProjectile::Render() const {
 	m_model.Render(false);
 }

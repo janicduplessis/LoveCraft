@@ -1,6 +1,8 @@
 #ifndef	QUATERNION_H__
 #define QUATERNION_H__
 
+#define TOLERANCE 0.00001f
+
 #include "matrix4.h"
 #include "vector3.h"
 
@@ -32,15 +34,21 @@ public:
 	 */
 	Quaternion operator*(const Quaternion& q) const;
 
+	// Multiplying a quaternion q with a vector v applies the q-rotation to v
+	Vector3f Quaternion::operator* (const Vector3f &vec) const;
+
 	/**
 	 * Normalise le quaternion
 	 */
-	void Normalize();
+	void Normalise();
 
 	/**
 	 * Doit etre presque egal a 1 sinon
 	 * le quaternion doit etre normalisé
 	 */
+
+	Quaternion GetConjugate() const;
+
 	float Magnitude();
 
 	/**
@@ -53,7 +61,7 @@ public:
 	/**
 	 * Donne une valeur d'angle de rotation sur un axe
 	 */
-	void SetRotation(float angle, Vector3f axis);
+	void FromAxis(float angle, const Vector3f& axis);
 
 	void Afficher() const;
 

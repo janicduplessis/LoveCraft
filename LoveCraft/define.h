@@ -44,6 +44,8 @@ typedef long long int64;
 #define SPELL_ICON_SIZE				64
 // Longueur de l'espace entre chaque images de sorts
 #define SPELL_ICON_PADDING			5
+// Épaisseur du contour des barres
+#define PROGRESS_BAR_OUTLINE		5
 
 // Valeurs quelconques
 #define PII							3.141592654f
@@ -75,15 +77,21 @@ typedef long long int64;
 // Accélération en Y représentant la gravité
 #define GRAVITY							9.81f
 
+// Vie (v/s)
+// Régénération passive de la vie
+#define HEALTH_PASSIVE_REGEN		0.01f
+// Multiplicateur de perte de vie en fonction de la vitesse lors d'un saut trop haut
+#define HEALTH_GRAVITY_LOST			0.5f
+
 // Energie (e/s)
 // Minimum d'énergie
 #define ENERGY_MINIMUM				0
 // Maximum d'énergie
 #define ENERGY_MAXIMUM				100
 // Vitesse de régénération de l'énergie
-#define ENERGY_REGEN				2
+#define ENERGY_REGEN				0.5f
 // Vitesse de dépense de l'énergie
-#define ENERGY_SPENDING				4
+#define ENERGY_SPENDING				1.0f
 
 // Valeurs des options
 #define MOUSE_SENSIBILITY			0.075f

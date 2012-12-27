@@ -2,6 +2,7 @@
 #include "openglcontext.h"
 #include "son.h"
 #include "info.h"
+#include "engine.h"
 #include <cmath>
 #include <iostream>
 #include <SFML/Network.hpp>
@@ -36,7 +37,7 @@ void Player::TurnTopBottom ( float value )
 		m_rot.x = newRotation;
 }
 
-void Player::Move(bool ghost, float elapsedTime )
+void Player::Move(bool ghost, float &health, float &energy, float elapsedTime )
 {
 
 #pragma region Raccourcis des touches
@@ -72,6 +73,9 @@ void Player::Move(bool ghost, float elapsedTime )
 		{
 			if (m_speed.y != 0)
 				Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
+			//Perte de vie quand on tombe de trop haut
+			if (m_speed.y > 8)
+				health -= (int)(m_speed.y * HEALTH_GRAVITY_LOST);
 			m_speed.y = 0;
 		}
 	}
@@ -153,7 +157,7 @@ void Player::Move(bool ghost, float elapsedTime )
 	//Assignation de base de la vitesse maximale
 	float speedMaxZ = MOUVEMENT_SPEED_MAX;
 	//vérification si le joueur est en mode course
-	if (shift && w)
+	if (shift && w && energy > 0)
 		speedMaxZ *= MOUVEMENT_SPEED_MAX_RUN_M;
 	else if (s)
 		//Est-ce qu'il recule
@@ -270,6 +274,10 @@ void Player::Move(bool ghost, float elapsedTime )
 
 #pragma endregion
 
+	if (shift && m_speed.z > 1)
+		energy -= ENERGY_SPENDING;
+	else energy += ENERGY_REGEN;
+	health += HEALTH_PASSIVE_REGEN;
 #pragma endregion
 
 	// =====================================================

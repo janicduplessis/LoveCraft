@@ -190,6 +190,13 @@ void Engine::LoadResource()
 	LoadTexture(m_textureFont, TEXTURE_PATH "font.bmp");
 	LoadTexture(m_textureCthulhu, TEXTURE_PATH "bewareofcthulhu.png");
 	LoadTexture(m_textureGhost, TEXTURE_PATH "boo.png");
+	LoadTexture(m_textureNoir, TEXTURE_PATH "noir.jpg");
+	LoadTexture(m_textureHealth, TEXTURE_PATH "health.png");
+	LoadTexture(m_textureEnergy, TEXTURE_PATH "energy.png");
+
+	//Initialisation des éléments de l'interface
+	m_healthBar = ProgressBar(Vector2i(400, 20), Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 35));
+	m_energyBar = ProgressBar(Vector2i(400, 20), Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 10));
 
 	// Load et compile les shaders
 	std::cout << " Loading and compiling shaders ..." << std::endl;
@@ -219,11 +226,13 @@ void Engine::Render(float elapsedTime)
 	static float gameTime = elapsedTime;
 
 	gameTime += elapsedTime;
-
+	float healthValue = m_healthBar.Value();
+	float energyValue = m_energyBar.Value();
 	// calcul la position du joueur et de la camera
-	m_player.Move(m_ghostMode, elapsedTime);
+	m_player.Move(m_ghostMode, healthValue, energyValue, elapsedTime);
 	m_camera.SetPosition(m_player.Position());
-
+	m_healthBar.SetValue(healthValue);
+	m_energyBar.SetValue(energyValue);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Transformations initiales
@@ -337,7 +346,7 @@ void Engine::Render2D(float elapsedTime)
 	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 35, ss.str());
 	ss.str("");
 	//Print de l'Accélération
-	ss << "Accélération : " << m_player.Acceleration();
+	ss << "Acceleration : " << m_player.Acceleration();
 	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 50, ss.str());
 	ss.str("");
 	//Print du nombre de FPS
@@ -387,6 +396,23 @@ void Engine::Render2D(float elapsedTime)
 		m_textureInterface);
 
 	RenderSpells();
+	//m_healthBar.Render(Vector2i(20, Height() / 2));
+	//m_energyBar.Render(Vector2i(20, Height() / 2 - 30));
+
+	//============================================
+	RenderSquare(Vector2i(m_healthBar.Position().x - PROGRESS_BAR_OUTLINE, m_healthBar.Position().y - PROGRESS_BAR_OUTLINE),
+		Vector2i(m_healthBar.Size().x + PROGRESS_BAR_OUTLINE * 2, m_healthBar.Size().y + PROGRESS_BAR_OUTLINE * 2), 
+		m_textureNoir);
+	RenderSquare(m_healthBar.Position(), 
+		Vector2i(m_healthBar.ValueWidth(), m_healthBar.Size().y), 
+		m_textureHealth);
+	RenderSquare(Vector2i(m_energyBar.Position().x - PROGRESS_BAR_OUTLINE, m_energyBar.Position().y - PROGRESS_BAR_OUTLINE),
+		Vector2i(m_energyBar.Size().x + PROGRESS_BAR_OUTLINE * 2, m_energyBar.Size().y + PROGRESS_BAR_OUTLINE * 2), 
+		m_textureNoir);
+	RenderSquare(m_energyBar.Position(), 
+		Vector2i(m_energyBar.ValueWidth(), m_energyBar.Size().y), 
+		m_textureEnergy);
+	//============================================
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);

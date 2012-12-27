@@ -14,6 +14,7 @@
 #include "info.h"
 #include "texturearray.h"
 #include "controls.h"
+#include "ProgressBar.h"
 
 class Engine : public OpenglContext
 {
@@ -151,13 +152,15 @@ private:
 	TextureArray* m_textureArray;
 
 	Texture* m_textureSpell;
-	Texture m_ttt;
 	Texture m_textureFloor;
 	Texture m_textureInterface;
 	Texture m_textureFont;
 	Texture m_textureCrosshair;
 	Texture m_textureCthulhu;
 	Texture m_textureGhost;
+	Texture m_textureHealth;
+	Texture m_textureEnergy;
+	Texture m_textureNoir;
 
 	Player m_player;
 	Camera m_camera;
@@ -168,6 +171,9 @@ private:
 	Array2d<Chunk>* m_chunks;
 
 	TestProjectile m_projectile;
+
+	ProgressBar m_healthBar;
+	ProgressBar m_energyBar;
 
 	bool m_ghostMode;
 	bool m_rightClick;

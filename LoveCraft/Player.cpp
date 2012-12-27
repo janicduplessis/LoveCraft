@@ -45,7 +45,7 @@ void Player::Move(bool ghost, float elapsedTime )
 	bool s = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
 	bool a = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
 	bool d = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
-	bool alt = sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt);
+	bool c = sf::Keyboard::isKeyPressed(sf::Keyboard::C);
 	bool shift = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
 	bool ctrl = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl);
 	bool space = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
@@ -94,7 +94,7 @@ void Player::Move(bool ghost, float elapsedTime )
 
 #pragma region Position en fonction du crouch
 
-	if (ctrl)	// Ctrl
+	if (c)	// Ctrl
 	{
 		if (!ghost)
 		{
@@ -110,15 +110,15 @@ void Player::Move(bool ghost, float elapsedTime )
 #pragma region Mouvement en Z
 
 #pragma region Calculs de la nouvelle position en fonction de la vitesse en Z
-	if (m_speed.z > 0)
+	if (m_speed.z != 0)
 	{
 		Vector3f newPos;
 		float distance = (m_speed.z * elapsedTime) + (m_accel.z * elapsedTime * elapsedTime / 2.0f);
 		float xRotRad = (m_rot.x / 180 * PII);
 		float yRotRad = (m_rot.y / 180 * PII);
-		newPos.x = m_pos.x + float(sin(yRotRad)) * distance * (s ? -1 : 1);
-		newPos.z = m_pos.z - float(cos(yRotRad)) * distance * (s ? -1 : 1);
-		newPos.y = m_pos.y - ((ghost) ? float(sin(xRotRad)) * distance * (s ? -1 : 1) : 0);
+		newPos.x = m_pos.x + float(sin(yRotRad)) * distance;
+		newPos.z = m_pos.z - float(cos(yRotRad)) * distance;
+		newPos.y = m_pos.y - ((ghost) ? float(sin(xRotRad)) * distance : 0);
 
 		// Si pas de collision affecter la nouvelle position
 		if (!CheckCollision(newPos))
@@ -126,7 +126,7 @@ void Player::Move(bool ghost, float elapsedTime )
 			m_lastPos = m_pos;
 			m_pos = newPos;
 			//Joue le bruit de pas s'il y a eu un mouvement et qu'il n'est pas au ralenti
-			if (!ghost && m_speed.y == 0 && m_speed.x != 0 && m_speed.z != 0 && !alt)
+			if (!ghost && m_speed.y == 0 && m_speed.x != 0 && m_speed.z != 0 && !ctrl)
 				Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
 		}
 	}
@@ -134,16 +134,16 @@ void Player::Move(bool ghost, float elapsedTime )
 
 #pragma region Calculs de la friction
 	//Le joueur est-il en mouvement?
-	if (m_speed.z > 0)
+	if (m_speed.z != 0)
 	{
 		//Vérification si le joueur bouge par lui-même (touches)
 		if (!w && !s)
 		{
 			//Si ce n'est pas le cas on diminue progressivement la vitesse du joueur
 			//Vérification que la vitesse ne tombe pas négative
-			if (m_speed.z - MOUVEMENT_SPEED_DECAY < 0)
+			if (fabs(m_speed.z) - MOUVEMENT_SPEED_DECAY < 0)
 				m_speed.z = 0;
-			else m_speed.z -= MOUVEMENT_SPEED_DECAY;
+			else m_speed.z -= m_speed.z > 0 ? MOUVEMENT_SPEED_DECAY : -MOUVEMENT_SPEED_DECAY;
 
 		}
 	}
@@ -159,7 +159,7 @@ void Player::Move(bool ghost, float elapsedTime )
 		//Est-ce qu'il recule
 		speedMaxZ *= MOUVEMENT_SPEED_BACKWARD_M;
 	//Vérification s'il est au ralenti
-	if (alt)
+	if (ctrl)
 		speedMaxZ *= MOUVEMENT_SPEED_SLOW_M;
 	//Vérification s'il appuie sur plus d'une touche
 	if (w && d || w && a || s && a || s && d)
@@ -169,7 +169,13 @@ void Player::Move(bool ghost, float elapsedTime )
 #pragma region Calculs de l acceleration
 	//Tant qu'il est en mouvement et qu'il n'a pas atteint la vitesse maximum il
 	//aura une accélération
-	m_accel.z = ((w || s) && m_speed.z < speedMaxZ) ? MOUVEMENT_ACCELERATION : 0;
+	m_accel.z = 0;
+	//Accélération positive
+	if (w)
+		m_accel.z = m_speed.z < speedMaxZ ? MOUVEMENT_ACCELERATION : 0;
+	//Accélération négative
+	else if (s)
+		m_accel.z = m_speed.z < speedMaxZ ? -MOUVEMENT_ACCELERATION : 0;
 	//Si le joueur est en mode course et au sol
 	if (shift && m_speed.y == 0)
 		m_accel.z *= MOUVEMENT_ACCELERATION_RUN_M;
@@ -180,8 +186,8 @@ void Player::Move(bool ghost, float elapsedTime )
 
 #pragma region Calculs de la vitesse
 	//Vérification que la nouvelle vitesse ne dépasse pas le maximum imposé
-	if (m_speed.z + m_accel.z * elapsedTime > speedMaxZ)
-		m_speed.z = speedMaxZ;
+	if (fabs(m_speed.z) + fabs(m_accel.z) * elapsedTime > speedMaxZ)
+		m_speed.z = m_speed.z < 0 ? -speedMaxZ : speedMaxZ;
 	//Assignation de la nouvelle vitesse en fonction de l'accélération
 	else m_speed.z += m_accel.z * elapsedTime;
 #pragma endregion
@@ -207,7 +213,7 @@ void Player::Move(bool ghost, float elapsedTime )
 			m_lastPos = m_pos;	//pas utiliser encore
 			m_pos = newPos;
 			//Joue le bruit de pas s'il y a eu un mouvement et qu'il n'est pas au ralenti
-			if (!ghost && m_speed.y == 0 && m_speed.x != 0 && m_speed.z != 0 && !alt)
+			if (!ghost && m_speed.y == 0 && m_speed.x != 0 && m_speed.z != 0 && !ctrl)
 				Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
 		}
 	}
@@ -234,7 +240,7 @@ void Player::Move(bool ghost, float elapsedTime )
 	//Assignation de base de la vitesse maximale
 	float speedMaxX = MOUVEMENT_SPEED_MAX;
 	//vérification si le joueur est en mode ralenti
-	if (alt && (a || d))
+	if (ctrl && (a || d))
 		speedMaxX *= MOUVEMENT_SPEED_SLOW_M;
 	//Vérification s'il appuie sur plus d'une touche
 	if (w && d || w && a || s && a || s && d)

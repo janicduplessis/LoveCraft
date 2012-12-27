@@ -30,27 +30,50 @@ typedef long long int64;
 #define VIEW_DISTANCE				64
 
 // Valeurs de l'interface
+// Hauteur du cadre inférieur de l'interface
 #define INTERFACE_BOTTOM_HEIGHT		64
+// Largeur du cadre de gauche de l'interface
 #define INTERFACE_SIDE_LEFT_WIDTH	64
+// Largeur du cadre de droite de l'interface
 #define INTERFACE_SIDE_RIGHT_WIDTH	32
+// Hauteur du cadre supérieur de l'interface
 #define INTERFACE_TOP_HEIGHT		32
+// Nombre de sort disponible dans la barre de sorts (max 10)
 #define SPELL_BAR_SPELL_NUMBER		10
+// Taille (hxl) des images des sorts dans la barre de sorts
+#define SPELL_ICON_SIZE				64
+// Longueur de l'espace entre chaque images de sorts
+#define SPELL_ICON_PADDING			5
 
 // Valeurs quelconques
 #define PII							3.141592654f
 
 // Valeurs du jeu
 // Valeurs de vitesse (m/s)
+// Vitesse initiale de déplacement (obselete)
 #define MOUVEMENT_SPEED_INI			4.f
+// Vitesse maximale en mode déplacement normal
 #define MOUVEMENT_SPEED_MAX			8.f
-#define MOUVEMENT_SPEED_MAX_RUN		12.f
-#define MOUVEMENT_SPEED_BACKWARD	2.f
+// Multiplicateur de la vitesse maximale en mode déplacement rapide
+#define MOUVEMENT_SPEED_MAX_RUN_M	1.5f
+// Multiplicateur de la vitesse maximale en mode déplacement lent
+#define MOUVEMENT_SPEED_SLOW_M		0.6f
+// Multiplicateur de la vitesse maximale en mode déplacement arrière
+#define MOUVEMENT_SPEED_BACKWARD_M	0.4f
+// Perte de vitesse à chaque tour de boucle. Modifier cette valeur changera la vitesse à laquelle le joueur ralenti
+#define MOUVEMENT_SPEED_DECAY		0.5f
+// Vitesse initiale acquise en santant
 #define MOUVEMENT_SPEED_JUMP		12.f
 
 // Valeurs d'acceleration (m/s^2)
-#define MOUVEMENT_ACCELERATION		12.f
-#define MOUVEMENT_ACCELERATION_RUN	24.f
-#define GRAVITY						9.81f
+// Accélération de base
+#define MOUVEMENT_ACCELERATION			12.f
+// Multiplicateur de l'accélération lorsqu'on est dans les airs
+#define MOVUEMENT_ACCELERATION_AIR_M	0.3f
+// Multiplicateur de l'accélération lorsque le joueur coure
+#define MOUVEMENT_ACCELERATION_RUN_M	1.5f
+// Accélération en Y représentant la gravité
+#define GRAVITY							9.81f
 
 // Energie (e/s)
 #define ENERGY_REGEN				2

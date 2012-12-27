@@ -108,12 +108,37 @@ void Engine::Init()
 	chunk.SetBloc(6,3,6, BTYPE_DIRT);
 	chunk.SetBloc(6,4,6, BTYPE_DIRT);
 	chunk.SetBloc(5,4,5, BTYPE_DIRT);
+	//Blocs en escalier
+	for (int k = 1; k <= 3; k++)
+	{
+		for (int j = 1; j < CHUNK_SIZE_Z-1; j++)
+		{
+			for (int i = 1; i < CHUNK_SIZE_X-1; i++)
+			{
+				if (i <= j)
+					chunk.SetBloc(k,i,j, BTYPE_BRICK);
+			}
+		}
+	}
+	//Blocs dans le trou de sable
+	for (int i = 1; i <= 8; i++)
+	{
+		for (int j = 1; j <= 6; j++)
+		{
+			chunk.SetBloc(i,0,j, BTYPE_SAND);
+			chunk.SetBloc(i,1,j, BTYPE_AIR);
 
-	chunk.SetBloc(5,0,5, BTYPE_SAND);
-	chunk.SetBloc(6,0,5, BTYPE_SAND);
-	chunk.SetBloc(7,0,5, BTYPE_SAND);
-	chunk.SetBloc(8,0,5, BTYPE_SAND);
-	chunk.SetBloc(9,0,5, BTYPE_SAND);
+		}
+	}
+
+	//Platoforme de gazon
+	for (int i = CHUNK_SIZE_X-1; i >= 2; i--)
+	{
+		for (int j = CHUNK_SIZE_Z-1; j >= 2; j--)
+		{
+			chunk.SetBloc(i,14,j, BTYPE_GRASS);
+		}
+	}
 
 	//Place les chunks
 	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
@@ -144,17 +169,7 @@ void Engine::LoadResource()
 	LoadBlocTexture(BTYPE_SAND, TEXTURE_PATH "sand.jpg");
 
 	m_textureArray->Generate();
-
-	//LoadTexture(m_textureSpell[0], TEXTURE_PATH "SpellBolt.png");
-	//LoadTexture(m_textureSpell[1], TEXTURE_PATH "SpellFire.png");
-	//LoadTexture(m_textureSpell[2], TEXTURE_PATH "SpellFreeze.png");
-	//LoadTexture(m_textureSpell[3], TEXTURE_PATH "SpellShock.png");
-	//LoadTexture(m_textureSpell[4], TEXTURE_PATH "SpellBolt.png");
-	//LoadTexture(m_textureSpell[5], TEXTURE_PATH "SpellBolt.png");
-	//LoadTexture(m_textureSpell[6], TEXTURE_PATH "SpellBolt.png");
-	//LoadTexture(m_textureSpell[7], TEXTURE_PATH "SpellBolt.png");
-	//LoadTexture(m_textureSpell[8], TEXTURE_PATH "SpellBolt.png");
-	//LoadTexture(m_textureSpell[9], TEXTURE_PATH "SpellBolt.png");
+	//Texture des spells
 	m_textureSpell[0].Load(TEXTURE_PATH "SpellBolt.gif");
 	m_textureSpell[1].Load(TEXTURE_PATH "SpellFire.png");
 	m_textureSpell[2].Load(TEXTURE_PATH "SpellFreeze.png");
@@ -165,7 +180,7 @@ void Engine::LoadResource()
 	m_textureSpell[7].Load(TEXTURE_PATH "SpellRain.gif");
 	m_textureSpell[8].Load(TEXTURE_PATH "SpellDefend.gif");
 	m_textureSpell[9].Load(TEXTURE_PATH "SpellShield.png");
-	
+
 
 	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
 	LoadTexture(m_textureInterface, TEXTURE_PATH "rock.jpg");
@@ -309,7 +324,7 @@ void Engine::Render2D(float elapsedTime)
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	// Bind de la texture pour le font
-	m_textureFont.Bind();
+	//m_textureFont.Bind();
 	std::ostringstream ss;
 	//Print de la position
 	ss << "Position : " << m_player.Position();
@@ -405,22 +420,23 @@ void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Textur
 
 void Engine::RenderSpells()
 {
-	short spellSize = 64;
-	short spellBarWidth = SPELL_BAR_SPELL_NUMBER * spellSize;
-	short spellBarPosX = Width() / 2 - spellBarWidth / 2;
-	short spellBarPosY = INTERFACE_BOTTOM_HEIGHT;
+	static short spellSize = SPELL_ICON_SIZE;
+	static short spellPadding = SPELL_ICON_PADDING;
+	static short spellBarWidth = SPELL_BAR_SPELL_NUMBER * (spellSize + spellPadding);
+	static short spellBarPosX = Width() / 2 - spellBarWidth / 2;
+	static short spellBarPosY = INTERFACE_BOTTOM_HEIGHT;
 	std::string nombre;
 
 	for (int i = 0; i < SPELL_BAR_SPELL_NUMBER; i++)
 	{
 		if (m_textureSpell[i].IsValid())
 		{
-			RenderSquare(Vector2i(spellBarPosX + i * spellSize, 0), Vector2i(spellSize, spellSize), m_textureSpell[i], false);
-			
+			RenderSquare(Vector2i(i == 0 ? spellBarPosX : (spellBarPosX + i * (spellSize + spellPadding)), 0), Vector2i(spellSize, spellSize), m_textureSpell[i], false);
+
 			std::ostringstream convertisseur;
 			convertisseur << (i + 1) % 10;
 			nombre = convertisseur.str();
-			PrintText(spellBarPosX + i * spellSize, spellSize, nombre);
+			PrintText(spellBarPosX + i * (spellSize + spellPadding), spellSize - 12, nombre);
 			nombre = "";
 		}
 	}
@@ -430,6 +446,7 @@ void Engine::RenderSpells()
 
 void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 {
+	m_textureFont.Bind();
 	glLoadIdentity();
 	glTranslated(x, y, 0);
 	for (unsigned int i = 0; i < t.length(); ++i)

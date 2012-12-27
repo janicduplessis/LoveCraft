@@ -47,6 +47,10 @@ typedef long long int64;
 // Épaisseur du contour des barres
 #define PROGRESS_BAR_OUTLINE		5
 
+// Valeurs en lien avec les particles
+// Nombre maximum de particles à la fois
+#define PARTICLE_COUNT				500
+
 // Valeurs quelconques
 #define PII							3.141592654f
 

@@ -8,8 +8,8 @@
 #include <SFML/Network.hpp>
 
 Player::Player(Vector3f position, Vector2f rotation)
-	:m_pos(position), m_rot(rotation), m_speed(Vector3f()), 
-	m_accel(Vector3f(MOUVEMENT_ACCELERATION, MOUVEMENT_ACCELERATION, MOUVEMENT_ACCELERATION))
+	:m_pos(position), m_rot(rotation), m_speed(Vector3f(0, 0, 0)), 
+	m_accel(Vector3f(0, 0, 0))
 {
 }
 

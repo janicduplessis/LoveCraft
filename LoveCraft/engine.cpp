@@ -79,8 +79,10 @@ void Engine::Init()
 
 	m_player.Init();
 	m_projectile.Init();
-	m_projectile.SetInitialSpeed(Vector3f(1,0,0));
-	m_projectile.SetPosition(Vector3f(0,0,0));
+	m_projectile.SetInitialSpeed(Vector3f(4,0,0));
+	m_projectile.SetCollisionRadius(Vector3f(2,2,2));
+	m_projectile.SetMaxRot(0.05);
+	m_projectile.SetPosition(Vector3f(10,0,0));
 
 	m_chunks = new Array2d<Chunk>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
 	Info::Get().SetChunkArray(m_chunks);
@@ -475,6 +477,7 @@ void Engine::KeyPressEvent(unsigned char key)
 		}
 		break;
 	case 27:
+		m_projectile.SetPosition(Vector3f(10,0,0));
 		m_projectile.Shoot();
 		sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
 		break;

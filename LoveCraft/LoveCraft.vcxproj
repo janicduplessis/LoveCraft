@@ -95,7 +95,6 @@
     <ClCompile Include="openglcontext.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="projectile.cpp" />
-    <ClCompile Include="QUAT.CPP" />
     <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="son.cpp" />
@@ -123,7 +122,6 @@
     <ClInclude Include="model.h" />
     <ClInclude Include="Nwork.h" />
     <ClInclude Include="projectile.h" />
-    <ClInclude Include="QUAT.H" />
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="son.h" />
     <ClInclude Include="testprojectile.h" />

@@ -1,6 +1,6 @@
 #include "testprojectile.h"
 
-TestProjectile::TestProjectile()
+TestProjectile::TestProjectile() : m_visible(false)
 {
 
 }
@@ -23,6 +23,18 @@ void TestProjectile::Move( float elapsedTime )
 }
 
 void TestProjectile::Render() const {
-	m_model.Render(false);
+	if (m_visible)
+		m_model.Render(false);
+}
+
+void TestProjectile::Shoot()
+{
+	m_visible = true;
+	Projectile::Shoot();
+}
+
+void TestProjectile::Hit()
+{
+	m_visible = false;
 }
 

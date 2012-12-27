@@ -23,6 +23,11 @@ public:
 	 * Lance le projectile
 	 */
 	virtual void Shoot();
+	
+	/**
+	 * Le projectile atteint sa destination
+	 */
+	virtual void Hit();
 
 	/**
 	 * Vitesse Initiale
@@ -65,17 +70,19 @@ public:
 	void SetHasMass(bool hasMass);
 	bool HasMass() const;
 
+	void SetMaxRot( float maxRot );
+	void SetCollisionRadius(const Vector3f& rad);
 private:
 	Vector3f m_speed;
 	Vector3f m_speedIni;
 	Vector3f m_pos;
 	Vector3f m_posIni;
 	Vector3f m_acceleration;
-
-	Quaternion m_rotation;
 	
 	Vector3f m_destination;
 	float m_timeToLive;
+	float m_maxRot;
+	Vector3f m_collisionRadius;
 
 	bool m_hasMass;
 	bool m_shot;

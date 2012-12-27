@@ -97,7 +97,7 @@ typedef long long int64;
 
 // Mana (m/s)
 // Régénération passive de la mana
-#define MANA_PASSIVE_REGEN			0.1f
+#define MANA_PASSIVE_REGEN			0.05f
 
 // Valeurs des options
 #define MOUSE_SENSIBILITY			0.075f

@@ -30,13 +30,13 @@ public:
 	virtual ~Engine();
 
 	/**
-	 * Retourne une reference en lecture seule vers l'engine
-	 */
+	* Retourne une reference en lecture seule vers l'engine
+	*/
 	virtual const Engine& Get() const;
 
 	/**
-	 * Retourne une reference vers l'engine
-	 */
+	* Retourne une reference vers l'engine
+	*/
 	virtual Engine& Get();
 
 	/**
@@ -59,28 +59,6 @@ public:
 	*						tour de boucle
 	*/
 	virtual void Render(float elapsedTime);
-
-	/**
-	* Render les elements 2D en premier plan
-	* 
-	* @param elapsedTime	Temps en millisecondes depuis le dernier
-	*						tour de boucle
-	*/
-	virtual void Render2D(float elapsedTime);
-
-	/**
-	* Render un element au niveau de l'interface
-	* avec les données spécifiées. La position doit debutee
-	* a partir du point en bas a droite de l'element
-	*
-	* @param position		Vector2<float> Position en X et Y de l'element
-	* @param size			Vector2<float> Taille de l'element (largeur, hauteur)
-	* @param texture		Texture qui doit être utiliser avec l'element
-	* 
-	*/
-	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat = true);
-
-	virtual void RenderSpells();
 
 	/**
 	* Affiche le texte donné à l'écran 
@@ -134,6 +112,26 @@ public:
 private:
 	bool LoadTexture(Texture& texture, const std::string& filename, bool stopOnError = true);
 	void LoadBlocTexture(BLOCK_TYPE type, std::string path);
+	/**
+	* Render les elements 2D en premier plan
+	* 
+	* @param elapsedTime	Temps en millisecondes depuis le dernier
+	*						tour de boucle
+	*/
+	virtual void Render2D(float elapsedTime);
+	/**
+	* Render un element au niveau de l'interface
+	* avec les données spécifiées. La position doit debutee
+	* a partir du point en bas a droite de l'element
+	*
+	* @param position		Vector2<float> Position en X et Y de l'element
+	* @param size			Vector2<float> Taille de l'element (largeur, hauteur)
+	* @param texture		Texture qui doit être utiliser avec l'element
+	* 
+	*/
+	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat = true);
+	virtual void RenderSpells();
+	void RenderProgressBar(const ProgressBar &bar, Texture &texture);
 private:
 	bool m_wireframe;
 	float m_angle;
@@ -165,7 +163,7 @@ private:
 
 	Player m_player;
 	Camera m_camera;
-	
+
 	Shader m_shaderModel;
 	Shader m_shaderCube;
 

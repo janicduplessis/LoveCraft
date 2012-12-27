@@ -20,24 +20,39 @@ void Projectile::TestRotation()
 	if (!m_shot)
 		return;
 	Quaternion l;
-	l.SetRotation(0.01, Vector3f(1, 0, 0));
+	l.SetRotation(0.01, Vector3f(0, 1, 0));
+	BAQuat l2;
+	static int angle = 0;
+	angle = (angle + 1) % 360;
+	l2.FromAxis(angle * PI / 180.f, 1, 0, 0);
 	
 	m_rotation = l * m_rotation;
 	m_rotation.Normalize();
-	//m_rotation.Afficher();
+
+	float mat[3][3];
+	l2.ToMatrix(mat);
 
 	Matrix4f rot = m_rotation.RotationMatrix();
-	m_speed = Vector3f(1,0,0);
-	m_speed.x = rot.Get11() * m_speed.x + rot.Get12() * m_speed.y + rot.Get13() * m_speed.z;
+	m_speed = Vector3f(2,1,2);
+	/*m_speed.x = rot.Get11() * m_speed.x + rot.Get12() * m_speed.y + rot.Get13() * m_speed.z;
 	m_speed.y = rot.Get21() * m_speed.x + rot.Get22() * m_speed.y + rot.Get23() * m_speed.z;
-	m_speed.z = rot.Get31() * m_speed.x + rot.Get32() * m_speed.y + rot.Get33() * m_speed.z;
-	m_pos = m_pos + m_speed;
-	/*std::cout << rot.Get11() << std::endl;
-	std::cout << rot.Get21() << std::endl;
-	std::cout << rot.Get31() << std::endl;
-	std::cout << rot.Get41() << std::endl;*/
-	std::cout << m_speed << std::endl;
+	m_speed.z = rot.Get31() * m_speed.x + rot.Get32() * m_speed.y + rot.Get33() * m_speed.z;*/
+
+	m_speed.x = mat[0][0] * m_speed.x + mat[0][1] * m_speed.y + mat[0][2] * m_speed.z;
+	m_speed.y = mat[1][0] * m_speed.x + mat[1][1] * m_speed.y + mat[1][2] * m_speed.z;
+	m_speed.z = mat[2][0] * m_speed.x + mat[2][1] * m_speed.y + mat[2][2] * m_speed.z;
+
+	m_pos = m_speed;
+	std::cout << "Quat1" << std::endl;
+	//std::cout << rot.Get11() << ", " << rot.Get12() << ", " << rot.Get13() << std::endl;
+	//std::cout << rot.Get21() << ", " << rot.Get22() << ", " << rot.Get23() << std::endl;
+	//std::cout << rot.Get31() << ", " << rot.Get32() << ", " << rot.Get33() << std::endl;
 	m_rotation.Afficher();
+	std::cout << "Quat2" << std::endl;
+	//std::cout << mat[0][0] << ", " << mat[0][1] << ", " << mat[0][2] << std::endl;
+	//std::cout << mat[1][0] << ", " << mat[1][1] << ", " << mat[1][2] << std::endl;
+	//std::cout << mat[2][0] << ", " << mat[2][1] << ", " << mat[2][2] << std::endl;
+	m_rot2.PrintOn();
 }
 
 void Projectile::Move(float elapsedTime) 

@@ -8,12 +8,12 @@
 #include "camera.h"
 #include "shader.h"
 #include "chunk.h"
-#include "arraybool.h"
 #include "array2d.h"
 #include "testprojectile.h"
 #include "vector2.h"
 #include "info.h"
 #include "texturearray.h"
+#include "controls.h"
 
 class Engine : public OpenglContext
 {
@@ -157,7 +157,7 @@ private:
 
 	Player m_player;
 	Camera m_camera;
-	Array<bool> m_controls;
+	Controls m_controls;
 	
 	Shader m_shaderModel;
 	Shader m_shaderCube;

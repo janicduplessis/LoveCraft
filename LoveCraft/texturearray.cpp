@@ -13,10 +13,10 @@ void TextureArray::Use()
 	glBindTexture(GL_TEXTURE_2D_ARRAY, m_texture);
 }
 
-void TextureArray::Init()
+void TextureArray::Generate()
 {
-	int slotSize = m_textureSize * m_textureSize * 4;
-	int size = m_textureList.size() * slotSize; // height * width * 4 ( RGBA)
+	int slotSize = m_textureSize * m_textureSize * 4; // size de une texture (height * width * 4 ( RGBA))
+	int size = m_textureList.size() * slotSize;  // size total
 	m_data = new unsigned char[size];
 
 	memset(m_data, 0x11, size); // setter a blanc...
@@ -30,12 +30,14 @@ void TextureArray::Init()
 		alreadyInitialized = true;
 	}
 
+	// Pour chaque texture de la liste...
 	int count = 0;
 	for(TextureList::iterator it = m_textureList.begin(); it != m_textureList.end(); ++it)
 	{
 		ILuint texid = it->second.texId;
 		if(texid == (ILuint)-1)
 		{
+			// Load l'image
 			std::cout << "Loading " << it->first << " (id=" << it->second.texIdx << ")..." << std::endl;
 			ilGenImages(1, &texid);
 			ilBindImage(texid);
@@ -49,18 +51,22 @@ void TextureArray::Init()
 			if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
 				return;
 
+			// Resize avec le texture size
 			iluScale(m_textureSize, m_textureSize, 1);
 
 			it->second.texId = texid;
 
+			// Ajoute le data de l'image
 			memcpy(m_data + (count * slotSize), ilGetData(), slotSize);
 
-			count++;
-
+			// Delete l'image
 			ilDeleteImages(1, &texid);
+
+			count++;
 		}
 	}
 
+	// Passe le data à la carte graphique et génère les mipmaps
 	int sliceCount = m_textureList.size();
 
 	glGenTextures(1, &m_texture);
@@ -73,8 +79,10 @@ void TextureArray::Init()
 	glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
 
 	glTexImage3D(GL_TEXTURE_2D_ARRAY,0,GL_RGBA,m_textureSize,m_textureSize,sliceCount,0,GL_RGBA,GL_UNSIGNED_BYTE,m_data);
-
 	CHECK_GL_ERROR();
+
+	// Delete le data de la mémoire
+	delete m_data;
 }
 
 TextureArray::TextureIndex TextureArray::AddTexture(const std::string& fname)
@@ -92,5 +100,4 @@ TextureArray::TextureIndex TextureArray::AddTexture(const std::string& fname)
 
 TextureArray::~TextureArray()
 {
-	delete [] m_data;
 }

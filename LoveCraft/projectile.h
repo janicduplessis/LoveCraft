@@ -3,6 +3,7 @@
 
 #include "vector3.h"
 #include "quaternion.h"
+#include "QUAT.H"
 
 /**
  * @brief Classe de projectile aka exam de physique
@@ -73,6 +74,7 @@ private:
 	Vector3f m_acceleration;
 
 	Quaternion m_rotation;
+	BAQuat m_rot2;
 	
 	Vector3f m_destination;
 	float m_timeToLive;

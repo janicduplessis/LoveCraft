@@ -35,13 +35,12 @@ void Player::TurnTopBottom ( float value )
 		m_rot.x = newRotation;
 }
 
-void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
+void Player::Move(const Controls& controls, bool ghost, float elapsedTime )
 {
 	//Calcul de la position en fonction de la gravité
 	if (!ghost)
 	{
 		float distance = (m_speed.y * elapsedTime) + (GRAVITY * elapsedTime * elapsedTime / 2.0f);
-		std::cout << distance << std::endl;
 		if (!CheckCollision(Vector3f(m_pos.x, m_pos.y - distance, m_pos.z)))
 		{
 			m_pos.y -= distance;
@@ -54,37 +53,31 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 			m_speed.y = 0;
 		}
 	}
-	if (controls.Get(22))	// W -z
+	if (controls.W())	// W -z
 	{
 		if (!ghost && m_speed.y == 0)
 			Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
 
 		// Détermine la vitesse max et l'acceleration en fontion de si run est activé
-		float xRotRad = (m_rot.x / 180 * PII);
-		float yRotRad = (m_rot.y / 180 * PII);
-		float speedMaxX = sin(yRotRad) * controls.Get(38) ? MOUVEMENT_SPEED_MAX_RUN : MOUVEMENT_SPEED_MAX;
-		float speedMaxY = cos(yRotRad) * controls.Get(38) ? MOUVEMENT_SPEED_MAX_RUN : MOUVEMENT_SPEED_MAX;
+		float speedMax = controls.Get(38) ? MOUVEMENT_SPEED_MAX_RUN : MOUVEMENT_SPEED_MAX;
 		float accel = controls.Get(38) ? MOUVEMENT_ACCELERATION_RUN : MOUVEMENT_ACCELERATION;
 
-		m_speed.x += sin(yRotRad) * m_accel.x * elapsedTime;
-		m_speed.z -= cos(yRotRad) * m_accel.z * elapsedTime;
-
 		// Applique la vitesse initiale
-		//if (m_speed.z == 0)
-		//	m_speed.z += MOUVEMENT_SPEED_INI;
+		if (m_speed.z == 0)
+			m_speed.z += MOUVEMENT_SPEED_INI;
 
 		// Regarde si la vitesse dépasse la vitesse max
-		if (m_speed.x <= speedMaxX) {
-			m_accel.x = 0;
-			m_speed.x = speedMaxX;
-		} else {
-			m_accel.x = accel;
+		if (m_speed.z >= speedMax) {
+			m_speed.z = speedMax;
+			m_accel.z = 0;
 		}
+		else m_accel.z = accel;
 
 		// Calcul la nouvelle position et la nouvelle vitesse
 		Vector3f newPos;
 		float distance = (m_speed.z * elapsedTime) + (m_accel.z * elapsedTime * elapsedTime / 2.0f);
-
+		float xRotRad = (m_rot.x / 180 * PII);
+		float yRotRad = (m_rot.y / 180 * PII);
 		newPos.x = m_pos.x + float(sin(yRotRad)) * distance;
 		newPos.z = m_pos.z - float(cos(yRotRad)) * distance;
 		newPos.y = m_pos.y - ((ghost) ? float(sin(xRotRad)) * distance : 0);
@@ -93,6 +86,7 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 		if (!CheckCollision(newPos))
 		{
 			m_speed.z = m_speed.z + (m_accel.z * elapsedTime);
+			m_lastPos = m_pos;
 			m_pos = newPos;
 		}
 	}
@@ -101,7 +95,7 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 		m_speed.z = 0;
 	}
 
-	if (controls.Get(18))	// S +z
+	if (controls.S())	// S +z
 	{
 		if (!ghost && m_speed.y == 0)
 			Info::Get().Sound().PlaySnd(Son::SON_FOOT2, Son::CHANNEL_STEP, false);
@@ -138,7 +132,7 @@ void Player::Move(Array<bool>& controls, bool ghost, float elapsedTime )
 			m_pos = newPos;
 		}
 	}
-	if (controls.Get(3))	// D +x
+	if (controls.D())	// D +x
 	{
 		if (!ghost && m_speed.y == 0)
 			Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
@@ -263,17 +257,16 @@ void Player::SetRotation( Vector2f rot )
 bool Player::CheckCollision(const Vector3f& pos) const
 {
 	float offset = 0.2f;
-
+	Info& info = Info::Get();
 	if(pos.y >=0 
-		&& Info::Get().GetBlocFromWorld(pos, Vector3f(offset, 1, offset)) == BTYPE_AIR
-		&& Info::Get().GetBlocFromWorld(pos, Vector3f(-offset, 1, offset)) == BTYPE_AIR
-		&& Info::Get().GetBlocFromWorld(pos, Vector3f(-offset, 1, -offset)) == BTYPE_AIR
-		&& Info::Get().GetBlocFromWorld(pos, Vector3f(offset, 1, -offset)) == BTYPE_AIR
-		&& Info::Get().GetBlocFromWorld(pos, Vector3f(offset, 2.8f, offset)) == BTYPE_AIR
-		&& Info::Get().GetBlocFromWorld(pos, Vector3f(-offset, 2.8f, offset)) == BTYPE_AIR
-		&& Info::Get().GetBlocFromWorld(pos, Vector3f(-offset, 2.8f, -offset)) == BTYPE_AIR
-		&& Info::Get().GetBlocFromWorld(pos, Vector3f(offset, 2.8f, -offset)) == BTYPE_AIR)
-		return false;
-	else 
-		return true;
+		&& info.GetBlocFromWorld(pos, Vector3f(offset, 1, offset)) == BTYPE_AIR
+		&& info.GetBlocFromWorld(pos, Vector3f(-offset, 1, offset)) == BTYPE_AIR
+		&& info.GetBlocFromWorld(pos, Vector3f(-offset, 1, -offset)) == BTYPE_AIR
+		&& info.GetBlocFromWorld(pos, Vector3f(offset, 1, -offset)) == BTYPE_AIR
+		&& info.GetBlocFromWorld(pos, Vector3f(offset, 2.8f, offset)) == BTYPE_AIR
+		&& info.GetBlocFromWorld(pos, Vector3f(-offset, 2.8f, offset)) == BTYPE_AIR
+		&& info.GetBlocFromWorld(pos, Vector3f(-offset, 2.8f, -offset)) == BTYPE_AIR
+		&& info.GetBlocFromWorld(pos, Vector3f(offset, 2.8f, -offset)) == BTYPE_AIR)
+		return false; 
+	return true;
 }

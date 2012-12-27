@@ -85,6 +85,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="chunk.cpp" />
     <ClCompile Include="chunkmesh.cpp" />
+    <ClCompile Include="controls.cpp" />
     <ClCompile Include="info.cpp" />
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="engine.cpp" />
@@ -93,6 +94,7 @@
     <ClCompile Include="openglcontext.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="projectile.cpp" />
+    <ClCompile Include="QUAT.CPP" />
     <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="son.cpp" />
@@ -110,6 +112,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="chunk.h" />
     <ClInclude Include="chunkmesh.h" />
+    <ClInclude Include="controls.h" />
     <ClInclude Include="info.h" />
     <ClInclude Include="matrix4.h" />
     <ClInclude Include="mesh.h" />
@@ -118,6 +121,7 @@
     <ClInclude Include="array2d.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="projectile.h" />
+    <ClInclude Include="QUAT.H" />
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="son.h" />
     <ClInclude Include="testprojectile.h" />

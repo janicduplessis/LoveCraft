@@ -27,8 +27,8 @@ Matrix4f Quaternion::RotationMatrix()
 {
 	return Matrix4f(
 		1 - 2 * m_y * m_y - 2 * m_z * m_z,	2 * m_x * m_y - 2 * m_w * m_z,		2 * m_x * m_z + 2 * m_w * m_y,		0,
-		2 * m_x * m_y + 2 * m_w * m_z,		1 - 2 * m_x * m_x - 2 * m_z * m_z,	2 * m_y * m_z + 2 * m_w * m_x,		0,
-		2 * m_x * m_z - 2 * m_w * m_y,		2 * m_y * m_z - 2 * m_w * m_x,		1 - 2 * m_x * m_x - 2 * m_y * m_y,	0,
+		2 * m_x * m_y + 2 * m_w * m_z,		1 - 2 * m_x * m_x - 2 * m_z * m_z,	2 * m_y * m_z - 2 * m_w * m_x,		0,
+		2 * m_x * m_z - 2 * m_w * m_y,		2 * m_y * m_z + 2 * m_w * m_x,		1 - 2 * m_x * m_x - 2 * m_y * m_y,	0,
 		0,									0,									0,									1 );
 }
 
@@ -46,7 +46,8 @@ Quaternion Quaternion::operator*( const Quaternion& q ) const
 
 void Quaternion::SetRotation( float angle, Vector3f axis )
 {
-	/*m_w = cosf(-angle / 2);
+	/*
+	m_w = cosf(-angle / 2);
 	m_x = axis.x * sinf(angle / 2);
 	m_y = axis.y * sinf(angle / 2);
 	m_z = axis.z * sinf(angle / 2);
@@ -74,9 +75,9 @@ void Quaternion::SetRotation( float angle, Vector3f axis )
 
 void Quaternion::Afficher() const
 {
-	std::cout << m_w << std::endl;
-	std::cout << m_x << std::endl;
-	std::cout << m_y << std::endl;
-	std::cout << m_z << std::endl;
+	std::cout << m_w << " + ";
+	std::cout << m_x << "i + ";
+	std::cout << m_y << "j + ";
+	std::cout << m_z << "k" << std::endl;
 }
 

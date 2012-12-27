@@ -6,7 +6,7 @@
 #include "son.h"
 
 
-Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false), m_controls(Array<bool>(256, false)),
+Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_rightClick(false), m_leftClick(false), m_camRadius(10),
 	m_playScreenBotLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
 	m_playScreenTopLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
@@ -132,6 +132,7 @@ void Engine::DeInit()
 
 void Engine::LoadResource()
 {
+	// Texture des blocs 128x128 px
 	m_textureArray = new TextureArray(128);
 
 	LoadBlocTexture(BTYPE_BRICK, TEXTURE_PATH "brick_red.jpg");
@@ -139,8 +140,9 @@ void Engine::LoadResource()
 	LoadBlocTexture(BTYPE_GRASS, TEXTURE_PATH "grass.bmp");
 	LoadBlocTexture(BTYPE_SAND, TEXTURE_PATH "sand.jpg");
 
-	m_textureArray->Init();
+	m_textureArray->Generate();
 
+	// Autres textures
 	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
 	LoadTexture(m_textureInterface, TEXTURE_PATH "rock.jpg");
 	LoadTexture(m_textureCrosshair, TEXTURE_PATH "cross.bmp");
@@ -148,14 +150,13 @@ void Engine::LoadResource()
 	LoadTexture(m_textureCthulhu, TEXTURE_PATH "bewareofcthulhu.png");
 	LoadTexture(m_textureGhost, TEXTURE_PATH "boo.png");
 
+	// Load et compile les shaders
 	std::cout << " Loading and compiling shaders ..." << std::endl;
-	
 	if (!m_shaderModel.Load(SHADER_PATH "modelshader.vert", SHADER_PATH "modelshader.frag", true))
 	{
 		std::cout << " Failed to load model shader" << std::endl;
 		exit(1) ;
 	}
-
 	if (!m_shaderCube.Load(SHADER_PATH "cubeshader.vert", SHADER_PATH "cubeshader.frag", true))
 	{
 		std::cout << " Failed to load cube shader" << std::endl;
@@ -214,6 +215,7 @@ void Engine::Render(float elapsedTime)
 		m_camera.ApplyTranslation();
 	}
 
+	// Render les cubes
 	m_shaderCube.Use();
 	m_textureArray->Use();
 	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
@@ -226,7 +228,6 @@ void Engine::Render(float elapsedTime)
 			c.Render();
 		}
 	}
-
 	Shader::Disable();
 
 	// HUD
@@ -238,6 +239,8 @@ void Engine::Render(float elapsedTime)
 
 	//m_projectile.Move(elapsedTime);
 	//m_projectile.Render();
+	m_projectile.TestRotation();
+	m_projectile.Render();
 
 
 }
@@ -275,7 +278,7 @@ void Engine::Render2D(float elapsedTime)
 			m_textureCrosshair, false);
 	}
 	//Optimisation possible par la surcharge d'opérateurs
-	if (m_controls.Get(38))		//Mode course
+	if (m_controls.Shift())		//Mode course
 		RenderSquare(
 		m_playScreenBotLeft,
 		Vector2i(m_textureCthulhu.GetWidth(), m_textureCthulhu.GetHeight()),
@@ -370,17 +373,6 @@ void Engine::KeyPressEvent(unsigned char key)
 	m_controls.Set(key, true);
 	switch(key)
 	{
-		//case 0:    // A
-		//case 3:    // D
-		//case 22:   // W
-		//case 18:   // S
-		//	break;
-		//case 57:   // Space
-		//	break;
-		//case 37:   // CTRL
-		//	break;
-		//case 38:   // Shift
-		//	break;
 	case 36:	// ESC
 		Stop();
 		break;
@@ -399,6 +391,7 @@ void Engine::KeyPressEvent(unsigned char key)
 		}
 		break;
 	case 27:
+		m_projectile.Shoot();
 		sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
 		break;
 	case 28:
@@ -442,27 +435,6 @@ void Engine::KeyReleaseEvent(unsigned char key)
 	m_controls.Set(key, false);
 	switch(key)
 	{
-		//case 0:    // A
-		//	m_dirLeft = false;
-		//	break;
-		//case 3:    // D
-		//	m_dirRight = false;
-		//	break;
-		//case 22:   // W
-		//	m_dirFront = false;
-		//	break;
-		//case 18:   // S
-		//	m_dirBack = false;
-		//	break;
-		//case 57:   // Space
-		//	m_space = false;
-		//	break;
-		//case 37:   // CTRL
-		//	m_ctrl = false;
-		//	break;
-		//case 38:   // Shift
-		//	m_run = false;
-		//	break;
 	case 24:       // Y
 		m_wireframe = !m_wireframe;
 		if(m_wireframe)

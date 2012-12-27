@@ -12,9 +12,12 @@ public:
 
 	void Init();
 	void Move(float elapsedTime);
+	void Shoot();
+	void Hit();
 	void Render() const;
 private:
 	Model m_model;
+	bool m_visible;
 };
 
 #endif

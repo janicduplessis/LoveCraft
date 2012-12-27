@@ -5,7 +5,7 @@
 
 
 Projectile::Projectile() : m_speedIni(0), m_hasMass(false), m_timeToLive(99999999), 
-	m_destination(0), m_acceleration(0), m_shot(false)
+	m_destination(0), m_acceleration(0), m_shot(false), m_maxRot(0.01f), m_collisionRadius(0.01f, 0.01f, 0.01f)
 {
 
 }
@@ -22,8 +22,12 @@ void Projectile::Move(float elapsedTime)
 		return;
 
 	// Test si atteint la cible
-	if(abs(m_destination.x - m_pos.x) < 0.01 && abs(m_destination.y - m_pos.y) < 0.01 && abs(m_destination.z - m_pos.z) < 0.01)
-		return;
+	if(	abs(m_destination.x - m_pos.x) < m_collisionRadius.x 
+		&& abs(m_destination.y - m_pos.y) < m_collisionRadius.y 
+		&& abs(m_destination.z - m_pos.z) < m_collisionRadius.z) {
+			Hit();
+			return;
+	}
 
 	// Met a jour la valeur de la vitesse en 
 	// fonction de l'acceleration et du temps
@@ -48,22 +52,21 @@ void Projectile::Move(float elapsedTime)
 	float angleA = acos(n);
 	Vector3f axis = distance.Cross(m_speed);
 	axis.Normalise();
-	//axis.Afficher();
 	// rotation autour de laxe
 	float rotation;
-	if (abs(angleA) >= 0.02)
-		rotation = (angleA > 0) ? -0.02f : 0.02f;
+	if (abs(angleA) >= m_maxRot)
+		rotation = (angleA > 0) ? -m_maxRot : m_maxRot;
 	else
 		rotation = angleA;
 	Quaternion q;
 	q.FromAxis(rotation, axis);
 	q.Normalise();
 
-	m_speed = q * m_speed;
+	float speed = m_speed.Lenght();
+	m_speed = q * m_speed * speed;
 
 	// calcul la nouvelle position
 	m_pos += m_speed * elapsedTime;
-	m_pos.Afficher();
 }
 
 void Projectile::Shoot() 
@@ -74,9 +77,15 @@ void Projectile::Shoot()
 	if (m_hasMass)
 		m_acceleration.y -= 9.8f;
 
-	//m_speed = m_speedIni;
-	m_speed = Vector3f(1, 0, 0);
+	m_speed = m_speedIni;
 }
+
+
+void Projectile::Hit()
+{
+
+}
+
 
 void Projectile::SetInitialSpeed( const Vector3f& iniSpeed )
 {
@@ -141,5 +150,15 @@ void Projectile::SetHasMass( bool hasMass )
 bool Projectile::HasMass() const
 {
 	return m_hasMass;
+}
+
+void Projectile::SetMaxRot( float maxRot )
+{
+	m_maxRot = maxRot;
+}
+
+void Projectile::SetCollisionRadius(const Vector3f& rad )
+{
+	m_collisionRadius = rad;
 }
 

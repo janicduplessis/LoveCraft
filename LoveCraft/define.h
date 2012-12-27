@@ -63,7 +63,7 @@ typedef long long int64;
 // Perte de vitesse à chaque tour de boucle. Modifier cette valeur changera la vitesse à laquelle le joueur ralenti
 #define MOUVEMENT_SPEED_DECAY		0.5f
 // Vitesse initiale acquise en santant
-#define MOUVEMENT_SPEED_JUMP		12.f
+#define MOUVEMENT_SPEED_JUMP		6.f
 
 // Valeurs d'acceleration (m/s^2)
 // Accélération de base
@@ -76,7 +76,13 @@ typedef long long int64;
 #define GRAVITY							9.81f
 
 // Energie (e/s)
+// Minimum d'énergie
+#define ENERGY_MINIMUM				0
+// Maximum d'énergie
+#define ENERGY_MAXIMUM				100
+// Vitesse de régénération de l'énergie
 #define ENERGY_REGEN				2
+// Vitesse de dépense de l'énergie
 #define ENERGY_SPENDING				4
 
 // Valeurs des options

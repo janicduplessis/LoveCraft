@@ -221,7 +221,7 @@ void Engine::Render(float elapsedTime)
 	gameTime += elapsedTime;
 
 	// calcul la position du joueur et de la camera
-	m_player.Move(m_controls, m_ghostMode, elapsedTime);
+	m_player.Move(m_ghostMode, elapsedTime);
 	m_camera.SetPosition(m_player.Position());
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -352,7 +352,7 @@ void Engine::Render2D(float elapsedTime)
 			m_textureCrosshair, false);
 	}
 	//Optimisation possible par la surcharge d'opérateurs
-	if (m_controls.Shift())		//Mode course
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))		//Mode course
 		RenderSquare(
 		m_playScreenBotLeft,
 		Vector2i(m_textureCthulhu.GetWidth(), m_textureCthulhu.GetHeight()),
@@ -473,7 +473,6 @@ void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 void Engine::KeyPressEvent(unsigned char key)
 {
 	Son& sound = Info::Get().Sound();
-	m_controls.Set(key, true);
 	switch(key)
 	{
 	case 36:	// ESC
@@ -536,7 +535,6 @@ void Engine::KeyPressEvent(unsigned char key)
 
 void Engine::KeyReleaseEvent(unsigned char key)
 {
-	m_controls.Set(key, false);
 	switch(key)
 	{
 	case 24:       // Y

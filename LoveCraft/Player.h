@@ -72,11 +72,12 @@ public:
 	 * @param controls		Le Array de touches
 	 * @param elapsedTime	Temps écoulé depuis le dernier loop de jeu
 	 */
-	void Move(const Controls& controls, bool ghost, float elapsedTime);
+	void Move(bool ghost, float elapsedTime);
 
 	void Render (bool wireFrame = false);
 	void SetRotation( Vector2f rot );
 
+private:
 	bool CheckCollision(const Vector3f& pos) const;
 
 private:

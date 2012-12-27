@@ -161,7 +161,6 @@ private:
 
 	Player m_player;
 	Camera m_camera;
-	Controls m_controls;
 	
 	Shader m_shaderModel;
 	Shader m_shaderCube;

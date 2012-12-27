@@ -63,13 +63,13 @@ typedef long long int64;
 // Perte de vitesse à chaque tour de boucle. Modifier cette valeur changera la vitesse à laquelle le joueur ralenti
 #define MOUVEMENT_SPEED_DECAY		0.5f
 // Vitesse initiale acquise en santant
-#define MOUVEMENT_SPEED_JUMP		6.f
+#define MOUVEMENT_SPEED_JUMP		7.f
 
 // Valeurs d'acceleration (m/s^2)
 // Accélération de base
 #define MOUVEMENT_ACCELERATION			12.f
 // Multiplicateur de l'accélération lorsqu'on est dans les airs
-#define MOVUEMENT_ACCELERATION_AIR_M	0.3f
+#define MOVUEMENT_ACCELERATION_AIR_M	0.4f
 // Multiplicateur de l'accélération lorsque le joueur coure
 #define MOUVEMENT_ACCELERATION_RUN_M	1.5f
 // Accélération en Y représentant la gravité

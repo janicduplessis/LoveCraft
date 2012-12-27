@@ -41,10 +41,22 @@ public:
 	Vector2f Rotation() const;
 
 	/**
-	 * Applique les valeurs de l'angle de rotation sur l'axe des Y
-	 * 
-	 * @param value Valeur de l'angle à modifier
-	 */
+	* Vitesse du joueur
+	* @return Vector3f
+	*/
+	Vector3f Speed() const;
+
+	/**
+	* Accélération du joueur
+	* @return Vector3f
+	*/
+	Vector3f Acceleration() const;
+
+	/**
+	* Applique les valeurs de l'angle de rotation sur l'axe des Y
+	* 
+	* @param value Valeur de l'angle à modifier
+	*/
 	void TurnLeftRight ( float value );
 
 	/**

@@ -3,10 +3,11 @@
 
 #include "define.h"
 #include <iostream>
+#include <SFML/Network.hpp>
 
 /**
- * @brief Template class pour manipuler des vecteurs 3d
- */
+* @brief Template class pour manipuler des vecteurs 3d
+*/
 template <class T>
 class Vector3
 {
@@ -42,6 +43,9 @@ public:
 
 	bool operator==(const Vector3<T>& v) const;
 	bool operator!=(const Vector3<T>& v) const;
+
+	//sf::Packet& operator <<(sf::Packet& packet, const Vector3<T>& vector);
+	//sf::Packet& operator >>(sf::Packet& packet, Vector3<T>& vector);
 
 	void Afficher() const;
 
@@ -161,7 +165,7 @@ bool Vector3<T>::operator!=( const Vector3<T>& v ) const
 template <class T>
 bool Vector3<T>::operator==( const Vector3<T>& v ) const
 {
-	
+
 	return (x == v.x && y == v.y && z == v.z);
 }
 
@@ -202,6 +206,18 @@ T Vector3<T>::Lenght() const
 {
 	return sqrt(x*x + y*y + z*z);
 }
+
+//template <class T>
+//sf::Packet& Vector3<T>::operator <<(sf::Packet& packet, const Vector3<T>& vector)
+//{
+//	return packet << vector.x << vector.y << vector.z;
+//}
+//
+//template <class T>
+//sf::Packet& Vector3<T>::operator >>(sf::Packet& packet, Vector3<T>& vector)
+//{
+//	return packet >> vector.x << vector.y << vector.z;
+//}
 
 template <class T>
 void Vector3<T>::Afficher() const

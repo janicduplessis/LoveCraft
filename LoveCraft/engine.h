@@ -79,6 +79,8 @@ public:
 	*/
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat = true);
 
+	virtual void RenderSpells();
+
 	/**
 	* Affiche le texte donné à l'écran 
 	* 
@@ -148,6 +150,8 @@ private:
 
 	TextureArray* m_textureArray;
 
+	Texture* m_textureSpell;
+	Texture m_ttt;
 	Texture m_textureFloor;
 	Texture m_textureInterface;
 	Texture m_textureFont;

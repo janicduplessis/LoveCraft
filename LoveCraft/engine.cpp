@@ -1,9 +1,12 @@
 #include "engine.h"
 #include <iostream>
+#include <string>
+#include <sstream>
 #include <algorithm>
 #include <iomanip>
 #include <cmath>
 #include "son.h"
+#include <SFML/Network.hpp>
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
@@ -14,6 +17,7 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_playScreenBotRight(Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
 	m_playScreenSize(Vector2i(m_playScreenTopRight.x - m_playScreenTopLeft.x, m_playScreenTopLeft.y - m_playScreenBotLeft.y))
 {
+	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 }
 
 Engine::~Engine()
@@ -142,7 +146,28 @@ void Engine::LoadResource()
 
 	m_textureArray->Generate();
 
-	// Autres textures
+	//LoadTexture(m_textureSpell[0], TEXTURE_PATH "SpellBolt.png");
+	//LoadTexture(m_textureSpell[1], TEXTURE_PATH "SpellFire.png");
+	//LoadTexture(m_textureSpell[2], TEXTURE_PATH "SpellFreeze.png");
+	//LoadTexture(m_textureSpell[3], TEXTURE_PATH "SpellShock.png");
+	//LoadTexture(m_textureSpell[4], TEXTURE_PATH "SpellBolt.png");
+	//LoadTexture(m_textureSpell[5], TEXTURE_PATH "SpellBolt.png");
+	//LoadTexture(m_textureSpell[6], TEXTURE_PATH "SpellBolt.png");
+	//LoadTexture(m_textureSpell[7], TEXTURE_PATH "SpellBolt.png");
+	//LoadTexture(m_textureSpell[8], TEXTURE_PATH "SpellBolt.png");
+	//LoadTexture(m_textureSpell[9], TEXTURE_PATH "SpellBolt.png");
+	m_textureSpell[0].Load(TEXTURE_PATH "SpellBolt.gif");
+	m_textureSpell[1].Load(TEXTURE_PATH "SpellFire.png");
+	m_textureSpell[2].Load(TEXTURE_PATH "SpellFreeze.png");
+	m_textureSpell[3].Load(TEXTURE_PATH "SpellShock.png");
+	m_textureSpell[4].Load(TEXTURE_PATH "SpellPoison.gif");
+	m_textureSpell[5].Load(TEXTURE_PATH "SpellStorm.png");
+	m_textureSpell[6].Load(TEXTURE_PATH "SpellHeal.gif");
+	m_textureSpell[7].Load(TEXTURE_PATH "SpellRain.gif");
+	m_textureSpell[8].Load(TEXTURE_PATH "SpellDefend.gif");
+	m_textureSpell[9].Load(TEXTURE_PATH "SpellShield.png");
+	
+
 	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
 	LoadTexture(m_textureInterface, TEXTURE_PATH "rock.jpg");
 	LoadTexture(m_textureCrosshair, TEXTURE_PATH "cross.bmp");
@@ -242,7 +267,33 @@ void Engine::Render(float elapsedTime)
 	m_projectile.TestRotation();
 	m_projectile.Render();
 
+	//Test réseau - Dessigne un carré en haut de la position du joueur
+	//sf::Packet p;
+	//if (Info::Get().Network().Receive(p))
+	//{
+	//	float x;
+	//	float y;
+	//	float z;
+	//	p >> x >> y >> z;
+	//	glLoadIdentity();
+	//	glTranslated(x, y+5, z);
+	//	m_textureFloor.Bind();
+	//	glBegin(GL_QUADS);
 
+	//	glTexCoord2f(0, 0);
+	//	glVertex3f(x - 0.5f, y, z - 0.5f);
+
+	//	glTexCoord2f(0, 1);
+	//	glVertex3f(x + 0.5f, y, z - 0.5f);
+
+	//	glTexCoord2f(1, 1);
+	//	glVertex3f(x + 0.5f, y, z + 0.5f);
+
+	//	glTexCoord2f(1, 0);
+	//	glVertex3f(x - 0.5f, y, z + 0.5f);
+
+	//	glEnd();
+	//}
 }
 
 void Engine::Render2D(float elapsedTime)
@@ -262,11 +313,19 @@ void Engine::Render2D(float elapsedTime)
 	// Bind de la texture pour le font
 	m_textureFont.Bind();
 	std::ostringstream ss;
-	ss << "Position : " << std::setprecision(3) << m_player.Position().x << ", " 
-		<< std::setprecision(3) << m_player.Position().y << ", " << 
-		std::setprecision(3) << m_player.Position().z;
-	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 20, ss. str());
+	//Print de la position
+	ss << "Position : " << m_player.Position();
+	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 20, ss.str());
 	ss.str("");
+	//Print de la vitesse
+	ss << "Vitesse : " << m_player.Speed();
+	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 35, ss.str());
+	ss.str("");
+	//Print de l'Accélération
+	ss << "Accélération : " << m_player.Acceleration();
+	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 50, ss.str());
+	ss.str("");
+	//Print du nombre de FPS
 	ss << "Fps : " << std::setprecision(5) << 1 / elapsedTime;
 	PrintText(Width() - INTERFACE_SIDE_RIGHT_WIDTH - 120, Height() - INTERFACE_TOP_HEIGHT - 20, ss.str());
 	//Affichage du crosshair
@@ -312,6 +371,8 @@ void Engine::Render2D(float elapsedTime)
 		Vector2i(Width(), Height() - INTERFACE_TOP_HEIGHT * 3),
 		m_textureInterface);
 
+	RenderSpells();
+
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
@@ -342,6 +403,31 @@ void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Textur
 	glVertex2i(0, size.y);
 
 	glEnd();
+}
+
+void Engine::RenderSpells()
+{
+	short spellSize = 64;
+	short spellBarWidth = SPELL_BAR_SPELL_NUMBER * spellSize;
+	short spellBarPosX = Width() / 2 - spellBarWidth / 2;
+	short spellBarPosY = INTERFACE_BOTTOM_HEIGHT;
+	std::string nombre;
+
+	for (int i = 0; i < SPELL_BAR_SPELL_NUMBER; i++)
+	{
+		if (m_textureSpell[i].IsValid())
+		{
+			RenderSquare(Vector2i(spellBarPosX + i * spellSize, 0), Vector2i(spellSize, spellSize), m_textureSpell[i], false);
+			
+			std::ostringstream convertisseur;
+			convertisseur << (i + 1) % 10;
+			nombre = convertisseur.str();
+			PrintText(spellBarPosX + i * spellSize, spellSize, nombre);
+			nombre = "";
+		}
+	}
+
+
 }
 
 void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)

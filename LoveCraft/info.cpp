@@ -49,6 +49,11 @@ Son& Info::Sound()
 	return m_sound;
 }
 
+Nwork& Info::Network()
+{
+	return m_network;
+}
+
 BlockInfo* Info::GetBlocInfo( BlockType type )
 {
 	return m_blocInfos[type];

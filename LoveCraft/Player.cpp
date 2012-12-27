@@ -4,6 +4,7 @@
 #include "info.h"
 #include <cmath>
 #include <iostream>
+#include <SFML/Network.hpp>
 
 Player::Player(Vector3f position, Vector2f rotation)
 	:m_pos(position), m_rot(rotation), m_speed(Vector3f()), 
@@ -62,14 +63,22 @@ void Player::Move(const Controls& controls, bool ghost, float elapsedTime )
 		float speedMax = controls.Get(38) ? MOUVEMENT_SPEED_MAX_RUN : MOUVEMENT_SPEED_MAX;
 		float accel = controls.Get(38) ? MOUVEMENT_ACCELERATION_RUN : MOUVEMENT_ACCELERATION;
 
-		// Applique la vitesse initiale
+		//Applique la vitesse initiale
 		if (m_speed.z == 0)
+		{
 			m_speed.z += MOUVEMENT_SPEED_INI;
+			m_accel.z = MOUVEMENT_ACCELERATION;
+		}
 
 		// Regarde si la vitesse dépasse la vitesse max
-		if (m_speed.z >= speedMax) {
-			m_speed.z = speedMax;
+		if (m_speed.z >= speedMaxX) 
+		{
 			m_accel.z = 0;
+			m_speed.z = speedMaxX;
+		} 
+		else 
+		{
+			m_accel.z = accel;
 		}
 		else m_accel.z = accel;
 
@@ -92,7 +101,19 @@ void Player::Move(const Controls& controls, bool ghost, float elapsedTime )
 	}
 	else
 	{
-		m_speed.z = 0;
+		// note Alex ~ Au lieu de mettre le speed à zéro immédiatement
+		//			   lorsque le joueur arrête, on pourrait décrémenter la vitesse
+		//			   progressivement jusqu'à atteindre 0
+
+		//JD
+		//m_speed.z = 0;
+
+		//AB
+		if (m_speed.z > 0)
+			m_speed.z -= 0.5f;
+		else if (m_speed.z < 0)
+			m_speed.z = 0;
+
 	}
 
 	if (controls.S())	// S +z
@@ -207,11 +228,7 @@ void Player::Move(const Controls& controls, bool ghost, float elapsedTime )
 	}
 	if (controls.Get(57))	// Space
 	{
-		if (ghost)
-		{
-			m_pos.y += MOUVEMENT_SPEED_MAX * elapsedTime;
-		}
-		else
+		if (!ghost)
 		{
 			if (m_speed.y == 0)
 			{
@@ -219,16 +236,20 @@ void Player::Move(const Controls& controls, bool ghost, float elapsedTime )
 				Info::Get().Sound().PlaySnd(Son::SON_JUMP, Son::CHANNEL_PLAYER, false);
 			}
 		}
+		else m_pos.y += MOUVEMENT_SPEED_MAX * elapsedTime;
 	}
 	if (controls.Get(37))	// Ctrl
 	{
-		if (ghost)
-			m_pos.y -= MOUVEMENT_SPEED_MAX * elapsedTime;
-		else
+		if (!ghost)
 		{
 			//Code du crouch ici
 		}
+		else m_pos.y -= MOUVEMENT_SPEED_MAX * elapsedTime;
 	}
+	//Test réseau - Envoie d'un paquet contenant les coordonnées du joueur sur le réseau
+	//sf::Packet pack;
+	//pack << m_pos.x << m_pos.y << m_pos.z;
+	//Info::Get().Network().Send(pack);
 }
 
 void Player::Render(bool wireFrame)
@@ -236,7 +257,6 @@ void Player::Render(bool wireFrame)
 	m_model.SetPosition(Vector3f(m_pos.x, m_pos.y - 0.5, m_pos.z));
 	m_model.SetRotation(Vector3f(0, m_rot.y, 0));
 	m_model.Render(wireFrame);
-	
 }
 
 Vector3f Player::Position() const
@@ -249,6 +269,16 @@ Vector2f Player::Rotation() const
 	return m_rot;
 }
 
+Vector3f Player::Speed() const
+{
+	return m_speed;
+}
+
+Vector3f Player::Acceleration() const
+{
+	return m_accel;
+}
+
 void Player::SetRotation( Vector2f rot )
 {
 	m_rot = rot;
@@ -256,7 +286,7 @@ void Player::SetRotation( Vector2f rot )
 
 bool Player::CheckCollision(const Vector3f& pos) const
 {
-	float offset = 0.2f;
+	static float offset = 0.2f;
 	Info& info = Info::Get();
 	if(pos.y >=0 
 		&& info.GetBlocFromWorld(pos, Vector3f(offset, 1, offset)) == BTYPE_AIR

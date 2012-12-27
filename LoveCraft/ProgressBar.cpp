@@ -1,4 +1,4 @@
-#include "ProgressBar.h"
+#include "progressbar.h"
 
 
 ProgressBar::ProgressBar() : m_minimum(0), m_maximum(100), m_value(80), 

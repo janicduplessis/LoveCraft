@@ -14,7 +14,7 @@
 #include "info.h"
 #include "texturearray.h"
 #include "controls.h"
-#include "ProgressBar.h"
+#include "progressbar.h"
 
 class Engine : public OpenglContext
 {

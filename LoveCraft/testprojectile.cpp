@@ -18,8 +18,10 @@ void TestProjectile::Init()
 
 void TestProjectile::Move( float elapsedTime )
 {
-	Projectile::Move(elapsedTime);
-	m_model.SetPosition(GetPosition());
+	if(m_visible) {
+		Projectile::Move(elapsedTime);
+		m_model.SetPosition(GetPosition());
+	}
 }
 
 void TestProjectile::Render() const {

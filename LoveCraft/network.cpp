@@ -1,5 +1,5 @@
 #include "define.h"
-#include "Nwork.h"
+#include "network.h"
 #include <iostream>
 
 Nwork::Nwork() : m_socket(sf::UdpSocket()), m_adress(NW_SERVER_ADDRESS), m_port(NW_PORT)

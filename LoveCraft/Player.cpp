@@ -2,7 +2,6 @@
 #include "openglcontext.h"
 #include "son.h"
 #include "info.h"
-#include "engine.h"
 #include <cmath>
 #include <iostream>
 #include <SFML/Network.hpp>
@@ -141,7 +140,7 @@ void Player::Move(bool ghost, float &health, float &energy, float elapsedTime )
 	if (m_speed.z != 0)
 	{
 		//Vérification si le joueur bouge par lui-même (touches)
-		if (!w && !s)
+		if (!w && !s && m_speed.y == 0)
 		{
 			//Si ce n'est pas le cas on diminue progressivement la vitesse du joueur
 			//Vérification que la vitesse ne dépasse pas 0
@@ -228,7 +227,7 @@ void Player::Move(bool ghost, float &health, float &energy, float elapsedTime )
 	if (m_speed.x != 0)
 	{
 		//Vérification si le joueur bouge par lui-même (touches)
-		if (!a && !d)
+		if (!a && !d && m_speed.y == 0)
 		{
 			//Si ce n'est pas le cas on diminue progressivement la vitesse du joueur
 			//Vérification que la vitesse ne tombe pas négative

@@ -6,7 +6,7 @@
 #include "array2d.h"
 #include "chunk.h"
 #include "son.h"
-#include "Nwork.h"
+#include "network.h"
 
 class Chunk;
 

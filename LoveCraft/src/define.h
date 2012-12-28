@@ -67,7 +67,7 @@ typedef long long int64;
 // Multiplicateur de la vitesse maximale en mode déplacement arrière
 #define MOUVEMENT_SPEED_BACKWARD_M	0.4f
 // Perte de vitesse à chaque tour de boucle. Modifier cette valeur changera la vitesse à laquelle le joueur ralenti
-#define MOUVEMENT_SPEED_DECAY		0.5f
+#define MOUVEMENT_SPEED_DECAY		0.9f
 // Vitesse initiale acquise en santant
 #define MOUVEMENT_SPEED_JUMP		6.5f
 

@@ -87,6 +87,12 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 		{
 			if (m_speed.y == 0)
 			{
+				//Perte de vitesse si on amorce un saut avec une vitesse de base
+				//et qu'aucune des touches de mouvement n'est appuyée
+				if ((!w && !s) && m_speed.z != 0)
+					m_speed.z *= 0.6f;
+				if ((!a && !d) && m_speed.x != 0)
+					m_speed.x *= 0.6f;
 				m_speed.y = -MOUVEMENT_SPEED_JUMP;
 				Info::Get().Sound().PlaySnd(Son::SON_JUMP, Son::CHANNEL_PLAYER, false);
 			}
@@ -237,7 +243,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 	if (m_speed.x != 0)
 	{
 		//Vérification si le joueur bouge par lui-même (touches)
-		if (!a && !d)
+		if (!a && !d && m_speed.y == 0)
 		{
 			//Si ce n'est pas le cas on diminue progressivement la vitesse du joueur
 			//Vérification que la vitesse ne tombe pas négative

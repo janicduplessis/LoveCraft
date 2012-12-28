@@ -9,9 +9,7 @@ public:
 	Pig();
 	~Pig();
 
-	virtual void Init();
-	virtual void Update();
-
+	virtual void Init(Player* player = 0);
 
 private:
 

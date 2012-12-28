@@ -22,7 +22,8 @@ public:
 		STATE_PATROL,
 		STATE_FOLLOW,
 		STATE_ATTACK,
-		STATE_STAY
+		STATE_STAY,
+		STATE_NONE
 	};
 
 	/**
@@ -44,7 +45,7 @@ public:
 	virtual bool StateChanged() const;
 	virtual State GetState() const;
 
-	virtual void Process();
+	virtual void Process(float elapsedTime);
 	virtual void Patrol();
 	virtual void RunAway();
 	virtual void Attack();
@@ -61,6 +62,9 @@ protected:
 	State m_currentState;
 	AiType m_type;
 	Npc* m_npc;
+
+	Vector3f* m_patrolDestination;
+	Vector3f m_posIni;
 
 	bool m_stateChanged;
 };

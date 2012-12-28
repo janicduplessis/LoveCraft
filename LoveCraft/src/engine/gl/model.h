@@ -4,6 +4,7 @@
 #include "mesh.h"
 #include "util/vector2.h"
 #include "util/vector3.h"
+#include "util/quaternion.h"
 
 #include <string>
 
@@ -34,22 +35,22 @@ public:
 	virtual void Render(bool wireFrame = false) const;
 	virtual void SetMeshData(VertexData* vd, int vertexCount, uint16* indexData = 0, int indexCount = 0);
 
-	void Rotate(float x, float y, float z);
 	void Translate(float x, float y, float z);
 	void Scale(float x, float y, float z);
 
-	void Rotate(const Vector3f& rot);
+	void Rotate(const Quaternion& rot);
 	void Translate(const Vector3f& trans);
 	void Scale(const Vector3f& scale);
 
 	Vector3f GetPosition() const;
 	void SetPosition(const Vector3f& pos);
-	Vector3f GetRotation() const;
+	Quaternion GetRotation() const;
 	void SetRotation(const Vector3f& rot);
+	void SetRotation(const Quaternion& rot);
 
 private:
 	Vector3f m_pos;
-	Vector3f m_rot;
+	Quaternion m_rot;
 	Vector3f m_scale;
 };
 

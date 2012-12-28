@@ -31,7 +31,7 @@ float Quaternion::Magnitude()
 	return m_w * m_w + m_x * m_x + m_y * m_y + m_z * m_z;
 }
 
-Matrix4f Quaternion::RotationMatrix()
+Matrix4f Quaternion::RotationMatrix() const
 {
 	float x2 = m_x * m_x;
 	float y2 = m_y * m_y;

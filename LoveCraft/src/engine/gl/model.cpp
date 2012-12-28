@@ -5,8 +5,9 @@
 #include <vector>
 #include <cassert>
 #include "util/tool.h"
+#include "util/matrix4.h"
 
-Model::Model() : m_scale(Vector3f(1,1,1)), m_rot(Vector3f(0,0,0)), m_pos(Vector3f(0,0,0)) {}
+Model::Model() : m_scale(Vector3f(1,1,1)), m_rot(1,0,0,0), m_pos(Vector3f(0,0,0)) {}
 
 Model::~Model() {}
 
@@ -133,9 +134,7 @@ void Model::Render(bool wireFrame) const
 {
 	glPushMatrix();
 	glTranslatef(m_pos.x, m_pos.y, m_pos.z);
-	glRotatef(-m_rot.x, 1.f, 0.f, 0.f);
-	glRotatef(-m_rot.y, 0.f, 1.f, 0.f);
-	glRotatef(-m_rot.z, 0.f, 0.f, 1.f);
+	glMultMatrixf(m_rot.RotationMatrix().GetInternalValues());
 	glScalef(m_scale.x, m_scale.y, m_scale.z);
 
 	if(IsValid())
@@ -164,14 +163,9 @@ void Model::Render(bool wireFrame) const
 	glPopMatrix();
 }
 
-void Model::Rotate( float x, float y, float z )
+void Model::Rotate( const Quaternion& rot )
 {
-	Rotate(Vector3f(x, y, z));
-}
-
-void Model::Rotate( const Vector3f& rot )
-{
-	m_rot += rot;
+	m_rot = m_rot * rot;
 }
 
 void Model::Translate( float x, float y, float z )
@@ -206,10 +200,19 @@ Vector3f Model::GetPosition() const
 }
 
 void Model::SetRotation(const Vector3f& rot) {
+	Vector3f rotRad = -rot * PII / 180;
+	Quaternion q;
+	q.FromAxis(rotRad.Lenght(), rotRad);
+	q.Normalise();
+	m_rot = q;
+}
+
+void Model::SetRotation( const Quaternion& rot )
+{
 	m_rot = rot;
 }
 
-Vector3f Model::GetRotation() const
+Quaternion Model::GetRotation() const
 {
 	return m_rot;
 }

@@ -56,7 +56,7 @@ public:
 	 *
 	 * @return La matrice de rotation
 	 */
-	Matrix4f RotationMatrix();
+	Matrix4f RotationMatrix() const;
 
 	/**
 	 * Donne une valeur d'angle de rotation sur un axe

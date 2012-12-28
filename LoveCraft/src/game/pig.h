@@ -10,6 +10,7 @@ public:
 	~Pig();
 
 	virtual void Init();
+	virtual void Update();
 
 
 private:

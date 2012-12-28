@@ -1,12 +1,16 @@
 #ifndef NPC_H__
 #define NPC_H__
 
-#include "util/array.h"
-#include "util/vector3.h"
-#include "util/vector2.h"
 #include "define.h"
 #include "engine/gl/model.h"
 #include "engine/ai.h"
+
+#include "util/array.h"
+#include "util/vector3.h"
+#include "util/vector2.h"
+#include "util/quaternion.h"
+
+class AI;
 
 class Npc
 {
@@ -15,13 +19,21 @@ public:
 	virtual ~Npc();
 
 	virtual void Init();
-	virtual void Update();
+	virtual void Update() = 0;
 	virtual void Render() const;
+	virtual void Move(const Vector3f& destination, float elapsedTime);
+
+	Vector3f Position() const;
 
 protected:
-	Model m_model;
 	Vector3f m_pos;
-	AI m_ai;
+	Vector3f m_speed;
+	Vector3f m_acceleration;
+	Quaternion m_rot;
+	float m_maxRot;
+
+	AI* m_ai;
+	Model m_model;
 };
 
 #endif // !NPC_H__

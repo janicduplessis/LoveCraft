@@ -1,12 +1,14 @@
 #ifndef TEXTUREARRAY_H__
 #define TEXTUREARRAY_H__
+
+#include "define.h"
+
 #include <string>
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
 #include <IL/ilu.h>
 #include <map>
-#include "define.h"
 
 #include <iostream>
 

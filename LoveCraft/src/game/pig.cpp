@@ -14,3 +14,8 @@ void Pig::Init()
 {
 	m_model.Load(MODEL_PATH "pig.lcm");
 }
+
+void Pig::Update()
+{
+
+}

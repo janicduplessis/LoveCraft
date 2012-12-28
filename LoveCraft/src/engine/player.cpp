@@ -328,7 +328,7 @@ void Player::SetRotation( Vector2f rot )
 
 bool Player::CheckCollision(const Vector3f& pos) const
 {
-	static float offset = 0.2f;
+	float offset = 0.2f;
 	Info& info = Info::Get();
 	if(pos.y >=0 
 		&& info.GetBlocFromWorld(pos, Vector3f(offset, 1, offset)) == BTYPE_AIR

@@ -2,7 +2,9 @@
 
 #include <cmath>
 
-AI::AI(AiType type, Npc* npc, Player* player) : m_player(player), m_type(type), m_npc(npc)
+AI::AI(AiType type, Npc* npc, Player* player) : 
+	m_player(player), m_type(type), m_npc(npc), m_posIni(npc->Position()), m_currentState(STATE_NONE),
+	m_patrolDestination(0)
 {
 
 }
@@ -18,8 +20,25 @@ bool AI::StateChanged() const
 	return m_stateChanged;
 }
 
-void AI::Process()
+void AI::Process(float elapsedTime)
 {
+	// Logique pour determiner le state
+	if (m_currentState != STATE_PATROL) {
+		m_currentState = STATE_PATROL;
+		m_stateChanged = true;
+	}
+	static float totalTime = 0;
+	totalTime += elapsedTime;
+	// Call la fonction qui correspond au state
+	if (m_currentState = STATE_PATROL)
+	{
+		if (totalTime > 1 || m_stateChanged)
+		{
+			totalTime = 0;
+			Patrol();
+		}
+		m_npc->Move(*m_patrolDestination, elapsedTime);
+	}
 	m_stateChanged = false;
 }
 
@@ -70,32 +89,33 @@ AI::State AI::GetState() const
 
 void AI::Patrol()
 {
-	if (m_currentState != STATE_PATROL)
-		m_stateChanged = true;
-
+	if (!m_patrolDestination || rand() % 100 < 10)
+	{
+		if (m_patrolDestination)
+			delete m_patrolDestination;
+		float x = m_posIni.x + rand() % (2 * PATROL_RANGE) - PATROL_RANGE; 
+		float z = m_posIni.z + rand() % (2 * PATROL_RANGE) - PATROL_RANGE; 
+		m_patrolDestination = new Vector3f(x, m_posIni.y, z);
+	}
 
 }
 
 void AI::RunAway()
 {
-	if (m_currentState != STATE_RUN_AWAY)
-		m_stateChanged = true;
+	
 }
 
 void AI::Attack()
 {
-	if (m_currentState != STATE_ATTACK)
-		m_stateChanged = true;
+	
 }
 
 void AI::Follow()
 {
-	if (m_currentState != STATE_FOLLOW)
-		m_stateChanged = true;
+	
 }
 
 void AI::Stay()
 {
-	if (m_currentState != STATE_STAY)
-		m_stateChanged = true;
+	
 }

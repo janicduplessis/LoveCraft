@@ -18,13 +18,13 @@ public:
 	Npc(const Vector3f& pos = Vector3f(0,0,0));
 	virtual ~Npc();
 
-	virtual void Init();
-	virtual void Update() = 0;
+	virtual void Init(Player* player = 0) = 0;
+	virtual void Update(float elapsedTime);
 	virtual void Render() const;
 	virtual void Move(const Vector3f& destination, float elapsedTime);
 
 	Vector3f Position() const;
-
+	void SetPosition(const Vector3f& pos);
 protected:
 	Vector3f m_pos;
 	Vector3f m_speed;

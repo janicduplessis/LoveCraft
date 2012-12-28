@@ -84,6 +84,7 @@ public:
 private:
 	bool CheckCollision(const Vector3f& pos) const;
 
+
 private:
 	float m_energy; // Energie pour pouvoir courir (0 à 100)
 

@@ -132,6 +132,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 			if (!ghost && m_speed.y == 0 && m_speed.x != 0 && m_speed.z != 0 && !ctrl)
 				Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
 		}
+		else m_speed.z = 0;
 	}
 #pragma endregion
 
@@ -185,6 +186,9 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 	//Diminution de l'accélération lorsque le joueur est en mouvement dans les airs
 	if (m_speed.y != 0)
 		m_accel.z *= MOVUEMENT_ACCELERATION_AIR_M;
+	//Vérification qu'il n'appuie pas sur les deux touches en même temps
+	if (w && s)
+		m_accel.z = 0;
 #pragma endregion
 
 #pragma region Calculs de la vitesse
@@ -193,6 +197,11 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 		m_speed.z = m_speed.z < 0 ? -speedMaxZ : speedMaxZ;
 	//Assignation de la nouvelle vitesse en fonction de l'accélération
 	else m_speed.z += m_accel.z * elapsedTime;
+
+	//Vérification si le joueur change de touche rapidement
+	if (w && m_speed.z < 0 || s && m_speed.z > 0)
+		m_speed.z = 0;
+
 #pragma endregion
 
 #pragma endregion
@@ -219,6 +228,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 			if (!ghost && m_speed.y == 0 && m_speed.x != 0 && m_speed.z != 0 && !ctrl)
 				Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
 		}
+		else m_speed.x = 0;
 	}
 #pragma endregion
 
@@ -227,7 +237,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 	if (m_speed.x != 0)
 	{
 		//Vérification si le joueur bouge par lui-même (touches)
-		if (!a && !d && m_speed.y == 0)
+		if (!a && !d)
 		{
 			//Si ce n'est pas le cas on diminue progressivement la vitesse du joueur
 			//Vérification que la vitesse ne tombe pas négative
@@ -261,6 +271,9 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 	//Diminution de l'accélération lorsque le joueur est en mouvement dans les airs
 	if (m_speed.y != 0)
 		m_accel.x *= MOVUEMENT_ACCELERATION_AIR_M;
+	//Vérification qu'il n'appuie pas sur les deux touches en même temps
+	if (a && d)
+		m_accel.x = 0;
 #pragma endregion
 
 #pragma region Calculs de la vitesse
@@ -269,6 +282,10 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 		m_speed.x = m_speed.x < 0 ? -speedMaxX : speedMaxX;
 	//Assignation de la nouvelle vitesse en fonction de l'accélération
 	else m_speed.x += m_accel.x * elapsedTime;
+
+	//Vérification si le joueur change de touche rapidement
+	if (d && m_speed.x < 0 || a && m_speed.x > 0)
+		m_speed.x = 0;
 #pragma endregion
 
 #pragma endregion
@@ -333,7 +350,7 @@ void Player::SetRotation( Vector2f rot )
 
 bool Player::CheckCollision(const Vector3f& pos) const
 {
-	float offset = 0.2f;
+	static float offset = 0.2f;
 	Info& info = Info::Get();
 	if(pos.y >=0 
 		&& info.GetBlocFromWorld(pos, Vector3f(offset, 1, offset)) == BTYPE_AIR

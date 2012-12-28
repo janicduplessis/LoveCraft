@@ -33,17 +33,22 @@ public:
 	*/
 	std::string Name() const;
 	/**
-	* Change la vie du personnage
+	* Méthode à appeler à chaque fin de boucle pour la régénération
+	* de la vie et du mana
+	*/
+	void PassiveRegen();
+	/**
+	* Change la vie du personnage. Une valeur négative diminue, positive augmente.
 	* @param value		La valeur voulue - soumise à des validations
 	*/
 	void SetHealth(const float value);
 	/**
-	* Change l'énergie du personnage
+	* Change l'énergie du personnage. Une valeur négative diminue, positive augmente.
 	* @param value		La valeur voulue - soumise à des validations
 	*/
 	void SetEnergy(const float value);
 	/**
-	* Change la mana du personnage
+	* Change la mana du personnage. Une valeur négative diminue, positive augmente.
 	* @param value		La valeur voulue - soumise à des validations
 	*/
 	void SetMana(const float value);

@@ -21,17 +21,61 @@ std::string Character::Name() const
 {
 	return m_name;
 }
+void Character::PassiveRegen()
+{
+	SetHealth(HEALTH_PASSIVE_REGEN);
+	SetMana(MANA_PASSIVE_REGEN);
+}
 void Character::SetHealth(const float value)
 {
-	m_health = value >= m_healthMax ? m_healthMax : (value <= 0 ? 0 : value);
+	float increment = value;
+	//vérification que l'ajout ne dépasse pas le maximum
+	if (m_health + increment >= m_healthMax)
+	{
+		m_health = m_healthMax;
+		return;
+	}
+	//Vérification que l'ajout ne dépasse pas 0
+	if (m_health + increment <= 0)
+	{
+		m_health = 0;
+		return;
+	}
+	m_health += increment;
 }
 void Character::SetEnergy(const float value)
 {
-	m_energy = value >= m_energyMax ? m_energyMax : (value <= 0 ? 0 : value);
+	float increment = value;
+	//vérification que l'ajout ne dépasse pas le maximum
+	if (m_energy + increment >= m_energyMax)
+	{
+		m_energy = m_energyMax;
+		return;
+	}
+	//Vérification que l'ajout ne dépasse pas 0
+	if (m_energy + increment <= 0)
+	{
+		m_energy = 0;
+		return;
+	}
+	m_energy += increment;
 }
 void Character::SetMana(const float value)
 {
-	m_mana = value >= m_manaMax ? m_manaMax : (value <= 0 ? 0 : value);
+	float increment = value;
+	//vérification que l'ajout ne dépasse pas le maximum
+	if (m_mana + increment >= m_manaMax)
+	{
+		m_mana = m_manaMax;
+		return;
+	}
+	//Vérification que l'ajout ne dépasse pas 0
+	if (m_mana + increment <= 0)
+	{
+		m_mana = 0;
+		return;
+	}
+	m_mana += increment;
 }
 
 float Character::Health() const
@@ -62,13 +106,13 @@ float Character::ManaMax() const
 
 float Character::HealthPerc() const
 {
-	return (m_health / m_healthMax);
+	return (m_health / m_healthMax * 100);
 }
 float Character::EnergyPerc() const
 {
-	return (m_energy / m_energyMax);
+	return (m_energy / m_energyMax * 100);
 }
 float Character::ManaPerc() const
 {
-	return (m_mana / m_manaMax);
+	return (m_mana / m_manaMax * 100);
 }

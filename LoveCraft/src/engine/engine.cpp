@@ -84,6 +84,7 @@ void Engine::Init()
 	m_projectile.SetPosition(Vector3f(10,0,0));
 
 	m_testpig.Init();
+	m_character = Character();
 
 	m_chunks = new Array2d<Chunk>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
 	Info::Get().SetChunkArray(m_chunks);
@@ -229,14 +230,10 @@ void Engine::Render(float elapsedTime)
 	static float gameTime = elapsedTime;
 
 	gameTime += elapsedTime;
-	float healthValue = m_healthBar.Value();
-	float energyValue = m_energyBar.Value();
 	// calcul la position du joueur et de la camera
-	m_player.Move(m_ghostMode, healthValue, energyValue, elapsedTime);
+	m_player.Move(m_ghostMode, m_character, elapsedTime);
 	m_camera.SetPosition(m_player.Position());
-	m_manaBar.SetValue(m_manaBar.Value() + MANA_PASSIVE_REGEN);
-	m_healthBar.SetValue(healthValue);
-	m_energyBar.SetValue(energyValue);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Transformations initiales
@@ -346,7 +343,7 @@ void Engine::Render2D(float elapsedTime)
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	// Bind de la texture pour le font
-	//m_textureFont.Bind();
+	m_textureFont.Bind();
 	std::ostringstream ss;
 	//Print de la position
 	ss << "Position : " << m_player.Position();
@@ -385,6 +382,8 @@ void Engine::Render2D(float elapsedTime)
 
 	glDisable(GL_BLEND);
 	//Affichage de l'interface
+
+	//============================================
 	//Bottom
 	RenderSquare(
 		Vector2i(0, 0), 
@@ -405,8 +404,12 @@ void Engine::Render2D(float elapsedTime)
 		Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
 		Vector2i(Width(), Height() - INTERFACE_TOP_HEIGHT * 3),
 		m_textureInterface);
-
+	//============================================
 	RenderSpells();
+	//============================================
+	m_healthBar.SetValue(m_character.HealthPerc());
+	m_energyBar.SetValue(m_character.EnergyPerc());
+	m_manaBar.SetValue(m_character.ManaPerc());
 	//============================================
 	RenderProgressBar(m_healthBar, m_textureHealth);
 	RenderProgressBar(m_energyBar, m_textureEnergy);
@@ -549,19 +552,19 @@ void Engine::KeyPressEvent(unsigned char key)
 		sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
 		break;
 	case 33:
-		if (m_manaBar.Value() - 15 >= 0)
+		if (m_character.Mana() - 15 >= 0)
 		{
 			sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
-			m_healthBar.SetValue(m_healthBar.Value() + 10);
-			m_manaBar.SetValue(m_manaBar.Value() - 15);
+			m_character.SetHealth(15);
+			m_character.SetMana(-15);
 		}
 		break;
 	case 34:
-		if (m_manaBar.Value() - 5 >= 0)
+		if (m_character.Mana() - 10 >= 0)
 		{
 			sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
-			m_energyBar.SetValue(m_energyBar.Value() + 15);
-			m_manaBar.SetValue(m_manaBar.Value() - 5);
+			m_character.SetEnergy(10);
+			m_character.SetMana(-10);
 		}
 		break;
 	case 35:

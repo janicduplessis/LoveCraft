@@ -17,6 +17,7 @@
 #include "controls.h"
 
 #include "game/pig.h"
+#include "game/character.h"
 
 #include "util/array2d.h"
 #include "util/vector2.h"
@@ -168,7 +169,8 @@ private:
 
 	Player m_player;
 	Camera m_camera;
-
+	
+	Character m_character;
 	Pig m_testpig;
 
 	Shader m_shaderModel;

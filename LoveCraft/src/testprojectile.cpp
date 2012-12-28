@@ -10,7 +10,7 @@ TestProjectile::~TestProjectile()
 
 }
 
-void TestProjectile::Init()
+void TestProjectile::Load()
 {
 	m_model.Load(MODEL_PATH "cube.lcm");
 	m_model.SetPosition(GetPosition());
@@ -21,6 +21,7 @@ void TestProjectile::Move( float elapsedTime )
 	if(m_visible) {
 		Projectile::Move(elapsedTime);
 		m_model.SetPosition(GetPosition());
+		m_model.SetRotation(m_rot);
 	}
 }
 

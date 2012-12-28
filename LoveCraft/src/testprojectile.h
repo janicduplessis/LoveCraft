@@ -10,7 +10,7 @@ public:
 	TestProjectile();
 	~TestProjectile();
 
-	void Init();
+	void Load();
 	void Move(float elapsedTime);
 	void Shoot();
 	void Hit();

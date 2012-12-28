@@ -30,11 +30,10 @@ public:
 	virtual void Hit();
 
 	/**
-	 * Vitesse Initiale
+	 * Vitesse et rotation initiale
 	 */
-	void SetInitialSpeed(const Vector3f& iniSpeed);
-	Vector3f GetInitialSpeed() const;
-	
+	void Init(float speed, const Quaternion& rot);
+
 	/**
 	 * Acceleration
 	 */
@@ -72,12 +71,15 @@ public:
 
 	void SetMaxRot( float maxRot );
 	void SetCollisionRadius(const Vector3f& rad);
-private:
+protected:
 	Vector3f m_speed;
-	Vector3f m_speedIni;
+	float m_speedIni;
 	Vector3f m_pos;
 	Vector3f m_posIni;
 	Vector3f m_acceleration;
+
+	Quaternion m_rot;
+	Quaternion m_rotIni;
 	
 	Vector3f m_destination;
 	float m_timeToLive;

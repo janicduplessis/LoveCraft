@@ -77,8 +77,8 @@ void Engine::Init()
 
 
 	m_player.Init();
-	m_projectile.Init();
-	m_projectile.SetInitialSpeed(Vector3f(4,0,0));
+	m_projectile.Load();
+	m_projectile.Init(4.f, Quaternion());
 	m_projectile.SetCollisionRadius(Vector3f(2,2,2));
 	m_projectile.SetMaxRot(0.05);
 	m_projectile.SetPosition(Vector3f(10,0,0));

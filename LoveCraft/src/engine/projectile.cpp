@@ -28,7 +28,7 @@ void Projectile::Move(float elapsedTime)
 			Hit();
 			return;
 	}
-
+	Vector3f speed = m_rot * m_speed;
 	// Met a jour la valeur de la vitesse en 
 	// fonction de l'acceleration et du temps
 	m_speed += m_acceleration * elapsedTime;
@@ -44,29 +44,30 @@ void Projectile::Move(float elapsedTime)
 
 	// calculer l'angle entre les 2 vecteurs
 	// fix imprecision float
-	float n = distance.Dot(m_speed) / (distance.Lenght() * m_speed.Lenght());
+	float n = distance.Dot(speed) / (distance.Lenght() * speed.Lenght());
 	if (n > 1)
 		n = 1;
 	else if (n < -1)
 		n = -1;
 	float angleA = acos(n);
-	Vector3f axis = distance.Cross(m_speed);
+	std::cout << angleA << std::endl;
+	Vector3f axis = distance.Cross(speed);
 	axis.Normalise();
 	// rotation autour de laxe
 	float rotation;
-	if (abs(angleA) >= m_maxRot)
+	if (abs(angleA) >= m_maxRot && abs(angleA) < PII - m_maxRot)
 		rotation = (angleA > 0) ? -m_maxRot : m_maxRot;
 	else
-		rotation = angleA;
+		rotation = angleA - PII;
 	Quaternion q;
 	q.FromAxis(rotation, axis);
 	q.Normalise();
 
-	float speed = m_speed.Lenght();
-	m_speed = q * m_speed * speed;
-
+	m_rot = q * m_rot;
+	m_rot.Normalise();
+	
 	// calcul la nouvelle position
-	m_pos += m_speed * elapsedTime;
+	m_pos += speed * elapsedTime;
 }
 
 void Projectile::Shoot() 
@@ -77,7 +78,10 @@ void Projectile::Shoot()
 	if (m_hasMass)
 		m_acceleration.y -= 9.8f;
 
-	m_speed = m_speedIni;
+	m_speed = Vector3f(1,0,0);
+	m_speed = m_speed * m_speedIni;
+	m_rot = m_rotIni;
+	m_rot.Normalise();
 }
 
 
@@ -86,15 +90,10 @@ void Projectile::Hit()
 
 }
 
-
-void Projectile::SetInitialSpeed( const Vector3f& iniSpeed )
+void Projectile::Init(float speed, const Quaternion& rot)
 {
-	m_speedIni = iniSpeed;
-}
-
-Vector3f Projectile::GetInitialSpeed() const
-{
-	return m_speedIni;
+	m_speedIni = speed;
+	m_rotIni = rot;
 }
 
 void Projectile::SetAcceleration( const Vector3f& acc )

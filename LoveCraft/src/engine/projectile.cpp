@@ -29,6 +29,7 @@ void Projectile::Move(float elapsedTime)
 			return;
 	}
 	Vector3f speed = m_rot * m_speed;
+	speed = speed * m_speed.Lenght();
 	// Met a jour la valeur de la vitesse en 
 	// fonction de l'acceleration et du temps
 	m_speed += m_acceleration * elapsedTime;

@@ -21,7 +21,7 @@ void TestProjectile::Move( float elapsedTime )
 	if(m_visible) {
 		Projectile::Move(elapsedTime);
 		m_model.SetPosition(GetPosition());
-		m_model.SetRotation(m_rot);
+		m_model.SetRotation(m_rot.GetConjugate());
 	}
 }
 

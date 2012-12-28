@@ -41,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>external\devil178_vstudio2k10\include;external\sfml20_vstudio2k10\include;$(IncludePath)</IncludePath>
-    <LibraryPath>external\devil178_vstudio2k10\lib;external\sfml20_vstudio2k10\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>src/external/devil178_vstudio2k10/include;src/external/sfml20_vstudio2k10/include;$(IncludePath)</IncludePath>
+    <LibraryPath>src/external/devil178_vstudio2k10/lib;src/external/sfml20_vstudio2k10/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -54,13 +54,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\lovecraft\external\glew-1.7.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../lovecraft/src/external/glew-1.7.0/include;../lovecraft/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>sfml-audio-d.lib;sfml-main-d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;sfml-network-d.lib;GlU32.Lib;OpenGL32.Lib;DevIL.lib;ILU.lib;ILUT.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\lovecraft\external\glew-1.7.0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../lovecraft/src/external/glew-1.7.0/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -81,63 +81,67 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="blockinfo.cpp" />
-    <ClCompile Include="camera.cpp" />
-    <ClCompile Include="chunk.cpp" />
-    <ClCompile Include="chunkmesh.cpp" />
-    <ClCompile Include="controls.cpp" />
-    <ClCompile Include="info.cpp" />
-    <ClCompile Include="mesh.cpp" />
-    <ClCompile Include="engine.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="model.cpp" />
-    <ClCompile Include="npc.cpp" />
-    <ClCompile Include="network.cpp" />
-    <ClCompile Include="openglcontext.cpp" />
-    <ClCompile Include="player.cpp" />
-    <ClCompile Include="progressbar.cpp" />
-    <ClCompile Include="projectile.cpp" />
-    <ClCompile Include="quaternion.cpp" />
-    <ClCompile Include="shader.cpp" />
-    <ClCompile Include="son.cpp" />
-    <ClCompile Include="testprojectile.cpp" />
-    <ClCompile Include="texture.cpp" />
-    <ClCompile Include="texturearray.cpp" />
-    <ClCompile Include="textureatlas.cpp" />
-    <ClCompile Include="tool.cpp" />
+    <ClCompile Include="src\engine\ai.cpp" />
+    <ClCompile Include="src\engine\blockinfo.cpp" />
+    <ClCompile Include="src\engine\camera.cpp" />
+    <ClCompile Include="src\engine\chunk.cpp" />
+    <ClCompile Include="src\engine\gl\chunkmesh.cpp" />
+    <ClCompile Include="src\engine\controls.cpp" />
+    <ClCompile Include="src\engine\info.cpp" />
+    <ClCompile Include="src\engine\gl\mesh.cpp" />
+    <ClCompile Include="src\engine\engine.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\engine\gl\model.cpp" />
+    <ClCompile Include="src\engine\network.cpp" />
+    <ClCompile Include="src\game\npc.cpp" />
+    <ClCompile Include="src\game\pig.cpp" />
+    <ClCompile Include="src\engine\openglcontext.cpp" />
+    <ClCompile Include="src\engine\player.cpp" />
+    <ClCompile Include="src\engine\gl\ui\progressbar.cpp" />
+    <ClCompile Include="src\engine\projectile.cpp" />
+    <ClCompile Include="src\util\quaternion.cpp" />
+    <ClCompile Include="src\engine\gl\shader.cpp" />
+    <ClCompile Include="src\engine\son.cpp" />
+    <ClCompile Include="src\testprojectile.cpp" />
+    <ClCompile Include="src\engine\gl\texture.cpp" />
+    <ClCompile Include="src\engine\gl\texturearray.cpp" />
+    <ClCompile Include="src\engine\gl\textureatlas.cpp" />
+    <ClCompile Include="src\util\tool.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="array.h" />
-    <ClInclude Include="array3d.h" />
-    <ClInclude Include="arraybool.h" />
-    <ClInclude Include="blockinfo.h" />
-    <ClInclude Include="camera.h" />
-    <ClInclude Include="chunk.h" />
-    <ClInclude Include="chunkmesh.h" />
-    <ClInclude Include="controls.h" />
-    <ClInclude Include="npc.h" />
-    <ClInclude Include="info.h" />
-    <ClInclude Include="matrix4.h" />
-    <ClInclude Include="mesh.h" />
-    <ClInclude Include="define.h" />
-    <ClInclude Include="engine.h" />
-    <ClInclude Include="array2d.h" />
-    <ClInclude Include="model.h" />
-    <ClInclude Include="network.h" />
-    <ClInclude Include="progressbar.h" />
-    <ClInclude Include="projectile.h" />
-    <ClInclude Include="quaternion.h" />
-    <ClInclude Include="son.h" />
-    <ClInclude Include="testprojectile.h" />
-    <ClInclude Include="texturearray.h" />
-    <ClInclude Include="textureatlas.h" />
-    <ClInclude Include="vector2.h" />
-    <ClInclude Include="openglcontext.h" />
-    <ClInclude Include="player.h" />
-    <ClInclude Include="shader.h" />
-    <ClInclude Include="texture.h" />
-    <ClInclude Include="tool.h" />
-    <ClInclude Include="vector3.h" />
+    <ClInclude Include="src\engine\ai.h" />
+    <ClInclude Include="src\util\array.h" />
+    <ClInclude Include="src\util\array3d.h" />
+    <ClInclude Include="src\util\arraybool.h" />
+    <ClInclude Include="src\engine\blockinfo.h" />
+    <ClInclude Include="src\engine\camera.h" />
+    <ClInclude Include="src\engine\chunk.h" />
+    <ClInclude Include="src\engine\gl\chunkmesh.h" />
+    <ClInclude Include="src\engine\controls.h" />
+    <ClInclude Include="src\engine\info.h" />
+    <ClInclude Include="src\util\matrix4.h" />
+    <ClInclude Include="src\engine\gl\mesh.h" />
+    <ClInclude Include="src\define.h" />
+    <ClInclude Include="src\engine\engine.h" />
+    <ClInclude Include="src\util\array2d.h" />
+    <ClInclude Include="src\engine\gl\model.h" />
+    <ClInclude Include="src\engine\network.h" />
+    <ClInclude Include="src\game\npc.h" />
+    <ClInclude Include="src\game\pig.h" />
+    <ClInclude Include="src\engine\gl\ui\progressbar.h" />
+    <ClInclude Include="src\engine\projectile.h" />
+    <ClInclude Include="src\util\quaternion.h" />
+    <ClInclude Include="src\engine\son.h" />
+    <ClInclude Include="src\testprojectile.h" />
+    <ClInclude Include="src\engine\gl\texturearray.h" />
+    <ClInclude Include="src\engine\gl\textureatlas.h" />
+    <ClInclude Include="src\util\vector2.h" />
+    <ClInclude Include="src\engine\openglcontext.h" />
+    <ClInclude Include="src\engine\player.h" />
+    <ClInclude Include="src\engine\gl\shader.h" />
+    <ClInclude Include="src\engine\gl\texture.h" />
+    <ClInclude Include="src\util\tool.h" />
+    <ClInclude Include="src\util\vector3.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="media\shader\modelshader.vert" />

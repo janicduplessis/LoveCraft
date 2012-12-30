@@ -183,6 +183,7 @@ private:
 	ProgressBar m_healthBar;
 	ProgressBar m_energyBar;
 	ProgressBar m_manaBar;
+	ProgressBar m_testbar;
 
 	bool m_ghostMode;
 	bool m_rightClick;

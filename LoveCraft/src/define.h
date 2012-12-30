@@ -57,10 +57,10 @@ typedef long long int64;
 #define INTERFACE_TOP_HEIGHT		32
 // Nombre de sort disponible dans la barre de sorts (max 10)
 #define SPELL_BAR_SPELL_NUMBER		10
-// Taille (hxl) des images des sorts dans la barre de sorts
+// Taille (LxH) des images des sorts dans la barre de sorts
 #define SPELL_ICON_SIZE				64
 // Longueur de l'espace entre chaque images de sorts
-#define SPELL_ICON_PADDING			5
+#define SPELL_ICON_PADDING			10
 // Épaisseur du contour des barres
 #define PROGRESS_BAR_OUTLINE		5
 
@@ -99,16 +99,16 @@ typedef long long int64;
 #define GRAVITY							9.81f
 
 // Vie (v/s)
+// Maximum de vie
+#define HEALTH_MAX					100
 // Régénération passive de la vie
 #define HEALTH_PASSIVE_REGEN		0.01f
 // Multiplicateur de perte de vie en fonction de la vitesse lors d'un saut trop haut
 #define HEALTH_GRAVITY_LOST			0.2f
 
 // Energie (e/s)
-// Minimum d'énergie
-#define ENERGY_MINIMUM				0
 // Maximum d'énergie
-#define ENERGY_MAXIMUM				100
+#define ENERGY_MAX					150
 // Vitesse de régénération de l'énergie
 #define ENERGY_REGEN				0.3f
 // Vitesse que le joueur ne doit pas dépasser s'il veut regagner l'énergie
@@ -117,12 +117,15 @@ typedef long long int64;
 #define ENERGY_SPENDING				0.5f
 
 // Mana (m/s)
+// Maximum de mana
+#define MANA_MAX					50
 // Régénération passive de la mana
 #define MANA_PASSIVE_REGEN			0.05f
 
 // Valeurs des options
 #define MOUSE_SENSIBILITY			0.075f
 #define CROSSHAIR_SIZE				64
+//#define MOUSE_CLICK_TIMEOUT_3RDP	0.05f
 
 typedef uint8 BlockType;
 enum BLOCK_TYPE {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS, BTYPE_BRICK, BTYPE_SAND, BTYPE_COUNT};

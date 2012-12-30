@@ -53,6 +53,7 @@ public:
 	virtual void Stay();
 
 protected:
+	virtual bool CheckVision(const Vector3f& pos) const;
 	virtual bool CheckCollision(const Vector3f& pos) const;
 	virtual bool CheckPlayer();
 	virtual bool CheckAttack();

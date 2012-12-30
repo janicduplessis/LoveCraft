@@ -84,7 +84,7 @@ void Engine::Init()
 	m_projectile.SetPosition(Vector3f(10,0,0));
 
 	m_testpig.Init(&m_player);
-	m_testpig.SetPosition(Vector3f(0,0,0));
+	m_testpig.SetPosition(Vector3f(10,5,10));
 	m_character = Character();
 
 	m_chunks = new Array2d<Chunk>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);

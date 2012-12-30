@@ -18,7 +18,7 @@ Projectile::~Projectile()
 void Projectile::Move(float elapsedTime) 
 {
 	// Test si les conditions de fin du projectile sont vraies
-	if (m_timeToLive <= 0 || !m_shot)
+	if (m_timeToLive <= 0 || !m_shot || elapsedTime == 0)
 		return;
 
 	// Test si atteint la cible

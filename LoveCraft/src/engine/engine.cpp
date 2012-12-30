@@ -330,11 +330,11 @@ void Engine::Render(float elapsedTime)
 	//}
 
 	//Solution temporaire pour changer la musique lors du premier render de l'engine
-	static float ttt = 0;
-	if (ttt == 0)
+	static bool ttt = true;
+	if (ttt)
 	{
 		Info::Get().Sound().PlayNextTrack();
-		ttt--;
+		ttt = false;
 	}
 }
 
@@ -352,8 +352,7 @@ void Engine::Render2D(float elapsedTime)
 	glOrtho(0, Width(), 0, Height(), -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-	// Bind de la texture pour le font
-	m_textureFont.Bind();
+
 	std::ostringstream ss;
 	//Print de la position
 	ss << "Position : " << m_player.Position();
@@ -370,6 +369,7 @@ void Engine::Render2D(float elapsedTime)
 	//Print du nombre de FPS
 	ss << "Fps : " << std::setprecision(5) << 1 / elapsedTime;
 	PrintText(Width() - INTERFACE_SIDE_RIGHT_WIDTH - 120, Height() - INTERFACE_TOP_HEIGHT - 20, ss.str());
+	ss.str("");
 	//Affichage du crosshair
 	if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
 	{
@@ -417,13 +417,35 @@ void Engine::Render2D(float elapsedTime)
 	//============================================
 	RenderSpells();
 	//============================================
+	//Mise à jour des données
 	m_healthBar.SetValue(m_character.HealthPerc());
 	m_energyBar.SetValue(m_character.EnergyPerc());
 	m_manaBar.SetValue(m_character.ManaPerc());
 	//============================================
+	//Affichage de la barre de vie
 	RenderProgressBar(m_healthBar, m_textureHealth);
+	ss << "Vie                   " << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
+	glEnable(GL_BLEND);
+	PrintText(m_healthBar.Position().x + PROGRESS_BAR_OUTLINE, 
+		m_healthBar.Position().y + PROGRESS_BAR_OUTLINE, ss.str());
+	ss.str("");
+	glDisable(GL_BLEND);
+	//Affichage de la barre d'énergie
 	RenderProgressBar(m_energyBar, m_textureEnergy);
+	ss << "Energie               " << (int)m_character.Energy() << " / " << (int)m_character.EnergyMax();
+	glEnable(GL_BLEND);
+	PrintText(m_energyBar.Position().x + PROGRESS_BAR_OUTLINE, 
+		m_energyBar.Position().y + PROGRESS_BAR_OUTLINE, ss.str());
+	ss.str("");
+	glDisable(GL_BLEND);
+	//Affichage de la bar de mana
 	RenderProgressBar(m_manaBar, m_textureMana);
+	ss << "Mana                  " << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
+	glEnable(GL_BLEND);
+	PrintText(m_manaBar.Position().x + PROGRESS_BAR_OUTLINE, 
+		m_manaBar.Position().y + PROGRESS_BAR_OUTLINE, ss.str());
+	glDisable(GL_BLEND);
+	ss.str("");
 	//============================================
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);

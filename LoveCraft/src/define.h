@@ -29,6 +29,12 @@ typedef long long int64;
 
 #define VIEW_DISTANCE				64
 
+// Nombre de sons que chaque type a
+#define SOUND_FOOT_NUMBER			4
+// Nombre de temps en secondes qui devront être écoulées 
+// avant qu'un autre son se fasse jouer
+#define SOUND_FOOT_TIMEOUT			0.9f
+
 // Valeurs de l'interface
 // Hauteur du cadre inférieur de l'interface
 #define INTERFACE_BOTTOM_HEIGHT		64

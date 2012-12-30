@@ -1,9 +1,10 @@
 #include "son.h"
+#include "info.h"
 
-
-Son::Son() : m_music(sf::Music()), m_stepTmr(0), m_trackNumber(0)
+Son::Son() : m_music(sf::Music()), m_stepTmr(0), m_trackNumber(0), m_footStep(0)
 {
 	m_sndBuffers = new sf::SoundBuffer[Sons::SON_LAST];
+	m_footSteps = new sf::SoundBuffer[Foots::FOOT_LAST];
 	m_sndChannels = new sf::Sound[Channel::CHANNEL_LAST];
 	m_musicList = new std::string[Musics::MUSIC_LAST];
 }
@@ -12,6 +13,7 @@ Son::Son() : m_music(sf::Music()), m_stepTmr(0), m_trackNumber(0)
 Son::~Son()
 {
 	delete [] m_sndBuffers;
+	delete [] m_footSteps;
 	delete [] m_sndChannels;
 	delete [] m_musicList;
 }
@@ -56,13 +58,16 @@ bool Son::LoadSounds()
 
 bool Son::PlayMusic()
 {
-	if (m_music.getStatus() != sf::SoundSource::Playing)
+	if (Info::Get().GetOptMusic())
 	{
-		//			Ouverture  de (string  de l'enum  ou on est rendu / nombre de piste)
-		if (!m_music.openFromFile(m_musicList[(Musics)(m_trackNumber % Musics::MUSIC_LAST)]))
-			return false;
+		if (m_music.getStatus() != sf::SoundSource::Playing)
+		{
+			//			Ouverture  de (string  de l'enum  ou on est rendu / nombre de piste)
+			if (!m_music.openFromFile(m_musicList[(Musics)(m_trackNumber % Musics::MUSIC_LAST)]))
+				return false;
 
-		m_music.play();
+			m_music.play();
+		}
 	}
 	return true;
 }
@@ -81,17 +86,24 @@ bool Son::PlaySnd(const Sons& snd)
 
 bool Son::PlaySnd(const Sons& snd, const Channel& channel, bool aSync)
 {
-	//Joue le son dans le canal voulu et vérifie si le son doit jouer en asynchrome
-	if (aSync || m_sndChannels[channel].getStatus() != sf::SoundSource::Playing)
+	if (Info::Get().GetOptSound())
 	{
-		//Assigne le son (buffer) voulu au canal voulu et joue le son
-		m_sndChannels[channel].setBuffer(m_sndBuffers[snd]);
-		m_sndChannels[channel].play();
+		//Joue le son dans le canal voulu et vérifie si le son doit jouer en asynchrome
+		if (aSync || m_sndChannels[channel].getStatus() != sf::SoundSource::Playing)
+		{
+			//Assigne le son (buffer) voulu au canal voulu et joue le son
+			m_sndChannels[channel].setBuffer(m_sndBuffers[snd]);
+			m_sndChannels[channel].play();
+		}
 	}
 	return true;
 }
 
-bool Son::PlayStep()
+bool Son::PlayStep(Foots &type, float &elapsedTime)
 {
+	if (type != Foots::FOOT_AIR)
+	{
+
+	}
 	return true;
 }

@@ -6,6 +6,8 @@
 #include "gl/texturearray.h"
 #include <string>
 
+#include "son.h"
+
 class BlockInfo
 {
 public:
@@ -13,6 +15,7 @@ public:
     ~BlockInfo();
 
     BlockType GetType() const;
+	Son::Foots Getsound() const;
 
     void SetDurabilite(int durabilite);
     int GetDurabilite() const;

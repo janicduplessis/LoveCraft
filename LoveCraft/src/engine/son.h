@@ -24,6 +24,22 @@ public:
 		SON_SHIELD,
 		SON_LAST
 	};
+	enum Foots
+	{
+		FOOT_DIRT,
+		FOOT_CONCRETE,
+		FOOT_GRASS,
+		FOOT_GRAVEL,
+		FOOT_METAL,
+		FOOT_MUD,
+		FOOT_SLOSH,
+		FOOT_SNOW,
+		FOOT_TILE,
+		FOOT_WADE,
+		FOOT_WOOD,
+		FOOT_LAST,
+		FOOT_AIR
+	};
 	enum Musics
 	{
 		MUSIC_OVERWORLD1,
@@ -79,13 +95,17 @@ public:
 	/**
 	* Fait jouer les sons de bruits de pas en alternance selon le type de bloc
 	*/
-	bool PlayStep();
+	bool PlayStep(Foots &type, float &elapsedTime);
 private:
-	unsigned short m_stepTmr;
+	float m_stepTmr;
+	unsigned short m_footStep;
+
 	unsigned short m_trackNumber;
 
 	std::string* m_musicList;
 	sf::Music m_music;
+
+	sf::SoundBuffer* m_footSteps;
 
 	sf::SoundBuffer* m_sndBuffers;
 	sf::Sound* m_sndChannels;

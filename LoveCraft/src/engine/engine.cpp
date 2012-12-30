@@ -109,7 +109,8 @@ void Engine::Init()
 	m_manaBar = ProgressBar(Vector2i(400, 20), 
 		Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 10), ProgressBar::BARMODE_HORIZONTAL_LTR);
 	m_testbar = ProgressBar(Vector2i(400, 20),
-		Vector2i(Width() / 2, Height() / 2), ProgressBar::BARMODE_HORIZONTAL_RTL);
+		Vector2i(Width() / 2, Height() / 2), ProgressBar::BARMODE_VERTICAL_UTD);
+	m_testbar.SetVisible(false);
 #pragma endregion
 
 #pragma region Initilisation du chunk principal
@@ -599,7 +600,7 @@ void Engine::RenderProgressBars()
 	glDisable(GL_BLEND);
 	ss.str("");
 	//Affichage de la bar de test
-	m_testbar.Render(m_textureNoir, m_textureFloor);
+	m_testbar.Render(m_textureNoir, m_textureMana);
 }
 
 void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)

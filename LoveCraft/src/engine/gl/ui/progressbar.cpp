@@ -14,7 +14,7 @@ ProgressBar::~ProgressBar()
 {
 }
 
-ProgressBar::ProgressBar(Vector2i &size, Vector2i &position, BarMode mode) : 
+ProgressBar::ProgressBar(Vector2i &size, Vector2i &position, BarMode mode) : m_visible(true),
 	m_minimum(0), m_maximum(100), m_value(80), m_size(size), m_position(position), m_mode(mode)
 {
 	//std::ostringstream ss;
@@ -36,24 +36,20 @@ ProgressBar::ProgressBar(Vector2i &size, Vector2i &position, BarMode mode) :
 
 void ProgressBar::Render(Texture& back, Texture& front)
 {
-	//Render du fond noir
-	RenderSquare(Vector2i(m_position.x - PROGRESS_BAR_OUTLINE, m_position.y - PROGRESS_BAR_OUTLINE),
-		Vector2i(m_size.x + PROGRESS_BAR_OUTLINE * 2, m_size.y + PROGRESS_BAR_OUTLINE * 2), 
-		back, (m_mode == BARMODE_VERTICAL_DTU || m_mode == BARMODE_VERTICAL_UTD));
-	//Render de la bar
-	RenderSquare(m_position, 
-		Vector2i(ValuePerc(), m_size.y), 
-		front, (m_mode == BARMODE_VERTICAL_DTU || m_mode == BARMODE_VERTICAL_UTD));
-	////Render du fond noir
-	//RenderSquare(Vector2i(m_position.x - PROGRESS_BAR_OUTLINE, m_position.y - PROGRESS_BAR_OUTLINE),
-	//	Vector2i(m_size.x + PROGRESS_BAR_OUTLINE * 2, m_size.y + PROGRESS_BAR_OUTLINE * 2), 
-	//	back, true);
-	////Render de la bar
-	//RenderSquare(m_position, 
-	//	Vector2i(m_size.x, ValuePerc()), 
-	//	front, true);
+	if (m_visible)
+	{
+		bool invertedBar = m_mode == BARMODE_HORIZONTAL_RTL || BARMODE_VERTICAL_UTD;
+		//Render du fond noir
+		RenderSquare(Vector2i(m_position.x - PROGRESS_BAR_OUTLINE, m_position.y - PROGRESS_BAR_OUTLINE),
+			Vector2i(m_size.x + PROGRESS_BAR_OUTLINE * 2, m_size.y + PROGRESS_BAR_OUTLINE * 2), 
+			back);
+		//Render de la bar
+		RenderSquare(Vector2i(m_position.x, m_position.y), 
+			Vector2i(ValuePerc(), m_size.y), 
+			front);
+	}
 }
-void ProgressBar::RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool rotate)
+void ProgressBar::RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture)
 {
 	texture.Bind();
 	glLoadIdentity();
@@ -80,22 +76,20 @@ void ProgressBar::RenderSquare(const Vector2i& position, const Vector2i& size, T
 }
 void ProgressBar::ApplyRotationTransformation(BarMode type, Vector2i size) const
 {
+	float rotateAngle = 0;
 	switch (type)
 	{
 	case BARMODE_HORIZONTAL_LTR:
+	case BARMODE_HORIZONTAL_RTL:
 		glTranslatef(0, 0, 0);
 		break;
 	case BARMODE_VERTICAL_DTU:
-		glTranslatef(size.y, 0, 0);
-		break;
-	case BARMODE_HORIZONTAL_RTL:
-		glTranslatef(size.x, size.y, 0);
-		break;
 	case BARMODE_VERTICAL_UTD:
-		glTranslatef(0, size.y, 0);
+		glTranslatef(size.y, 0, 0);
+		rotateAngle = 90.0f;
 		break;
 	}
-	glRotatef((float)type, 0, 0, 1.0f);
+	glRotatef(rotateAngle, 0, 0, 1.0f);
 }
 
 void ProgressBar::RenderCircle(const Vector2i& origin, float rayon, Texture& texture, bool repeat)
@@ -127,6 +121,14 @@ float ProgressBar::Minimum() const
 float ProgressBar::ValuePerc() const
 {
 	return (m_value / m_maximum) * m_size.x;
+}
+bool ProgressBar::Visible() const
+{
+	return m_visible;
+}
+void ProgressBar::SetVisible(const bool value)
+{
+	m_visible = value;
 }
 Vector2i ProgressBar::Size() const
 {

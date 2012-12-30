@@ -612,6 +612,10 @@ void Engine::KeyPressEvent(unsigned char key)
 		std::cout << "Unhandled key: " << (int)key << std::endl;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
 			Info::Get().Sound().PlayNextTrack();
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::T))
+			Info::Get().Sound().TestSon();
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
+			Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
 	}
 
 }

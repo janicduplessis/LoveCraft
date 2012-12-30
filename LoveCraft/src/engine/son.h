@@ -27,11 +27,11 @@ public:
 	};
 	enum Foots
 	{
-		FOOT_DIRT,
 		FOOT_CONCRETE,
+		FOOT_DIRT,
 		FOOT_GRASS,
-		FOOT_GRAVEL,
 		FOOT_METAL,
+		FOOT_GRAVEL,
 		FOOT_MUD,
 		FOOT_SLOSH,
 		FOOT_SNOW,
@@ -105,10 +105,13 @@ public:
 	* @param elapsedTime	Le nombre de temps écoulé depuis le dernier frame
 	* @param timeout		Le nombre de secondes qui doivent être écoulées avant de
 	*						jouer le prochain son
+	* @param priority		Joue le son quelque soit le temps depuis le dernier son
+	* 
 	* @note		Vérifier que les sons sont activés avant d'appeler cette méthode
 	* 			pour éviter de surcharger inutilement la mémoire.
 	*/
-	bool PlayStep(const BlockType type, float elapsedTime, float timeout);
+	bool PlayStep(const BlockType type, float elapsedTime, float timeout, bool priority = false);
+	void TestSon();
 private:
 	Foots GetFootType(BlockType type) const;
 	bool LoadFootSteps(const Foots type, const std::string filename);
@@ -125,5 +128,8 @@ private:
 
 	sf::SoundBuffer* m_sndBuffers;
 	sf::Sound* m_sndChannels;
+
+	//Tests
+	unsigned short m_soundStep;
 };
 #endif

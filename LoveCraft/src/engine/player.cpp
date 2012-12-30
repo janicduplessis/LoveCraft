@@ -70,9 +70,14 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 		}
 		else
 		{
+			if (m_speed.y > 0)
+				Info::Get().Sound().PlayStep(Info::Get().GetBlocFromWorld(m_pos), elapsedTime, 1.0f, true);
 			//Perte de vie quand on tombe de trop haut
 			if (m_speed.y > 8)
+			{
 				cter.SetHealth(-(int)(m_speed.y * m_speed.y * HEALTH_GRAVITY_LOST));
+				Info::Get().Sound().PlaySnd(Son::SON_FALLPAIN, Son::CHANNEL_STEP);
+			}
 			m_speed.y = 0;
 		}
 	}
@@ -101,7 +106,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 
 #pragma region Position en fonction du crouch
 
-	if (c)	// Ctrl
+	if (c)
 	{
 		if (!ghost)
 		{
@@ -133,7 +138,11 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 			m_lastPos = m_pos;
 			m_pos = newPos;
 		}
-		else m_speed.z = 0;
+		else
+		{
+			m_speed.z = 0;
+			m_accel.z = 0;
+		}
 	}
 #pragma endregion
 
@@ -226,7 +235,11 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 			m_lastPos = m_pos;	//pas utiliser encore
 			m_pos = newPos;
 		}
-		else m_speed.x = 0;
+		else
+		{
+			m_speed.x = 0;
+			m_accel.x = 0;
+		}
 	}
 #pragma endregion
 
@@ -306,7 +319,9 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 	if (Info::Get().Options().GetOptSound())
 	{
 		//Vérification que le joueur se trouve par terre et qu'il avance
-		if (m_speed.y == 0 && (w || a || s || d) && !ctrl && !ghost)
+		bool readyToMove = (fabs(m_speed.x) >= 0.5f || fabs(m_speed.z) >= 0.5f) && 
+			m_speed.y == 0 && (w || a || s || d);
+		if (readyToMove && !ctrl && !ghost)
 		{
 			//Appel de la fonction qui joue le son avec le BlockType qui se trouve
 			//juste en dessous du joueur (position = 0x, 0y, 0z)

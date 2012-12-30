@@ -2,7 +2,7 @@
 #include "info.h"
 #include <sstream>
 
-Son::Son() : m_music(sf::Music()), m_stepTmr(0), m_trackNumber(0), m_footStep(0)
+Son::Son() : m_music(sf::Music()), m_stepTmr(0), m_trackNumber(0), m_footStep(0), m_soundStep(0)
 {
 	m_sndBuffers = new sf::SoundBuffer[Sons::SON_LAST];
 	m_footSteps = new sf::SoundBuffer[Foots::FOOT_LAST * SOUND_FOOT_NUMBER + 1];
@@ -117,7 +117,7 @@ bool Son::PlaySnd(const Sons& snd, const Channel& channel, bool aSync)
 	return true;
 }
 
-bool Son::PlayStep(const BlockType type, float elapsedTime, float timeout)
+bool Son::PlayStep(const BlockType type, float elapsedTime, float timeout, bool priority)
 {
 	//Conversion du BlockType en Foots
 	Foots typePas = GetFootType(type);
@@ -127,10 +127,10 @@ bool Son::PlayStep(const BlockType type, float elapsedTime, float timeout)
 		//Incrémentation du timer
 		m_stepTmr += elapsedTime;
 		//Vérification que le timer soit rendu au temps minimal
-		if (timeout <= m_stepTmr)
+		if (timeout <= m_stepTmr || priority)
 		{
 			//Assigne le buffer correspondant au type de pas
-			m_sndChannels[CHANNEL_STEP].setBuffer(m_footSteps[(int)type * 4 + (m_footStep % SOUND_FOOT_NUMBER)]);
+			m_sndChannels[CHANNEL_STEP].setBuffer(m_footSteps[typePas * 4 + (m_footStep % SOUND_FOOT_NUMBER)]);
 			//Joue le son
 			m_sndChannels[CHANNEL_STEP].play();
 			//Incrémente le pas afin d'obtenir des sons presque différents à chaque appel
@@ -142,6 +142,13 @@ bool Son::PlayStep(const BlockType type, float elapsedTime, float timeout)
 	return true;
 }
 
+void Son::TestSon()
+{
+	m_sndChannels[CHANNEL_DEFAULT].setBuffer(m_footSteps[m_soundStep % (Foots::FOOT_LAST * SOUND_FOOT_NUMBER + 1)]);
+	m_sndChannels[CHANNEL_DEFAULT].play();
+	m_soundStep++;
+}
+
 Son::Foots Son::GetFootType(BlockType type) const
 {
 	switch (type)
@@ -151,9 +158,9 @@ Son::Foots Son::GetFootType(BlockType type) const
 	case BLOCK_TYPE::BTYPE_GRASS:
 		return Son::FOOT_GRASS;
 	case BLOCK_TYPE::BTYPE_DIRT:
-		return Son::FOOT_MUD;
-	case BLOCK_TYPE::BTYPE_SAND:
 		return Son::FOOT_DIRT;
+	case BLOCK_TYPE::BTYPE_SAND:
+		return Son::FOOT_GRAVEL;
 	default:
 		return Son::FOOT_AIR;
 	}
@@ -164,10 +171,10 @@ bool Son::LoadFootSteps(const Son::Foots type, const std::string filename)
 	//Initialisation du stream pour les noms de fichier
 	std::ostringstream ss;
 	//Entrée en boucle
-	for (unsigned short i = 1; i <= SOUND_FOOT_NUMBER; i++)
+	for (unsigned short i = 0; i < SOUND_FOOT_NUMBER; i++)
 	{
 		//Construit le nom de fichier complet avec les infos
-		ss << SOUND_FOOT_PATH << filename << i << ".ogg";
+		ss << SOUND_FOOT_PATH << filename << (i + 1) << ".ogg";
 		//Charge le son grâce au nom de fichier construit
 		if (!m_footSteps[type * 4 + i].loadFromFile(ss.str()))
 			return false;

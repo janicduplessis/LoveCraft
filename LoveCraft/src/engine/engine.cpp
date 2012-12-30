@@ -200,9 +200,12 @@ void Engine::LoadResource()
 	LoadTexture(m_textureMana, TEXTURE_PATH "mana.png");
 
 	//Initialisation des éléments de l'interface
-	m_healthBar = ProgressBar(Vector2i(400, 20), Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 35));
-	m_energyBar = ProgressBar(Vector2i(400, 20), Vector2i(Width() - (INTERFACE_SIDE_RIGHT_WIDTH + 400 + PROGRESS_BAR_OUTLINE), 35));
-	m_manaBar = ProgressBar(Vector2i(400, 20), Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 10));
+	m_healthBar = ProgressBar(Vector2i(400, 20), 
+		Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 35));
+	m_energyBar = ProgressBar(Vector2i(400, 20), 
+		Vector2i(Width() - (INTERFACE_SIDE_RIGHT_WIDTH + 400 + PROGRESS_BAR_OUTLINE), 35));
+	m_manaBar = ProgressBar(Vector2i(400, 20), 
+		Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 10));
 
 	// Load et compile les shaders
 	std::cout << " Loading and compiling shaders ..." << std::endl;
@@ -422,30 +425,7 @@ void Engine::Render2D(float elapsedTime)
 	m_energyBar.SetValue(m_character.EnergyPerc());
 	m_manaBar.SetValue(m_character.ManaPerc());
 	//============================================
-	//Affichage de la barre de vie
-	RenderProgressBar(m_healthBar, m_textureHealth);
-	ss << "Vie                   " << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
-	glEnable(GL_BLEND);
-	PrintText(m_healthBar.Position().x + PROGRESS_BAR_OUTLINE, 
-		m_healthBar.Position().y + PROGRESS_BAR_OUTLINE, ss.str());
-	ss.str("");
-	glDisable(GL_BLEND);
-	//Affichage de la barre d'énergie
-	RenderProgressBar(m_energyBar, m_textureEnergy);
-	ss << "Energie               " << (int)m_character.Energy() << " / " << (int)m_character.EnergyMax();
-	glEnable(GL_BLEND);
-	PrintText(m_energyBar.Position().x + PROGRESS_BAR_OUTLINE, 
-		m_energyBar.Position().y + PROGRESS_BAR_OUTLINE, ss.str());
-	ss.str("");
-	glDisable(GL_BLEND);
-	//Affichage de la bar de mana
-	RenderProgressBar(m_manaBar, m_textureMana);
-	ss << "Mana                  " << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
-	glEnable(GL_BLEND);
-	PrintText(m_manaBar.Position().x + PROGRESS_BAR_OUTLINE, 
-		m_manaBar.Position().y + PROGRESS_BAR_OUTLINE, ss.str());
-	glDisable(GL_BLEND);
-	ss.str("");
+	RenderProgressBars();
 	//============================================
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
@@ -505,16 +485,33 @@ void Engine::RenderSpells()
 
 }
 
-void Engine::RenderProgressBar(const ProgressBar &bar, Texture &texture)
+void Engine::RenderProgressBars()
 {
-	//Render du fond noir
-	RenderSquare(Vector2i(bar.Position().x - PROGRESS_BAR_OUTLINE, bar.Position().y - PROGRESS_BAR_OUTLINE),
-		Vector2i(bar.Size().x + PROGRESS_BAR_OUTLINE * 2, bar.Size().y + PROGRESS_BAR_OUTLINE * 2), 
-		m_textureNoir);
-	//Render de la bar
-	RenderSquare(bar.Position(), 
-		Vector2i(bar.ValueWidth(), bar.Size().y), 
-		texture);
+	std::ostringstream ss;
+	//Affichage de la barre de vie
+	m_healthBar.Render(m_textureNoir, m_textureHealth);
+	ss << "Vie                   " << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
+	glEnable(GL_BLEND);
+	PrintText(m_healthBar.Position().x + PROGRESS_BAR_OUTLINE, 
+		m_healthBar.Position().y + PROGRESS_BAR_OUTLINE, ss.str());
+	ss.str("");
+	glDisable(GL_BLEND);
+	//Affichage de la barre d'énergie
+	m_energyBar.Render(m_textureNoir, m_textureEnergy);
+	ss << "Energie               " << (int)m_character.Energy() << " / " << (int)m_character.EnergyMax();
+	glEnable(GL_BLEND);
+	PrintText(m_energyBar.Position().x + PROGRESS_BAR_OUTLINE, 
+		m_energyBar.Position().y + PROGRESS_BAR_OUTLINE, ss.str());
+	ss.str("");
+	glDisable(GL_BLEND);
+	//Affichage de la bar de mana
+	m_manaBar.Render(m_textureNoir, m_textureMana);
+	ss << "Mana                  " << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
+	glEnable(GL_BLEND);
+	PrintText(m_manaBar.Position().x + PROGRESS_BAR_OUTLINE, 
+		m_manaBar.Position().y + PROGRESS_BAR_OUTLINE, ss.str());
+	glDisable(GL_BLEND);
+	ss.str("");
 }
 
 void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)

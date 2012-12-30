@@ -49,6 +49,11 @@ Son& Info::Sound()
 	return m_sound;
 }
 
+Option& Info::Options()
+{
+	return m_options;
+}
+
 Nwork& Info::Network()
 {
 	return m_network;

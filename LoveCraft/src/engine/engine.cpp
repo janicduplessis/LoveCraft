@@ -37,12 +37,20 @@ Engine& Engine::Get()
 
 void Engine::Init()
 {
+
+#pragma region Initilisation de Glew
+
 	GLenum err = glewInit ();
 	if( err != GLEW_OK )
 	{
 		std :: cerr << " Error while initializing glew .. abording (" << glewGetErrorString ( err) << ")" << std :: endl ;
 		abort ();
 	}
+
+#pragma endregion
+
+#pragma region Initilisation des elements OpenGl
+
 	//glClearColor( 0.f, 0.75f, 1.f, 1.0f );
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glEnable( GL_TEXTURE_2D );
@@ -75,6 +83,9 @@ void Engine::Init()
 	//float fogCol[3] = {0.8f, 0.8f, 0.8f};
 	//glFogfv(GL_FOG_COLOR, fogCol);
 
+#pragma endregion
+
+#pragma Initialisation des entites
 
 	m_player.Init();
 	m_projectile.Load();
@@ -86,6 +97,23 @@ void Engine::Init()
 	m_testpig.Init(&m_player);
 	m_testpig.SetPosition(Vector3f(10,5,10));
 	m_character = Character();
+
+#pragma endregion
+
+#pragma region Initialisation des elements de l interface
+	m_healthBar = ProgressBar(Vector2i(400, 20), 
+		Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 35), ProgressBar::BARMODE_HORIZONTAL_LTR);
+	m_energyBar = ProgressBar(Vector2i(20, 300), 
+		Vector2i(m_playScreenBotLeft.x + PROGRESS_BAR_OUTLINE, m_playScreenBotLeft.y + PROGRESS_BAR_OUTLINE), 
+		ProgressBar::BARMODE_VERTICAL_DTU);
+	m_manaBar = ProgressBar(Vector2i(400, 20), 
+		Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 10), ProgressBar::BARMODE_HORIZONTAL_LTR);
+	m_testbar = ProgressBar(Vector2i(400, 20),
+		Vector2i(Width() / 2, Height() / 2), ProgressBar::BARMODE_VERTICAL_UTD);
+	m_testbar.SetVisible(false);
+#pragma endregion
+
+#pragma region Initilisation du chunk principal
 
 	m_chunks = new Array2d<Chunk>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
 	Info::Get().SetChunkArray(m_chunks);
@@ -155,6 +183,8 @@ void Engine::Init()
 		}
 	}
 
+#pragma endregion
+
 	CenterMouse();
 	HideCursor();
 }
@@ -165,6 +195,9 @@ void Engine::DeInit()
 
 void Engine::LoadResource()
 {
+
+#pragma region Chargement des textures
+
 	// Texture des blocs 128x128 px
 	m_textureArray = new TextureArray(128);
 
@@ -186,7 +219,6 @@ void Engine::LoadResource()
 	m_textureSpell[8].Load(TEXTURE_PATH "SpellDefend.gif");
 	m_textureSpell[9].Load(TEXTURE_PATH "SpellShield.png");
 
-
 	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
 	LoadTexture(m_textureInterface, TEXTURE_PATH "rock.jpg");
 	LoadTexture(m_textureCrosshair, TEXTURE_PATH "cross.bmp");
@@ -198,12 +230,9 @@ void Engine::LoadResource()
 	LoadTexture(m_textureEnergy, TEXTURE_PATH "energy.png");
 	LoadTexture(m_textureMana, TEXTURE_PATH "mana.png");
 
-	//Initialisation des éléments de l'interface
-	m_healthBar = ProgressBar(Vector2i(400, 20), Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 35));
-	m_energyBar = ProgressBar(Vector2i(400, 20), Vector2i(Width() - (INTERFACE_SIDE_RIGHT_WIDTH + 400 + PROGRESS_BAR_OUTLINE), 35));
-	m_manaBar = ProgressBar(Vector2i(400, 20), Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 10));
+#pragma endregion
 
-	// Load et compile les shaders
+#pragma region Load et compile les shaders
 	std::cout << " Loading and compiling shaders ..." << std::endl;
 	if (!m_shaderModel.Load(SHADER_PATH "modelshader.vert", SHADER_PATH "modelshader.frag", true))
 	{
@@ -215,6 +244,8 @@ void Engine::LoadResource()
 		std::cout << " Failed to load cube shader" << std::endl;
 		exit(1) ;
 	}
+#pragma endregion
+
 }
 
 void Engine::LoadBlocTexture(BLOCK_TYPE type, std::string path)
@@ -228,10 +259,16 @@ void Engine::UnloadResource()
 
 void Engine::Render(float elapsedTime)
 {
-	static float gameTime = elapsedTime;
 
+#pragma region Game time
+
+	static float gameTime = elapsedTime;
 	gameTime += elapsedTime;
-	// calcul la position du joueur et de la camera
+
+#pragma endregion
+
+#pragma region Calcul la position du joueur et de la camera
+
 	m_player.Move(m_ghostMode, m_character, elapsedTime);
 	m_camera.SetPosition(m_player.Position());
 
@@ -240,6 +277,10 @@ void Engine::Render(float elapsedTime)
 	// Transformations initiales
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
+#pragma endregion
+
+#pragma Elements de la camera
 
 	// 3rd person
 	if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON ) {
@@ -267,7 +308,9 @@ void Engine::Render(float elapsedTime)
 		m_camera.ApplyTranslation();
 	}
 
-	// Render les cubes
+#pragma endregion
+
+#pragma region Render les cubes
 	m_shaderCube.Use();
 	m_textureArray->Use();
 	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
@@ -282,7 +325,10 @@ void Engine::Render(float elapsedTime)
 	}
 	Shader::Disable();
 
-	// Render models
+#pragma endregion
+
+#pragma region Render models
+
 	m_shaderModel.Use();
 	m_projectile.SetDestination(m_player.Position());
 	m_projectile.Move(elapsedTime);
@@ -293,12 +339,20 @@ void Engine::Render(float elapsedTime)
 
 	Shader::Disable();
 
+#pragma endregion
+
+#pragma region Render l interface
+
 	// HUD
 	if (m_wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	Render2D(elapsedTime);
 	if (m_wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+#pragma endregion
+
+#pragma region Reseau
 
 	//Test réseau - Dessigne un carré en haut de la position du joueur
 	//sf::Packet p;
@@ -327,11 +381,29 @@ void Engine::Render(float elapsedTime)
 
 	//	glEnd();
 	//}
+
+#pragma endregion
+
+#pragma region Musique
+
+	//Solution temporaire pour changer la musique lors du premier render de l'engine
+	static bool ttt = true;
+	if (ttt)
+	{
+		Info::Get().Sound().PlayNextTrack();
+		ttt = false;
+	}
+
+#pragma endregion
+
 }
 
 void Engine::Render2D(float elapsedTime)
 {
-	// Setter le blend function , tout ce qui sera noir sera transparent
+
+#pragma region OpenGl
+
+	//Setter le blend function, tout ce qui sera noir sera transparent
 	glDisable(GL_LIGHTING);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -343,8 +415,11 @@ void Engine::Render2D(float elapsedTime)
 	glOrtho(0, Width(), 0, Height(), -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-	// Bind de la texture pour le font
-	m_textureFont.Bind();
+
+#pragma endregion
+
+#pragma region Affichage du texte
+
 	std::ostringstream ss;
 	//Print de la position
 	ss << "Position : " << m_player.Position();
@@ -361,7 +436,12 @@ void Engine::Render2D(float elapsedTime)
 	//Print du nombre de FPS
 	ss << "Fps : " << std::setprecision(5) << 1 / elapsedTime;
 	PrintText(Width() - INTERFACE_SIDE_RIGHT_WIDTH - 120, Height() - INTERFACE_TOP_HEIGHT - 20, ss.str());
-	//Affichage du crosshair
+	ss.str("");
+
+#pragma endregion
+
+#pragma region Crosshair
+
 	if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
 	{
 		RenderSquare(
@@ -369,6 +449,11 @@ void Engine::Render2D(float elapsedTime)
 			Vector2i(CROSSHAIR_SIZE, CROSSHAIR_SIZE),
 			m_textureCrosshair, false);
 	}
+
+#pragma endregion
+
+#pragma region Images quelconque
+
 	//Optimisation possible par la surcharge d'opérateurs
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))		//Mode course
 		RenderSquare(
@@ -381,8 +466,10 @@ void Engine::Render2D(float elapsedTime)
 		Vector2i(m_textureGhost.GetWidth(), m_textureGhost.GetHeight()),
 		m_textureGhost);
 
+#pragma endregion
+
 	glDisable(GL_BLEND);
-	//Affichage de l'interface
+#pragma region Affichage de l interface
 
 	//============================================
 	//Bottom
@@ -408,20 +495,27 @@ void Engine::Render2D(float elapsedTime)
 	//============================================
 	RenderSpells();
 	//============================================
+	//Mise à jour des données
 	m_healthBar.SetValue(m_character.HealthPerc());
 	m_energyBar.SetValue(m_character.EnergyPerc());
 	m_manaBar.SetValue(m_character.ManaPerc());
+	m_testbar.SetValue(m_character.EnergyPerc());
 	//============================================
-	RenderProgressBar(m_healthBar, m_textureHealth);
-	RenderProgressBar(m_energyBar, m_textureEnergy);
-	RenderProgressBar(m_manaBar, m_textureMana);
+	RenderProgressBars();
 	//============================================
+
+#pragma endregion
+
+#pragma region OpenGl
+
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
+
+#pragma endregion
 
 }
 
@@ -474,16 +568,39 @@ void Engine::RenderSpells()
 
 }
 
-void Engine::RenderProgressBar(const ProgressBar &bar, Texture &texture)
+void Engine::RenderProgressBars()
 {
-	//Render du fond noir
-	RenderSquare(Vector2i(bar.Position().x - PROGRESS_BAR_OUTLINE, bar.Position().y - PROGRESS_BAR_OUTLINE),
-		Vector2i(bar.Size().x + PROGRESS_BAR_OUTLINE * 2, bar.Size().y + PROGRESS_BAR_OUTLINE * 2), 
-		m_textureNoir);
-	//Render de la bar
-	RenderSquare(bar.Position(), 
-		Vector2i(bar.ValueWidth(), bar.Size().y), 
-		texture);
+	std::ostringstream ss;
+	//Affichage de la barre de vie
+	m_healthBar.Render(m_textureNoir, m_textureHealth);
+	ss << "Vie                   " << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
+	glEnable(GL_BLEND);
+	PrintText(m_healthBar.Position().x + PROGRESS_BAR_OUTLINE, 
+		m_healthBar.Position().y + PROGRESS_BAR_OUTLINE, ss.str());
+	ss.str("");
+	glDisable(GL_BLEND);
+	//Affichage de la barre d'énergie
+	m_energyBar.Render(m_textureNoir, m_textureEnergy);
+	ss << "Energie";
+	glEnable(GL_BLEND);
+	PrintText(m_energyBar.Position().x, 
+		m_energyBar.Position().y + m_energyBar.Size().x + PROGRESS_BAR_OUTLINE * 2 + 12, ss.str());
+	ss.str("");
+	ss << (int)m_character.Energy() << " / " << (int)m_character.EnergyMax();
+	PrintText(m_energyBar.Position().x, 
+		m_energyBar.Position().y + m_energyBar.Size().x + PROGRESS_BAR_OUTLINE * 2, ss.str());
+	ss.str("");
+	glDisable(GL_BLEND);
+	//Affichage de la bar de mana
+	m_manaBar.Render(m_textureNoir, m_textureMana);
+	ss << "Mana                  " << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
+	glEnable(GL_BLEND);
+	PrintText(m_manaBar.Position().x + PROGRESS_BAR_OUTLINE, 
+		m_manaBar.Position().y + PROGRESS_BAR_OUTLINE, ss.str());
+	glDisable(GL_BLEND);
+	ss.str("");
+	//Affichage de la bar de test
+	m_testbar.Render(m_textureNoir, m_textureMana);
 }
 
 void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
@@ -579,6 +696,12 @@ void Engine::KeyPressEvent(unsigned char key)
 		break;
 	default:
 		std::cout << "Unhandled key: " << (int)key << std::endl;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
+			Info::Get().Sound().PlayNextTrack();
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::T))
+			Info::Get().Sound().TestSon();
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
+			Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
 	}
 
 }
@@ -687,9 +810,6 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 				m_camRadius += 1;
 			}
 		}
-		break;
-	case MOUSEEVENTF_MIDDLEDOWN:
-		Info::Get().Sound().PlayMusic();
 		break;
 	}
 }

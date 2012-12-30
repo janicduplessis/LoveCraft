@@ -1,7 +1,7 @@
 #include "character.h"
 
 
-Character::Character() : m_name("DeFacto"), m_healthMax(100), m_energyMax(150), m_manaMax(50),
+Character::Character() : m_name("DeFacto"), m_healthMax(HEALTH_MAX), m_energyMax(ENERGY_MAX), m_manaMax(MANA_MAX),
 	m_health(m_healthMax), m_energy(m_energyMax), m_mana(m_manaMax)
 {
 }

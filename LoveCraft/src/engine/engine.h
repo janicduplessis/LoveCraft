@@ -137,7 +137,7 @@ private:
 	*/
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat = true);
 	virtual void RenderSpells();
-	void RenderProgressBar(const ProgressBar &bar, Texture &texture);
+	void RenderProgressBars();
 private:
 	bool m_wireframe;
 	float m_angle;
@@ -183,6 +183,7 @@ private:
 	ProgressBar m_healthBar;
 	ProgressBar m_energyBar;
 	ProgressBar m_manaBar;
+	ProgressBar m_testbar;
 
 	bool m_ghostMode;
 	bool m_rightClick;

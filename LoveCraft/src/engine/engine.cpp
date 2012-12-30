@@ -43,6 +43,7 @@ void Engine::Init()
 		std :: cerr << " Error while initializing glew .. abording (" << glewGetErrorString ( err) << ")" << std :: endl ;
 		abort ();
 	}
+
 	//glClearColor( 0.f, 0.75f, 1.f, 1.0f );
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glEnable( GL_TEXTURE_2D );
@@ -327,6 +328,14 @@ void Engine::Render(float elapsedTime)
 
 	//	glEnd();
 	//}
+
+	//Solution temporaire pour changer la musique lors du premier render de l'engine
+	static float ttt = 0;
+	if (ttt == 0)
+	{
+		Info::Get().Sound().PlayNextTrack();
+		ttt--;
+	}
 }
 
 void Engine::Render2D(float elapsedTime)
@@ -579,6 +588,8 @@ void Engine::KeyPressEvent(unsigned char key)
 		break;
 	default:
 		std::cout << "Unhandled key: " << (int)key << std::endl;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
+			Info::Get().Sound().PlayNextTrack();
 	}
 
 }
@@ -687,9 +698,6 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 				m_camRadius += 1;
 			}
 		}
-		break;
-	case MOUSEEVENTF_MIDDLEDOWN:
-		Info::Get().Sound().PlayMusic();
 		break;
 	}
 }

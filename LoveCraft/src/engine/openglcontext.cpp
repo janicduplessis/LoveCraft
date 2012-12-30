@@ -1,5 +1,6 @@
 #include "openglcontext.h"
 #include "define.h"
+#include "info.h"
 
 OpenglContext::OpenglContext() : m_maxFps(999999), m_fullscreen(false), m_title(""), m_lastFrameTime(0)
 {
@@ -18,7 +19,7 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 	Init();
 	LoadResource();
 
-	sf::Clock clock;
+	sf::Clock clock;	
 
 	while (m_app.isOpen())
 	{
@@ -58,6 +59,7 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 				break;
 			}
 		}
+			
 		m_app.setActive();
 		Render(m_lastFrameTime);
 		m_app.display();

@@ -209,7 +209,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 	else m_speed.z += m_accel.z * elapsedTime;
 
 	//Vérification si le joueur change de touche rapidement
-	if (w && m_speed.z < 0 || s && m_speed.z > 0)
+	if ((w && m_speed.z < 0 || s && m_speed.z > 0) && m_speed.y == 0)
 		m_speed.z = 0;
 
 #pragma endregion
@@ -295,7 +295,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 	else m_speed.x += m_accel.x * elapsedTime;
 
 	//Vérification si le joueur change de touche rapidement
-	if (d && m_speed.x < 0 || a && m_speed.x > 0)
+	if ((d && m_speed.x < 0 || a && m_speed.x > 0) && m_speed.y == 0)
 		m_speed.x = 0;
 #pragma endregion
 

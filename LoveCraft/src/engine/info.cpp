@@ -1,6 +1,6 @@
 #include "info.h"
 
-Info::Info() : m_optMusic(true), m_optSound(true)
+Info::Info()
 {
 	GenerateBlocInfos();
 	if (!m_sound.LoadSounds())
@@ -49,25 +49,9 @@ Son& Info::Sound()
 	return m_sound;
 }
 
-bool Info::GetOptMusic() const
+Option& Info::Options()
 {
-	return m_optMusic;
-}
-
-bool Info::GetOptSound() const
-{
-	return m_optSound;
-}
-
-void Info::SetOptMusic(const bool value)
-{
-	m_optMusic = value;
-	m_sound.PlayNextTrack();
-}
-
-void Info::SetOptSound(const bool value)
-{
-	m_optSound = value;
+	return m_options;
 }
 
 Nwork& Info::Network()

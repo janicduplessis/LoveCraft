@@ -7,6 +7,7 @@
 #include "chunk.h"
 #include "son.h"
 #include "network.h"
+#include "options.h"
 
 #include <util/vector3.h>
 #include <util/array2d.h>
@@ -35,6 +36,11 @@ public:
 	* Retourne une référence vers l'instance de son
 	*/
 	Son& Sound();
+
+	/**
+	* Retourne une référence vers l'instance des options
+	*/
+	Option& Options();
 
 	/**
 	* Retourne une référence vers l'instance de réseau
@@ -68,22 +74,6 @@ public:
 	* @return type du bloc à la position
 	*/
 	BlockType GetBlocFromWorld(Vector3f pos, const Vector3f& offset = Vector3f(0,0,0)) const;
-	/**
-	* Obtient la valeur indiquant si la musique est active
-	*/
-	bool GetOptMusic() const;
-	/**
-	* Obtient la valeur indiquant si le son est actif
-	*/
-	bool GetOptSound() const;
-	/**
-	* Définit la valeur indiquant si la musique est active
-	*/
-	void SetOptMusic(const bool value);
-	/**
-	* Définit la valeur indiquant si le son est actif
-	*/
-	void SetOptSound(const bool value);
 
 private:
 	Info();
@@ -96,9 +86,8 @@ private:
 	Array2d<Chunk>* m_chunks;
 	static Info* m_info;
 	BlockInfo* m_blocInfos[BTYPE_COUNT];
+	Option m_options;
 	Son m_sound;
-	bool m_optMusic;
-	bool m_optSound;
 	Nwork m_network;
 };
 

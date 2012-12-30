@@ -29,11 +29,22 @@ typedef long long int64;
 
 #define VIEW_DISTANCE				64
 
+// Options
+// Musique à l'ouverture du programme
+#define OPTION_MUSIC_STARTING_VALUE	true
+// Son à l'ouverture du programme
+#define OPTION_SOUND_STARTING_VALUE	true
+// Montrer les informations à l'ouverture du programme
+#define OPTION_INFO_STARTING_VALUE	true
+
 // Nombre de sons que chaque type a
 #define SOUND_FOOT_NUMBER			4
 // Nombre de temps en secondes qui devront être écoulées 
 // avant qu'un autre son se fasse jouer
-#define SOUND_FOOT_TIMEOUT			0.9f
+#define SOUND_FOOT_TIMEOUT			0.4f
+// Nombre de temps en secondes qui devront être écoulées 
+// avant qu'un autre son se fasse jouer lorsque le joueur coure
+#define SOUND_FOOT_RUN_TIMEOUT		0.25f
 
 // Valeurs de l'interface
 // Hauteur du cadre inférieur de l'interface

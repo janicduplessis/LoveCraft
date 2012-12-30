@@ -70,8 +70,6 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 		}
 		else
 		{
-			if (m_speed.y != 0)
-				Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
 			//Perte de vie quand on tombe de trop haut
 			if (m_speed.y > 8)
 				cter.SetHealth(-(int)(m_speed.y * m_speed.y * HEALTH_GRAVITY_LOST));
@@ -94,7 +92,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 				if ((!a && !d) && m_speed.x != 0)
 					m_speed.x *= 0.6f;
 				m_speed.y = -MOUVEMENT_SPEED_JUMP;
-				Info::Get().Sound().PlaySnd(Son::SON_JUMP, Son::CHANNEL_PLAYER, false);
+				Info::Get().Sound().PlaySnd(Son::SON_JUMP1, Son::CHANNEL_PLAYER, false);
 			}
 		}
 		else m_pos.y += MOUVEMENT_SPEED_MAX * elapsedTime;
@@ -134,9 +132,6 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 		{
 			m_lastPos = m_pos;
 			m_pos = newPos;
-			//Joue le bruit de pas s'il y a eu un mouvement et qu'il n'est pas au ralenti
-			if (!ghost && m_speed.y == 0 && m_speed.x != 0 && m_speed.z != 0 && !ctrl)
-				Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
 		}
 		else m_speed.z = 0;
 	}
@@ -230,9 +225,6 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 		{
 			m_lastPos = m_pos;	//pas utiliser encore
 			m_pos = newPos;
-			//Joue le bruit de pas s'il y a eu un mouvement et qu'il n'est pas au ralenti
-			if (!ghost && m_speed.y == 0 && m_speed.x != 0 && m_speed.z != 0 && !ctrl)
-				Info::Get().Sound().PlaySnd(Son::SON_FOOT1, Son::CHANNEL_STEP, false);
 		}
 		else m_speed.x = 0;
 	}
@@ -305,6 +297,23 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 	if (!shift && fabs(m_speed.z) + fabs(m_speed.x) <= ENERGY_REGEN_THRESHOLD)
 		cter.SetEnergy(ENERGY_REGEN);
 	cter.PassiveRegen();
+
+#pragma endregion
+
+#pragma region Sons de pas
+
+	//Vérification que les sons sont activés
+	if (Info::Get().Options().GetOptSound())
+	{
+		//Vérification que le joueur se trouve par terre et qu'il avance
+		if (m_speed.y == 0 && (w || a || s || d) && !ctrl && !ghost)
+		{
+			//Appel de la fonction qui joue le son avec le BlockType qui se trouve
+			//juste en dessous du joueur (position = 0x, 0y, 0z)
+			Info::Get().Sound().PlayStep(Info::Get().GetBlocFromWorld(m_pos), 
+				elapsedTime, (shift ? SOUND_FOOT_RUN_TIMEOUT : SOUND_FOOT_TIMEOUT));
+		}
+	}
 
 #pragma endregion
 

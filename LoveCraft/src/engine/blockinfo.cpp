@@ -13,23 +13,6 @@ BlockType BlockInfo::GetType() const
 {
 	return m_type;
 }
-Son::Foots BlockInfo::Getsound() const
-{
-	switch (m_type)
-	{
-	case BLOCK_TYPE::BTYPE_BRICK:
-		return Son::FOOT_CONCRETE;
-	case BLOCK_TYPE::BTYPE_GRASS:
-		return Son::FOOT_GRASS;
-	case BLOCK_TYPE::BTYPE_DIRT:
-		return Son::FOOT_MUD;
-	case BLOCK_TYPE::BTYPE_SAND:
-		return Son::FOOT_DIRT;
-	default:
-		return Son::FOOT_AIR;
-		break;
-	}
-}
 
 void BlockInfo::SetDurabilite(int durabilite)
 {

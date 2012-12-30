@@ -2,16 +2,17 @@
 #define SON_H_
 
 #include "define.h"
+#include "blockinfo.h"
 
 class Son
 {
 public:
 	enum Sons
 	{
-		SON_FOOT1,
-		SON_FOOT2,
 		SON_CLICK,
-		SON_JUMP,
+		SON_JUMP1,
+		SON_JUMP2,
+		SON_FALLPAIN,
 		SON_BOLT,
 		SON_FIRE,
 		SON_SHOCK,
@@ -82,11 +83,16 @@ public:
 	void PlayNextTrack();
 	/**
 	* Fait jouer le son demandé dans le canal par défaut
+	* 
+	* @param snd		Le son à jouer - Voir Enum:Sons
 	* @return Succès
 	*/
 	bool PlaySnd(const Sons& snd);
 	/**
 	* Fait jouer le son demandé dans le canal demandé
+	* 
+	* @param snd		Le son à jouer - Voir Enum:Sons
+	* @param channel	Le canal dans lequel sera joué le son - Voir Enum:Channel
 	* @param aSync		Spécifie si le son ne peut être joué que si aucun autre son
 	* 					n'occupe le canal
 	* @return Succès
@@ -94,9 +100,19 @@ public:
 	bool PlaySnd(const Sons& snd, const Channel& channel, bool aSync = true);
 	/**
 	* Fait jouer les sons de bruits de pas en alternance selon le type de bloc
+	* 
+	* @param type			Le type de bloc sur lequel est le joueur
+	* @param elapsedTime	Le nombre de temps écoulé depuis le dernier frame
+	* @param timeout		Le nombre de secondes qui doivent être écoulées avant de
+	*						jouer le prochain son
+	* @note		Vérifier que les sons sont activés avant d'appeler cette méthode
+	* 			pour éviter de surcharger inutilement la mémoire.
 	*/
-	bool PlayStep(Foots &type, float &elapsedTime);
+	bool PlayStep(const BlockType type, float elapsedTime, float timeout);
 private:
+	Foots GetFootType(BlockType type) const;
+	bool LoadFootSteps(const Foots type, const std::string filename);
+
 	float m_stepTmr;
 	unsigned short m_footStep;
 

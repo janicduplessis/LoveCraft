@@ -1,10 +1,11 @@
 #include "son.h"
 #include "info.h"
+#include <sstream>
 
 Son::Son() : m_music(sf::Music()), m_stepTmr(0), m_trackNumber(0), m_footStep(0)
 {
 	m_sndBuffers = new sf::SoundBuffer[Sons::SON_LAST];
-	m_footSteps = new sf::SoundBuffer[Foots::FOOT_LAST];
+	m_footSteps = new sf::SoundBuffer[Foots::FOOT_LAST * SOUND_FOOT_NUMBER + 1];
 	m_sndChannels = new sf::Sound[Channel::CHANNEL_LAST];
 	m_musicList = new std::string[Musics::MUSIC_LAST];
 }
@@ -20,14 +21,14 @@ Son::~Son()
 
 bool Son::LoadSounds()
 {
-	//Sons
-	if (!m_sndBuffers[Sons::SON_FOOT1].loadFromFile(SOUND_FOOT_PATH "wood1.ogg"))
-		return false;
-	if (!m_sndBuffers[Sons::SON_FOOT2].loadFromFile(SOUND_FOOT_PATH "wood2.ogg"))
-		return false;
+	//Sons divers
 	if (!m_sndBuffers[Sons::SON_CLICK].loadFromFile(SOUND_PATH "g_click.ogg"))
 		return false;
-	if (!m_sndBuffers[Sons::SON_JUMP].loadFromFile(SOUND_PATH "g_jump2.ogg"))
+	if (!m_sndBuffers[Sons::SON_JUMP1].loadFromFile(SOUND_PATH "g_jump1.ogg"))
+		return false;
+	if (!m_sndBuffers[Sons::SON_JUMP2].loadFromFile(SOUND_PATH "g_jump2.ogg"))
+		return false;
+	if (!m_sndBuffers[Sons::SON_FALLPAIN].loadFromFile(SOUND_PATH "g_fallpain.ogg"))
 		return false;
 	if (!m_sndBuffers[Sons::SON_BOLT].loadFromFile(SOUND_PATH "s_bolt.ogg"))
 		return false;
@@ -50,6 +51,23 @@ bool Son::LoadSounds()
 	if (!m_sndBuffers[Sons::SON_STORM].loadFromFile(SOUND_PATH "s_storm.ogg"))
 		return false;
 
+	if (!(LoadFootSteps(FOOT_CONCRETE, "concrete") &&
+		LoadFootSteps(FOOT_DIRT, "dirt") &&
+		LoadFootSteps(FOOT_GRASS, "grass") &&
+		LoadFootSteps(FOOT_GRAVEL, "gravel") &&
+		LoadFootSteps(FOOT_METAL, "metal") &&
+		LoadFootSteps(FOOT_MUD, "mud") &&
+		LoadFootSteps(FOOT_SLOSH, "slosh") &&
+		LoadFootSteps(FOOT_SNOW, "snow") &&
+		LoadFootSteps(FOOT_TILE, "tile") &&
+		LoadFootSteps(FOOT_WADE, "wade") &&
+		LoadFootSteps(FOOT_WOOD, "wood") ))
+	{
+		std::cout << "Erreur lors du chargement des sons de bruits de pas" << std::endl;
+		return false;
+	}
+
+
 	//Musiques
 	m_musicList[Musics::MUSIC_OVERWORLD1] = SOUND_PATH "m_overworld1.ogg";
 	m_musicList[Musics::MUSIC_OVERWORLD2] = SOUND_PATH "m_overworld2.ogg";
@@ -58,7 +76,7 @@ bool Son::LoadSounds()
 
 bool Son::PlayMusic()
 {
-	if (Info::Get().GetOptMusic())
+	if (Info::Get().Options().GetOptMusic())
 	{
 		if (m_music.getStatus() != sf::SoundSource::Playing)
 		{
@@ -86,7 +104,7 @@ bool Son::PlaySnd(const Sons& snd)
 
 bool Son::PlaySnd(const Sons& snd, const Channel& channel, bool aSync)
 {
-	if (Info::Get().GetOptSound())
+	if (Info::Get().Options().GetOptSound())
 	{
 		//Joue le son dans le canal voulu et vérifie si le son doit jouer en asynchrome
 		if (aSync || m_sndChannels[channel].getStatus() != sf::SoundSource::Playing)
@@ -99,11 +117,62 @@ bool Son::PlaySnd(const Sons& snd, const Channel& channel, bool aSync)
 	return true;
 }
 
-bool Son::PlayStep(Foots &type, float &elapsedTime)
+bool Son::PlayStep(const BlockType type, float elapsedTime, float timeout)
 {
-	if (type != Foots::FOOT_AIR)
+	//Conversion du BlockType en Foots
+	Foots typePas = GetFootType(type);
+	//Vérification que le bloc rencontré est solide (ou a un son de définit)
+	if (typePas != FOOT_AIR)
 	{
-
+		//Incrémentation du timer
+		m_stepTmr += elapsedTime;
+		//Vérification que le timer soit rendu au temps minimal
+		if (timeout <= m_stepTmr)
+		{
+			//Assigne le buffer correspondant au type de pas
+			m_sndChannels[CHANNEL_STEP].setBuffer(m_footSteps[(int)type * 4 + (m_footStep % SOUND_FOOT_NUMBER)]);
+			//Joue le son
+			m_sndChannels[CHANNEL_STEP].play();
+			//Incrémente le pas afin d'obtenir des sons presque différents à chaque appel
+			m_footStep++;
+			//Comme le son est joué, on réinitialise le timer
+			m_stepTmr = 0;
+		}
 	}
 	return true;
+}
+
+Son::Foots Son::GetFootType(BlockType type) const
+{
+	switch (type)
+	{
+	case BLOCK_TYPE::BTYPE_BRICK:
+		return Son::FOOT_CONCRETE;
+	case BLOCK_TYPE::BTYPE_GRASS:
+		return Son::FOOT_GRASS;
+	case BLOCK_TYPE::BTYPE_DIRT:
+		return Son::FOOT_MUD;
+	case BLOCK_TYPE::BTYPE_SAND:
+		return Son::FOOT_DIRT;
+	default:
+		return Son::FOOT_AIR;
+	}
+}
+
+bool Son::LoadFootSteps(const Son::Foots type, const std::string filename)
+{
+	//Initialisation du stream pour les noms de fichier
+	std::ostringstream ss;
+	//Entrée en boucle
+	for (unsigned short i = 1; i <= SOUND_FOOT_NUMBER; i++)
+	{
+		//Construit le nom de fichier complet avec les infos
+		ss << SOUND_FOOT_PATH << filename << i << ".ogg";
+		//Charge le son grâce au nom de fichier construit
+		if (!m_footSteps[type * 4 + i].loadFromFile(ss.str()))
+			return false;
+		//Réinitialisation du stream
+		ss.str("");
+	}
+
 }

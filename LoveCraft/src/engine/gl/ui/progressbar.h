@@ -12,16 +12,15 @@ class ProgressBar
 public:
 	enum BarMode
 	{
-		BARMODE_HORIZONTAL_LTR,
-		BARMODE_HORIZONTAL_RTL,
-		BARMODE_VERTICAL_UTD,
-		BARMODE_VERTICAL_DTU,
+		BARMODE_HORIZONTAL_LTR = 0,
+		BARMODE_VERTICAL_DTU = 90,
+		BARMODE_HORIZONTAL_RTL = 180,
+		BARMODE_VERTICAL_UTD = 270,
 		BARMODE_CIRCLE_CLKW,
 		BARMODE_CIRCLE_ACLKW,
-		BARMODE_LAST
 	};
 	ProgressBar();
-	ProgressBar(Vector2i &size, Vector2i &position, BarMode mode = BARMODE_HORIZONTAL_LTR);
+	ProgressBar(Vector2i &size, Vector2i &position, BarMode mode);
 	~ProgressBar();
 	void Render(Texture& back, Texture& front);
 	BarMode Mode() const;
@@ -29,12 +28,13 @@ public:
 	float Value() const;
 	float Maximum() const;
 	float Minimum() const;
-	float ValueWidth() const;
+	float ValuePerc() const;
 	Vector2i Size() const;
 	Vector2i Position() const;
 private:
-	void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat = true);
+	void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool rotate = false);
 	void RenderCircle(const Vector2i& origin, float rayon, Texture& texture, bool repeat = true);
+	void ApplyRotationTransformation(BarMode type, Vector2i size) const;
 	BarMode m_mode;
 	float m_minimum;
 	float m_maximum;

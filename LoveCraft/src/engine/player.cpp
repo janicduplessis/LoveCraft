@@ -71,7 +71,8 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 		else
 		{
 			if (m_speed.y > 0)
-				Info::Get().Sound().PlayStep(Info::Get().GetBlocFromWorld(m_pos), elapsedTime, 1.0f, true);
+				Info::Get().Sound().PlayStep(Info::Get().GetBlocFromWorld(m_pos), 
+				elapsedTime, SOUND_FOOT_TIMEOUT, true);
 			//Perte de vie quand on tombe de trop haut
 			if (m_speed.y > 8)
 			{

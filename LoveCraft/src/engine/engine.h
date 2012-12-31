@@ -138,6 +138,7 @@ private:
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat = true);
 	virtual void RenderSpells();
 	void RenderProgressBars();
+	void StartBlendPNG(bool value = true) const;
 private:
 	bool m_wireframe;
 	float m_angle;

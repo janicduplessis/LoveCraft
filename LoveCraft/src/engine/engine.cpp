@@ -412,8 +412,6 @@ void Engine::Render2D(float elapsedTime)
 	//Setter le blend function, tout ce qui sera noir sera transparent
 	glDisable(GL_LIGHTING);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -423,6 +421,11 @@ void Engine::Render2D(float elapsedTime)
 	glPushMatrix();
 
 #pragma endregion
+
+#pragma region Images qui subissent le blend par le contraste
+
+	//Activation du blend normal
+	StartBlendPNG(false);
 
 #pragma region Affichage du texte
 
@@ -458,7 +461,14 @@ void Engine::Render2D(float elapsedTime)
 
 #pragma endregion
 
-#pragma region Images qui subissent le blend
+	glDisable(GL_BLEND);
+
+#pragma endregion
+
+#pragma region Images qui subissent le blend pour les PNG
+
+	//Activation du blend par PNG
+	StartBlendPNG();
 
 	// Portrait
 	RenderSquare(
@@ -477,10 +487,11 @@ void Engine::Render2D(float elapsedTime)
 		Vector2i(m_textureGhost.GetWidth(), m_textureGhost.GetHeight()),
 		m_textureGhost);
 
+	glDisable(GL_BLEND);
+
 #pragma endregion
 
-	glDisable(GL_BLEND);
-#pragma region Affichage de l interface
+#pragma region Affichage de l interface sans transparence
 
 	//============================================
 
@@ -585,16 +596,21 @@ void Engine::RenderProgressBars()
 	std::ostringstream ss;
 	//Affichage de la barre de vie
 	m_healthBar.Render(m_textureNoir, m_textureHealth);
+	//Affichage de la barre d'énergie
+	m_energyBar.Render(m_textureNoir, m_textureEnergy);
+	//Affichage de la bar de mana
+	m_manaBar.Render(m_textureNoir, m_textureMana);
+	//Affichage de la bar de test
+	m_testbar.Render(m_textureNoir, m_textureMana);
+
+	//Textes des bars
+	StartBlendPNG(false);
 	ss << "Vie             " << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
-	glEnable(GL_BLEND);
 	PrintText(m_healthBar.Position().x + PROGRESS_BAR_OUTLINE, 
 		m_healthBar.Position().y + PROGRESS_BAR_OUTLINE, ss.str());
 	ss.str("");
-	glDisable(GL_BLEND);
-	//Affichage de la barre d'énergie
-	m_energyBar.Render(m_textureNoir, m_textureEnergy);
+
 	ss << "Energie";
-	glEnable(GL_BLEND);
 	PrintText(m_energyBar.Position().x, 
 		m_energyBar.Position().y + m_energyBar.Size().x + PROGRESS_BAR_OUTLINE * 2 + 12, ss.str());
 	ss.str("");
@@ -602,17 +618,13 @@ void Engine::RenderProgressBars()
 	PrintText(m_energyBar.Position().x, 
 		m_energyBar.Position().y + m_energyBar.Size().x + PROGRESS_BAR_OUTLINE * 2, ss.str());
 	ss.str("");
-	glDisable(GL_BLEND);
-	//Affichage de la bar de mana
-	m_manaBar.Render(m_textureNoir, m_textureMana);
+
 	ss << "Mana            " << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
 	glEnable(GL_BLEND);
 	PrintText(m_manaBar.Position().x + PROGRESS_BAR_OUTLINE, 
 		m_manaBar.Position().y + PROGRESS_BAR_OUTLINE, ss.str());
-	glDisable(GL_BLEND);
 	ss.str("");
-	//Affichage de la bar de test
-	m_testbar.Render(m_textureNoir, m_textureMana);
+	glDisable(GL_BLEND);
 }
 
 void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
@@ -637,6 +649,14 @@ void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 		glEnd();
 		glTranslated(8, 0, 0);
 	}
+}
+
+void Engine::StartBlendPNG(bool value) const
+{
+	glEnable(GL_BLEND);
+	if (value)
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Blend PNG
+	else glBlendFunc(GL_SRC_ALPHA, GL_ONE); //Blend original
 }
 
 void Engine::KeyPressEvent(unsigned char key)

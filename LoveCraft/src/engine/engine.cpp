@@ -168,7 +168,39 @@ void Engine::Init()
 		}
 	}
 
-	//Platoforme de gazon
+	//Blocs de l'igloo
+	for (int k = 0; k <= 4; k++)
+	{
+		for (int i = 10; i < CHUNK_SIZE_X - 1; i++)
+		{
+			for (int j = 8; j < CHUNK_SIZE_Z - 1; j++)
+			{
+				if (k == 0 || k == 4)
+					chunk.SetBloc(i,k,j, BTYPE_SNOW);
+				else
+				{
+					if (i == 10 || j == 8 || i == CHUNK_SIZE_X - 2 || j == CHUNK_SIZE_Z - 2)
+						chunk.SetBloc(i,k,j, BTYPE_SNOW);
+				}
+			}
+		}
+	}
+	chunk.SetBloc(12, 1, 14, BTYPE_AIR);
+	chunk.SetBloc(12, 2, 14, BTYPE_AIR);
+	chunk.SetBloc(12, 1, 8, BTYPE_AIR);
+	chunk.SetBloc(12, 2, 8, BTYPE_AIR);
+
+	//Blocs de roche
+	for (int i = 1; i <= 7; i++)
+	{
+		for (int j = 7; j < CHUNK_SIZE_Z - 1; j++)
+		{
+			chunk.SetBloc(i,0,j, BTYPE_ROCK);
+			chunk.SetBloc(i,1,j, BTYPE_AIR);
+		}
+	}
+
+	//Platforme de gazon
 	for (int i = CHUNK_SIZE_X-1; i >= 2; i--)
 	{
 		for (int j = CHUNK_SIZE_Z-1; j >= 2; j--)
@@ -208,7 +240,9 @@ void Engine::LoadResource()
 	LoadBlocTexture(BTYPE_BRICK, TEXTURE_PATH "b_brick_red.jpg");
 	LoadBlocTexture(BTYPE_DIRT, TEXTURE_PATH "b_dirt.bmp");
 	LoadBlocTexture(BTYPE_GRASS, TEXTURE_PATH "b_grass.bmp");
+	LoadBlocTexture(BTYPE_ROCK, TEXTURE_PATH "b_rock.jpg");
 	LoadBlocTexture(BTYPE_SAND, TEXTURE_PATH "b_sand.jpg");
+	LoadBlocTexture(BTYPE_SNOW, TEXTURE_PATH "b_snow.jpg");
 	LoadTexture(m_textureFloor, TEXTURE_PATH "b_checker.bmp");
 	LoadTexture(m_textureInterface, TEXTURE_PATH "b_rock.jpg");
 

@@ -2,12 +2,12 @@
 #define PROGRESSBAR_H_
 
 #include "define.h"
-
+#include "control.h"
 #include "../texture.h"
 
 #include "util/vector2.h"
 
-class ProgressBar
+class ProgressBar : public Control
 {
 public:
 	/**
@@ -29,13 +29,22 @@ public:
 	*/
 	ProgressBar();
 	/**
-	* Constructeur de la class
+	* Constructeur de la classe
 	* 
 	* @param size		La taille de la barre Largeur x Hauteur
 	* @param position	La position du coin inférieur gauche du contrôle
 	* @param mode		Le mode d'affichage de la barre
 	*/
 	ProgressBar(Vector2i &size, Vector2i &position, BarMode mode);
+	/**
+	* Constructeur de la classe
+	* 
+	* @param size		La taille de la barre Largeur x Hauteur
+	* @param position	La position du coin inférieur gauche du contrôle
+	* @param mode		Le mode d'affichage de la barre
+	* @param parent		Le panel dans lequel est emmagasiné le controle
+	*/
+	ProgressBar(Vector2i &size, Vector2i &position, BarMode mode, Vector2i parent);
 	/**
 	* Destructeur par défaut de la classe
 	*/
@@ -76,33 +85,12 @@ public:
 	*/
 	float Minimum() const;
 	/**
-	* Obtient la valeur indiquant si la barre est visible
-	* 
-	* @return bool
-	*/
-	bool Visible() const;
-	/**
-	* Définit la valeur indiquant si la barre est visible
-	*/
-	void SetVisible(const bool value);
-	/**
 	* Obtient la proportion de la barre qui est remplie
 	* 
 	* @return float
 	*/
 	float ValuePerc() const;
-	/**
-	* Obtient la taille de la barre
-	* 
-	* @return Vector2i
-	*/
-	Vector2i Size() const;
-	/**
-	* Obtient la position de la barre
-	* 
-	* @return Vector2i
-	*/
-	Vector2i Position() const;
+
 private:
 	void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture);
 	void RenderCircle(const Vector2i& origin, float rayon, Texture& texture, bool repeat = true);
@@ -111,11 +99,6 @@ private:
 	float m_minimum;
 	float m_maximum;
 	float m_value;
-	bool m_visible;
-	Texture m_textBack;
-	Texture m_textFront;
-	Vector2i m_size;
-	Vector2i m_position;
 };
 
 #endif

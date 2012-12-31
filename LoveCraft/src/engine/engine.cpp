@@ -105,12 +105,12 @@ void Engine::Init()
 #pragma endregion
 
 #pragma region Initialisation des elements de l interface
-	m_healthBar = ProgressBar(Vector2i(400, 20), 
+	m_healthBar = ProgressBar(Vector2i(300, 20), 
 		Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 35), ProgressBar::BARMODE_HORIZONTAL_LTR);
-	m_energyBar = ProgressBar(Vector2i(20, 300), 
+	m_energyBar = ProgressBar(Vector2i(20, 250), 
 		Vector2i(m_playScreenBotLeft.x + PROGRESS_BAR_OUTLINE, m_playScreenBotLeft.y + PROGRESS_BAR_OUTLINE), 
 		ProgressBar::BARMODE_VERTICAL_DTU);
-	m_manaBar = ProgressBar(Vector2i(400, 20), 
+	m_manaBar = ProgressBar(Vector2i(300, 20), 
 		Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 10), ProgressBar::BARMODE_HORIZONTAL_LTR);
 	m_testbar = ProgressBar(Vector2i(20, 400),
 		Vector2i(Width() / 2, Height() / 2), ProgressBar::BARMODE_HORIZONTAL_RTL);
@@ -585,7 +585,7 @@ void Engine::RenderProgressBars()
 	std::ostringstream ss;
 	//Affichage de la barre de vie
 	m_healthBar.Render(m_textureNoir, m_textureHealth);
-	ss << "Vie                   " << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
+	ss << "Vie             " << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
 	glEnable(GL_BLEND);
 	PrintText(m_healthBar.Position().x + PROGRESS_BAR_OUTLINE, 
 		m_healthBar.Position().y + PROGRESS_BAR_OUTLINE, ss.str());
@@ -605,7 +605,7 @@ void Engine::RenderProgressBars()
 	glDisable(GL_BLEND);
 	//Affichage de la bar de mana
 	m_manaBar.Render(m_textureNoir, m_textureMana);
-	ss << "Mana                  " << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
+	ss << "Mana            " << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
 	glEnable(GL_BLEND);
 	PrintText(m_manaBar.Position().x + PROGRESS_BAR_OUTLINE, 
 		m_manaBar.Position().y + PROGRESS_BAR_OUTLINE, ss.str());

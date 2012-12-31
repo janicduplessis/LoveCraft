@@ -103,7 +103,7 @@
     <ClCompile Include="src\engine\options.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="control.cpp">
+    <ClCompile Include="src\engine\gl\ui\control.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -213,7 +213,7 @@
     <ClInclude Include="src\engine\options.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="control.h">
+    <ClInclude Include="src\engine\gl\ui\control.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,6 +6,9 @@
 #include <iomanip>
 #include <cmath>
 #include "son.h"
+#include "SFML/Graphics/Image.hpp"
+#include "SFML/Graphics/Sprite.hpp"
+#include "SFML/Graphics/Texture.hpp"
 #include <SFML/Network.hpp>
 
 
@@ -18,6 +21,7 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_playScreenSize(Vector2i(m_playScreenTopRight.x - m_playScreenTopLeft.x, m_playScreenTopLeft.y - m_playScreenBotLeft.y))
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
+	//m_textureInterface = new Texture[SPELL_BAR_SPELL_NUMBER];
 }
 
 Engine::~Engine()
@@ -85,7 +89,7 @@ void Engine::Init()
 
 #pragma endregion
 
-#pragma Initialisation des entites
+#pragma region Initialisation des entites
 
 	m_player.Init();
 	m_projectile.Load();
@@ -108,8 +112,8 @@ void Engine::Init()
 		ProgressBar::BARMODE_VERTICAL_DTU);
 	m_manaBar = ProgressBar(Vector2i(400, 20), 
 		Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 10), ProgressBar::BARMODE_HORIZONTAL_LTR);
-	m_testbar = ProgressBar(Vector2i(400, 20),
-		Vector2i(Width() / 2, Height() / 2), ProgressBar::BARMODE_VERTICAL_UTD);
+	m_testbar = ProgressBar(Vector2i(20, 400),
+		Vector2i(Width() / 2, Height() / 2), ProgressBar::BARMODE_HORIZONTAL_RTL);
 	m_testbar.SetVisible(false);
 #pragma endregion
 
@@ -201,34 +205,36 @@ void Engine::LoadResource()
 	// Texture des blocs 128x128 px
 	m_textureArray = new TextureArray(128);
 
-	LoadBlocTexture(BTYPE_BRICK, TEXTURE_PATH "brick_red.jpg");
-	LoadBlocTexture(BTYPE_DIRT, TEXTURE_PATH "dirt.bmp");
-	LoadBlocTexture(BTYPE_GRASS, TEXTURE_PATH "grass.bmp");
-	LoadBlocTexture(BTYPE_SAND, TEXTURE_PATH "sand.jpg");
+	LoadBlocTexture(BTYPE_BRICK, TEXTURE_PATH "b_brick_red.jpg");
+	LoadBlocTexture(BTYPE_DIRT, TEXTURE_PATH "b_dirt.bmp");
+	LoadBlocTexture(BTYPE_GRASS, TEXTURE_PATH "b_grass.bmp");
+	LoadBlocTexture(BTYPE_SAND, TEXTURE_PATH "b_sand.jpg");
+	LoadTexture(m_textureFloor, TEXTURE_PATH "b_checker.bmp");
+	LoadTexture(m_textureInterface, TEXTURE_PATH "b_rock.jpg");
 
 	m_textureArray->Generate();
 	//Texture des spells
-	m_textureSpell[0].Load(TEXTURE_PATH "SpellBolt.gif");
-	m_textureSpell[1].Load(TEXTURE_PATH "SpellFire.png");
-	m_textureSpell[2].Load(TEXTURE_PATH "SpellFreeze.png");
-	m_textureSpell[3].Load(TEXTURE_PATH "SpellShock.png");
-	m_textureSpell[4].Load(TEXTURE_PATH "SpellPoison.gif");
-	m_textureSpell[5].Load(TEXTURE_PATH "SpellStorm.png");
-	m_textureSpell[6].Load(TEXTURE_PATH "SpellHeal.gif");
-	m_textureSpell[7].Load(TEXTURE_PATH "SpellRain.gif");
-	m_textureSpell[8].Load(TEXTURE_PATH "SpellDefend.gif");
-	m_textureSpell[9].Load(TEXTURE_PATH "SpellShield.png");
+	m_textureSpell[0].Load(TEXTURE_PATH "spellbolt.gif");
+	m_textureSpell[1].Load(TEXTURE_PATH "spellfire.png");
+	m_textureSpell[2].Load(TEXTURE_PATH "spellfreeze.png");
+	m_textureSpell[3].Load(TEXTURE_PATH "spellshock.png");
+	m_textureSpell[4].Load(TEXTURE_PATH "spellpoison.gif");
+	m_textureSpell[5].Load(TEXTURE_PATH "spellstorm.png");
+	m_textureSpell[6].Load(TEXTURE_PATH "spellheal.gif");
+	m_textureSpell[7].Load(TEXTURE_PATH "spellrain.gif");
+	m_textureSpell[8].Load(TEXTURE_PATH "spelldefend.gif");
+	m_textureSpell[9].Load(TEXTURE_PATH "spellshield.png");
 
-	LoadTexture(m_textureFloor, TEXTURE_PATH "checker.bmp");
-	LoadTexture(m_textureInterface, TEXTURE_PATH "rock.jpg");
-	LoadTexture(m_textureCrosshair, TEXTURE_PATH "cross.bmp");
+	LoadTexture(m_textureCrosshair, TEXTURE_PATH "i_cross.bmp");
 	LoadTexture(m_textureFont, TEXTURE_PATH "font.bmp");
-	LoadTexture(m_textureCthulhu, TEXTURE_PATH "bewareofcthulhu.png");
-	LoadTexture(m_textureGhost, TEXTURE_PATH "boo.png");
+	LoadTexture(m_textureCthulhu, TEXTURE_PATH "i_bewareofcthulhu.png");
+	LoadTexture(m_textureGhost, TEXTURE_PATH "i_boo.png");
+	LoadTexture(m_texturePortrait, TEXTURE_PATH "i_portrait.png");
 	LoadTexture(m_textureNoir, TEXTURE_PATH "noir.jpg");
-	LoadTexture(m_textureHealth, TEXTURE_PATH "health.png");
-	LoadTexture(m_textureEnergy, TEXTURE_PATH "energy.png");
-	LoadTexture(m_textureMana, TEXTURE_PATH "mana.png");
+	LoadTexture(m_textureHealth, TEXTURE_PATH "i_health.png");
+	LoadTexture(m_textureEnergy, TEXTURE_PATH "i_energy.png");
+	LoadTexture(m_textureMana, TEXTURE_PATH "i_mana.png");
+
 
 #pragma endregion
 
@@ -452,8 +458,13 @@ void Engine::Render2D(float elapsedTime)
 
 #pragma endregion
 
-#pragma region Images quelconque
+#pragma region Images qui subissent le blend
 
+	// Portrait
+	RenderSquare(
+		Vector2i(m_playScreenBotLeft.x + m_energyBar.Size().y, m_playScreenBotLeft.y),
+		Vector2i((int)m_texturePortrait.GetWidth(), (int)m_texturePortrait.GetHeight()),
+		m_texturePortrait);
 	//Optimisation possible par la surcharge d'opérateurs
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))		//Mode course
 		RenderSquare(
@@ -472,6 +483,7 @@ void Engine::Render2D(float elapsedTime)
 #pragma region Affichage de l interface
 
 	//============================================
+
 	//Bottom
 	RenderSquare(
 		Vector2i(0, 0), 

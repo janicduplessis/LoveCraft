@@ -156,12 +156,14 @@ private:
 	TextureArray* m_textureArray;
 
 	Texture* m_textureSpell;
+	//Texture* m_textureInterface;
 	Texture m_textureFloor;
 	Texture m_textureInterface;
 	Texture m_textureFont;
 	Texture m_textureCrosshair;
 	Texture m_textureCthulhu;
 	Texture m_textureGhost;
+	Texture m_texturePortrait;
 	Texture m_textureHealth;
 	Texture m_textureEnergy;
 	Texture m_textureMana;

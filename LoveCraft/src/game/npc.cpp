@@ -1,6 +1,6 @@
 #include "npc.h"
 
-Npc::Npc(const Vector3f& pos /*= Vector3f(0,0,0)*/ ) : m_ai(0), m_maxRot(0.01f), m_speed(0), m_speedGravity(0)
+Npc::Npc(const Vector3f& pos /*= Vector3f(0,0,0)*/ ) : m_ai(0), m_maxRot(0.01f), m_speed(0), m_speedGravity(0), m_spells(0)
 {
 
 }
@@ -85,7 +85,6 @@ void Npc::Move(const Vector3f& destination, float elapsedTime)
 		m_pos += deplacement;
 	}
 	m_pos.y += distanceY;
-	m_pos.Afficher();
 }
 
 bool Npc::CheckCollision(const Vector3f& pos) const

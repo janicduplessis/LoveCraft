@@ -23,13 +23,17 @@ bool AI::StateChanged() const
 void AI::Process(float elapsedTime)
 {
 	// Logique pour determiner le state
-	m_currentState = STATE_NONE;
-	// Si le joueur est visible, suit le
-	if (CheckPlayer()) {
-		m_currentState = STATE_FOLLOW;
+	// Run Away Start
+	if (CheckPlayer(DETECTION_RANGE) && m_currentState != STATE_RUN_AWAY) {
+		m_currentState = STATE_RUN_AWAY;
+		m_stateChanged = true;
+	}	
+	// Run Away End
+	if (CheckPlayer(RUN_AWAY_RANGE, false)) {
+		m_currentState = STATE_PATROL;
 	}	
 
-	// State par defaut
+	// State par defaut (patrol)
 	if (m_currentState == STATE_NONE) {
 		m_currentState = STATE_PATROL;
 	}
@@ -49,6 +53,13 @@ void AI::Process(float elapsedTime)
 	else if (m_currentState == STATE_FOLLOW)
 	{
 		m_npc->Move(Vector3f(m_player->Position().x, m_npc->Position().y, m_player->Position().z), elapsedTime);
+	}
+	else if (m_currentState == STATE_RUN_AWAY)
+	{
+		// Calcul position opposé au joueur
+		Vector3f dist = -PlayerDistance();
+		dist += m_npc->Position();
+		m_npc->Move(Vector3f(dist.x, m_npc->Position().y, dist.z), elapsedTime);
 	}
 	m_stateChanged = false;
 }
@@ -82,26 +93,33 @@ bool AI::CheckCollision(Vector3f& pos ) const
 	return true;
 }
 
-bool AI::CheckPlayer()
+bool AI::CheckPlayer(float detectionRange, bool enableLOS)
 {
-	Vector3f npcPos = m_npc->Position();
-	Vector3f distance = m_player->Position() - npcPos;
-	Vector3f iterator = distance;
-	iterator.Normalise();
-
+	Vector3f distance = PlayerDistance();
 	// regarde si le joueur est assez proche
-	if (distance.Lenght() > PLAYER_DETECTION_RANGE)
+	if (distance.Lenght() > detectionRange)
 		return false;
 
-	// itère sur le vecteur distance et regarde si il y a
-	// collision a chaque 1m
-	for (float i = 0; i < distance.Lenght(); i++)
-	{
-		if(!CheckVision(npcPos + (iterator * i)))
-			return false;
+	if (enableLOS) {
+		Vector3f npcPos = m_npc->Position();
+		Vector3f iterator = distance;
+		iterator.Normalise();
+
+		// itère sur le vecteur distance et regarde si il y a
+		// collision a chaque 1m
+		for (float i = 0; i < distance.Lenght(); i++)
+		{
+			if(!CheckVision(npcPos + (iterator * i)))
+				return false;
+		}
 	}
 	// passe tous les test, le joueur est visible!
 	return true;
+}
+
+Vector3f AI::PlayerDistance()
+{
+	return m_player->Position() - m_npc->Position();
 }
 
 bool AI::CheckAttack()
@@ -125,27 +143,24 @@ void AI::Patrol()
 		float z = m_posIni.z + rand() % (2 * PATROL_RANGE) - PATROL_RANGE; 
 		m_patrolDestination = new Vector3f(x, m_posIni.y, z);
 	}
-
-	CheckCollision(m_npc->Position());
-
 }
 
 void AI::RunAway()
 {
-	
+
 }
 
 void AI::Attack()
 {
-	
+
 }
 
 void AI::Follow()
 {
-	
+
 }
 
 void AI::Stay()
 {
-	
+
 }

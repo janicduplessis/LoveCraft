@@ -95,6 +95,7 @@
     <ClCompile Include="src\engine\info.cpp" />
     <ClCompile Include="src\engine\gl\mesh.cpp" />
     <ClCompile Include="src\engine\engine.cpp" />
+    <ClCompile Include="src\game\spell.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\engine\gl\model.cpp" />
     <ClCompile Include="src\engine\network.cpp" />
@@ -115,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\gl\ui\label.h" />
+    <ClInclude Include="src\game\spell.h" />
     <ClInclude Include="src\interface.h" />
     <ClInclude Include="src\engine\gl\ui\panel.h" />
     <ClInclude Include="src\engine\gl\ui\control.h" />

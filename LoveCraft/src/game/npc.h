@@ -2,6 +2,7 @@
 #define NPC_H__
 
 #include "define.h"
+#include "spell.h"
 #include "engine/gl/model.h"
 #include "engine/info.h"
 #include "engine/ai.h"
@@ -16,6 +17,13 @@ class AI;
 class Npc
 {
 public:
+	enum Type
+	{
+		HOSTILE,
+		FRIENDLY,
+		NEUTRAL
+	};
+
 	Npc(const Vector3f& pos = Vector3f(0,0,0));
 	virtual ~Npc();
 
@@ -33,6 +41,9 @@ protected:
 	Quaternion m_rot;
 	float m_maxRot;
 	float m_speedGravity;
+
+	Type m_type;
+	Spell* m_spells;
 
 	AI* m_ai;
 	Model m_model;

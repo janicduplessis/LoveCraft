@@ -23,14 +23,21 @@ bool AI::StateChanged() const
 void AI::Process(float elapsedTime)
 {
 	// Logique pour determiner le state
-	if (m_currentState != STATE_PATROL) {
+	m_currentState = STATE_NONE;
+	// Si le joueur est visible, suit le
+	if (CheckPlayer()) {
+		m_currentState = STATE_FOLLOW;
+	}	
+
+	// State par defaut
+	if (m_currentState == STATE_NONE) {
 		m_currentState = STATE_PATROL;
-		m_stateChanged = true;
 	}
+
 	static float totalTime = 0;
 	totalTime += elapsedTime;
 	// Call la fonction qui correspond au state
-	if (m_currentState = STATE_PATROL)
+	if (m_currentState == STATE_PATROL)
 	{
 		if (totalTime > 1 || m_stateChanged)
 		{
@@ -38,6 +45,10 @@ void AI::Process(float elapsedTime)
 			Patrol();
 		}
 		m_npc->Move(Vector3f(m_patrolDestination->x, m_npc->Position().y, m_patrolDestination->z), elapsedTime);
+	} 
+	else if (m_currentState == STATE_FOLLOW)
+	{
+		m_npc->Move(Vector3f(m_player->Position().x, m_npc->Position().y, m_player->Position().z), elapsedTime);
 	}
 	m_stateChanged = false;
 }
@@ -45,29 +56,31 @@ void AI::Process(float elapsedTime)
 bool AI::CheckVision(const Vector3f& pos) const
 {
 	Info& info = Info::Get();
-	if(pos.y >=0 
-		&& info.GetBlocFromWorld(pos) == BTYPE_AIR
-		&& info.GetBlocFromWorld(pos) == BTYPE_AIR
-		&& info.GetBlocFromWorld(pos) == BTYPE_AIR
-		&& info.GetBlocFromWorld(pos) == BTYPE_AIR)
-		return false; 
-	return true;
+	Vector3f vision = pos;
+	if (vision.y < 0)
+		vision.y = 0;
+	vision.y += 1;
+	if(info.GetBlocFromWorld(vision) == BTYPE_AIR
+		&& info.GetBlocFromWorld(vision) == BTYPE_AIR
+		&& info.GetBlocFromWorld(vision) == BTYPE_AIR
+		&& info.GetBlocFromWorld(vision) == BTYPE_AIR)
+		return true; 
+	return false;
 }
 
-
-bool AI::CheckCollision( const Vector3f& pos ) const
+bool AI::CheckCollision(Vector3f& pos ) const
 {
 	float offset = 0.2f;
 	Info& info = Info::Get();
-	if(pos.y >=0 
-		&& info.GetBlocFromWorld(pos, Vector3f(offset, 1, offset)) == BTYPE_AIR
+	if (pos.y < 0)
+		pos.y = 0;
+	if(info.GetBlocFromWorld(pos, Vector3f(offset, 1, offset)) == BTYPE_AIR
 		&& info.GetBlocFromWorld(pos, Vector3f(-offset, 1, offset)) == BTYPE_AIR
 		&& info.GetBlocFromWorld(pos, Vector3f(-offset, 1, -offset)) == BTYPE_AIR
 		&& info.GetBlocFromWorld(pos, Vector3f(offset, 1, -offset)) == BTYPE_AIR)
 		return false;
 	return true;
 }
-
 
 bool AI::CheckPlayer()
 {
@@ -84,7 +97,7 @@ bool AI::CheckPlayer()
 	// collision a chaque 1m
 	for (float i = 0; i < distance.Lenght(); i++)
 	{
-		if(CheckVision(npcPos + (iterator * i)))
+		if(!CheckVision(npcPos + (iterator * i)))
 			return false;
 	}
 	// passe tous les test, le joueur est visible!

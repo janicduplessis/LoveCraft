@@ -44,14 +44,18 @@ Panel::~Panel()
 //	assert(index < m_controlNbr);
 //	return m_controls[index];
 //}
-//Control& Panel::GetControlByName(const std::string& name) const
+//Control* Panel::GetControlByName(const std::string& name) const
 //{
+//	Control* ctrl = 0;
 //	for (unsigned short i = 0; i < m_controlNbr; i++)
 //	{
 //		if (m_controls[i].Name() == name)
-//			return m_controls[i];
+//		{
+//			ctrl = m_controls[i];
+//			break;
+//		}
 //	}
-//	return Control();
+//	return ctrl;
 //}
 
 void Panel::Render()

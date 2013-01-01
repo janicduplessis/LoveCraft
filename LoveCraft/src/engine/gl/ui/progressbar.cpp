@@ -7,17 +7,16 @@
 
 ProgressBar::ProgressBar() : Control(CTRLTYPE_PROGRESSBAR)
 {
-	m_textureBack = new Texture();
+	m_textureBack = 0;
 }
-
 ProgressBar::~ProgressBar()
 {
-	
+
 }
 
-ProgressBar::ProgressBar(Vector2i parent, Vector2i &position, Vector2i &size, Texture* textureFront, Texture* textureBack, BarMode mode, const std::string& name) : 
+ProgressBar::ProgressBar(Vector2i parent, Vector2i &position, Vector2i &size, Texture* textureFront, Texture* textureBack, BarMode mode, const bool back, const std::string& name) : 
 	Control(CTRLTYPE_PROGRESSBAR, parent, position, size, textureFront, name), 
-	m_minimum(0), m_maximum(100), m_value(80), m_mode(mode), m_textureBack(textureBack)
+	m_minimum(0), m_maximum(100), m_value(80), m_mode(mode), m_textureBack(textureBack), m_background(back)
 {
 	//Lorsque la bar doit être horizontale, inversion des valeurs de largeur longueur
 	//afin d'accomoder l'appel du glRotate dans le Render
@@ -29,47 +28,36 @@ ProgressBar::ProgressBar(Vector2i parent, Vector2i &position, Vector2i &size, Te
 
 void ProgressBar::Render(Texture* back, Texture* front)
 {
-	if (Control::m_visible)
+	if (m_visible)
 	{
 		bool invertedBar = m_mode == BARMODE_HORIZONTAL_RTL || m_mode == BARMODE_VERTICAL_UTD;
-		//Render du fond noir
-		RenderSquare(Vector2i(
-			m_parentPosition.x + m_position.x - PROGRESS_BAR_OUTLINE, 
-			m_parentPosition.y + m_position.y - PROGRESS_BAR_OUTLINE),
+		//Render du fond
+		if (back && m_background)
+			RenderSquare(Vector2i(
+			AbsolutePosition().x - PROGRESS_BAR_OUTLINE, 
+			AbsolutePosition().y - PROGRESS_BAR_OUTLINE),
 			Vector2i(m_size.x + PROGRESS_BAR_OUTLINE * 2, m_size.y + PROGRESS_BAR_OUTLINE * 2), 
 			back);
 		//Render de la bar
-		RenderSquare(Vector2i(
-			invertedBar ? m_parentPosition.x + m_position.x + m_size.x - ValuePerc() : m_parentPosition.x + m_position.x, 
-			m_parentPosition.y + m_position.y), 
+		if (front)
+			RenderSquare(Vector2i(
+			invertedBar ? AbsolutePosition().x + m_size.x - ValuePerc() : AbsolutePosition().x, 
+			AbsolutePosition().y), 
 			Vector2i(ValuePerc(), m_size.y), 
 			front);
 	}
 }
 void ProgressBar::Render()
 {
-	if (m_visible)
-	{
-		bool invertedBar = m_mode == BARMODE_HORIZONTAL_RTL || m_mode == BARMODE_VERTICAL_UTD;
-		//Render du fond noir
-		RenderSquare(Vector2i(
-			AbsolutePosition().x - PROGRESS_BAR_OUTLINE, 
-			AbsolutePosition().y - PROGRESS_BAR_OUTLINE),
-			Vector2i(m_size.x + PROGRESS_BAR_OUTLINE * 2, m_size.y + PROGRESS_BAR_OUTLINE * 2), 
-			m_textureBack);
-		//Render de la bar
-		RenderSquare(Vector2i(
-			invertedBar ? AbsolutePosition().x + m_size.x - ValuePerc() : AbsolutePosition().x, 
-			AbsolutePosition().y), 
-			Vector2i(ValuePerc(), m_size.y), 
-			m_texture);
-	}
+	Render(m_textureBack, m_texture);
 }
 void ProgressBar::RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture)
 {
 	texture->Bind();
 	glLoadIdentity();
 	glTranslated(position.x, position.y, 0);
+
+	
 
 	//Applications des transoformations nécessaires au bon affichage du mode de bar
 	ApplyRotationTransformation(m_mode, size);
@@ -90,6 +78,7 @@ void ProgressBar::RenderSquare(const Vector2i& position, const Vector2i& size, T
 
 	glEnd();
 }
+
 void ProgressBar::ApplyRotationTransformation(BarMode type, Vector2i size) const
 {
 	float rotateAngle = 0;
@@ -137,6 +126,15 @@ float ProgressBar::Minimum() const
 float ProgressBar::ValuePerc() const
 {
 	return (m_value / m_maximum) * m_size.x;
+}
+
+bool ProgressBar::GetBeckground() const
+{
+	return m_background;
+}
+void ProgressBar::SetBackgroundTo(const bool value)
+{
+	m_background = value;
 }
 
 ProgressBar& ProgressBar::operator=(const ProgressBar& pgb)

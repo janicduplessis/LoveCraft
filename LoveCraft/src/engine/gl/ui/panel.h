@@ -2,6 +2,7 @@
 #define PANEL_H_
 
 #include "control.h"
+#include "util/array.h"
 
 class Panel : public Control
 {

@@ -1,14 +1,15 @@
 #ifndef VECTOR2_H__
 #define VECTOR2_H__
 
-#include <SFML/System/Vector2.hpp>
+#include <iostream>
 
 /**
 * @brief Template class pour manipuler des vecteurs 2d
 */
 template <class T>
-class Vector2 : public sf::Vector2<T>
+class Vector2
 {
+public:
 	Vector2();
 	Vector2(const T& t);
 	Vector2(const T& nx, const T& ny);

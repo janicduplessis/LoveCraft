@@ -5,10 +5,6 @@ Info::Info()
 	GenerateBlocInfos();
 	if (!m_sound.LoadSounds())
 		std::cout << "Une erreur est survenue lors du chargement des sons en memoire" << std::endl;
-
-	m_fontColors = new Texture*[Label::TEXTCOLOR_LAST];
-	for (unsigned short i = 0; i < Label::TEXTCOLOR_LAST; i++)
-		m_fontColors[i] = 0;
 }
 
 Info::Info( Info const& copy )

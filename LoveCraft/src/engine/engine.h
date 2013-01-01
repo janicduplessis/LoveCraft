@@ -13,9 +13,9 @@
 #include "chunk.h"
 #include "testprojectile.h"
 #include "info.h"
-#include "controls.h"
 #include "gl/ui/panel.h"
 #include "gl/ui/progressbar.h"
+#include "gl/ui/label.h"
 
 #include "game/pig.h"
 #include "game/character.h"
@@ -179,10 +179,14 @@ private:
 	Panel m_pnl_playscreen;
 	Panel m_pnl_portrait;
 
+	Panel m_ptest;
+
 	ProgressBar m_pgb_health;
 	ProgressBar m_pgb_energy;
 	ProgressBar m_pgb_mana;
 	ProgressBar m_pgb_exp;
+
+	Label m_testlabel;
 
 	bool m_ghostMode;
 	bool m_rightClick;

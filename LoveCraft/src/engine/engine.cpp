@@ -321,6 +321,13 @@ void Engine::LoadResource()
 		&m_textureInterface[IMAGE_PORTRAIT_FRAME], PNL_PORTRAIT_CONTROLS_NBR, PNL_PORTRAIT_NAME);
 	m_pnl_playscreen.AddControl(&m_pnl_portrait);
 
+	//m_ptest = Panel(&m_pnl_playscreen, Vector2i(Width()/2, Height()/2), Vector2i(400, 200), &m_textureInterface[IMAGE_BLACK_BACK], 1, "ptest");
+	//m_pnl_screen.AddControl(&m_ptest);
+
+	//m_testlabel = Label(&m_ptest, Vector2i(), Vector2i(), &m_texturefontColor[TEXTCOLOR_YELLOW], "123", 
+	//	Label::TEXTDOCK_MIDDLECENTER, false, 20.0f, 42.0f, 1.50f, Vector2f(), "lbl_test");
+	//m_ptest.AddControl(&m_testlabel);
+
 #pragma region Enfants pnl portrait
 
 	// Barre de vie
@@ -555,7 +562,6 @@ void Engine::Render2D(float elapsedTime)
 	std::ostringstream ss;
 	//Print de la position
 	ss << "Position : " << m_player.Position();
-	PrintText(Width() /2, Height() /2, "Z9!");
 	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 20, ss.str());
 	ss.str("");
 	//Print de la vitesse

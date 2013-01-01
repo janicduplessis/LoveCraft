@@ -138,6 +138,8 @@ Label& Label::operator=(const Label& l)
 	m_texture = l.m_texture;
 	m_type = l.m_type;
 	m_visible = l.m_visible;
+
+	return *this;
 }
 
 // private
@@ -154,7 +156,7 @@ Vector2f Label::GetNewPosition(unsigned short length)
 		relposition = Vector2f(0, m_parent->Size().y - m_fontHeight);
 		break;
 	case Label::TEXTDOCK_TOPCENTER:
-		relposition = Vector2f(m_parent->Size().x - (length * m_charInterval * m_fontWidth / 2), m_parent->Size().y - m_fontHeight);
+		relposition = Vector2f((m_parent->Size().x - (length * m_charInterval * m_fontWidth)) / 2, m_parent->Size().y - m_fontHeight);
 		break;
 	case Label::TEXTDOCK_TOPRIGHT:
 		relposition = Vector2f(m_parent->Size().x - (length * m_charInterval * m_fontWidth), m_parent->Size().y - m_fontHeight);
@@ -163,7 +165,7 @@ Vector2f Label::GetNewPosition(unsigned short length)
 		relposition = Vector2f(0, (m_parent->Size().y - m_fontHeight) / 2);
 		break;
 	case Label::TEXTDOCK_MIDDLECENTER:
-		relposition = Vector2f(m_parent->Size().x - (length * m_charInterval * m_fontWidth / 2), (m_parent->Size().y - m_fontHeight) / 2);
+		relposition = Vector2f((m_parent->Size().x - (length * m_charInterval * m_fontWidth)) / 2, (m_parent->Size().y - m_fontHeight) / 2);
 		break;
 	case Label::TEXTDOCK_MIDDLERIGHT:
 		relposition = Vector2f(m_parent->Size().x - (length * m_charInterval * m_fontWidth), (m_parent->Size().y - m_fontHeight) / 2);
@@ -172,10 +174,10 @@ Vector2f Label::GetNewPosition(unsigned short length)
 		relposition = Vector2f(0, 0);
 		break;
 	case Label::TEXTDOCK_BOTTOMCENTER:
-		relposition = Vector2f(m_parent->Size().x - (length * m_charInterval * m_fontWidth / 2), 0);
+		relposition = Vector2f((m_parent->Size().x - (length * m_charInterval * m_fontWidth)) / 2, 0);
 		break;
 	case Label::TEXTDOCK_BOTTOMRIGHT:
-		relposition = Vector2f(m_parent->Size().x - (length * m_charInterval * m_fontWidth), 0);
+		relposition = Vector2f(m_parent->Size().x  / 2 - (length * m_charInterval * m_fontWidth), 0);
 		break;
 	default:
 		relposition = Vector2f((float)m_position.x, (float)m_position.y);

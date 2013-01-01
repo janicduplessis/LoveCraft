@@ -1,6 +1,6 @@
 #include "npc.h"
 
-Npc::Npc(const Vector3f& pos /*= Vector3f(0,0,0)*/ ) : m_ai(0), m_maxRot(0.01f), m_acceleration(0), m_speed(0)
+Npc::Npc(const Vector3f& pos /*= Vector3f(0,0,0)*/ ) : m_ai(0), m_maxRot(0.01f), m_speed(0), m_speedGravity(0)
 {
 
 }
@@ -32,15 +32,15 @@ void Npc::Move(const Vector3f& destination, float elapsedTime)
 	if (elapsedTime == 0)
 		return;
 	// Gravité
-	float distanceY = (m_speed.y * elapsedTime) + (m_acceleration.y * elapsedTime * elapsedTime / 2.0f);
+	float distanceY = (m_speedGravity * elapsedTime) + (GRAVITY * elapsedTime * elapsedTime / 2.0f);
 	if (!CheckCollision(Vector3f(m_pos.x, m_pos.y - distanceY, m_pos.z)))
 	{
-		m_acceleration.y = -GRAVITY;
+		m_speedGravity -= GRAVITY * elapsedTime;
 	}
 	else
 	{
-  		m_acceleration.y = 0;
-		m_speed.y = 0;
+		m_speedGravity = 0;
+		distanceY = 0;
 	}
 
 	// Test si atteint la destination
@@ -50,15 +50,8 @@ void Npc::Move(const Vector3f& destination, float elapsedTime)
 			return;
 	}
 	Vector3f deplacement;
-	deplacement = (m_speed * elapsedTime) + (m_acceleration * elapsedTime * elapsedTime / 2);
-	Vector3f depNoY = Vector3f(deplacement.x, 0, deplacement.z);
-	deplacement = m_rot * deplacement;
-	depNoY = m_rot * depNoY;
-	// Met a jour la valeur de la vitesse en 
-	// fonction de l'acceleration et du temps
-	m_speed = m_speed + (m_acceleration * elapsedTime);
+	deplacement = m_rot * m_speed * elapsedTime;
 
-	// distance entre le projectile et sa destination
 	// chemin le plus court
 	Vector3f distance;
 	distance.x = m_pos.x - destination.x;
@@ -67,13 +60,13 @@ void Npc::Move(const Vector3f& destination, float elapsedTime)
 
 	// calculer l'angle entre les 2 vecteurs
 	// fix imprecision float
-	float n = distance.Dot(depNoY) / (distance.Lenght() * depNoY.Lenght());
+	float n = distance.Dot(deplacement) / (distance.Lenght() * deplacement.Lenght());
 	if (n > 1)
 		n = 1;
 	else if (n < -1)
 		n = -1;
 	float angleA = acos(n);
-	Vector3f axis = distance.Cross(depNoY);
+	Vector3f axis = distance.Cross(deplacement);
 	axis.Normalise();
 	// rotation autour de laxe
 	float rotation;
@@ -90,6 +83,7 @@ void Npc::Move(const Vector3f& destination, float elapsedTime)
 
 	// calcul la nouvelle position
 	m_pos += deplacement;
+	m_pos.y += distanceY;
 	m_pos.Afficher();
 }
 

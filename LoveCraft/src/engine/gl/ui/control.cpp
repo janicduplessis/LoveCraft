@@ -6,16 +6,15 @@ Control::Control()
 }
 
 Control::Control(Type type) : m_type(type), m_visible(true), m_name("default"),
-	m_parentPosition(Vector2i()), m_position(Vector2i()), m_size(Vector2i(100, 100))
+	m_parentPosition(Vector2i()), m_position(Vector2i()), m_size(Vector2i(100, 100)), m_texture(0)
 {
-	m_texture = new Texture();
 }
 
 Control::Control(Type type, Vector2i parent, Vector2i position, Vector2i size, Texture* texture, const std::string& name) : 
 	m_type(type), m_visible(true), m_name(name), m_parentPosition(parent), m_position(position), m_texture(texture),
 	m_size(size)
 {
-	m_texture = texture;
+	//m_texture = texture;
 }
 
 

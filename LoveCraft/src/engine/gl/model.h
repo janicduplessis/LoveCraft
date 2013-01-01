@@ -50,6 +50,7 @@ public:
 
 private:
 	Vector3f m_pos;
+	Vector3f m_translation;
 	Quaternion m_rot;
 	Vector3f m_scale;
 };

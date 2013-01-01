@@ -30,9 +30,9 @@ public:
 protected:
 	Vector3f m_pos;
 	Vector3f m_speed;
-	Vector3f m_acceleration;
 	Quaternion m_rot;
 	float m_maxRot;
+	float m_speedGravity;
 
 	AI* m_ai;
 	Model m_model;

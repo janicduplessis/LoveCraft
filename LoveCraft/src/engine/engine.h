@@ -158,6 +158,7 @@ private:
 	TextureArray* m_textureArray;
 
 	Texture* m_textureSpell;
+	Texture* m_textureSpellX;
 	Texture* m_textureInterface;
 
 	Player m_player;

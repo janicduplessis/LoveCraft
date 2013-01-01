@@ -5,13 +5,13 @@ Control::Control() : m_texture(0)
 }
 
 Control::Control(Type type) : m_type(type), m_visible(true), m_name("default"),
-	m_parentPosition(Vector2i()), m_position(Vector2i()), m_size(Vector2i(100, 100)), m_texture(0)
+	m_parentPosition(Vector2i()), m_position(Vector2i()), m_size(Vector2i(100, 100)), m_texture(0), m_pngBlend(true)
 {
 }
 
 Control::Control(Type type, Vector2i parent, Vector2i position, Vector2i size, Texture* texture, const std::string& name) : 
 	m_type(type), m_visible(true), m_name(name), m_parentPosition(parent), m_position(position), m_texture(texture),
-	m_size(size)
+	m_size(size), m_pngBlend(true)
 {
 }
 
@@ -67,7 +67,7 @@ void Control::SetPosition(Vector2i value)
 
 Vector2i Control::AbsolutePosition() const
 {
-	return Vector2i(m_parentPosition.x + m_position.x, m_parentPosition.y + m_position.y);
+	return m_parentPosition + m_position;
 }
 
 void Control::SetTexture(Texture* text)
@@ -80,6 +80,16 @@ Texture* Control::GetTexture() const
 	return m_texture;
 }
 
+bool Control::GetPngBlend() const
+{
+	return m_pngBlend;
+}
+
+void Control::SetPngBlend(const bool value)
+{
+	m_pngBlend = value;
+}
+
 Control& Control::operator=(const Control& c)
 {
 	m_name = c.m_name;
@@ -89,13 +99,18 @@ Control& Control::operator=(const Control& c)
 	m_texture = c.m_texture;
 	m_type = c.m_type;
 	m_visible = c.m_visible;
+	m_pngBlend = c.m_pngBlend;
 
 	return *this;
 }
 
 void Control::RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture)
 {
-	glEnable(GL_BLEND);
+	if (m_pngBlend)
+	{
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+	}
 	texture->Bind();
 	glLoadIdentity();
 	glTranslated(position.x, position.y, 0);
@@ -115,7 +130,8 @@ void Control::RenderSquare(const Vector2i& position, const Vector2i& size, Textu
 	glVertex2i(0, size.y);
 
 	glEnd();
-	glDisable(GL_BLEND);
+	if (m_pngBlend)
+		glDisable(GL_BLEND);
 }
 
 void Control::RenderSquare(const Vector2i& position, const Vector2i& size)

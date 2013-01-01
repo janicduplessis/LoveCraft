@@ -222,6 +222,9 @@
     <ClInclude Include="src\engine\gl\ui\panel.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="src\interface.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="media\shader\cubeshader.frag">

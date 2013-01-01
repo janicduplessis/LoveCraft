@@ -92,10 +92,26 @@ public:
 	* @return Vector2i
 	*/
 	virtual Vector2i AbsolutePosition() const;
-
+	/**
+	* Définit la texture qui sera utilisée lors du Render
+	*/
 	virtual void SetTexture(Texture* text);
-
+	/**
+	* Obtient la texture qui sera utilisée lors du Render
+	* 
+	* @return Texture*
+	*/
 	virtual Texture* GetTexture() const;
+	/**
+	* Obtient la valeur indiquant si le blend doit être activé lors du Render
+	* 
+	* @return bool
+	*/
+	virtual bool GetPngBlend() const;
+	/**
+	* Définit la valeur indiquant si le blend doit être activé lors du Render
+	*/
+	virtual void SetPngBlend(const bool value);
 
 	Control& operator=(const Control& c);
 
@@ -105,6 +121,7 @@ protected:
 
 	std::string m_name;
 	Type m_type;
+	bool m_pngBlend;
 	bool m_visible;
 	Texture* m_texture;
 	Vector2i m_parentPosition;

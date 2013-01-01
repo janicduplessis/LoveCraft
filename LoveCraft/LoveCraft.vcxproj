@@ -113,6 +113,7 @@
     <ClCompile Include="src\util\tool.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\interface.h" />
     <ClInclude Include="src\engine\gl\ui\panel.h" />
     <ClInclude Include="src\engine\gl\ui\control.h" />
     <ClInclude Include="src\engine\options.h" />

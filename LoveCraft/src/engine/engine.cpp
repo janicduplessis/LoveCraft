@@ -6,10 +6,8 @@
 #include <iomanip>
 #include <cmath>
 #include "son.h"
-#include "SFML/Graphics/Image.hpp"
-#include "SFML/Graphics/Sprite.hpp"
-#include "SFML/Graphics/Texture.hpp"
 #include <SFML/Network.hpp>
+#include "interface.h"
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
@@ -21,6 +19,7 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_playScreenSize(Vector2i(m_playScreenTopRight.x - m_playScreenTopLeft.x, m_playScreenTopLeft.y - m_playScreenBotLeft.y))
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
+	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureInterface = new Texture[IMAGE::IMAGE_LAST];
 }
 
@@ -235,16 +234,27 @@ void Engine::LoadResource()
 
 	m_textureArray->Generate();
 	//Texture des spells
-	m_textureSpell[0].Load(TEXTURE_PATH "spellbolt.gif");
-	m_textureSpell[1].Load(TEXTURE_PATH "spellfire.png");
-	m_textureSpell[2].Load(TEXTURE_PATH "spellfreeze.png");
-	m_textureSpell[3].Load(TEXTURE_PATH "spellshock.png");
-	m_textureSpell[4].Load(TEXTURE_PATH "spellpoison.gif");
-	m_textureSpell[5].Load(TEXTURE_PATH "spellstorm.png");
-	m_textureSpell[6].Load(TEXTURE_PATH "spellheal.gif");
-	m_textureSpell[7].Load(TEXTURE_PATH "spellrain.gif");
-	m_textureSpell[8].Load(TEXTURE_PATH "spelldefend.gif");
-	m_textureSpell[9].Load(TEXTURE_PATH "spellshield.png");
+	m_textureSpell[SPELL_IMAGE_BOLT].Load(TEXTURE_PATH "s_spellbolt.gif");
+	m_textureSpell[SPELL_IMAGE_FIRE].Load(TEXTURE_PATH "s_spellfire.png");
+	m_textureSpell[SPELL_IMAGE_FREEZE].Load(TEXTURE_PATH "s_spellfreeze.png");
+	m_textureSpell[SPELL_IMAGE_SHOCK].Load(TEXTURE_PATH "s_spellshock.png");
+	m_textureSpell[SPELL_IMAGE_POISON].Load(TEXTURE_PATH "s_spellpoison.gif");
+	m_textureSpell[SPELL_IMAGE_STORM].Load(TEXTURE_PATH "s_spellstorm.png");
+	m_textureSpell[SPELL_IMAGE_HEAL].Load(TEXTURE_PATH "s_spellheal.gif");
+	m_textureSpell[SPELL_IMAGE_RAIN].Load(TEXTURE_PATH "s_spellrain.gif");
+	m_textureSpell[SPELL_IMAGE_DEFEND].Load(TEXTURE_PATH "s_spelldefend.gif");
+	m_textureSpell[SPELL_IMAGE_SHIELD].Load(TEXTURE_PATH "s_spellshield.png");
+
+	m_textureSpellX[SPELL_IMAGE_BOLT].Load(TEXTURE_PATH "s_spellboltx.gif");
+	m_textureSpellX[SPELL_IMAGE_FIRE].Load(TEXTURE_PATH "s_spellfirex.png");
+	m_textureSpellX[SPELL_IMAGE_FREEZE].Load(TEXTURE_PATH "s_spellfreezex.png");
+	m_textureSpellX[SPELL_IMAGE_SHOCK].Load(TEXTURE_PATH "s_spellshockx.png");
+	m_textureSpellX[SPELL_IMAGE_POISON].Load(TEXTURE_PATH "s_spellpoisonx.gif");
+	m_textureSpellX[SPELL_IMAGE_STORM].Load(TEXTURE_PATH "s_spellstormx.png");
+	m_textureSpellX[SPELL_IMAGE_HEAL].Load(TEXTURE_PATH "s_spellhealx.gif");
+	m_textureSpellX[SPELL_IMAGE_RAIN].Load(TEXTURE_PATH "s_spellrainx.gif");
+	m_textureSpellX[SPELL_IMAGE_DEFEND].Load(TEXTURE_PATH "s_spelldefendx.gif");
+	m_textureSpellX[SPELL_IMAGE_SHIELD].Load(TEXTURE_PATH "s_spellshieldx.png");
 
 	m_textureInterface[IMAGE_BLACK_BACK].Load(TEXTURE_PATH "noir.jpg");
 	m_textureInterface[IMAGE_BOO].Load(TEXTURE_PATH "i_boo.png");
@@ -258,6 +268,11 @@ void Engine::LoadResource()
 	m_textureInterface[IMAGE_PGBTEXT_ENERGY].Load(TEXTURE_PATH "i_pgb_energy.png");
 	m_textureInterface[IMAGE_PGBTEXT_MANA].Load(TEXTURE_PATH "i_pgb_mana.png");
 	m_textureInterface[IMAGE_PGBTEXT_EXP].Load(TEXTURE_PATH "i_pgb_exp.png");
+	m_textureInterface[IMAGE_PGBTEXT_HEALTH_BACK].Load(TEXTURE_PATH "i_pgb_health_back.png");
+	m_textureInterface[IMAGE_PGBTEXT_ENERGY_BACK].Load(TEXTURE_PATH "i_pgb_energy_back.png");
+	m_textureInterface[IMAGE_PGBTEXT_MANA_BACK].Load(TEXTURE_PATH "i_pgb_mana_back.png");
+	m_textureInterface[IMAGE_PGBTEXT_EXP_BACK].Load(TEXTURE_PATH "i_pgb_exp_back.png");
+	m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW].Load(TEXTURE_PATH "i_pgb_health_low.png");
 
 
 #pragma endregion
@@ -282,26 +297,26 @@ void Engine::LoadResource()
 	m_pgb_health = ProgressBar(m_pnl_portrait.AbsolutePosition(),
 		Vector2i(PGB_HEALTH_POSITION_X, PGB_HEALTH_POSITION_Y),
 		Vector2i(PGB_HEALTH_SIZE_W, PGB_HEALTH_SIZE_H),
-		&m_textureInterface[IMAGE_PGBTEXT_HEALTH], &m_textureInterface[IMAGE_BLACK_BACK],
-		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_HEALTH_BACKGROUND, PGB_HEALTH_NAME);
+		&m_textureInterface[IMAGE_PGBTEXT_HEALTH], &m_textureInterface[IMAGE_PGBTEXT_HEALTH_BACK],
+		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_HEALTH_BACKGROUND, PGB_HEALTH_BORDER_SIZE, PGB_HEALTH_NAME);
 	//m_pnl_portrait.AddControl(m_pgb_health);
 	m_pgb_mana = ProgressBar(m_pnl_portrait.AbsolutePosition(),
 		Vector2i(PGB_MANA_POSITION_X, PGB_MANA_POSITION_Y),
 		Vector2i(PGB_MANA_SIZE_W, PGB_MANA_SIZE_H),
-		&m_textureInterface[IMAGE_PGBTEXT_MANA], &m_textureInterface[IMAGE_BLACK_BACK],
-		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_MANA_BACKGROUND, PGB_MANA_NAME);
+		&m_textureInterface[IMAGE_PGBTEXT_MANA], &m_textureInterface[IMAGE_PGBTEXT_MANA_BACK],
+		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_MANA_BACKGROUND, PGB_MANA_BORDER_SIZE, PGB_MANA_NAME);
 	//m_pnl_portrait.AddControl(m_pgb_mana);
 	m_pgb_exp = ProgressBar(m_pnl_portrait.AbsolutePosition(),
 		Vector2i(PGB_EXP_POSITION_X, PGB_EXP_POSITION_Y),
 		Vector2i(PGB_EXP_SIZE_W, PGB_EXP_SIZE_H),
-		&m_textureInterface[IMAGE_PGBTEXT_EXP], &m_textureInterface[IMAGE_BLACK_BACK],
-		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_EXP_BACKGROUND, PGB_EXP_NAME);
+		&m_textureInterface[IMAGE_PGBTEXT_EXP], &m_textureInterface[IMAGE_PGBTEXT_EXP_BACK],
+		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_EXP_BACKGROUND, PGB_EXP_BORDER_SIZE, PGB_EXP_NAME);
 	//m_pnl_portrait.AddControl(m_pgb_exp);
 	m_pgb_energy = ProgressBar(m_pnl_playscreen.AbsolutePosition(),
 		Vector2i(PGB_ENERGY_POSITION_X, PGB_ENERGY_POSITION_Y),
 		Vector2i(PGB_ENERGY_SIZE_W, PGB_ENERGY_SIZE_H),
-		&m_textureInterface[IMAGE_PGBTEXT_ENERGY], &m_textureInterface[IMAGE_BLACK_BACK],
-		ProgressBar::BARMODE_VERTICAL_DTU, PGB_ENERGY_BACKGROUND, PGB_ENERGY_NAME);
+		&m_textureInterface[IMAGE_PGBTEXT_ENERGY], &m_textureInterface[IMAGE_PGBTEXT_ENERGY_BACK],
+		ProgressBar::BARMODE_VERTICAL_DTU, PGB_ENERGY_BACKGROUND, PGB_ENERGY_BORDER_SIZE, PGB_ENERGY_NAME);
 	//m_pnl_playscreen.AddControl(m_pgb_energy);
 
 	//m_healthBar = ProgressBar(Vector2i(300, 20), 
@@ -545,6 +560,18 @@ void Engine::Render2D(float elapsedTime)
 
 #pragma region Images qui subissent le blend pour les PNG
 
+	//Change la texture de la barre de vie en fonction du %. Ne réassigne la texture que si on en a besoin
+	if (m_character.HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_pgb_health.GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH])
+		m_pgb_health.SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW]);
+	else if (m_character.HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_pgb_health.GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW])
+		m_pgb_health.SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH]);
+
+	//Affiche ou cache la barre d'énergie selon la situation
+	if (m_character.Energy() == m_character.EnergyMax())
+		m_pgb_energy.SetVisible(false);
+	else if (m_character.Energy() != m_character.EnergyMax() || sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+		m_pgb_energy.SetVisible(true);
+
 	m_pnl_portrait.Render();
 	m_pgb_energy.Render();
 	m_pgb_health.Render();
@@ -679,28 +706,30 @@ void Engine::RenderSpells()
 void Engine::RenderProgressBars()
 {
 	std::ostringstream ss;
-	m_pnl_portrait.Render();
 
 	//Textes des bars
 	StartBlendPNG(false);
 	ss << "Vie             " << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
-	PrintText(m_pgb_health.AbsolutePosition().x + PROGRESS_BAR_OUTLINE, 
-		m_pgb_health.AbsolutePosition().y + PROGRESS_BAR_OUTLINE, ss.str());
+	PrintText(m_pgb_health.AbsolutePosition().x, 
+		m_pgb_health.AbsolutePosition().y, ss.str());
 	ss.str("");
 
-	ss << "Energie";
-	PrintText(m_pgb_energy.AbsolutePosition().x, 
-		m_pgb_energy.AbsolutePosition().y + m_pgb_energy.Size().x + PROGRESS_BAR_OUTLINE * 2 + 12, ss.str());
-	ss.str("");
-	ss << (int)m_character.Energy() << " / " << (int)m_character.EnergyMax();
-	PrintText(m_pgb_energy.AbsolutePosition().x, 
-		m_pgb_energy.AbsolutePosition().y + m_pgb_energy.Size().x + PROGRESS_BAR_OUTLINE * 2, ss.str());
-	ss.str("");
+	if (m_pgb_energy.Visible())
+	{
+		ss << "Energie";
+		PrintText(m_pgb_energy.AbsolutePosition().x, 
+			m_pgb_energy.AbsolutePosition().y + m_pgb_energy.Size().x + 16, ss.str());
+		ss.str("");
+		ss << (int)m_character.Energy() << " / " << (int)m_character.EnergyMax();
+		PrintText(m_pgb_energy.AbsolutePosition().x, 
+			m_pgb_energy.AbsolutePosition().y + m_pgb_energy.Size().x + 4, ss.str());
+		ss.str("");
+	}
 
 	ss << "Mana            " << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
 	glEnable(GL_BLEND);
-	PrintText(m_pgb_mana.AbsolutePosition().x + PROGRESS_BAR_OUTLINE, 
-		m_pgb_mana.AbsolutePosition().y + PROGRESS_BAR_OUTLINE, ss.str());
+	PrintText(m_pgb_mana.AbsolutePosition().x, 
+		m_pgb_mana.AbsolutePosition().y, ss.str());
 	ss.str("");
 	glDisable(GL_BLEND);
 }

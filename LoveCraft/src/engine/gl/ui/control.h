@@ -4,20 +4,9 @@
 #include "define.h"
 #include "../texture.h"
 #include "util/vector2.h"
+#include <cassert>
 #include <string>
 #include <iostream>
-
-enum Image
-{
-	IMAGE_BOO,
-	IMAGE_RUN,
-	IMAGE_CROSSHAIR,
-	IMAGE_PORTRAIT,
-	IMAGE_HEALTH,
-	IMAGE_ENERGY,
-	IMAGE_MANA,
-	IMAGE_LAST
-};
 
 class Control
 {
@@ -41,6 +30,15 @@ public:
 	*/
 	Control(Type type);
 	/**
+	* Constructeur de la classe
+	*
+	* @param type		Le type du controle - Voir Enum Type
+	* @param parent		La position du controle parent
+	* @param position	La poisition initiale du controle par rapport a son parent
+	* @param size		La taille du controle
+	*/
+	Control(Type type, Vector2i parent, Vector2i position, Vector2i size, Texture* texture, const std::string& name);
+	/**
 	* Destructeur par défaut
 	*/
 	virtual ~Control();
@@ -51,11 +49,13 @@ public:
 	/**
 	* Dessine l'objet à l'écran en utilisant une texture
 	*/
-	virtual void Render(Texture& texture);
+	virtual void Render(Texture* texture);
 	/**
-	* Dessine l'objet à l'écran en spécifiant une texture de fond et de devant
+	* Obtient le nom du cotnrole
+	* 
+	* @return std::string
 	*/
-	virtual void Render(Texture& textureBack, Texture& textureFront);
+	virtual std::string Name() const;
 	/**
 	* Obtient la valeur indiquant si le controle est visible
 	* 
@@ -93,13 +93,20 @@ public:
 	*/
 	virtual Vector2i AbsolutePosition() const;
 
+	virtual void SetTexture(Texture* text);
+
+	virtual Texture* GetTexture() const;
+
+	Control& operator=(const Control& c);
+
 protected:
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size);
-	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture);
+	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture);
 
 	std::string m_name;
 	Type m_type;
 	bool m_visible;
+	Texture* m_texture;
 	Vector2i m_parentPosition;
 	Vector2i m_position;
 	Vector2i m_size;

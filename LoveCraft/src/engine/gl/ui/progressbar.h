@@ -1,11 +1,7 @@
 #ifndef PROGRESSBAR_H_
 #define PROGRESSBAR_H_
 
-#include "define.h"
 #include "control.h"
-#include "../texture.h"
-
-#include "util/vector2.h"
 
 class ProgressBar : public Control
 {
@@ -34,17 +30,9 @@ public:
 	* @param size		La taille de la barre Largeur x Hauteur
 	* @param position	La position du coin inférieur gauche du contrôle
 	* @param mode		Le mode d'affichage de la barre
-	*/
-	ProgressBar(Vector2i &size, Vector2i &position, BarMode mode);
-	/**
-	* Constructeur de la classe
-	* 
-	* @param size		La taille de la barre Largeur x Hauteur
-	* @param position	La position du coin inférieur gauche du contrôle
-	* @param mode		Le mode d'affichage de la barre
 	* @param parent		Le panel dans lequel est emmagasiné le controle
 	*/
-	ProgressBar(Vector2i &size, Vector2i &position, BarMode mode, Vector2i parent);
+	ProgressBar(Vector2i parent, Vector2i &position, Vector2i &size, Texture* textureFront, Texture* textureBack, BarMode mode, const std::string& name);
 	/**
 	* Destructeur par défaut de la classe
 	*/
@@ -55,7 +43,8 @@ public:
 	* @param back	Texture qui sera affichée en arrière plan de la barre
 	* @param front	Texture qui sera affichée au premier plan de la barre
 	*/
-	void Render(Texture& back, Texture& front);
+	void Render(Texture* back, Texture* front);
+	void Render();
 	/**
 	* Obtient le mode d'affichage de la barre
 	*/
@@ -90,12 +79,14 @@ public:
 	* @return float
 	*/
 	float ValuePerc() const;
+	ProgressBar& operator=(const ProgressBar& pgb);
 
 private:
-	void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture);
-	void RenderCircle(const Vector2i& origin, float rayon, Texture& texture, bool repeat = true);
+	void RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture);
+	void RenderCircle(const Vector2i& origin, float rayon, Texture* texture, bool repeat = true);
 	void ApplyRotationTransformation(BarMode type, Vector2i size) const;
 	BarMode m_mode;
+	Texture* m_textureBack;
 	float m_minimum;
 	float m_maximum;
 	float m_value;

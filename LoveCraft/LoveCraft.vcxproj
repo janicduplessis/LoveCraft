@@ -81,6 +81,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\gl\ui\panel.cpp" />
+    <ClCompile Include="src\engine\gl\ui\control.cpp" />
     <ClCompile Include="src\engine\options.cpp" />
     <ClCompile Include="src\game\character.cpp" />
     <ClCompile Include="src\engine\ai.cpp" />
@@ -111,6 +113,8 @@
     <ClCompile Include="src\util\tool.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\gl\ui\panel.h" />
+    <ClInclude Include="src\engine\gl\ui\control.h" />
     <ClInclude Include="src\engine\options.h" />
     <ClInclude Include="src\game\character.h" />
     <ClInclude Include="src\engine\ai.h" />

@@ -161,6 +161,10 @@ Son::Foots Son::GetFootType(BlockType type) const
 		return Son::FOOT_DIRT;
 	case BLOCK_TYPE::BTYPE_SAND:
 		return Son::FOOT_GRAVEL;
+	case BLOCK_TYPE::BTYPE_ROCK:
+		return Son::FOOT_TILE;
+	case BLOCK_TYPE::BTYPE_SNOW:
+		return Son::FOOT_SNOW;
 	default:
 		return Son::FOOT_AIR;
 	}

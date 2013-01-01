@@ -48,7 +48,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 	bool c = sf::Keyboard::isKeyPressed(sf::Keyboard::C);
 	bool shift = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
 	bool ctrl = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl);
-	bool space = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
+	bool space = sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_speed.y == 0;
 
 #pragma endregion
 
@@ -327,7 +327,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 			//Appel de la fonction qui joue le son avec le BlockType qui se trouve
 			//juste en dessous du joueur (position = 0x, 0y, 0z)
 			Info::Get().Sound().PlayStep(Info::Get().GetBlocFromWorld(m_pos), 
-				elapsedTime, (shift ? SOUND_FOOT_RUN_TIMEOUT : SOUND_FOOT_TIMEOUT));
+				elapsedTime, ((shift && cter.Energy() > 0) ? SOUND_FOOT_RUN_TIMEOUT : SOUND_FOOT_TIMEOUT));
 		}
 	}
 

@@ -7,7 +7,6 @@
 #include "gl/texture.h"
 #include "gl/shader.h"
 #include "gl/texturearray.h"
-#include "gl/ui/progressbar.h"
 
 #include "player.h"
 #include "camera.h"
@@ -15,6 +14,8 @@
 #include "testprojectile.h"
 #include "info.h"
 #include "controls.h"
+#include "gl/ui/panel.h"
+#include "gl/ui/progressbar.h"
 
 #include "game/pig.h"
 #include "game/character.h"
@@ -138,6 +139,7 @@ private:
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat = true);
 	virtual void RenderSpells();
 	void RenderProgressBars();
+	void StartBlendPNG(bool value = true) const;
 private:
 	bool m_wireframe;
 	float m_angle;
@@ -156,16 +158,7 @@ private:
 	TextureArray* m_textureArray;
 
 	Texture* m_textureSpell;
-	Texture m_textureFloor;
-	Texture m_textureInterface;
-	Texture m_textureFont;
-	Texture m_textureCrosshair;
-	Texture m_textureCthulhu;
-	Texture m_textureGhost;
-	Texture m_textureHealth;
-	Texture m_textureEnergy;
-	Texture m_textureMana;
-	Texture m_textureNoir;
+	Texture* m_textureInterface;
 
 	Player m_player;
 	Camera m_camera;
@@ -180,10 +173,16 @@ private:
 
 	TestProjectile m_projectile;
 
-	ProgressBar m_healthBar;
-	ProgressBar m_energyBar;
-	ProgressBar m_manaBar;
-	ProgressBar m_testbar;
+	Panel m_pnl_screen;
+	Panel m_pnl_playscreen;
+	Panel m_pnl_portrait;
+
+	Control m_con;
+	
+	ProgressBar m_pgb_health;
+	ProgressBar m_pgb_energy;
+	ProgressBar m_pgb_mana;
+	ProgressBar m_pgb_exp;
 
 	bool m_ghostMode;
 	bool m_rightClick;

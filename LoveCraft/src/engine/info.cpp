@@ -89,15 +89,19 @@ BlockType Info::GetBlocFromWorld(Vector3f pos, const Vector3f& offset) const
 
 void Info::GenerateBlocInfos()
 {
-	m_blocInfos[0] = new BlockInfo(BTYPE_AIR, "Air");
+	m_blocInfos[BTYPE_AIR] = new BlockInfo(BTYPE_AIR, "Air");
 
-	m_blocInfos[1] = new BlockInfo(BTYPE_DIRT, "Dirt");
+	m_blocInfos[BTYPE_DIRT] = new BlockInfo(BTYPE_DIRT, "Dirt");
 
-	m_blocInfos[2] = new BlockInfo(BTYPE_GRASS, "Grass");
+	m_blocInfos[BTYPE_GRASS] = new BlockInfo(BTYPE_GRASS, "Grass");
 
-	m_blocInfos[3] = new BlockInfo(BTYPE_BRICK, "Brick");
+	m_blocInfos[BTYPE_BRICK] = new BlockInfo(BTYPE_BRICK, "Brick");
 
-	m_blocInfos[4] = new BlockInfo(BTYPE_SAND, "Sand");
+	m_blocInfos[BTYPE_SAND] = new BlockInfo(BTYPE_SAND, "Sand");
+
+	m_blocInfos[BTYPE_ROCK] = new BlockInfo(BTYPE_ROCK, "Rock");
+
+	m_blocInfos[BTYPE_SNOW] = new BlockInfo(BTYPE_SNOW, "Snow");
 }
 
 void Info::SetChunkArray( Array2d<Chunk>* arrayPtr )

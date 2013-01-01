@@ -3,6 +3,7 @@
 
 #include "define.h"
 #include "engine/gl/model.h"
+#include "engine/info.h"
 #include "engine/ai.h"
 
 #include "util/array.h"
@@ -25,12 +26,13 @@ public:
 
 	Vector3f Position() const;
 	void SetPosition(const Vector3f& pos);
+	bool CheckCollision(const Vector3f& pos) const;
 protected:
 	Vector3f m_pos;
 	Vector3f m_speed;
-	Vector3f m_acceleration;
 	Quaternion m_rot;
 	float m_maxRot;
+	float m_speedGravity;
 
 	AI* m_ai;
 	Model m_model;

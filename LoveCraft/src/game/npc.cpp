@@ -1,6 +1,6 @@
 #include "npc.h"
 
-Npc::Npc(const Vector3f& pos /*= Vector3f(0,0,0)*/ ) : m_ai(0), m_maxRot(0.01f)
+Npc::Npc(const Vector3f& pos /*= Vector3f(0,0,0)*/ ) : m_ai(0), m_maxRot(0.01f), m_speed(0), m_speedGravity(0)
 {
 
 }
@@ -29,19 +29,29 @@ void Npc::Render() const
 
 void Npc::Move(const Vector3f& destination, float elapsedTime) 
 {
+	if (elapsedTime == 0)
+		return;
+	// Gravité
+	float distanceY = (m_speedGravity * elapsedTime) + (GRAVITY * elapsedTime * elapsedTime / 2.0f);
+	if (!CheckCollision(Vector3f(m_pos.x, m_pos.y - distanceY, m_pos.z)))
+	{
+		m_speedGravity -= GRAVITY * elapsedTime;
+	}
+	else
+	{
+		m_speedGravity = 0;
+		distanceY = 0;
+	}
+
 	// Test si atteint la destination
 	if(	abs(destination.x - m_pos.x) < 1
 		&& abs(destination.y - m_pos.y) < 1 
 		&& abs(destination.z - m_pos.z) < 1) {
 			return;
 	}
-	Vector3f speed = m_rot * m_speed;
-	speed = speed * m_speed.Lenght();
-	// Met a jour la valeur de la vitesse en 
-	// fonction de l'acceleration et du temps
-	m_speed += m_acceleration * elapsedTime;
+	Vector3f deplacement;
+	deplacement = m_rot * m_speed * elapsedTime;
 
-	// distance entre le projectile et sa destination
 	// chemin le plus court
 	Vector3f distance;
 	distance.x = m_pos.x - destination.x;
@@ -50,14 +60,13 @@ void Npc::Move(const Vector3f& destination, float elapsedTime)
 
 	// calculer l'angle entre les 2 vecteurs
 	// fix imprecision float
-	float n = distance.Dot(speed) / (distance.Lenght() * speed.Lenght());
+	float n = distance.Dot(deplacement) / (distance.Lenght() * deplacement.Lenght());
 	if (n > 1)
 		n = 1;
 	else if (n < -1)
 		n = -1;
 	float angleA = acos(n);
-	std::cout << angleA << std::endl;
-	Vector3f axis = distance.Cross(speed);
+	Vector3f axis = distance.Cross(deplacement);
 	axis.Normalise();
 	// rotation autour de laxe
 	float rotation;
@@ -73,7 +82,22 @@ void Npc::Move(const Vector3f& destination, float elapsedTime)
 	m_rot.Normalise();
 
 	// calcul la nouvelle position
-	m_pos += speed * elapsedTime;
+	m_pos += deplacement;
+	m_pos.y += distanceY;
+	m_pos.Afficher();
+}
+
+bool Npc::CheckCollision(const Vector3f& pos) const
+{
+	static float offset = 0.2f;
+	Info& info = Info::Get();
+	if(pos.y >=0 
+		&& info.GetBlocFromWorld(pos, Vector3f(offset, 1, offset)) == BTYPE_AIR
+		&& info.GetBlocFromWorld(pos, Vector3f(-offset, 1, offset)) == BTYPE_AIR
+		&& info.GetBlocFromWorld(pos, Vector3f(-offset, 1, -offset)) == BTYPE_AIR
+		&& info.GetBlocFromWorld(pos, Vector3f(offset, 1, -offset)) == BTYPE_AIR)
+		return false; 
+	return true;
 }
 
 Vector3f Npc::Position() const

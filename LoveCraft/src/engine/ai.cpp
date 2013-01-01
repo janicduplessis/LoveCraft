@@ -37,12 +37,12 @@ void AI::Process(float elapsedTime)
 			totalTime = 0;
 			Patrol();
 		}
-		m_npc->Move(*m_patrolDestination, elapsedTime);
+		m_npc->Move(Vector3f(m_patrolDestination->x, m_npc->Position().y, m_patrolDestination->z), elapsedTime);
 	}
 	m_stateChanged = false;
 }
 
-bool AI::CheckCollision(const Vector3f& pos) const
+bool AI::CheckVision(const Vector3f& pos) const
 {
 	Info& info = Info::Get();
 	if(pos.y >=0 
@@ -53,6 +53,21 @@ bool AI::CheckCollision(const Vector3f& pos) const
 		return false; 
 	return true;
 }
+
+
+bool AI::CheckCollision( const Vector3f& pos ) const
+{
+	float offset = 0.2f;
+	Info& info = Info::Get();
+	if(pos.y >=0 
+		&& info.GetBlocFromWorld(pos, Vector3f(offset, 1, offset)) == BTYPE_AIR
+		&& info.GetBlocFromWorld(pos, Vector3f(-offset, 1, offset)) == BTYPE_AIR
+		&& info.GetBlocFromWorld(pos, Vector3f(-offset, 1, -offset)) == BTYPE_AIR
+		&& info.GetBlocFromWorld(pos, Vector3f(offset, 1, -offset)) == BTYPE_AIR)
+		return false;
+	return true;
+}
+
 
 bool AI::CheckPlayer()
 {
@@ -69,7 +84,7 @@ bool AI::CheckPlayer()
 	// collision a chaque 1m
 	for (float i = 0; i < distance.Lenght(); i++)
 	{
-		if(CheckCollision(npcPos + (iterator * i)))
+		if(CheckVision(npcPos + (iterator * i)))
 			return false;
 	}
 	// passe tous les test, le joueur est visible!
@@ -97,6 +112,8 @@ void AI::Patrol()
 		float z = m_posIni.z + rand() % (2 * PATROL_RANGE) - PATROL_RANGE; 
 		m_patrolDestination = new Vector3f(x, m_posIni.y, z);
 	}
+
+	CheckCollision(m_npc->Position());
 
 }
 

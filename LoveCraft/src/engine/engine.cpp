@@ -99,7 +99,7 @@ void Engine::Init()
 	m_projectile.SetPosition(Vector3f(10,0,0));
 
 	m_testpig.Init(&m_player);
-	m_testpig.SetPosition(Vector3f(0,0,0));
+	m_testpig.SetPosition(Vector3f(10,5,10));
 	m_character = Character();
 
 #pragma endregion
@@ -765,6 +765,7 @@ void Engine::KeyPressEvent(unsigned char key)
 		sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
 		break;
 	case 28:
+		m_testpig.SetPosition(Vector3f(m_testpig.Position().x, 10, m_testpig.Position().z));
 		sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
 		break;
 	case 29:

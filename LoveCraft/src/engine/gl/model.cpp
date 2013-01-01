@@ -7,7 +7,7 @@
 #include "util/tool.h"
 #include "util/matrix4.h"
 
-Model::Model() : m_scale(Vector3f(1,1,1)), m_rot(1,0,0,0), m_pos(Vector3f(0,0,0)) {}
+Model::Model() : m_scale(Vector3f(1,1,1)), m_rot(1,0,0,0), m_pos(Vector3f(0,0,0)), m_translation(Vector3f(0,0,0)) {}
 
 Model::~Model() {}
 
@@ -135,6 +135,7 @@ void Model::Render(bool wireFrame) const
 	glPushMatrix();
 	glTranslatef(m_pos.x, m_pos.y, m_pos.z);
 	glMultMatrixf(m_rot.RotationMatrix().GetInternalValues());
+	glTranslatef(m_translation.x, m_translation.y, m_translation.z);
 	glScalef(m_scale.x, m_scale.y, m_scale.z);
 
 	if(IsValid())
@@ -175,7 +176,7 @@ void Model::Translate( float x, float y, float z )
 
 void Model::Translate( const Vector3f& trans )
 {
-	m_pos += trans;
+	m_translation += trans;
 }
 
 void Model::Scale( float x, float y, float z )

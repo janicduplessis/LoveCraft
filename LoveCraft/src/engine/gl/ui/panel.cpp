@@ -44,14 +44,18 @@ Panel::~Panel()
 //	assert(index < m_controlNbr);
 //	return m_controls[index];
 //}
-//Control& Panel::GetControlByName(const std::string& name) const
+//Control* Panel::GetControlByName(const std::string& name) const
 //{
+//	Control* ctrl = 0;
 //	for (unsigned short i = 0; i < m_controlNbr; i++)
 //	{
 //		if (m_controls[i].Name() == name)
-//			return m_controls[i];
+//		{
+//			ctrl = m_controls[i];
+//			break;
+//		}
 //	}
-//	return Control();
+//	return ctrl;
 //}
 
 void Panel::Render()
@@ -64,6 +68,21 @@ void Panel::RenderAllControls()
 {
 	//for (unsigned short i = 0; i < m_controlNbr; i++)
 	//	m_controls[i].Render();
+}
+
+Panel& Panel::operator=(const Panel& p)
+{
+	m_controlNbr = p.m_controlNbr;
+	m_index = p.m_index;
+	m_name = p.m_name;
+	m_parentPosition = p.m_parentPosition;
+	m_position = p.m_position;
+	m_size = p.m_size;
+	m_texture = p.m_texture;
+	m_type = p.m_type;
+	m_visible = p.m_visible;
+
+	return *this;
 }
 
 //private

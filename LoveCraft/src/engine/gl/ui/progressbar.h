@@ -32,7 +32,7 @@ public:
 	* @param mode		Le mode d'affichage de la barre
 	* @param parent		Le panel dans lequel est emmagasiné le controle
 	*/
-	ProgressBar(Vector2i parent, Vector2i &position, Vector2i &size, Texture* textureFront, Texture* textureBack, BarMode mode, const std::string& name);
+	ProgressBar(Vector2i parent, Vector2i &position, Vector2i &size, Texture* textureFront, Texture* textureBack, BarMode mode, bool back, const std::string& name);
 	/**
 	* Destructeur par défaut de la classe
 	*/
@@ -79,12 +79,23 @@ public:
 	* @return float
 	*/
 	float ValuePerc() const;
+	/**
+	* Obtient la valeur indiquant si le fond des bars est affiché
+	* 
+	* @return bool
+	*/
+	bool GetBeckground() const;
+	/**
+	* Définit la valeur indiquant si le fond des bars est affiché
+	*/
+	void SetBackgroundTo(const bool value);
 	ProgressBar& operator=(const ProgressBar& pgb);
 
 private:
 	void RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture);
 	void RenderCircle(const Vector2i& origin, float rayon, Texture* texture, bool repeat = true);
 	void ApplyRotationTransformation(BarMode type, Vector2i size) const;
+	bool m_background;
 	BarMode m_mode;
 	Texture* m_textureBack;
 	float m_minimum;

@@ -177,8 +177,6 @@ private:
 	Panel m_pnl_playscreen;
 	Panel m_pnl_portrait;
 
-	Control m_con;
-	
 	ProgressBar m_pgb_health;
 	ProgressBar m_pgb_energy;
 	ProgressBar m_pgb_mana;

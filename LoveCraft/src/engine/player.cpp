@@ -327,7 +327,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 			//Appel de la fonction qui joue le son avec le BlockType qui se trouve
 			//juste en dessous du joueur (position = 0x, 0y, 0z)
 			Info::Get().Sound().PlayStep(Info::Get().GetBlocFromWorld(m_pos), 
-				elapsedTime, ((shift && cter.Energy() > 0) ? SOUND_FOOT_RUN_TIMEOUT : SOUND_FOOT_TIMEOUT));
+				elapsedTime, fabs(m_speed.x) + fabs(m_speed.z));
 		}
 	}
 

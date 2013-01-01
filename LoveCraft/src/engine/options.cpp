@@ -24,7 +24,8 @@ bool Option::GetOptSound() const
 void Option::SetOptMusic(const bool value)
 {
 	m_music = value;
-	Info::Get().Sound().PlayNextTrack();
+	if (m_music)
+		Info::Get().Sound().PlayNextTrack();
 }
 
 void Option::SetOptSound(const bool value)

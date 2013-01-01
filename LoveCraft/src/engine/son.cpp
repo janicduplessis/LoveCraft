@@ -82,8 +82,12 @@ bool Son::PlayMusic()
 		{
 			//			Ouverture  de (string  de l'enum  ou on est rendu / nombre de piste)
 			if (!m_music.openFromFile(m_musicList[(Musics)(m_trackNumber % Musics::MUSIC_LAST)]))
+			{
+				//Sort en console le fichier qui n'a pas pu être ouvert
+				std::cout << "Erreur lors du chargement de la musique: " << 
+					m_musicList[(Musics)(m_trackNumber % Musics::MUSIC_LAST)] << std::endl;
 				return false;
-
+			}
 			m_music.play();
 		}
 	}
@@ -117,17 +121,17 @@ bool Son::PlaySnd(const Sons& snd, const Channel& channel, bool aSync)
 	return true;
 }
 
-bool Son::PlayStep(const BlockType type, float elapsedTime, float timeout, bool priority)
+bool Son::PlayStep(const BlockType type, float elapsedTime, float speed, bool priority)
 {
 	//Conversion du BlockType en Foots
 	Foots typePas = GetFootType(type);
 	//Vérification que le bloc rencontré est solide (ou a un son de définit)
 	if (typePas != FOOT_AIR)
 	{
-		//Incrémentation du timer
-		m_stepTmr += elapsedTime;
-		//Vérification que le timer soit rendu au temps minimal
-		if (timeout <= m_stepTmr || priority)
+		//Incrémentation du timer par la normalisation de la vitesse
+		m_stepTmr += elapsedTime * (speed / 8);
+		//Vérification que le timer soit rendu au temps minimal ou que le son ait priorité
+		if (SOUND_FOOT_TIMEOUT <= m_stepTmr || priority)
 		{
 			//Assigne le buffer correspondant au type de pas
 			m_sndChannels[CHANNEL_STEP].setBuffer(m_footSteps[typePas * 4 + (m_footStep % SOUND_FOOT_NUMBER)]);
@@ -140,13 +144,6 @@ bool Son::PlayStep(const BlockType type, float elapsedTime, float timeout, bool 
 		}
 	}
 	return true;
-}
-
-void Son::TestSon()
-{
-	m_sndChannels[CHANNEL_DEFAULT].setBuffer(m_footSteps[m_soundStep % (Foots::FOOT_LAST * SOUND_FOOT_NUMBER + 1)]);
-	m_sndChannels[CHANNEL_DEFAULT].play();
-	m_soundStep++;
 }
 
 Son::Foots Son::GetFootType(BlockType type) const

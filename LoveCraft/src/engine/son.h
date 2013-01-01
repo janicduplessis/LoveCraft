@@ -110,8 +110,7 @@ public:
 	* @note		Vérifier que les sons sont activés avant d'appeler cette méthode
 	* 			pour éviter de surcharger inutilement la mémoire.
 	*/
-	bool PlayStep(const BlockType type, float elapsedTime, float timeout, bool priority = false);
-	void TestSon();
+	bool PlayStep(const BlockType type, float elapsedTime, float speed, bool priority = false);
 private:
 	Foots GetFootType(BlockType type) const;
 	bool LoadFootSteps(const Foots type, const std::string filename);

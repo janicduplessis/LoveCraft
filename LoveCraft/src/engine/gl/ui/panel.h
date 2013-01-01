@@ -2,6 +2,7 @@
 #define PANEL_H_
 
 #include "control.h"
+#include "util/array.h"
 
 class Panel : public Control
 {
@@ -14,6 +15,7 @@ public:
 	//Control& GetControlByName(const std::string& name) const;
 	void Render();
 	void RenderAllControls();
+	Panel& operator=(const Panel& p);
 private:
 	void Resize(unsigned short newNbr);
 

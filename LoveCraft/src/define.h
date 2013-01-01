@@ -42,9 +42,6 @@ typedef long long int64;
 // Nombre de temps en secondes qui devront être écoulées 
 // avant qu'un autre son se fasse jouer
 #define SOUND_FOOT_TIMEOUT			0.4f
-// Nombre de temps en secondes qui devront être écoulées 
-// avant qu'un autre son se fasse jouer lorsque le joueur coure
-#define SOUND_FOOT_RUN_TIMEOUT		0.25f
 
 // Valeurs de l'interface
 // Hauteur du cadre inférieur de l'interface
@@ -64,7 +61,7 @@ typedef long long int64;
 #define PNL_PORTRAIT_CONTROLS_NBR	7	//3 bars, 3 labels, 
 
 // Panel portrait
-#define PNL_PORTRAIT_NAME			"pnl_portrait`"
+#define PNL_PORTRAIT_NAME			"pnl_portrait"
 #define PNL_PORTRAIT_SIZE_W			512
 #define PNL_PORTRAIT_SIZE_H			128
 #define PNL_PORTRAIT_POSITION_X		20
@@ -77,16 +74,19 @@ typedef long long int64;
 #define PB_PORTRAIT_POSITION_Y		19
 // Bars dans le panel portrait
 #define PGB_HEALTH_NAME				"pgb_health"
+#define PGB_HEALTH_BACKGROUND		false
 #define PGB_HEALTH_POSITION_X		143
 #define PGB_HEALTH_POSITION_Y		86
 #define PGB_HEALTH_SIZE_W			250
 #define PGB_HEALTH_SIZE_H			20
 #define PGB_MANA_NAME				"pgb_mana"
+#define PGB_MANA_BACKGROUND			false
 #define PGB_MANA_POSITION_X			143
 #define PGB_MANA_POSITION_Y			56
 #define PGB_MANA_SIZE_W				250
 #define PGB_MANA_SIZE_H				20
 #define PGB_EXP_NAME				"pgb_exp"
+#define PGB_EXP_BACKGROUND			false
 #define PGB_EXP_POSITION_X			143
 #define PGB_EXP_POSITION_Y			26
 #define PGB_EXP_SIZE_W				225
@@ -112,10 +112,11 @@ typedef long long int64;
 #define LBL_EXP_AUTOSIZE			false
 // Taille de la barre d'énergie
 #define PGB_ENERGY_NAME				"pgb_energy"
-#define PGB_ENERGY_POSITION_X		0
-#define PGB_ENERGY_POSITION_Y		0
-#define PGB_ENERGY_SIZE_W			20
-#define PGB_ENERGY_SIZE_H			250
+#define PGB_ENERGY_BACKGROUND		true
+#define PGB_ENERGY_POSITION_X		10
+#define PGB_ENERGY_POSITION_Y		150
+#define PGB_ENERGY_SIZE_W			250
+#define PGB_ENERGY_SIZE_H			20
 // Taille (LxH) des boutons des sorts dans la barre de sorts
 #define SPELL_ICON_SIZE				64
 // Longueur de l'espace entre chaque images de sorts
@@ -192,7 +193,6 @@ typedef uint8 Image;
 enum IMAGE
 {
 	IMAGE_BLACK_BACK,
-	IMAGE_TRANSP_BACK,
 	IMAGE_BOO,
 	IMAGE_RUN,
 	IMAGE_CROSSHAIR,

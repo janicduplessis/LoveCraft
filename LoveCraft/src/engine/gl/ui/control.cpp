@@ -1,8 +1,7 @@
 #include "control.h"
 
-Control::Control()
+Control::Control() : m_texture(0)
 {
-	m_texture = new Texture();
 }
 
 Control::Control(Type type) : m_type(type), m_visible(true), m_name("default"),
@@ -14,7 +13,6 @@ Control::Control(Type type, Vector2i parent, Vector2i position, Vector2i size, T
 	m_type(type), m_visible(true), m_name(name), m_parentPosition(parent), m_position(position), m_texture(texture),
 	m_size(size)
 {
-	//m_texture = texture;
 }
 
 
@@ -29,7 +27,11 @@ void Control::Render()
 
 void Control::Render(Texture* texture)
 {
-	RenderSquare(AbsolutePosition(), m_size, texture);
+	if (m_visible)
+	{
+		if (texture)
+			RenderSquare(AbsolutePosition(), m_size, texture);
+	}
 }
 
 std::string Control::Name() const
@@ -93,6 +95,7 @@ Control& Control::operator=(const Control& c)
 
 void Control::RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture)
 {
+	glEnable(GL_BLEND);
 	texture->Bind();
 	glLoadIdentity();
 	glTranslated(position.x, position.y, 0);
@@ -112,6 +115,7 @@ void Control::RenderSquare(const Vector2i& position, const Vector2i& size, Textu
 	glVertex2i(0, size.y);
 
 	glEnd();
+	glDisable(GL_BLEND);
 }
 
 void Control::RenderSquare(const Vector2i& position, const Vector2i& size)

@@ -180,17 +180,29 @@ private:
 	Panel m_pnl_portrait;
 
 	Panel m_ptest;
+	Label m_testlabel;
 
 	ProgressBar m_pgb_health;
 	ProgressBar m_pgb_energy;
 	ProgressBar m_pgb_mana;
 	ProgressBar m_pgb_exp;
 
-	Label m_testlabel;
+	Label m_lbl_plrPos;
+	Label m_lbl_plrSpd;
+	Label m_lbl_plrAcc;
+	Label m_lbl_FPS;
+
+	Label m_lbl_health;
+	Label m_lbl_mana;
+	Label m_lbl_exp;
+	Label m_lbl_energy;
 
 	bool m_ghostMode;
 	bool m_rightClick;
 	bool m_leftClick;
+
+	float m_fpstmr;
+	float m_fps;
 };
 
 #endif // ENGINE_H__

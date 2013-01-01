@@ -11,7 +11,7 @@
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
-	m_rightClick(false), m_leftClick(false), m_camRadius(10),
+	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0),
 	m_playScreenBotLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
 	m_playScreenTopLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
 	m_playScreenTopRight(Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
@@ -532,6 +532,18 @@ void Engine::Render(float elapsedTime)
 
 #pragma endregion
 
+#pragma region FPS
+
+	m_fpstmr += gameTime;
+	if (m_fpstmr > 1.5f)
+	{
+		float fps = 1 / elapsedTime;
+		m_fps = fps >= 60 ? 60 : fps;
+		m_fpstmr = 0;
+	}
+
+#pragma endregion
+
 }
 
 void Engine::Render2D(float elapsedTime)
@@ -573,7 +585,7 @@ void Engine::Render2D(float elapsedTime)
 	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 50, ss.str());
 	ss.str("");
 	//Print du nombre de FPS
-	ss << "Fps : " << std::setprecision(5) << 1 / elapsedTime;
+	ss << "Fps : " << std::setprecision(2) << m_fps;
 	PrintText(Width() - INTERFACE_SIDE_RIGHT_WIDTH - 120, Height() - INTERFACE_TOP_HEIGHT - 20, ss.str());
 	ss.str("");
 

@@ -32,7 +32,7 @@ public:
 	* @param mode		Le mode d'affichage de la barre
 	* @param parent		Le panel dans lequel est emmagasiné le controle
 	*/
-	ProgressBar(Vector2i parent, Vector2i &position, Vector2i &size, Texture* textureFront, Texture* textureBack, BarMode mode, const bool back, const std::string& name);
+	ProgressBar(Vector2i parent, Vector2i &position, Vector2i &size, Texture* textureFront, Texture* textureBack, BarMode mode, bool back, const std::string& name);
 	/**
 	* Destructeur par défaut de la classe
 	*/

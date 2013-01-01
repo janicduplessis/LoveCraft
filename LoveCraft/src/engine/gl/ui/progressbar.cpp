@@ -14,13 +14,13 @@ ProgressBar::~ProgressBar()
 
 }
 
-ProgressBar::ProgressBar(Vector2i parent, Vector2i &position, Vector2i &size, Texture* textureFront, Texture* textureBack, BarMode mode, const bool back, const std::string& name) : 
+ProgressBar::ProgressBar(Vector2i parent, Vector2i &position, Vector2i &size, Texture* textureFront, Texture* textureBack, BarMode mode, bool back, const std::string& name) : 
 	Control(CTRLTYPE_PROGRESSBAR, parent, position, size, textureFront, name), 
 	m_minimum(0), m_maximum(100), m_value(80), m_mode(mode), m_textureBack(textureBack), m_background(back)
 {
 	//Lorsque la bar doit être horizontale, inversion des valeurs de largeur longueur
 	//afin d'accomoder l'appel du glRotate dans le Render
-	if (m_mode == ProgressBar::BARMODE_VERTICAL_DTU || m_mode == ProgressBar::BARMODE_VERTICAL_UTD)
+	if (m_mode == ProgressBar::BARMODE_HORIZONTAL_RTL || m_mode == ProgressBar::BARMODE_VERTICAL_UTD)
 	{
 		m_size = Vector2i(size.y, size.x);
 	}
@@ -56,8 +56,6 @@ void ProgressBar::RenderSquare(const Vector2i& position, const Vector2i& size, T
 	texture->Bind();
 	glLoadIdentity();
 	glTranslated(position.x, position.y, 0);
-
-	
 
 	//Applications des transoformations nécessaires au bon affichage du mode de bar
 	ApplyRotationTransformation(m_mode, size);
@@ -150,6 +148,7 @@ ProgressBar& ProgressBar::operator=(const ProgressBar& pgb)
 	m_size = pgb.m_size;
 	m_texture = pgb.m_texture;
 	m_type = pgb.m_type;
+	m_background = pgb.m_background;
 	m_visible = pgb.m_visible;
 
 	return *this;

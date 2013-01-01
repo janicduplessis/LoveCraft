@@ -15,6 +15,7 @@ public:
 	//Control& GetControlByName(const std::string& name) const;
 	void Render();
 	void RenderAllControls();
+	Panel& operator=(const Panel& p);
 private:
 	void Resize(unsigned short newNbr);
 

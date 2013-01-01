@@ -70,6 +70,21 @@ void Panel::RenderAllControls()
 	//	m_controls[i].Render();
 }
 
+Panel& Panel::operator=(const Panel& p)
+{
+	m_controlNbr = p.m_controlNbr;
+	m_index = p.m_index;
+	m_name = p.m_name;
+	m_parentPosition = p.m_parentPosition;
+	m_position = p.m_position;
+	m_size = p.m_size;
+	m_texture = p.m_texture;
+	m_type = p.m_type;
+	m_visible = p.m_visible;
+
+	return *this;
+}
+
 //private
 
 void Panel::Resize(unsigned short newNbr)

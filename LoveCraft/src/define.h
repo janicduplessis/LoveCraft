@@ -42,9 +42,6 @@ typedef long long int64;
 // Nombre de temps en secondes qui devront être écoulées 
 // avant qu'un autre son se fasse jouer
 #define SOUND_FOOT_TIMEOUT			0.4f
-// Nombre de temps en secondes qui devront être écoulées 
-// avant qu'un autre son se fasse jouer lorsque le joueur coure
-#define SOUND_FOOT_RUN_TIMEOUT		0.25f
 
 // Valeurs de l'interface
 // Hauteur du cadre inférieur de l'interface
@@ -115,11 +112,11 @@ typedef long long int64;
 #define LBL_EXP_AUTOSIZE			false
 // Taille de la barre d'énergie
 #define PGB_ENERGY_NAME				"pgb_energy"
-#define PGB_ENERGY_BACKGROUND		false
-#define PGB_ENERGY_POSITION_X		0
-#define PGB_ENERGY_POSITION_Y		0
-#define PGB_ENERGY_SIZE_W			20
-#define PGB_ENERGY_SIZE_H			250
+#define PGB_ENERGY_BACKGROUND		true
+#define PGB_ENERGY_POSITION_X		10
+#define PGB_ENERGY_POSITION_Y		150
+#define PGB_ENERGY_SIZE_W			250
+#define PGB_ENERGY_SIZE_H			20
 // Taille (LxH) des boutons des sorts dans la barre de sorts
 #define SPELL_ICON_SIZE				64
 // Longueur de l'espace entre chaque images de sorts

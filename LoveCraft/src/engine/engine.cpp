@@ -267,7 +267,7 @@ void Engine::LoadResource()
 	m_pnl_screen = Panel(Vector2i(), Vector2i(), Vector2i(Width(), Height()), 0, 1, "main");
 	// Zone de jeu
 	m_pnl_playscreen = Panel(m_pnl_screen.AbsolutePosition(), 
-		Vector2i(INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
+		Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
 		Vector2i(m_pnl_screen.Size().x - INTERFACE_SIDE_LEFT_WIDTH - INTERFACE_SIDE_RIGHT_WIDTH, 
 		m_pnl_screen.Size().y - INTERFACE_TOP_HEIGHT * 3 - INTERFACE_BOTTOM_HEIGHT),
 		0, PNL_PLAYSCREEN_CONTROLS_NBR, "playscreen");
@@ -302,7 +302,7 @@ void Engine::LoadResource()
 		Vector2i(PGB_ENERGY_SIZE_W, PGB_ENERGY_SIZE_H),
 		&m_textureInterface[IMAGE_PGBTEXT_ENERGY], &m_textureInterface[IMAGE_BLACK_BACK],
 		ProgressBar::BARMODE_VERTICAL_DTU, PGB_ENERGY_BACKGROUND, PGB_ENERGY_NAME);
-	//m_pnl_portrait.AddControl(m_pgb_energy);
+	//m_pnl_playscreen.AddControl(m_pgb_energy);
 
 	//m_healthBar = ProgressBar(Vector2i(300, 20), 
 	//	Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 35), ProgressBar::BARMODE_HORIZONTAL_LTR);
@@ -809,8 +809,6 @@ void Engine::KeyPressEvent(unsigned char key)
 		std::cout << "Unhandled key: " << (int)key << std::endl;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
 			Info::Get().Sound().PlayNextTrack();
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::T))
-			Info::Get().Sound().TestSon();
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
 			Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
 	}

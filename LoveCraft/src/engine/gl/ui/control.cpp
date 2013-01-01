@@ -13,7 +13,6 @@ Control::Control(Type type, Vector2i parent, Vector2i position, Vector2i size, T
 	m_type(type), m_visible(true), m_name(name), m_parentPosition(parent), m_position(position), m_texture(texture),
 	m_size(size)
 {
-	//m_texture = texture;
 }
 
 
@@ -28,7 +27,7 @@ void Control::Render()
 
 void Control::Render(Texture* texture)
 {
-	if (Control::m_visible)
+	if (m_visible)
 	{
 		if (texture)
 			RenderSquare(AbsolutePosition(), m_size, texture);

@@ -81,6 +81,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\gl\ui\label.cpp" />
     <ClCompile Include="src\engine\gl\ui\panel.cpp" />
     <ClCompile Include="src\engine\gl\ui\control.cpp" />
     <ClCompile Include="src\engine\options.cpp" />
@@ -113,6 +114,7 @@
     <ClCompile Include="src\util\tool.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\gl\ui\label.h" />
     <ClInclude Include="src\interface.h" />
     <ClInclude Include="src\engine\gl\ui\panel.h" />
     <ClInclude Include="src\engine\gl\ui\control.h" />

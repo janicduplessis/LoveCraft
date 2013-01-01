@@ -1,81 +1,106 @@
 #include "panel.h"
 
 
-Panel::Panel() : Control(CTRLTYPE_PANEL), m_index(0)
+Panel::Panel() : Control(CTRLTYPE_PANEL), m_ctrlNbr(0), m_capacity(0)/*, m_controls(Array<Control*>(1, 0)), m_controlNbr(1)*/
 {
-	//m_controls = new Control[m_controlNbr];
+	m_controls = 0;
 }
 
-Panel::Panel(Vector2i parent, Vector2i &position, Vector2i &size, Texture* texture, 
+Panel::Panel(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, 
 			 const unsigned short controlnbr, const std::string& name) : Control(CTRLTYPE_PANEL, 
-			 parent, position, size, texture, name), m_index(0), m_controlNbr(controlnbr)
+			 parent, position, size, texture, name), m_ctrlNbr(0), m_capacity(controlnbr)/*, m_controls(Array<Control*>(controlnbr, 0))*/
 {
-	//m_controls = new Control[m_controlNbr];
+	m_controls = new Control*[controlnbr];
+	for (unsigned short i = 0; i < controlnbr; i++)
+		m_controls[i] = 0;
 }
 
 Panel::~Panel()
 {
-	//delete [] m_controls;
+	
 }
 
-//void Panel::AddControl(const Control& control)
+//void Panel::AddControl(Control* control)
 //{
-//	//Tente d'ajouter le control à la liste de controles
-//	if (m_index < m_controlNbr)
-//	{
-//		//Assignation réussie
-//		m_controls[m_index] = control;
-//		//Incrémentation du nombre de controles présents
-//		m_index++;
-//	}
-//	//Si la liste est pleine
-//	else
-//	{
-//		//Augmente le nombre de controle disponible
-//		m_controlNbr++;
-//		//Redimensionne le pointeur
-//		Resize(m_controlNbr);
-//		//Retente l'ajout du control
-//		AddControl(control);
-//	}
+//	m_controls.Set(m_ctrlNbr, control);
+//	//Incrémentation du nombre de controles présents
+//	m_ctrlNbr++;
 //}
-//Control& Panel::GetControlById(unsigned short index) const
+//Control* Panel::GetControlById(unsigned short index) const
 //{
-//	assert(index < m_controlNbr);
-//	return m_controls[index];
+//	assert(index < m_capacity);
+//	return m_controls.Get(index);
 //}
 //Control* Panel::GetControlByName(const std::string& name) const
 //{
 //	Control* ctrl = 0;
 //	for (unsigned short i = 0; i < m_controlNbr; i++)
 //	{
-//		if (m_controls[i].Name() == name)
+//		if (m_controls.Get(i)->Name() == name)
 //		{
-//			ctrl = m_controls[i];
+//			ctrl = m_controls.Get(i);
 //			break;
 //		}
 //	}
 //	return ctrl;
 //}
 
+void Panel::AddControl(Control* control)
+{
+	m_controls[m_ctrlNbr] = control;
+	//Incrémentation du nombre de controles présents
+	m_ctrlNbr++;
+}
+Control* Panel::GetControlById(unsigned short index) const
+{
+	assert(index < m_capacity);
+	return m_controls[index];
+}
+Control* Panel::GetControlByName(const std::string& name) const
+{
+	Control* ctrl = 0;
+	for (unsigned short i = 0; i < m_capacity; i++)
+	{
+		if (m_controls[i]->Name() == name)
+		{
+			ctrl = m_controls[i];
+			break;
+		}
+	}
+	return ctrl;
+}
+
 void Panel::Render()
 {
-	RenderSquare(AbsolutePosition(), m_size, m_texture);
-	//RenderAllControls();
+	Control::Render();
+	RenderAllControls();
 }
+
+//void Panel::RenderAllControls()
+//{
+//	if (m_ctrlNbr != 0)
+//	{
+//		for (unsigned short i = 0; i < m_ctrlNbr; i++)
+//			m_controls.Get(i)->Render();
+//	}
+//}
 
 void Panel::RenderAllControls()
 {
-	//for (unsigned short i = 0; i < m_controlNbr; i++)
-	//	m_controls[i].Render();
+	if (m_ctrlNbr != 0 && m_controls != 0)
+	{
+		for (unsigned short i = 0; i < m_ctrlNbr; i++)
+			m_controls[i]->Render();
+	}
 }
 
 Panel& Panel::operator=(const Panel& p)
 {
-	m_controlNbr = p.m_controlNbr;
-	m_index = p.m_index;
+	m_capacity = p.m_capacity;
+	m_ctrlNbr = m_ctrlNbr;
 	m_name = p.m_name;
-	m_parentPosition = p.m_parentPosition;
+	m_parent = p.m_parent;
+	m_controls = p.m_controls;
 	m_position = p.m_position;
 	m_size = p.m_size;
 	m_texture = p.m_texture;
@@ -83,15 +108,4 @@ Panel& Panel::operator=(const Panel& p)
 	m_visible = p.m_visible;
 
 	return *this;
-}
-
-//private
-
-void Panel::Resize(unsigned short newNbr)
-{
-	//Control* data = new Control[newNbr];
-	//for (unsigned short i = 0; i < newNbr - 1; i++)
-	//	data[i] = m_controls[i];
-	//m_controls = data;
-	//delete [] data;
 }

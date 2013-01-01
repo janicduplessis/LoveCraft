@@ -13,6 +13,7 @@ class Control
 public:
 	enum Type
 	{
+		CTRLTYPE_NONE,
 		CTRLTYPE_PROGRESSBAR,
 		CTRLTYPE_LABEL,
 		CTRLTYPE_BOUTON,
@@ -37,7 +38,7 @@ public:
 	* @param position	La poisition initiale du controle par rapport a son parent
 	* @param size		La taille du controle
 	*/
-	Control(Type type, Vector2i parent, Vector2i position, Vector2i size, Texture* texture, const std::string& name);
+	Control(Type type, Control* parent, Vector2i position, Vector2i size, Texture* texture, const std::string& name);
 	/**
 	* Destructeur par défaut
 	*/
@@ -124,7 +125,7 @@ protected:
 	bool m_pngBlend;
 	bool m_visible;
 	Texture* m_texture;
-	Vector2i m_parentPosition;
+	Control* m_parent;
 	Vector2i m_position;
 	Vector2i m_size;
 };

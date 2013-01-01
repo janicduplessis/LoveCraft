@@ -34,7 +34,7 @@ Array<T>::Array(unsigned int size, const T& valeur) : m_size(size)
 template <class T>
 Array<T>::Array(const Array& array) : m_size(array.m_size)
 {
-	m_data = new int[m_size];
+	m_data = new T[m_size];
 	for (unsigned int i = 0; i < m_size; i++)
 	{
 		m_data[i] = array.m_data[i];
@@ -81,7 +81,7 @@ template <class T>
 void Array<T>::Resize(unsigned int size)
 {
 	T* arr = m_data;
-	m_data = new int[size];
+	m_data = new T[size];
 	for (int i = 0; i < std::min(size, m_size); i++)
 		m_data[i] = arr[i];
 	m_size = size;

@@ -14,7 +14,7 @@ ProgressBar::~ProgressBar()
 
 }
 
-ProgressBar::ProgressBar(Vector2i parent, Vector2i &position, Vector2i &size, Texture* textureFront, 
+ProgressBar::ProgressBar(Control* parent, Vector2i &position, Vector2i &size, Texture* textureFront, 
 						 Texture* textureBack, BarMode mode, bool back, unsigned short border, const std::string& name) : 
 Control(CTRLTYPE_PROGRESSBAR, parent, position, size, textureFront, name), 
 	m_minimum(0), m_maximum(100), m_value(80), m_mode(mode), m_textureBack(textureBack), m_background(back), m_borderSize(border)
@@ -158,7 +158,7 @@ ProgressBar& ProgressBar::operator=(const ProgressBar& pgb)
 	m_textureBack = pgb.m_textureBack;
 	m_value = pgb.m_value;
 	m_name = pgb.m_name;
-	m_parentPosition = pgb.m_parentPosition;
+	m_parent = pgb.m_parent;
 	m_position = pgb.m_position;
 	m_size = pgb.m_size;
 	m_texture = pgb.m_texture;

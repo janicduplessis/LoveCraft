@@ -1,16 +1,17 @@
 #include "control.h"
 
-Control::Control() : m_texture(0)
+Control::Control() : m_texture(0), m_parent(0), m_name(""), m_pngBlend(true), m_position(Vector2i()), m_size(Vector2i()),
+	m_type(CTRLTYPE_NONE), m_visible(true)
 {
 }
 
 Control::Control(Type type) : m_type(type), m_visible(true), m_name("default"),
-	m_parentPosition(Vector2i()), m_position(Vector2i()), m_size(Vector2i(100, 100)), m_texture(0), m_pngBlend(true)
+	m_parent(0), m_position(Vector2i()), m_size(Vector2i(100, 100)), m_texture(0), m_pngBlend(true)
 {
 }
 
-Control::Control(Type type, Vector2i parent, Vector2i position, Vector2i size, Texture* texture, const std::string& name) : 
-	m_type(type), m_visible(true), m_name(name), m_parentPosition(parent), m_position(position), m_texture(texture),
+Control::Control(Type type, Control* parent, Vector2i position, Vector2i size, Texture* texture, const std::string& name) : 
+	m_type(type), m_visible(true), m_name(name), m_parent(parent), m_position(position), m_texture(texture),
 	m_size(size), m_pngBlend(true)
 {
 }
@@ -18,6 +19,7 @@ Control::Control(Type type, Vector2i parent, Vector2i position, Vector2i size, T
 
 Control::~Control()
 {
+	
 }
 
 void Control::Render()
@@ -67,7 +69,7 @@ void Control::SetPosition(Vector2i value)
 
 Vector2i Control::AbsolutePosition() const
 {
-	return m_parentPosition + m_position;
+	return m_position + (m_parent != 0 ? m_parent->AbsolutePosition() : 0);
 }
 
 void Control::SetTexture(Texture* text)
@@ -93,7 +95,7 @@ void Control::SetPngBlend(const bool value)
 Control& Control::operator=(const Control& c)
 {
 	m_name = c.m_name;
-	m_parentPosition = c.m_parentPosition;
+	m_parent = c.m_parent;
 	m_position = c.m_position;
 	m_size = c.m_size;
 	m_texture = c.m_texture;

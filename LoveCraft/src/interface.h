@@ -1,14 +1,12 @@
 #ifndef INTERFACE_H_
 #define INTERFACE_H_
 
-typedef uint8 Image;
 enum IMAGE
 {
 	IMAGE_BLACK_BACK,
 	IMAGE_BOO,
 	IMAGE_RUN,
 	IMAGE_CROSSHAIR,
-	IMAGE_FONT,
 	IMAGE_INTERFACE_FRAME,
 	IMAGE_PORTRAIT_FRAME,
 	IMAGE_PORTRAIT_MALE,
@@ -24,7 +22,6 @@ enum IMAGE
 	IMAGE_LAST
 };
 
-typedef uint8 Image;
 enum SPELL_IMAGE
 {
 	SPELL_IMAGE_BOLT,
@@ -38,6 +35,19 @@ enum SPELL_IMAGE
 	SPELL_IMAGE_DEFEND,
 	SPELL_IMAGE_SHIELD
 
+};
+
+/**
+* Palette de couleurs possibles pour le texte une fois ajoutées via AddFontColor()
+*/
+enum COLOR
+{
+	TEXTCOLOR_WHITE,
+	TEXTCOLOR_RED,
+	TEXTCOLOR_GREEN,
+	TEXTCOLOR_BLUE,
+	TEXTCOLOR_YELLOW,
+	TEXTCOLOR_LAST
 };
 
 // Valeurs de l'interface
@@ -98,19 +108,16 @@ enum SPELL_IMAGE
 #define LBL_HEALTH_POSITION_Y		86
 #define LBL_HEALTH_SIZE_W			95
 #define LBL_HEALTH_SIZE_H			20
-#define LBL_HEALTH_AUTOSIZE			false
 #define LBL_MANA_NAME				"lbl_mana"
 #define LBL_MANA_POSITION_X			400
 #define LBL_MANA_POSITION_Y			56
 #define LBL_MANA_SIZE_W				95
 #define LBL_MANA_SIZE_H				20
-#define LBL_MANA_AUTOSIZE			false
 #define LBL_EXP_NAME				"lbl_exp"
 #define LBL_EXP_POSITION_X			377
 #define LBL_EXP_POSITION_Y			26
 #define LBL_EXP_SIZE_W				118
 #define LBL_EXP_SIZE_H				20
-#define LBL_EXP_AUTOSIZE			false
 // Taille de la barre d'énergie
 #define PGB_ENERGY_NAME				"pgb_energy"
 #define PGB_ENERGY_BACKGROUND		true

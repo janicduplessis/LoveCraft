@@ -8,20 +8,20 @@ class Panel : public Control
 {
 public:
 	Panel();
-	Panel(Vector2i parent, Vector2i &position, Vector2i &size, Texture* texture, const unsigned short controlnbr, const std::string& name);
+	Panel(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, const unsigned short controlnbr, const std::string& name);
 	~Panel();
-	//void AddControl(const Control& control);
-	//Control& GetControlById(unsigned short index) const;
-	//Control& GetControlByName(const std::string& name) const;
+	void AddControl(Control* control);
+	Control* GetControlById(unsigned short index) const;
+	Control* GetControlByName(const std::string& name) const;
 	void Render();
-	void RenderAllControls();
 	Panel& operator=(const Panel& p);
 private:
-	void Resize(unsigned short newNbr);
+	void RenderAllControls();
 
-	//Control* m_controls;
-	unsigned short m_controlNbr;
-	unsigned short m_index;
+	(Control*)* m_controls;
+	/*Array<Control*> m_controls;*/
+	unsigned short m_capacity;
+	unsigned short m_ctrlNbr;
 };
 
 #endif

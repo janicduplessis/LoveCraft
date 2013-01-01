@@ -21,6 +21,7 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureInterface = new Texture[IMAGE::IMAGE_LAST];
+	m_texturefontColor = new Texture[COLOR::TEXTCOLOR_LAST];
 }
 
 Engine::~Engine()
@@ -221,6 +222,7 @@ void Engine::LoadResource()
 
 #pragma region Chargement des textures
 
+#pragma region Blocs
 	// Texture des blocs 128x128 px
 	m_textureArray = new TextureArray(128);
 
@@ -231,6 +233,9 @@ void Engine::LoadResource()
 	LoadBlocTexture(BTYPE_SAND, TEXTURE_PATH "b_sand.jpg");
 	LoadBlocTexture(BTYPE_SNOW, TEXTURE_PATH "b_snow.jpg");
 
+#pragma endregion
+
+#pragma region Boutons des spells
 
 	m_textureArray->Generate();
 	//Texture des spells
@@ -256,11 +261,14 @@ void Engine::LoadResource()
 	m_textureSpellX[SPELL_IMAGE_DEFEND].Load(TEXTURE_PATH "s_spelldefendx.gif");
 	m_textureSpellX[SPELL_IMAGE_SHIELD].Load(TEXTURE_PATH "s_spellshieldx.png");
 
+#pragma endregion
+
+#pragma region Images et textures
+
 	m_textureInterface[IMAGE_BLACK_BACK].Load(TEXTURE_PATH "noir.jpg");
 	m_textureInterface[IMAGE_BOO].Load(TEXTURE_PATH "i_boo.png");
 	m_textureInterface[IMAGE_RUN].Load(TEXTURE_PATH "i_bewareofcthulhu.png");
 	m_textureInterface[IMAGE_CROSSHAIR].Load(TEXTURE_PATH "i_cross.bmp");
-	m_textureInterface[IMAGE_FONT].Load(TEXTURE_PATH "font.bmp");
 	m_textureInterface[IMAGE_INTERFACE_FRAME].Load(TEXTURE_PATH "b_rock.jpg");
 	m_textureInterface[IMAGE_PORTRAIT_FRAME].Load(TEXTURE_PATH "i_portrait-frame.png");
 	m_textureInterface[IMAGE_PORTRAIT_MALE].Load(TEXTURE_PATH "i_portrait-male");
@@ -274,61 +282,83 @@ void Engine::LoadResource()
 	m_textureInterface[IMAGE_PGBTEXT_EXP_BACK].Load(TEXTURE_PATH "i_pgb_exp_back.png");
 	m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW].Load(TEXTURE_PATH "i_pgb_health_low.png");
 
+#pragma endregion
+
+#pragma region Couleurs label
+
+	m_texturefontColor[TEXTCOLOR_WHITE].Load(TEXTURE_PATH "font.png");
+	m_texturefontColor[TEXTCOLOR_RED].Load(TEXTURE_PATH "font_red.png");
+	m_texturefontColor[TEXTCOLOR_GREEN].Load(TEXTURE_PATH "font_green.png");
+	m_texturefontColor[TEXTCOLOR_BLUE].Load(TEXTURE_PATH "font_blue.png");
+	m_texturefontColor[TEXTCOLOR_YELLOW].Load(TEXTURE_PATH "font_yellow.png");
+
+
+#pragma endregion
 
 #pragma endregion
 
 #pragma region Chargement des elements de l interface
+
 	// Écran
-	m_pnl_screen = Panel(Vector2i(), Vector2i(), Vector2i(Width(), Height()), 0, 1, "main");
+	m_pnl_screen = Panel(0, Vector2i(), Vector2i(Width(), Height()), 0, 1, "main");
+
+#pragma region Enfants de Main
+
 	// Zone de jeu
-	m_pnl_playscreen = Panel(m_pnl_screen.AbsolutePosition(), 
+	m_pnl_playscreen = Panel(&m_pnl_screen, 
 		Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
 		Vector2i(m_pnl_screen.Size().x - INTERFACE_SIDE_LEFT_WIDTH - INTERFACE_SIDE_RIGHT_WIDTH, 
 		m_pnl_screen.Size().y - INTERFACE_TOP_HEIGHT * 3 - INTERFACE_BOTTOM_HEIGHT),
 		0, PNL_PLAYSCREEN_CONTROLS_NBR, "playscreen");
-	//m_pnl_screen.AddControl(m_pnl_playscreen);
-	// Portrait
-	m_pnl_portrait = Panel(m_pnl_playscreen.AbsolutePosition(),
+	m_pnl_screen.AddControl(&m_pnl_playscreen);
+
+#pragma region Enfants de Playscreen
+
+	// Frame portrait
+	m_pnl_portrait = Panel(&m_pnl_playscreen,
 		Vector2i(PNL_PORTRAIT_POSITION_X, PNL_PORTRAIT_POSITION_Y),
 		Vector2i(PNL_PORTRAIT_SIZE_W, PNL_PORTRAIT_SIZE_H),
 		&m_textureInterface[IMAGE_PORTRAIT_FRAME], PNL_PORTRAIT_CONTROLS_NBR, PNL_PORTRAIT_NAME);
-	//m_pnl_playscreen.AddControl(m_pnl_portrait);
-	// Controles du portrait
-	m_pgb_health = ProgressBar(m_pnl_portrait.AbsolutePosition(),
+	m_pnl_playscreen.AddControl(&m_pnl_portrait);
+
+#pragma region Enfants pnl portrait
+
+	// Barre de vie
+	m_pgb_health = ProgressBar(&m_pnl_portrait,
 		Vector2i(PGB_HEALTH_POSITION_X, PGB_HEALTH_POSITION_Y),
 		Vector2i(PGB_HEALTH_SIZE_W, PGB_HEALTH_SIZE_H),
 		&m_textureInterface[IMAGE_PGBTEXT_HEALTH], &m_textureInterface[IMAGE_PGBTEXT_HEALTH_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_HEALTH_BACKGROUND, PGB_HEALTH_BORDER_SIZE, PGB_HEALTH_NAME);
-	//m_pnl_portrait.AddControl(m_pgb_health);
-	m_pgb_mana = ProgressBar(m_pnl_portrait.AbsolutePosition(),
+	m_pnl_portrait.AddControl(&m_pgb_health);
+	// Barre de mana
+	m_pgb_mana = ProgressBar(&m_pnl_portrait,
 		Vector2i(PGB_MANA_POSITION_X, PGB_MANA_POSITION_Y),
 		Vector2i(PGB_MANA_SIZE_W, PGB_MANA_SIZE_H),
 		&m_textureInterface[IMAGE_PGBTEXT_MANA], &m_textureInterface[IMAGE_PGBTEXT_MANA_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_MANA_BACKGROUND, PGB_MANA_BORDER_SIZE, PGB_MANA_NAME);
-	//m_pnl_portrait.AddControl(m_pgb_mana);
-	m_pgb_exp = ProgressBar(m_pnl_portrait.AbsolutePosition(),
+	m_pnl_portrait.AddControl(&m_pgb_mana);
+	// Barre d'expérience
+	m_pgb_exp = ProgressBar(&m_pnl_portrait,
 		Vector2i(PGB_EXP_POSITION_X, PGB_EXP_POSITION_Y),
 		Vector2i(PGB_EXP_SIZE_W, PGB_EXP_SIZE_H),
 		&m_textureInterface[IMAGE_PGBTEXT_EXP], &m_textureInterface[IMAGE_PGBTEXT_EXP_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_EXP_BACKGROUND, PGB_EXP_BORDER_SIZE, PGB_EXP_NAME);
-	//m_pnl_portrait.AddControl(m_pgb_exp);
-	m_pgb_energy = ProgressBar(m_pnl_playscreen.AbsolutePosition(),
+	m_pnl_portrait.AddControl(&m_pgb_exp);
+
+#pragma endregion
+
+	//Barre d'énergie verticale
+	m_pgb_energy = ProgressBar(&m_pnl_playscreen,
 		Vector2i(PGB_ENERGY_POSITION_X, PGB_ENERGY_POSITION_Y),
 		Vector2i(PGB_ENERGY_SIZE_W, PGB_ENERGY_SIZE_H),
 		&m_textureInterface[IMAGE_PGBTEXT_ENERGY], &m_textureInterface[IMAGE_PGBTEXT_ENERGY_BACK],
 		ProgressBar::BARMODE_VERTICAL_DTU, PGB_ENERGY_BACKGROUND, PGB_ENERGY_BORDER_SIZE, PGB_ENERGY_NAME);
-	//m_pnl_playscreen.AddControl(m_pgb_energy);
+	m_pnl_playscreen.AddControl(&m_pgb_energy);
 
-	//m_healthBar = ProgressBar(Vector2i(300, 20), 
-	//	Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 35), ProgressBar::BARMODE_HORIZONTAL_LTR);
-	//m_energyBar = ProgressBar(Vector2i(20, 250), 
-	//	Vector2i(m_playScreenBotLeft.x + PROGRESS_BAR_OUTLINE, m_playScreenBotLeft.y + PROGRESS_BAR_OUTLINE), 
-	//	ProgressBar::BARMODE_VERTICAL_DTU);
-	//m_manaBar = ProgressBar(Vector2i(300, 20), 
-	//	Vector2i(INTERFACE_SIDE_LEFT_WIDTH + PROGRESS_BAR_OUTLINE, 10), ProgressBar::BARMODE_HORIZONTAL_LTR);
-	//m_testbar = ProgressBar(Vector2i(20, 400),
-	//	Vector2i(Width() / 2, Height() / 2), ProgressBar::BARMODE_HORIZONTAL_RTL);
-	//m_testbar.SetVisible(false);
+#pragma endregion
+
+#pragma endregion
+
 #pragma endregion
 
 #pragma region Load et compile les shaders
@@ -525,6 +555,7 @@ void Engine::Render2D(float elapsedTime)
 	std::ostringstream ss;
 	//Print de la position
 	ss << "Position : " << m_player.Position();
+	PrintText(Width() /2, Height() /2, "Z9!");
 	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 20, ss.str());
 	ss.str("");
 	//Print de la vitesse
@@ -572,12 +603,8 @@ void Engine::Render2D(float elapsedTime)
 	else if (m_character.Energy() != m_character.EnergyMax() || sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
 		m_pgb_energy.SetVisible(true);
 
-	m_pnl_portrait.Render();
-	m_pgb_energy.Render();
-	m_pgb_health.Render();
-	m_pgb_mana.Render();
-	m_pgb_exp.Render();
-
+	//Render de l'écran au complet avec tous ses contrôles.
+	m_pnl_screen.Render();
 
 	//Activation du blend par PNG
 	StartBlendPNG();
@@ -736,14 +763,14 @@ void Engine::RenderProgressBars()
 
 void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 {
-	m_textureInterface[IMAGE_FONT].Bind();
+	m_texturefontColor[TEXTCOLOR_WHITE].Bind();
 	glLoadIdentity();
 	glTranslated(x, y, 0);
 	for (unsigned int i = 0; i < t.length(); ++i)
 	{
 		float left = (float)((t[i] - 32) % 16) / 16.0f;
 		float top = (float)((t[i] - 32) / 16) / 16.0f;
-		top += 0.5f;
+		top += 1.0f;
 		glBegin(GL_QUADS);
 		glTexCoord2f(left, 1.0f - top - 0.0625f);
 		glVertex2i(0, 0);
@@ -751,7 +778,7 @@ void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 		glVertex2i(12 , 0);
 		glTexCoord2f(left + 0.0625f, 1.0f - top);
 		glVertex2i(12, 12);
-		glTexCoord2f(left , 1.0f - top );
+		glTexCoord2f(left , 1.0f - top);
 		glVertex2i(0, 12);
 		glEnd();
 		glTranslated(8, 0, 0);

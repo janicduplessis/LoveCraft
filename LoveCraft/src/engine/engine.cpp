@@ -677,17 +677,19 @@ void Engine::Render2D(float elapsedTime)
 	//	Vector2i(m_playScreenBotLeft.x + m_pgb_energy.Size().y, m_playScreenBotLeft.y),
 	//	Vector2i((int)m_textureInterface[IMAGE_PORTRAIT_FRAME].GetWidth(), (int)m_textureInterface[IMAGE_PORTRAIT_FRAME].GetHeight()),
 	//	m_textureInterface[IMAGE_PORTRAIT_FRAME]);
+
+
 	//Optimisation possible par la surcharge d'opérateurs
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))		//Mode course
-		RenderSquare(
-		m_playScreenBotLeft,
-		Vector2i(m_textureInterface[IMAGE_RUN].GetWidth(), m_textureInterface[IMAGE_RUN].GetHeight()),
-		m_textureInterface[IMAGE_RUN]);
-	if (m_ghostMode)			//Mode ghost
-		RenderSquare(
-		Vector2i(Width() / 2 - m_textureInterface[IMAGE_BOO].GetWidth() /2, m_playScreenBotLeft.y),
-		Vector2i(m_textureInterface[IMAGE_BOO].GetWidth(), m_textureInterface[IMAGE_BOO].GetHeight()),
-		m_textureInterface[IMAGE_BOO]);
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))		//Mode course
+	//	RenderSquare(
+	//	m_playScreenBotLeft,
+	//	Vector2i(m_textureInterface[IMAGE_RUN].GetWidth(), m_textureInterface[IMAGE_RUN].GetHeight()),
+	//	m_textureInterface[IMAGE_RUN]);
+	//if (m_ghostMode)			//Mode ghost
+	//	RenderSquare(
+	//	Vector2i(Width() / 2 - m_textureInterface[IMAGE_BOO].GetWidth() /2, m_playScreenBotLeft.y),
+	//	Vector2i(m_textureInterface[IMAGE_BOO].GetWidth(), m_textureInterface[IMAGE_BOO].GetHeight()),
+	//	m_textureInterface[IMAGE_BOO]);
 
 	glDisable(GL_BLEND);
 
@@ -702,21 +704,21 @@ void Engine::Render2D(float elapsedTime)
 		Vector2i(0, 0), 
 		Vector2i(Width(), INTERFACE_BOTTOM_HEIGHT), 
 		m_textureInterface[IMAGE_INTERFACE_FRAME]);
-	//Left
-	RenderSquare(
-		Vector2i(0, INTERFACE_BOTTOM_HEIGHT), 
-		Vector2i(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3), 
-		m_textureInterface[IMAGE_INTERFACE_FRAME]);
-	//Top
-	RenderSquare(
-		Vector2i(0, Height() - INTERFACE_TOP_HEIGHT),
-		Vector2i(Width(), INTERFACE_TOP_HEIGHT),
-		m_textureInterface[IMAGE_INTERFACE_FRAME]);
-	//Right
-	RenderSquare(
-		Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
-		Vector2i(Width(), Height() - INTERFACE_TOP_HEIGHT * 3),
-		m_textureInterface[IMAGE_INTERFACE_FRAME]);
+	////Left
+	//RenderSquare(
+	//	Vector2i(0, INTERFACE_BOTTOM_HEIGHT), 
+	//	Vector2i(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3), 
+	//	m_textureInterface[IMAGE_INTERFACE_FRAME]);
+	////Top
+	//RenderSquare(
+	//	Vector2i(0, Height() - INTERFACE_TOP_HEIGHT),
+	//	Vector2i(Width(), INTERFACE_TOP_HEIGHT),
+	//	m_textureInterface[IMAGE_INTERFACE_FRAME]);
+	////Right
+	//RenderSquare(
+	//	Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
+	//	Vector2i(Width(), Height() - INTERFACE_TOP_HEIGHT * 3),
+	//	m_textureInterface[IMAGE_INTERFACE_FRAME]);
 	//============================================
 	RenderSpells();
 	//============================================

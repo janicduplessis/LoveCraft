@@ -106,7 +106,6 @@ void Engine::Init()
 
 #pragma endregion
 
-
 #pragma region Initilisation du chunk principal
 
 	m_chunks = new Array2d<Chunk>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
@@ -153,7 +152,6 @@ void Engine::Init()
 		for (int j = 1; j <= 6; j++)
 		{
 			chunk.SetBloc(i,0,j, BTYPE_SAND);
-			chunk.SetBloc(i,1,j, BTYPE_AIR);
 
 		}
 	}
@@ -186,16 +184,22 @@ void Engine::Init()
 		for (int j = 7; j < CHUNK_SIZE_Z - 1; j++)
 		{
 			chunk.SetBloc(i,0,j, BTYPE_ROCK);
-			chunk.SetBloc(i,1,j, BTYPE_AIR);
 		}
 	}
 
-	//Platforme de gazon
-	for (int i = CHUNK_SIZE_X-1; i >= 2; i--)
+	//Platforme de gazon + lac
+	for (int k = 14; k < 16; k++)
 	{
-		for (int j = CHUNK_SIZE_Z-1; j >= 2; j--)
+		for (int i = CHUNK_SIZE_X-1; i >= 4; i--)
 		{
-			chunk.SetBloc(i,14,j, BTYPE_GRASS);
+			for (int j = CHUNK_SIZE_Z-1; j >= 2; j--)
+			{
+				chunk.SetBloc(i,k,j, BTYPE_GRASS);
+				if (k == 15 && (i < CHUNK_SIZE_X - 3 && i > 6 && j < CHUNK_SIZE_Z - 3 && j > 4))
+					chunk.SetBloc(i,k,j, BTYPE_SWAMP);
+				if (k == 15 && (i == CHUNK_SIZE_X - 3 || i == 6 || j == CHUNK_SIZE_Z - 3 || j == 4))
+					chunk.SetBloc(i,k,j, BTYPE_ROCK);
+			}
 		}
 	}
 
@@ -230,10 +234,11 @@ void Engine::LoadResource()
 
 	LoadBlocTexture(BTYPE_BRICK, TEXTURE_PATH "b_brick_red.jpg");
 	LoadBlocTexture(BTYPE_DIRT, TEXTURE_PATH "b_dirt.bmp");
-	LoadBlocTexture(BTYPE_GRASS, TEXTURE_PATH "b_grass.bmp");
+	LoadBlocTexture(BTYPE_GRASS, TEXTURE_PATH "b_grass.jpg");
 	LoadBlocTexture(BTYPE_ROCK, TEXTURE_PATH "b_rock.jpg");
 	LoadBlocTexture(BTYPE_SAND, TEXTURE_PATH "b_sand.jpg");
 	LoadBlocTexture(BTYPE_SNOW, TEXTURE_PATH "b_snow.jpg");
+	LoadBlocTexture(BTYPE_SWAMP, TEXTURE_PATH "b_swamp.jpg");
 
 #pragma endregion
 
@@ -330,6 +335,26 @@ void Engine::LoadResource()
 	//	Label::TEXTDOCK_MIDDLECENTER, false, 20.0f, 42.0f, 1.50f, Vector2f(), "lbl_test");
 	//m_ptest.AddControl(&m_testlabel);
 
+	//m_lb_infos = ListBox(&m_pnl_playscreen, Vector2i(0, m_pnl_playscreen.Size().y / 2 - 200), Vector2i(200, 400), &m_texturefontColor[TEXTCOLOR_RED], 
+	//	&m_textureInterface[IMAGE_BLACK_BACK], 15, 2, 12.f, 12.f, 0.5f, "lb_infos");
+	//m_pnl_playscreen.AddControl(&m_lb_infos);
+	//m_lb_infos.SetLine(0, "Avancer:     W");
+	//m_lb_infos.SetLine(1, "Reculer:     S");
+	//m_lb_infos.SetLine(2, "Droite:      D");
+	//m_lb_infos.SetLine(3, "Gauche:      A");
+	//m_lb_infos.SetLine(4, "Sauter:      Espace");
+	//m_lb_infos.SetLine(5, "Marcher:     Ctrl");
+	//m_lb_infos.SetLine(6, "Se pencher:  C");
+	//m_lb_infos.SetLine(7, "Courir:      Shift");
+	//m_lb_infos.SetLine(8, "Tirer:       1");
+	//m_lb_infos.SetLine(9, "Cochon:      2");
+	//m_lb_infos.SetLine(10, "Wireframe:   Y");
+	//m_lb_infos.SetLine(11, "Music On/off O");
+	//m_lb_infos.SetLine(12, "Music Next   M");
+	//m_lb_infos.SetLine(13, "Fullscreen   F10");
+	//m_lb_infos.SetLine(14, "Quitter      Esc");
+
+
 #pragma region Enfants pnl portrait
 
 	// Barre de vie
@@ -353,6 +378,18 @@ void Engine::LoadResource()
 		&m_textureInterface[IMAGE_PGBTEXT_EXP], &m_textureInterface[IMAGE_PGBTEXT_EXP_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_EXP_BACKGROUND, PGB_EXP_BORDER_SIZE, PGB_EXP_NAME);
 	m_pnl_portrait.AddControl(&m_pgb_exp);
+	// Label de vie
+	m_lbl_health = Label(&m_pnl_portrait, Vector2i(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), Vector2i(), &m_texturefontColor[TEXTCOLOR_RED], "", 
+		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, PNL_PORTRAIT_CHAR_H, PNL_PORTRAIT_CHAR_W, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_HEALTH_NAME);
+	m_pnl_portrait.AddControl(&m_lbl_health);
+	// Label de mana
+	m_lbl_mana = Label(&m_pnl_portrait, Vector2i(LBL_MANA_POSITION_X, LBL_MANA_POSITION_Y), Vector2i(), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
+		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, PNL_PORTRAIT_CHAR_H, PNL_PORTRAIT_CHAR_W, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_MANA_NAME);
+	m_pnl_portrait.AddControl(&m_lbl_mana);
+	// Label d'exp
+	m_lbl_exp = Label(&m_pnl_portrait, Vector2i(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), Vector2i(), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
+		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, LBL_EXP_CHAR_W, LBL_EXP_CHAR_H, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_EXP_NAME);
+	m_pnl_portrait.AddControl(&m_lbl_exp);
 
 #pragma endregion
 
@@ -363,6 +400,10 @@ void Engine::LoadResource()
 		&m_textureInterface[IMAGE_PGBTEXT_ENERGY], &m_textureInterface[IMAGE_PGBTEXT_ENERGY_BACK],
 		ProgressBar::BARMODE_VERTICAL_DTU, PGB_ENERGY_BACKGROUND, PGB_ENERGY_BORDER_SIZE, PGB_ENERGY_NAME);
 	m_pnl_playscreen.AddControl(&m_pgb_energy);
+	//Label d'énergie
+	m_lbl_energy = Label(&m_pnl_playscreen, Vector2i(LBL_ENERGY_POSITION_X, LBL_ENERGY_POSITION_Y), Vector2i(), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
+		Label::TEXTDOCK_NONE, LBL_ENERGY_ITALIC, LBL_ENERGY_CHAR_H, LBL_ENERGY_CHAR_W, LBL_ENERGY_CHAR_I, Vector2f(), LBL_ENERGY_NAME);
+	m_pnl_playscreen.AddControl(&m_lbl_energy);
 
 #pragma endregion
 
@@ -621,10 +662,15 @@ void Engine::Render2D(float elapsedTime)
 
 	//Affiche ou cache la barre d'énergie selon la situation
 	if (m_character.Energy() == m_character.EnergyMax())
+	{
 		m_pgb_energy.SetVisible(false);
+		m_lbl_energy.SetVisible(false);
+	}
 	else if (m_character.Energy() != m_character.EnergyMax() || sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+	{
 		m_pgb_energy.SetVisible(true);
-
+		m_lbl_energy.SetVisible(true);
+	}
 	//Render de l'écran au complet avec tous ses contrôles.
 	m_pnl_screen.Render();
 
@@ -685,7 +731,7 @@ void Engine::Render2D(float elapsedTime)
 	m_pgb_mana.SetValue(m_character.ManaPerc());
 	m_pgb_exp.SetValue(m_character.EnergyPerc());
 	//============================================
-	RenderProgressBars();
+	TextUpdate();
 	//============================================
 
 #pragma endregion
@@ -752,35 +798,25 @@ void Engine::RenderSpells()
 
 }
 
-void Engine::RenderProgressBars()
+void Engine::TextUpdate()
 {
 	std::ostringstream ss;
 
-	//Textes des bars
-	StartBlendPNG(false);
-	ss << "Vie             " << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
-	PrintText(m_pgb_health.AbsolutePosition().x, 
-		m_pgb_health.AbsolutePosition().y, ss.str());
+	ss << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
+	m_lbl_health.SetMessage(ss.str());
 	ss.str("");
 
-	if (m_pgb_energy.Visible())
-	{
-		ss << "Energie";
-		PrintText(m_pgb_energy.AbsolutePosition().x, 
-			m_pgb_energy.AbsolutePosition().y + m_pgb_energy.Size().x + 16, ss.str());
-		ss.str("");
-		ss << (int)m_character.Energy() << " / " << (int)m_character.EnergyMax();
-		PrintText(m_pgb_energy.AbsolutePosition().x, 
-			m_pgb_energy.AbsolutePosition().y + m_pgb_energy.Size().x + 4, ss.str());
-		ss.str("");
-	}
-
-	ss << "Mana            " << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
-	glEnable(GL_BLEND);
-	PrintText(m_pgb_mana.AbsolutePosition().x, 
-		m_pgb_mana.AbsolutePosition().y, ss.str());
+	ss << (int)m_character.Energy() << " / " << (int)m_character.EnergyMax();
+	m_lbl_energy.SetMessage(ss.str());
 	ss.str("");
-	glDisable(GL_BLEND);
+
+	ss << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
+	m_lbl_mana.SetMessage(ss.str());
+	ss.str("");
+
+	ss << (int)m_character.Exp() << " / " << (int)m_character.ExpNext();
+	m_lbl_exp.SetMessage(ss.str());
+	ss.str("");
 }
 
 void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
@@ -856,7 +892,12 @@ void Engine::KeyPressEvent(unsigned char key)
 		sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
 		break;
 	case 32:
-		sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
+		if (m_character.Mana() - 5 >= 0)
+		{
+			sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
+			m_character.SetMana(-5);
+			m_player.Teleport();
+		}
 		break;
 	case 33:
 		if (m_character.Mana() - 15 >= 0)

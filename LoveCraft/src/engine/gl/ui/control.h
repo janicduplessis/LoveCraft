@@ -18,7 +18,8 @@ public:
 		CTRLTYPE_LABEL,
 		CTRLTYPE_BOUTON,
 		CTRLTYPE_PICTUREBOX,
-		CTRLTYPE_PANEL
+		CTRLTYPE_PANEL,
+		CTRLTYPE_LISTBOX
 	};
 	/**
 	* Constructeur par défaut
@@ -34,9 +35,10 @@ public:
 	* Constructeur de la classe
 	*
 	* @param type		Le type du controle - Voir Enum Type
-	* @param parent		La position du controle parent
+	* @param parent		Le controle qui joue le rôle de parent
 	* @param position	La poisition initiale du controle par rapport a son parent
 	* @param size		La taille du controle
+	* @param name		Le nom du controle
 	*/
 	Control(Type type, Control* parent, Vector2i position, Vector2i size, Texture* texture, const std::string& name);
 	/**

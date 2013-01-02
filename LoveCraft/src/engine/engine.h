@@ -16,6 +16,7 @@
 #include "gl/ui/panel.h"
 #include "gl/ui/progressbar.h"
 #include "gl/ui/label.h"
+#include "gl/ui/listbox.h"
 
 #include "game/pig.h"
 #include "game/character.h"
@@ -142,7 +143,7 @@ private:
 	*/
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat = true);
 	virtual void RenderSpells();
-	void RenderProgressBars();
+	void TextUpdate();
 	void StartBlendPNG(bool value = true) const;
 private:
 	bool m_wireframe;
@@ -191,6 +192,8 @@ private:
 	ProgressBar m_pgb_energy;
 	ProgressBar m_pgb_mana;
 	ProgressBar m_pgb_exp;
+
+	ListBox m_lb_infos;
 
 	Label m_lbl_plrPos;
 	Label m_lbl_plrSpd;

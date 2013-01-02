@@ -102,6 +102,8 @@ void Info::GenerateBlocInfos()
 	m_blocInfos[BTYPE_ROCK] = new BlockInfo(BTYPE_ROCK, "Rock");
 
 	m_blocInfos[BTYPE_SNOW] = new BlockInfo(BTYPE_SNOW, "Snow");
+
+	m_blocInfos[BTYPE_SWAMP] = new BlockInfo(BTYPE_SWAMP, "Swamp");
 }
 
 void Info::SetChunkArray( Array2d<Chunk>* arrayPtr )

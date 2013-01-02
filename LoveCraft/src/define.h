@@ -107,7 +107,8 @@ typedef long long int64;
 //#define MOUSE_CLICK_TIMEOUT_3RDP	0.05f
 
 typedef uint8 BlockType;
-enum BLOCK_TYPE {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS, BTYPE_BRICK, BTYPE_SAND, BTYPE_ROCK, BTYPE_SNOW, BTYPE_COUNT};
+enum BLOCK_TYPE {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS, BTYPE_BRICK, BTYPE_SAND, BTYPE_ROCK, BTYPE_SNOW,
+				 BTYPE_SWAMP, BTYPE_COUNT};
 
 //Chemins d'accès
 #define TEXTURE_PATH        "../lovecraft/media/textures/"

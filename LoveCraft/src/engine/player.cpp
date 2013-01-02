@@ -36,6 +36,11 @@ void Player::TurnTopBottom ( float value )
 		m_rot.x = newRotation;
 }
 
+void Player::Teleport()
+{
+	m_pos.y += 7;
+}
+
 void Player::Move(bool ghost, Character &cter, float elapsedTime)
 {
 

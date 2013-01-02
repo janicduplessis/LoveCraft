@@ -184,7 +184,7 @@ Vector2f Label::GetNewPosition(unsigned short length)
 		break;
 	}
 	//Position relative avec le offset
-	relposition += m_offset;
+	relposition = relposition + m_offset;
 	//Position absolue prete à être dessinée
 	Vector2i& posparent = m_parent->AbsolutePosition();
 	absposition = Vector2f(relposition.x + (float)posparent.x, relposition.y + (float)posparent.y);

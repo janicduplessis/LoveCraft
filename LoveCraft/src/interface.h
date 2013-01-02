@@ -103,21 +103,21 @@ enum COLOR
 #define PGB_EXP_SIZE_W				225
 #define PGB_EXP_SIZE_H				20
 // Labels dans le panel portrait
+#define PNL_PORTRAIT_ITALIC			false
+#define PNL_PORTRAIT_CHAR_H			20
+#define PNL_PORTRAIT_CHAR_W			15
+#define PNL_PORTRAIT_CHAR_I			0.5f
 #define LBL_HEALTH_NAME				"lbl_health"
-#define LBL_HEALTH_POSITION_X		400
+#define LBL_HEALTH_POSITION_X		410
 #define LBL_HEALTH_POSITION_Y		86
-#define LBL_HEALTH_SIZE_W			95
-#define LBL_HEALTH_SIZE_H			20
 #define LBL_MANA_NAME				"lbl_mana"
-#define LBL_MANA_POSITION_X			400
+#define LBL_MANA_POSITION_X			410
 #define LBL_MANA_POSITION_Y			56
-#define LBL_MANA_SIZE_W				95
-#define LBL_MANA_SIZE_H				20
 #define LBL_EXP_NAME				"lbl_exp"
-#define LBL_EXP_POSITION_X			377
+#define LBL_EXP_POSITION_X			390
 #define LBL_EXP_POSITION_Y			26
-#define LBL_EXP_SIZE_W				118
-#define LBL_EXP_SIZE_H				20
+#define LBL_EXP_CHAR_W				18
+#define LBL_EXP_CHAR_H				12
 // Taille de la barre d'énergie
 #define PGB_ENERGY_NAME				"pgb_energy"
 #define PGB_ENERGY_BACKGROUND		true
@@ -126,6 +126,14 @@ enum COLOR
 #define PGB_ENERGY_POSITION_Y		150
 #define PGB_ENERGY_SIZE_W			250
 #define PGB_ENERGY_SIZE_H			20
+#define LBL_ENERGY_NAME				"lbl_energy"
+#define LBL_ENERGY_POSITION_X		5
+#define LBL_ENERGY_POSITION_Y		420
+#define LBL_ENERGY_ITALIC			false
+#define LBL_ENERGY_CHAR_H			25
+#define LBL_ENERGY_CHAR_W			35
+#define LBL_ENERGY_CHAR_I			0.5f
+
 // Taille (LxH) des boutons des sorts dans la barre de sorts
 #define SPELL_ICON_SIZE				64
 // Longueur de l'espace entre chaque images de sorts

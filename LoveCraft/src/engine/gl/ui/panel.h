@@ -16,7 +16,7 @@ public:
 	void Render();
 	Panel& operator=(const Panel& p);
 private:
-	void RenderAllControls();
+	virtual void RenderAllControls();
 
 	(Control*)* m_controls;
 	/*Array<Control*> m_controls;*/

@@ -52,6 +52,7 @@ public:
 	* @param value		La valeur voulue - soumise à des validations
 	*/
 	void SetMana(const float value);
+	void SetExp(const float value);
 
 	/**
 	* Obtient la vie courante du personnage
@@ -68,6 +69,7 @@ public:
 	* @return float
 	*/
 	float Mana() const;
+	float Exp() const;
 
 	/**
 	* Obtient la vie maximum du personnage
@@ -84,6 +86,7 @@ public:
 	* @return float
 	*/
 	float ManaMax() const;
+	float ExpNext() const;
 
 	/**
 	* Obtient le pourventage de vie du personnage
@@ -100,16 +103,19 @@ public:
 	* @return float
 	*/
 	float ManaPerc() const;
+	float ExpPerc() const;
 private:
 	std::string m_name;
 
 	float m_healthMax;
 	float m_energyMax;
 	float m_manaMax;
+	float m_expToNextLevel;
 
 	float m_health;
 	float m_energy;
 	float m_mana;
+	float m_exp;
 };
 
 #endif

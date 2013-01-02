@@ -1,4 +1,4 @@
-#ifndef ARRAYBOOL_H__
+﻿#ifndef ARRAYBOOL_H__
 #define ARRAYBOOL_H__
 
 #include "util/array.h"

@@ -1,4 +1,4 @@
-#ifndef AI_H__
+ï»¿#ifndef AI_H__
 #define AI_H__
 
 #include "player.h"
@@ -19,14 +19,14 @@ class AI
 {
 public:
 	/**
-	 * @brief États de l'AI
+	 * @brief Ã‰tats de l'AI
 	 * 
 	 * Run Away :	se sauve du joueur
-	 * Patrol :		se promène aléatoirement dans son territoire
+	 * Patrol :		se promÃ¨ne alÃ©atoirement dans son territoire
 	 * Follow :		suit le joueur
 	 * Attack :		attaque le joueur
 	 * Stay :		reste sur place
-	 * None :		aucun, state par defaut est utilisé
+	 * None :		aucun, state par defaut est utilisÃ©
 	 */
 	enum State
 	{
@@ -41,8 +41,8 @@ public:
 	/**
 	 * @brief Types d'ai
 	 * 
-	 * Passive Harmless :	n'attaque pas et se sauve si attaqué
-	 * Passive :			n'attaque pas mais attaque si attaqué
+	 * Passive Harmless :	n'attaque pas et se sauve si attaquÃ©
+	 * Passive :			n'attaque pas mais attaque si attaquÃ©
 	 * Aggressive :			attaque
 	 */
 	enum AiType
@@ -66,18 +66,18 @@ public:
 	virtual ~AI();
 
 	/**
-	 * @return true Si l'état a changer
+	 * @return true Si l'Ã©tat a changer
 	 */
 	virtual bool StateChanged() const;
 
 	/**
-	 * @return l'état courant
+	 * @return l'Ã©tat courant
 	 */
 	virtual State GetState() const;
 
 	/**
 	 * Boucle principal de l'ai
-	 * Détermine le state et ce que l'objet controlé par
+	 * DÃ©termine le state et ce que l'objet controlÃ© par
 	 * l'ai doit faire.
 	 * @param elapsedTime Game loop elapsed time
 	 */
@@ -102,9 +102,9 @@ protected:
 	virtual bool CheckCollision(Vector3f& pos) const;
 
 	/**
-	 * Regarde si le joueur est détecté
-	 * @param detectionRange distance max pour être vu
-	 * @param enableLOS si le joueur doit être visible
+	 * Regarde si le joueur est dÃ©tectÃ©
+	 * @param detectionRange distance max pour Ãªtre vu
+	 * @param enableLOS si le joueur doit Ãªtre visible
 	 */
 	virtual bool CheckPlayer(float detectionRange, bool enableLOS = true);
 	virtual bool CheckAttack();

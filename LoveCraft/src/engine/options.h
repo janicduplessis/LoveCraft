@@ -1,4 +1,4 @@
-#ifndef OPTIONS_H_
+ï»¿#ifndef OPTIONS_H_
 #define OPTIONS_H_
 
 
@@ -17,11 +17,11 @@ public:
 	*/
 	bool GetOptSound() const;
 	/**
-	* Définit la valeur indiquant si la musique est active
+	* DÃ©finit la valeur indiquant si la musique est active
 	*/
 	void SetOptMusic(const bool value);
 	/**
-	* Définit la valeur indiquant si le son est actif
+	* DÃ©finit la valeur indiquant si le son est actif
 	*/
 	void SetOptSound(const bool value);
 private:

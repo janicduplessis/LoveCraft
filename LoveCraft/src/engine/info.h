@@ -1,4 +1,4 @@
-#ifndef INFO_H__
+ï»¿#ifndef INFO_H__
 #define INFO_H__
 
 #include "define.h"
@@ -15,9 +15,9 @@
 class Chunk;
 
 /**
-* @brief Singleton qui contient tout les informations générales du jeu
+* @brief Singleton qui contient tout les informations gÃ©nÃ©rales du jeu
 * 
-* Initialise les données dans le constructeur
+* Initialise les donnÃ©es dans le constructeur
 */
 class Info
 {
@@ -33,22 +33,22 @@ public:
 	static Info* GetPtr();
 
 	/**
-	* Retourne une référence vers l'instance de son
+	* Retourne une rÃ©fÃ©rence vers l'instance de son
 	*/
 	Son& Sound();
 
 	/**
-	* Retourne une référence vers l'instance des options
+	* Retourne une rÃ©fÃ©rence vers l'instance des options
 	*/
 	Option& Options();
 
 	/**
-	* Retourne une référence vers l'instance de réseau
+	* Retourne une rÃ©fÃ©rence vers l'instance de rÃ©seau
 	*/
 	Nwork& Network();
 
 	/**
-	* Retourne le bloc info pour le type donné
+	* Retourne le bloc info pour le type donnÃ©
 	* 
 	* @param type type
 	* @return BlocInfo
@@ -66,12 +66,12 @@ public:
 	Array2d<Chunk>* GetChunkArray() const;
 
 	/**
-	* Retourne le bloc à la position donné en 
-	* considérent un offset
+	* Retourne le bloc Ã  la position donnÃ© en 
+	* considÃ©rent un offset
 	* 
 	* @param pos position
-	* @param offset décalage
-	* @return type du bloc à la position
+	* @param offset dÃ©calage
+	* @return type du bloc Ã  la position
 	*/
 	BlockType GetBlocFromWorld(Vector3f pos, const Vector3f& offset = Vector3f(0,0,0)) const;
 

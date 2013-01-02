@@ -1,4 +1,4 @@
-#ifndef VECTOR2_H__
+﻿#ifndef VECTOR2_H__
 #define VECTOR2_H__
 
 #include <iostream>

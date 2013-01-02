@@ -1,4 +1,4 @@
-#ifndef ARRAY_H__
+﻿#ifndef ARRAY_H__
 #define ARRAY_H__
 
 #include <cassert>

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['next',['next',['../classsf_1_1_utf_3_018_01_4.html#a0365a0b38700baa161843563d083edf6',1,'sf::Utf&lt; 8 &gt;::next()'],['../classsf_1_1_utf_3_0116_01_4.html#ab899108d77ce088eb001588e84d91525',1,'sf::Utf&lt; 16 &gt;::next()'],['../classsf_1_1_utf_3_0132_01_4.html#a788b4ebc728dde2aaba38f3605d4867c',1,'sf::Utf&lt; 32 &gt;::next()']]],
-  ['noncopyable',['NonCopyable',['../classsf_1_1_non_copyable.html#a2110add170580fdb946f887719da6860',1,'sf::NonCopyable']]]
+  ['name',['Name',['../class_control.html#ad189c21e031857686eb4415177ca646f',1,'Control::Name()'],['../class_character.html#a4f0dacb5ca42e7bae0ff89bb9678a47a',1,'Character::Name()']]],
+  ['network',['Network',['../class_info.html#aa5e2b1961592b62eb79accc0f4807ebb',1,'Info']]],
+  ['normalise',['Normalise',['../class_quaternion.html#aa8690475695274735b97a62364177516',1,'Quaternion']]]
 ];

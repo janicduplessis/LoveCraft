@@ -1,0 +1,501 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<title>LoveCraft: Référence de la classe AI</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">LoveCraft
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.8.2 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>Page&#160;principale</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="files.html"><span>Fichiers</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Recherche" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="annotated.html"><span>Liste&#160;des&#160;classes</span></a></li>
+      <li><a href="classes.html"><span>Index&#160;des&#160;classes</span></a></li>
+      <li><a href="hierarchy.html"><span>Hiérarchie&#160;des&#160;classes</span></a></li>
+      <li><a href="functions.html"><span>Membres&#160;de&#160;classe</span></a></li>
+    </ul>
+  </div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Tout</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Fonctions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Définitions de type</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Énumérations</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Types publics</a> &#124;
+<a href="#pub-methods">Fonctions membres publiques</a> &#124;
+<a href="#pro-methods">Fonctions membres protégées</a> &#124;
+<a href="#pro-attribs">Attributs protégés</a> &#124;
+<a href="class_a_i-members.html">Liste de tous les membres</a>  </div>
+  <div class="headertitle">
+<div class="title">Référence de la classe AI</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Intelligence Artificielle.  
+ <a href="class_a_i.html#details">Plus de détails...</a></p>
+
+<p><code>#include &lt;<a class="el" href="ai_8h_source.html">ai.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Types publics</h2></td></tr>
+<tr class="memitem:a065ad8725d67f32b974e157e32790754"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_i.html#a065ad8725d67f32b974e157e32790754">State</a> { <br/>
+&#160;&#160;<b>STATE_RUN_AWAY</b>, 
+<b>STATE_PATROL</b>, 
+<b>STATE_FOLLOW</b>, 
+<b>STATE_ATTACK</b>, 
+<br/>
+&#160;&#160;<b>STATE_STAY</b>, 
+<b>STATE_NONE</b>
+<br/>
+ }</td></tr>
+<tr class="memdesc:a065ad8725d67f32b974e157e32790754"><td class="mdescLeft">&#160;</td><td class="mdescRight">États de l'<a class="el" href="class_a_i.html" title="Intelligence Artificielle.">AI</a>.  <a href="class_a_i.html#a065ad8725d67f32b974e157e32790754">Plus de détails...</a><br/></td></tr>
+<tr class="separator:a065ad8725d67f32b974e157e32790754"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a742fc46e89b6da576e2879d075b4a30d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_i.html#a742fc46e89b6da576e2879d075b4a30d">AiType</a> { <b>TYPE_PASSIVE_HARMLESS</b>, 
+<b>TYPE_PASSIVE</b>, 
+<b>TYPE_AGGRESSIVE</b>
+ }</td></tr>
+<tr class="memdesc:a742fc46e89b6da576e2879d075b4a30d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Types d'ai.  <a href="class_a_i.html#a742fc46e89b6da576e2879d075b4a30d">Plus de détails...</a><br/></td></tr>
+<tr class="separator:a742fc46e89b6da576e2879d075b4a30d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Fonctions membres publiques</h2></td></tr>
+<tr class="memitem:a8267d355ae1e1dec1d7ea2a860d9f172"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_i.html#a8267d355ae1e1dec1d7ea2a860d9f172">AI</a> (<a class="el" href="class_a_i.html#a742fc46e89b6da576e2879d075b4a30d">AiType</a> type, <a class="el" href="class_npc.html">Npc</a> *npc, <a class="el" href="class_player.html">Player</a> *player=0)</td></tr>
+<tr class="separator:a8267d355ae1e1dec1d7ea2a860d9f172"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66a8645f0c27285cd75346f2c2bbfb14"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_i.html#a66a8645f0c27285cd75346f2c2bbfb14">~AI</a> ()</td></tr>
+<tr class="separator:a66a8645f0c27285cd75346f2c2bbfb14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75696904a7ff7ec1045d6dbfc7b9403b"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_i.html#a75696904a7ff7ec1045d6dbfc7b9403b">StateChanged</a> () const </td></tr>
+<tr class="separator:a75696904a7ff7ec1045d6dbfc7b9403b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaafdf2b5aff4020d469e5f5c7970be31"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_a_i.html#a065ad8725d67f32b974e157e32790754">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_i.html#aaafdf2b5aff4020d469e5f5c7970be31">GetState</a> () const </td></tr>
+<tr class="separator:aaafdf2b5aff4020d469e5f5c7970be31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a138df641a957bc41498f466df6f550cc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_i.html#a138df641a957bc41498f466df6f550cc">Process</a> (float elapsedTime)</td></tr>
+<tr class="separator:a138df641a957bc41498f466df6f550cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48485ec309724e9a2f7ed0fb21227eff"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_i.html#a48485ec309724e9a2f7ed0fb21227eff">Patrol</a> ()</td></tr>
+<tr class="separator:a48485ec309724e9a2f7ed0fb21227eff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4dd66ff3750e57e65f74c96f05e4bc7f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4dd66ff3750e57e65f74c96f05e4bc7f"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>RunAway</b> ()</td></tr>
+<tr class="separator:a4dd66ff3750e57e65f74c96f05e4bc7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08a5328c7a556cd8116c104a2b46ccfa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a08a5328c7a556cd8116c104a2b46ccfa"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>Attack</b> ()</td></tr>
+<tr class="separator:a08a5328c7a556cd8116c104a2b46ccfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef5cc338192b6b2adb350fc40198e90d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aef5cc338192b6b2adb350fc40198e90d"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>Follow</b> ()</td></tr>
+<tr class="separator:aef5cc338192b6b2adb350fc40198e90d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a586ccffeeb92c47bad21e9ddb9a8226a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a586ccffeeb92c47bad21e9ddb9a8226a"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>Stay</b> ()</td></tr>
+<tr class="separator:a586ccffeeb92c47bad21e9ddb9a8226a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Fonctions membres protégées</h2></td></tr>
+<tr class="memitem:a40c4a453223577d29f018402d6b24391"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a40c4a453223577d29f018402d6b24391"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>CheckVision</b> (const <a class="el" href="class_vector3.html">Vector3f</a> &amp;pos) const </td></tr>
+<tr class="separator:a40c4a453223577d29f018402d6b24391"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12ede073460af8da751b432bb3916c44"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_i.html#a12ede073460af8da751b432bb3916c44">CheckCollision</a> (<a class="el" href="class_vector3.html">Vector3f</a> &amp;pos) const </td></tr>
+<tr class="separator:a12ede073460af8da751b432bb3916c44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91ccda8cd87be47c998aa837868402dd"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_i.html#a91ccda8cd87be47c998aa837868402dd">CheckPlayer</a> (float detectionRange, bool enableLOS=true)</td></tr>
+<tr class="separator:a91ccda8cd87be47c998aa837868402dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ed45043165f8db39139d7e75b599f49"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ed45043165f8db39139d7e75b599f49"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>CheckAttack</b> ()</td></tr>
+<tr class="separator:a0ed45043165f8db39139d7e75b599f49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb13e6542e37a4477ec783dfab2d19a2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_vector3.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_i.html#aeb13e6542e37a4477ec783dfab2d19a2">PlayerDistance</a> ()</td></tr>
+<tr class="separator:aeb13e6542e37a4477ec783dfab2d19a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Attributs protégés</h2></td></tr>
+<tr class="memitem:a9fbe0ffe6d8e18e76f2fde95e05688d8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9fbe0ffe6d8e18e76f2fde95e05688d8"></a>
+<a class="el" href="class_player.html">Player</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>m_player</b></td></tr>
+<tr class="separator:a9fbe0ffe6d8e18e76f2fde95e05688d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ed093990d96ec32cb4675fe1fb93925"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ed093990d96ec32cb4675fe1fb93925"></a>
+<a class="el" href="class_a_i.html#a065ad8725d67f32b974e157e32790754">State</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_currentState</b></td></tr>
+<tr class="separator:a4ed093990d96ec32cb4675fe1fb93925"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa34b405db05824235cca5a434b3c144b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa34b405db05824235cca5a434b3c144b"></a>
+<a class="el" href="class_a_i.html#a065ad8725d67f32b974e157e32790754">State</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_lastState</b></td></tr>
+<tr class="separator:aa34b405db05824235cca5a434b3c144b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7761493e2e8c361d199e3061d007668"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad7761493e2e8c361d199e3061d007668"></a>
+<a class="el" href="class_a_i.html#a742fc46e89b6da576e2879d075b4a30d">AiType</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_type</b></td></tr>
+<tr class="separator:ad7761493e2e8c361d199e3061d007668"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb7d033badb1cf16884223adb669e3fd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adb7d033badb1cf16884223adb669e3fd"></a>
+<a class="el" href="class_npc.html">Npc</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>m_npc</b></td></tr>
+<tr class="separator:adb7d033badb1cf16884223adb669e3fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3795e366a39a53c84a6616e0fbdcdd4d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3795e366a39a53c84a6616e0fbdcdd4d"></a>
+<a class="el" href="class_vector3.html">Vector3f</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>m_patrolDestination</b></td></tr>
+<tr class="separator:a3795e366a39a53c84a6616e0fbdcdd4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80a5de1bc3211771e5b18dac6542c16e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a80a5de1bc3211771e5b18dac6542c16e"></a>
+<a class="el" href="class_vector3.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_posIni</b></td></tr>
+<tr class="separator:a80a5de1bc3211771e5b18dac6542c16e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f3313bbd56c8d04ba1578e15668080b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1f3313bbd56c8d04ba1578e15668080b"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_stateChanged</b></td></tr>
+<tr class="separator:a1f3313bbd56c8d04ba1578e15668080b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Description détaillée</h2>
+<div class="textblock"><p>Intelligence Artificielle. </p>
+</div><h2 class="groupheader">Documentation des énumérations membres</h2>
+<a class="anchor" id="a742fc46e89b6da576e2879d075b4a30d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_a_i.html#a742fc46e89b6da576e2879d075b4a30d">AI::AiType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Types d'ai. </p>
+<p>Passive Harmless : n'attaque pas et se sauve si attaqué Passive : n'attaque pas mais attaque si attaqué Aggressive : attaque </p>
+
+</div>
+</div>
+<a class="anchor" id="a065ad8725d67f32b974e157e32790754"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_a_i.html#a065ad8725d67f32b974e157e32790754">AI::State</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>États de l'<a class="el" href="class_a_i.html" title="Intelligence Artificielle.">AI</a>. </p>
+<p>Run Away : se sauve du joueur Patrol : se promène aléatoirement dans son territoire Follow : suit le joueur Attack : attaque le joueur Stay : reste sur place None : aucun, state par defaut est utilisé </p>
+
+</div>
+</div>
+<h2 class="groupheader">Documentation des constructeurs et destructeur</h2>
+<a class="anchor" id="a8267d355ae1e1dec1d7ea2a860d9f172"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">AI::AI </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_a_i.html#a742fc46e89b6da576e2879d075b4a30d">AiType</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_npc.html">Npc</a> *&#160;</td>
+          <td class="paramname"><em>npc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_player.html">Player</a> *&#160;</td>
+          <td class="paramname"><em>player</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Constructeur </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>AiType </td></tr>
+    <tr><td class="paramname">npc</td><td>Pointeur vers le npc que l'ai controle </td></tr>
+    <tr><td class="paramname">player</td><td>Pointeur vers le joueur </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a66a8645f0c27285cd75346f2c2bbfb14"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">AI::~AI </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Deconstructeur </p>
+
+</div>
+</div>
+<h2 class="groupheader">Documentation des fonctions membres</h2>
+<a class="anchor" id="a12ede073460af8da751b432bb3916c44"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool AI::CheckCollision </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_vector3.html">Vector3f</a> &amp;&#160;</td>
+          <td class="paramname"><em>pos</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Detecte s'il y a collision </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pos</td><td>position a tester </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a91ccda8cd87be47c998aa837868402dd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool AI::CheckPlayer </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>detectionRange</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enableLOS</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Regarde si le joueur est détecté </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">detectionRange</td><td>distance max pour être vu </td></tr>
+    <tr><td class="paramname">enableLOS</td><td>si le joueur doit être visible </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="aaafdf2b5aff4020d469e5f5c7970be31"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_a_i.html#a065ad8725d67f32b974e157e32790754">AI::State</a> AI::GetState </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Renvoie</dt><dd>l'état courant </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a48485ec309724e9a2f7ed0fb21227eff"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AI::Patrol </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calcul une nouvelle destination de patrol </p>
+
+</div>
+</div>
+<a class="anchor" id="aeb13e6542e37a4477ec783dfab2d19a2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_vector3.html">Vector3f</a> AI::PlayerDistance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Renvoie</dt><dd>distance entre le joueur et le npc </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a138df641a957bc41498f466df6f550cc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AI::Process </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>elapsedTime</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Boucle principal de l'ai Détermine le state et ce que l'objet controlé par l'ai doit faire. </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">elapsedTime</td><td>Game loop elapsed time </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a75696904a7ff7ec1045d6dbfc7b9403b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool AI::StateChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Renvoie</dt><dd>true Si l'état a changer </dd></dl>
+
+</div>
+</div>
+<hr/>La documentation de cette classe a été générée à partir des fichiers suivants :<ul>
+<li>C:/Users/Janic/Documents/LoveCraft/lovecraft/src/engine/<a class="el" href="ai_8h_source.html">ai.h</a></li>
+<li>C:/Users/Janic/Documents/LoveCraft/lovecraft/src/engine/ai.cpp</li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Généré le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.2
+</small></address>
+</body>
+</html>

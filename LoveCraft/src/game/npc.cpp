@@ -1,4 +1,4 @@
-#include "npc.h"
+﻿#include "npc.h"
 
 Npc::Npc(const Vector3f& pos /*= Vector3f(0,0,0)*/ ) : m_ai(0), m_maxRot(0.01f), m_speed(0), m_speedGravity(0), m_spells(0)
 {
@@ -31,7 +31,7 @@ void Npc::Move(const Vector3f& destination, float elapsedTime)
 {
 	if (elapsedTime == 0)
 		return;
-	// Gravit�
+	// Gravité
 	float distanceY = (m_speedGravity * elapsedTime) + (GRAVITY * elapsedTime * elapsedTime / 2.0f);
 	if (!CheckCollision(Vector3f(m_pos.x, m_pos.y - distanceY, m_pos.z)))
 	{

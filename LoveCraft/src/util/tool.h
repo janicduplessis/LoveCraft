@@ -1,4 +1,4 @@
-#ifndef TOOL_H__
+﻿#ifndef TOOL_H__
 #define TOOL_H__
 
 #include <string>

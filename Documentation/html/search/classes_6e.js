@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['noncopyable',['NonCopyable',['../classsf_1_1_non_copyable.html',1,'sf']]]
+  ['npc',['Npc',['../class_npc.html',1,'']]],
+  ['nwork',['Nwork',['../class_nwork.html',1,'']]]
 ];

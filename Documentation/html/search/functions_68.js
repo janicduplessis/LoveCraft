@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['hasaxis',['hasAxis',['../classsf_1_1_joystick.html#a268e8f2a11ae6af4a47c727cb4ab4d95',1,'sf::Joystick']]],
-  ['http',['Http',['../classsf_1_1_http.html#abe2360194f99bdde402c9f97a85cf067',1,'sf::Http::Http()'],['../classsf_1_1_http.html#a79efd844a735f083fcce0edbf1092385',1,'sf::Http::Http(const std::string &amp;host, unsigned short port=0)']]]
+  ['health',['Health',['../class_character.html#a225406c2de0910d7dfcaf96c70a4f2b4',1,'Character']]],
+  ['healthmax',['HealthMax',['../class_character.html#a8ba4c8fbf8b9706d0825f1d62c2c9460',1,'Character']]],
+  ['healthperc',['HealthPerc',['../class_character.html#a3b01919cc34b94b60ab87e062cc06618',1,'Character']]],
+  ['hit',['Hit',['../class_projectile.html#af0f42067025835c00f1ed68f567b9e60',1,'Projectile::Hit()'],['../class_test_projectile.html#afae04b9b3f883572c488f6bbbdb04501',1,'TestProjectile::Hit()']]]
 ];

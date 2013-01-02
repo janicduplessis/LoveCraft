@@ -1,4 +1,4 @@
-#include "projectile.h"
+﻿#include "projectile.h"
 #include "util/matrix4.h"
 #include <cmath>
 #include <iostream>
@@ -75,7 +75,7 @@ void Projectile::Shoot()
 {
 	m_shot = true;
 	// Modifie l'acceleration pour inclure la
-	// gravit� s'il a lieux
+	// gravité s'il a lieux
 	if (m_hasMass)
 		m_acceleration.y -= 9.8f;
 

@@ -1,4 +1,4 @@
-#ifndef CONTROLS_H__
+﻿#ifndef CONTROLS_H__
 #define CONTROLS_H__
 
 #include "util/arraybool.h"

@@ -1,4 +1,4 @@
-#ifndef CHARACTER_H_
+ï»¿#ifndef CHARACTER_H_
 #define CHARACTER_H_
 
 #include "define.h"
@@ -6,25 +6,25 @@
 #include <string>
 
 /**
-* @brief Classe représentant les infos du personnage
+* @brief Classe reprÃ©sentant les infos du personnage
 */
 class Character
 {
 public:
 	/**
-	* Constructeur par défaut
+	* Constructeur par dÃ©faut
 	*/
 	Character();
 	/**
-	* Constructeur avec paramètres
+	* Constructeur avec paramÃ¨tres
 	* @param name		Le nom du personnage
 	* @param health	La vie maximum du personnage
-	* @param energy	L'énergie maximum du joueur
+	* @param energy	L'Ã©nergie maximum du joueur
 	* @param mana		Le mana maximum du personnage
 	*/
 	Character(std::string name, float health, float energy, float mana);
 	/**
-	* Destructeur par défaut
+	* Destructeur par dÃ©faut
 	*/
 	~Character();
 	/**
@@ -33,23 +33,23 @@ public:
 	*/
 	std::string Name() const;
 	/**
-	* Méthode à appeler à chaque fin de boucle pour la régénération
+	* MÃ©thode Ã  appeler Ã  chaque fin de boucle pour la rÃ©gÃ©nÃ©ration
 	* de la vie et du mana
 	*/
 	void PassiveRegen();
 	/**
-	* Change la vie du personnage. Une valeur négative diminue, positive augmente.
-	* @param value		La valeur voulue - soumise à des validations
+	* Change la vie du personnage. Une valeur nÃ©gative diminue, positive augmente.
+	* @param value		La valeur voulue - soumise Ã  des validations
 	*/
 	void SetHealth(const float value);
 	/**
-	* Change l'énergie du personnage. Une valeur négative diminue, positive augmente.
-	* @param value		La valeur voulue - soumise à des validations
+	* Change l'Ã©nergie du personnage. Une valeur nÃ©gative diminue, positive augmente.
+	* @param value		La valeur voulue - soumise Ã  des validations
 	*/
 	void SetEnergy(const float value);
 	/**
-	* Change la mana du personnage. Une valeur négative diminue, positive augmente.
-	* @param value		La valeur voulue - soumise à des validations
+	* Change la mana du personnage. Une valeur nÃ©gative diminue, positive augmente.
+	* @param value		La valeur voulue - soumise Ã  des validations
 	*/
 	void SetMana(const float value);
 
@@ -59,7 +59,7 @@ public:
 	*/
 	float Health() const;
 	/**
-	* Obtient l'énergie courante du personnage
+	* Obtient l'Ã©nergie courante du personnage
 	* @return float
 	*/
 	float Energy() const;
@@ -75,7 +75,7 @@ public:
 	*/
 	float HealthMax() const;
 	/**
-	* Obtient l'énergie maximum du personnage
+	* Obtient l'Ã©nergie maximum du personnage
 	* @return float
 	*/
 	float EnergyMax() const;
@@ -91,7 +91,7 @@ public:
 	*/
 	float HealthPerc() const;
 	/**
-	* Obtient le pourventage d'énergie du personnage
+	* Obtient le pourventage d'Ã©nergie du personnage
 	* @return float
 	*/
 	float EnergyPerc() const;

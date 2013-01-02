@@ -1,4 +1,4 @@
-#include "textureatlas.h"
+﻿#include "textureatlas.h"
 #include <cmath>
 
 // TODO

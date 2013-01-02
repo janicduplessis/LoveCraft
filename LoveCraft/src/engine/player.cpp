@@ -1,4 +1,4 @@
-#include "player.h"
+ï»¿#include "player.h"
 #include "son.h"
 #include "info.h"
 #include <cmath>
@@ -31,7 +31,7 @@ void Player::TurnTopBottom ( float value )
 {
 	//Assignation de la nouvelle rotation
 	float newRotation = m_rot.x + value * MOUSE_SENSIBILITY;
-	//Test de la rotation entre les limites établies
+	//Test de la rotation entre les limites Ã©tablies
 	if (newRotation >= -85.f && newRotation <= 85.f)
 		m_rot.x = newRotation;
 }
@@ -92,7 +92,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 			if (m_speed.y == 0)
 			{
 				//Perte de vitesse si on amorce un saut avec une vitesse de base
-				//et qu'aucune des touches de mouvement n'est appuyée
+				//et qu'aucune des touches de mouvement n'est appuyÃ©e
 				if ((!w && !s) && m_speed.z != 0)
 					m_speed.z *= 0.6f;
 				if ((!a && !d) && m_speed.x != 0)
@@ -151,11 +151,11 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 	//Le joueur est-il en mouvement?
 	if (m_speed.z != 0)
 	{
-		//Vérification si le joueur bouge par lui-même (touches)
+		//VÃ©rification si le joueur bouge par lui-mÃªme (touches)
 		if (!w && !s && m_speed.y == 0)
 		{
 			//Si ce n'est pas le cas on diminue progressivement la vitesse du joueur
-			//Vérification que la vitesse ne dépasse pas 0
+			//VÃ©rification que la vitesse ne dÃ©passe pas 0
 			if (fabs(m_speed.z) - MOUVEMENT_SPEED_DECAY < 0)
 				m_speed.z = 0;
 			else m_speed.z -= m_speed.z > 0 ? MOUVEMENT_SPEED_DECAY : -MOUVEMENT_SPEED_DECAY;
@@ -167,49 +167,49 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 #pragma region Calculs de la vitesse maximale
 	//Assignation de base de la vitesse maximale
 	float speedMaxZ = MOUVEMENT_SPEED_MAX;
-	//vérification si le joueur est en mode course
+	//vÃ©rification si le joueur est en mode course
 	if (shift && w && cter.Energy() > 0)
 		speedMaxZ *= MOUVEMENT_SPEED_MAX_RUN_M;
 	else if (s)
 		//Est-ce qu'il recule
 		speedMaxZ *= MOUVEMENT_SPEED_BACKWARD_M;
-	//Vérification s'il est au ralenti
+	//VÃ©rification s'il est au ralenti
 	if (ctrl)
 		speedMaxZ *= MOUVEMENT_SPEED_SLOW_M;
-	//Vérification s'il appuie sur plus d'une touche
+	//VÃ©rification s'il appuie sur plus d'une touche
 	if (w && d || w && a || s && a || s && d)
 		speedMaxZ *= 0.6f;
 #pragma endregion
 
 #pragma region Calculs de l acceleration
 	//Tant qu'il est en mouvement et qu'il n'a pas atteint la vitesse maximum il
-	//aura une accélération
+	//aura une accÃ©lÃ©ration
 	m_accel.z = 0;
-	//Accélération positive
+	//AccÃ©lÃ©ration positive
 	if (w)
 		m_accel.z = m_speed.z < speedMaxZ ? MOUVEMENT_ACCELERATION : 0;
-	//Accélération négative
+	//AccÃ©lÃ©ration nÃ©gative
 	else if (s)
 		m_accel.z = m_speed.z < speedMaxZ ? -MOUVEMENT_ACCELERATION : 0;
 	//Si le joueur est en mode course et au sol
 	if (shift && m_speed.y == 0)
 		m_accel.z *= MOUVEMENT_ACCELERATION_RUN_M;
-	//Diminution de l'accélération lorsque le joueur est en mouvement dans les airs
+	//Diminution de l'accÃ©lÃ©ration lorsque le joueur est en mouvement dans les airs
 	if (m_speed.y != 0)
 		m_accel.z *= MOVUEMENT_ACCELERATION_AIR_M;
-	//Vérification qu'il n'appuie pas sur les deux touches en même temps
+	//VÃ©rification qu'il n'appuie pas sur les deux touches en mÃªme temps
 	if (w && s)
 		m_accel.z = 0;
 #pragma endregion
 
 #pragma region Calculs de la vitesse
-	//Vérification que la nouvelle vitesse ne dépasse pas le maximum imposé
+	//VÃ©rification que la nouvelle vitesse ne dÃ©passe pas le maximum imposÃ©
 	if (fabs(m_speed.z) + fabs(m_accel.z) * elapsedTime > speedMaxZ)
 		m_speed.z = m_speed.z < 0 ? -speedMaxZ : speedMaxZ;
-	//Assignation de la nouvelle vitesse en fonction de l'accélération
+	//Assignation de la nouvelle vitesse en fonction de l'accÃ©lÃ©ration
 	else m_speed.z += m_accel.z * elapsedTime;
 
-	//Vérification si le joueur change de touche rapidement
+	//VÃ©rification si le joueur change de touche rapidement
 	if ((w && m_speed.z < 0 || s && m_speed.z > 0) && m_speed.y == 0)
 		m_speed.z = 0;
 
@@ -248,11 +248,11 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 	//Le joueur est-il en mouvement?
 	if (m_speed.x != 0)
 	{
-		//Vérification si le joueur bouge par lui-même (touches)
+		//VÃ©rification si le joueur bouge par lui-mÃªme (touches)
 		if (!a && !d && m_speed.y == 0)
 		{
 			//Si ce n'est pas le cas on diminue progressivement la vitesse du joueur
-			//Vérification que la vitesse ne tombe pas négative
+			//VÃ©rification que la vitesse ne tombe pas nÃ©gative
 			if (fabs(m_speed.x) - MOUVEMENT_SPEED_DECAY < 0)
 				m_speed.x = 0;
 			else m_speed.x -= m_speed.x > 0 ? MOUVEMENT_SPEED_DECAY : -MOUVEMENT_SPEED_DECAY;
@@ -264,38 +264,38 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 #pragma region Calculs de la vitesse maximale
 	//Assignation de base de la vitesse maximale
 	float speedMaxX = MOUVEMENT_SPEED_MAX;
-	//vérification si le joueur est en mode ralenti
+	//vÃ©rification si le joueur est en mode ralenti
 	if (ctrl)
 		speedMaxX *= MOUVEMENT_SPEED_SLOW_M;
-	//Vérification s'il appuie sur plus d'une touche
+	//VÃ©rification s'il appuie sur plus d'une touche
 	if (w && d || w && a || s && a || s && d)
 		speedMaxX *= 0.6f;
 #pragma endregion
 
 #pragma region Calculs de l acceleration
 	//Tant qu'il est en mouvement et qu'il n'a pas atteint la vitesse maximum il
-	//aura une accélération
+	//aura une accÃ©lÃ©ration
 	m_accel.x = 0;
 	if (d)
 		m_accel.x = m_speed.x < speedMaxX ? MOUVEMENT_ACCELERATION : 0;
 	if (a)
 		m_accel.x = m_speed.x < speedMaxX ? -MOUVEMENT_ACCELERATION : 0;
-	//Diminution de l'accélération lorsque le joueur est en mouvement dans les airs
+	//Diminution de l'accÃ©lÃ©ration lorsque le joueur est en mouvement dans les airs
 	if (m_speed.y != 0)
 		m_accel.x *= MOVUEMENT_ACCELERATION_AIR_M;
-	//Vérification qu'il n'appuie pas sur les deux touches en même temps
+	//VÃ©rification qu'il n'appuie pas sur les deux touches en mÃªme temps
 	if (a && d)
 		m_accel.x = 0;
 #pragma endregion
 
 #pragma region Calculs de la vitesse
-	//Vérification que la nouvelle vitesse ne dépasse pas le maximum imposé
+	//VÃ©rification que la nouvelle vitesse ne dÃ©passe pas le maximum imposÃ©
 	if (fabs(m_speed.x) + fabs(m_accel.x) * elapsedTime > speedMaxX)
 		m_speed.x = m_speed.x < 0 ? -speedMaxX : speedMaxX;
-	//Assignation de la nouvelle vitesse en fonction de l'accélération
+	//Assignation de la nouvelle vitesse en fonction de l'accÃ©lÃ©ration
 	else m_speed.x += m_accel.x * elapsedTime;
 
-	//Vérification si le joueur change de touche rapidement
+	//VÃ©rification si le joueur change de touche rapidement
 	if ((d && m_speed.x < 0 || a && m_speed.x > 0) && m_speed.y == 0)
 		m_speed.x = 0;
 #pragma endregion
@@ -304,10 +304,10 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 
 #pragma region Depenses d energie
 
-	//Dépenses d'énergie lorsque le joueur se déplace et tient shift
+	//DÃ©penses d'Ã©nergie lorsque le joueur se dÃ©place et tient shift
 	if (shift && m_speed.z > 1)
 		cter.SetEnergy(-ENERGY_SPENDING);
-	//Commence la régénération de l'énergie que si le joueur bouge presque pas
+	//Commence la rÃ©gÃ©nÃ©ration de l'Ã©nergie que si le joueur bouge presque pas
 	if (!shift && fabs(m_speed.z) + fabs(m_speed.x) <= ENERGY_REGEN_THRESHOLD)
 		cter.SetEnergy(ENERGY_REGEN);
 	cter.PassiveRegen();
@@ -316,10 +316,10 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 
 #pragma region Sons de pas
 
-	//Vérification que les sons sont activés
+	//VÃ©rification que les sons sont activÃ©s
 	if (Info::Get().Options().GetOptSound())
 	{
-		//Vérification que le joueur se trouve par terre et qu'il avance
+		//VÃ©rification que le joueur se trouve par terre et qu'il avance
 		bool readyToMove = (fabs(m_speed.x) >= 0.5f || fabs(m_speed.z) >= 0.5f) && 
 			m_speed.y == 0 && (w || a || s || d);
 		if (readyToMove && !ctrl && !ghost)
@@ -339,7 +339,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 
 #pragma region Tests reseau
 
-	//Envoie d'un paquet contenant les coordonnées du joueur sur le réseau
+	//Envoie d'un paquet contenant les coordonnÃ©es du joueur sur le rÃ©seau
 	//sf::Packet pack;
 	//pack << m_pos.x << m_pos.y << m_pos.z;
 	//Info::Get().Network().Send(pack);

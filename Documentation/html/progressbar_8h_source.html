@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<title>LoveCraft:  Fichier source de C:/Users/Janic/Documents/LoveCraft/lovecraft/src/engine/gl/ui/progressbar.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">LoveCraft
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.8.2 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>Page&#160;principale</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Recherche" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>Liste&#160;des&#160;fichiers</span></a></li>
+    </ul>
+  </div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Tout</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Fonctions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Définitions de type</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Énumérations</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_03ea7e1f447e206a9ba50aa1ffd2a21b.html">lovecraft</a></li><li class="navelem"><a class="el" href="dir_d07ae656d675a18f21e5524277e66db7.html">src</a></li><li class="navelem"><a class="el" href="dir_4fc27a38ea0915d7d915ce14d7d27472.html">engine</a></li><li class="navelem"><a class="el" href="dir_b9aae73dce7e5e151de92cb1caa601c4.html">gl</a></li><li class="navelem"><a class="el" href="dir_559f8480a3cad3468044559ec239876d.html">ui</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">progressbar.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef PROGRESSBAR_H_</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PROGRESSBAR_H_</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;control.h&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
+<div class="line"><a name="l00006"></a><span class="lineno"><a class="code" href="class_progress_bar.html">    6</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_progress_bar.html">ProgressBar</a> : <span class="keyword">public</span> <a class="code" href="class_control.html">Control</a></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;{</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="code" href="class_progress_bar.html#a02ce1c300ec367441c3f577c99bb6bbd">   14</a></span>&#160;    <span class="keyword">enum</span> <a class="code" href="class_progress_bar.html#a02ce1c300ec367441c3f577c99bb6bbd">BarMode</a></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        BARMODE_HORIZONTAL_LTR,</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        BARMODE_VERTICAL_DTU,</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        BARMODE_HORIZONTAL_RTL,</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        BARMODE_VERTICAL_UTD,</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        BARMODE_CIRCLE_CLKW,</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        BARMODE_CIRCLE_ACLKW,</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    };</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="class_progress_bar.html#aabdebc9823af01c7567e7546d9f0016f">ProgressBar</a>();</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <a class="code" href="class_progress_bar.html#aabdebc9823af01c7567e7546d9f0016f">ProgressBar</a>(<a class="code" href="class_control.html">Control</a>* parent, <a class="code" href="class_vector2.html">Vector2i</a> &amp;position, <a class="code" href="class_vector2.html">Vector2i</a> &amp;size, <a class="code" href="class_texture.html">Texture</a>* textureFront, <a class="code" href="class_texture.html">Texture</a>* textureBack, <a class="code" href="class_progress_bar.html#a02ce1c300ec367441c3f577c99bb6bbd">BarMode</a> mode, <span class="keywordtype">bool</span> back, <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> border, <span class="keyword">const</span> std::string&amp; name);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="class_progress_bar.html#aa0ced60c0ade467a4602c35443e7bc78">~ProgressBar</a>();</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_progress_bar.html#a061d81d3384a0609b15faf8a6b9cab13">Render</a>(<a class="code" href="class_texture.html">Texture</a>* back, <a class="code" href="class_texture.html">Texture</a>* front);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_progress_bar.html#a061d81d3384a0609b15faf8a6b9cab13">Render</a>();</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <a class="code" href="class_progress_bar.html#a02ce1c300ec367441c3f577c99bb6bbd">BarMode</a> <a class="code" href="class_progress_bar.html#a6bdc08f6ef18583ab82b6c0772f292e8">Mode</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_progress_bar.html#a233e1bc8f2350b714d42c8123a8e403b">SetValue</a>(<span class="keyword">const</span> <span class="keywordtype">float</span> value);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_progress_bar.html#ab55067d0bae74f93dc195233b4ea7cbd">Value</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_progress_bar.html#a6919619ba1590217f8ac9632446b6021">Maximum</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_progress_bar.html#a7f0f376e79051bcfdb857fb07d18f3dc">Minimum</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_progress_bar.html#a4064f1b73d35e63791e62735100a0caa">ValuePerc</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_progress_bar.html#a29835f86e0b7659acbfd77876326cfe9">GetBeckground</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_progress_bar.html#a3f92c52ccd1ced15b3b20c7b9b2c1c96">SetBackgroundTo</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> value);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="class_progress_bar.html#a6b0d098a0c6d79f59f287f274bb16b55">GetBordersize</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_progress_bar.html#a2423bbd9baaafa51d5c04f256f295d26">SetBorderSize</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> size);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <a class="code" href="class_progress_bar.html">ProgressBar</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="class_progress_bar.html">ProgressBar</a>&amp; pgb);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keywordtype">void</span> RenderSquare(<span class="keyword">const</span> <a class="code" href="class_vector2.html">Vector2i</a>&amp; position, <span class="keyword">const</span> <a class="code" href="class_vector2.html">Vector2i</a>&amp; size, <a class="code" href="class_texture.html">Texture</a>* texture, <span class="keywordtype">bool</span> repeat = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordtype">void</span> RenderCircle(<span class="keyword">const</span> <a class="code" href="class_vector2.html">Vector2i</a>&amp; origin, <span class="keywordtype">float</span> rayon, <a class="code" href="class_texture.html">Texture</a>* texture, <span class="keywordtype">bool</span> repeat = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordtype">void</span> ApplyRotationTransformation(<a class="code" href="class_progress_bar.html#a02ce1c300ec367441c3f577c99bb6bbd">BarMode</a> type, <a class="code" href="class_vector2.html">Vector2i</a> size) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordtype">bool</span> m_background;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> m_borderSize;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <a class="code" href="class_progress_bar.html#a02ce1c300ec367441c3f577c99bb6bbd">BarMode</a> m_mode;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <a class="code" href="class_texture.html">Texture</a>* m_textureBack;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keywordtype">float</span> m_minimum;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordtype">float</span> m_maximum;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keywordtype">float</span> m_value;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;};</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor">#endif</span></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Généré le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.2
+</small></address>
+</body>
+</html>

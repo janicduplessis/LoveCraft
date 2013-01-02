@@ -41,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>src/external/devil178_vstudio2k10/include;src/external/sfml20_vstudio2k10/include;$(IncludePath)</IncludePath>
-    <LibraryPath>src/external/devil178_vstudio2k10/lib;src/external/sfml20_vstudio2k10/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>external/devil178_vstudio2k10/include;external/sfml20_vstudio2k10/include;$(IncludePath)</IncludePath>
+    <LibraryPath>external/devil178_vstudio2k10/lib;external/sfml20_vstudio2k10/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -54,13 +54,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../lovecraft/src/external/glew-1.7.0/include;../lovecraft/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../lovecraft/external/glew-1.7.0/include;../lovecraft/external;../lovecraft/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>sfml-audio-d.lib;sfml-main-d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;sfml-network-d.lib;GlU32.Lib;OpenGL32.Lib;DevIL.lib;ILU.lib;ILUT.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../lovecraft/src/external/glew-1.7.0/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../lovecraft/external/glew-1.7.0/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

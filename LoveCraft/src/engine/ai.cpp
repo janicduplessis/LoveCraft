@@ -1,4 +1,4 @@
-#include "ai.h"
+ï»¿#include "ai.h"
 
 #include <cmath>
 
@@ -56,7 +56,7 @@ void AI::Process(float elapsedTime)
 	}
 	else if (m_currentState == STATE_RUN_AWAY)
 	{
-		// Calcul position opposé au joueur
+		// Calcul position opposÃ© au joueur
 		Vector3f dist = -PlayerDistance();
 		dist += m_npc->Position();
 		m_npc->Move(Vector3f(dist.x, m_npc->Position().y, dist.z), elapsedTime);
@@ -105,7 +105,7 @@ bool AI::CheckPlayer(float detectionRange, bool enableLOS)
 		Vector3f iterator = distance;
 		iterator.Normalise();
 
-		// itère sur le vecteur distance et regarde si il y a
+		// itÃ¨re sur le vecteur distance et regarde si il y a
 		// collision a chaque 1m
 		for (float i = 0; i < distance.Lenght(); i++)
 		{

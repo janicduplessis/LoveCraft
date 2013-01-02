@@ -1,4 +1,4 @@
-#include "testprojectile.h"
+﻿#include "testprojectile.h"
 
 TestProjectile::TestProjectile() : m_visible(false)
 {

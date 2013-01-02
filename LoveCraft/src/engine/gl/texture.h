@@ -1,4 +1,4 @@
-#ifndef TEXTURE_H__
+﻿#ifndef TEXTURE_H__
 #define TEXTURE_H__
 
 #include "define.h"

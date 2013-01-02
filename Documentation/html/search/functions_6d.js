@@ -1,11 +1,13 @@
 var searchData=
 [
-  ['microseconds',['microseconds',['../classsf_1_1_time.html#a951fd7219641f1e8191887f5dfe0dc31',1,'sf::Time']]],
-  ['milliseconds',['milliseconds',['../classsf_1_1_time.html#ae379d420bc07170668f51522023957b9',1,'sf::Time']]],
+  ['mana',['Mana',['../class_character.html#a50abd6e558cf97f8972d8d417c2d3bfd',1,'Character']]],
+  ['manamax',['ManaMax',['../class_character.html#a51b0181dc5f78c620a8f7f9c9623e58e',1,'Character']]],
+  ['manaperc',['ManaPerc',['../class_character.html#acd446f0d7d3c07c866ebfece61bb285d',1,'Character']]],
+  ['maximum',['Maximum',['../class_progress_bar.html#a6919619ba1590217f8ac9632446b6021',1,'ProgressBar']]],
+  ['minimum',['Minimum',['../class_progress_bar.html#a7f0f376e79051bcfdb857fb07d18f3dc',1,'ProgressBar']]],
+  ['mode',['Mode',['../class_progress_bar.html#a6bdc08f6ef18583ab82b6c0772f292e8',1,'ProgressBar']]],
   ['mousemoveevent',['MouseMoveEvent',['../class_engine.html#af237824de51cb054d378f669f2917f2d',1,'Engine']]],
   ['mousepressevent',['MousePressEvent',['../class_engine.html#a9ce300edf273954b89f421f39ebf5f1d',1,'Engine']]],
   ['mousereleaseevent',['MouseReleaseEvent',['../class_engine.html#ab7b8dba3cd8f25a1540da398224bf6e2',1,'Engine']]],
-  ['move',['move',['../classsf_1_1_transformable.html#a86b461d6a941ad390c2ad8b6a4a20391',1,'sf::Transformable::move(float offsetX, float offsetY)'],['../classsf_1_1_transformable.html#ab9ca691522f6ddc1a40406849b87c469',1,'sf::Transformable::move(const Vector2f &amp;offset)'],['../classsf_1_1_view.html#a0c82144b837caf812f7cb25a43d80c41',1,'sf::View::move(float offsetX, float offsetY)'],['../classsf_1_1_view.html#a4c98a6e04fed756dfaff8f629de50862',1,'sf::View::move(const Vector2f &amp;offset)'],['../class_player.html#a46168b3eed09fd2d4fe374014b8f6d7b',1,'Player::Move()']]],
-  ['music',['Music',['../classsf_1_1_music.html#a0bc787d8e022b3a9b89cf2c28befd42e',1,'sf::Music']]],
-  ['mutex',['Mutex',['../classsf_1_1_mutex.html#a9bd52a48320fd7b6db8a78037aad276e',1,'sf::Mutex']]]
+  ['move',['Move',['../class_player.html#af7683efbf8f53f8e1e2943e1a6f0a759',1,'Player::Move()'],['../class_projectile.html#a79ea641a0235cce7281fed37c220cf53',1,'Projectile::Move()'],['../class_test_projectile.html#a353c60e7e8f07a576bbd5ce7877a920e',1,'TestProjectile::Move()']]]
 ];

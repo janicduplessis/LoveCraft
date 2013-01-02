@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<title>LoveCraft:  Fichier source de C:/Users/Janic/Documents/LoveCraft/lovecraft/src/engine/ai.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">LoveCraft
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.8.2 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>Page&#160;principale</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Recherche" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>Liste&#160;des&#160;fichiers</span></a></li>
+    </ul>
+  </div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Tout</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Fonctions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Définitions de type</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Énumérations</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_03ea7e1f447e206a9ba50aa1ffd2a21b.html">lovecraft</a></li><li class="navelem"><a class="el" href="dir_d07ae656d675a18f21e5524277e66db7.html">src</a></li><li class="navelem"><a class="el" href="dir_4fc27a38ea0915d7d915ce14d7d27472.html">engine</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">ai.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;﻿#ifndef AI_H__</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define AI_H__</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;player.h&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;info.h&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;game/npc.h&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;util/vector3.h&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#define DETECTION_RANGE 10</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define RUN_AWAY_RANGE 20</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PATROL_RANGE 30</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">class </span><a class="code" href="class_npc.html">Npc</a>;</div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="code" href="class_a_i.html">   18</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_a_i.html" title="Intelligence Artificielle.">AI</a></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;{</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="code" href="class_a_i.html#a065ad8725d67f32b974e157e32790754">   31</a></span>&#160;    <span class="keyword">enum</span> <a class="code" href="class_a_i.html#a065ad8725d67f32b974e157e32790754" title="États de l&#39;AI.">State</a></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        STATE_RUN_AWAY,</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        STATE_PATROL,</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        STATE_FOLLOW,</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        STATE_ATTACK,</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        STATE_STAY,</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        STATE_NONE</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    };</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="code" href="class_a_i.html#a742fc46e89b6da576e2879d075b4a30d">   48</a></span>&#160;    <span class="keyword">enum</span> <a class="code" href="class_a_i.html#a742fc46e89b6da576e2879d075b4a30d" title="Types d&#39;ai.">AiType</a></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        TYPE_PASSIVE_HARMLESS,</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        TYPE_PASSIVE,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        TYPE_AGGRESSIVE</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    };</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <a class="code" href="class_a_i.html#a8267d355ae1e1dec1d7ea2a860d9f172">AI</a>(<a class="code" href="class_a_i.html#a742fc46e89b6da576e2879d075b4a30d" title="Types d&#39;ai.">AiType</a> type, <a class="code" href="class_npc.html">Npc</a>* npc, <a class="code" href="class_player.html" title="classe représentent le joueur dans l&#39;environnement 3D">Player</a>* player = 0);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="class_a_i.html#a66a8645f0c27285cd75346f2c2bbfb14">~AI</a>();</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_a_i.html#a75696904a7ff7ec1045d6dbfc7b9403b">StateChanged</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="class_a_i.html#a065ad8725d67f32b974e157e32790754" title="États de l&#39;AI.">State</a> <a class="code" href="class_a_i.html#aaafdf2b5aff4020d469e5f5c7970be31">GetState</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_a_i.html#a138df641a957bc41498f466df6f550cc">Process</a>(<span class="keywordtype">float</span> elapsedTime);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_a_i.html#a48485ec309724e9a2f7ed0fb21227eff">Patrol</a>();</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> RunAway();</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> Attack();</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> Follow();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> Stay();</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> CheckVision(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; pos) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_a_i.html#a12ede073460af8da751b432bb3916c44">CheckCollision</a>(<a class="code" href="class_vector3.html">Vector3f</a>&amp; pos) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_a_i.html#a91ccda8cd87be47c998aa837868402dd">CheckPlayer</a>(<span class="keywordtype">float</span> detectionRange, <span class="keywordtype">bool</span> enableLOS = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> CheckAttack();</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> <a class="code" href="class_a_i.html#aeb13e6542e37a4477ec783dfab2d19a2">PlayerDistance</a>();</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <a class="code" href="class_player.html" title="classe représentent le joueur dans l&#39;environnement 3D">Player</a>* m_player;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <a class="code" href="class_a_i.html#a065ad8725d67f32b974e157e32790754" title="États de l&#39;AI.">State</a> m_currentState;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <a class="code" href="class_a_i.html#a065ad8725d67f32b974e157e32790754" title="États de l&#39;AI.">State</a> m_lastState;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <a class="code" href="class_a_i.html#a742fc46e89b6da576e2879d075b4a30d" title="Types d&#39;ai.">AiType</a> m_type;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <a class="code" href="class_npc.html">Npc</a>* m_npc;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a>* m_patrolDestination;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> m_posIni;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keywordtype">bool</span> m_stateChanged;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;};</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="preprocessor">#endif</span></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Généré le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.2
+</small></address>
+</body>
+</html>

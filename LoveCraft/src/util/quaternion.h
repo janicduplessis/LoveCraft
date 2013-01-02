@@ -1,4 +1,4 @@
-#ifndef	QUATERNION_H__
+ï»¿#ifndef	QUATERNION_H__
 #define QUATERNION_H__
 
 #define TOLERANCE 0.00001f
@@ -9,7 +9,7 @@
 /**
  * @brief Quaternion
  * 
- * Sphere en 4 dimentions qui représente un angle (w) de
+ * Sphere en 4 dimentions qui reprÃ©sente un angle (w) de
  * rotation autour d'un axe quelconque (x, y, z)
  * 
  * q = w + xi + yj + zk
@@ -20,7 +20,7 @@ class Quaternion
 {
 public:
 	/**
-	 * Quaternion initialisé
+	 * Quaternion initialisÃ©
 	 */
 	Quaternion(float w = 1, float x = 0, float y = 0, float z = 0);
 
@@ -44,7 +44,7 @@ public:
 
 	/**
 	 * Doit etre presque egal a 1 sinon
-	 * le quaternion doit etre normalisé
+	 * le quaternion doit etre normalisÃ©
 	 */
 
 	Quaternion GetConjugate() const;

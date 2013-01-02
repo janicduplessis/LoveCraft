@@ -1,4 +1,4 @@
-#include "pig.h"
+﻿#include "pig.h"
 
 Pig::Pig() : Npc()
 {

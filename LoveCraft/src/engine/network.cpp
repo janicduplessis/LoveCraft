@@ -1,4 +1,4 @@
-#include "define.h"
+ï»¿#include "define.h"
 #include "network.h"
 #include <iostream>
 
@@ -21,16 +21,16 @@ bool Nwork::Send(sf::Packet& pack)
 bool Nwork::Receive(sf::Packet& packet)
 {
 	//Test en Udp
-	//Bind du socket (près a recevoir les données)
+	//Bind du socket (prÃ¨s a recevoir les donnÃ©es)
 	m_socket.bind(m_port);
 	//Instanciation des variables de l'envoyeur
 	sf::Packet pack;
 	sf::IpAddress adress;
 	unsigned short port;
-	//Vérification si le packet a bien été reçu
+	//VÃ©rification si le packet a bien Ã©tÃ© reÃ§u
 	if (m_socket.receive(pack, adress, port))
 	{
-		//S'il a été reçu, assignation du nouveau packet
+		//S'il a Ã©tÃ© reÃ§u, assignation du nouveau packet
 		packet = pack;
 		return true;
 	}

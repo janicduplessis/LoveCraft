@@ -1,4 +1,4 @@
-#ifndef ARRAY2D_H__
+﻿#ifndef ARRAY2D_H__
 #define ARRAY2D_H__
 
 #include <cassert>
@@ -21,7 +21,7 @@ public:
 
 	/**
 	 * Assigne une valeur a tout le tableau
-	 * @param value		valeur assign�e
+	 * @param value		valeur assignée
 	 */
 	void Reset(const T& value);
 

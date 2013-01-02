@@ -1,4 +1,4 @@
-#include "camera.h"
+﻿#include "camera.h"
 
 Camera::Camera( Vector3f position, Vector2f rotation) : m_pos(position), m_rot(rotation), m_mode(CAM_FIRST_PERSON)
 {
@@ -14,7 +14,7 @@ void Camera::TurnTopBottom ( float value )
 {
 	//Assignation de la nouvelle rotation
 	float newRotation = m_rot.x + value * MOUSE_SENSIBILITY;
-	//Test de la rotation entre les limites �tablies
+	//Test de la rotation entre les limites établies
 	if (newRotation >= -85.f && newRotation <= 85.f)
 		m_rot.x = newRotation;
 }

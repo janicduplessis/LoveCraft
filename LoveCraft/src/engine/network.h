@@ -1,4 +1,4 @@
-#ifndef NWORK_H_
+﻿#ifndef NWORK_H_
 #define NWORK_H_
 
 #include <SFML/Network.hpp>

@@ -1,4 +1,4 @@
-#ifndef INTERFACE_H_
+ï»¿#ifndef INTERFACE_H_
 #define INTERFACE_H_
 
 enum IMAGE
@@ -38,7 +38,7 @@ enum SPELL_IMAGE
 };
 
 /**
-* Palette de couleurs possibles pour le texte une fois ajoutées via AddFontColor()
+* Palette de couleurs possibles pour le texte une fois ajoutÃ©es via AddFontColor()
 */
 enum COLOR
 {
@@ -51,13 +51,13 @@ enum COLOR
 };
 
 // Valeurs de l'interface
-// Hauteur du cadre inférieur de l'interface
+// Hauteur du cadre infÃ©rieur de l'interface
 #define INTERFACE_BOTTOM_HEIGHT		64
 // Largeur du cadre de gauche de l'interface
 #define INTERFACE_SIDE_LEFT_WIDTH	64
 // Largeur du cadre de droite de l'interface
 #define INTERFACE_SIDE_RIGHT_WIDTH	32
-// Hauteur du cadre supérieur de l'interface
+// Hauteur du cadre supÃ©rieur de l'interface
 #define INTERFACE_TOP_HEIGHT		32
 // Nombre de sort disponible dans la barre de sorts (max 10)
 #define SPELL_BAR_SPELL_NUMBER		10
@@ -118,7 +118,7 @@ enum COLOR
 #define LBL_EXP_POSITION_Y			26
 #define LBL_EXP_SIZE_W				118
 #define LBL_EXP_SIZE_H				20
-// Taille de la barre d'énergie
+// Taille de la barre d'Ã©nergie
 #define PGB_ENERGY_NAME				"pgb_energy"
 #define PGB_ENERGY_BACKGROUND		true
 #define PGB_ENERGY_BORDER_SIZE		2

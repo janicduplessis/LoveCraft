@@ -1,4 +1,4 @@
-#ifndef BLOCKINFO_H__
+﻿#ifndef BLOCKINFO_H__
 #define BLOCKINFO_H__
 
 #include "define.h"

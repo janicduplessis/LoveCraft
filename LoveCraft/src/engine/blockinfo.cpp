@@ -1,4 +1,4 @@
-#include "blockinfo.h"
+﻿#include "blockinfo.h"
 #include <iostream>
 
 BlockInfo::BlockInfo(BlockType type, const std::string& nom) : m_type(type), m_nom(nom), m_durabilite(1)

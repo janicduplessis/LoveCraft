@@ -36,7 +36,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Page&#160;principale</span></a></li>
-      <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Fichiers</span></a></li>
       <li>
@@ -70,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Tout</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Fichiers</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Fonctions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Définitions de type</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Énumérations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Valeurs énumérées</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Groupes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Tout</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Fonctions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Définitions de type</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Énumérations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -91,13 +90,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
   <tr bgcolor="#f0f0f0"class="even"><td class="entry"><b>Afficher</b>() const  (défini dans <a class="el" href="class_block_info.html">BlockInfo</a>)</td><td class="entry"><a class="el" href="class_block_info.html">BlockInfo</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>BlockInfo</b>(BlockType type, const std::string &amp;nom) (défini dans <a class="el" href="class_block_info.html">BlockInfo</a>)</td><td class="entry"><a class="el" href="class_block_info.html">BlockInfo</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0"class="even"><td class="entry"><b>GetDurabilite</b>() const  (défini dans <a class="el" href="class_block_info.html">BlockInfo</a>)</td><td class="entry"><a class="el" href="class_block_info.html">BlockInfo</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>GetType</b>() const  (défini dans <a class="el" href="class_block_info.html">BlockInfo</a>)</td><td class="entry"><a class="el" href="class_block_info.html">BlockInfo</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"class="even"><td class="entry"><b>SetDurabilite</b>(int durabilite) (défini dans <a class="el" href="class_block_info.html">BlockInfo</a>)</td><td class="entry"><a class="el" href="class_block_info.html">BlockInfo</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>GetTextureIndex</b>() const  (défini dans <a class="el" href="class_block_info.html">BlockInfo</a>)</td><td class="entry"><a class="el" href="class_block_info.html">BlockInfo</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"class="even"><td class="entry"><b>GetType</b>() const  (défini dans <a class="el" href="class_block_info.html">BlockInfo</a>)</td><td class="entry"><a class="el" href="class_block_info.html">BlockInfo</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>SetDurabilite</b>(int durabilite) (défini dans <a class="el" href="class_block_info.html">BlockInfo</a>)</td><td class="entry"><a class="el" href="class_block_info.html">BlockInfo</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"class="even"><td class="entry"><b>SetTextureIndex</b>(TextureArray::TextureIndex index) (défini dans <a class="el" href="class_block_info.html">BlockInfo</a>)</td><td class="entry"><a class="el" href="class_block_info.html">BlockInfo</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>~BlockInfo</b>() (défini dans <a class="el" href="class_block_info.html">BlockInfo</a>)</td><td class="entry"><a class="el" href="class_block_info.html">BlockInfo</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Généré le Lundi Novembre 19 2012 02:32:52 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+Généré le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

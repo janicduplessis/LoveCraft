@@ -1,4 +1,4 @@
-#ifndef CHUNK_H__
+﻿#ifndef CHUNK_H__
 #define CHUNK_H__
 
 #include "define.h"

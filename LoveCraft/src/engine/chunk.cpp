@@ -1,4 +1,4 @@
-#include "chunk.h"
+ï»¿#include "chunk.h"
 
 Chunk::Chunk(Shader* shader) : m_pos(0), m_blocks(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z), m_chunkMesh(shader)
 {
@@ -128,7 +128,7 @@ void Chunk::Update()
 
 					BlockType bt = GetBloc (x, y, z);
 
-					// Regarde si chaque face à besoin d'être optimisé car
+					// Regarde si chaque face Ã  besoin d'Ãªtre optimisÃ© car
 					// l'algorithme d'optimisation doit commencer sur une face
 					// visible
 					if (bt == BTYPE_AIR || y == 0)
@@ -203,12 +203,12 @@ void Chunk::Render() const
 
 void Chunk::CreateOptimizedTopBottomFace(MeshFace face, ChunkMesh::VertexData* vd, int& vertexCount, ChunkMesh::TextureData* td, int x, int y, int z, BlockType bt, Array3d<bool>& facesOptimized)
 {
-	// Itérateurs : i = x, j = z
-	// Conditions d'arrêt : 
-	//  - On est arrivé à la fin du chunk (CHUNK_SIZE - 1)
-	//  - Le prochain bloc n'est pas du même type que @bt
+	// ItÃ©rateurs : i = x, j = z
+	// Conditions d'arrÃªt : 
+	//  - On est arrivÃ© Ã  la fin du chunk (CHUNK_SIZE - 1)
+	//  - Le prochain bloc n'est pas du mÃªme type que @bt
 	//  - Le bloc au dessus du prochain bloc n'est pas de l'air
-	//  - Le prochain bloc est déja optimisé
+	//  - Le prochain bloc est dÃ©ja optimisÃ©
 
 	int endX = -1;
 	int endZ = -1;
@@ -219,16 +219,16 @@ void Chunk::CreateOptimizedTopBottomFace(MeshFace face, ChunkMesh::VertexData* v
 		// Parcourt le chunk en z
 		for(int j = z; j < CHUNK_SIZE_Z; ++j)
 		{
-			// Si une des conditions d'arrêt est vraie
+			// Si une des conditions d'arrÃªt est vraie
 			if ((j == CHUNK_SIZE_Z - 1) || (GetBloc(i, y, j + 1) != bt) || (GetBloc(i, y + (face == FACE_BOTTOM) ? -1 : 1, j + 1) != BTYPE_AIR) || facesOptimized.Get(i, y, j + 1))
 			{
-				// Trouve la plus petite position en Y qui répond à la condition d'arrêt
+				// Trouve la plus petite position en Y qui rÃ©pond Ã  la condition d'arrÃªt
 				if (endZ == -1 || j < endZ)
 					endZ = j;
 				break;
 			}
 		}
-		// Si une des conditions d'arrêt est vraie
+		// Si une des conditions d'arrÃªt est vraie
 		if ((i == CHUNK_SIZE_X - 1) || (GetBloc(i + 1, y, z) != bt) || (GetBloc(i + 1, y + (face == FACE_BOTTOM) ? -1 : 1, z) != BTYPE_AIR) || facesOptimized.Get(i + 1, y, z))
 		{
 			endX = i;
@@ -236,7 +236,7 @@ void Chunk::CreateOptimizedTopBottomFace(MeshFace face, ChunkMesh::VertexData* v
 		}
 	}
 
-	// Update le tableau avec les nouveaux blocs optimisés
+	// Update le tableau avec les nouveaux blocs optimisÃ©s
 	for (int i = x; i <= endX; ++i)
 	{
 		for (int j = z; j <= endZ; ++j)
@@ -257,7 +257,7 @@ void Chunk::CreateOptimizedTopBottomFace(MeshFace face, ChunkMesh::VertexData* v
 
 	float index = Info::Get().GetBlocInfo(bt)->GetTextureIndex();
 
-	// Crée les vertices de la face
+	// CrÃ©e les vertices de la face
 	if(face == FACE_TOP)
 	{
 		td[vertexCount] = ChunkMesh::TextureData(0, 0, index);
@@ -288,12 +288,12 @@ void Chunk::CreateOptimizedTopBottomFace(MeshFace face, ChunkMesh::VertexData* v
 
 void Chunk::CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* vd, int& vertexCount, ChunkMesh::TextureData* td, int x, int y, int z, BlockType bt, Array3d<bool>& facesOptimized)
 {
-	// Itérateurs : i = x, j = y
-	// Conditions d'arrêt : 
-	//  - On est arrivé à la fin du chunk (CHUNK_SIZE - 1)
-	//  - Le prochain bloc n'est pas du même type que @bt
+	// ItÃ©rateurs : i = x, j = y
+	// Conditions d'arrÃªt : 
+	//  - On est arrivÃ© Ã  la fin du chunk (CHUNK_SIZE - 1)
+	//  - Le prochain bloc n'est pas du mÃªme type que @bt
 	//  - Le bloc au dessus du prochain bloc n'est pas de l'air
-	//  - Le prochain bloc est déja optimisé
+	//  - Le prochain bloc est dÃ©ja optimisÃ©
 
 	int endX = -1;
 	int endY = -1;
@@ -304,16 +304,16 @@ void Chunk::CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* v
 		// Parcourt le chunk en y
 		for(int j = y; j < CHUNK_SIZE_Y; ++j)
 		{
-			// Si une des conditions d'arrêt est vraie
+			// Si une des conditions d'arrÃªt est vraie
 			if ((j == CHUNK_SIZE_Y - 1) || (GetBloc(i, j + 1, z) != bt) || (GetBloc(i, j + 1, z + (face == FACE_BACK) ? -1 : 1) != BTYPE_AIR) || facesOptimized.Get(i, j + 1, z))
 			{
-				// Trouve la plus petite position en Y qui répond à la condition d'arrêt
+				// Trouve la plus petite position en Y qui rÃ©pond Ã  la condition d'arrÃªt
 				if (endY == -1 || j < endY)
 					endY = j;
 				break;
 			}
 		}
-		// Si une des conditions d'arrêt est vraie
+		// Si une des conditions d'arrÃªt est vraie
 		if ((i == CHUNK_SIZE_X - 1) || (GetBloc(i + 1, y, z) != bt) || (GetBloc(i + 1, y, z + (face == FACE_BACK) ? -1 : 1) != BTYPE_AIR) || facesOptimized.Get(i + 1, y, z))
 		{
 			endX = i;
@@ -321,7 +321,7 @@ void Chunk::CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* v
 		}
 	}
 
-	// Update le tableau avec les nouveaux blocs optimisés
+	// Update le tableau avec les nouveaux blocs optimisÃ©s
 	for (int i = x; i <= endX; ++i)
 	{
 		for (int j = y; j <= endY; ++j)
@@ -342,7 +342,7 @@ void Chunk::CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* v
 
 	float index = Info::Get().GetBlocInfo(bt)->GetTextureIndex();
 
-	// Crée les vertices de la face
+	// CrÃ©e les vertices de la face
 	if(face == FACE_FRONT)
 	{
 		td[vertexCount] = ChunkMesh::TextureData(0, 0, index);
@@ -374,12 +374,12 @@ void Chunk::CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* v
 
 void Chunk::CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* vd, int& vertexCount, ChunkMesh::TextureData* td, int x, int y, int z, BlockType bt, Array3d<bool>& facesOptimized)
 {
-	// Itérateurs : i = z, j = y
-	// Conditions d'arrêt : 
-	//  - On est arrivé à la fin du chunk (CHUNK_SIZE - 1)
-	//  - Le prochain bloc n'est pas du même type que @bt
+	// ItÃ©rateurs : i = z, j = y
+	// Conditions d'arrÃªt : 
+	//  - On est arrivÃ© Ã  la fin du chunk (CHUNK_SIZE - 1)
+	//  - Le prochain bloc n'est pas du mÃªme type que @bt
 	//  - Le bloc au dessus du prochain bloc n'est pas de l'air
-	//  - Le prochain bloc est déja optimisé
+	//  - Le prochain bloc est dÃ©ja optimisÃ©
 
 	int endZ = -1;
 	int endY = -1;
@@ -390,18 +390,18 @@ void Chunk::CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* v
 		// Parcourt le chunk en y
 		for(int j = y; j < CHUNK_SIZE_Y; ++j)
 		{
-			// Si une des conditions d'arrêt est vraie
+			// Si une des conditions d'arrÃªt est vraie
 			if ((j == CHUNK_SIZE_Z - 1) || (GetBloc(x, j + 1, i) != bt)
 				|| (GetBloc(x + (face == FACE_LEFT) ? - 1 : 1, j + 1, i) != BTYPE_AIR) 
 				|| (facesOptimized.Get(x, j + 1, i)))
 			{
-				// Trouve la plus petite position en Y qui répond à la condition d'arrêt
+				// Trouve la plus petite position en Y qui rÃ©pond Ã  la condition d'arrÃªt
 				if (endY == -1 || j < endY)
 					endY = j;
 				break;
 			}
 		}
-		// Si une des conditions d'arrêt est vraie
+		// Si une des conditions d'arrÃªt est vraie
 		if ((i == CHUNK_SIZE_Z - 1) || (GetBloc(x, y, i + 1) != bt) || 
 			(GetBloc(x + (face == FACE_LEFT) ? - 1 : 1, y, i + 1) != BTYPE_AIR) || 
 			facesOptimized.Get(x, y, i + 1))
@@ -411,7 +411,7 @@ void Chunk::CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* v
 		}
 	}
 
-	// Update le tableau avec les nouveaux blocs optimisés
+	// Update le tableau avec les nouveaux blocs optimisÃ©s
 	for (int i = z; i <= endZ; ++i)
 	{
 		for (int j = y; j <= endY; ++j)
@@ -432,7 +432,7 @@ void Chunk::CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* v
 	y -= 2.f;
 	z += pos.y;
 
-	// Crée les vertices de la face
+	// CrÃ©e les vertices de la face
 	if(face == FACE_LEFT)
 	{
 		td[vertexCount] = ChunkMesh::TextureData(0, 0, index);

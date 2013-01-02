@@ -1,4 +1,4 @@
-#include "texturearray.h"
+ï»¿#include "texturearray.h"
 #include "util/tool.h"
 
 
@@ -66,7 +66,7 @@ void TextureArray::Generate()
 		}
 	}
 
-	// Passe le data à la carte graphique et génère les mipmaps
+	// Passe le data Ã  la carte graphique et gÃ©nÃ¨re les mipmaps
 	int sliceCount = m_textureList.size();
 
 	glGenTextures(1, &m_texture);
@@ -81,7 +81,7 @@ void TextureArray::Generate()
 	glTexImage3D(GL_TEXTURE_2D_ARRAY,0,GL_RGBA,m_textureSize,m_textureSize,sliceCount,0,GL_RGBA,GL_UNSIGNED_BYTE,m_data);
 	CHECK_GL_ERROR();
 
-	// Delete le data de la mémoire
+	// Delete le data de la mÃ©moire
 	delete m_data;
 }
 

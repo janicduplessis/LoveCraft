@@ -1,4 +1,4 @@
-#include "tool.h"
+ï»¿#include "tool.h"
 #include "define.h"
 #include <cassert>
 #include <iostream>
@@ -6,9 +6,9 @@
 
 void Tool::CheckTypes()
 {
-    // Vérifier que les types définis dans define.h ont vraiment la bonne taille
-    // Cette vérification se révèlera utile si on change de compilateur/architecture
-    // et qu'on oublie de vérifier la taille des types
+    // VÃ©rifier que les types dÃ©finis dans define.h ont vraiment la bonne taille
+    // Cette vÃ©rification se rÃ©vÃ¨lera utile si on change de compilateur/architecture
+    // et qu'on oublie de vÃ©rifier la taille des types
     assert(sizeof(uint8) == 1);
     assert(sizeof(uint16) == 2);
     assert(sizeof(uint32) == 4);

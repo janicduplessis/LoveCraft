@@ -1,4 +1,4 @@
-#include "info.h"
+ï»¿#include "info.h"
 #include "engine/gl/ui/label.h"
 Info::Info()
 {
@@ -24,7 +24,7 @@ Info::~Info()
 
 Info& Info::Get()
 {
-	// Si info n'est pas instancié
+	// Si info n'est pas instanciÃ©
 	if (!m_info) {
 		// instancie
 		m_info = new Info;
@@ -35,7 +35,7 @@ Info& Info::Get()
 
 Info* Info::GetPtr()
 {
-	// Si info n'est pas instancié
+	// Si info n'est pas instanciÃ©
 	if (!m_info) {
 		// instancie
 		m_info = new Info;

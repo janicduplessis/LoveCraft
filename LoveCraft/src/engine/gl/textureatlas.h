@@ -1,4 +1,4 @@
-#ifndef TEXTUREATLAS_H__
+﻿#ifndef TEXTUREATLAS_H__
 #define TEXTUREATLAS_H__
 #include "define.h"
 #include <string>

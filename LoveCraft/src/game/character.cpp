@@ -1,4 +1,4 @@
-#include "character.h"
+ï»¿#include "character.h"
 
 
 Character::Character() : m_name("DeFacto"), m_healthMax(HEALTH_MAX), m_energyMax(ENERGY_MAX), m_manaMax(MANA_MAX),
@@ -29,13 +29,13 @@ void Character::PassiveRegen()
 void Character::SetHealth(const float value)
 {
 	float increment = value;
-	//vérification que l'ajout ne dépasse pas le maximum
+	//vÃ©rification que l'ajout ne dÃ©passe pas le maximum
 	if (m_health + increment >= m_healthMax)
 	{
 		m_health = m_healthMax;
 		return;
 	}
-	//Vérification que l'ajout ne dépasse pas 0
+	//VÃ©rification que l'ajout ne dÃ©passe pas 0
 	if (m_health + increment <= 0)
 	{
 		m_health = 0;
@@ -46,13 +46,13 @@ void Character::SetHealth(const float value)
 void Character::SetEnergy(const float value)
 {
 	float increment = value;
-	//vérification que l'ajout ne dépasse pas le maximum
+	//vÃ©rification que l'ajout ne dÃ©passe pas le maximum
 	if (m_energy + increment >= m_energyMax)
 	{
 		m_energy = m_energyMax;
 		return;
 	}
-	//Vérification que l'ajout ne dépasse pas 0
+	//VÃ©rification que l'ajout ne dÃ©passe pas 0
 	if (m_energy + increment <= 0)
 	{
 		m_energy = 0;
@@ -63,13 +63,13 @@ void Character::SetEnergy(const float value)
 void Character::SetMana(const float value)
 {
 	float increment = value;
-	//vérification que l'ajout ne dépasse pas le maximum
+	//vÃ©rification que l'ajout ne dÃ©passe pas le maximum
 	if (m_mana + increment >= m_manaMax)
 	{
 		m_mana = m_manaMax;
 		return;
 	}
-	//Vérification que l'ajout ne dépasse pas 0
+	//VÃ©rification que l'ajout ne dÃ©passe pas 0
 	if (m_mana + increment <= 0)
 	{
 		m_mana = 0;

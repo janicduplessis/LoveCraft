@@ -1,4 +1,4 @@
-#ifndef ENGINE_H__
+ï»¿#ifndef ENGINE_H__
 #define ENGINE_H__
 
 #include "define.h"
@@ -27,12 +27,12 @@ class Engine : public OpenglContext
 {
 public:
 	/**
-	* Constructeur par défaut de la classe
+	* Constructeur par dÃ©faut de la classe
 	*/
 	Engine();
 
 	/**
-	* Destructeur par défaut de la classe
+	* Destructeur par dÃ©faut de la classe
 	*/
 	virtual ~Engine();
 
@@ -53,7 +53,7 @@ public:
 
 	virtual void DeInit();
 	/**
-	* Chargement des ressources en mémoire
+	* Chargement des ressources en mÃ©moire
 	*/
 	virtual void LoadResource();
 
@@ -68,51 +68,51 @@ public:
 	virtual void Render(float elapsedTime);
 
 	/**
-	* Affiche le texte donné à l'écran 
+	* Affiche le texte donnÃ© Ã  l'Ã©cran 
 	* 
-	* @param x		coordonnée en X
-	* @param y		coordonnée en Y
-	* @param t		texte à afficher
+	* @param x		coordonnÃ©e en X
+	* @param y		coordonnÃ©e en Y
+	* @param t		texte Ã  afficher
 	*/
 	virtual void PrintText(unsigned int x, unsigned int y, const std::string& t);
 
 	/**
-	* Évènement appelé lorsqu'une touche du clavier est enfoncée
+	* Ã‰vÃ¨nement appelÃ© lorsqu'une touche du clavier est enfoncÃ©e
 	*
-	* @param key	 Touche qui a déclenché l'évènement
+	* @param key	 Touche qui a dÃ©clenchÃ© l'Ã©vÃ¨nement
 	*/
 	virtual void KeyPressEvent(unsigned char key);
 
 	/**
-	* Évènement appelé lorsqu'une touche du clavier est relâchée
+	* Ã‰vÃ¨nement appelÃ© lorsqu'une touche du clavier est relÃ¢chÃ©e
 	*
-	* @param key	Touche qui a déclenché l'évènement
+	* @param key	Touche qui a dÃ©clenchÃ© l'Ã©vÃ¨nement
 	*/
 	virtual void KeyReleaseEvent(unsigned char key);
 
 	/**
-	* Évènement appelé lorsque la position de la souris est modifiée
+	* Ã‰vÃ¨nement appelÃ© lorsque la position de la souris est modifiÃ©e
 	*
-	* @param x Position en X de la souris au moment du déclenchement de l'évènement
-	* @param y Position en Y de la souris au moment du déclenchement de l'évènement
+	* @param x Position en X de la souris au moment du dÃ©clenchement de l'Ã©vÃ¨nement
+	* @param y Position en Y de la souris au moment du dÃ©clenchement de l'Ã©vÃ¨nement
 	*/
 	virtual void MouseMoveEvent(int x, int y);
 
 	/**
-	* Évènement appelé lorsqu'une touche de la souris est enfoncée
+	* Ã‰vÃ¨nement appelÃ© lorsqu'une touche de la souris est enfoncÃ©e
 	*
-	* @param button Bouton qui a déclenché l'évènement
-	* @param x Coordonnée en X de l'endroit d'où l'évènement a été déclenché
-	* @param y Coordonnée en Y de l'endroit d'où l'évènement a été déclenché
+	* @param button Bouton qui a dÃ©clenchÃ© l'Ã©vÃ¨nement
+	* @param x CoordonnÃ©e en X de l'endroit d'oÃ¹ l'Ã©vÃ¨nement a Ã©tÃ© dÃ©clenchÃ©
+	* @param y CoordonnÃ©e en Y de l'endroit d'oÃ¹ l'Ã©vÃ¨nement a Ã©tÃ© dÃ©clenchÃ©
 	*/
 	virtual void MousePressEvent(const MOUSE_BUTTON &button, int x, int y);
 
 	/**
-	* Évènement appelé lorsqu'une touche de la souris est relâchée
+	* Ã‰vÃ¨nement appelÃ© lorsqu'une touche de la souris est relÃ¢chÃ©e
 	*
-	* @param button Bouton qui a déclenché l'évènement
-	* @param x Coordonnée en X de l'endroit d'où l'évènement a été déclenché
-	* @param y Coordonnée en Y de l'endroit d'où l'évènement a été déclenché
+	* @param button Bouton qui a dÃ©clenchÃ© l'Ã©vÃ¨nement
+	* @param x CoordonnÃ©e en X de l'endroit d'oÃ¹ l'Ã©vÃ¨nement a Ã©tÃ© dÃ©clenchÃ©
+	* @param y CoordonnÃ©e en Y de l'endroit d'oÃ¹ l'Ã©vÃ¨nement a Ã©tÃ© dÃ©clenchÃ©
 	*/
 	virtual void MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y);
 
@@ -128,12 +128,12 @@ private:
 	virtual void Render2D(float elapsedTime);
 	/**
 	* Render un element au niveau de l'interface
-	* avec les données spécifiées. La position doit debutee
+	* avec les donnÃ©es spÃ©cifiÃ©es. La position doit debutee
 	* a partir du point en bas a droite de l'element
 	*
 	* @param position		Vector2<float> Position en X et Y de l'element
 	* @param size			Vector2<float> Taille de l'element (largeur, hauteur)
-	* @param texture		Texture qui doit être utiliser avec l'element
+	* @param texture		Texture qui doit Ãªtre utiliser avec l'element
 	* 
 	*/
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat = true);
@@ -147,8 +147,8 @@ private:
 
 	//Stockage des nouveaux points pour permettre de render
 	//dans la zone de jeu (sprite, images, etc)
-	//À utiliser au lieu de Height() et Width() comme
-	//point de départ.
+	//Ã€ utiliser au lieu de Height() et Width() comme
+	//point de dÃ©part.
 	Vector2i m_playScreenTopLeft;
 	Vector2i m_playScreenTopRight;
 	Vector2i m_playScreenBotRight;

@@ -1,4 +1,4 @@
-#ifndef PIG_H__
+﻿#ifndef PIG_H__
 #define PIG_H__
 
 #include "npc.h"

@@ -1,4 +1,4 @@
-#ifndef DEFINE_H__
+ï»¿#ifndef DEFINE_H__
 #define DEFINE_H__
 
 #include <GL/glew.h>
@@ -30,21 +30,21 @@ typedef long long int64;
 #define VIEW_DISTANCE				64
 
 // Options
-// Musique à l'ouverture du programme
+// Musique Ã  l'ouverture du programme
 #define OPTION_MUSIC_STARTING_VALUE	false
-// Son à l'ouverture du programme
+// Son Ã  l'ouverture du programme
 #define OPTION_SOUND_STARTING_VALUE	true
-// Montrer les informations à l'ouverture du programme
+// Montrer les informations Ã  l'ouverture du programme
 #define OPTION_INFO_STARTING_VALUE	true
 
 // Nombre de sons que chaque type de pas a
 #define SOUND_FOOT_NUMBER			4
-// Nombre de temps en secondes qui devront être écoulées 
+// Nombre de temps en secondes qui devront Ãªtre Ã©coulÃ©es 
 // avant qu'un autre son se fasse jouer
 #define SOUND_FOOT_TIMEOUT			0.4f
 
 // Valeurs en lien avec les particles
-// Nombre maximum de particles à la fois
+// Nombre maximum de particles Ã  la fois
 #define PARTICLE_COUNT				500
 
 // Valeurs quelconques
@@ -52,53 +52,53 @@ typedef long long int64;
 
 // Valeurs du jeu
 // Valeurs de vitesse (m/s)
-// Vitesse initiale de déplacement (obselete)
+// Vitesse initiale de dÃ©placement (obselete)
 #define MOUVEMENT_SPEED_INI			4.f
-// Vitesse maximale en mode déplacement normal
+// Vitesse maximale en mode dÃ©placement normal
 #define MOUVEMENT_SPEED_MAX			8.f
-// Multiplicateur de la vitesse maximale en mode déplacement rapide
+// Multiplicateur de la vitesse maximale en mode dÃ©placement rapide
 #define MOUVEMENT_SPEED_MAX_RUN_M	1.5f
-// Multiplicateur de la vitesse maximale en mode déplacement lent
+// Multiplicateur de la vitesse maximale en mode dÃ©placement lent
 #define MOUVEMENT_SPEED_SLOW_M		0.6f
-// Multiplicateur de la vitesse maximale en mode déplacement arrière
+// Multiplicateur de la vitesse maximale en mode dÃ©placement arriÃ¨re
 #define MOUVEMENT_SPEED_BACKWARD_M	0.4f
-// Perte de vitesse à chaque tour de boucle. Modifier cette valeur changera la vitesse à laquelle le joueur ralenti
+// Perte de vitesse Ã  chaque tour de boucle. Modifier cette valeur changera la vitesse Ã  laquelle le joueur ralenti
 #define MOUVEMENT_SPEED_DECAY		0.9f
 // Vitesse initiale acquise en santant
 #define MOUVEMENT_SPEED_JUMP		6.5f
 
 // Valeurs d'acceleration (m/s^2)
-// Accélération de base
+// AccÃ©lÃ©ration de base
 #define MOUVEMENT_ACCELERATION			12.f
-// Multiplicateur de l'accélération lorsqu'on est dans les airs
+// Multiplicateur de l'accÃ©lÃ©ration lorsqu'on est dans les airs
 #define MOVUEMENT_ACCELERATION_AIR_M	0.4f
-// Multiplicateur de l'accélération lorsque le joueur coure
+// Multiplicateur de l'accÃ©lÃ©ration lorsque le joueur coure
 #define MOUVEMENT_ACCELERATION_RUN_M	1.5f
-// Accélération en Y représentant la gravité
+// AccÃ©lÃ©ration en Y reprÃ©sentant la gravitÃ©
 #define GRAVITY							9.81f
 
 // Vie (v/s)
 // Maximum de vie
 #define HEALTH_MAX					100
-// Régénération passive de la vie
+// RÃ©gÃ©nÃ©ration passive de la vie
 #define HEALTH_PASSIVE_REGEN		0.01f
 // Multiplicateur de perte de vie en fonction de la vitesse lors d'un saut trop haut
 #define HEALTH_GRAVITY_LOST			0.2f
 
 // Energie (e/s)
-// Maximum d'énergie
+// Maximum d'Ã©nergie
 #define ENERGY_MAX					150
-// Vitesse de régénération de l'énergie
+// Vitesse de rÃ©gÃ©nÃ©ration de l'Ã©nergie
 #define ENERGY_REGEN				0.3f
-// Vitesse que le joueur ne doit pas dépasser s'il veut regagner l'énergie
+// Vitesse que le joueur ne doit pas dÃ©passer s'il veut regagner l'Ã©nergie
 #define ENERGY_REGEN_THRESHOLD		5.f
-// Vitesse de dépense de l'énergie
+// Vitesse de dÃ©pense de l'Ã©nergie
 #define ENERGY_SPENDING				0.5f
 
 // Mana (m/s)
 // Maximum de mana
 #define MANA_MAX					50
-// Régénération passive de la mana
+// RÃ©gÃ©nÃ©ration passive de la mana
 #define MANA_PASSIVE_REGEN			0.05f
 
 // Valeurs des options
@@ -109,7 +109,7 @@ typedef long long int64;
 typedef uint8 BlockType;
 enum BLOCK_TYPE {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS, BTYPE_BRICK, BTYPE_SAND, BTYPE_ROCK, BTYPE_SNOW, BTYPE_COUNT};
 
-//Chemins d'accès
+//Chemins d'accÃ¨s
 #define TEXTURE_PATH        "../lovecraft/media/textures/"
 #define SHADER_PATH			"../lovecraft/media/shader/"
 #define MODEL_PATH			"../lovecraft/media/models/"

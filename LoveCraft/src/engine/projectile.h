@@ -1,4 +1,4 @@
-#ifndef	PROJECTILE_H__
+ï»¿#ifndef	PROJECTILE_H__
 #define PROJECTILE_H__
 
 #include "util/vector3.h"
@@ -64,7 +64,7 @@ public:
 	float GetTimeToLive() const;
 
 	/**
-	 * Si affecté par la gravité
+	 * Si affectÃ© par la gravitÃ©
 	 */
 	void SetHasMass(bool hasMass);
 	bool HasMass() const;

@@ -1,4 +1,4 @@
-#ifndef MODEL_H__
+﻿#ifndef MODEL_H__
 #define MODEL_H__
 
 #include "mesh.h"
@@ -11,7 +11,7 @@
 class Model : public Mesh
 {
 public:
-	// Structure repr�sentant toutes les informations de chacuns des vertex
+	// Structure représentant toutes les informations de chacuns des vertex
 	// S'assurer que le size de cette struct reste un multiple de 32
 	// octet pour un maximum de performance
 	// Au besoin, ajouter du padding

@@ -36,7 +36,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Page&#160;principale</span></a></li>
-      <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Fichiers</span></a></li>
       <li>
@@ -70,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Tout</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Fichiers</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Fonctions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Définitions de type</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Énumérations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Valeurs énumérées</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Groupes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Tout</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Fonctions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Définitions de type</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Énumérations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -131,6 +130,9 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UnloadResourc
 <tr class="memitem:ace2cfeea48536bab357e6543032573a6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ace2cfeea48536bab357e6543032573a6"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>Render</b> (float elapsedTime)=0</td></tr>
 <tr class="separator:ace2cfeea48536bab357e6543032573a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e2906c20b717ffb68a4b66ba940af66"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e2906c20b717ffb68a4b66ba940af66"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>Render2D</b> (float elapsedTime)=0</td></tr>
+<tr class="separator:a3e2906c20b717ffb68a4b66ba940af66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79bbf84c6c82c58c09df4eb62bd5e90e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a79bbf84c6c82c58c09df4eb62bd5e90e"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>KeyPressEvent</b> (unsigned char key)=0</td></tr>
 <tr class="separator:a79bbf84c6c82c58c09df4eb62bd5e90e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -176,9 +178,21 @@ Fonctions membres protégées</h2></td></tr>
 <tr class="memitem:a119061adbba0c0334f882dc0ad5ccb12"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a119061adbba0c0334f882dc0ad5ccb12"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>CenterMouse</b> ()</td></tr>
 <tr class="separator:a119061adbba0c0334f882dc0ad5ccb12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec924e0fcb0f5260e4b59714c472cfa7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec924e0fcb0f5260e4b59714c472cfa7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ResetMouse</b> ()</td></tr>
+<tr class="separator:aec924e0fcb0f5260e4b59714c472cfa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec6dbafa32b0b6f53e30b66024c281ce"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec6dbafa32b0b6f53e30b66024c281ce"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SetMousePos</b> (int x, int y)</td></tr>
+<tr class="separator:aec6dbafa32b0b6f53e30b66024c281ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94aa2c7ada35b39978aac228d89c4572"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a94aa2c7ada35b39978aac228d89c4572"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>MousePosChanged</b> (int x, int y)</td></tr>
+<tr class="separator:a94aa2c7ada35b39978aac228d89c4572"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2889657d7ce609096d6811528ae55b81"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2889657d7ce609096d6811528ae55b81"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>MakeRelativeToCenter</b> (int &amp;x, int &amp;y) const </td></tr>
 <tr class="separator:a2889657d7ce609096d6811528ae55b81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae67ad2177a5bdd3d3afa15ed5da56b5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aae67ad2177a5bdd3d3afa15ed5da56b5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>MakeRelativeToMouse</b> (int &amp;x, int &amp;y) const </td></tr>
+<tr class="separator:aae67ad2177a5bdd3d3afa15ed5da56b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e5faffeb6faec0ff9aafe42f5e59a4a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e5faffeb6faec0ff9aafe42f5e59a4a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ShowCursor</b> ()</td></tr>
 <tr class="separator:a5e5faffeb6faec0ff9aafe42f5e59a4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -190,13 +204,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ShowCrossCursor</b> (
 <tr class="separator:a18daa95a87a858324b343542c37e6907"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>La documentation de cette classe a été générée à partir des fichiers suivants :<ul>
-<li>C:/Users/Janic/Documents/LoveCraft/LoveCraft/<a class="el" href="openglcontext_8h_source.html">openglcontext.h</a></li>
-<li>C:/Users/Janic/Documents/LoveCraft/LoveCraft/openglcontext.cpp</li>
+<li>C:/Users/Janic/Documents/LoveCraft/lovecraft/src/engine/<a class="el" href="openglcontext_8h_source.html">openglcontext.h</a></li>
+<li>C:/Users/Janic/Documents/LoveCraft/lovecraft/src/engine/openglcontext.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Généré le Lundi Novembre 19 2012 02:32:52 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+Généré le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['axis',['Axis',['../classsf_1_1_joystick.html#a48db337092c2e263774f94de6d50baa7',1,'sf::Joystick']]]
+  ['aitype',['AiType',['../class_a_i.html#a742fc46e89b6da576e2879d075b4a30d',1,'AI']]]
 ];

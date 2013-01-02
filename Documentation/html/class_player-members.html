@@ -36,7 +36,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Page&#160;principale</span></a></li>
-      <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Fichiers</span></a></li>
       <li>
@@ -70,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Tout</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Fichiers</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Fonctions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Définitions de type</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Énumérations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Valeurs énumérées</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Groupes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Tout</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Fonctions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Définitions de type</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Énumérations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -88,17 +87,22 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 
 <p>Liste complète des membres de <a class="el" href="class_player.html">Player</a>, y compris les membres hérités :</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="class_player.html#a072c6b4e02608847e7dbd6f52eb1f188">ApplyRotation</a>() const </td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_player.html#a6082eed56c14fa32a878d5d50ba93b86">ApplyTranslation</a>() const </td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_player.html#a46168b3eed09fd2d4fe374014b8f6d7b">Move</a>(bool front, bool back, bool left, bool right, bool run, bool ghost, float elapsedTime)</td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_player.html#aa374fbce494044ff245a339699367957">Player</a>(float posX=0, float posY=0, float posZ=0, float rotX=0, float rotY=0)</td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_player.html#a58fb866c6ae6192a182cb9c787fb9488">TurnLeftRight</a>(float value)</td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_player.html#a7cff894b14caefeb4449e616a52f3127">TurnTopBottom</a>(float value)</td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_player.html#a749d2c00e1fe0f5c2746f7505a58c062">~Player</a>()</td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_player.html#acb12cd0695840666d6a5d23cb92b8b84">Acceleration</a>() const </td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>Init</b>() (défini dans <a class="el" href="class_player.html">Player</a>)</td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_player.html#af7683efbf8f53f8e1e2943e1a6f0a759">Move</a>(bool ghost, Character &amp;cter, float elapsedTime)</td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_player.html#a8c7b61ed8c1a334afe5ee72dad954c68">Player</a>(Vector3f position=Vector3f(), Vector2f rotation=Vector2f())</td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_player.html#af8fa4751d943b827588cdb864cd8fd2e">Position</a>() const </td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>Render</b>(bool wireFrame=false) (défini dans <a class="el" href="class_player.html">Player</a>)</td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_player.html#a714fa571f68d909c9ea5fac2ad680c20">Rotation</a>() const </td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>SetRotation</b>(Vector2f rot) (défini dans <a class="el" href="class_player.html">Player</a>)</td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_player.html#a14cf0d2098bdea6ce81326ccdf63ae05">Speed</a>() const </td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_player.html#a58fb866c6ae6192a182cb9c787fb9488">TurnLeftRight</a>(float value)</td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_player.html#a7cff894b14caefeb4449e616a52f3127">TurnTopBottom</a>(float value)</td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_player.html#a749d2c00e1fe0f5c2746f7505a58c062">~Player</a>()</td><td class="entry"><a class="el" href="class_player.html">Player</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Généré le Lundi Novembre 19 2012 02:32:52 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+Généré le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

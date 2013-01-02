@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<title>LoveCraft:  Fichier source de C:/Users/Janic/Documents/LoveCraft/lovecraft/src/engine/gl/ui/label.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">LoveCraft
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.8.2 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>Page&#160;principale</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Recherche" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>Liste&#160;des&#160;fichiers</span></a></li>
+    </ul>
+  </div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Tout</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Fonctions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Définitions de type</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Énumérations</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_03ea7e1f447e206a9ba50aa1ffd2a21b.html">lovecraft</a></li><li class="navelem"><a class="el" href="dir_d07ae656d675a18f21e5524277e66db7.html">src</a></li><li class="navelem"><a class="el" href="dir_4fc27a38ea0915d7d915ce14d7d27472.html">engine</a></li><li class="navelem"><a class="el" href="dir_b9aae73dce7e5e151de92cb1caa601c4.html">gl</a></li><li class="navelem"><a class="el" href="dir_559f8480a3cad3468044559ec239876d.html">ui</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">label.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef LABEL_H_</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LABEL_H_</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;interface.h&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;control.h&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="code" href="class_label.html">   11</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_label.html">Label</a> : <span class="keyword">public</span> <a class="code" href="class_control.html">Control</a></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;{</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="code" href="class_label.html#aeae84744d659bdcd7803d19d3c711d49">   17</a></span>&#160;    <span class="keyword">enum</span> <a class="code" href="class_label.html#aeae84744d659bdcd7803d19d3c711d49">Docking</a></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    {</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        TEXTDOCK_NONE,</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        TEXTDOCK_TOPLEFT,</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        TEXTDOCK_TOPCENTER,</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        TEXTDOCK_TOPRIGHT,</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        TEXTDOCK_MIDDLELEFT,</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        TEXTDOCK_MIDDLECENTER,</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        TEXTDOCK_MIDDLERIGHT,</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        TEXTDOCK_BOTTOMLEFT,</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        TEXTDOCK_BOTTOMCENTER,</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        TEXTDOCK_BOTTOMRIGHT,</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        TEXTDOCK_LAST</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    };</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <a class="code" href="class_label.html#af8f2bccf9faadcb2ca964bd2347dde24">Label</a>();</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <a class="code" href="class_label.html#af8f2bccf9faadcb2ca964bd2347dde24">Label</a>(<a class="code" href="class_control.html">Control</a>* parent, <a class="code" href="class_vector2.html">Vector2i</a> position, <a class="code" href="class_vector2.html">Vector2i</a> size, <a class="code" href="class_texture.html">Texture</a>* color, std::string message, <a class="code" href="class_label.html#aeae84744d659bdcd7803d19d3c711d49">Docking</a> dock, <span class="keywordtype">bool</span> italic, <span class="keywordtype">float</span> charHeight, <span class="keywordtype">float</span> charWidth, <span class="keywordtype">float</span> charinterval, <a class="code" href="class_vector2.html">Vector2f</a> offset, <span class="keyword">const</span> std::string&amp; name);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="class_label.html#a39e1167a9b5827afd888780973d88894">~Label</a>();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_label.html#a248a252f8d553b15a5f9fff0c073c2a9">SetMessage</a>(std::string&amp; message);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_label.html#a6c93a763b54a641818be83640800d805">SetColor</a>(<a class="code" href="class_texture.html">Texture</a>* texture);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="class_texture.html">Texture</a>* <a class="code" href="class_label.html#ad4038e0fe8cee91ecc064877f0771185">GetColor</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_label.html#a3fab0d91ad8219701eddfadd46f71da1">SetDock</a>(<a class="code" href="class_label.html#aeae84744d659bdcd7803d19d3c711d49">Docking</a> dock);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <a class="code" href="class_label.html#aeae84744d659bdcd7803d19d3c711d49">Docking</a> <a class="code" href="class_label.html#a565f5ed2db2dc42d0c62239bf839fe3d">GetDock</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_label.html#a7345059fe9ab967e94ea0d1f2658fee5">SetItalic</a>(<span class="keywordtype">bool</span> value);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_label.html#a485f726c63bbc2303e569a34c3697c4e">GetItalic</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_label.html#a3f5ef31e1d678b4f5c9e0e3da0d734ab">SetFontWidth</a>(<span class="keywordtype">float</span> value);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_label.html#a4abfd3a5ac2d39c7d878255f38f353ab">GetFontWidth</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_label.html#ad70b5f78f88a6c82efcfeb4ae35258d6">SetFontHeight</a>(<span class="keywordtype">float</span> value);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_label.html#aa09c6fe8a70b67a1aab293a8ba0bc94e">GetFontHeight</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <a class="code" href="class_vector2.html">Vector2f</a> <a class="code" href="class_label.html#ad52174ab08205e777bcec851fb94274a">GetOffset</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_label.html#ac0920b3944a8286ed107264eaf7ecf25">SetOffset</a>(<a class="code" href="class_vector2.html">Vector2f</a> offset);</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_label.html#a3cebc2d0c2b30ad2dc3004ea1df0af19">SetInterval</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> interval);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_label.html#a3cebc2d0c2b30ad2dc3004ea1df0af19">SetInterval</a>(<span class="keywordtype">float</span> interval);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_label.html#a09cd6f013f6c3587608297b02f0694c1">Render</a>();</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <a class="code" href="class_label.html">Label</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="class_label.html">Label</a>&amp; l);</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <a class="code" href="class_vector2.html">Vector2f</a> GetNewPosition(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> length);</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    std::string m_message;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    <a class="code" href="class_label.html#aeae84744d659bdcd7803d19d3c711d49">Docking</a> m_docking;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    <span class="keywordtype">bool</span> m_italic;</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="keywordtype">float</span> m_fontWidth;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keywordtype">float</span> m_fontHeight;</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <a class="code" href="class_vector2.html">Vector2f</a> m_offset;</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    <span class="keywordtype">float</span> m_charInterval;</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    <a class="code" href="class_vector2.html">Vector2f</a> m_newPosition;</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;};</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="preprocessor">#endif</span></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Généré le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.2
+</small></address>
+</body>
+</html>

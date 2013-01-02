@@ -1,4 +1,4 @@
-#include "texture.h"
+﻿#include "texture.h"
 #include <cassert>
 
 Texture::Texture(const std::string& filename) : m_isValid(false)

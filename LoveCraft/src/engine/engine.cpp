@@ -1,4 +1,4 @@
-#include "engine.h"
+ï»¿#include "engine.h"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -299,7 +299,7 @@ void Engine::LoadResource()
 
 #pragma region Chargement des elements de l interface
 
-	// Écran
+	// Ã‰cran
 	m_pnl_screen = Panel(0, Vector2i(), Vector2i(Width(), Height()), 0, 1, "main");
 
 #pragma region Enfants de Main
@@ -344,7 +344,7 @@ void Engine::LoadResource()
 		&m_textureInterface[IMAGE_PGBTEXT_MANA], &m_textureInterface[IMAGE_PGBTEXT_MANA_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_MANA_BACKGROUND, PGB_MANA_BORDER_SIZE, PGB_MANA_NAME);
 	m_pnl_portrait.AddControl(&m_pgb_mana);
-	// Barre d'expérience
+	// Barre d'expÃ©rience
 	m_pgb_exp = ProgressBar(&m_pnl_portrait,
 		Vector2i(PGB_EXP_POSITION_X, PGB_EXP_POSITION_Y),
 		Vector2i(PGB_EXP_SIZE_W, PGB_EXP_SIZE_H),
@@ -354,7 +354,7 @@ void Engine::LoadResource()
 
 #pragma endregion
 
-	//Barre d'énergie verticale
+	//Barre d'Ã©nergie verticale
 	m_pgb_energy = ProgressBar(&m_pnl_playscreen,
 		Vector2i(PGB_ENERGY_POSITION_X, PGB_ENERGY_POSITION_Y),
 		Vector2i(PGB_ENERGY_SIZE_W, PGB_ENERGY_SIZE_H),
@@ -490,7 +490,7 @@ void Engine::Render(float elapsedTime)
 
 #pragma region Reseau
 
-	//Test réseau - Dessigne un carré en haut de la position du joueur
+	//Test rÃ©seau - Dessigne un carrÃ© en haut de la position du joueur
 	//sf::Packet p;
 	//if (Info::Get().Network().Receive(p))
 	//{
@@ -580,7 +580,7 @@ void Engine::Render2D(float elapsedTime)
 	ss << "Vitesse : " << m_player.Speed();
 	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 35, ss.str());
 	ss.str("");
-	//Print de l'Accélération
+	//Print de l'AccÃ©lÃ©ration
 	ss << "Acceleration : " << m_player.Acceleration();
 	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 50, ss.str());
 	ss.str("");
@@ -609,19 +609,19 @@ void Engine::Render2D(float elapsedTime)
 
 #pragma region Images qui subissent le blend pour les PNG
 
-	//Change la texture de la barre de vie en fonction du %. Ne réassigne la texture que si on en a besoin
+	//Change la texture de la barre de vie en fonction du %. Ne rÃ©assigne la texture que si on en a besoin
 	if (m_character.HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_pgb_health.GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH])
 		m_pgb_health.SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW]);
 	else if (m_character.HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_pgb_health.GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW])
 		m_pgb_health.SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH]);
 
-	//Affiche ou cache la barre d'énergie selon la situation
+	//Affiche ou cache la barre d'Ã©nergie selon la situation
 	if (m_character.Energy() == m_character.EnergyMax())
 		m_pgb_energy.SetVisible(false);
 	else if (m_character.Energy() != m_character.EnergyMax() || sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
 		m_pgb_energy.SetVisible(true);
 
-	//Render de l'écran au complet avec tous ses contrôles.
+	//Render de l'Ã©cran au complet avec tous ses contrÃ´les.
 	m_pnl_screen.Render();
 
 	//Activation du blend par PNG
@@ -632,7 +632,7 @@ void Engine::Render2D(float elapsedTime)
 	//	Vector2i(m_playScreenBotLeft.x + m_pgb_energy.Size().y, m_playScreenBotLeft.y),
 	//	Vector2i((int)m_textureInterface[IMAGE_PORTRAIT_FRAME].GetWidth(), (int)m_textureInterface[IMAGE_PORTRAIT_FRAME].GetHeight()),
 	//	m_textureInterface[IMAGE_PORTRAIT_FRAME]);
-	//Optimisation possible par la surcharge d'opérateurs
+	//Optimisation possible par la surcharge d'opÃ©rateurs
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))		//Mode course
 		RenderSquare(
 		m_playScreenBotLeft,
@@ -675,7 +675,7 @@ void Engine::Render2D(float elapsedTime)
 	//============================================
 	RenderSpells();
 	//============================================
-	//Mise à jour des données
+	//Mise Ã  jour des donnÃ©es
 	m_pgb_health.SetValue(m_character.HealthPerc());
 	m_pgb_energy.SetValue(m_character.EnergyPerc());
 	m_pgb_mana.SetValue(m_character.ManaPerc());
@@ -915,9 +915,9 @@ void Engine::KeyReleaseEvent(unsigned char key)
 
 void Engine::MouseMoveEvent(int x, int y)
 {
-	// Centrer la souris seulement si elle n'est pas déjà centrée
-	// Il est nécessaire de faire la vérification pour éviter de tomber
-	// dans une boucle infinie où l'appel à CenterMouse génère un
+	// Centrer la souris seulement si elle n'est pas dÃ©jÃ  centrÃ©e
+	// Il est nÃ©cessaire de faire la vÃ©rification pour Ã©viter de tomber
+	// dans une boucle infinie oÃ¹ l'appel Ã  CenterMouse gÃ©nÃ¨re un
 	// MouseMoveEvent, qui rapelle CenterMouse qui rapelle un autre 
 	// MouseMoveEvent, etc
 

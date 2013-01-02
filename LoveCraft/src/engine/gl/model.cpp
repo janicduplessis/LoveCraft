@@ -1,6 +1,6 @@
-#include "model.h"
+﻿#include "model.h"
 #include <iostream>
-#include "external/rapidxml-1.13/rapidxml.hpp"
+#include "rapidxml-1.13/rapidxml.hpp"
 #include <fstream>
 #include <vector>
 #include <cassert>

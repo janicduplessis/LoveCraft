@@ -36,7 +36,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Page&#160;principale</span></a></li>
-      <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Fichiers</span></a></li>
       <li>
@@ -70,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Tout</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Fichiers</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Fonctions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>D√©finitions de type</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>√ânum√©rations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Valeurs √©num√©r√©es</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Groupes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Tout</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Fonctions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>D√©finitions de type</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>√ânum√©rations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -89,64 +88,59 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 </div><!--header-->
 <div class="contents">
 
-<p>classe reprÈsentent le joueur dans l'environnement 3D  
+<p>classe repr√©sentent le joueur dans l'environnement 3D  
  <a href="class_player.html#details">Plus de d√©tails...</a></p>
 
 <p><code>#include &lt;<a class="el" href="player_8h_source.html">player.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Fonctions membres publiques</h2></td></tr>
-<tr class="memitem:aa374fbce494044ff245a339699367957"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#aa374fbce494044ff245a339699367957">Player</a> (float posX=0, float posY=0, float posZ=0, float rotX=0, float rotY=0)</td></tr>
-<tr class="separator:aa374fbce494044ff245a339699367957"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c7b61ed8c1a334afe5ee72dad954c68"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a8c7b61ed8c1a334afe5ee72dad954c68">Player</a> (<a class="el" href="class_vector3.html">Vector3f</a> position=<a class="el" href="class_vector3.html">Vector3f</a>(), <a class="el" href="class_vector2.html">Vector2f</a> rotation=<a class="el" href="class_vector2.html">Vector2f</a>())</td></tr>
+<tr class="separator:a8c7b61ed8c1a334afe5ee72dad954c68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a749d2c00e1fe0f5c2746f7505a58c062"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a749d2c00e1fe0f5c2746f7505a58c062">~Player</a> ()</td></tr>
 <tr class="separator:a749d2c00e1fe0f5c2746f7505a58c062"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4523bf2e637fcb0e36a3f456ec397e7d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4523bf2e637fcb0e36a3f456ec397e7d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>Init</b> ()</td></tr>
+<tr class="separator:a4523bf2e637fcb0e36a3f456ec397e7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8fa4751d943b827588cdb864cd8fd2e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_vector3.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#af8fa4751d943b827588cdb864cd8fd2e">Position</a> () const </td></tr>
+<tr class="separator:af8fa4751d943b827588cdb864cd8fd2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a714fa571f68d909c9ea5fac2ad680c20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_vector2.html">Vector2f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a714fa571f68d909c9ea5fac2ad680c20">Rotation</a> () const </td></tr>
+<tr class="separator:a714fa571f68d909c9ea5fac2ad680c20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14cf0d2098bdea6ce81326ccdf63ae05"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_vector3.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a14cf0d2098bdea6ce81326ccdf63ae05">Speed</a> () const </td></tr>
+<tr class="separator:a14cf0d2098bdea6ce81326ccdf63ae05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb12cd0695840666d6a5d23cb92b8b84"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_vector3.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#acb12cd0695840666d6a5d23cb92b8b84">Acceleration</a> () const </td></tr>
+<tr class="separator:acb12cd0695840666d6a5d23cb92b8b84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58fb866c6ae6192a182cb9c787fb9488"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a58fb866c6ae6192a182cb9c787fb9488">TurnLeftRight</a> (float value)</td></tr>
 <tr class="separator:a58fb866c6ae6192a182cb9c787fb9488"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cff894b14caefeb4449e616a52f3127"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a7cff894b14caefeb4449e616a52f3127">TurnTopBottom</a> (float value)</td></tr>
 <tr class="separator:a7cff894b14caefeb4449e616a52f3127"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46168b3eed09fd2d4fe374014b8f6d7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a46168b3eed09fd2d4fe374014b8f6d7b">Move</a> (bool front, bool back, bool left, bool right, bool run, bool ghost, float elapsedTime)</td></tr>
-<tr class="separator:a46168b3eed09fd2d4fe374014b8f6d7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a072c6b4e02608847e7dbd6f52eb1f188"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a072c6b4e02608847e7dbd6f52eb1f188">ApplyRotation</a> () const </td></tr>
-<tr class="separator:a072c6b4e02608847e7dbd6f52eb1f188"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6082eed56c14fa32a878d5d50ba93b86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a6082eed56c14fa32a878d5d50ba93b86">ApplyTranslation</a> () const </td></tr>
-<tr class="separator:a6082eed56c14fa32a878d5d50ba93b86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7683efbf8f53f8e1e2943e1a6f0a759"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#af7683efbf8f53f8e1e2943e1a6f0a759">Move</a> (bool ghost, <a class="el" href="class_character.html">Character</a> &amp;cter, float elapsedTime)</td></tr>
+<tr class="separator:af7683efbf8f53f8e1e2943e1a6f0a759"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6eef18d76b5d52f33d0ef15e93386e1c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6eef18d76b5d52f33d0ef15e93386e1c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>Render</b> (bool wireFrame=false)</td></tr>
+<tr class="separator:a6eef18d76b5d52f33d0ef15e93386e1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe9134f0590b5a8d9880ae985883b0c6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe9134f0590b5a8d9880ae985883b0c6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SetRotation</b> (<a class="el" href="class_vector2.html">Vector2f</a> rot)</td></tr>
+<tr class="separator:afe9134f0590b5a8d9880ae985883b0c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Description d√©taill√©e</h2>
-<div class="textblock"><p>classe reprÈsentent le joueur dans l'environnement 3D </p>
+<div class="textblock"><p>classe repr√©sentent le joueur dans l'environnement 3D </p>
 </div><h2 class="groupheader">Documentation des constructeurs et destructeur</h2>
-<a class="anchor" id="aa374fbce494044ff245a339699367957"></a>
+<a class="anchor" id="a8c7b61ed8c1a334afe5ee72dad954c68"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">Player::Player </td>
           <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>posX</em> = <code>0</code>, </td>
+          <td class="paramtype"><a class="el" href="class_vector3.html">Vector3f</a>&#160;</td>
+          <td class="paramname"><em>position</em> = <code><a class="el" href="class_vector3.html">Vector3f</a>()</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>posY</em> = <code>0</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>posZ</em> = <code>0</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>rotX</em> = <code>0</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>rotY</em> = <code>0</code>&#160;</td>
+          <td class="paramtype"><a class="el" href="class_vector2.html">Vector2f</a>&#160;</td>
+          <td class="paramname"><em>rotation</em> = <code><a class="el" href="class_vector2.html">Vector2f</a>()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -158,11 +152,8 @@ Fonctions membres publiques</h2></td></tr>
 <p>Constructeur de la classe. Valeurs par defaut a 0</p>
 <dl class="params"><dt>Param√®tres</dt><dd>
   <table class="params">
-    <tr><td class="paramname">posX</td><td>Position initiale en X du joueur </td></tr>
-    <tr><td class="paramname">posY</td><td>Position initiale en Y du joueur </td></tr>
-    <tr><td class="paramname">posZ</td><td>Position initiale en Z du joueur </td></tr>
-    <tr><td class="paramname">rotX</td><td>Angle de rotation initial en X du joueur </td></tr>
-    <tr><td class="paramname">rotY</td><td>Angle de rotation initial en Y du joueur </td></tr>
+    <tr><td class="paramname">posX</td><td>Position initiale du joueur </td></tr>
+    <tr><td class="paramname">rotY</td><td>Angle de rotation initial du joueur </td></tr>
   </table>
   </dd>
 </dl>
@@ -181,44 +172,29 @@ Fonctions membres publiques</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Destructeur par dÈfaut de la classe </p>
+<p>Destructeur par d√©faut de la classe </p>
 
 </div>
 </div>
 <h2 class="groupheader">Documentation des fonctions membres</h2>
-<a class="anchor" id="a072c6b4e02608847e7dbd6f52eb1f188"></a>
+<a class="anchor" id="acb12cd0695840666d6a5d23cb92b8b84"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Player::ApplyRotation </td>
+          <td class="memname"><a class="el" href="class_vector3.html">Vector3f</a> Player::Acceleration </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Applique la rotation de la camÈra en fonction des donnÈes de positionnement et d'angle du joueur. ¿ appeler aprËs la dÈclaration de la matrice identitÈe principale </p>
+<p>Acc√©l√©ration du joueur </p>
+<dl class="section return"><dt>Renvoie</dt><dd>Vector3f </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a6082eed56c14fa32a878d5d50ba93b86"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Player::ApplyTranslation </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Applique la translation du joueur en fonction des donnÈes de positionnement et d'angle du joueur. ¿ appeler aprËs la dÈclaration de la matrice identitÈe principale </p>
-
-</div>
-</div>
-<a class="anchor" id="a46168b3eed09fd2d4fe374014b8f6d7b"></a>
+<a class="anchor" id="af7683efbf8f53f8e1e2943e1a6f0a759"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -226,37 +202,13 @@ Fonctions membres publiques</h2></td></tr>
           <td class="memname">void Player::Move </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>front</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>back</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>left</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>right</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>run</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>ghost</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_character.html">Character</a> &amp;&#160;</td>
+          <td class="paramname"><em>cter</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -271,18 +223,65 @@ Fonctions membres publiques</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Fait bouger le personnage en fonction des touches enfoncÈes</p>
+<p>Fait bouger le personnage en fonction des touches enfonc√©es</p>
 <dl class="params"><dt>Param√®tres</dt><dd>
   <table class="params">
-    <tr><td class="paramname">front</td><td>Si la touche pour avancer est enfoncÈe </td></tr>
-    <tr><td class="paramname">back</td><td>Si la touche pour reculer est enfoncÈe </td></tr>
-    <tr><td class="paramname">left</td><td>Si la touche pour strafer ‡ gauche est enfoncÈe </td></tr>
-    <tr><td class="paramname">right</td><td>Si la touche pour strafer ‡ droite est enfoncÈe </td></tr>
-    <tr><td class="paramname">run</td><td>Si la touche pour courir est enfoncÈe </td></tr>
-    <tr><td class="paramname">elapsedTime</td><td>Temps ÈcoulÈ depuis le dernier loop de jeu </td></tr>
+    <tr><td class="paramname">controls</td><td>Le <a class="el" href="class_array.html">Array</a> de touches </td></tr>
+    <tr><td class="paramname">elapsedTime</td><td>Temps √©coul√© depuis le dernier loop de jeu </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="af8fa4751d943b827588cdb864cd8fd2e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_vector3.html">Vector3f</a> Player::Position </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Position du joueur </p>
+<dl class="section return"><dt>Renvoie</dt><dd>Vector3f </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a714fa571f68d909c9ea5fac2ad680c20"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_vector2.html">Vector2f</a> Player::Rotation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Rotation du joueur </p>
+<dl class="section return"><dt>Renvoie</dt><dd>Vector2f </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a14cf0d2098bdea6ce81326ccdf63ae05"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_vector3.html">Vector3f</a> Player::Speed </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Vitesse du joueur </p>
+<dl class="section return"><dt>Renvoie</dt><dd>Vector3f </dd></dl>
 
 </div>
 </div>
@@ -302,7 +301,7 @@ Fonctions membres publiques</h2></td></tr>
 <p>Applique les valeurs de l'angle de rotation sur l'axe des Y</p>
 <dl class="params"><dt>Param√®tres</dt><dd>
   <table class="params">
-    <tr><td class="paramname">value</td><td>Valeur de l'angle ‡ modifier </td></tr>
+    <tr><td class="paramname">value</td><td>Valeur de l'angle √† modifier </td></tr>
   </table>
   </dd>
 </dl>
@@ -325,7 +324,7 @@ Fonctions membres publiques</h2></td></tr>
 <p>Applique les valeurs de l'angle de rotation sur l'axe des X</p>
 <dl class="params"><dt>Param√®tres</dt><dd>
   <table class="params">
-    <tr><td class="paramname">value</td><td>Valeur de l'angle ‡ modifier </td></tr>
+    <tr><td class="paramname">value</td><td>Valeur de l'angle √† modifier </td></tr>
   </table>
   </dd>
 </dl>
@@ -333,13 +332,13 @@ Fonctions membres publiques</h2></td></tr>
 </div>
 </div>
 <hr/>La documentation de cette classe a √©t√© g√©n√©r√©e √† partir des fichiers suivants :<ul>
-<li>C:/Users/Janic/Documents/LoveCraft/LoveCraft/<a class="el" href="player_8h_source.html">player.h</a></li>
-<li>C:/Users/Janic/Documents/LoveCraft/LoveCraft/player.cpp</li>
+<li>C:/Users/Janic/Documents/LoveCraft/lovecraft/src/engine/<a class="el" href="player_8h_source.html">player.h</a></li>
+<li>C:/Users/Janic/Documents/LoveCraft/lovecraft/src/engine/player.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-G√©n√©r√© le Lundi Novembre 19 2012 02:32:52 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+G√©n√©r√© le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

@@ -1,4 +1,4 @@
-#ifndef PLAYER_H__
+ï»¿#ifndef PLAYER_H__
 #define PLAYER_H__
 
 #include "define.h"
@@ -12,7 +12,7 @@
 #include "game/character.h"
 
 /**
- * @brief classe représentent le joueur dans l'environnement 3D
+ * @brief classe reprÃ©sentent le joueur dans l'environnement 3D
  */
 class Player
 {
@@ -26,7 +26,7 @@ public:
 	Player(Vector3f position = Vector3f(), Vector2f rotation = Vector2f());
 
 	/**
-	 * Destructeur par défaut de la classe
+	 * Destructeur par dÃ©faut de la classe
 	 */
 	~Player();
 
@@ -51,7 +51,7 @@ public:
 	Vector3f Speed() const;
 
 	/**
-	* Accélération du joueur
+	* AccÃ©lÃ©ration du joueur
 	* @return Vector3f
 	*/
 	Vector3f Acceleration() const;
@@ -59,22 +59,22 @@ public:
 	/**
 	* Applique les valeurs de l'angle de rotation sur l'axe des Y
 	* 
-	* @param value Valeur de l'angle à modifier
+	* @param value Valeur de l'angle Ã  modifier
 	*/
 	void TurnLeftRight ( float value );
 
 	/**
 	 * Applique les valeurs de l'angle de rotation sur l'axe des X
 	 * 
-	 * @param value Valeur de l'angle à modifier
+	 * @param value Valeur de l'angle Ã  modifier
 	 */
 	void TurnTopBottom ( float value );
 
 	/**
-	 * Fait bouger le personnage en fonction des touches enfoncées
+	 * Fait bouger le personnage en fonction des touches enfoncÃ©es
 	 * 
 	 * @param controls		Le Array de touches
-	 * @param elapsedTime	Temps écoulé depuis le dernier loop de jeu
+	 * @param elapsedTime	Temps Ã©coulÃ© depuis le dernier loop de jeu
 	 */
 	void Move(bool ghost, Character &cter, float elapsedTime);
 
@@ -86,7 +86,7 @@ private:
 
 
 private:
-	float m_energy; // Energie pour pouvoir courir (0 à 100)
+	float m_energy; // Energie pour pouvoir courir (0 Ã  100)
 
 	Vector3f m_pos; // Position du joueur
 	Vector3f m_lastPos; // Position au frame precedent

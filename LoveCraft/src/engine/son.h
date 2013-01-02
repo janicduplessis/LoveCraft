@@ -1,4 +1,4 @@
-#ifndef SON_H_
+ï»¿#ifndef SON_H_
 #define SON_H_
 
 #include "define.h"
@@ -60,55 +60,55 @@ public:
 		CHANNEL_LAST
 	};
 	/**
-	* Constructeur par défaut
+	* Constructeur par dÃ©faut
 	*/
 	Son();
 	/**
-	* Destructeur par défaut
+	* Destructeur par dÃ©faut
 	*/
 	~Son();
 	/**
-	* Charge les sons en mémoire et les noms de fichier des musiques
-	* @return Succès
+	* Charge les sons en mÃ©moire et les noms de fichier des musiques
+	* @return SuccÃ¨s
 	*/
 	bool LoadSounds();
 	/**
-	* Fait jouer la musique au numéro de piste du champ m_trackNumber
-	* @return Succès
+	* Fait jouer la musique au numÃ©ro de piste du champ m_trackNumber
+	* @return SuccÃ¨s
 	*/
 	bool PlayMusic();
 	/**
-	* Arrête la musique en cours, incrémente la numéro de piste et refait jouer la musique
+	* ArrÃªte la musique en cours, incrÃ©mente la numÃ©ro de piste et refait jouer la musique
 	*/
 	void PlayNextTrack();
 	/**
-	* Fait jouer le son demandé dans le canal par défaut
+	* Fait jouer le son demandÃ© dans le canal par dÃ©faut
 	* 
-	* @param snd		Le son à jouer - Voir Enum:Sons
-	* @return Succès
+	* @param snd		Le son Ã  jouer - Voir Enum:Sons
+	* @return SuccÃ¨s
 	*/
 	bool PlaySnd(const Sons& snd);
 	/**
-	* Fait jouer le son demandé dans le canal demandé
+	* Fait jouer le son demandÃ© dans le canal demandÃ©
 	* 
-	* @param snd		Le son à jouer - Voir Enum:Sons
-	* @param channel	Le canal dans lequel sera joué le son - Voir Enum:Channel
-	* @param aSync		Spécifie si le son ne peut être joué que si aucun autre son
+	* @param snd		Le son Ã  jouer - Voir Enum:Sons
+	* @param channel	Le canal dans lequel sera jouÃ© le son - Voir Enum:Channel
+	* @param aSync		SpÃ©cifie si le son ne peut Ãªtre jouÃ© que si aucun autre son
 	* 					n'occupe le canal
-	* @return Succès
+	* @return SuccÃ¨s
 	*/
 	bool PlaySnd(const Sons& snd, const Channel& channel, bool aSync = true);
 	/**
 	* Fait jouer les sons de bruits de pas en alternance selon le type de bloc
 	* 
 	* @param type			Le type de bloc sur lequel est le joueur
-	* @param elapsedTime	Le nombre de temps écoulé depuis le dernier frame
-	* @param timeout		Le nombre de secondes qui doivent être écoulées avant de
+	* @param elapsedTime	Le nombre de temps Ã©coulÃ© depuis le dernier frame
+	* @param timeout		Le nombre de secondes qui doivent Ãªtre Ã©coulÃ©es avant de
 	*						jouer le prochain son
 	* @param priority		Joue le son quelque soit le temps depuis le dernier son
 	* 
-	* @note		Vérifier que les sons sont activés avant d'appeler cette méthode
-	* 			pour éviter de surcharger inutilement la mémoire.
+	* @note		VÃ©rifier que les sons sont activÃ©s avant d'appeler cette mÃ©thode
+	* 			pour Ã©viter de surcharger inutilement la mÃ©moire.
 	*/
 	bool PlayStep(const BlockType type, float elapsedTime, float speed, bool priority = false);
 private:

@@ -1,4 +1,4 @@
-#ifndef TEXTUREARRAY_H__
+ï»¿#ifndef TEXTUREARRAY_H__
 #define TEXTUREARRAY_H__
 
 #include "define.h"
@@ -15,7 +15,7 @@
 /**
  * @brief Classe pour utiliser avec un TextureArray2d de OpenGL
  * 
- * Redimensionne les textures et génère des mipmaps
+ * Redimensionne les textures et gÃ©nÃ¨re des mipmaps
  */
 class TextureArray
 {
@@ -25,8 +25,8 @@ public:
 
 public:
 	/**
-	 * Constructeur, les textures seront toutes redimentionnés
-	 * avec les dimensions spécifiés dans @textureSize
+	 * Constructeur, les textures seront toutes redimentionnÃ©s
+	 * avec les dimensions spÃ©cifiÃ©s dans @textureSize
 	 * 
 	 * @param textureSize dimension des textures
 	 */
@@ -41,12 +41,12 @@ public:
 	 * Ajoute une texture et retourne son index
 	 * dans le TextureArray2d de opengl
 	 * 
-	 * @returns index de la texture ajoutée
+	 * @returns index de la texture ajoutÃ©e
 	 */
 	TextureIndex AddTexture(const std::string& fname);
 
 	/**
-	 * Génère le texture array avec les textures ajoutées
+	 * GÃ©nÃ¨re le texture array avec les textures ajoutÃ©es
 	 */
 	void Generate();
 

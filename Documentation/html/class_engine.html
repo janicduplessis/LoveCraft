@@ -36,7 +36,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Page&#160;principale</span></a></li>
-      <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Fichiers</span></a></li>
       <li>
@@ -70,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Tout</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Fichiers</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Fonctions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>D√©finitions de type</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>√ânum√©rations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Valeurs √©num√©r√©es</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Groupes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Tout</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Fonctions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>D√©finitions de type</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>√ânum√©rations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -104,6 +103,10 @@ Fonctions membres publiques</h2></td></tr>
 <tr class="separator:a8c98683b0a3aa28d8ab72a8bcd0d52f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ef7030a089ecb30bbfcb9e43094717a"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_engine.html#a8ef7030a089ecb30bbfcb9e43094717a">~Engine</a> ()</td></tr>
 <tr class="separator:a8ef7030a089ecb30bbfcb9e43094717a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a843434a9253a8cc0f3af310a4993a4d4"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="class_engine.html">Engine</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_engine.html#a843434a9253a8cc0f3af310a4993a4d4">Get</a> () const </td></tr>
+<tr class="separator:a843434a9253a8cc0f3af310a4993a4d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49139d7df5f506586882537714363530"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_engine.html">Engine</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_engine.html#a49139d7df5f506586882537714363530">Get</a> ()</td></tr>
+<tr class="separator:a49139d7df5f506586882537714363530"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa425192c63c4e258588db980ddf18d0d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_engine.html#aa425192c63c4e258588db980ddf18d0d">Init</a> ()</td></tr>
 <tr class="separator:aa425192c63c4e258588db980ddf18d0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80f7193fdf0c5ed55804bbc65472e4ac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a80f7193fdf0c5ed55804bbc65472e4ac"></a>
@@ -116,6 +119,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UnloadResourc
 <tr class="separator:a85fde1ed14153dbc7ce46334300905ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5659a2efcf569274d87e73a74501a7df"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_engine.html#a5659a2efcf569274d87e73a74501a7df">Render</a> (float elapsedTime)</td></tr>
 <tr class="separator:a5659a2efcf569274d87e73a74501a7df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a553e186bea8206589aaeee9bd0d3500f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_engine.html#a553e186bea8206589aaeee9bd0d3500f">PrintText</a> (unsigned int x, unsigned int y, const std::string &amp;t)</td></tr>
+<tr class="separator:a553e186bea8206589aaeee9bd0d3500f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ad5c05679e9b6aeee4e0a6492b8f981"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_engine.html#a8ad5c05679e9b6aeee4e0a6492b8f981">KeyPressEvent</a> (unsigned char key)</td></tr>
 <tr class="separator:a8ad5c05679e9b6aeee4e0a6492b8f981"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfab320b970b0e2d289681c36a1c6fc8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_engine.html#abfab320b970b0e2d289681c36a1c6fc8">KeyReleaseEvent</a> (unsigned char key)</td></tr>
@@ -170,9 +175,21 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a119061adbba0c0334f882dc0ad5ccb12 inherit pro_methods_class_opengl_context"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a119061adbba0c0334f882dc0ad5ccb12"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>CenterMouse</b> ()</td></tr>
 <tr class="separator:a119061adbba0c0334f882dc0ad5ccb12 inherit pro_methods_class_opengl_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec924e0fcb0f5260e4b59714c472cfa7 inherit pro_methods_class_opengl_context"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec924e0fcb0f5260e4b59714c472cfa7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ResetMouse</b> ()</td></tr>
+<tr class="separator:aec924e0fcb0f5260e4b59714c472cfa7 inherit pro_methods_class_opengl_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec6dbafa32b0b6f53e30b66024c281ce inherit pro_methods_class_opengl_context"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec6dbafa32b0b6f53e30b66024c281ce"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SetMousePos</b> (int x, int y)</td></tr>
+<tr class="separator:aec6dbafa32b0b6f53e30b66024c281ce inherit pro_methods_class_opengl_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94aa2c7ada35b39978aac228d89c4572 inherit pro_methods_class_opengl_context"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a94aa2c7ada35b39978aac228d89c4572"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>MousePosChanged</b> (int x, int y)</td></tr>
+<tr class="separator:a94aa2c7ada35b39978aac228d89c4572 inherit pro_methods_class_opengl_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2889657d7ce609096d6811528ae55b81 inherit pro_methods_class_opengl_context"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2889657d7ce609096d6811528ae55b81"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>MakeRelativeToCenter</b> (int &amp;x, int &amp;y) const </td></tr>
 <tr class="separator:a2889657d7ce609096d6811528ae55b81 inherit pro_methods_class_opengl_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae67ad2177a5bdd3d3afa15ed5da56b5 inherit pro_methods_class_opengl_context"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aae67ad2177a5bdd3d3afa15ed5da56b5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>MakeRelativeToMouse</b> (int &amp;x, int &amp;y) const </td></tr>
+<tr class="separator:aae67ad2177a5bdd3d3afa15ed5da56b5 inherit pro_methods_class_opengl_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e5faffeb6faec0ff9aafe42f5e59a4a inherit pro_methods_class_opengl_context"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e5faffeb6faec0ff9aafe42f5e59a4a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ShowCursor</b> ()</td></tr>
 <tr class="separator:a5e5faffeb6faec0ff9aafe42f5e59a4a inherit pro_methods_class_opengl_context"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -196,7 +213,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ShowCrossCursor</b> (
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Constructeur par dÈfaut de la classe </p>
+<p>Constructeur par d√©faut de la classe </p>
 
 </div>
 </div>
@@ -220,11 +237,59 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ShowCrossCursor</b> (
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Destructeur par dÈfaut de la classe </p>
+<p>Destructeur par d√©faut de la classe </p>
 
 </div>
 </div>
 <h2 class="groupheader">Documentation des fonctions membres</h2>
+<a class="anchor" id="a843434a9253a8cc0f3af310a4993a4d4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_engine.html">Engine</a> &amp; Engine::Get </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Retourne une reference en lecture seule vers l'engine </p>
+
+</div>
+</div>
+<a class="anchor" id="a49139d7df5f506586882537714363530"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_engine.html">Engine</a> &amp; Engine::Get </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Retourne une reference vers l'engine </p>
+
+</div>
+</div>
 <a class="anchor" id="aa425192c63c4e258588db980ddf18d0d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -272,10 +337,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ShowCrossCursor</b> (
   </tr>
 </table>
 </div><div class="memdoc">
-<p>…vËnement appelÈ lorsqu'une touche du clavier est enfoncÈe</p>
+<p>√âv√®nement appel√© lorsqu'une touche du clavier est enfonc√©e</p>
 <dl class="params"><dt>Param√®tres</dt><dd>
   <table class="params">
-    <tr><td class="paramname">key</td><td>Touche qui a dÈclenchÈ l'ÈvËnement </td></tr>
+    <tr><td class="paramname">key</td><td>Touche qui a d√©clench√© l'√©v√®nement </td></tr>
   </table>
   </dd>
 </dl>
@@ -305,10 +370,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ShowCrossCursor</b> (
   </tr>
 </table>
 </div><div class="memdoc">
-<p>…vËnement appelÈ lorsqu'une touche du clavier est rel‚chÈe</p>
+<p>√âv√®nement appel√© lorsqu'une touche du clavier est rel√¢ch√©e</p>
 <dl class="params"><dt>Param√®tres</dt><dd>
   <table class="params">
-    <tr><td class="paramname">key</td><td>Touche qui a dÈclenchÈ l'ÈvËnement </td></tr>
+    <tr><td class="paramname">key</td><td>Touche qui a d√©clench√© l'√©v√®nement </td></tr>
   </table>
   </dd>
 </dl>
@@ -337,7 +402,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ShowCrossCursor</b> (
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Chargement des ressources en mÈmoire </p>
+<p>Chargement des ressources en m√©moire </p>
 
 <p>Impl√©mente <a class="el" href="class_opengl_context.html">OpenglContext</a>.</p>
 
@@ -374,11 +439,11 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ShowCrossCursor</b> (
   </tr>
 </table>
 </div><div class="memdoc">
-<p>…vËnement appelÈ lorsque la position de la souris est modifiÈe</p>
+<p>√âv√®nement appel√© lorsque la position de la souris est modifi√©e</p>
 <dl class="params"><dt>Param√®tres</dt><dd>
   <table class="params">
-    <tr><td class="paramname">x</td><td>Position en X de la souris au moment du dÈclenchement de l'ÈvËnement </td></tr>
-    <tr><td class="paramname">y</td><td>Position en Y de la souris au moment du dÈclenchement de l'ÈvËnement </td></tr>
+    <tr><td class="paramname">x</td><td>Position en X de la souris au moment du d√©clenchement de l'√©v√®nement </td></tr>
+    <tr><td class="paramname">y</td><td>Position en Y de la souris au moment du d√©clenchement de l'√©v√®nement </td></tr>
   </table>
   </dd>
 </dl>
@@ -424,12 +489,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ShowCrossCursor</b> (
   </tr>
 </table>
 </div><div class="memdoc">
-<p>…vËnement appelÈ lorsqu'une touche de la souris est enfoncÈe</p>
+<p>√âv√®nement appel√© lorsqu'une touche de la souris est enfonc√©e</p>
 <dl class="params"><dt>Param√®tres</dt><dd>
   <table class="params">
-    <tr><td class="paramname">button</td><td>Bouton qui a dÈclenchÈ l'ÈvËnement </td></tr>
-    <tr><td class="paramname">x</td><td>CoordonnÈe en X de l'endroit d'o˘ l'ÈvËnement a ÈtÈ dÈclenchÈ </td></tr>
-    <tr><td class="paramname">y</td><td>CoordonnÈe en Y de l'endroit d'o˘ l'ÈvËnement a ÈtÈ dÈclenchÈ </td></tr>
+    <tr><td class="paramname">button</td><td>Bouton qui a d√©clench√© l'√©v√®nement </td></tr>
+    <tr><td class="paramname">x</td><td>Coordonn√©e en X de l'endroit d'o√π l'√©v√®nement a √©t√© d√©clench√© </td></tr>
+    <tr><td class="paramname">y</td><td>Coordonn√©e en Y de l'endroit d'o√π l'√©v√®nement a √©t√© d√©clench√© </td></tr>
   </table>
   </dd>
 </dl>
@@ -475,17 +540,66 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ShowCrossCursor</b> (
   </tr>
 </table>
 </div><div class="memdoc">
-<p>…vËnement appelÈ lorsqu'une touche de la souris est rel‚chÈe</p>
+<p>√âv√®nement appel√© lorsqu'une touche de la souris est rel√¢ch√©e</p>
 <dl class="params"><dt>Param√®tres</dt><dd>
   <table class="params">
-    <tr><td class="paramname">button</td><td>Bouton qui a dÈclenchÈ l'ÈvËnement </td></tr>
-    <tr><td class="paramname">x</td><td>CoordonnÈe en X de l'endroit d'o˘ l'ÈvËnement a ÈtÈ dÈclenchÈ </td></tr>
-    <tr><td class="paramname">y</td><td>CoordonnÈe en Y de l'endroit d'o˘ l'ÈvËnement a ÈtÈ dÈclenchÈ </td></tr>
+    <tr><td class="paramname">button</td><td>Bouton qui a d√©clench√© l'√©v√®nement </td></tr>
+    <tr><td class="paramname">x</td><td>Coordonn√©e en X de l'endroit d'o√π l'√©v√®nement a √©t√© d√©clench√© </td></tr>
+    <tr><td class="paramname">y</td><td>Coordonn√©e en Y de l'endroit d'o√π l'√©v√®nement a √©t√© d√©clench√© </td></tr>
   </table>
   </dd>
 </dl>
 
 <p>Impl√©mente <a class="el" href="class_opengl_context.html">OpenglContext</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a553e186bea8206589aaeee9bd0d3500f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Engine::PrintText </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>t</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Affiche le texte donn√© √† l'√©cran</p>
+<dl class="params"><dt>Param√®tres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>coordonn√©e en X </td></tr>
+    <tr><td class="paramname">y</td><td>coordonn√©e en Y </td></tr>
+    <tr><td class="paramname">t</td><td>texte √† afficher </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -523,13 +637,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ShowCrossCursor</b> (
 </div>
 </div>
 <hr/>La documentation de cette classe a √©t√© g√©n√©r√©e √† partir des fichiers suivants :<ul>
-<li>C:/Users/Janic/Documents/LoveCraft/LoveCraft/<a class="el" href="engine_8h_source.html">engine.h</a></li>
-<li>C:/Users/Janic/Documents/LoveCraft/LoveCraft/engine.cpp</li>
+<li>C:/Users/Janic/Documents/LoveCraft/lovecraft/src/engine/<a class="el" href="engine_8h_source.html">engine.h</a></li>
+<li>C:/Users/Janic/Documents/LoveCraft/lovecraft/src/engine/engine.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-G√©n√©r√© le Lundi Novembre 19 2012 02:32:52 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+G√©n√©r√© le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

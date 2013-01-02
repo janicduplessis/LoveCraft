@@ -1,4 +1,4 @@
-#ifndef CAMERA_H__
+ï»¿#ifndef CAMERA_H__
 #define CAMERA_H__
 
 #include "util/vector2.h"
@@ -31,16 +31,16 @@ public:
 	void SetPosition (Vector3f pos);
 
 	/**
-	 * Applique la rotation de la caméra en fonction des données de
-	 * positionnement et d'angle du joueur. À appeler après la déclaration
-	 * de la matrice identitée principale
+	 * Applique la rotation de la camÃ©ra en fonction des donnÃ©es de
+	 * positionnement et d'angle du joueur. Ã€ appeler aprÃ¨s la dÃ©claration
+	 * de la matrice identitÃ©e principale
 	 */
 	void ApplyRotation () const ;
 
 	/**
-	 * Applique la translation du joueur en fonction des données de
-	 * positionnement et d'angle du joueur. À appeler après la déclaration
-	 * de la matrice identitée principale
+	 * Applique la translation du joueur en fonction des donnÃ©es de
+	 * positionnement et d'angle du joueur. Ã€ appeler aprÃ¨s la dÃ©claration
+	 * de la matrice identitÃ©e principale
 	 */
 	void ApplyTranslation () const ;
 

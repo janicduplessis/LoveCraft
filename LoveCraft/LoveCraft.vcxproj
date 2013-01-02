@@ -81,6 +81,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\gl\particles.cpp" />
     <ClCompile Include="src\engine\gl\ui\label.cpp" />
     <ClCompile Include="src\engine\gl\ui\panel.cpp" />
     <ClCompile Include="src\engine\gl\ui\control.cpp" />
@@ -115,6 +116,7 @@
     <ClCompile Include="src\util\tool.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\gl\particles.h" />
     <ClInclude Include="src\engine\gl\ui\label.h" />
     <ClInclude Include="src\game\spell.h" />
     <ClInclude Include="src\interface.h" />

@@ -19,10 +19,14 @@
 
 #include "game/pig.h"
 #include "game/character.h"
+#include "game/spell.h"
 
 #include "util/array2d.h"
 #include "util/vector2.h"
 
+/**
+ * @brief Engin graphique
+ */
 class Engine : public OpenglContext
 {
 public:
@@ -167,6 +171,7 @@ private:
 	
 	Character m_character;
 	Pig m_testpig;
+	Spell m_testSpell;
 
 	Shader m_shaderModel;
 	Shader m_shaderCube;

@@ -101,6 +101,8 @@ void Engine::Init()
 	m_testpig.Init(&m_player);
 	m_testpig.SetPosition(Vector3f(10,5,10));
 	m_character = Character();
+	m_testSpell.SetPosition(Vector3f(10,2,0));
+	m_testSpell.Init(4.f, Quaternion());
 
 #pragma endregion
 
@@ -469,6 +471,8 @@ void Engine::Render(float elapsedTime)
 	m_projectile.SetDestination(m_player.Position());
 	m_projectile.Move(elapsedTime);
 	m_projectile.Render();
+
+	m_testSpell.Move(elapsedTime);
 
 	m_testpig.Update(elapsedTime);
 	m_testpig.Render();

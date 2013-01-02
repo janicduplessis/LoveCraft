@@ -32,45 +32,45 @@ public:
 	/**
 	 * Vitesse et rotation initiale
 	 */
-	void Init(float speed, const Quaternion& rot);
+	virtual void Init(float speed, const Quaternion& rot);
 
 	/**
 	 * Acceleration
 	 */
-	void SetAcceleration(const Vector3f& acc);
-	Vector3f GetAcceleration() const;
+	virtual void SetAcceleration(const Vector3f& acc);
+	virtual Vector3f GetAcceleration() const;
 
 	/**
 	 * Vitesse
 	 */
-	Vector3f GetSpeed() const;
+	virtual Vector3f GetSpeed() const;
 
 	/**
 	 * Position
 	 */
-	void SetPosition(const Vector3f& pos);
-	Vector3f GetPosition() const;
+	virtual void SetPosition(const Vector3f& pos);
+	virtual Vector3f GetPosition() const;
 
 	/**
 	 * Destination (0 pour infini)
 	 */
-	void SetDestination(const Vector3f& dest);
-	Vector3f GetDestination() const;
+	virtual void SetDestination(const Vector3f& dest);
+	virtual Vector3f GetDestination() const;
 
 	/**
 	 * Temps de vie du projectile
 	 */
-	void SetTimeToLive(float time);
-	float GetTimeToLive() const;
+	virtual void SetTimeToLive(float time);
+	virtual float GetTimeToLive() const;
 
 	/**
 	 * Si affecté par la gravité
 	 */
-	void SetHasMass(bool hasMass);
-	bool HasMass() const;
+	virtual void SetHasMass(bool hasMass);
+	virtual bool HasMass() const;
 
-	void SetMaxRot( float maxRot );
-	void SetCollisionRadius(const Vector3f& rad);
+	virtual void SetMaxRot( float maxRot );
+	virtual void SetCollisionRadius(const Vector3f& rad);
 protected:
 	Vector3f m_speed;
 	float m_speedIni;

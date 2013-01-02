@@ -315,7 +315,7 @@ void Engine::LoadResource()
 	m_pnl_playscreen = Panel(&m_pnl_screen, 
 		Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
 		Vector2i(m_pnl_screen.Size().x - INTERFACE_SIDE_LEFT_WIDTH - INTERFACE_SIDE_RIGHT_WIDTH, 
-		m_pnl_screen.Size().y - INTERFACE_TOP_HEIGHT * 3 - INTERFACE_BOTTOM_HEIGHT),
+		m_pnl_screen.Size().y - INTERFACE_TOP_HEIGHT - INTERFACE_BOTTOM_HEIGHT),
 		0, PNL_PLAYSCREEN_CONTROLS_NBR, "playscreen");
 	m_pnl_screen.AddControl(&m_pnl_playscreen);
 
@@ -379,15 +379,15 @@ void Engine::LoadResource()
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_EXP_BACKGROUND, PGB_EXP_BORDER_SIZE, PGB_EXP_NAME);
 	m_pnl_portrait.AddControl(&m_pgb_exp);
 	// Label de vie
-	m_lbl_health = Label(&m_pnl_portrait, Vector2i(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), Vector2i(), &m_texturefontColor[TEXTCOLOR_RED], "", 
+	m_lbl_health = Label(&m_pnl_portrait, Vector2i(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), &m_texturefontColor[TEXTCOLOR_RED], "", 
 		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, PNL_PORTRAIT_CHAR_H, PNL_PORTRAIT_CHAR_W, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_HEALTH_NAME);
 	m_pnl_portrait.AddControl(&m_lbl_health);
 	// Label de mana
-	m_lbl_mana = Label(&m_pnl_portrait, Vector2i(LBL_MANA_POSITION_X, LBL_MANA_POSITION_Y), Vector2i(), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
+	m_lbl_mana = Label(&m_pnl_portrait, Vector2i(LBL_MANA_POSITION_X, LBL_MANA_POSITION_Y), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
 		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, PNL_PORTRAIT_CHAR_H, PNL_PORTRAIT_CHAR_W, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_MANA_NAME);
 	m_pnl_portrait.AddControl(&m_lbl_mana);
 	// Label d'exp
-	m_lbl_exp = Label(&m_pnl_portrait, Vector2i(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), Vector2i(), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
+	m_lbl_exp = Label(&m_pnl_portrait, Vector2i(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
 		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, LBL_EXP_CHAR_W, LBL_EXP_CHAR_H, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_EXP_NAME);
 	m_pnl_portrait.AddControl(&m_lbl_exp);
 
@@ -401,9 +401,25 @@ void Engine::LoadResource()
 		ProgressBar::BARMODE_VERTICAL_DTU, PGB_ENERGY_BACKGROUND, PGB_ENERGY_BORDER_SIZE, PGB_ENERGY_NAME);
 	m_pnl_playscreen.AddControl(&m_pgb_energy);
 	//Label d'énergie
-	m_lbl_energy = Label(&m_pnl_playscreen, Vector2i(LBL_ENERGY_POSITION_X, LBL_ENERGY_POSITION_Y), Vector2i(), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
+	m_lbl_energy = Label(&m_pnl_playscreen, Vector2i(LBL_ENERGY_POSITION_X, LBL_ENERGY_POSITION_Y), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
 		Label::TEXTDOCK_NONE, LBL_ENERGY_ITALIC, LBL_ENERGY_CHAR_H, LBL_ENERGY_CHAR_W, LBL_ENERGY_CHAR_I, Vector2f(), LBL_ENERGY_NAME);
 	m_pnl_playscreen.AddControl(&m_lbl_energy);
+	//Label FPS
+	m_lbl_FPS = Label(&m_pnl_playscreen, Vector2i(), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
+		Label::TEXTDOCK_TOPRIGHT, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(-20.f, 0.f), "fps");
+	m_pnl_playscreen.AddControl(&m_lbl_FPS);
+	//Label Position
+	m_lbl_plrPos = Label(&m_pnl_playscreen, Vector2i(5, m_pnl_playscreen.Size().y - LBL_GENERIC_CHAR_H), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
+		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "pos");
+	m_pnl_playscreen.AddControl(&m_lbl_plrPos);
+	//Label Vitesse
+	m_lbl_plrSpd = Label(&m_pnl_playscreen, Vector2i(5, m_pnl_playscreen.Size().y - LBL_GENERIC_CHAR_H*2), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
+		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "spd");
+	m_pnl_playscreen.AddControl(&m_lbl_plrSpd);
+	//Label Acceleration
+	m_lbl_plrAcc = Label(&m_pnl_playscreen, Vector2i(5, m_pnl_playscreen.Size().y - LBL_GENERIC_CHAR_H*3), &m_texturefontColor[TEXTCOLOR_RED], "", 
+		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "acc");
+	m_pnl_playscreen.AddControl(&m_lbl_plrAcc);
 
 #pragma endregion
 
@@ -614,27 +630,6 @@ void Engine::Render2D(float elapsedTime)
 	//Activation du blend normal
 	StartBlendPNG(false);
 
-#pragma region Affichage du texte
-
-	std::ostringstream ss;
-	//Print de la position
-	ss << "Position : " << m_player.Position();
-	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 20, ss.str());
-	ss.str("");
-	//Print de la vitesse
-	ss << "Vitesse : " << m_player.Speed();
-	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 35, ss.str());
-	ss.str("");
-	//Print de l'Accélération
-	ss << "Acceleration : " << m_player.Acceleration();
-	PrintText(INTERFACE_SIDE_LEFT_WIDTH + 10, Height() - INTERFACE_TOP_HEIGHT - 50, ss.str());
-	ss.str("");
-	//Print du nombre de FPS
-	ss << "Fps : " << std::setprecision(2) << m_fps;
-	PrintText(Width() - INTERFACE_SIDE_RIGHT_WIDTH - 120, Height() - INTERFACE_TOP_HEIGHT - 20, ss.str());
-	ss.str("");
-
-#pragma endregion
 
 #pragma region Crosshair
 
@@ -729,7 +724,7 @@ void Engine::Render2D(float elapsedTime)
 	m_pgb_health.SetValue(m_character.HealthPerc());
 	m_pgb_energy.SetValue(m_character.EnergyPerc());
 	m_pgb_mana.SetValue(m_character.ManaPerc());
-	m_pgb_exp.SetValue(m_character.EnergyPerc());
+	m_pgb_exp.SetValue(m_character.ExpPerc());
 	//============================================
 	TextUpdate();
 	//============================================
@@ -801,21 +796,37 @@ void Engine::RenderSpells()
 void Engine::TextUpdate()
 {
 	std::ostringstream ss;
-
+	//Vie
 	ss << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
 	m_lbl_health.SetMessage(ss.str());
 	ss.str("");
-
+	//Energie
 	ss << (int)m_character.Energy() << " / " << (int)m_character.EnergyMax();
 	m_lbl_energy.SetMessage(ss.str());
 	ss.str("");
-
+	//Mana
 	ss << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
 	m_lbl_mana.SetMessage(ss.str());
 	ss.str("");
-
+	//Experience
 	ss << (int)m_character.Exp() << " / " << (int)m_character.ExpNext();
 	m_lbl_exp.SetMessage(ss.str());
+	ss.str("");
+	//Position
+	ss << "Position :     " << m_player.Position();
+	m_lbl_plrPos.SetMessage(ss.str());
+	ss.str("");
+	//Vitesse
+	ss << "Vitesse :      " << m_player.Speed();
+	m_lbl_plrSpd.SetMessage(ss.str());
+	ss.str("");
+	//Accélération
+	ss << "Acceleration : " << m_player.Acceleration();
+	m_lbl_plrAcc.SetMessage(ss.str());
+	ss.str("");
+	//FPS
+	ss << "Fps : " << std::setprecision(2) << m_fps;
+	m_lbl_FPS.SetMessage(ss.str());
 	ss.str("");
 }
 

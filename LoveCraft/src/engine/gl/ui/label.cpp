@@ -6,9 +6,9 @@ Label::Label() : Control(CTRLTYPE_LABEL), m_message("Label"), m_docking(TEXTDOCK
 {
 }
 
-Label::Label(Control* parent, Vector2i position, Vector2i size, Texture* color, std::string message, Docking dock, 
+Label::Label(Control* parent, Vector2i position, Texture* color, std::string message, Docking dock, 
 			 bool italic, float charHeight, float charWidth, float charinterval, Vector2f offset, const std::string& name) :
-Control(CTRLTYPE_LABEL, parent, position, size, color, name), m_message(message), m_docking(dock), m_italic(italic), 
+Control(CTRLTYPE_LABEL, parent, position, Vector2i(), color, name), m_message(message), m_docking(dock), m_italic(italic), 
 	m_fontWidth(charWidth), m_fontHeight(charHeight), m_charInterval(charinterval), m_offset(offset)
 {
 
@@ -185,6 +185,7 @@ Vector2f Label::GetNewPosition(unsigned short length)
 	}
 	//Position relative avec le offset
 	relposition = relposition + m_offset;
+	m_position = Vector2i((int)relposition.x, (int)relposition.y);
 	//Position absolue prete à être dessinée
 	Vector2i& posparent = m_parent->AbsolutePosition();
 	absposition = Vector2f(relposition.x + (float)posparent.x, relposition.y + (float)posparent.y);

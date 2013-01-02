@@ -63,9 +63,14 @@ enum COLOR
 #define SPELL_BAR_SPELL_NUMBER		10
 
 // Valeurs des controles
-#define PNL_SCREEN_CONTROLS_NBR		5	//les 4 cadres externes et la zone de jeu
-#define PNL_PLAYSCREEN_CONTROLS_NBR	4	//1 Panel de portrait, 2 images, 1 bar
-#define PNL_PORTRAIT_CONTROLS_NBR	7	//3 bars, 3 labels, 
+#define PNL_SCREEN_CONTROLS_NBR		5
+#define PNL_PLAYSCREEN_CONTROLS_NBR	6
+#define PNL_PORTRAIT_CONTROLS_NBR	7 
+
+#define LBL_GENERIC_ITALIC			false
+#define LBL_GENERIC_CHAR_W			12
+#define LBL_GENERIC_CHAR_H			25
+#define LBL_GENERIC_CHAR_I			0.6f
 
 // Panel portrait
 #define PNL_PORTRAIT_NAME			"pnl_portrait"

@@ -32,7 +32,7 @@ public:
 	* Constructeur par défaut
 	*/
 	Label();
-	Label(Control* parent, Vector2i position, Vector2i size, Texture* color, std::string message, Docking dock, bool italic, float charHeight, float charWidth, float charinterval, Vector2f offset, const std::string& name);
+	Label(Control* parent, Vector2i position, Texture* color, std::string message, Docking dock, bool italic, float charHeight, float charWidth, float charinterval, Vector2f offset, const std::string& name);
 	/**
 	* Destructeur par défaut
 	*/

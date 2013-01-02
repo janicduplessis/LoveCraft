@@ -230,7 +230,7 @@ Vector3<T>::~Vector3() {}
 template <class T>
 std::ostream& operator<<(std::ostream& out, const Vector3<T>& vec)
 {
-	out << "( " << vec.x << ", " << vec.y << ", " << vec.z << " )";
+	out << "( " << std::setprecision(3) << vec.x << ", " << std::setprecision(3) << vec.y << ", " << std::setprecision(3) << vec.z << " )";
 	return out;
 }
 

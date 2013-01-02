@@ -19,7 +19,6 @@ Control(CTRLTYPE_LISTBOX, parent, position, size, background, name),
 		ss << m_name << "_line" << (m_lineNbr - i - 1);
 		m_lines[m_lineNbr - i - 1] = Label(this, 
 			Vector2i(0, (m_charHeight + m_gapBetLines) * i), 
-			Vector2i(), 
 			m_fontMainColor,
 			"",
 			Label::TEXTDOCK_NONE,

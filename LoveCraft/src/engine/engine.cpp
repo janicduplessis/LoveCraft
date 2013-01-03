@@ -8,6 +8,7 @@
 #include "son.h"
 #include <SFML/Network.hpp>
 #include "interface.h"
+#include <ctime>
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
@@ -41,6 +42,8 @@ Engine& Engine::Get()
 
 void Engine::Init()
 {
+	//seed random number generator
+	srand((unsigned)time(0));
 
 #pragma region Initilisation de Glew
 
@@ -92,11 +95,6 @@ void Engine::Init()
 #pragma region Initialisation des entites
 
 	m_player.Init();
-	m_projectile.Load();
-	m_projectile.Init(4.f, Quaternion());
-	m_projectile.SetCollisionRadius(Vector3f(2,2,2));
-	m_projectile.SetMaxRot(0.05);
-	m_projectile.SetPosition(Vector3f(10,0,0));
 
 	m_testpig.Init(&m_player);
 	m_testpig.SetPosition(Vector3f(10,5,10));
@@ -121,19 +119,6 @@ void Engine::Init()
 		}
 	}
 
-	chunk.SetBloc(5,3,5, BTYPE_DIRT);
-	chunk.SetBloc(1,1,0, BTYPE_BRICK);
-	chunk.SetBloc(1,2,0, BTYPE_DIRT);
-	chunk.SetBloc(1,3,0, BTYPE_DIRT);
-	chunk.SetBloc(2,1,0, BTYPE_DIRT);
-	chunk.SetBloc(3,1,0, BTYPE_GRASS);
-	chunk.SetBloc(5,3,6, BTYPE_DIRT);
-	chunk.SetBloc(6,3,5, BTYPE_DIRT);
-	chunk.SetBloc(5,4,6, BTYPE_DIRT);
-	chunk.SetBloc(6,4,5, BTYPE_DIRT);
-	chunk.SetBloc(6,3,6, BTYPE_DIRT);
-	chunk.SetBloc(6,4,6, BTYPE_DIRT);
-	chunk.SetBloc(5,4,5, BTYPE_DIRT);
 	//Blocs en escalier
 	for (int k = 1; k <= 3; k++)
 	{
@@ -439,6 +424,11 @@ void Engine::LoadResource()
 		std::cout << " Failed to load cube shader" << std::endl;
 		exit(1) ;
 	}
+	if (!m_shaderSpells.Load(SHADER_PATH "particleshader.vert", SHADER_PATH "particleshader.frag", true))
+	{
+		std::cout << " Failed to load cube shader" << std::endl;
+		exit(1) ;
+	}
 #pragma endregion
 
 }
@@ -475,7 +465,7 @@ void Engine::Render(float elapsedTime)
 
 #pragma endregion
 
-#pragma Elements de la camera
+#pragma region Elements de la camera
 
 	// 3rd person
 	if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON ) {
@@ -518,6 +508,7 @@ void Engine::Render(float elapsedTime)
 			c.Render();
 		}
 	}
+
 	Shader::Disable();
 
 #pragma endregion
@@ -525,16 +516,27 @@ void Engine::Render(float elapsedTime)
 #pragma region Render models
 
 	m_shaderModel.Use();
-	m_projectile.SetDestination(m_player.Position());
-	m_projectile.Move(elapsedTime);
-	m_projectile.Render();
-
-	m_testSpell.Move(elapsedTime);
 
 	m_testpig.Update(elapsedTime);
 	m_testpig.Render();
 
 	Shader::Disable();
+
+#pragma endregion
+
+#pragma region Render spells
+
+	glEnable(GL_BLEND);
+	glDisable(GL_CULL_FACE);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	m_shaderSpells.Use();
+
+	m_testSpell.Move(elapsedTime);
+
+	Shader::Disable();
+	glDisable(GL_BLEND);
+	glEnable(GL_CULL_FACE);
 
 #pragma endregion
 
@@ -887,8 +889,6 @@ void Engine::KeyPressEvent(unsigned char key)
 		}
 		break;
 	case 27:
-		m_projectile.SetPosition(Vector3f(10,0,0));
-		m_projectile.Shoot();
 		sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
 		break;
 	case 28:
@@ -935,7 +935,6 @@ void Engine::KeyPressEvent(unsigned char key)
 		sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
 		break;
 	case 37:
-		m_projectile.Shoot();
 		break;
 	default:
 		std::cout << "Unhandled key: " << (int)key << std::endl;

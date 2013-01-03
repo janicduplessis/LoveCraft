@@ -11,7 +11,6 @@
 #include "player.h"
 #include "camera.h"
 #include "chunk.h"
-#include "testprojectile.h"
 #include "info.h"
 #include "gl/ui/panel.h"
 #include "gl/ui/progressbar.h"
@@ -176,10 +175,9 @@ private:
 
 	Shader m_shaderModel;
 	Shader m_shaderCube;
+	Shader m_shaderSpells;
 
 	Array2d<Chunk>* m_chunks;
-
-	TestProjectile m_projectile;
 
 	Panel m_pnl_screen;
 	Panel m_pnl_playscreen;

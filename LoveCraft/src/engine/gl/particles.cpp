@@ -40,7 +40,7 @@ void Particles::Update(float elapsedTime)
 	for(int i = 0; i < m_particlesNumber; i++) {
 		ps.push_back(m_particles + i);
 	}
-	std::sort(ps.begin(), ps.end(), Particles::CompareParticles);
+	std::sort(ps.begin(), ps.end(), CompareParticles);
 
 	VertexData* vd = new VertexData[m_particlesNumber * 4];
 	unsigned int vertexCount = 0;
@@ -118,7 +118,7 @@ void Particles::Render(bool wireFrame) const
 	if(IsValid())
 	{
 		m_texture->Bind();
-		//glClientActiveTexture(GL_TEXTURE0);
+		glClientActiveTexture(GL_TEXTURE0);
 		glBindBuffer(GL_ARRAY_BUFFER, m_vertexVboId);
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glVertexPointer(3, GL_FLOAT, sizeof(VertexData), (char*)0);
@@ -138,7 +138,7 @@ void Particles::Render(bool wireFrame) const
 
 float Particles::RandomFloat() const
 {
-	return (float)rand() / 2.f;
+	return (float)rand() / (float)RAND_MAX;
 }
 
 bool Particles::CompareParticles( Particle* particle1, Particle* particle2 )

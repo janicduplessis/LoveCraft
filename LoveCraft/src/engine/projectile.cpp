@@ -5,7 +5,7 @@
 
 
 Projectile::Projectile() : m_speedIni(0), m_hasMass(false), m_timeToLive(99999999), 
-	m_destination(0), m_acceleration(0), m_shot(false), m_maxRot(0.01f), m_collisionRadius(0.01f, 0.01f, 0.01f)
+	m_destination(0), m_acceleration(0), m_shot(false), m_maxRot(1), m_collisionRadius(0.01f, 0.01f, 0.01f)
 {
 
 }
@@ -15,7 +15,7 @@ Projectile::~Projectile()
 
 }
 
-void Projectile::Move(float elapsedTime) 
+void Projectile::Update(float elapsedTime) 
 {
 	// Test si les conditions de fin du projectile sont vraies
 	if (m_timeToLive <= 0 || !m_shot || elapsedTime == 0)
@@ -56,8 +56,10 @@ void Projectile::Move(float elapsedTime)
 	axis.Normalise();
 	// rotation autour de laxe
 	float rotation;
-	if (abs(angleA) >= m_maxRot && abs(angleA) < PII - m_maxRot)
+	if (abs(angleA) >= m_maxRot && abs(angleA) < PII - m_maxRot) {
 		rotation = (angleA > 0) ? -m_maxRot : m_maxRot;
+		rotation *= elapsedTime;
+	}
 	else
 		rotation = angleA - PII;
 	Quaternion q;

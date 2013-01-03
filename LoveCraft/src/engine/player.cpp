@@ -400,3 +400,18 @@ bool Player::CheckCollision(const Vector3f& pos) const
 		return false; 
 	return true;
 }
+
+Quaternion Player::RotationQ() const
+{
+	Quaternion q;
+	Quaternion qX;
+	qX.FromAxis(PII * (m_rot.x) / 180, Vector3f(0,0,1));
+	qX.Normalise();
+	Quaternion qY;
+	qY.FromAxis(PII * (m_rot.y - 90) / 180, Vector3f(0,1,0));
+	qY.Normalise();
+	q = qX * q;
+	q = qY * q;
+	q.Normalise();
+	return q;
+}

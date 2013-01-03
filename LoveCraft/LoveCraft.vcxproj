@@ -110,7 +110,6 @@
     <ClCompile Include="src\util\quaternion.cpp" />
     <ClCompile Include="src\engine\gl\shader.cpp" />
     <ClCompile Include="src\engine\son.cpp" />
-    <ClCompile Include="src\testprojectile.cpp" />
     <ClCompile Include="src\engine\gl\texture.cpp" />
     <ClCompile Include="src\engine\gl\texturearray.cpp" />
     <ClCompile Include="src\engine\gl\textureatlas.cpp" />
@@ -149,7 +148,6 @@
     <ClInclude Include="src\engine\projectile.h" />
     <ClInclude Include="src\util\quaternion.h" />
     <ClInclude Include="src\engine\son.h" />
-    <ClInclude Include="src\testprojectile.h" />
     <ClInclude Include="src\engine\gl\texturearray.h" />
     <ClInclude Include="src\engine\gl\textureatlas.h" />
     <ClInclude Include="src\util\vector2.h" />
@@ -165,6 +163,8 @@
     <None Include="media\shader\modelshader.frag" />
     <None Include="media\shader\cubeshader.frag" />
     <None Include="media\shader\cubeshader.vert" />
+    <None Include="media\shader\particleshader.frag" />
+    <None Include="media\shader\particleshader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

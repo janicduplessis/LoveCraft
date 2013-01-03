@@ -17,7 +17,7 @@ public:
 	 * Deplace le projectile en fonction de ses parametres
 	 * et du temps depuis la derniere execution de move
 	 */
-	virtual void Move(float elapsedTime);
+	virtual void Update(float elapsedTime);
 
 	/**
 	 * Lance le projectile

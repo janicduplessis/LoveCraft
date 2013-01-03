@@ -6,8 +6,9 @@
 #include "controls.h"
 #include "gl/model.h"
 
-#include "util/vector2.h"
-#include "util/vector3.h"
+#include <util/vector2.h>
+#include <util/vector3.h>
+#include <util/quaternion.h>
 
 #include "game/character.h"
 
@@ -43,6 +44,7 @@ public:
 	 * @return Vector2f
 	 */
 	Vector2f Rotation() const;
+	Quaternion RotationQ() const;
 
 	/**
 	* Vitesse du joueur

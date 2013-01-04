@@ -16,8 +16,9 @@ public:
 	~Vector2();
 
 	T Lenght() const;
-	void Normalise();
-	void Zero();
+	Vector2<T> Normalise();
+	Vector2<T> Zero();
+	Vector2<T> Abs();
 
 	Vector2<T> operator+(const Vector2<T>& v) const;
 	Vector2<T> operator-(const Vector2<T>& v) const;
@@ -161,25 +162,35 @@ bool Vector2<T>::operator==( const Vector2<T>& v ) const
 }
 
 template <class T>
-void Vector2<T>::Zero()
+Vector2<T> Vector2<T>::Zero()
 {
 	x = y = 0;
+	return *this;
 }
 
 template <class T>
-void Vector2<T>::Normalise()
+Vector2<T> Vector2<T>::Normalise()
 {
 	T len = Lenght();
-	if(len == 0)
-		return;
-	x /= len;
-	y /= len;
+	if(len != 0) {
+		x /= len;
+		y /= len;
+	}
+	return *this;
 }
 
 template <class T>
 T Vector2<T>::Lenght() const
 {
 	return sqrt(x*x + y*y);
+}
+
+template <class T>
+Vector2<T> Vector2<T>::Abs()
+{
+	x = abs(x);
+	y = abs(y);
+	return *this;
 }
 
 template <class T>

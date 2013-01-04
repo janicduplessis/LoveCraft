@@ -116,5 +116,14 @@ Array2d<Chunk>* Info::GetChunkArray() const
 	return m_chunks;
 }
 
+Camera* Info::GetCamera() const
+{
+	return m_cam;
+}
+
+void Info::SetCamera(Camera* cam)
+{
+	m_cam = cam;
+}
 
 Info* Info::m_info = 0;

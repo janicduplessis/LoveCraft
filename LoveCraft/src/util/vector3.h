@@ -18,8 +18,9 @@ public:
 	~Vector3();
 
 	T Lenght() const;
-	void Normalise();
-	void Zero();
+	Vector3<T> Normalise();
+	Vector3<T> Zero();
+	Vector3<T> Abs();
 
 	T Dot(const Vector3<T>& v) const;
 	Vector3<T> Cross(const Vector3<T>& v) const;
@@ -184,20 +185,31 @@ T Vector3<T>::Dot( const Vector3<T>& v ) const
 }
 
 template <class T>
-void Vector3<T>::Zero()
+Vector3<T> Vector3<T>::Zero()
 {
 	x = y = z = 0;
+	return *this;
 }
 
 template <class T>
-void Vector3<T>::Normalise()
+Vector3<T> Vector3<T>::Abs()
+{
+	x = abs(x);
+	y = abs(y);
+	z = abs(z);
+	return *this;
+}
+
+template <class T>
+Vector3<T> Vector3<T>::Normalise()
 {
 	T len = Lenght();
-	if(len == 0)
-		return;
-	x /= len;
-	y /= len;
-	z /= len;
+	if(len != 0) {
+		x /= len;
+		y /= len;
+		z /= len;
+	}
+	return *this;
 }
 
 template <class T>

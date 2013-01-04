@@ -8,6 +8,7 @@
 #include "son.h"
 #include "network.h"
 #include "options.h"
+#include "camera.h"
 
 #include <util/vector3.h>
 #include <util/array2d.h>
@@ -75,6 +76,12 @@ public:
 	*/
 	BlockType GetBlocFromWorld(Vector3f pos, const Vector3f& offset = Vector3f(0,0,0)) const;
 
+	/**
+	 * Pointeur vers la camera
+	 */
+	Camera* GetCamera() const;
+	void SetCamera(Camera* cam);
+
 private:
 	Info();
 	~Info();
@@ -89,6 +96,7 @@ private:
 	Option m_options;
 	Son m_sound;
 	Nwork m_network;
+	Camera* m_cam;
 };
 
 #endif

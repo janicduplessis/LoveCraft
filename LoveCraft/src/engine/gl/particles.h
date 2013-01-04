@@ -7,6 +7,9 @@
 #include <util/vector3.h>
 #include <util/quaternion.h>
 
+/**
+ * @brief Particles engine
+ */
 class Particles : Mesh
 {
 private:

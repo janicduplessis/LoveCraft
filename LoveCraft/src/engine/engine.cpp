@@ -44,6 +44,8 @@ void Engine::Init()
 {
 	//seed random number generator
 	srand((unsigned)time(0));
+	//Donne une référence vers la camera a info
+	Info::Get().SetCamera(&m_camera);
 
 #pragma region Initilisation de Glew
 

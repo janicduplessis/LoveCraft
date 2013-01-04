@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <cassert>
 #include <util/tool.h>
+#include "../info.h"
+#include "../camera.h"
 
 Particles::Particles(unsigned int particlesNumber) : m_particlesNumber(particlesNumber), 
 	m_pos(0), m_range(0.5f), m_color(0.5f), m_angle(Quaternion(1,0,0,0)), m_averageVelocity(2),
@@ -53,7 +55,7 @@ void Particles::Update(float elapsedTime)
 		float r = p->color.x;
 		float g = p->color.y;
 		float b = p->color.z;
-		float a = p->timeAlive / p->lifespan;
+		float a = 1 - p->timeAlive / p->lifespan;
 
 		vd[vertexCount++] = VertexData(pos.x - size, pos.y - size, pos.z, r, b, g, a, 0, 0);
 		vd[vertexCount++] = VertexData(pos.x - size, pos.y + size, pos.z, r, b, g, a, 0, 1);
@@ -143,7 +145,10 @@ float Particles::RandomFloat() const
 
 bool Particles::CompareParticles( Particle* particle1, Particle* particle2 )
 {
-	return particle1->pos.z < particle2->pos.z;
+	Camera* cam = Info::Get().GetCamera();
+	Vector3f dist1 = (particle1->pos - cam->GetPosition());
+	Vector3f dist2 = (particle2->pos - cam->GetPosition());
+	return dist1.Lenght() > dist2.Lenght();
 }
 
 Vector3f Particles::AvgVelocity() const

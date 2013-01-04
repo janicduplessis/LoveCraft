@@ -5,7 +5,7 @@
 
 
 Projectile::Projectile() : m_speedIni(0), m_hasMass(false), m_timeToLive(99999999), 
-	m_destination(0), m_acceleration(0), m_shot(false), m_maxRot(1), m_collisionRadius(0.01f, 0.01f, 0.01f)
+	m_destination(0), m_acceleration(0), m_shot(false), m_maxRot(0.75), m_collisionRadius(0.01f, 0.01f, 0.01f)
 {
 
 }

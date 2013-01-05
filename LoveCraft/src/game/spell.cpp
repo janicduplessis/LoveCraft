@@ -6,7 +6,7 @@ Spell::Spell() : m_particles(200)
 	m_spellTexture.Load(TEXTURE_PATH "particle1.png");
 	m_particles.SetTexture(&m_spellTexture);
 	m_particles.Init();
-	m_particles.SetColor(Vector3f(0,1,0));
+	m_particles.SetColor(Vector3f(1,0,0));
 }
 
 Spell::~Spell()

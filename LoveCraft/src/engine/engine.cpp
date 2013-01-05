@@ -532,7 +532,6 @@ void Engine::Render(float elapsedTime)
 	glEnable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glPushMatrix();
 
 	m_shaderSpells.Use();
 
@@ -543,7 +542,6 @@ void Engine::Render(float elapsedTime)
 	Shader::Disable();
 	glDisable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
-	glPopMatrix();
 
 #pragma endregion
 

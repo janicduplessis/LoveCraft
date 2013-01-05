@@ -452,11 +452,11 @@ void Matrix4<T>::SetOrthographicProjection(const T& left, const T& right, const 
 void Matrix4<T>::SetLookAt(const Vector3<T>& eyePosition, const Vector3<T>& lookAtPosition, Vector3<T> upVector)
 {
     Vector3f L = lookAtPosition - eyePosition;
-    L.Normalize();
+    L.Normalise();
 
-    upVector.Normalize();
+    upVector.Normalise();
     Vector3f S = L.Cross(upVector);
-    S.Normalize();
+    S.Normalise();
 
     Vector3f U = S.Cross(L);
 

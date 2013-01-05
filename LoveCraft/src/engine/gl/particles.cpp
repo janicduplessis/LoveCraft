@@ -151,6 +151,25 @@ bool Particles::CompareParticles( Particle* particle1, Particle* particle2 )
 	return dist1.Lenght() > dist2.Lenght();
 }
 
+void Particles::FaceCamera(Particle* p)
+{
+	Camera* cam = Info::Get().GetCamera();
+	if (p->pos == cam->GetPosition())
+		return;
+	Vector3f dist = cam->GetPosition() - p->pos;
+	Vector3f perp = dist.Cross(p->pos);
+	Vector3f ini = Vector3f(1,0,0);
+
+	float n = perp.Dot(ini) / (perp.Lenght() * ini.Lenght());
+	if (n > 1)
+		n = 1;
+	else if (n < -1)
+		n = -1;
+	float angleA = acos(n);
+
+
+}
+
 Vector3f Particles::AvgVelocity() const
 {
 	return m_angle * Vector3f(-1,0,0) * m_averageVelocity;

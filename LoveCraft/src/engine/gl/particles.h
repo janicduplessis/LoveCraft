@@ -58,6 +58,7 @@ private:
 	void CreateParticle(Particle* p) const;
 	void SetMeshData(VertexData* vd, unsigned int vertexCount);
 	static bool CompareParticles(Particle* particle1, Particle* particle2);
+	void FaceCamera(Particle* p);
 private:
 	Particle* m_particles;
 

@@ -539,11 +539,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 <div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_matrix4.html">Matrix4&lt;T&gt;::SetLookAt</a>(<span class="keyword">const</span> <a class="code" href="class_vector3.html" title="Template class pour manipuler des vecteurs 3d.">Vector3&lt;T&gt;</a>&amp; eyePosition, <span class="keyword">const</span> <a class="code" href="class_vector3.html" title="Template class pour manipuler des vecteurs 3d.">Vector3&lt;T&gt;</a>&amp; lookAtPosition, <a class="code" href="class_vector3.html" title="Template class pour manipuler des vecteurs 3d.">Vector3&lt;T&gt;</a> upVector)</div>
 <div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;{</div>
 <div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> L = lookAtPosition - eyePosition;</div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;    L.Normalize();</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;    L.Normalise();</div>
 <div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;</div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;    upVector.Normalize();</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;    upVector.Normalise();</div>
 <div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> S = L.Cross(upVector);</div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;    S.Normalize();</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;    S.Normalise();</div>
 <div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;</div>
 <div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> U = S.Cross(L);</div>
 <div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;</div>
@@ -656,7 +656,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Généré le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+Généré le Dimanche Janvier 6 2013 03:06:36 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

@@ -101,46 +101,47 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">class </span><a class="code" href="class_a_i.html" title="Intelligence Artificielle.">AI</a>;</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
-<div class="line"><a name="l00017"></a><span class="lineno"><a class="code" href="class_npc.html">   17</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_npc.html">Npc</a></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;{</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keyword">enum</span> Type</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        HOSTILE,</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        FRIENDLY,</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        NEUTRAL</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    };</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <a class="code" href="class_npc.html">Npc</a>(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; pos = <a class="code" href="class_vector3.html">Vector3f</a>(0,0,0));</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="class_npc.html">Npc</a>();</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> Init(<a class="code" href="class_player.html" title="classe représentent le joueur dans l&#39;environnement 3D">Player</a>* player = 0) = 0;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> Update(<span class="keywordtype">float</span> elapsedTime);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> Render() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> Move(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; destination, <span class="keywordtype">float</span> elapsedTime);</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="code" href="class_npc.html">   22</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_npc.html" title="Non Player Character Classe virtuelle pure Est controlé par un AI.">Npc</a></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;{</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keyword">enum</span> Type</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        HOSTILE,</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        FRIENDLY,</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        NEUTRAL</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    };</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="class_npc.html" title="Non Player Character Classe virtuelle pure Est controlé par un AI.">Npc</a>(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; pos = <a class="code" href="class_vector3.html">Vector3f</a>(0,0,0));</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="class_npc.html" title="Non Player Character Classe virtuelle pure Est controlé par un AI.">Npc</a>();</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> Position() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordtype">void</span> SetPosition(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; pos);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordtype">bool</span> CheckCollision(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; pos) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> m_pos;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> m_speed;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="class_quaternion.html" title="Quaternion.">Quaternion</a> m_rot;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordtype">float</span> m_maxRot;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordtype">float</span> m_speedGravity;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    Type m_type;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="class_spell.html">Spell</a>* m_spells;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="class_a_i.html" title="Intelligence Artificielle.">AI</a>* m_ai;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <a class="code" href="class_model.html">Model</a> m_model;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;};</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#endif // !NPC_H__</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_npc.html#a1205be066394c278b478c6e600ecbf9b">Init</a>(<a class="code" href="class_player.html" title="classe représentent le joueur dans l&#39;environnement 3D">Player</a>* player = 0) = 0;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_npc.html#a948743646c881181eddf2d8b78b2aeac">Update</a>(<span class="keywordtype">float</span> elapsedTime);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_npc.html#a8d8cc505a176f6322a511474824133ed">Render</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_npc.html#a21f5e6cf9637900910c45adb791a5a7a">Move</a>(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; destination, <span class="keywordtype">float</span> elapsedTime);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> <a class="code" href="class_npc.html#a91a92953c440e203a299b8f1cd8c73f5">Position</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> SetPosition(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; pos);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_npc.html#a641c5d0ba9d05fefa0d7517e0fd2dc47">CheckCollision</a>(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; pos) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> m_pos;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> m_speed;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <a class="code" href="class_quaternion.html" title="Quaternion.">Quaternion</a> m_rot;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">float</span> m_maxRot;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">float</span> m_speedGravity;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    Type m_type;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="class_spell.html">Spell</a>* m_spells;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <a class="code" href="class_a_i.html" title="Intelligence Artificielle.">AI</a>* m_ai;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <a class="code" href="class_model.html" title="Modèle loadé a partir d&#39;un fichier lcm (LoveCraft Model)">Model</a> m_model;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;};</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor">#endif // !NPC_H__</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Généré le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+Généré le Dimanche Janvier 6 2013 03:06:36 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

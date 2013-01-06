@@ -97,8 +97,9 @@ Graphe d'héritage de Control:</div>
   <img src="class_control.png" usemap="#Control_map" alt=""/>
   <map id="Control_map" name="Control_map">
 <area href="class_label.html" alt="Label" shape="rect" coords="0,56,83,80"/>
-<area href="class_panel.html" alt="Panel" shape="rect" coords="93,56,176,80"/>
-<area href="class_progress_bar.html" alt="ProgressBar" shape="rect" coords="186,56,269,80"/>
+<area href="class_list_box.html" alt="ListBox" shape="rect" coords="93,56,176,80"/>
+<area href="class_panel.html" alt="Panel" shape="rect" coords="186,56,269,80"/>
+<area href="class_progress_bar.html" alt="ProgressBar" shape="rect" coords="279,56,362,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -111,7 +112,8 @@ Types publics</h2></td></tr>
 <b>CTRLTYPE_BOUTON</b>, 
 <br/>
 &#160;&#160;<b>CTRLTYPE_PICTUREBOX</b>, 
-<b>CTRLTYPE_PANEL</b>
+<b>CTRLTYPE_PANEL</b>, 
+<b>CTRLTYPE_LISTBOX</b>
 <br/>
  }</td></tr>
 <tr class="separator:aa400d134ed6130578f98860289cf21ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -285,9 +287,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_visible</b></td></t
 <dl class="params"><dt>Paramètres</dt><dd>
   <table class="params">
     <tr><td class="paramname">type</td><td>Le type du controle - Voir Enum Type </td></tr>
-    <tr><td class="paramname">parent</td><td>La position du controle parent </td></tr>
+    <tr><td class="paramname">parent</td><td>Le controle qui joue le r�le de parent </td></tr>
     <tr><td class="paramname">position</td><td>La poisition initiale du controle par rapport a son parent </td></tr>
     <tr><td class="paramname">size</td><td>La taille du controle </td></tr>
+    <tr><td class="paramname">name</td><td>Le nom du controle </td></tr>
   </table>
   </dd>
 </dl>
@@ -466,7 +469,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_visible</b></td></t
 </div><div class="memdoc">
 <p>Dessine l'objet � l'�cran </p>
 
-<p>Réimplémentée dans <a class="el" href="class_label.html#a09cd6f013f6c3587608297b02f0694c1">Label</a>, <a class="el" href="class_progress_bar.html#a061d81d3384a0609b15faf8a6b9cab13">ProgressBar</a>, et <a class="el" href="class_panel.html#ad8eb87041ce3e3d47a3cb74a622cd8a3">Panel</a>.</p>
+<p>Réimplémentée dans <a class="el" href="class_label.html#a09cd6f013f6c3587608297b02f0694c1">Label</a>, <a class="el" href="class_progress_bar.html#a061d81d3384a0609b15faf8a6b9cab13">ProgressBar</a>, <a class="el" href="class_panel.html#ad8eb87041ce3e3d47a3cb74a622cd8a3">Panel</a>, et <a class="el" href="class_list_box.html#ae4f4e6e97e9262186620e6d53838d4a9">ListBox</a>.</p>
 
 </div>
 </div>
@@ -677,7 +680,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_visible</b></td></t
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Généré le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+Généré le Dimanche Janvier 6 2013 03:06:36 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

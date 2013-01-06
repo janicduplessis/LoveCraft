@@ -147,79 +147,92 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#define SPELL_BAR_SPELL_NUMBER      10</span></div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">// Valeurs des controles</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor">#define PNL_SCREEN_CONTROLS_NBR     5   //les 4 cadres externes et la zone de jeu</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PNL_PLAYSCREEN_CONTROLS_NBR 4   //1 Panel de portrait, 2 images, 1 bar</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PNL_PORTRAIT_CONTROLS_NBR   7   //3 bars, 3 labels, </span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor">#define PNL_SCREEN_CONTROLS_NBR     5</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PNL_PLAYSCREEN_CONTROLS_NBR 6</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PNL_PORTRAIT_CONTROLS_NBR   7 </span></div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">// Panel portrait</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">#define PNL_PORTRAIT_NAME           &quot;pnl_portrait&quot;</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PNL_PORTRAIT_SIZE_W         512</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PNL_PORTRAIT_SIZE_H         128</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PNL_PORTRAIT_POSITION_X     20</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PNL_PORTRAIT_POSITION_Y     0</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor"></span><span class="comment">// Picture box dans le panel portrait</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#define PB_PORTRAIT_NAME            &quot;pb_portrait&quot;</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PB_PORTRAIT_SIZE_W          97</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PB_PORTRAIT_SIZE_H          97</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PB_PORTRAIT_POSITION_X      14</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PB_PORTRAIT_POSITION_Y      19</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="preprocessor"></span><span class="comment">// Bars dans le panel portrait</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor">#define PGB_HEALTH_NAME             &quot;pgb_health&quot;</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_HEALTH_BACKGROUND       true</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_HEALTH_BORDER_SIZE      2</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_HEALTH_POSITION_X       160</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_HEALTH_POSITION_Y       86</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_HEALTH_SIZE_W           250</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_HEALTH_SIZE_H           20</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_HEALTH_LOW_TRESHOLD     35</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_MANA_NAME               &quot;pgb_mana&quot;</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_MANA_BACKGROUND         true</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_MANA_BORDER_SIZE        2</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_MANA_POSITION_X         160</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_MANA_POSITION_Y         56</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_MANA_SIZE_W             250</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_MANA_SIZE_H             20</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_EXP_NAME                &quot;pgb_exp&quot;</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_EXP_BACKGROUND          true</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_EXP_BORDER_SIZE         2</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_EXP_POSITION_X          160</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_EXP_POSITION_Y          26</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_EXP_SIZE_W              225</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_EXP_SIZE_H              20</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="preprocessor"></span><span class="comment">// Labels dans le panel portrait</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor">#define LBL_HEALTH_NAME             &quot;lbl_health&quot;</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_HEALTH_POSITION_X       400</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_HEALTH_POSITION_Y       86</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_HEALTH_SIZE_W           95</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_HEALTH_SIZE_H           20</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_MANA_NAME               &quot;lbl_mana&quot;</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_MANA_POSITION_X         400</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_MANA_POSITION_Y         56</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_MANA_SIZE_W             95</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_MANA_SIZE_H             20</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_EXP_NAME                &quot;lbl_exp&quot;</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_EXP_POSITION_X          377</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_EXP_POSITION_Y          26</span></div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_EXP_SIZE_W              118</span></div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_EXP_SIZE_H              20</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor"></span><span class="comment">// Taille de la barre d&#39;énergie</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="preprocessor">#define PGB_ENERGY_NAME             &quot;pgb_energy&quot;</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_ENERGY_BACKGROUND       true</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_ENERGY_BORDER_SIZE      2</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_ENERGY_POSITION_X       10</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_ENERGY_POSITION_Y       150</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_ENERGY_SIZE_W           250</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_ENERGY_SIZE_H           20</span></div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="preprocessor"></span><span class="comment">// Taille (LxH) des boutons des sorts dans la barre de sorts</span></div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="preprocessor">#define SPELL_ICON_SIZE             64</span></div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="preprocessor"></span><span class="comment">// Longueur de l&#39;espace entre chaque images de sorts</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor">#define SPELL_ICON_PADDING          10</span></div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#define LBL_GENERIC_ITALIC          false</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_GENERIC_CHAR_W          12</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_GENERIC_CHAR_H          25</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_GENERIC_CHAR_I          0.6f</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">// Panel portrait</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor">#define PNL_PORTRAIT_NAME           &quot;pnl_portrait&quot;</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PNL_PORTRAIT_SIZE_W         512</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PNL_PORTRAIT_SIZE_H         128</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PNL_PORTRAIT_POSITION_X     20</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PNL_PORTRAIT_POSITION_Y     0</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor"></span><span class="comment">// Picture box dans le panel portrait</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="preprocessor">#define PB_PORTRAIT_NAME            &quot;pb_portrait&quot;</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PB_PORTRAIT_SIZE_W          97</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PB_PORTRAIT_SIZE_H          97</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PB_PORTRAIT_POSITION_X      14</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PB_PORTRAIT_POSITION_Y      19</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor"></span><span class="comment">// Bars dans le panel portrait</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">#define PGB_HEALTH_NAME             &quot;pgb_health&quot;</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_HEALTH_BACKGROUND       true</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_HEALTH_BORDER_SIZE      2</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_HEALTH_POSITION_X       160</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_HEALTH_POSITION_Y       86</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_HEALTH_SIZE_W           250</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_HEALTH_SIZE_H           20</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_HEALTH_LOW_TRESHOLD     35</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_MANA_NAME               &quot;pgb_mana&quot;</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_MANA_BACKGROUND         true</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_MANA_BORDER_SIZE        2</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_MANA_POSITION_X         160</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_MANA_POSITION_Y         56</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_MANA_SIZE_W             250</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_MANA_SIZE_H             20</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_EXP_NAME                &quot;pgb_exp&quot;</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_EXP_BACKGROUND          true</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_EXP_BORDER_SIZE         2</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_EXP_POSITION_X          160</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_EXP_POSITION_Y          26</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_EXP_SIZE_W              225</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_EXP_SIZE_H              20</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="preprocessor"></span><span class="comment">// Labels dans le panel portrait</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="preprocessor">#define PNL_PORTRAIT_ITALIC         false</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PNL_PORTRAIT_CHAR_H         20</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PNL_PORTRAIT_CHAR_W         15</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PNL_PORTRAIT_CHAR_I         0.5f</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_HEALTH_NAME             &quot;lbl_health&quot;</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_HEALTH_POSITION_X       410</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_HEALTH_POSITION_Y       86</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_MANA_NAME               &quot;lbl_mana&quot;</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_MANA_POSITION_X         410</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_MANA_POSITION_Y         56</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_EXP_NAME                &quot;lbl_exp&quot;</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_EXP_POSITION_X          390</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_EXP_POSITION_Y          26</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_EXP_CHAR_W              18</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_EXP_CHAR_H              12</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="preprocessor"></span><span class="comment">// Taille de la barre d&#39;énergie</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="preprocessor">#define PGB_ENERGY_NAME             &quot;pgb_energy&quot;</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_ENERGY_BACKGROUND       true</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_ENERGY_BORDER_SIZE      2</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_ENERGY_POSITION_X       10</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_ENERGY_POSITION_Y       150</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_ENERGY_SIZE_W           250</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define PGB_ENERGY_SIZE_H           20</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_ENERGY_NAME             &quot;lbl_energy&quot;</span></div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_ENERGY_POSITION_X       5</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_ENERGY_POSITION_Y       420</span></div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_ENERGY_ITALIC           false</span></div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_ENERGY_CHAR_H           25</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_ENERGY_CHAR_W           35</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define LBL_ENERGY_CHAR_I           0.5f</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="comment">// Taille (LxH) des boutons des sorts dans la barre de sorts</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="preprocessor">#define SPELL_ICON_SIZE             64</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="preprocessor"></span><span class="comment">// Longueur de l&#39;espace entre chaque images de sorts</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="preprocessor">#define SPELL_ICON_PADDING          10</span></div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Généré le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+Généré le Dimanche Janvier 6 2013 03:06:36 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

@@ -8,6 +8,12 @@
 
 #include <string>
 
+/**
+ * @brief Modèle loadé a partir d'un fichier lcm (LoveCraft Model)
+ * 
+ * Utiliser modelimport.exe pour convertir la plupart des format de model
+ * en lcm
+ */
 class Model : public Mesh
 {
 public:
@@ -27,26 +33,54 @@ public:
 	};
 
 public:
+	/**
+	 * Constructeur
+	 */
 	Model();
+	/**
+	 * Déconstructeur
+	 */
 	virtual ~Model();
 
-	bool Load(const std::string filePath);
+	/**
+	 * Load un modèle lcm depuis un fichier
+	 */
+	virtual bool Load(const std::string filePath);
 
+	/**
+	 * Render le modèle
+	 */
 	virtual void Render(bool wireFrame = false) const;
+	/**
+	 * Copie le mesh dans la carte graphique
+	 */
 	virtual void SetMeshData(VertexData* vd, int vertexCount, uint16* indexData = 0, int indexCount = 0);
 
-	void Translate(float x, float y, float z);
-	void Scale(float x, float y, float z);
+	/**
+	 * Déplace le modèle par rapport à son origine
+	 */
+	virtual void Translate(float x, float y, float z);
+	virtual void Translate(const Vector3f& trans);
+	/**
+	 * Tourne le modèle autour de son origine
+	 */
+	virtual void Rotate(const Quaternion& rot);
+	virtual Quaternion GetRotation() const;
+	virtual void SetRotation(const Vector3f& rot);
+	virtual void SetRotation(const Quaternion& rot);
+	
+	/**
+	 * Scale le modèle
+	 */
+	virtual void Scale(const Vector3f& scale);
+	virtual void Scale(float x, float y, float z);
 
-	void Rotate(const Quaternion& rot);
-	void Translate(const Vector3f& trans);
-	void Scale(const Vector3f& scale);
-
-	Vector3f GetPosition() const;
-	void SetPosition(const Vector3f& pos);
-	Quaternion GetRotation() const;
-	void SetRotation(const Vector3f& rot);
-	void SetRotation(const Quaternion& rot);
+	/**
+	 * Position de l'origine
+	 */
+	virtual Vector3f GetPosition() const;
+	virtual void SetPosition(const Vector3f& pos);
+	
 
 private:
 	Vector3f m_pos;

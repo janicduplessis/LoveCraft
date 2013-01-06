@@ -5,6 +5,7 @@ var searchData=
   ['_7econtrol',['~Control',['../class_control.html#aedda1328c4f8b8d49bca8f0812d3bfd1',1,'Control']]],
   ['_7eengine',['~Engine',['../class_engine.html#a8ef7030a089ecb30bbfcb9e43094717a',1,'Engine']]],
   ['_7elabel',['~Label',['../class_label.html#a39e1167a9b5827afd888780973d88894',1,'Label']]],
+  ['_7emodel',['~Model',['../class_model.html#ad6ebd2062a0b823db841a0b88baac4c0',1,'Model']]],
   ['_7eplayer',['~Player',['../class_player.html#a749d2c00e1fe0f5c2746f7505a58c062',1,'Player']]],
   ['_7eprogressbar',['~ProgressBar',['../class_progress_bar.html#aa0ced60c0ade467a4602c35443e7bc78',1,'ProgressBar']]],
   ['_7eson',['~Son',['../class_son.html#ab5bc2f6252e48b6ace6948cb730c6e3e',1,'Son']]],

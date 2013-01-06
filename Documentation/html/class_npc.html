@@ -89,6 +89,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 <div class="title">Référence de la classe Npc<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Non <a class="el" href="class_player.html" title="classe représentent le joueur dans l&#39;environnement 3D">Player</a> <a class="el" href="class_character.html" title="Classe représentant les infos du personnage.">Character</a> Classe virtuelle pure Est controlé par un <a class="el" href="class_a_i.html" title="Intelligence Artificielle.">AI</a>.  
+ <a href="class_npc.html#details">Plus de détails...</a></p>
+
+<p><code>#include &lt;<a class="el" href="npc_8h_source.html">npc.h</a>&gt;</code></p>
 <div class="dynheader">
 Graphe d'héritage de Npc:</div>
 <div class="dyncontent">
@@ -112,26 +117,20 @@ Fonctions membres publiques</h2></td></tr>
 <tr class="memitem:a75ec25e16001503d5503d120142925b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a75ec25e16001503d5503d120142925b1"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Npc</b> (const <a class="el" href="class_vector3.html">Vector3f</a> &amp;pos=<a class="el" href="class_vector3.html">Vector3f</a>(0, 0, 0))</td></tr>
 <tr class="separator:a75ec25e16001503d5503d120142925b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1205be066394c278b478c6e600ecbf9b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1205be066394c278b478c6e600ecbf9b"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>Init</b> (<a class="el" href="class_player.html">Player</a> *player=0)=0</td></tr>
+<tr class="memitem:a1205be066394c278b478c6e600ecbf9b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_npc.html#a1205be066394c278b478c6e600ecbf9b">Init</a> (<a class="el" href="class_player.html">Player</a> *player=0)=0</td></tr>
 <tr class="separator:a1205be066394c278b478c6e600ecbf9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a948743646c881181eddf2d8b78b2aeac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a948743646c881181eddf2d8b78b2aeac"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>Update</b> (float elapsedTime)</td></tr>
+<tr class="memitem:a948743646c881181eddf2d8b78b2aeac"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_npc.html#a948743646c881181eddf2d8b78b2aeac">Update</a> (float elapsedTime)</td></tr>
 <tr class="separator:a948743646c881181eddf2d8b78b2aeac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d8cc505a176f6322a511474824133ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d8cc505a176f6322a511474824133ed"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>Render</b> () const </td></tr>
+<tr class="memitem:a8d8cc505a176f6322a511474824133ed"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_npc.html#a8d8cc505a176f6322a511474824133ed">Render</a> () const </td></tr>
 <tr class="separator:a8d8cc505a176f6322a511474824133ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21f5e6cf9637900910c45adb791a5a7a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a21f5e6cf9637900910c45adb791a5a7a"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>Move</b> (const <a class="el" href="class_vector3.html">Vector3f</a> &amp;destination, float elapsedTime)</td></tr>
+<tr class="memitem:a21f5e6cf9637900910c45adb791a5a7a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_npc.html#a21f5e6cf9637900910c45adb791a5a7a">Move</a> (const <a class="el" href="class_vector3.html">Vector3f</a> &amp;destination, float elapsedTime)</td></tr>
 <tr class="separator:a21f5e6cf9637900910c45adb791a5a7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91a92953c440e203a299b8f1cd8c73f5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a91a92953c440e203a299b8f1cd8c73f5"></a>
-<a class="el" href="class_vector3.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Position</b> () const </td></tr>
+<tr class="memitem:a91a92953c440e203a299b8f1cd8c73f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_vector3.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_npc.html#a91a92953c440e203a299b8f1cd8c73f5">Position</a> () const </td></tr>
 <tr class="separator:a91a92953c440e203a299b8f1cd8c73f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad61ee25f96171192ff9c947712c6e16f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad61ee25f96171192ff9c947712c6e16f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>SetPosition</b> (const <a class="el" href="class_vector3.html">Vector3f</a> &amp;pos)</td></tr>
 <tr class="separator:ad61ee25f96171192ff9c947712c6e16f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a641c5d0ba9d05fefa0d7517e0fd2dc47"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a641c5d0ba9d05fefa0d7517e0fd2dc47"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>CheckCollision</b> (const <a class="el" href="class_vector3.html">Vector3f</a> &amp;pos) const </td></tr>
+<tr class="memitem:a641c5d0ba9d05fefa0d7517e0fd2dc47"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_npc.html#a641c5d0ba9d05fefa0d7517e0fd2dc47">CheckCollision</a> (const <a class="el" href="class_vector3.html">Vector3f</a> &amp;pos) const </td></tr>
 <tr class="separator:a641c5d0ba9d05fefa0d7517e0fd2dc47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
@@ -164,6 +163,166 @@ Type&#160;</td><td class="memItemRight" valign="bottom"><b>m_type</b></td></tr>
 <a class="el" href="class_model.html">Model</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_model</b></td></tr>
 <tr class="separator:af0ed448f33355d1234924d2da58af53f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Description détaillée</h2>
+<div class="textblock"><p>Non <a class="el" href="class_player.html" title="classe représentent le joueur dans l&#39;environnement 3D">Player</a> <a class="el" href="class_character.html" title="Classe représentant les infos du personnage.">Character</a> Classe virtuelle pure Est controlé par un <a class="el" href="class_a_i.html" title="Intelligence Artificielle.">AI</a>. </p>
+</div><h2 class="groupheader">Documentation des fonctions membres</h2>
+<a class="anchor" id="a641c5d0ba9d05fefa0d7517e0fd2dc47"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Npc::CheckCollision </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_vector3.html">Vector3f</a> &amp;&#160;</td>
+          <td class="paramname"><em>pos</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Renvoie</dt><dd>true si collision </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a1205be066394c278b478c6e600ecbf9b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Npc::Init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_player.html">Player</a> *&#160;</td>
+          <td class="paramname"><em>player</em> = <code>0</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Initialisation Doit être implémenté Initialise le modèle, les spells, l'ai </p>
+
+<p>Implémenté dans <a class="el" href="class_pig.html#a515ac6cae78b647211d7c293a6adc0dc">Pig</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a21f5e6cf9637900910c45adb791a5a7a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Npc::Move </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_vector3.html">Vector3f</a> &amp;&#160;</td>
+          <td class="paramname"><em>destination</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>elapsedTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Déplace le npc à la destination </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">destination</td><td>Destination </td></tr>
+    <tr><td class="paramname">elapsedTime</td><td>Temps depuis le dernier frame </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a91a92953c440e203a299b8f1cd8c73f5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_vector3.html">Vector3f</a> Npc::Position </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Position </p>
+
+</div>
+</div>
+<a class="anchor" id="a8d8cc505a176f6322a511474824133ed"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Npc::Render </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Render le npc </p>
+
+</div>
+</div>
+<a class="anchor" id="a948743646c881181eddf2d8b78b2aeac"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Npc::Update </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>elapsedTime</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Update le npc </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">elapsedTime</td><td>Temps depuis le dernier frame </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>La documentation de cette classe a été générée à partir des fichiers suivants :<ul>
 <li>C:/Users/Janic/Documents/LoveCraft/lovecraft/src/game/<a class="el" href="npc_8h_source.html">npc.h</a></li>
 <li>C:/Users/Janic/Documents/LoveCraft/lovecraft/src/game/npc.cpp</li>
@@ -171,7 +330,7 @@ Type&#160;</td><td class="memItemRight" valign="bottom"><b>m_type</b></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Généré le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+Généré le Dimanche Janvier 6 2013 03:06:36 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

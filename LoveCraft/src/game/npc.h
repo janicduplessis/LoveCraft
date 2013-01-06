@@ -14,6 +14,11 @@
 
 class AI;
 
+/**
+ * @brief Non Player Character
+ * Classe virtuelle pure
+ * Est controlé par un AI
+ */
 class Npc
 {
 public:
@@ -27,13 +32,37 @@ public:
 	Npc(const Vector3f& pos = Vector3f(0,0,0));
 	virtual ~Npc();
 
+	/**
+	 * Initialisation
+	 * Doit être implémenté
+	 * Initialise le modèle, les spells, l'ai
+	 */
 	virtual void Init(Player* player = 0) = 0;
+	/**
+	 * Update le npc
+	 * @param elapsedTime Temps depuis le dernier frame
+	 */
 	virtual void Update(float elapsedTime);
+	/**
+	 * Render le npc
+	 */
 	virtual void Render() const;
+	/**
+	 * Déplace le npc à la destination
+	 * @param destination Destination
+	 * @param elapsedTime Temps depuis le dernier frame
+	 */
 	virtual void Move(const Vector3f& destination, float elapsedTime);
 
+	/**
+	 * Position
+	 */
 	Vector3f Position() const;
 	void SetPosition(const Vector3f& pos);
+
+	/**
+	 * @return true si collision
+	 */
 	bool CheckCollision(const Vector3f& pos) const;
 protected:
 	Vector3f m_pos;

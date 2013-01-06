@@ -97,33 +97,33 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <a class="code" href="class_projectile.html" title="Classe de projectile aka exam de physique.">Projectile</a>();</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="class_projectile.html" title="Classe de projectile aka exam de physique.">Projectile</a>();</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#a79ea641a0235cce7281fed37c220cf53">Move</a>(<span class="keywordtype">float</span> elapsedTime);</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#a7db90be6368cf99c598a8fe214423d29">Update</a>(<span class="keywordtype">float</span> elapsedTime);</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#a07b54273a30bbdf5b4e48a8b6c563739">Shoot</a>();</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    </div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#af0f42067025835c00f1ed68f567b9e60">Hit</a>();</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#a78be83c53111b481ad88d65f2297cedd">Init</a>(<span class="keywordtype">float</span> speed, <span class="keyword">const</span> <a class="code" href="class_quaternion.html" title="Quaternion.">Quaternion</a>&amp; rot);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#a78be83c53111b481ad88d65f2297cedd">Init</a>(<span class="keywordtype">float</span> speed, <span class="keyword">const</span> <a class="code" href="class_quaternion.html" title="Quaternion.">Quaternion</a>&amp; rot);</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#a5a2c9eddc1ce1cd696f9decc46b25576">SetAcceleration</a>(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; acc);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> GetAcceleration() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#a5a2c9eddc1ce1cd696f9decc46b25576">SetAcceleration</a>(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; acc);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="class_vector3.html">Vector3f</a> GetAcceleration() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> <a class="code" href="class_projectile.html#af04ef80c66768e351cd1c9cea4ebe323">GetSpeed</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="class_vector3.html">Vector3f</a> <a class="code" href="class_projectile.html#af04ef80c66768e351cd1c9cea4ebe323">GetSpeed</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#ac63b7a661d6bc0d27d4871734ae0d829">SetPosition</a>(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; pos);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> GetPosition() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#ac63b7a661d6bc0d27d4871734ae0d829">SetPosition</a>(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; pos);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="class_vector3.html">Vector3f</a> GetPosition() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#a683ad4f111e9135abd666e0c89249b8b">SetDestination</a>(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; dest);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> GetDestination() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#a683ad4f111e9135abd666e0c89249b8b">SetDestination</a>(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; dest);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="class_vector3.html">Vector3f</a> GetDestination() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#a941a381fb491189ebc7280e77acc7bce">SetTimeToLive</a>(<span class="keywordtype">float</span> time);</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordtype">float</span> GetTimeToLive() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#a941a381fb491189ebc7280e77acc7bce">SetTimeToLive</a>(<span class="keywordtype">float</span> time);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">float</span> GetTimeToLive() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#addb2f1285a9a52ae7793db21381ed28c">SetHasMass</a>(<span class="keywordtype">bool</span> hasMass);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">bool</span> HasMass() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_projectile.html#addb2f1285a9a52ae7793db21381ed28c">SetHasMass</a>(<span class="keywordtype">bool</span> hasMass);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> HasMass() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">void</span> SetMaxRot( <span class="keywordtype">float</span> maxRot );</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordtype">void</span> SetCollisionRadius(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; rad);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetMaxRot( <span class="keywordtype">float</span> maxRot );</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetCollisionRadius(<span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; rad);</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keyword">protected</span>:</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="class_vector3.html">Vector3f</a> m_speed;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">float</span> m_speedIni;</div>
@@ -147,7 +147,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Généré le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+Généré le Dimanche Janvier 6 2013 03:06:36 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

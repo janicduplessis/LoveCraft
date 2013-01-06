@@ -103,35 +103,41 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_character.html#acb74cf2c0f3309c269201acdfec452bc">SetHealth</a>(<span class="keyword">const</span> <span class="keywordtype">float</span> value);</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_character.html#ab6cb3b9da0cbd5bf85d9afd724590d92">SetEnergy</a>(<span class="keyword">const</span> <span class="keywordtype">float</span> value);</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_character.html#aeaf9a01dccb2f93b5c8a1326a89b4db0">SetMana</a>(<span class="keyword">const</span> <span class="keywordtype">float</span> value);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#a225406c2de0910d7dfcaf96c70a4f2b4">Health</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#ab36597dc6dc14b2eb45b88cedef045d1">Energy</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#a50abd6e558cf97f8972d8d417c2d3bfd">Mana</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#a8ba4c8fbf8b9706d0825f1d62c2c9460">HealthMax</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#ae054295f98ef37636348520406484293">EnergyMax</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#a51b0181dc5f78c620a8f7f9c9623e58e">ManaMax</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#a3b01919cc34b94b60ab87e062cc06618">HealthPerc</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#ae8872b5dbc030478bd4ec612c71a1360">EnergyPerc</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#acd446f0d7d3c07c866ebfece61bb285d">ManaPerc</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    std::string m_name;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordtype">float</span> m_healthMax;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordtype">float</span> m_energyMax;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordtype">float</span> m_manaMax;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordtype">void</span> SetExp(<span class="keyword">const</span> <span class="keywordtype">float</span> value);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#a225406c2de0910d7dfcaf96c70a4f2b4">Health</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#ab36597dc6dc14b2eb45b88cedef045d1">Energy</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#a50abd6e558cf97f8972d8d417c2d3bfd">Mana</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">float</span> Exp() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#a8ba4c8fbf8b9706d0825f1d62c2c9460">HealthMax</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#ae054295f98ef37636348520406484293">EnergyMax</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#a51b0181dc5f78c620a8f7f9c9623e58e">ManaMax</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">float</span> ExpNext() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#a3b01919cc34b94b60ab87e062cc06618">HealthPerc</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#ae8872b5dbc030478bd4ec612c71a1360">EnergyPerc</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_character.html#acd446f0d7d3c07c866ebfece61bb285d">ManaPerc</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordtype">float</span> ExpPerc() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    std::string m_name;</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordtype">float</span> m_health;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordtype">float</span> m_energy;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keywordtype">float</span> m_mana;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;};</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordtype">float</span> m_healthMax;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordtype">float</span> m_energyMax;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keywordtype">float</span> m_manaMax;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordtype">float</span> m_expToNextLevel;</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordtype">float</span> m_health;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordtype">float</span> m_energy;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">float</span> m_mana;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keywordtype">float</span> m_exp;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;};</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Généré le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+Généré le Dimanche Janvier 6 2013 03:06:36 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

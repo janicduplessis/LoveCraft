@@ -34,7 +34,10 @@ public:
 	 */
 	Quaternion operator*(const Quaternion& q) const;
 
-	// Multiplying a quaternion q with a vector v applies the q-rotation to v
+	/**
+	 * Multiple un vecteur par le quaternion et applique la rotation
+	 * au vecteur
+	 */
 	Vector3f Quaternion::operator* (const Vector3f &vec) const;
 
 	/**
@@ -43,12 +46,14 @@ public:
 	void Normalise();
 
 	/**
+	 * Retourne le conjugé (q^-1)
+	 */
+	Quaternion GetConjugate() const;
+
+	/**
 	 * Doit etre presque egal a 1 sinon
 	 * le quaternion doit etre normalisé
 	 */
-
-	Quaternion GetConjugate() const;
-
 	float Magnitude();
 
 	/**

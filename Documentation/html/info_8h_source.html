@@ -95,55 +95,60 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;son.h&quot;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;network.h&quot;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;options.h&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;util/vector3.h&gt;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;util/array2d.h&gt;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">class </span><a class="code" href="class_chunk.html">Chunk</a>;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno"><a class="code" href="class_info.html">   22</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;{</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">static</span> <a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a>&amp; <a class="code" href="class_info.html#a6b6e0acbfda7c02255abd4c4c6fe3c15">Get</a>();</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">static</span> <a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a>* <a class="code" href="class_info.html#aea28221f19755e9be182f5eb604ecf23">GetPtr</a>();</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="class_son.html">Son</a>&amp; <a class="code" href="class_info.html#a21dfd54aa0258d31783bba20be8e4d5e">Sound</a>();</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="class_option.html">Option</a>&amp; <a class="code" href="class_info.html#a2a4dd45817e964a464e92f3909a7ded5">Options</a>();</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="class_nwork.html">Nwork</a>&amp; <a class="code" href="class_info.html#aa5e2b1961592b62eb79accc0f4807ebb">Network</a>();</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="class_block_info.html">BlockInfo</a>* <a class="code" href="class_info.html#a94c3dd10ede99fa1b4cdbde57038d2cf">GetBlocInfo</a>(BlockType type);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_info.html#ae18e6c25020f57cb369c1dba2450d21a">SetChunkArray</a>(<a class="code" href="class_array2d.html">Array2d&lt;Chunk&gt;</a>* arrayPtr);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <a class="code" href="class_array2d.html">Array2d&lt;Chunk&gt;</a>* <a class="code" href="class_info.html#af16f965b1ebf3b0eb16363b806b81b00">GetChunkArray</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    BlockType <a class="code" href="class_info.html#aebf235af0f5d7000bd071fb8db22bc0b">GetBlocFromWorld</a>(<a class="code" href="class_vector3.html">Vector3f</a> pos, <span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; offset = <a class="code" href="class_vector3.html">Vector3f</a>(0,0,0)) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a>();</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    ~<a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a>();</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a>(<a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a> <span class="keyword">const</span>&amp; copy);</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a>&amp; operator=(<a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a> <span class="keyword">const</span>&amp; copy); </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordtype">void</span> GenerateBlocInfos();</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;camera.h&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;util/vector3.h&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;util/array2d.h&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">class </span><a class="code" href="class_chunk.html">Chunk</a>;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="code" href="class_info.html">   23</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;{</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">static</span> <a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a>&amp; <a class="code" href="class_info.html#a6b6e0acbfda7c02255abd4c4c6fe3c15">Get</a>();</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">static</span> <a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a>* <a class="code" href="class_info.html#aea28221f19755e9be182f5eb604ecf23">GetPtr</a>();</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="class_son.html">Son</a>&amp; <a class="code" href="class_info.html#a21dfd54aa0258d31783bba20be8e4d5e">Sound</a>();</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <a class="code" href="class_option.html">Option</a>&amp; <a class="code" href="class_info.html#a2a4dd45817e964a464e92f3909a7ded5">Options</a>();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <a class="code" href="class_nwork.html">Nwork</a>&amp; <a class="code" href="class_info.html#aa5e2b1961592b62eb79accc0f4807ebb">Network</a>();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="class_block_info.html">BlockInfo</a>* <a class="code" href="class_info.html#a94c3dd10ede99fa1b4cdbde57038d2cf">GetBlocInfo</a>(BlockType type);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_info.html#ae18e6c25020f57cb369c1dba2450d21a">SetChunkArray</a>(<a class="code" href="class_array2d.html">Array2d&lt;Chunk&gt;</a>* arrayPtr);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <a class="code" href="class_array2d.html">Array2d&lt;Chunk&gt;</a>* <a class="code" href="class_info.html#af16f965b1ebf3b0eb16363b806b81b00">GetChunkArray</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    BlockType <a class="code" href="class_info.html#aebf235af0f5d7000bd071fb8db22bc0b">GetBlocFromWorld</a>(<a class="code" href="class_vector3.html">Vector3f</a> pos, <span class="keyword">const</span> <a class="code" href="class_vector3.html">Vector3f</a>&amp; offset = <a class="code" href="class_vector3.html">Vector3f</a>(0,0,0)) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <a class="code" href="class_camera.html">Camera</a>* <a class="code" href="class_info.html#aeb7ff19dca3610512dd35b1a00026229">GetCamera</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordtype">void</span> SetCamera(<a class="code" href="class_camera.html">Camera</a>* cam);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <a class="code" href="class_array2d.html">Array2d&lt;Chunk&gt;</a>* m_chunks;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keyword">static</span> <a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a>* m_info;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <a class="code" href="class_block_info.html">BlockInfo</a>* m_blocInfos[BTYPE_COUNT];</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <a class="code" href="class_option.html">Option</a> m_options;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <a class="code" href="class_son.html">Son</a> m_sound;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <a class="code" href="class_nwork.html">Nwork</a> m_network;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;};</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a>();</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    ~<a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a>();</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a>(<a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a> <span class="keyword">const</span>&amp; copy);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a>&amp; operator=(<a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a> <span class="keyword">const</span>&amp; copy); </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordtype">void</span> GenerateBlocInfos();</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <a class="code" href="class_array2d.html">Array2d&lt;Chunk&gt;</a>* m_chunks;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">static</span> <a class="code" href="class_info.html" title="Singleton qui contient tout les informations générales du jeu.">Info</a>* m_info;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <a class="code" href="class_block_info.html">BlockInfo</a>* m_blocInfos[BTYPE_COUNT];</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <a class="code" href="class_option.html">Option</a> m_options;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <a class="code" href="class_son.html">Son</a> m_sound;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <a class="code" href="class_nwork.html">Nwork</a> m_network;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <a class="code" href="class_camera.html">Camera</a>* m_cam;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;};</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Généré le Mardi Janvier 1 2013 21:07:40 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
+Généré le Dimanche Janvier 6 2013 03:06:36 pour LoveCraft par &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

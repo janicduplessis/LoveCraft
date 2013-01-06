@@ -81,6 +81,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="spellinfo.cpp" />
     <ClCompile Include="src\engine\gl\ui\picturebox.cpp" />
     <ClCompile Include="src\engine\gl\ui\icontainer.cpp" />
     <ClCompile Include="src\engine\gl\ui\listbox.cpp" />
@@ -118,6 +119,7 @@
     <ClCompile Include="src\util\tool.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="spellinfo.h" />
     <ClInclude Include="src\engine\gl\ui\picturebox.h" />
     <ClInclude Include="src\engine\gl\ui\icontainer.h" />
     <ClInclude Include="src\engine\gl\ui\listbox.h" />

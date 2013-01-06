@@ -65,7 +65,7 @@ enum COLOR
 // Valeurs des controles
 #define PNL_SCREEN_CONTROLS_NBR		5
 #define PNL_PLAYSCREEN_CONTROLS_NBR	6
-#define PNL_PORTRAIT_CONTROLS_NBR	7 
+#define PNL_PORTRAIT_CONTROLS_NBR	9 
 
 #define LBL_GENERIC_ITALIC			false
 #define LBL_GENERIC_CHAR_W			12
@@ -79,11 +79,16 @@ enum COLOR
 #define PNL_PORTRAIT_POSITION_X		20
 #define PNL_PORTRAIT_POSITION_Y		0
 // Picture box dans le panel portrait
-#define PB_PORTRAIT_NAME			"pb_portrait"
-#define PB_PORTRAIT_SIZE_W			97
-#define PB_PORTRAIT_SIZE_H			97
-#define PB_PORTRAIT_POSITION_X		14
-#define PB_PORTRAIT_POSITION_Y		19
+#define PB_PORTRAIT_NAME			"pnl_portrait_image"
+#define PB_PORTRAIT_SIZE_W			87
+#define PB_PORTRAIT_SIZE_H			87
+#define PB_PORTRAIT_POSITION_X		16
+#define PB_PORTRAIT_POSITION_Y		23
+// Label du niveau
+#define LBL_PLAYER_LEVEL_NAME		"lbl_player_level"
+#define LBL_PLAYER_LEVEL_W			20
+#define LBL_PLAYER_LEVEL_H			15
+#define LBL_PLAYER_LEVEL_I			0.77f
 // Bars dans le panel portrait
 #define PGB_HEALTH_NAME				"pgb_health"
 #define PGB_HEALTH_BACKGROUND		true

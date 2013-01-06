@@ -16,6 +16,7 @@
 #include "gl/ui/progressbar.h"
 #include "gl/ui/label.h"
 #include "gl/ui/listbox.h"
+#include "gl/ui/picturebox.h"
 
 #include "game/pig.h"
 #include "game/character.h"
@@ -183,15 +184,15 @@ private:
 	Panel m_pnl_playscreen;
 	Panel m_pnl_portrait;
 
-	Panel m_ptest;
-	Label m_testlabel;
-
 	ProgressBar m_pgb_health;
 	ProgressBar m_pgb_energy;
 	ProgressBar m_pgb_mana;
 	ProgressBar m_pgb_exp;
 
 	ListBox m_lb_infos;
+
+	Panel m_pnl_playerImage;
+	Label m_lbl_playerLevel;
 
 	Label m_lbl_plrPos;
 	Label m_lbl_plrSpd;

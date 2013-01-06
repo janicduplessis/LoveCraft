@@ -110,6 +110,10 @@ typedef uint8 BlockType;
 enum BLOCK_TYPE {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS, BTYPE_BRICK, BTYPE_SAND, BTYPE_ROCK, BTYPE_SNOW,
 				 BTYPE_SWAMP, BTYPE_COUNT};
 
+typedef uint8 SpellType;
+enum SPELLS {STYPE_BOLT, STYPE_FIRE, STYPE_FREEZE, STYPE_SHOCK, STYPE_POISON, STYPE_STORM,
+				 STYPE_HEAL, STYPE_RAIN, STYPE_DEFEND, STYPE_SHIELD, STYPE_LAST};
+
 //Chemins d'accès
 #define TEXTURE_PATH        "../lovecraft/media/textures/"
 #define SHADER_PATH			"../lovecraft/media/shader/"

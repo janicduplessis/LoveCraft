@@ -265,7 +265,7 @@ void Engine::LoadResource()
 	m_textureInterface[IMAGE_CROSSHAIR].Load(TEXTURE_PATH "i_cross.bmp");
 	m_textureInterface[IMAGE_INTERFACE_FRAME].Load(TEXTURE_PATH "b_rock.jpg");
 	m_textureInterface[IMAGE_PORTRAIT_FRAME].Load(TEXTURE_PATH "i_portrait-frame.png");
-	m_textureInterface[IMAGE_PORTRAIT_MALE].Load(TEXTURE_PATH "i_portrait-male");
+	m_textureInterface[IMAGE_PORTRAIT_MALE].Load(TEXTURE_PATH "i_portrait-male.png");
 	m_textureInterface[IMAGE_PGBTEXT_HEALTH].Load(TEXTURE_PATH "i_pgb_health.png");
 	m_textureInterface[IMAGE_PGBTEXT_ENERGY].Load(TEXTURE_PATH "i_pgb_energy.png");
 	m_textureInterface[IMAGE_PGBTEXT_MANA].Load(TEXTURE_PATH "i_pgb_mana.png");
@@ -377,6 +377,21 @@ void Engine::LoadResource()
 	m_lbl_exp = Label(&m_pnl_portrait, Vector2i(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
 		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, LBL_EXP_CHAR_W, LBL_EXP_CHAR_H, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_EXP_NAME);
 	m_pnl_portrait.AddControl(&m_lbl_exp);
+
+	// Image du joueur
+	m_pnl_playerImage = Panel(&m_pnl_portrait, 
+		Vector2i(PB_PORTRAIT_POSITION_X, PB_PORTRAIT_POSITION_Y),
+		Vector2i(PB_PORTRAIT_SIZE_W, PB_PORTRAIT_SIZE_H),
+		&m_textureInterface[IMAGE_PORTRAIT_MALE], 1, PB_PORTRAIT_NAME);
+	m_pnl_portrait.AddControl(&m_pnl_playerImage);
+
+#pragma region Enfants de m_pnl_playerImage
+
+	m_lbl_playerLevel = Label(&m_pnl_playerImage, Vector2i(), &m_texturefontColor[TEXTCOLOR_WHITE], "10", 
+		Label::TEXTDOCK_TOPCENTER, LBL_GENERIC_ITALIC, LBL_PLAYER_LEVEL_W, LBL_PLAYER_LEVEL_H, LBL_PLAYER_LEVEL_I, Vector2f(), LBL_PLAYER_LEVEL_NAME);
+	m_pnl_playerImage.AddControl(&m_lbl_playerLevel);
+
+#pragma endregion
 
 #pragma endregion
 
@@ -822,7 +837,8 @@ void Engine::TextUpdate()
 	m_lbl_exp.SetMessage(ss.str());
 	ss.str("");
 	//Position
-	ss << "Position :     " << m_player.Position();
+	ss << "Position :     ( " << std::setprecision(4) << m_player.Position().x << ", " << std::setprecision(4) <<
+		m_player.Position().y << ", " << std::setprecision(4) << m_player.Position().z << " )";
 	m_lbl_plrPos.SetMessage(ss.str());
 	ss.str("");
 	//Vitesse

@@ -30,7 +30,7 @@ public:
 	 * (Q1 * Q2).w = (w1w2 - x1x2 - y1y2 - z1z2)
 	 * (Q1 * Q2).x = (w1x2 + x1w2 + y1z2 - z1y2)
 	 * (Q1 * Q2).y = (w1y2 - x1z2 + y1w2 + z1x2)
-	 * (Q1 * Q2).z = (w1z2 + x1y2 - y1x2 + z1w2
+	 * (Q1 * Q2).z = (w1z2 + x1y2 - y1x2 + z1w2)
 	 */
 	Quaternion operator*(const Quaternion& q) const;
 

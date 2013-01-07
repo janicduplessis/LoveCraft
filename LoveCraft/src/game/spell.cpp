@@ -1,14 +1,14 @@
 ﻿#include "spell.h"
 
 
-Spell::Spell() : m_particles(100)
+Spell::Spell() : m_particles(100), m_spellTexture(0)
 {
 	
 }
 
 Spell::Spell( const Spell& s ) : m_particles(s.m_particles), m_spellTexture(s.m_spellTexture), Projectile(s)
 {
-	m_particles.SetTexture(&m_spellTexture);
+	m_particles.SetTexture(m_spellTexture);
 }
 
 Spell::~Spell()
@@ -35,12 +35,13 @@ void Spell::SetPosition( const Vector3f& pos )
 	m_particles.SetPosition(pos);
 }
 
-void Spell::Init( float speed, const Quaternion& rot )
+void Spell::Init( float speed, const Quaternion& rot, Texture* tex )
 {
 	Projectile::Init(speed, rot);
 	m_particles.SetRotation(rot);
-	m_spellTexture.Load(TEXTURE_PATH "particle1.png");
-	m_particles.SetTexture(&m_spellTexture);
+	m_spellTexture = tex;
+	m_spellTexture->Load(TEXTURE_PATH "particle1.png");
+	m_particles.SetTexture(m_spellTexture);
 	m_particles.SetColor(Vector3f(1,0,0));
 	m_particles.Init();
 }

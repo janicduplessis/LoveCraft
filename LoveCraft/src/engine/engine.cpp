@@ -934,7 +934,7 @@ void Engine::KeyPressEvent(unsigned char key)
 		{
 			Spell newSpell;
 			newSpell.SetPosition(m_player.Position());
-			newSpell.Init(4.f, m_player.RotationQ());
+			newSpell.Init(4.f, m_player.RotationQ(), &m_texSpell);
 			newSpell.Shoot();
 			m_spells.push_back(newSpell);
 			sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);

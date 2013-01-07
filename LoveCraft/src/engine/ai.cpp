@@ -24,12 +24,12 @@ void AI::Process(float elapsedTime)
 {
 	// Logique pour determiner le state
 	// Run Away Start
-	if (CheckPlayer(DETECTION_RANGE) && m_currentState != STATE_RUN_AWAY) {
-		m_currentState = STATE_RUN_AWAY;
+	if (CheckPlayer(DETECTION_RANGE) && m_currentState != STATE_FOLLOW) {
+		m_currentState = STATE_FOLLOW;
 		m_stateChanged = true;
 	}	
 	// Run Away End
-	if (CheckPlayer(RUN_AWAY_RANGE, false)) {
+	if (!CheckPlayer(DETECTION_RANGE)) {
 		m_currentState = STATE_PATROL;
 	}	
 

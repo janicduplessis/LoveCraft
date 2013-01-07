@@ -17,11 +17,11 @@ public:
 	virtual void SetPosition(const Vector3f& pos);
 	void Render() const;
 
-	virtual void Init( float speed, const Quaternion& rot );
+	virtual void Init( float speed, const Quaternion& rot, Texture* tex );
 
 private:
 	Particles m_particles;
-	Texture m_spellTexture;
+	Texture* m_spellTexture;
 };
 
 #endif

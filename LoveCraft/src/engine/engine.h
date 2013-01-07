@@ -169,6 +169,7 @@ private:
 	Texture* m_textureSpellX;
 	Texture* m_textureInterface;
 	Texture* m_texturefontColor;
+	Texture m_texSpell;
 
 	Player m_player;
 	Camera m_camera;

@@ -8,6 +8,9 @@
 #include <string>
 #include <iostream>
 
+/**
+ * @Brief Controle de l'interface 2d
+ */
 class Control
 {
 public:

@@ -81,14 +81,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="spellinfo.cpp" />
-    <ClCompile Include="src\engine\gl\ui\picturebox.cpp" />
     <ClCompile Include="src\engine\gl\ui\icontainer.cpp" />
     <ClCompile Include="src\engine\gl\ui\listbox.cpp" />
     <ClCompile Include="src\engine\gl\particles.cpp" />
     <ClCompile Include="src\engine\gl\ui\label.cpp" />
     <ClCompile Include="src\engine\gl\ui\panel.cpp" />
     <ClCompile Include="src\engine\gl\ui\control.cpp" />
+    <ClCompile Include="src\engine\gl\ui\picturebox.cpp" />
     <ClCompile Include="src\engine\options.cpp" />
     <ClCompile Include="src\game\character.cpp" />
     <ClCompile Include="src\engine\ai.cpp" />
@@ -119,12 +118,11 @@
     <ClCompile Include="src\util\tool.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="spellinfo.h" />
-    <ClInclude Include="src\engine\gl\ui\picturebox.h" />
     <ClInclude Include="src\engine\gl\ui\icontainer.h" />
     <ClInclude Include="src\engine\gl\ui\listbox.h" />
     <ClInclude Include="src\engine\gl\particles.h" />
     <ClInclude Include="src\engine\gl\ui\label.h" />
+    <ClInclude Include="src\engine\gl\ui\picturebox.h" />
     <ClInclude Include="src\game\spell.h" />
     <ClInclude Include="src\interface.h" />
     <ClInclude Include="src\engine\gl\ui\panel.h" />

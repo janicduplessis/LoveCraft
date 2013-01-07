@@ -8,7 +8,7 @@
 #include "son.h"
 #include <SFML/Network.hpp>
 #include "interface.h"
-#include <ctime>
+
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
@@ -275,6 +275,7 @@ void Engine::LoadResource()
 	m_textureInterface[IMAGE_PGBTEXT_MANA_BACK].Load(TEXTURE_PATH "i_pgb_mana_back.png");
 	m_textureInterface[IMAGE_PGBTEXT_EXP_BACK].Load(TEXTURE_PATH "i_pgb_exp_back.png");
 	m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW].Load(TEXTURE_PATH "i_pgb_health_low.png");
+	m_textureInterface[IMAGE_CLOCK_BG].Load(TEXTURE_PATH "i_clock_bg.png");
 
 #pragma endregion
 
@@ -300,9 +301,9 @@ void Engine::LoadResource()
 
 	// Zone de jeu
 	m_pnl_playscreen = Panel(&m_pnl_screen, 
-		Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
-		Vector2i(m_pnl_screen.Size().x - INTERFACE_SIDE_LEFT_WIDTH - INTERFACE_SIDE_RIGHT_WIDTH, 
-		m_pnl_screen.Size().y - INTERFACE_TOP_HEIGHT - INTERFACE_BOTTOM_HEIGHT),
+		Vector2i(0, INTERFACE_BOTTOM_HEIGHT),
+		Vector2i(m_pnl_screen.Size().x, 
+		m_pnl_screen.Size().y - INTERFACE_BOTTOM_HEIGHT),
 		0, PNL_PLAYSCREEN_CONTROLS_NBR, "playscreen");
 	m_pnl_screen.AddControl(&m_pnl_playscreen);
 
@@ -406,10 +407,6 @@ void Engine::LoadResource()
 	m_lbl_energy = Label(&m_pnl_playscreen, Vector2i(LBL_ENERGY_POSITION_X, LBL_ENERGY_POSITION_Y), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
 		Label::TEXTDOCK_NONE, LBL_ENERGY_ITALIC, LBL_ENERGY_CHAR_H, LBL_ENERGY_CHAR_W, LBL_ENERGY_CHAR_I, Vector2f(), LBL_ENERGY_NAME);
 	m_pnl_playscreen.AddControl(&m_lbl_energy);
-	//Label FPS
-	m_lbl_FPS = Label(&m_pnl_playscreen, Vector2i(), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
-		Label::TEXTDOCK_TOPRIGHT, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(-20.f, 0.f), "fps");
-	m_pnl_playscreen.AddControl(&m_lbl_FPS);
 	//Label Position
 	m_lbl_plrPos = Label(&m_pnl_playscreen, Vector2i(5, m_pnl_playscreen.Size().y - LBL_GENERIC_CHAR_H), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "pos");
@@ -422,6 +419,17 @@ void Engine::LoadResource()
 	m_lbl_plrAcc = Label(&m_pnl_playscreen, Vector2i(5, m_pnl_playscreen.Size().y - LBL_GENERIC_CHAR_H*3), &m_texturefontColor[TEXTCOLOR_RED], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "acc");
 	m_pnl_playscreen.AddControl(&m_lbl_plrAcc);
+	//Label FPS
+	m_lbl_FPS = Label(&m_pnl_playscreen, Vector2i(5, m_pnl_playscreen.Size().y - LBL_GENERIC_CHAR_H*4), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
+		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "fps");
+	m_pnl_playscreen.AddControl(&m_lbl_FPS);
+	//Heure
+	m_pnl_time = Panel(&m_pnl_playscreen, Vector2i(m_pnl_playscreen.Size().x - 128, m_pnl_playscreen.Size().y - 64), 
+		Vector2i(128, 64), &m_textureInterface[IMAGE_CLOCK_BG], 1, "clock");
+	m_pnl_playscreen.AddControl(&m_pnl_time);
+	m_lbl_time = Label(&m_pnl_time, Vector2i(0,0), &m_texturefontColor[TEXTCOLOR_WHITE], "", Label::TEXTDOCK_MIDDLECENTER, false, 
+		LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "time");
+	m_pnl_time.AddControl(&m_lbl_time);
 
 #pragma endregion
 
@@ -688,6 +696,7 @@ void Engine::Render2D(float elapsedTime)
 		m_pgb_energy.SetVisible(true);
 		m_lbl_energy.SetVisible(true);
 	}
+	
 	//Render de l'écran au complet avec tous ses contrôles.
 	m_pnl_screen.Render();
 
@@ -852,6 +861,15 @@ void Engine::TextUpdate()
 	//FPS
 	ss << "Fps : " << std::setprecision(2) << m_fps;
 	m_lbl_FPS.SetMessage(ss.str());
+	ss.str("");
+	//Heure
+	time_t currentTime;
+	time (&currentTime);
+	struct tm ptm;
+	localtime_s(&ptm, &currentTime);
+	ss << std::setfill('0');
+	ss << std::setw(2) << ptm.tm_hour << ":" << std::setw(2) << ptm.tm_min;
+	m_lbl_time.SetMessage(ss.str());
 	ss.str("");
 }
 

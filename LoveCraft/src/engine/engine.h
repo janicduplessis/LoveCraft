@@ -1,6 +1,8 @@
 ﻿#ifndef ENGINE_H__
 #define ENGINE_H__
 
+#include <ctime>
+
 #include "define.h"
 #include "openglcontext.h"
 
@@ -199,6 +201,9 @@ private:
 	Label m_lbl_plrAcc;
 	Label m_lbl_FPS;
 
+	Panel m_pnl_time;
+	Label m_lbl_time;
+
 	Label m_lbl_health;
 	Label m_lbl_mana;
 	Label m_lbl_exp;
@@ -210,6 +215,8 @@ private:
 
 	float m_fpstmr;
 	float m_fps;
+
+	time_t m_time;
 };
 
 #endif // ENGINE_H__

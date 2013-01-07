@@ -24,9 +24,7 @@ bool Son::LoadSounds()
 	//Sons divers
 	if (!m_sndBuffers[Sons::SON_CLICK].loadFromFile(SOUND_PATH "g_click.ogg"))
 		return false;
-	if (!m_sndBuffers[Sons::SON_JUMP1].loadFromFile(SOUND_PATH "g_jump1.ogg"))
-		return false;
-	if (!m_sndBuffers[Sons::SON_JUMP2].loadFromFile(SOUND_PATH "g_jump2.ogg"))
+	if (!m_sndBuffers[Sons::SON_JUMP].loadFromFile(SOUND_PATH "g_jump.ogg"))
 		return false;
 	if (!m_sndBuffers[Sons::SON_FALLPAIN].loadFromFile(SOUND_PATH "g_fallpain.ogg"))
 		return false;

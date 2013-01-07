@@ -2,6 +2,7 @@
 #define ENGINE_H__
 
 #include <ctime>
+#include <list>
 
 #include "define.h"
 #include "openglcontext.h"
@@ -174,7 +175,6 @@ private:
 	
 	Character m_character;
 	Pig m_testpig;
-	Spell m_testSpell;
 
 	Shader m_shaderModel;
 	Shader m_shaderCube;
@@ -215,6 +215,9 @@ private:
 
 	float m_fpstmr;
 	float m_fps;
+
+	typedef std::list<Spell> SpellList;
+	SpellList m_spells;
 
 	time_t m_time;
 };

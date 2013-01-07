@@ -9,6 +9,7 @@ class Spell : public Projectile
 {
 public:
 	Spell();
+	Spell(const Spell& s);
 	virtual ~Spell();
 
 	virtual void Update(float elapsedTime);

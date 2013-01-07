@@ -2,7 +2,7 @@
 
 
 Character::Character() : m_name("DeFacto"), m_healthMax(HEALTH_MAX), m_energyMax(ENERGY_MAX), m_manaMax(MANA_MAX),
-	m_health(m_healthMax), m_energy(m_energyMax), m_mana(m_manaMax), m_expToNextLevel(10000.f), m_exp(6258.f)
+	m_health(m_healthMax), m_energy(m_energyMax), m_mana(m_manaMax), m_expToNextLevel(10000.f), m_exp(6258.f), m_globalCooldown(0)
 {
 }
 
@@ -144,4 +144,26 @@ float Character::ManaPerc() const
 float Character::ExpPerc() const
 {
 	return (m_exp / m_expToNextLevel * 100);
+}
+
+float Character::GlobalCooldown() const
+{
+	return m_globalCooldown;
+}
+
+void Character::ReduceGlobalCooldown( float time )
+{
+	if (GlobalCooldown() == 0)
+		return;
+	float nextGCDTime = m_globalCooldown - time;
+	if (nextGCDTime > 0)
+	{
+		m_globalCooldown = nextGCDTime;
+	}
+	else m_globalCooldown = 0;
+}
+
+void Character::ResetGlobalCooldown()
+{
+	m_globalCooldown = GLOBAL_COOLDOWN;
 }

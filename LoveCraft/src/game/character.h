@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 
+#define GLOBAL_COOLDOWN 1.5f
+
 /**
 * @brief Classe représentant les infos du personnage
 */
@@ -104,6 +106,10 @@ public:
 	*/
 	float ManaPerc() const;
 	float ExpPerc() const;
+
+	float GlobalCooldown() const;
+	void ReduceGlobalCooldown(float time);
+	void ResetGlobalCooldown();
 private:
 	std::string m_name;
 
@@ -116,6 +122,8 @@ private:
 	float m_energy;
 	float m_mana;
 	float m_exp;
+
+	float m_globalCooldown;
 };
 
 #endif

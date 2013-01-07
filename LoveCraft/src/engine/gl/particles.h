@@ -45,6 +45,7 @@ public:
 	 * @param particlesNumber Nombre de particules
 	 */
 	Particles(unsigned int particlesNumber);
+	Particles(const Particles& p);
 	~Particles();
 
 	/**

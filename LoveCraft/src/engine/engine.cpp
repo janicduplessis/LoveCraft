@@ -101,8 +101,6 @@ void Engine::Init()
 	m_testpig.Init(&m_player);
 	m_testpig.SetPosition(Vector3f(10,5,10));
 	m_character = Character();
-	m_testSpell.SetPosition(Vector3f(10,2,0));
-	m_testSpell.Init(4.f, Quaternion());
 
 #pragma endregion
 
@@ -472,6 +470,7 @@ void Engine::Render(float elapsedTime)
 
 #pragma region Game time
 
+	m_character.ReduceGlobalCooldown(elapsedTime);
 	static float gameTime = elapsedTime;
 	gameTime += elapsedTime;
 
@@ -558,9 +557,12 @@ void Engine::Render(float elapsedTime)
 
 	m_shaderSpells.Use();
 
-	m_testSpell.SetDestination(m_testpig.Position());
-	m_testSpell.Update(elapsedTime);
-	m_testSpell.Render();
+	// Update et render tous les spells
+	for (SpellList::iterator it = m_spells.begin(); it != m_spells.end(); ++it) {
+		it->SetDestination(m_testpig.Position());
+		it->Update(elapsedTime);
+		it->Render();
+	}
 
 	Shader::Disable();
 	glDisable(GL_BLEND);
@@ -928,10 +930,16 @@ void Engine::KeyPressEvent(unsigned char key)
 		}
 		break;
 	case 27:
-		m_testSpell.SetPosition(m_player.Position());
-		m_testSpell.Init(4.f, m_player.RotationQ());
-		m_testSpell.Shoot();
-		sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
+		if(m_character.GlobalCooldown() == 0)
+		{
+			Spell newSpell;
+			newSpell.SetPosition(m_player.Position());
+			newSpell.Init(4.f, m_player.RotationQ());
+			newSpell.Shoot();
+			m_spells.push_back(newSpell);
+			sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
+			m_character.ResetGlobalCooldown();
+		}
 		break;
 	case 28:
 		m_testpig.SetPosition(Vector3f(m_testpig.Position().x, 10, m_testpig.Position().z));

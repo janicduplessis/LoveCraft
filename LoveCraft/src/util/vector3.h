@@ -3,6 +3,7 @@
 
 #include "define.h"
 #include <iostream>
+#include <iomanip>
 #include <SFML/Network.hpp>
 
 /**

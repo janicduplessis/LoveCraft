@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <cassert>
+#include <iostream>
 #include <util/tool.h>
 #include "../info.h"
 #include "../camera.h"
@@ -11,6 +12,18 @@ Particles::Particles(unsigned int particlesNumber) : m_particlesNumber(particles
 	m_particlesSize(0.1f), m_averageLifespan(1.5), m_texture(0)
 {
 	m_particles = new Particle[m_particlesNumber];
+}
+
+Particles::Particles( const Particles& p) : m_particlesNumber(p.m_particlesNumber),
+	m_pos(p.m_pos), m_range(p.m_range), m_color(p.m_color), m_angle(p.m_angle), 
+	m_averageVelocity(p.m_averageVelocity), m_averageLifespan(p.m_averageLifespan), 
+	m_particlesSize(p.m_particlesSize), m_texture(p.m_texture)
+{
+	m_particles = new Particle[m_particlesNumber];
+	for (unsigned int i = 0; i < m_particlesNumber; i++)
+	{
+		m_particles[i] = p.m_particles[i];
+	}
 }
 
 Particles::~Particles()

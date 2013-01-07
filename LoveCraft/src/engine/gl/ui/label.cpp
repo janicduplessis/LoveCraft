@@ -18,7 +18,7 @@ Label::~Label()
 {
 }
 
-void Label::SetMessage(std::string& message)
+void Label::SetMessage(const std::string& message)
 {
 	m_message = message;
 }

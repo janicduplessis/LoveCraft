@@ -321,24 +321,24 @@ void Engine::LoadResource()
 	//	Label::TEXTDOCK_MIDDLECENTER, false, 20.0f, 42.0f, 1.50f, Vector2f(), "lbl_test");
 	//m_ptest.AddControl(&m_testlabel);
 
-	//m_lb_infos = ListBox(&m_pnl_playscreen, Vector2i(0, m_pnl_playscreen.Size().y / 2 - 200), Vector2i(200, 400), &m_texturefontColor[TEXTCOLOR_RED], 
-	//	&m_textureInterface[IMAGE_BLACK_BACK], 15, 2, 12.f, 12.f, 0.5f, "lb_infos");
-	//m_pnl_playscreen.AddControl(&m_lb_infos);
-	//m_lb_infos.SetLine(0, "Avancer:     W");
-	//m_lb_infos.SetLine(1, "Reculer:     S");
-	//m_lb_infos.SetLine(2, "Droite:      D");
-	//m_lb_infos.SetLine(3, "Gauche:      A");
-	//m_lb_infos.SetLine(4, "Sauter:      Espace");
-	//m_lb_infos.SetLine(5, "Marcher:     Ctrl");
-	//m_lb_infos.SetLine(6, "Se pencher:  C");
-	//m_lb_infos.SetLine(7, "Courir:      Shift");
-	//m_lb_infos.SetLine(8, "Tirer:       1");
-	//m_lb_infos.SetLine(9, "Cochon:      2");
-	//m_lb_infos.SetLine(10, "Wireframe:   Y");
-	//m_lb_infos.SetLine(11, "Music On/off O");
-	//m_lb_infos.SetLine(12, "Music Next   M");
-	//m_lb_infos.SetLine(13, "Fullscreen   F10");
-	//m_lb_infos.SetLine(14, "Quitter      Esc");
+	m_lb_infos = new ListBox(&m_pnl_playscreen, Vector2i(0, m_pnl_playscreen.Size().y / 2 - 200), Vector2i(200, 400), &m_texturefontColor[TEXTCOLOR_RED], 
+		&m_textureInterface[IMAGE_BLACK_BACK], 15, 2, 12.f, 12.f, 0.5f, "lb_infos");
+	m_pnl_playscreen.AddControl(m_lb_infos);
+	m_lb_infos->SetLine(0, "Avancer:     W");
+	m_lb_infos->SetLine(1, "Reculer:     S");
+	m_lb_infos->SetLine(2, "Droite:      D");
+	m_lb_infos->SetLine(3, "Gauche:      A");
+	m_lb_infos->SetLine(4, "Sauter:      Espace");
+	m_lb_infos->SetLine(5, "Marcher:     Ctrl");
+	m_lb_infos->SetLine(6, "Se pencher:  C");
+	m_lb_infos->SetLine(7, "Courir:      Shift");
+	m_lb_infos->SetLine(8, "Tirer:       1");
+	m_lb_infos->SetLine(9, "Cochon:      2");
+	m_lb_infos->SetLine(10, "Wireframe:   Y");
+	m_lb_infos->SetLine(11, "Music On/off O");
+	m_lb_infos->SetLine(12, "Music Next   M");
+	m_lb_infos->SetLine(13, "Fullscreen   F10");
+	m_lb_infos->SetLine(14, "Quitter      Esc");
 
 
 #pragma region Enfants pnl portrait
@@ -562,8 +562,12 @@ void Engine::Render(float elapsedTime)
 		it->SetDestination(m_testpig.Position());
 		it->Update(elapsedTime);
 		it->Render();
+		if (it->HasHit())
+		{
+			m_spells.erase(it);
+			break;
+		}
 	}
-
 	Shader::Disable();
 	glDisable(GL_BLEND);
 	glEnable(GL_CULL_FACE);

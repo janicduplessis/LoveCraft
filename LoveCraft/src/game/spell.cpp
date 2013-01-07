@@ -1,7 +1,7 @@
 ﻿#include "spell.h"
 
 
-Spell::Spell() : m_particles(100), m_spellTexture(0)
+Spell::Spell() : m_particles(50), m_spellTexture(0)
 {
 	
 }
@@ -43,6 +43,10 @@ void Spell::Init( float speed, const Quaternion& rot, Texture* tex )
 	m_spellTexture->Load(TEXTURE_PATH "particle1.png");
 	m_particles.SetTexture(m_spellTexture);
 	m_particles.SetColor(Vector3f(1,0,0));
+	m_particles.SetParticlesSize(0.3);
+	m_particles.SetAverageVelocity(0.01);
+	m_particles.SetColor(Vector3f(1, 153/255.f, 0));
+	m_particles.SetRange(0.2);
 	m_particles.Init();
 }
 

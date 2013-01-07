@@ -71,6 +71,7 @@ public:
 
 	virtual void SetMaxRot( float maxRot );
 	virtual void SetCollisionRadius(const Vector3f& rad);
+	bool HasHit() const;
 protected:
 	Vector3f m_speed;
 	float m_speedIni;
@@ -87,6 +88,7 @@ protected:
 	Vector3f m_collisionRadius;
 
 	bool m_hasMass;
+	bool m_hasHit;
 	bool m_shot;
 };
 

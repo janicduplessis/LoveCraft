@@ -11,11 +11,11 @@ public:
 	ListBox(Control* parent, Vector2i &position, Vector2i &size, Texture* textMainColor, Texture* background, unsigned short linenbr,
 		short linegap, float charwidth, float charheight, float charinterval, const std::string& name);
 	~ListBox();
-	void SetLine(unsigned short line, std::string message);
+	void SetLine(unsigned short line, const std::string& message);
 	void Render();
 	ListBox& operator=(const ListBox& p);
 private:
-	Label* m_lines;
+	(Label*)* m_lines;
 	Texture* m_fontMainColor;
 	unsigned short m_lineNbr;
 	short m_gapBetLines;

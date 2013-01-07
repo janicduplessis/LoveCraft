@@ -70,10 +70,10 @@ void Particles::Update(float elapsedTime)
 		float b = p->color.z;
 		float a = 1 - p->timeAlive / p->lifespan;
 
-		vd[vertexCount++] = VertexData(pos.x - size, pos.y - size, pos.z, r, b, g, a, 0, 0);
-		vd[vertexCount++] = VertexData(pos.x - size, pos.y + size, pos.z, r, b, g, a, 0, 1);
-		vd[vertexCount++] = VertexData(pos.x + size, pos.y + size, pos.z, r, b, g, a, 1, 1);
-		vd[vertexCount++] = VertexData(pos.x + size, pos.y - size, pos.z, r, b, g, a, 1, 0);
+		vd[vertexCount++] = VertexData(pos.x - size, pos.y - size, pos.z, r, g, b, a, 0, 0);
+		vd[vertexCount++] = VertexData(pos.x - size, pos.y + size, pos.z, r, g, b, a, 0, 1);
+		vd[vertexCount++] = VertexData(pos.x + size, pos.y + size, pos.z, r, g, b, a, 1, 1);
+		vd[vertexCount++] = VertexData(pos.x + size, pos.y - size, pos.z, r, g, b, a, 1, 0);
 	}
 
 	SetMeshData(vd, vertexCount);

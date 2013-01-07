@@ -192,7 +192,7 @@ private:
 	ProgressBar m_pgb_mana;
 	ProgressBar m_pgb_exp;
 
-	ListBox m_lb_infos;
+	ListBox* m_lb_infos;
 
 	Panel m_pnl_playerImage;
 	Label m_lbl_playerLevel;

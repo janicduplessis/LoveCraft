@@ -12,12 +12,12 @@ ListBox::ListBox(Control* parent, Vector2i &position, Vector2i &size, Texture* t
 Control(CTRLTYPE_LISTBOX, parent, position, size, background, name), 
 	m_fontMainColor(textMainColor), m_lineNbr(linenbr), m_gapBetLines(linegap), m_charWidth(charwidth), m_charHeight(charheight), m_charInterval(charinterval)
 {
+	m_lines = new Label*[linenbr];
 	std::ostringstream ss;
-	m_lines = new Label[m_lineNbr];
 	for (unsigned short i = 0; i < m_lineNbr; i++)
 	{
 		ss << m_name << "_line" << (m_lineNbr - i - 1);
-		m_lines[m_lineNbr - i - 1] = Label(this, 
+		m_lines[i] = new Label(this, 
 			Vector2i(0, (m_charHeight + m_gapBetLines) * i), 
 			m_fontMainColor,
 			"",
@@ -34,6 +34,10 @@ Control(CTRLTYPE_LISTBOX, parent, position, size, background, name),
 
 ListBox::~ListBox()
 {
+	for (unsigned short i = 0; i < m_lineNbr; i++)
+	{
+		delete m_lines[i];
+	}
 	delete [] m_lines;
 }
 
@@ -41,13 +45,13 @@ void ListBox::Render()
 {
 	Control::Render();
 	for (unsigned short i = 0; i < m_lineNbr; i++)
-		m_lines[i].Render();
+		m_lines[i]->Render();
 }
 
-void ListBox::SetLine(unsigned short line, std::string message)
+void ListBox::SetLine(unsigned short line, const std::string& message)
 {
 	assert(line < m_lineNbr);
-	m_lines[line].SetMessage(message);
+	m_lines[line]->SetMessage(message);
 }
 
 ListBox& ListBox::operator=(const ListBox& l)
@@ -65,9 +69,9 @@ ListBox& ListBox::operator=(const ListBox& l)
 	m_pngBlend = l.m_pngBlend;
 	m_position = l.m_position;
 	m_size = l.m_size;
-	m_texture = l.m_texture;
 	m_type = l.m_type;
 	m_visible = l.m_visible;
+	m_texture = l.m_texture;
 
 	return *this;
 }

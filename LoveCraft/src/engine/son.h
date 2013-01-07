@@ -10,8 +10,7 @@ public:
 	enum Sons
 	{
 		SON_CLICK,
-		SON_JUMP1,
-		SON_JUMP2,
+		SON_JUMP,
 		SON_FALLPAIN,
 		SON_BOLT,
 		SON_FIRE,

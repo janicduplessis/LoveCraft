@@ -103,7 +103,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 				if ((!a && !d) && m_speed.x != 0)
 					m_speed.x *= 0.6f;
 				m_speed.y = -MOUVEMENT_SPEED_JUMP;
-				Info::Get().Sound().PlaySnd(Son::SON_JUMP1, Son::CHANNEL_PLAYER, false);
+				Info::Get().Sound().PlaySnd(Son::SON_JUMP, Son::CHANNEL_PLAYER, false);
 			}
 		}
 		else m_pos.y += MOUVEMENT_SPEED_MAX * elapsedTime;

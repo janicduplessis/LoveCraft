@@ -59,21 +59,25 @@ void Particles::Update(float elapsedTime)
 
 	VertexData* vd = new VertexData[m_particlesNumber * 4];
 	unsigned int vertexCount = 0;
-
+	float size = m_particlesSize;
+	Vector3f sizeX(0,0,-size);
+	sizeX = FaceCamera(m_particles) * sizeX;
 	for(unsigned int i = 0; i < ps.size(); i++) {
 		Particle* p = ps[i];
-
-		float size = m_particlesSize / 2;
 		Vector3f pos = p->pos;
 		float r = p->color.x;
 		float g = p->color.y;
 		float b = p->color.z;
 		float a = 1 - p->timeAlive / p->lifespan;
 
-		vd[vertexCount++] = VertexData(pos.x - size, pos.y - size, pos.z, r, g, b, a, 0, 0);
+		/*vd[vertexCount++] = VertexData(pos.x - size, pos.y - size, pos.z, r, g, b, a, 0, 0);
 		vd[vertexCount++] = VertexData(pos.x - size, pos.y + size, pos.z, r, g, b, a, 0, 1);
 		vd[vertexCount++] = VertexData(pos.x + size, pos.y + size, pos.z, r, g, b, a, 1, 1);
-		vd[vertexCount++] = VertexData(pos.x + size, pos.y - size, pos.z, r, g, b, a, 1, 0);
+		vd[vertexCount++] = VertexData(pos.x + size, pos.y - size, pos.z, r, g, b, a, 1, 0);*/
+		vd[vertexCount++] = VertexData(pos.x, pos.y, pos.z, r, g, b, a, 0, 0);
+		vd[vertexCount++] = VertexData(pos.x + sizeX.x, pos.y, pos.z + sizeX.z, r, g, b, a, 0, 1);
+		vd[vertexCount++] = VertexData(pos.x + sizeX.x, pos.y + size, pos.z + sizeX.z, r, g, b, a, 1, 1);
+		vd[vertexCount++] = VertexData(pos.x, pos.y + size, pos.z, r, g, b, a, 1, 0);
 	}
 
 	SetMeshData(vd, vertexCount);
@@ -164,23 +168,88 @@ bool Particles::CompareParticles( Particle* particle1, Particle* particle2 )
 	return dist1.Lenght() > dist2.Lenght();
 }
 
-void Particles::FaceCamera(Particle* p)
+Quaternion Particles::FaceCamera(Particle* p) const
 {
-	Camera* cam = Info::Get().GetCamera();
-	if (p->pos == cam->GetPosition())
-		return;
-	Vector3f dist = cam->GetPosition() - p->pos;
-	Vector3f perp = dist.Cross(p->pos);
-	Vector3f ini = Vector3f(1,0,0);
+	// Billboarding
+	// http://www.lighthouse3d.com/opengl/billboarding/index.php3?billSphe
 
-	float n = perp.Dot(ini) / (perp.Lenght() * ini.Lenght());
-	if (n > 1)
-		n = 1;
-	else if (n < -1)
-		n = -1;
-	float angleA = acos(n);
+	Vector3f camPos = Info::Get().GetCamera()->GetPosition();
+	Vector3f partPos = p->pos;
+	Vector3f lookAt, objToCamProj, objToCam, upAux;
+	float modelview[16],angleCosine;
+
+	glPushMatrix();
+
+	// objToCamProj is the vector in world coordinates from the 
+	// local origin to the camera projected in the XZ plane
+	objToCamProj.x = camPos.x - partPos.x;
+	objToCamProj.y = 0;
+	objToCamProj.z = camPos.z - partPos.z ;
+
+	// This is the original lookAt vector for the object 
+	// in world coordinates
+	lookAt.x = 1;
+	lookAt.y = 0;
+	lookAt.z = 0;
 
 
+	// normalize both vectors to get the cosine directly afterwards
+	objToCamProj.Normalise();
+
+	// easy fix to determine wether the angle is negative or positive
+	// for positive angles upAux will be a vector pointing in the 
+	// positive y direction, otherwise upAux will point downwards
+	// effectively reversing the rotation.
+
+	upAux = lookAt.Cross(objToCamProj);
+
+	// compute the angle
+	angleCosine = lookAt.Dot(objToCamProj);
+
+	Quaternion q;
+	// perform the rotation. The if statement is used for stability reasons
+	// if the lookAt and objToCamProj vectors are too close together then 
+	// |angleCosine| could be bigger than 1 due to lack of precision
+	if ((angleCosine < 0.99990) && (angleCosine > -0.9999)) {
+		q.FromAxis(acos(angleCosine), upAux);
+		//glRotatef(acos(angleCosine)*180/3.14,upAux.x,upAux.y,upAux.z);
+	}
+
+	// so far it is just like the cylindrical billboard. The code for the 
+	// second rotation comes now
+	// The second part tilts the object so that it faces the camera
+
+	// objToCam is the vector in world coordinates from 
+	// the local origin to the camera
+	objToCam = camPos - partPos;
+
+	// Normalize to get the cosine afterwards
+	objToCam.Normalise();
+
+	// Compute the angle between objToCamProj and objToCam, 
+	//i.e. compute the required angle for the lookup vector
+
+	angleCosine = objToCamProj.Dot(objToCam);
+
+	// Tilt the object. The test is done to prevent instability 
+	// when objToCam and objToCamProj have a very small
+	// angle between them
+	Quaternion l;
+	if ((angleCosine < 0.99990) && (angleCosine > -0.9999)) {
+		if (objToCam.y < 0)
+		{
+			//glRotatef(acos(angleCosine)*180/3.14,1,0,0);
+			l.FromAxis(acos(angleCosine), Vector3f(1,0,0));
+		}
+		else
+		{
+			//glRotatef(acos(angleCosine)*180/3.14,-1,0,0);
+			l.FromAxis(acos(angleCosine), Vector3f(-1,0,0));
+		}
+	}
+	//return l * q;
+	q.Normalise();
+	return q;
 }
 
 Vector3f Particles::AvgVelocity() const
@@ -192,8 +261,8 @@ void Particles::CreateParticle( Particle* p ) const
 {
 	p->pos = m_pos;
 	p->velocity = AvgVelocity() + Vector3f(m_range * RandomFloat() - m_range / 2,
-										  m_range * RandomFloat() - m_range / 2,
-										  m_range * RandomFloat() - m_range / 2);
+		m_range * RandomFloat() - m_range / 2,
+		m_range * RandomFloat() - m_range / 2);
 	p->color = m_color;
 	p->timeAlive = 0;
 	p->lifespan = m_averageLifespan + RandomFloat() - 0.5f;

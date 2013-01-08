@@ -109,8 +109,8 @@ private:
 	void SetMeshData(VertexData* vd, unsigned int vertexCount);
 	// Compare 2 particules pour savoir laquelle est la plus proche de la caméra
 	static bool CompareParticles(Particle* particle1, Particle* particle2);
-	//NYI
-	void FaceCamera(Particle* p);
+
+	Quaternion FaceCamera(Particle* p) const;
 private:
 	Particle* m_particles;
 

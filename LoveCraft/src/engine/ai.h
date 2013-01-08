@@ -7,7 +7,7 @@
 
 #include <util/vector3.h>
 
-#define DETECTION_RANGE 10
+#define DETECTION_RANGE 20
 #define RUN_AWAY_RANGE 20
 #define PATROL_RANGE 30
 

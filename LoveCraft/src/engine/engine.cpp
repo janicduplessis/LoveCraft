@@ -321,24 +321,24 @@ void Engine::LoadResource()
 	//	Label::TEXTDOCK_MIDDLECENTER, false, 20.0f, 42.0f, 1.50f, Vector2f(), "lbl_test");
 	//m_ptest.AddControl(&m_testlabel);
 
-	m_lb_infos = new ListBox(&m_pnl_playscreen, Vector2i(0, m_pnl_playscreen.Size().y / 2 - 200), Vector2i(200, 400), &m_texturefontColor[TEXTCOLOR_RED], 
+	m_lb_infos = new ListBox(&m_pnl_playscreen, Vector2i(0, m_pnl_playscreen.Size().y / 2 - 200), 200, &m_texturefontColor[TEXTCOLOR_RED], 
 		&m_textureInterface[IMAGE_BLACK_BACK], 15, 2, 12.f, 12.f, 0.5f, "lb_infos");
 	m_pnl_playscreen.AddControl(m_lb_infos);
-	m_lb_infos->SetLine(0, "Avancer:     W");
-	m_lb_infos->SetLine(1, "Reculer:     S");
-	m_lb_infos->SetLine(2, "Droite:      D");
-	m_lb_infos->SetLine(3, "Gauche:      A");
-	m_lb_infos->SetLine(4, "Sauter:      Espace");
-	m_lb_infos->SetLine(5, "Marcher:     Ctrl");
-	m_lb_infos->SetLine(6, "Se pencher:  C");
-	m_lb_infos->SetLine(7, "Courir:      Shift");
-	m_lb_infos->SetLine(8, "Tirer:       1");
-	m_lb_infos->SetLine(9, "Cochon:      2");
-	m_lb_infos->SetLine(10, "Wireframe:   Y");
-	m_lb_infos->SetLine(11, "Music On/off O");
-	m_lb_infos->SetLine(12, "Music Next   M");
-	m_lb_infos->SetLine(13, "Fullscreen   F10");
-	m_lb_infos->SetLine(14, "Quitter      Esc");
+	m_lb_infos->AddLine("Avancer:     W");
+	m_lb_infos->AddLine("Reculer:     S");
+	m_lb_infos->AddLine("Droite:      D");
+	m_lb_infos->AddLine("Gauche:      A");
+	m_lb_infos->AddLine("Sauter:      Espace");
+	m_lb_infos->AddLine("Marcher:     Ctrl");
+	m_lb_infos->AddLine("Se pencher:  C");
+	m_lb_infos->AddLine("Courir:      Shift");
+	m_lb_infos->AddLine("Tirer:       1");
+	m_lb_infos->AddLine("Cochon:      2");
+	m_lb_infos->AddLine("Wireframe:   Y");
+	m_lb_infos->AddLine("Music On/off O");
+	m_lb_infos->AddLine("Music Next   M");
+	m_lb_infos->AddLine("Fullscreen   F10");
+	m_lb_infos->AddLine("Quitter      Esc");
 
 
 #pragma region Enfants pnl portrait
@@ -568,6 +568,7 @@ void Engine::Render(float elapsedTime)
 			break;
 		}
 	}
+
 	Shader::Disable();
 	glDisable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
@@ -575,7 +576,6 @@ void Engine::Render(float elapsedTime)
 #pragma endregion
 
 #pragma region Render l interface
-
 	// HUD
 	if (m_wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -702,7 +702,7 @@ void Engine::Render2D(float elapsedTime)
 		m_pgb_energy.SetVisible(true);
 		m_lbl_energy.SetVisible(true);
 	}
-	
+
 	//Render de l'écran au complet avec tous ses contrôles.
 	m_pnl_screen.Render();
 
@@ -1066,6 +1066,9 @@ void Engine::MouseMoveEvent(int x, int y)
 
 void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 {
+	Vector2i& pos = m_lb_infos->AbsolutePosition();
+	Vector2i& size = m_lb_infos->Size();
+	Vector2i& play = m_pnl_screen.Size();
 	switch (button)
 	{
 	case MOUSE_BUTTON_RIGHT:
@@ -1086,7 +1089,10 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 			Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE);
 		break;
 	case MOUSE_BUTTON_WHEEL_UP:
-		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
+		if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
+			m_lb_infos->Scroll(1);
+		} 
+		else if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
 		{
 			// Zoom in camera
 			if (m_camRadius > 0)
@@ -1096,7 +1102,10 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		}
 		break;
 	case MOUSE_BUTTON_WHEEL_DOWN:
-		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
+		if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
+			m_lb_infos->Scroll(-1);
+		} 
+		else if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
 		{
 			// Zoom out camera
 			if (m_camRadius < 20)

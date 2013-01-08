@@ -2,15 +2,16 @@
 #include <sstream>
 
 ListBox::ListBox() : Control(CTRLTYPE_LISTBOX), m_lines(0), m_fontMainColor(0), m_lineNbr(0), m_gapBetLines(2), m_charWidth(12.f),
-	m_charHeight(12.f), m_charInterval(0.66f)
+	m_charHeight(12.f), m_charInterval(0.66f), m_curLineIndex(0)
 {
 
 }
 
-ListBox::ListBox(Control* parent, Vector2i &position, Vector2i &size, Texture* textMainColor, Texture* background, unsigned short linenbr,
+ListBox::ListBox(Control* parent, Vector2i &position, float lineWidth, Texture* textMainColor, Texture* background, unsigned short linenbr,
 				 short linegap, float charwidth, float charheight, float charinterval, const std::string& name) : 
-Control(CTRLTYPE_LISTBOX, parent, position, size, background, name), 
-	m_fontMainColor(textMainColor), m_lineNbr(linenbr), m_gapBetLines(linegap), m_charWidth(charwidth), m_charHeight(charheight), m_charInterval(charinterval)
+Control(CTRLTYPE_LISTBOX, parent, position, Vector2i(lineWidth, (charheight + linegap) * linenbr), background, name), 
+	m_fontMainColor(textMainColor), m_lineNbr(linenbr), m_gapBetLines(linegap), m_charWidth(charwidth), m_charHeight(charheight), m_charInterval(charinterval),
+	m_curLineIndex(0)
 {
 	m_lines = new Label*[linenbr];
 	std::ostringstream ss;
@@ -48,10 +49,47 @@ void ListBox::Render()
 		m_lines[i]->Render();
 }
 
+void ListBox::Update()
+{
+	StringList::iterator it = m_messages.begin();
+	for (int i = 0; i < m_curLineIndex; i++)
+	{
+		if (it != m_messages.end())
+			++it;
+	}
+	for(int i = 0; i < m_lineNbr; ++i)
+	{
+		if (it == m_messages.end())
+			m_lines[i]->SetMessage("");
+		else {
+			m_lines[i]->SetMessage(it->data());
+			++it;
+		}
+	}
+}
+
 void ListBox::SetLine(unsigned short line, const std::string& message)
 {
 	assert(line < m_lineNbr);
-	m_lines[line]->SetMessage(message);
+	m_messages.assign(line, message);
+	Update();
+}
+
+void ListBox::AddLine(const std::string& message)
+{
+	m_messages.push_front(message);
+	Update();
+}
+
+void ListBox::Scroll(int lines)
+{
+	/*if (m_curLineIndex == 0 || m_messages.size() - m_curLineIndex < m_lineNbr)
+	return;*/
+	if (m_curLineIndex + lines <= 0)
+		return;
+	m_curLineIndex += lines;
+	Update();
+
 }
 
 ListBox& ListBox::operator=(const ListBox& l)
@@ -73,5 +111,11 @@ ListBox& ListBox::operator=(const ListBox& l)
 	m_visible = l.m_visible;
 	m_texture = l.m_texture;
 
+	return *this;
+}
+
+ListBox& ListBox::operator<<( const std::string& text )
+{
+	AddLine(text);
 	return *this;
 }

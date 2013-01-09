@@ -270,6 +270,7 @@ void Engine::LoadResource()
 	m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW].Load(TEXTURE_PATH "i_pgb_health_low.png");
 	m_textureInterface[IMAGE_CLOCK_BG].Load(TEXTURE_PATH "i_clock_bg.png");
 	m_textureInterface[IMAGE_CONSOLE_BACK].Load(TEXTURE_PATH "i_console_back.png");
+	m_textureInterface[IMAGE_CONSOLE_TEXTBOX_BACK].Load(TEXTURE_PATH "i_console_textbox_back.png");
 
 #pragma endregion
 
@@ -336,7 +337,7 @@ void Engine::LoadResource()
 
 	//Fenetre de console
 	m_lb_console = new ListBox(&m_pnl_playscreen, 
-		Vector2i(m_pnl_playscreen.Size().x - 64 - (int)LB_CONSOLE_SIZE_W, 0), 
+		Vector2i(m_pnl_playscreen.Size().x - 64 - (int)LB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H + 5), 
 		LB_CONSOLE_SIZE_W, 
 		&m_texturefontColor[TEXTCOLOR_YELLOW], 
 		&m_textureInterface[IMAGE_CONSOLE_BACK], 
@@ -350,6 +351,22 @@ void Engine::LoadResource()
 		Vector2i(LB_CONSOLE_BODER_OFFSET_S, LB_CONSOLE_BODER_OFFSET_B));
 	m_pnl_playscreen.AddControl(m_lb_console);
 	m_lb_console->SetRepeatTexture(false);
+	//Texbox de la console
+	m_txb_console = new Textbox(&m_pnl_playscreen,
+		Vector2i(m_pnl_playscreen.Size().x - 64 - (int)LB_CONSOLE_SIZE_W, 0),
+		Vector2i(TXB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H),
+		&m_texturefontColor[TEXTCOLOR_WHITE],
+		&m_textureInterface[IMAGE_CONSOLE_TEXTBOX_BACK],
+		Label::TEXTDOCK_MIDDLELEFT,
+		LBL_GENERIC_ITALIC,
+		TXB_CONSOLE_SIZE_H * 0.75f,
+		TXB_CONSOLE_CHAR_I,
+		Vector2f(TXB_CONSOLE_OFFSET_X, TXB_CONSOLE_OFFSET_Y),
+		TXB_CONSOLE_NAME);
+	m_pnl_playscreen.AddControl(m_txb_console);
+	m_txb_console->SetRepeatTexture(false);
+	m_txb_console->SetVisible(false);
+	m_txb_console->SetFocus(false);
 	// Frame portrait
 	m_pnl_portrait = Panel(&m_pnl_playscreen,
 		Vector2i(PNL_PORTRAIT_POSITION_X, PNL_PORTRAIT_POSITION_Y),
@@ -925,106 +942,148 @@ void Engine::KeyPressEvent(unsigned char key)
 {
 	Son& sound = Info::Get().Sound();
 	static std::ostringstream ss;
-	switch(key)
+	ss << (int)key;
+	CW(ss.str());
+	ss.str("");
+	if (key == 58 && !m_txb_console->HasFocus())
 	{
-	case 36:	// ESC
-		Stop();
-		break;
-	case 94:	// F10
-		SetFullscreen(!IsFullscreen());
-		break;
-	case 21:	// V
-		if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON) 
+		m_txb_console->SetFocus(true);
+		m_txb_console->SetVisible(true);
+		return;
+	}
+	if (m_txb_console->HasFocus())
+	{
+		if (key == 59)
 		{
-			m_camera.SetMode(Camera::CAM_THIRD_PERSON);
-			CW("Affichage de la camera a la troisieme personne");
+			std::string mes = m_txb_console->GetMsg();
+			if (mes.length() > 0)
+			{
+				for (int i = 0; i < mes.length()-1; i++)
+				{
+					ss << mes[i];
+				}
+				m_txb_console->SetMessage(ss.str());
+				ss.str("");
+			}
+			return;
 		}
-		else 
+		if (key == 58)
 		{
-			HideCursor();
-			m_camera.SetMode(Camera::CAM_FIRST_PERSON);
-			CW("Affichage de la camera a la premiere personne");
+			if (m_txb_console->GetMsg() != "")
+				CW(m_txb_console->GetMsg());
+			m_txb_console->SetVisible(false);
+			m_txb_console->SetFocus(false);
+			m_txb_console->SetMessage("");
+			return;
 		}
-		break;
-	case 27:
-		if(m_character.GlobalCooldown() == 0)
+		ss << m_txb_console->GetMsg() << key;
+		m_txb_console->SetMessage(ss.str());
+		ss.str("");
+		return;
+	}
+	else
+	{
+		switch(key)
 		{
-			Spell newSpell;
-			newSpell.SetPosition(m_player.Position());
-			newSpell.Init(4.f, m_player.RotationQ(), &m_texSpell);
-			newSpell.Shoot();
-			m_spells.push_back(newSpell);
-			sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
-			m_character.ResetGlobalCooldown();
-		}
-		CW("Lancement de sort: Trail orange!");
-		break;
-	case 28:
-		m_testpig.SetPosition(Vector3f(m_testpig.Position().x, 10, m_testpig.Position().z));
-		sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
-		CW("Lancement de sort: teleportation de cochon!");
-		break;
-	case 29:
-		sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
-		CW("Lancement de sort: Glace");
-		break;
-	case 30:
-		sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
-		CW("Lancement de sort: Shock");
-		break;
-	case 31:
-		sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
-		CW("Lancement de sort: Poison");
-		break;
-	case 32:
-		if (m_character.Mana() - 5 >= 0)
-		{
-			sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
-			m_character.SetMana(-5);
-			m_player.Teleport();
-			CW("Lancement de sort: Teleportation");
-		}
-		break;
-	case 33:
-		if (m_character.Mana() - 15 >= 0)
-		{
-			sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
-			m_character.SetHealth(15);
-			m_character.SetMana(-15);
-			CW("Lancement de sort: Soin");
-		}
-		break;
-	case 34:
-		if (m_character.Mana() - 10 >= 0)
-		{
-			sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
-			m_character.SetEnergy(10);
-			m_character.SetMana(-10);
-			CW("Lancement de sort: Rafraichissement");
-		}
-		break;
-	case 35:
-		sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
-		CW("Lancement de sort: Defense");
-		break;
-	case 26:
-		sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
-		CW("Lancement de sort: Bouclier magique");
-		break;
-	default:
-		std::cout << "Unhandled key: " << (int)key << std::endl;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
-			Info::Get().Sound().PlayNextTrack();
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
-		{
-			Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
-			ss << "Musique mis a: " << (Info::Get().Options().GetOptMusic() ? "on" : "off");
-			CW(ss.str());
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
-		{
-			m_character.SetExp(75);
-			CW("Ajout de 75 points d'exp");
+		case 36:	// ESC
+			Stop();
+			break;
+		case 94:	// F10
+			SetFullscreen(!IsFullscreen());
+			break;
+		case 21:	// V
+			if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON) 
+			{
+				m_camera.SetMode(Camera::CAM_THIRD_PERSON);
+				CW("Affichage de la camera a la troisieme personne");
+			}
+			else 
+			{
+				HideCursor();
+				m_camera.SetMode(Camera::CAM_FIRST_PERSON);
+				CW("Affichage de la camera a la premiere personne");
+			}
+			break;
+		case 27:
+			if(m_character.GlobalCooldown() == 0)
+			{
+				Spell newSpell;
+				newSpell.SetPosition(m_player.Position());
+				newSpell.Init(4.f, m_player.RotationQ(), &m_texSpell);
+				newSpell.Shoot();
+				m_spells.push_back(newSpell);
+				sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
+				m_character.ResetGlobalCooldown();
+			}
+			CW("Lancement de sort: Trail orange!");
+			break;
+		case 28:
+			m_testpig.SetPosition(Vector3f(m_testpig.Position().x, 10, m_testpig.Position().z));
+			sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
+			CW("Lancement de sort: teleportation de cochon!");
+			break;
+		case 29:
+			sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
+			CW("Lancement de sort: Glace");
+			break;
+		case 30:
+			sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
+			CW("Lancement de sort: Shock");
+			break;
+		case 31:
+			sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
+			CW("Lancement de sort: Poison");
+			break;
+		case 32:
+			if (m_character.Mana() - 5 >= 0)
+			{
+				sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
+				m_character.SetMana(-5);
+				m_player.Teleport();
+				CW("Lancement de sort: Teleportation");
+			}
+			break;
+		case 33:
+			if (m_character.Mana() - 15 >= 0)
+			{
+				sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
+				m_character.SetHealth(15);
+				m_character.SetMana(-15);
+				CW("Lancement de sort: Soin");
+			}
+			break;
+		case 34:
+			if (m_character.Mana() - 10 >= 0)
+			{
+				sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
+				m_character.SetEnergy(10);
+				m_character.SetMana(-10);
+				CW("Lancement de sort: Rafraichissement");
+			}
+			break;
+		case 35:
+			sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
+			CW("Lancement de sort: Defense");
+			break;
+		case 26:
+			sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
+			CW("Lancement de sort: Bouclier magique");
+			break;
+		default:
+			std::cout << "Unhandled key: " << (int)key << std::endl;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
+				Info::Get().Sound().PlayNextTrack();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
+			{
+				Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
+				ss << "Musique mis a: " << (Info::Get().Options().GetOptMusic() ? "on" : "off");
+				CW(ss.str());
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+			{
+				m_character.SetExp(75);
+				CW("Ajout de 75 points d'exp");
+			}
 		}
 	}
 	ss.str("");

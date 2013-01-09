@@ -20,6 +20,7 @@ enum IMAGE
 	IMAGE_PGBTEXT_EXP,
 	IMAGE_PGBTEXT_EXP_BACK,
 	IMAGE_CONSOLE_BACK,
+	IMAGE_CONSOLE_TEXTBOX_BACK,
 	IMAGE_CLOCK_BG,
 	IMAGE_LAST
 };
@@ -85,6 +86,13 @@ enum COLOR
 #define LB_CONSOLE_CHAR_I			0.5f
 #define LB_CONSOLE_BODER_OFFSET_S	25
 #define LB_CONSOLE_BODER_OFFSET_B	15
+// Texbox console
+#define TXB_CONSOLE_NAME			"txb_console"
+#define TXB_CONSOLE_SIZE_H			30
+#define TXB_CONSOLE_SIZE_W			500
+#define TXB_CONSOLE_CHAR_I			0.5f
+#define TXB_CONSOLE_OFFSET_X		5.0f
+#define TXB_CONSOLE_OFFSET_Y		3.0f
 
 // Panel portrait
 #define PNL_PORTRAIT_NAME			"pnl_portrait"

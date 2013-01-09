@@ -23,6 +23,11 @@ void Label::SetMessage(const std::string& message)
 	m_message = message;
 }
 
+std::string Label::GetMsg() const
+{
+	return m_message;
+}
+
 void Label::SetDock(Docking dock)
 {
 	m_docking = dock;

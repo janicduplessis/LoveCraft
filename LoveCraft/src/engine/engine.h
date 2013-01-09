@@ -20,6 +20,7 @@
 #include "gl/ui/label.h"
 #include "gl/ui/listbox.h"
 #include "gl/ui/picturebox.h"
+#include "gl/ui/textbox.h"
 #include "gl/ui/button.h"
 
 #include "game/pig.h"
@@ -190,6 +191,7 @@ private:
 
 	ListBox* m_lb_infos;
 	ListBox* m_lb_console;
+	Textbox* m_txb_console;
 
 	Panel m_pnl_playerImage;
 	Label m_lbl_playerLevel;

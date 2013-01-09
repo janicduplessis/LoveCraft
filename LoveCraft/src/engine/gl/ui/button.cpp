@@ -7,16 +7,24 @@ Button::Button() : m_clicked(false), m_label(0)
 
 Button::Button(Control* parent, const Vector2i& position, const Vector2i &size, Texture* background, 
 			   Texture* textColor, const std::string& text, const std::string& name) : 
-	Control(CTRLTYPE_BOUTON, parent, position, size, background, name)
+	Control(CTRLTYPE_BOUTON, parent, position, size, background, name), m_clicked(false), m_label(0),
+		m_text(text)
 {
-	if (text != "")
-		m_label = new Label(this, Vector2i(), textColor, text, Label::TEXTDOCK_MIDDLECENTER, false, 
+	if (m_text != "")
+		m_label = new Label(this, Vector2i(), textColor, m_text, Label::TEXTDOCK_MIDDLECENTER, false, 
 		LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "label_");
 }
 
 Button::~Button()
 {
 	delete m_label;
+}
+
+void Button::Render()
+{
+	Control::Render(m_texture);
+	if (m_text != "")
+		m_label->Render();
 }
 
 bool Button::isClicked( int x, int y )

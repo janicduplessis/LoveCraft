@@ -68,6 +68,7 @@ private:
     bool		m_fullscreen;
     std::string m_title;
 	float m_lastFrameTime;
+protected:
 	sf::Vector2i m_mousePos; // position de la souris pour calculer la position relative
 };
 

@@ -371,7 +371,9 @@ void Engine::LoadResource()
 	m_lb_infos->AddLine("Quitter            Esc");
 
 	// Test bouton
-	m_testButton = new Button();
+	m_testButton = new Button(m_pnl_playscreen, Vector2i(200,200), Vector2i(100,50),
+		&m_textureInterface[IMAGE_CLOCK_BG], &m_texturefontColor[TEXTCOLOR_RED], "Test", "testb");
+	m_pnl_playscreen->AddControl(m_testButton);
 	// Abonnement a levent onClick
 	m_testButton->OnClick.Attach(this, &Engine::OnClick);
 
@@ -1255,7 +1257,8 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		}
 		break;
 	case MOUSE_BUTTON_LEFT:
-		m_testButton->isClicked(x,y);
+		m_testButton->isClicked(x, m_pnl_screen->Size().y - y);
+		m_lb_console->MouseClick(x, m_pnl_playscreen->Size().y - y);
 		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
 		{
 			m_leftClick = true;
@@ -1307,6 +1310,8 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 		break;
 	case MOUSE_BUTTON_LEFT:
 		m_leftClick = false;
+		m_testButton->Release();
+		m_lb_console->MouseRelease();
 		break;
 
 	}

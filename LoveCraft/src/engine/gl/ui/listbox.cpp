@@ -1,5 +1,6 @@
 #include "listbox.h"
 #include <sstream>
+#include "../../info.h"
 
 ListBox::ListBox() : Control(CTRLTYPE_LISTBOX), m_lines(0), m_fontMainColor(0), m_lineNbr(0), m_gapBetLines(2), m_charWidth(12.f),
 	m_charHeight(12.f), m_charInterval(0.66f), m_curLineIndex(0), m_scrollable(false)
@@ -11,7 +12,7 @@ ListBox::ListBox(Control* parent, const Vector2i &position, float lineWidth, Tex
 				 short linegap, float charwidth, float charheight, float charinterval, bool scrollable, const std::string& name, const Vector2i& offset) : 
 Control(CTRLTYPE_LISTBOX, parent, position, Vector2i(lineWidth + offset.x * 2, (charheight + linegap) * linenbr + offset.y * 2), background, name), 
 	m_fontMainColor(textMainColor), m_lineNbr(linenbr), m_gapBetLines(linegap), m_charWidth(charwidth), m_charHeight(charheight), m_charInterval(charinterval),
-	m_curLineIndex(0), m_scrollable(scrollable), m_offset(offset)
+	m_curLineIndex(0), m_scrollable(scrollable), m_offset(offset), m_upArrow(0), m_downArrow(0), m_texUpArrow(0), m_texDownArrow(0)
 {
 	m_lines = new Label*[linenbr];
 	std::ostringstream ss;
@@ -31,6 +32,20 @@ Control(CTRLTYPE_LISTBOX, parent, position, Vector2i(lineWidth + offset.x * 2, (
 			ss.str());
 		ss.str("");
 	}
+	if (m_scrollable) {
+		// Texture arrows
+		m_texDownArrow = new Texture();
+		m_texDownArrow->Load(TEXTURE_PATH "i_arrowbutton_down.jpg");
+		m_texUpArrow = new Texture();
+		m_texUpArrow->Load(TEXTURE_PATH "i_arrowbutton_up.jpg");
+		// Init boutons
+		m_upArrow = new Button(this, Vector2i(m_size.x - 30, 30), Vector2i(30,20), m_texUpArrow, m_fontMainColor, "", "bup");
+		m_downArrow = new Button(this, Vector2i(m_size.x - 30, 0), Vector2i(30,20), m_texDownArrow, m_fontMainColor, "", "bdown");
+		// Events
+		m_upArrow->OnClick.Attach(this, &ListBox::ScrollUp);
+		m_downArrow->OnClick.Attach(this, &ListBox::ScrollDown);
+	}
+
 }
 
 ListBox::~ListBox()
@@ -40,6 +55,10 @@ ListBox::~ListBox()
 		delete m_lines[i];
 	}
 	delete [] m_lines;
+	delete m_upArrow;
+	delete m_downArrow;
+	delete m_texDownArrow;
+	delete m_texUpArrow;
 }
 
 void ListBox::Render()
@@ -49,6 +68,10 @@ void ListBox::Render()
 		Control::Render();
 		for (unsigned short i = 0; i < m_lineNbr; i++)
 			m_lines[i]->Render();
+		if (m_scrollable) {
+			m_upArrow->Render();
+			m_downArrow->Render();
+		}
 	}
 }
 
@@ -97,6 +120,28 @@ void ListBox::Scroll(int lines)
 		m_curLineIndex += lines;
 		Update();
 	}
+}
+
+void ListBox::ScrollUp(Control* sender)
+{
+	Scroll(1);
+}
+
+void ListBox::ScrollDown(Control* sender)
+{
+	Scroll(-1);
+}
+
+void ListBox::MouseClick(int x, int y)
+{
+	m_downArrow->isClicked(x,y);
+	m_upArrow->isClicked(x,y);
+}
+
+void ListBox::MouseRelease()
+{
+	m_downArrow->Release();
+	m_upArrow->Release();
 }
 
 ListBox& ListBox::operator=(const ListBox& l)

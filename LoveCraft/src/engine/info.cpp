@@ -141,3 +141,13 @@ std::string Info::LineToPrint() const
 {
 	return m_lineToPrint;
 }
+
+Vector2i Info::GetMouse()
+{
+	return m_mouse;
+}
+
+void Info::SetMouse( Vector2i pos )
+{
+	m_mouse = pos;
+}

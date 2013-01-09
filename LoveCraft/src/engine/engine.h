@@ -86,6 +86,8 @@ public:
 	*/
 	virtual void PrintText(unsigned int x, unsigned int y, const std::string& t);
 
+	virtual void TextenteredEvent(unsigned int val);
+
 	/**
 	* Évènement appelé lorsqu'une touche du clavier est enfoncée
 	*

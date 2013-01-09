@@ -27,6 +27,7 @@ public:
     virtual void UnloadResource() = 0;
     virtual void Render(float elapsedTime) = 0;
 	virtual void Render2D( float elapsedTime ) = 0;
+	virtual void TextenteredEvent(unsigned int val) = 0;
     virtual void KeyPressEvent(unsigned char key) = 0;
     virtual void KeyReleaseEvent(unsigned char key) = 0;
     virtual void MouseMoveEvent(int x, int y) = 0;

@@ -45,6 +45,9 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 			case sf::Event::MouseMoved:
 				MouseMoveEvent(Event.mouseMove.x, Event.mouseMove.y);
 				break;
+			case sf::Event::TextEntered:
+				TextenteredEvent(Event.text.unicode);
+				break;
 			case sf::Event::MouseButtonPressed:
 				MousePressEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
 				break;

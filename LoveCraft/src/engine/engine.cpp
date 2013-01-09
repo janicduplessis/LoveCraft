@@ -976,24 +976,31 @@ void Engine::StartBlendPNG(bool value) const
 	else glBlendFunc(GL_SRC_ALPHA, GL_ONE); //Blend original
 }
 
-void Engine::KeyPressEvent(unsigned char key)
+void Engine::TextenteredEvent(unsigned int val)
 {
-	Son& sound = Info::Get().Sound();
 	static std::ostringstream ss;
-	Controls& c = Info::Get().Ctrls();
-	//Affiche les numéros de touche dans la console de jeu
-	//ss << (int)key;
-	//CW(ss.str());
-	//ss.str("");
-	if (key == 58 && !m_txb_console->HasFocus())
+
+	//Appuie sur Enter pour acquérir le focus
+	if (val == 13 && !m_txb_console->HasFocus())
 	{
 		m_txb_console->SetFocus(true);
 		m_txb_console->SetVisible(true);
 		return;
 	}
+
+	//Capture du texte en mode Textbox
 	if (m_txb_console->HasFocus())
 	{
-		if (key == 59)
+		//Vérification qu'il s'agit d'un caractère valide
+		if (val >= 32 && val <= 126)
+		{
+			ss << m_txb_console->GetMsg() << static_cast<char>(val);
+			m_txb_console->SetMessage(ss.str());
+			ss.str("");
+			return;
+		}
+		//Si c'est un backspace
+		if (val == 8)
 		{
 			std::string mes = m_txb_console->GetMsg();
 			if (mes.length() > 0)
@@ -1005,23 +1012,31 @@ void Engine::KeyPressEvent(unsigned char key)
 				m_txb_console->SetMessage(ss.str());
 				ss.str("");
 			}
-			return;
 		}
-		if (key == 58)
+		//Si c'est un return
+		if (val == 13)
 		{
 			if (m_txb_console->GetMsg() != "")
 				CW(m_txb_console->GetMsg());
 			m_txb_console->SetVisible(false);
 			m_txb_console->SetFocus(false);
 			m_txb_console->SetMessage("");
-			return;
 		}
-		ss << m_txb_console->GetMsg() << key;
-		m_txb_console->SetMessage(ss.str());
-		ss.str("");
-		return;
 	}
-	else
+}
+
+void Engine::KeyPressEvent(unsigned char key)
+{
+	Son& sound = Info::Get().Sound();
+	static std::ostringstream ss;
+	Controls& c = Info::Get().Ctrls();
+	//Affiche les numéros de touche dans la console de jeu
+	//ss << (int)key;
+	//CW(ss.str());
+	//ss.str("");
+
+	//Si on est pas en train d'écrire, envoie les données de touches
+	if (!m_txb_console->HasFocus())
 	{
 		c.Set(key, true);
 		//Sorts qui subissent le global cooldown

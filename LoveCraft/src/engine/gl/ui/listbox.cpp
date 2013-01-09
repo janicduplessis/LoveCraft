@@ -171,3 +171,9 @@ ListBox& ListBox::operator<<( const std::string& text )
 	AddLine(text);
 	return *this;
 }
+
+std::string ListBox::GetLine( int index )
+{
+	StringList::iterator it = m_messages.begin();
+	return it->data();
+}

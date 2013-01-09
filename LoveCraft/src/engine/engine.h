@@ -154,8 +154,9 @@ private:
 	void StartBlendPNG(bool value = true) const;
 private:
 	//CONSOLE.WRITELINE()
-	void CW(const std::string& line);
+	void CWL(const std::string& line);
 	void OnClick(Control* sender);
+	void CW(const std::string& line);
 	bool m_wireframe;
 	float m_angle;
 	float m_camRadius;

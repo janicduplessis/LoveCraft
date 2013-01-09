@@ -88,9 +88,11 @@ void ListBox::Scroll(int lines)
 {
 	if (m_scrollable)
 	{
-		if (m_curLineIndex + lines <= 0)
+		if (m_curLineIndex + lines < 0) {
+			m_curLineIndex = 0;
 			return;
-		if (m_curLineIndex + lines > m_messages.size() - m_lineNbr)
+		}
+		if (m_curLineIndex + lines > m_messages.size() - m_lineNbr || m_messages.size() <= m_lineNbr)
 			return;
 		m_curLineIndex += lines;
 		Update();

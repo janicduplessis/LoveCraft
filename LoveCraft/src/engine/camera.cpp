@@ -1,6 +1,6 @@
 ﻿#include "camera.h"
 
-Camera::Camera( Vector3f position, Vector2f rotation) : m_pos(position), m_rot(rotation), m_mode(CAM_FIRST_PERSON)
+Camera::Camera( Vector3f position, Vector2f rotation) : m_pos(position), m_rot(rotation), m_mode(CAM_THIRD_PERSON)
 {
 
 }

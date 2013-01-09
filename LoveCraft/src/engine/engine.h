@@ -20,6 +20,7 @@
 #include "gl/ui/label.h"
 #include "gl/ui/listbox.h"
 #include "gl/ui/picturebox.h"
+#include "gl/ui/button.h"
 
 #include "game/pig.h"
 #include "game/character.h"
@@ -151,6 +152,7 @@ private:
 private:
 	//CONSOLE.WRITELINE()
 	void CW(const std::string& line);
+	void OnClick(Control* sender);
 	bool m_wireframe;
 	float m_angle;
 	float m_camRadius;
@@ -178,6 +180,8 @@ private:
 	Panel m_pnl_screen;
 	Panel m_pnl_playscreen;
 	Panel m_pnl_portrait;
+
+	Button m_testButton;
 
 	ProgressBar m_pgb_health;
 	ProgressBar m_pgb_energy;

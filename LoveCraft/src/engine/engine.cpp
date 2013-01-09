@@ -290,6 +290,7 @@ void Engine::LoadResource()
 
 	// Écran
 	m_pnl_screen = Panel(0, Vector2i(), Vector2i(Width(), Height()), 0, 1, "main");
+	m_testButton.OnClick.Attach(this, &Engine::OnClick);
 
 #pragma region Enfants de Main
 
@@ -1119,6 +1120,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		}
 		break;
 	case MOUSE_BUTTON_LEFT:
+		m_testButton.isClicked(x,y);
 		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
 		{
 			m_leftClick = true;
@@ -1154,6 +1156,11 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		}
 		break;
 	}
+}
+
+void Engine::OnClick(Control* sender)
+{
+	CW("Test Bouton");
 }
 
 void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)

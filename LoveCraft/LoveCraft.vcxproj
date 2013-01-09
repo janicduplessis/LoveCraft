@@ -116,6 +116,7 @@
     <ClCompile Include="src\engine\gl\texturearray.cpp" />
     <ClCompile Include="src\engine\gl\textureatlas.cpp" />
     <ClCompile Include="src\util\tool.cpp" />
+    <ClCompile Include="src\engine\gl\ui\textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\gl\ui\icontainer.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="src\engine\gl\texture.h" />
     <ClInclude Include="src\util\tool.h" />
     <ClInclude Include="src\util\vector3.h" />
+    <ClInclude Include="src\engine\gl\ui\textbox.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="media\shader\modelshader.vert" />

@@ -30,6 +30,7 @@ void Option::SetOptMusic(const bool value)
 	m_music = value;
 	if (m_music)
 		Info::Get().Sound().PlayNextTrack();
+	else Info::Get().Sound().StopMusic();
 }
 
 void Option::SetOptSound(const bool value)

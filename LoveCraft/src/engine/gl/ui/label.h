@@ -43,6 +43,7 @@ public:
 	* @param message	Le message à afficher
 	*/
 	void SetMessage(const std::string& message);
+	std::string GetMsg() const;
 	/**
 	* Définit la texture de la couleur du texte
 	*

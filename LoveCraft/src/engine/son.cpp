@@ -148,6 +148,11 @@ bool Son::PlayStep(const BlockType type, float elapsedTime, float speed, bool pr
 	return true;
 }
 
+void Son::StopMusic()
+{
+	m_music.stop();
+}
+
 Son::Foots Son::GetFootType(BlockType type) const
 {
 	switch (type)

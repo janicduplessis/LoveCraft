@@ -112,6 +112,10 @@ public:
 	* 			pour éviter de surcharger inutilement la mémoire.
 	*/
 	bool PlayStep(const BlockType type, float elapsedTime, float speed, bool priority = false);
+	/**
+	* Arrête la musique en cours
+	*/
+	void StopMusic();
 private:
 	Foots GetFootType(BlockType type) const;
 	bool LoadFootSteps(const Foots type, const std::string filename);

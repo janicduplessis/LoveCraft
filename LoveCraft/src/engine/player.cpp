@@ -50,6 +50,7 @@ void Player::ResetPosition()
 
 void Player::Move(bool ghost, Character &cter, float elapsedTime)
 {
+	Vector3f delta;
 
 #pragma region Raccourcis des touches
 	Controls& ctrls = Info::Get().Ctrls();
@@ -141,21 +142,10 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 		float distance = (m_speed.z * elapsedTime) + (m_accel.z * elapsedTime * elapsedTime / 2.0f);
 		float xRotRad = (m_rot.x / 180 * PII);
 		float yRotRad = (m_rot.y / 180 * PII);
-		newPos.x = m_pos.x + float(sin(yRotRad)) * distance;
-		newPos.z = m_pos.z - float(cos(yRotRad)) * distance;
-		newPos.y = m_pos.y - ((ghost) ? float(sin(xRotRad)) * distance : 0);
 
-		// Si pas de collision affecter la nouvelle position
-		if (!CheckCollision(newPos))
-		{
-			m_lastPos = m_pos;
-			m_pos = newPos;
-		}
-		else
-		{
-			m_speed.z = 0;
-			m_accel.z = 0;
-		}
+		delta.x += float(sin(yRotRad)) * distance;
+		delta.z -= float(cos(yRotRad)) * distance;
+		delta.y -= ((ghost) ? float(sin(xRotRad)) * distance : 0);
 	}
 #pragma endregion
 
@@ -238,21 +228,8 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 		float distance = (m_speed.x * elapsedTime) + (m_accel.x * elapsedTime * elapsedTime / 2.0f);
 		float yRotRad = (m_rot.y / 180 * PII);
 
-		newPos.x = m_pos.x + float(cos(yRotRad)) * distance;
-		newPos.z = m_pos.z + float(sin(yRotRad)) * distance;
-		newPos.y = m_pos.y;
-
-		// Si pas de collision affecter la nouvelle position
-		if (!CheckCollision(newPos))
-		{
-			m_lastPos = m_pos;	//pas utiliser encore
-			m_pos = newPos;
-		}
-		else
-		{
-			m_speed.x = 0;
-			m_accel.x = 0;
-		}
+		delta.x += float(cos(yRotRad)) * distance;
+		delta.z += float(sin(yRotRad)) * distance;
 	}
 #pragma endregion
 
@@ -312,6 +289,42 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 		m_speed.x = 0;
 #pragma endregion
 
+#pragma endregion
+
+#pragma region Collisions
+	// Check collisions et applique le déplacement
+	Vector3f curPos = m_pos;
+	Vector3f newPos;
+	newPos.x = curPos.x + delta.x;
+	newPos.y = curPos.y;
+	newPos.z = curPos.z;
+	if(!CheckCollision(newPos))
+		m_pos.x += delta.x;
+	else
+	{
+		m_speed.x = 0;
+		m_accel.x = 0;
+	}
+	newPos.x = curPos.x;
+	newPos.y = curPos.y + delta.y;
+	newPos.z = curPos.z;
+	if(!CheckCollision(newPos))
+		m_pos.y += delta.y;
+	else
+	{
+		m_speed.y = 0;
+		m_accel.y = 0;
+	}
+	newPos.x = curPos.x;
+	newPos.y = curPos.y;
+	newPos.z = curPos.z + delta.z;
+	if(!CheckCollision(newPos))
+		m_pos.z += delta.z;
+	else
+	{
+		m_speed.z = 0;
+		m_accel.z = 0;
+	}
 #pragma endregion
 
 #pragma region Depenses d energie

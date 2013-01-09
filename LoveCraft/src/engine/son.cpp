@@ -28,6 +28,10 @@ bool Son::LoadSounds()
 		return false;
 	if (!m_sndBuffers[Sons::SON_FALLPAIN].loadFromFile(SOUND_PATH "g_fallpain.ogg"))
 		return false;
+	if (!m_sndBuffers[Sons::SON_DEATH].loadFromFile(SOUND_PATH "g_laugh.ogg"))
+		return false;
+	if (!m_sndBuffers[Sons::SON_LEVELUP].loadFromFile(SOUND_PATH "g_level.ogg"))
+		return false;
 	if (!m_sndBuffers[Sons::SON_BOLT].loadFromFile(SOUND_PATH "s_bolt.ogg"))
 		return false;
 	if (!m_sndBuffers[Sons::SON_DEFEND].loadFromFile(SOUND_PATH "s_defend.ogg"))

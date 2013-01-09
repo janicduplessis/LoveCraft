@@ -1,25 +1,25 @@
 #include "control.h"
 
 Control::Control() : m_texture(0), m_parent(0), m_name(""), m_pngBlend(true), m_position(Vector2i()), m_size(Vector2i()),
-	m_type(CTRLTYPE_NONE), m_visible(true)
+	m_type(CTRLTYPE_NONE), m_visible(true), m_repeatTexture(true)
 {
 }
 
 Control::Control(Type type) : m_type(type), m_visible(true), m_name("default"),
-	m_parent(0), m_position(Vector2i()), m_size(Vector2i(100, 100)), m_texture(0), m_pngBlend(true)
+	m_parent(0), m_position(Vector2i()), m_size(Vector2i(100, 100)), m_texture(0), m_pngBlend(true), m_repeatTexture(true)
 {
 }
 
 Control::Control(Type type, Control* parent, Vector2i position, Vector2i size, Texture* texture, const std::string& name) : 
 	m_type(type), m_visible(true), m_name(name), m_parent(parent), m_position(position), m_texture(texture),
-	m_size(size), m_pngBlend(true)
+	m_size(size), m_pngBlend(true), m_repeatTexture(true)
 {
 }
 
 
 Control::~Control()
 {
-	
+
 }
 
 void Control::Render()
@@ -91,6 +91,14 @@ void Control::SetPngBlend(const bool value)
 {
 	m_pngBlend = value;
 }
+bool Control::GetRepeatTexture() const
+{
+	return m_repeatTexture;
+}
+void Control::SetRepeatTexture(const bool value)
+{
+	m_repeatTexture = value;
+}
 
 Control& Control::operator=(const Control& c)
 {
@@ -122,13 +130,13 @@ void Control::RenderSquare(const Vector2i& position, const Vector2i& size, Textu
 	glTexCoord2f(0, 0);
 	glVertex2f(0, 0);
 
-	glTexCoord2f(size.x / texture->GetWidth(), 0);
+	glTexCoord2f(m_repeatTexture ? (size.x / texture->GetWidth()) : 1, 0);
 	glVertex2i(size.x, 0);
 
-	glTexCoord2f(size.x / texture->GetWidth(), size.y / texture->GetHeight());
+	glTexCoord2f(m_repeatTexture ? (size.x / texture->GetWidth()) : 1, m_repeatTexture ? (size.y / texture->GetHeight()) : 1);
 	glVertex2i(size.x, size.y);
 
-	glTexCoord2f(0, size.y / texture->GetHeight());
+	glTexCoord2f(0, m_repeatTexture ? (size.y / texture->GetHeight()) : 1);
 	glVertex2i(0, size.y);
 
 	glEnd();

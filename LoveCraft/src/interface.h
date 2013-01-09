@@ -19,6 +19,7 @@ enum IMAGE
 	IMAGE_PGBTEXT_MANA_BACK,
 	IMAGE_PGBTEXT_EXP,
 	IMAGE_PGBTEXT_EXP_BACK,
+	IMAGE_CONSOLE_BACK,
 	IMAGE_CLOCK_BG,
 	IMAGE_LAST
 };
@@ -57,9 +58,9 @@ enum COLOR
 // Largeur du cadre de gauche de l'interface
 #define INTERFACE_SIDE_LEFT_WIDTH	64
 // Largeur du cadre de droite de l'interface
-#define INTERFACE_SIDE_RIGHT_WIDTH	32
+#define INTERFACE_SIDE_RIGHT_WIDTH	64
 // Hauteur du cadre supérieur de l'interface
-#define INTERFACE_TOP_HEIGHT		32
+#define INTERFACE_TOP_HEIGHT		64
 // Nombre de sort disponible dans la barre de sorts (max 10)
 #define SPELL_BAR_SPELL_NUMBER		10
 
@@ -72,6 +73,18 @@ enum COLOR
 #define LBL_GENERIC_CHAR_W			12
 #define LBL_GENERIC_CHAR_H			25
 #define LBL_GENERIC_CHAR_I			0.6f
+
+// ListBox Console
+#define LB_CONSOLE_NAME				"lb_console"
+#define LB_CONSOLE_SCROLLABLE		true
+#define LB_CONSOLE_SIZE_W			500.0f
+#define LB_CONSOLE_LINE_NUMBER		10
+#define LB_CONSOLE_LINE_GAP			3
+#define LB_CONSOLE_CHAR_H			18.0f
+#define LB_CONSOLE_CHAR_W			12.0f
+#define LB_CONSOLE_CHAR_I			0.5f
+#define LB_CONSOLE_BODER_OFFSET_S	25
+#define LB_CONSOLE_BODER_OFFSET_B	15
 
 // Panel portrait
 #define PNL_PORTRAIT_NAME			"pnl_portrait"
@@ -87,9 +100,9 @@ enum COLOR
 #define PB_PORTRAIT_POSITION_Y		23
 // Label du niveau
 #define LBL_PLAYER_LEVEL_NAME		"lbl_player_level"
-#define LBL_PLAYER_LEVEL_W			20
-#define LBL_PLAYER_LEVEL_H			15
-#define LBL_PLAYER_LEVEL_I			0.77f
+#define LBL_PLAYER_LEVEL_W			30
+#define LBL_PLAYER_LEVEL_H			20
+#define LBL_PLAYER_LEVEL_I			0.4f
 // Bars dans le panel portrait
 #define PGB_HEALTH_NAME				"pgb_health"
 #define PGB_HEALTH_BACKGROUND		true

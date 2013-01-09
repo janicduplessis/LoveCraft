@@ -16,6 +16,7 @@ public:
 	* Obtient la valeur indiquant si le son est actif
 	*/
 	bool GetOptSound() const;
+	bool GetOptInfos() const;
 	/**
 	* Définit la valeur indiquant si la musique est active
 	*/
@@ -24,6 +25,7 @@ public:
 	* Définit la valeur indiquant si le son est actif
 	*/
 	void SetOptSound(const bool value);
+	void SetOptInfos(const bool value);
 private:
 	bool m_music;
 	bool m_sound;

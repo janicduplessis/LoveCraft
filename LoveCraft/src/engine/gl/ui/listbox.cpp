@@ -2,16 +2,16 @@
 #include <sstream>
 
 ListBox::ListBox() : Control(CTRLTYPE_LISTBOX), m_lines(0), m_fontMainColor(0), m_lineNbr(0), m_gapBetLines(2), m_charWidth(12.f),
-	m_charHeight(12.f), m_charInterval(0.66f), m_curLineIndex(0)
+	m_charHeight(12.f), m_charInterval(0.66f), m_curLineIndex(0), m_scrollable(false)
 {
 
 }
 
 ListBox::ListBox(Control* parent, Vector2i &position, float lineWidth, Texture* textMainColor, Texture* background, unsigned short linenbr,
-				 short linegap, float charwidth, float charheight, float charinterval, const std::string& name) : 
-Control(CTRLTYPE_LISTBOX, parent, position, Vector2i(lineWidth, (charheight + linegap) * linenbr), background, name), 
+				 short linegap, float charwidth, float charheight, float charinterval, bool scrollable, const std::string& name, Vector2i offset) : 
+Control(CTRLTYPE_LISTBOX, parent, position, Vector2i(lineWidth + offset.x * 2, (charheight + linegap) * linenbr + offset.y * 2), background, name), 
 	m_fontMainColor(textMainColor), m_lineNbr(linenbr), m_gapBetLines(linegap), m_charWidth(charwidth), m_charHeight(charheight), m_charInterval(charinterval),
-	m_curLineIndex(0)
+	m_curLineIndex(0), m_scrollable(scrollable), m_offset(offset)
 {
 	m_lines = new Label*[linenbr];
 	std::ostringstream ss;
@@ -19,7 +19,7 @@ Control(CTRLTYPE_LISTBOX, parent, position, Vector2i(lineWidth, (charheight + li
 	{
 		ss << m_name << "_line" << (m_lineNbr - i - 1);
 		m_lines[i] = new Label(this, 
-			Vector2i(0, (m_charHeight + m_gapBetLines) * i), 
+			Vector2i(m_offset.x, (m_charHeight + m_gapBetLines) * i + m_offset.y), 
 			m_fontMainColor,
 			"",
 			Label::TEXTDOCK_NONE,
@@ -44,9 +44,12 @@ ListBox::~ListBox()
 
 void ListBox::Render()
 {
-	Control::Render();
-	for (unsigned short i = 0; i < m_lineNbr; i++)
-		m_lines[i]->Render();
+	if (m_visible)
+	{
+		Control::Render();
+		for (unsigned short i = 0; i < m_lineNbr; i++)
+			m_lines[i]->Render();
+	}
 }
 
 void ListBox::Update()
@@ -83,13 +86,15 @@ void ListBox::AddLine(const std::string& message)
 
 void ListBox::Scroll(int lines)
 {
-	/*if (m_curLineIndex == 0 || m_messages.size() - m_curLineIndex < m_lineNbr)
-	return;*/
-	if (m_curLineIndex + lines <= 0)
-		return;
-	m_curLineIndex += lines;
-	Update();
-
+	if (m_scrollable)
+	{
+		if (m_curLineIndex + lines <= 0)
+			return;
+		if (m_curLineIndex + lines > m_messages.size() - m_lineNbr)
+			return;
+		m_curLineIndex += lines;
+		Update();
+	}
 }
 
 ListBox& ListBox::operator=(const ListBox& l)

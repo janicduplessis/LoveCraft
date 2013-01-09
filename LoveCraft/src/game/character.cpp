@@ -1,9 +1,21 @@
 ﻿#include "character.h"
-
+#include <sstream>
+#include <string>
 
 Character::Character() : m_name("DeFacto"), m_healthMax(HEALTH_MAX), m_energyMax(ENERGY_MAX), m_manaMax(MANA_MAX),
-	m_health(m_healthMax), m_energy(m_energyMax), m_mana(m_manaMax), m_expToNextLevel(10000.f), m_exp(6258.f), m_globalCooldown(0)
+	m_health(m_healthMax), m_energy(m_energyMax), m_mana(m_manaMax), m_exp(0), m_globalCooldown(0), m_level(1)
 {
+	m_expTable = new uint16[CHARACTER_MAX_LEVEL];
+	m_expTable[0] = 50;
+	m_expTable[1] = 110;
+	m_expTable[2] = 190;
+	m_expTable[3] = 260;
+	m_expTable[4] = 350;
+	m_expTable[5] = 470;
+	m_expTable[6] = 600;
+	m_expTable[7] = 780;
+	m_expTable[8] = 970;
+	m_expTable[9] = 0;
 }
 
 
@@ -20,6 +32,10 @@ Character::Character(std::string name, float health, float energy, float mana) :
 std::string Character::Name() const
 {
 	return m_name;
+}
+uint16 Character::Level() const
+{
+	return m_level;
 }
 void Character::PassiveRegen()
 {
@@ -80,12 +96,6 @@ void Character::SetMana(const float value)
 void Character::SetExp(const float value)
 {
 	float increment = value;
-	//vérification que l'ajout ne dépasse pas le maximum
-	if (m_exp + increment >= m_expToNextLevel)
-	{
-		m_exp = m_expToNextLevel;
-		return;
-	}
 	//Vérification que l'ajout ne dépasse pas 0
 	if (m_exp + increment <= 0)
 	{
@@ -93,6 +103,7 @@ void Character::SetExp(const float value)
 		return;
 	}
 	m_exp += increment;
+	CheckLevelUp();
 }
 
 float Character::Health() const
@@ -126,7 +137,7 @@ float Character::ManaMax() const
 }
 float Character::ExpNext() const
 {
-	return m_expToNextLevel;
+	return m_expTable[m_level-1];
 }
 
 float Character::HealthPerc() const
@@ -143,7 +154,7 @@ float Character::ManaPerc() const
 }
 float Character::ExpPerc() const
 {
-	return (m_exp / m_expToNextLevel * 100);
+	return (m_exp / ExpNext() * 100);
 }
 
 float Character::GlobalCooldown() const
@@ -166,4 +177,31 @@ void Character::ReduceGlobalCooldown( float time )
 void Character::ResetGlobalCooldown()
 {
 	m_globalCooldown = GLOBAL_COOLDOWN;
+}
+
+//Private
+
+bool Character::CheckLevelUp()
+{
+	if (m_level < CHARACTER_MAX_LEVEL)
+	{
+		if (m_exp >= m_expTable[m_level-1])
+		{
+			m_exp -= m_expTable[m_level-1];
+			m_level++;
+			ApplyBonus();
+			Info::Get().Sound().PlaySnd(Son::SON_LEVELUP, Son::CHANNEL_INTERFACE, true);
+			std::ostringstream ss;
+			ss << "Felicitations! Vous etes passe(e) au niveau " << m_level << "!";
+			Info::Get().NextPrint(ss.str());
+			return true;
+		}
+	}
+	return false;
+}
+void Character::ApplyBonus()
+{
+	m_healthMax += CHARACTER_HEALTH_INCREASE;
+	m_manaMax += CHARACTER_MANA_INCREASE;
+	m_energyMax += CHARACTER_ENERGY_INCREASE;
 }

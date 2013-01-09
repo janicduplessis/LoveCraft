@@ -82,6 +82,9 @@ public:
 	Camera* GetCamera() const;
 	void SetCamera(Camera* cam);
 
+	void NextPrint(const std::string& text);
+	std::string LineToPrint() const;
+
 private:
 	Info();
 	~Info();
@@ -97,6 +100,7 @@ private:
 	Son m_sound;
 	Nwork m_network;
 	Camera* m_cam;
+	std::string m_lineToPrint;
 };
 
 #endif

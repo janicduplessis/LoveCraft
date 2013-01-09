@@ -41,6 +41,13 @@ void Player::Teleport()
 	m_pos.y += 7;
 }
 
+void Player::ResetPosition()
+{
+	m_pos = Vector3f(0, 3.0f, 0);
+	m_rot = Vector2f(0, 0);
+	m_speed = Vector3f(0, 0, 0);
+}
+
 void Player::Move(bool ghost, Character &cter, float elapsedTime)
 {
 

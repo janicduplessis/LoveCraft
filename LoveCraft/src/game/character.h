@@ -1,7 +1,9 @@
 ﻿#ifndef CHARACTER_H_
 #define CHARACTER_H_
 
+
 #include "define.h"
+#include "engine/info.h"
 #include <iostream>
 #include <string>
 
@@ -34,6 +36,7 @@ public:
 	* @return std::string
 	*/
 	std::string Name() const;
+	uint16 Level() const;
 	/**
 	* Méthode à appeler à chaque fin de boucle pour la régénération
 	* de la vie et du mana
@@ -111,12 +114,16 @@ public:
 	void ReduceGlobalCooldown(float time);
 	void ResetGlobalCooldown();
 private:
+	bool CheckLevelUp();
+	void ApplyBonus();
 	std::string m_name;
+
+	uint16 m_level;
+	uint16* m_expTable;
 
 	float m_healthMax;
 	float m_energyMax;
 	float m_manaMax;
-	float m_expToNextLevel;
 
 	float m_health;
 	float m_energy;

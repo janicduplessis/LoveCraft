@@ -1,6 +1,6 @@
 ﻿#include "info.h"
 #include "engine/gl/ui/label.h"
-Info::Info()
+Info::Info() : m_lineToPrint("")
 {
 	GenerateBlocInfos();
 	if (!m_sound.LoadSounds())
@@ -127,3 +127,12 @@ void Info::SetCamera(Camera* cam)
 }
 
 Info* Info::m_info = 0;
+
+void Info::NextPrint(const std::string& text)
+{
+	m_lineToPrint = text;
+}
+std::string Info::LineToPrint() const
+{
+	return m_lineToPrint;
+}

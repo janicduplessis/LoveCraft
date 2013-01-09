@@ -77,6 +77,12 @@ typedef long long int64;
 // Accélération en Y représentant la gravité
 #define GRAVITY							9.81f
 
+// Character
+#define CHARACTER_MAX_LEVEL			10
+#define CHARACTER_HEALTH_INCREASE	25
+#define CHARACTER_MANA_INCREASE		15
+#define CHARACTER_ENERGY_INCREASE	10
+
 // Vie (v/s)
 // Maximum de vie
 #define HEALTH_MAX					100

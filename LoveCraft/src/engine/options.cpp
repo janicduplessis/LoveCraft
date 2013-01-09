@@ -20,6 +20,10 @@ bool Option::GetOptSound() const
 {
 	return m_sound;
 }
+bool Option::GetOptInfos() const
+{
+	return m_showInfo;
+}
 
 void Option::SetOptMusic(const bool value)
 {
@@ -31,4 +35,8 @@ void Option::SetOptMusic(const bool value)
 void Option::SetOptSound(const bool value)
 {
 	m_sound = value;
+}
+void Option::SetOptInfos(const bool value)
+{
+	m_showInfo = value;
 }

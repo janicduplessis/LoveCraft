@@ -149,19 +149,11 @@ private:
 	void TextUpdate();
 	void StartBlendPNG(bool value = true) const;
 private:
+	//CONSOLE.WRITELINE()
+	void CW(const std::string& line);
 	bool m_wireframe;
 	float m_angle;
 	float m_camRadius;
-
-	//Stockage des nouveaux points pour permettre de render
-	//dans la zone de jeu (sprite, images, etc)
-	//À utiliser au lieu de Height() et Width() comme
-	//point de départ.
-	Vector2i m_playScreenTopLeft;
-	Vector2i m_playScreenTopRight;
-	Vector2i m_playScreenBotRight;
-	Vector2i m_playScreenBotLeft;
-	Vector2i m_playScreenSize;
 
 	TextureArray* m_textureArray;
 
@@ -193,6 +185,7 @@ private:
 	ProgressBar m_pgb_exp;
 
 	ListBox* m_lb_infos;
+	ListBox* m_lb_console;
 
 	Panel m_pnl_playerImage;
 	Label m_lbl_playerLevel;

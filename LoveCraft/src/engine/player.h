@@ -82,6 +82,7 @@ public:
 	void Teleport();
 	void Render (bool wireFrame = false);
 	void SetRotation( Vector2f rot );
+	void ResetPosition();
 
 private:
 	bool CheckCollision(const Vector3f& pos) const;

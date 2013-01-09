@@ -12,12 +12,7 @@
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
-	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0),
-	m_playScreenBotLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
-	m_playScreenTopLeft(Vector2i(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
-	m_playScreenTopRight(Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3)),
-	m_playScreenBotRight(Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT)),
-	m_playScreenSize(Vector2i(m_playScreenTopRight.x - m_playScreenTopLeft.x, m_playScreenTopLeft.y - m_playScreenBotLeft.y))
+	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0)
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
@@ -274,6 +269,7 @@ void Engine::LoadResource()
 	m_textureInterface[IMAGE_PGBTEXT_EXP_BACK].Load(TEXTURE_PATH "i_pgb_exp_back.png");
 	m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW].Load(TEXTURE_PATH "i_pgb_health_low.png");
 	m_textureInterface[IMAGE_CLOCK_BG].Load(TEXTURE_PATH "i_clock_bg.png");
+	m_textureInterface[IMAGE_CONSOLE_BACK].Load(TEXTURE_PATH "i_console_back.png");
 
 #pragma endregion
 
@@ -299,46 +295,66 @@ void Engine::LoadResource()
 
 	// Zone de jeu
 	m_pnl_playscreen = Panel(&m_pnl_screen, 
-		Vector2i(0, INTERFACE_BOTTOM_HEIGHT),
-		Vector2i(m_pnl_screen.Size().x, 
-		m_pnl_screen.Size().y - INTERFACE_BOTTOM_HEIGHT),
+		Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
+		Vector2i(m_pnl_screen.Size().x - INTERFACE_SIDE_LEFT_WIDTH - INTERFACE_SIDE_RIGHT_WIDTH, 
+		m_pnl_screen.Size().y - INTERFACE_BOTTOM_HEIGHT - INTERFACE_TOP_HEIGHT),
 		0, PNL_PLAYSCREEN_CONTROLS_NBR, "playscreen");
 	m_pnl_screen.AddControl(&m_pnl_playscreen);
 
 #pragma region Enfants de Playscreen
 
+	// Informations
+	m_lb_infos = new ListBox(&m_pnl_playscreen, Vector2i(5, m_pnl_playscreen.Size().y - LBL_GENERIC_CHAR_H*6 - 26*12), 200, &m_texturefontColor[TEXTCOLOR_RED], 
+		0, 26, 2, 12.f, 12.f, 0.5f, false, "lb_infos");
+	m_pnl_playscreen.AddControl(m_lb_infos);
+	m_lb_infos->AddLine("Controles Mouvements");
+	m_lb_infos->AddLine("Avancer:           W");
+	m_lb_infos->AddLine("Reculer:           S");
+	m_lb_infos->AddLine("Droite:            D");
+	m_lb_infos->AddLine("Gauche:            A");
+	m_lb_infos->AddLine("Sauter:            Espace");
+	m_lb_infos->AddLine("Marcher:           Ctrl");
+	//m_lb_infos->AddLine("Se pencher:        C");
+	m_lb_infos->AddLine("Courir:            Shift");
+	m_lb_infos->AddLine("");
+	m_lb_infos->AddLine("Controles Debug");
+	m_lb_infos->AddLine("Tirer:             1");
+	m_lb_infos->AddLine("Cochon:            2");
+	m_lb_infos->AddLine("Teleporter:        6");
+	m_lb_infos->AddLine("Remplir Vie:       7");
+	m_lb_infos->AddLine("Remplir Energie:   8");
+	m_lb_infos->AddLine("Augmenter Exp:     P");
+	m_lb_infos->AddLine("");
+	m_lb_infos->AddLine("Options");
+	m_lb_infos->AddLine("Wireframe:         Y");
+	m_lb_infos->AddLine("Music On/off       O");
+	m_lb_infos->AddLine("Music Next         M");
+	m_lb_infos->AddLine("Aff/Cach Infos:    F9");
+	m_lb_infos->AddLine("Fullscreen         F10");
+	m_lb_infos->AddLine("Quitter            Esc");
+
+	//Fenetre de console
+	m_lb_console = new ListBox(&m_pnl_playscreen, 
+		Vector2i(m_pnl_playscreen.Size().x - 64 - (int)LB_CONSOLE_SIZE_W, 0), 
+		LB_CONSOLE_SIZE_W, 
+		&m_texturefontColor[TEXTCOLOR_YELLOW], 
+		&m_textureInterface[IMAGE_CONSOLE_BACK], 
+		LB_CONSOLE_LINE_NUMBER, 
+		LB_CONSOLE_LINE_GAP, 
+		LB_CONSOLE_CHAR_W, 
+		LB_CONSOLE_CHAR_H, 
+		LB_CONSOLE_CHAR_I, 
+		LB_CONSOLE_SCROLLABLE, 
+		LB_CONSOLE_NAME,
+		Vector2i(LB_CONSOLE_BODER_OFFSET_S, LB_CONSOLE_BODER_OFFSET_B));
+	m_pnl_playscreen.AddControl(m_lb_console);
+	m_lb_console->SetRepeatTexture(false);
 	// Frame portrait
 	m_pnl_portrait = Panel(&m_pnl_playscreen,
 		Vector2i(PNL_PORTRAIT_POSITION_X, PNL_PORTRAIT_POSITION_Y),
 		Vector2i(PNL_PORTRAIT_SIZE_W, PNL_PORTRAIT_SIZE_H),
 		&m_textureInterface[IMAGE_PORTRAIT_FRAME], PNL_PORTRAIT_CONTROLS_NBR, PNL_PORTRAIT_NAME);
 	m_pnl_playscreen.AddControl(&m_pnl_portrait);
-
-	//m_ptest = Panel(&m_pnl_playscreen, Vector2i(Width()/2, Height()/2), Vector2i(400, 200), &m_textureInterface[IMAGE_BLACK_BACK], 1, "ptest");
-	//m_pnl_screen.AddControl(&m_ptest);
-
-	//m_testlabel = Label(&m_ptest, Vector2i(), Vector2i(), &m_texturefontColor[TEXTCOLOR_YELLOW], "123", 
-	//	Label::TEXTDOCK_MIDDLECENTER, false, 20.0f, 42.0f, 1.50f, Vector2f(), "lbl_test");
-	//m_ptest.AddControl(&m_testlabel);
-
-	m_lb_infos = new ListBox(&m_pnl_playscreen, Vector2i(0, m_pnl_playscreen.Size().y / 2 - 200), 200, &m_texturefontColor[TEXTCOLOR_RED], 
-		&m_textureInterface[IMAGE_BLACK_BACK], 15, 2, 12.f, 12.f, 0.5f, "lb_infos");
-	m_pnl_playscreen.AddControl(m_lb_infos);
-	m_lb_infos->AddLine("Avancer:     W");
-	m_lb_infos->AddLine("Reculer:     S");
-	m_lb_infos->AddLine("Droite:      D");
-	m_lb_infos->AddLine("Gauche:      A");
-	m_lb_infos->AddLine("Sauter:      Espace");
-	m_lb_infos->AddLine("Marcher:     Ctrl");
-	m_lb_infos->AddLine("Se pencher:  C");
-	m_lb_infos->AddLine("Courir:      Shift");
-	m_lb_infos->AddLine("Tirer:       1");
-	m_lb_infos->AddLine("Cochon:      2");
-	m_lb_infos->AddLine("Wireframe:   Y");
-	m_lb_infos->AddLine("Music On/off O");
-	m_lb_infos->AddLine("Music Next   M");
-	m_lb_infos->AddLine("Fullscreen   F10");
-	m_lb_infos->AddLine("Quitter      Esc");
 
 
 #pragma region Enfants pnl portrait
@@ -386,7 +402,7 @@ void Engine::LoadResource()
 
 #pragma region Enfants de m_pnl_playerImage
 
-	m_lbl_playerLevel = Label(&m_pnl_playerImage, Vector2i(), &m_texturefontColor[TEXTCOLOR_WHITE], "10", 
+	m_lbl_playerLevel = Label(&m_pnl_playerImage, Vector2i(), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
 		Label::TEXTDOCK_TOPCENTER, LBL_GENERIC_ITALIC, LBL_PLAYER_LEVEL_W, LBL_PLAYER_LEVEL_H, LBL_PLAYER_LEVEL_I, Vector2f(), LBL_PLAYER_LEVEL_NAME);
 	m_pnl_playerImage.AddControl(&m_lbl_playerLevel);
 
@@ -435,6 +451,8 @@ void Engine::LoadResource()
 
 #pragma endregion
 
+	CW("Chargement des controles termine");
+
 #pragma region Load et compile les shaders
 	std::cout << " Loading and compiling shaders ..." << std::endl;
 	if (!m_shaderModel.Load(SHADER_PATH "modelshader.vert", SHADER_PATH "modelshader.frag", true))
@@ -452,6 +470,7 @@ void Engine::LoadResource()
 		std::cout << " Failed to load cube shader" << std::endl;
 		exit(1) ;
 	}
+	CW("Chargement des shaders termine");
 #pragma endregion
 
 }
@@ -480,6 +499,16 @@ void Engine::Render(float elapsedTime)
 
 	m_player.Move(m_ghostMode, m_character, elapsedTime);
 	m_camera.SetPosition(m_player.Position());
+
+	//Vérification de la mort du personnage
+	if (m_character.Health() <= 0.999f)
+	{
+		m_player.ResetPosition();
+		m_character.SetHealth(m_character.HealthMax());
+		Info::Get().Sound().PlaySnd(Son::SON_DEATH, Son::CHANNEL_INTERFACE, true);
+		CW("Vous etes mort!");
+
+	}
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -625,6 +654,7 @@ void Engine::Render(float elapsedTime)
 	{
 		Info::Get().Sound().PlayNextTrack();
 		ttt = false;
+		CW("Premier Render de l'engine termine avec succes.");
 	}
 
 #pragma endregion
@@ -683,14 +713,18 @@ void Engine::Render2D(float elapsedTime)
 
 #pragma endregion
 
-#pragma region Images qui subissent le blend pour les PNG
+#pragma region Proprietes des controles
 
+	//Affiche ou cache les infos s'il y a un changement
+	if (m_lb_infos->Visible() && !Info::Get().Options().GetOptInfos())
+		m_lb_infos->SetVisible(false);
+	else if (!m_lb_infos->Visible() && Info::Get().Options().GetOptInfos())
+		m_lb_infos->SetVisible(true);
 	//Change la texture de la barre de vie en fonction du %. Ne réassigne la texture que si on en a besoin
 	if (m_character.HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_pgb_health.GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH])
 		m_pgb_health.SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW]);
 	else if (m_character.HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_pgb_health.GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW])
 		m_pgb_health.SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH]);
-
 	//Affiche ou cache la barre d'énergie selon la situation
 	if (m_character.Energy() == m_character.EnergyMax())
 	{
@@ -706,30 +740,6 @@ void Engine::Render2D(float elapsedTime)
 	//Render de l'écran au complet avec tous ses contrôles.
 	m_pnl_screen.Render();
 
-	//Activation du blend par PNG
-	StartBlendPNG();
-
-	//// Portrait
-	//RenderSquare(
-	//	Vector2i(m_playScreenBotLeft.x + m_pgb_energy.Size().y, m_playScreenBotLeft.y),
-	//	Vector2i((int)m_textureInterface[IMAGE_PORTRAIT_FRAME].GetWidth(), (int)m_textureInterface[IMAGE_PORTRAIT_FRAME].GetHeight()),
-	//	m_textureInterface[IMAGE_PORTRAIT_FRAME]);
-
-
-	//Optimisation possible par la surcharge d'opérateurs
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))		//Mode course
-	//	RenderSquare(
-	//	m_playScreenBotLeft,
-	//	Vector2i(m_textureInterface[IMAGE_RUN].GetWidth(), m_textureInterface[IMAGE_RUN].GetHeight()),
-	//	m_textureInterface[IMAGE_RUN]);
-	//if (m_ghostMode)			//Mode ghost
-	//	RenderSquare(
-	//	Vector2i(Width() / 2 - m_textureInterface[IMAGE_BOO].GetWidth() /2, m_playScreenBotLeft.y),
-	//	Vector2i(m_textureInterface[IMAGE_BOO].GetWidth(), m_textureInterface[IMAGE_BOO].GetHeight()),
-	//	m_textureInterface[IMAGE_BOO]);
-
-	glDisable(GL_BLEND);
-
 #pragma endregion
 
 #pragma region Affichage de l interface sans transparence
@@ -741,21 +751,6 @@ void Engine::Render2D(float elapsedTime)
 		Vector2i(0, 0), 
 		Vector2i(Width(), INTERFACE_BOTTOM_HEIGHT), 
 		m_textureInterface[IMAGE_INTERFACE_FRAME]);
-	////Left
-	//RenderSquare(
-	//	Vector2i(0, INTERFACE_BOTTOM_HEIGHT), 
-	//	Vector2i(INTERFACE_SIDE_LEFT_WIDTH, Height() - INTERFACE_TOP_HEIGHT * 3), 
-	//	m_textureInterface[IMAGE_INTERFACE_FRAME]);
-	////Top
-	//RenderSquare(
-	//	Vector2i(0, Height() - INTERFACE_TOP_HEIGHT),
-	//	Vector2i(Width(), INTERFACE_TOP_HEIGHT),
-	//	m_textureInterface[IMAGE_INTERFACE_FRAME]);
-	////Right
-	//RenderSquare(
-	//	Vector2i(Width() - INTERFACE_SIDE_RIGHT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
-	//	Vector2i(Width(), Height() - INTERFACE_TOP_HEIGHT * 3),
-	//	m_textureInterface[IMAGE_INTERFACE_FRAME]);
 	//============================================
 	RenderSpells();
 	//============================================
@@ -767,6 +762,16 @@ void Engine::Render2D(float elapsedTime)
 	//============================================
 	TextUpdate();
 	//============================================
+
+#pragma endregion
+
+#pragma region Ecriture console
+
+	if (Info::Get().LineToPrint() != "")
+	{
+		m_lb_console->AddLine(Info::Get().LineToPrint());
+		Info::Get().NextPrint("");
+	}
 
 #pragma endregion
 
@@ -851,6 +856,10 @@ void Engine::TextUpdate()
 	ss << (int)m_character.Exp() << " / " << (int)m_character.ExpNext();
 	m_lbl_exp.SetMessage(ss.str());
 	ss.str("");
+	//Niveau
+	ss << m_character.Level();
+	m_lbl_playerLevel.SetMessage(ss.str());
+	ss.str("");
 	//Position
 	ss << "Position :     ( " << std::setprecision(4) << m_player.Position().x << ", " << std::setprecision(4) <<
 		m_player.Position().y << ", " << std::setprecision(4) << m_player.Position().z << " )";
@@ -865,7 +874,7 @@ void Engine::TextUpdate()
 	m_lbl_plrAcc.SetMessage(ss.str());
 	ss.str("");
 	//FPS
-	ss << "Fps : " << std::setprecision(2) << m_fps;
+	ss << "Fps :          " << std::setprecision(2) << m_fps;
 	m_lbl_FPS.SetMessage(ss.str());
 	ss.str("");
 	//Heure
@@ -914,6 +923,7 @@ void Engine::StartBlendPNG(bool value) const
 void Engine::KeyPressEvent(unsigned char key)
 {
 	Son& sound = Info::Get().Sound();
+	static std::ostringstream ss;
 	switch(key)
 	{
 	case 36:	// ESC
@@ -926,11 +936,13 @@ void Engine::KeyPressEvent(unsigned char key)
 		if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON) 
 		{
 			m_camera.SetMode(Camera::CAM_THIRD_PERSON);
+			CW("Affichage de la camera a la troisieme personne");
 		}
 		else 
 		{
 			HideCursor();
 			m_camera.SetMode(Camera::CAM_FIRST_PERSON);
+			CW("Affichage de la camera a la premiere personne");
 		}
 		break;
 	case 27:
@@ -944,19 +956,24 @@ void Engine::KeyPressEvent(unsigned char key)
 			sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
 			m_character.ResetGlobalCooldown();
 		}
+		CW("Lancement de sort: Trail orange!");
 		break;
 	case 28:
 		m_testpig.SetPosition(Vector3f(m_testpig.Position().x, 10, m_testpig.Position().z));
 		sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
+		CW("Lancement de sort: teleportation de cochon!");
 		break;
 	case 29:
 		sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
+		CW("Lancement de sort: Glace");
 		break;
 	case 30:
 		sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
+		CW("Lancement de sort: Shock");
 		break;
 	case 31:
 		sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
+		CW("Lancement de sort: Poison");
 		break;
 	case 32:
 		if (m_character.Mana() - 5 >= 0)
@@ -964,6 +981,7 @@ void Engine::KeyPressEvent(unsigned char key)
 			sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
 			m_character.SetMana(-5);
 			m_player.Teleport();
+			CW("Lancement de sort: Teleportation");
 		}
 		break;
 	case 33:
@@ -972,6 +990,7 @@ void Engine::KeyPressEvent(unsigned char key)
 			sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
 			m_character.SetHealth(15);
 			m_character.SetMana(-15);
+			CW("Lancement de sort: Soin");
 		}
 		break;
 	case 34:
@@ -980,28 +999,39 @@ void Engine::KeyPressEvent(unsigned char key)
 			sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
 			m_character.SetEnergy(10);
 			m_character.SetMana(-10);
+			CW("Lancement de sort: Rafraichissement");
 		}
 		break;
 	case 35:
 		sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
+		CW("Lancement de sort: Defense");
 		break;
 	case 26:
 		sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
-		break;
-	case 37:
+		CW("Lancement de sort: Bouclier magique");
 		break;
 	default:
 		std::cout << "Unhandled key: " << (int)key << std::endl;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
 			Info::Get().Sound().PlayNextTrack();
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
+		{
 			Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
+			ss << "Musique mis a: " << (Info::Get().Options().GetOptMusic() ? "on" : "off");
+			CW(ss.str());
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+		{
+			m_character.SetExp(75);
+			CW("Ajout de 75 points d'exp");
+		}
 	}
-
+	ss.str("");
 }
 
 void Engine::KeyReleaseEvent(unsigned char key)
 {
+	static std::ostringstream ss;
 	switch(key)
 	{
 	case 24:       // Y
@@ -1016,12 +1046,21 @@ void Engine::KeyReleaseEvent(unsigned char key)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			glEnable(GL_CULL_FACE);
 		}
+		ss << "Affichage Wireframe mis a: " << (m_wireframe ? "on" : "off");
+		CW(ss.str());
+		break;
+	case 93:	// F9
+		Info::Get().Options().SetOptInfos(!Info::Get().Options().GetOptInfos());
+		ss << "Affichage des infos a: " << (Info::Get().Options().GetOptInfos() ? "on" : "off");
+		CW(ss.str());
 		break;
 	case 6:		   // G
 		m_ghostMode = !m_ghostMode;
-		std::cout << "Ghost Mode set to: " << (m_ghostMode ? "True" : "False") << std::endl;
+		ss << "Mode fantome mis a: " << (m_ghostMode ? "on" : "off");
+		CW(ss.str());
 		break;
 	}
+	ss.str("");
 }
 
 void Engine::MouseMoveEvent(int x, int y)
@@ -1066,8 +1105,8 @@ void Engine::MouseMoveEvent(int x, int y)
 
 void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 {
-	Vector2i& pos = m_lb_infos->AbsolutePosition();
-	Vector2i& size = m_lb_infos->Size();
+	Vector2i& pos = m_lb_console->AbsolutePosition();
+	Vector2i& size = m_lb_console->Size();
 	Vector2i& play = m_pnl_screen.Size();
 	switch (button)
 	{
@@ -1090,7 +1129,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		break;
 	case MOUSE_BUTTON_WHEEL_UP:
 		if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
-			m_lb_infos->Scroll(1);
+			m_lb_console->Scroll(1);
 		} 
 		else if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
 		{
@@ -1103,7 +1142,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		break;
 	case MOUSE_BUTTON_WHEEL_DOWN:
 		if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
-			m_lb_infos->Scroll(-1);
+			m_lb_console->Scroll(-1);
 		} 
 		else if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
 		{
@@ -1146,3 +1185,9 @@ bool Engine::LoadTexture(Texture& texture, const std::string& filename, bool sto
 	return true;
 }
 
+//Private
+
+void Engine::CW(const std::string& line)
+{
+	m_lb_console->AddLine(line);
+}

@@ -118,6 +118,8 @@ public:
 	* Définit la valeur indiquant si le blend doit être activé lors du Render
 	*/
 	virtual void SetPngBlend(const bool value);
+	virtual bool GetRepeatTexture() const;
+	virtual void SetRepeatTexture(const bool value);
 
 	Control& operator=(const Control& c);
 
@@ -128,6 +130,7 @@ protected:
 	std::string m_name;
 	Type m_type;
 	bool m_pngBlend;
+	bool m_repeatTexture;
 	bool m_visible;
 	Texture* m_texture;
 	Control* m_parent;

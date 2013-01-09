@@ -23,6 +23,35 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 Engine::~Engine()
 {
 	delete m_textureArray;
+	delete m_testButton;
+	delete m_pnl_screen;
+	delete m_pnl_playscreen;
+	delete m_pnl_portrait;
+
+	delete m_pgb_health;
+	delete m_pgb_energy;
+	delete m_pgb_mana;
+	delete m_pgb_exp;
+
+	delete m_lb_infos;
+	delete m_lb_console;
+	delete m_txb_console;
+
+	delete m_pnl_playerImage;
+	delete m_lbl_playerLevel;
+
+	delete m_lbl_plrPos;
+	delete m_lbl_plrSpd;
+	delete m_lbl_plrAcc;
+	delete m_lbl_FPS;
+
+	delete m_pnl_time;
+	delete m_lbl_time;
+
+	delete m_lbl_health;
+	delete m_lbl_mana;
+	delete m_lbl_exp;
+	delete m_lbl_energy;
 }
 
 const Engine& Engine::Get() const
@@ -290,25 +319,24 @@ void Engine::LoadResource()
 #pragma region Chargement des elements de l interface
 
 	// Écran
-	m_pnl_screen = Panel(0, Vector2i(), Vector2i(Width(), Height()), 0, 1, "main");
-	m_testButton.OnClick.Attach(this, &Engine::OnClick);
+	m_pnl_screen = new Panel(0, Vector2i(), Vector2i(Width(), Height()), 0, 1, "main");
 
 #pragma region Enfants de Main
 
 	// Zone de jeu
-	m_pnl_playscreen = Panel(&m_pnl_screen, 
+	m_pnl_playscreen = new Panel(m_pnl_screen, 
 		Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
-		Vector2i(m_pnl_screen.Size().x - INTERFACE_SIDE_LEFT_WIDTH - INTERFACE_SIDE_RIGHT_WIDTH, 
-		m_pnl_screen.Size().y - INTERFACE_BOTTOM_HEIGHT - INTERFACE_TOP_HEIGHT),
+		Vector2i(m_pnl_screen->Size().x - INTERFACE_SIDE_LEFT_WIDTH - INTERFACE_SIDE_RIGHT_WIDTH, 
+		m_pnl_screen->Size().y - INTERFACE_BOTTOM_HEIGHT - INTERFACE_TOP_HEIGHT),
 		0, PNL_PLAYSCREEN_CONTROLS_NBR, "playscreen");
-	m_pnl_screen.AddControl(&m_pnl_playscreen);
+	m_pnl_screen->AddControl(m_pnl_playscreen);
 
 #pragma region Enfants de Playscreen
 
 	// Informations
-	m_lb_infos = new ListBox(&m_pnl_playscreen, Vector2i(5, m_pnl_playscreen.Size().y - LBL_GENERIC_CHAR_H*6 - 26*12), 200, &m_texturefontColor[TEXTCOLOR_RED], 
+	m_lb_infos = new ListBox(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*6 - 26*12), 200, &m_texturefontColor[TEXTCOLOR_RED], 
 		0, 26, 2, 12.f, 12.f, 0.5f, false, "lb_infos");
-	m_pnl_playscreen.AddControl(m_lb_infos);
+	m_pnl_playscreen->AddControl(m_lb_infos);
 	m_lb_infos->AddLine("Controles Mouvements");
 	m_lb_infos->AddLine("Avancer:           W");
 	m_lb_infos->AddLine("Reculer:           S");
@@ -335,9 +363,14 @@ void Engine::LoadResource()
 	m_lb_infos->AddLine("Fullscreen         F10");
 	m_lb_infos->AddLine("Quitter            Esc");
 
+	// Test bouton
+	m_testButton = new Button();
+	// Abonnement a levent onClick
+	m_testButton->OnClick.Attach(this, &Engine::OnClick);
+
 	//Fenetre de console
-	m_lb_console = new ListBox(&m_pnl_playscreen, 
-		Vector2i(m_pnl_playscreen.Size().x - 64 - (int)LB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H + 5), 
+	m_lb_console = new ListBox(m_pnl_playscreen, 
+		Vector2i(m_pnl_playscreen->Size().x - 64 - (int)LB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H + 5), 
 		LB_CONSOLE_SIZE_W, 
 		&m_texturefontColor[TEXTCOLOR_YELLOW], 
 		&m_textureInterface[IMAGE_CONSOLE_BACK], 
@@ -349,11 +382,11 @@ void Engine::LoadResource()
 		LB_CONSOLE_SCROLLABLE, 
 		LB_CONSOLE_NAME,
 		Vector2i(LB_CONSOLE_BODER_OFFSET_S, LB_CONSOLE_BODER_OFFSET_B));
-	m_pnl_playscreen.AddControl(m_lb_console);
+	m_pnl_playscreen->AddControl(m_lb_console);
 	m_lb_console->SetRepeatTexture(false);
 	//Texbox de la console
-	m_txb_console = new Textbox(&m_pnl_playscreen,
-		Vector2i(m_pnl_playscreen.Size().x - 64 - (int)LB_CONSOLE_SIZE_W, 0),
+	m_txb_console = new Textbox(m_pnl_playscreen,
+		Vector2i(m_pnl_playscreen->Size().x - 64 - (int)LB_CONSOLE_SIZE_W, 0),
 		Vector2i(TXB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H),
 		&m_texturefontColor[TEXTCOLOR_WHITE],
 		&m_textureInterface[IMAGE_CONSOLE_TEXTBOX_BACK],
@@ -363,105 +396,105 @@ void Engine::LoadResource()
 		TXB_CONSOLE_CHAR_I,
 		Vector2f(TXB_CONSOLE_OFFSET_X, TXB_CONSOLE_OFFSET_Y),
 		TXB_CONSOLE_NAME);
-	m_pnl_playscreen.AddControl(m_txb_console);
+	m_pnl_playscreen->AddControl(m_txb_console);
 	m_txb_console->SetRepeatTexture(false);
 	m_txb_console->SetVisible(false);
 	m_txb_console->SetFocus(false);
 	// Frame portrait
-	m_pnl_portrait = Panel(&m_pnl_playscreen,
+	m_pnl_portrait = new Panel(m_pnl_playscreen,
 		Vector2i(PNL_PORTRAIT_POSITION_X, PNL_PORTRAIT_POSITION_Y),
 		Vector2i(PNL_PORTRAIT_SIZE_W, PNL_PORTRAIT_SIZE_H),
 		&m_textureInterface[IMAGE_PORTRAIT_FRAME], PNL_PORTRAIT_CONTROLS_NBR, PNL_PORTRAIT_NAME);
-	m_pnl_playscreen.AddControl(&m_pnl_portrait);
+	m_pnl_playscreen->AddControl(m_pnl_portrait);
 
 
 #pragma region Enfants pnl portrait
 
 	// Barre de vie
-	m_pgb_health = ProgressBar(&m_pnl_portrait,
+	m_pgb_health = new ProgressBar(m_pnl_portrait,
 		Vector2i(PGB_HEALTH_POSITION_X, PGB_HEALTH_POSITION_Y),
 		Vector2i(PGB_HEALTH_SIZE_W, PGB_HEALTH_SIZE_H),
 		&m_textureInterface[IMAGE_PGBTEXT_HEALTH], &m_textureInterface[IMAGE_PGBTEXT_HEALTH_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_HEALTH_BACKGROUND, PGB_HEALTH_BORDER_SIZE, PGB_HEALTH_NAME);
-	m_pnl_portrait.AddControl(&m_pgb_health);
+	m_pnl_portrait->AddControl(m_pgb_health);
 	// Barre de mana
-	m_pgb_mana = ProgressBar(&m_pnl_portrait,
+	m_pgb_mana = new ProgressBar(m_pnl_portrait,
 		Vector2i(PGB_MANA_POSITION_X, PGB_MANA_POSITION_Y),
 		Vector2i(PGB_MANA_SIZE_W, PGB_MANA_SIZE_H),
 		&m_textureInterface[IMAGE_PGBTEXT_MANA], &m_textureInterface[IMAGE_PGBTEXT_MANA_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_MANA_BACKGROUND, PGB_MANA_BORDER_SIZE, PGB_MANA_NAME);
-	m_pnl_portrait.AddControl(&m_pgb_mana);
+	m_pnl_portrait->AddControl(m_pgb_mana);
 	// Barre d'expérience
-	m_pgb_exp = ProgressBar(&m_pnl_portrait,
+	m_pgb_exp = new ProgressBar(m_pnl_portrait,
 		Vector2i(PGB_EXP_POSITION_X, PGB_EXP_POSITION_Y),
 		Vector2i(PGB_EXP_SIZE_W, PGB_EXP_SIZE_H),
 		&m_textureInterface[IMAGE_PGBTEXT_EXP], &m_textureInterface[IMAGE_PGBTEXT_EXP_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_EXP_BACKGROUND, PGB_EXP_BORDER_SIZE, PGB_EXP_NAME);
-	m_pnl_portrait.AddControl(&m_pgb_exp);
+	m_pnl_portrait->AddControl(m_pgb_exp);
 	// Label de vie
-	m_lbl_health = Label(&m_pnl_portrait, Vector2i(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), &m_texturefontColor[TEXTCOLOR_RED], "", 
+	m_lbl_health = new Label(m_pnl_portrait, Vector2i(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), &m_texturefontColor[TEXTCOLOR_RED], "", 
 		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, PNL_PORTRAIT_CHAR_H, PNL_PORTRAIT_CHAR_W, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_HEALTH_NAME);
-	m_pnl_portrait.AddControl(&m_lbl_health);
+	m_pnl_portrait->AddControl(m_lbl_health);
 	// Label de mana
-	m_lbl_mana = Label(&m_pnl_portrait, Vector2i(LBL_MANA_POSITION_X, LBL_MANA_POSITION_Y), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
+	m_lbl_mana = new Label(m_pnl_portrait, Vector2i(LBL_MANA_POSITION_X, LBL_MANA_POSITION_Y), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
 		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, PNL_PORTRAIT_CHAR_H, PNL_PORTRAIT_CHAR_W, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_MANA_NAME);
-	m_pnl_portrait.AddControl(&m_lbl_mana);
+	m_pnl_portrait->AddControl(m_lbl_mana);
 	// Label d'exp
-	m_lbl_exp = Label(&m_pnl_portrait, Vector2i(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
+	m_lbl_exp = new Label(m_pnl_portrait, Vector2i(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
 		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, LBL_EXP_CHAR_W, LBL_EXP_CHAR_H, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_EXP_NAME);
-	m_pnl_portrait.AddControl(&m_lbl_exp);
+	m_pnl_portrait->AddControl(m_lbl_exp);
 
 	// Image du joueur
-	m_pnl_playerImage = Panel(&m_pnl_portrait, 
+	m_pnl_playerImage = new Panel(m_pnl_portrait, 
 		Vector2i(PB_PORTRAIT_POSITION_X, PB_PORTRAIT_POSITION_Y),
 		Vector2i(PB_PORTRAIT_SIZE_W, PB_PORTRAIT_SIZE_H),
 		&m_textureInterface[IMAGE_PORTRAIT_MALE], 1, PB_PORTRAIT_NAME);
-	m_pnl_portrait.AddControl(&m_pnl_playerImage);
+	m_pnl_portrait->AddControl(m_pnl_playerImage);
 
 #pragma region Enfants de m_pnl_playerImage
 
-	m_lbl_playerLevel = Label(&m_pnl_playerImage, Vector2i(), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
+	m_lbl_playerLevel = new Label(m_pnl_playerImage, Vector2i(), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
 		Label::TEXTDOCK_TOPCENTER, LBL_GENERIC_ITALIC, LBL_PLAYER_LEVEL_W, LBL_PLAYER_LEVEL_H, LBL_PLAYER_LEVEL_I, Vector2f(), LBL_PLAYER_LEVEL_NAME);
-	m_pnl_playerImage.AddControl(&m_lbl_playerLevel);
+	m_pnl_playerImage->AddControl(m_lbl_playerLevel);
 
 #pragma endregion
 
 #pragma endregion
 
 	//Barre d'énergie verticale
-	m_pgb_energy = ProgressBar(&m_pnl_playscreen,
+	m_pgb_energy = new ProgressBar(m_pnl_playscreen,
 		Vector2i(PGB_ENERGY_POSITION_X, PGB_ENERGY_POSITION_Y),
 		Vector2i(PGB_ENERGY_SIZE_W, PGB_ENERGY_SIZE_H),
 		&m_textureInterface[IMAGE_PGBTEXT_ENERGY], &m_textureInterface[IMAGE_PGBTEXT_ENERGY_BACK],
 		ProgressBar::BARMODE_VERTICAL_DTU, PGB_ENERGY_BACKGROUND, PGB_ENERGY_BORDER_SIZE, PGB_ENERGY_NAME);
-	m_pnl_playscreen.AddControl(&m_pgb_energy);
+	m_pnl_playscreen->AddControl(m_pgb_energy);
 	//Label d'énergie
-	m_lbl_energy = Label(&m_pnl_playscreen, Vector2i(LBL_ENERGY_POSITION_X, LBL_ENERGY_POSITION_Y), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
+	m_lbl_energy = new Label(m_pnl_playscreen, Vector2i(LBL_ENERGY_POSITION_X, LBL_ENERGY_POSITION_Y), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
 		Label::TEXTDOCK_NONE, LBL_ENERGY_ITALIC, LBL_ENERGY_CHAR_H, LBL_ENERGY_CHAR_W, LBL_ENERGY_CHAR_I, Vector2f(), LBL_ENERGY_NAME);
-	m_pnl_playscreen.AddControl(&m_lbl_energy);
+	m_pnl_playscreen->AddControl(m_lbl_energy);
 	//Label Position
-	m_lbl_plrPos = Label(&m_pnl_playscreen, Vector2i(5, m_pnl_playscreen.Size().y - LBL_GENERIC_CHAR_H), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
+	m_lbl_plrPos = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "pos");
-	m_pnl_playscreen.AddControl(&m_lbl_plrPos);
+	m_pnl_playscreen->AddControl(m_lbl_plrPos);
 	//Label Vitesse
-	m_lbl_plrSpd = Label(&m_pnl_playscreen, Vector2i(5, m_pnl_playscreen.Size().y - LBL_GENERIC_CHAR_H*2), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
+	m_lbl_plrSpd = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*2), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "spd");
-	m_pnl_playscreen.AddControl(&m_lbl_plrSpd);
+	m_pnl_playscreen->AddControl(m_lbl_plrSpd);
 	//Label Acceleration
-	m_lbl_plrAcc = Label(&m_pnl_playscreen, Vector2i(5, m_pnl_playscreen.Size().y - LBL_GENERIC_CHAR_H*3), &m_texturefontColor[TEXTCOLOR_RED], "", 
+	m_lbl_plrAcc = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*3), &m_texturefontColor[TEXTCOLOR_RED], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "acc");
-	m_pnl_playscreen.AddControl(&m_lbl_plrAcc);
+	m_pnl_playscreen->AddControl(m_lbl_plrAcc);
 	//Label FPS
-	m_lbl_FPS = Label(&m_pnl_playscreen, Vector2i(5, m_pnl_playscreen.Size().y - LBL_GENERIC_CHAR_H*4), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
+	m_lbl_FPS = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*4), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "fps");
-	m_pnl_playscreen.AddControl(&m_lbl_FPS);
+	m_pnl_playscreen->AddControl(m_lbl_FPS);
 	//Heure
-	m_pnl_time = Panel(&m_pnl_playscreen, Vector2i(m_pnl_playscreen.Size().x - 128, m_pnl_playscreen.Size().y - 64), 
+	m_pnl_time = new Panel(m_pnl_playscreen, Vector2i(m_pnl_playscreen->Size().x - 128, m_pnl_playscreen->Size().y - 64), 
 		Vector2i(128, 64), &m_textureInterface[IMAGE_CLOCK_BG], 1, "clock");
-	m_pnl_playscreen.AddControl(&m_pnl_time);
-	m_lbl_time = Label(&m_pnl_time, Vector2i(0,0), &m_texturefontColor[TEXTCOLOR_WHITE], "", Label::TEXTDOCK_MIDDLECENTER, false, 
+	m_pnl_playscreen->AddControl(m_pnl_time);
+	m_lbl_time = new Label(m_pnl_time, Vector2i(0,0), &m_texturefontColor[TEXTCOLOR_WHITE], "", Label::TEXTDOCK_MIDDLECENTER, false, 
 		LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "time");
-	m_pnl_time.AddControl(&m_lbl_time);
+	m_pnl_time->AddControl(m_lbl_time);
 
 #pragma endregion
 
@@ -739,24 +772,24 @@ void Engine::Render2D(float elapsedTime)
 	else if (!m_lb_infos->Visible() && Info::Get().Options().GetOptInfos())
 		m_lb_infos->SetVisible(true);
 	//Change la texture de la barre de vie en fonction du %. Ne réassigne la texture que si on en a besoin
-	if (m_character.HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_pgb_health.GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH])
-		m_pgb_health.SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW]);
-	else if (m_character.HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_pgb_health.GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW])
-		m_pgb_health.SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH]);
+	if (m_character.HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_pgb_health->GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH])
+		m_pgb_health->SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW]);
+	else if (m_character.HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_pgb_health->GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW])
+		m_pgb_health->SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH]);
 	//Affiche ou cache la barre d'énergie selon la situation
 	if (m_character.Energy() == m_character.EnergyMax())
 	{
-		m_pgb_energy.SetVisible(false);
-		m_lbl_energy.SetVisible(false);
+		m_pgb_energy->SetVisible(false);
+		m_lbl_energy->SetVisible(false);
 	}
 	else if (m_character.Energy() != m_character.EnergyMax() || sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
 	{
-		m_pgb_energy.SetVisible(true);
-		m_lbl_energy.SetVisible(true);
+		m_pgb_energy->SetVisible(true);
+		m_lbl_energy->SetVisible(true);
 	}
 
 	//Render de l'écran au complet avec tous ses contrôles.
-	m_pnl_screen.Render();
+	m_pnl_screen->Render();
 
 #pragma endregion
 
@@ -773,10 +806,10 @@ void Engine::Render2D(float elapsedTime)
 	RenderSpells();
 	//============================================
 	//Mise à jour des données
-	m_pgb_health.SetValue(m_character.HealthPerc());
-	m_pgb_energy.SetValue(m_character.EnergyPerc());
-	m_pgb_mana.SetValue(m_character.ManaPerc());
-	m_pgb_exp.SetValue(m_character.ExpPerc());
+	m_pgb_health->SetValue(m_character.HealthPerc());
+	m_pgb_energy->SetValue(m_character.EnergyPerc());
+	m_pgb_mana->SetValue(m_character.ManaPerc());
+	m_pgb_exp->SetValue(m_character.ExpPerc());
 	//============================================
 	TextUpdate();
 	//============================================
@@ -851,8 +884,6 @@ void Engine::RenderSpells()
 			nombre = "";
 		}
 	}
-
-
 }
 
 void Engine::TextUpdate()
@@ -860,40 +891,40 @@ void Engine::TextUpdate()
 	std::ostringstream ss;
 	//Vie
 	ss << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
-	m_lbl_health.SetMessage(ss.str());
+	m_lbl_health->SetMessage(ss.str());
 	ss.str("");
 	//Energie
 	ss << (int)m_character.Energy() << " / " << (int)m_character.EnergyMax();
-	m_lbl_energy.SetMessage(ss.str());
+	m_lbl_energy->SetMessage(ss.str());
 	ss.str("");
 	//Mana
 	ss << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
-	m_lbl_mana.SetMessage(ss.str());
+	m_lbl_mana->SetMessage(ss.str());
 	ss.str("");
 	//Experience
 	ss << (int)m_character.Exp() << " / " << (int)m_character.ExpNext();
-	m_lbl_exp.SetMessage(ss.str());
+	m_lbl_exp->SetMessage(ss.str());
 	ss.str("");
 	//Niveau
 	ss << m_character.Level();
-	m_lbl_playerLevel.SetMessage(ss.str());
+	m_lbl_playerLevel->SetMessage(ss.str());
 	ss.str("");
 	//Position
 	ss << "Position :     ( " << std::setprecision(4) << m_player.Position().x << ", " << std::setprecision(4) <<
 		m_player.Position().y << ", " << std::setprecision(4) << m_player.Position().z << " )";
-	m_lbl_plrPos.SetMessage(ss.str());
+	m_lbl_plrPos->SetMessage(ss.str());
 	ss.str("");
 	//Vitesse
 	ss << "Vitesse :      " << m_player.Speed();
-	m_lbl_plrSpd.SetMessage(ss.str());
+	m_lbl_plrSpd->SetMessage(ss.str());
 	ss.str("");
 	//Accélération
 	ss << "Acceleration : " << m_player.Acceleration();
-	m_lbl_plrAcc.SetMessage(ss.str());
+	m_lbl_plrAcc->SetMessage(ss.str());
 	ss.str("");
 	//FPS
 	ss << "Fps :          " << std::setprecision(2) << m_fps;
-	m_lbl_FPS.SetMessage(ss.str());
+	m_lbl_FPS->SetMessage(ss.str());
 	ss.str("");
 	//Heure
 	time_t currentTime;
@@ -902,7 +933,7 @@ void Engine::TextUpdate()
 	localtime_s(&ptm, &currentTime);
 	ss << std::setfill('0');
 	ss << std::setw(2) << ptm.tm_hour << ":" << std::setw(2) << ptm.tm_min;
-	m_lbl_time.SetMessage(ss.str());
+	m_lbl_time->SetMessage(ss.str());
 	ss.str("");
 }
 
@@ -1190,7 +1221,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 {
 	Vector2i& pos = m_lb_console->AbsolutePosition();
 	Vector2i& size = m_lb_console->Size();
-	Vector2i& play = m_pnl_screen.Size();
+	Vector2i& play = m_pnl_screen->Size();
 	switch (button)
 	{
 	case MOUSE_BUTTON_RIGHT:
@@ -1202,7 +1233,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		}
 		break;
 	case MOUSE_BUTTON_LEFT:
-		m_testButton.isClicked(x,y);
+		m_testButton->isClicked(x,y);
 		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
 		{
 			m_leftClick = true;

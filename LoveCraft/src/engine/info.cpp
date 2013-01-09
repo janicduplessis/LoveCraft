@@ -59,6 +59,11 @@ Nwork& Info::Network()
 	return m_network;
 }
 
+Controls& Info::Ctrls()
+{
+	return m_controls;
+}
+
 BlockInfo* Info::GetBlocInfo( BlockType type )
 {
 	return m_blocInfos[type];

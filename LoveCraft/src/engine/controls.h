@@ -53,10 +53,27 @@ public:
 	bool n9() const;
 	bool n0() const;
 
+	bool f1() const;
+	bool f2() const;
+	bool f3() const;
+	bool f4() const;
+	bool f5() const;
+	bool f6() const;
+	bool f7() const;
+	bool f8() const;
+	bool f9() const;
+	bool f10() const;
+	bool f11() const;
+	bool f12() const;
+
 	bool Shift() const;
 	bool Ctrl() const;
 	bool Alt() const;
 	bool Space() const;
+
+	bool BackSpace() const;
+	bool Enter() const;
+	bool Esc() const;
 
 private:
 	Array<bool> m_controls;

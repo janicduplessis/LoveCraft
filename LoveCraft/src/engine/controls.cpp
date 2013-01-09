@@ -29,8 +29,7 @@ Controls::Controls() : m_controls(Array<bool>(256, false))
 
 bool Controls::Q() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(16);
 }
 
 bool Controls::W() const
@@ -40,56 +39,47 @@ bool Controls::W() const
 
 bool Controls::E() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(4);
 }
 
 bool Controls::R() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(17);
 }
 
 bool Controls::T() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(19);
 }
 
 bool Controls::Y() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(24);
 }
 
 bool Controls::U() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(20);
 }
 
 bool Controls::I() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(8);
 }
 
 bool Controls::O() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(14);
 }
 
 bool Controls::P() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(15);
 }
 
 bool Controls::A() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(0);
 }
 
 bool Controls::S() const
@@ -104,140 +94,166 @@ bool Controls::D() const
 
 bool Controls::F() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(5);
 }
 
 bool Controls::G() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(6);
 }
 
 bool Controls::H() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(7);
 }
 
 bool Controls::J() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(9);
 }
 
 bool Controls::K() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(10);
 }
 
 bool Controls::L() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(11);
 }
 
 bool Controls::Z() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(25);
 }
 
 bool Controls::X() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(23);
 }
 
 bool Controls::C() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(2);
 }
 
 bool Controls::V() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(21);
 }
 
 bool Controls::B() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(1);
 }
 
 bool Controls::N() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(13);
 }
 
 bool Controls::M() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(12);
 }
 
 bool Controls::n1() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(27);
 }
 
 bool Controls::n2() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(28);
 }
 
 bool Controls::n3() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(29);
 }
 
 bool Controls::n4() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(30);
 }
 
 bool Controls::n5() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(31);
 }
 
 bool Controls::n6() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(32);
 }
 
 bool Controls::n7() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(33);
 }
 
 bool Controls::n8() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(34);
 }
 
 bool Controls::n9() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(35);
 }
 
 bool Controls::n0() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(26);
+}
+
+bool Controls::f1() const
+{
+	return m_controls.Get(85);
+}
+bool Controls::f2() const
+{
+	return m_controls.Get(86);
+}
+bool Controls::f3() const
+{
+	return m_controls.Get(87);
+}
+bool Controls::f4() const
+{
+	return m_controls.Get(88);
+}
+bool Controls::f5() const
+{
+	return m_controls.Get(89);
+}
+bool Controls::f6() const
+{
+	return m_controls.Get(90);
+}
+bool Controls::f7() const
+{
+	return m_controls.Get(91);
+}
+bool Controls::f8() const
+{
+	return m_controls.Get(92);
+}
+bool Controls::f9() const
+{
+	return m_controls.Get(93);
+}
+bool Controls::f10() const
+{
+	return m_controls.Get(94);
+}
+bool Controls::f11() const
+{
+	return m_controls.Get(95);
+}
+bool Controls::f12() const
+{
+	return m_controls.Get(96);
 }
 
 bool Controls::Shift() const
@@ -247,18 +263,28 @@ bool Controls::Shift() const
 
 bool Controls::Ctrl() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(37);
 }
 
 bool Controls::Alt() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(39);
 }
 
 bool Controls::Space() const
 {
-	//NYI
-	return false;
+	return m_controls.Get(57);
+}
+
+bool Controls::BackSpace() const
+{
+	return m_controls.Get(59);
+}
+bool Controls::Enter() const
+{
+	return m_controls.Get(58);
+}
+bool Controls::Esc() const
+{
+	return m_controls.Get(36);
 }

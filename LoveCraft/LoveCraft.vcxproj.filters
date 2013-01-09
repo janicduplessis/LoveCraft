@@ -124,7 +124,7 @@
     <ClCompile Include="src\engine\gl\ui\picturebox.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\ui\textbox.cpp">
+    <ClCompile Include="src\engine\gl\ui\button.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -258,7 +258,7 @@
     <ClInclude Include="src\engine\gl\ui\picturebox.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\ui\textbox.h">
+    <ClInclude Include="src\engine\gl\ui\button.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

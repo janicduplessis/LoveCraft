@@ -81,6 +81,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\gl\ui\button.cpp" />
     <ClCompile Include="src\engine\gl\ui\icontainer.cpp" />
     <ClCompile Include="src\engine\gl\ui\listbox.cpp" />
     <ClCompile Include="src\engine\gl\particles.cpp" />
@@ -119,6 +120,7 @@
     <ClCompile Include="src\engine\gl\ui\textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\gl\ui\button.h" />
     <ClInclude Include="src\engine\gl\ui\icontainer.h" />
     <ClInclude Include="src\engine\gl\ui\listbox.h" />
     <ClInclude Include="src\engine\gl\particles.h" />

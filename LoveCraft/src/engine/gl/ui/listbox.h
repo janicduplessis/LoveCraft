@@ -9,8 +9,8 @@ class ListBox : public Control
 {
 public:
 	ListBox();
-	ListBox(Control* parent, Vector2i &position, float lineWidth, Texture* textMainColor, Texture* background, unsigned short linenbr,
-		short linegap, float charwidth, float charheight, float charinterval, bool scrollable, const std::string& name, Vector2i offset = Vector2i());
+	ListBox(Control* parent, const Vector2i& position, float lineWidth, Texture* textMainColor, Texture* background, unsigned short linenbr,
+		short linegap, float charwidth, float charheight, float charinterval, bool scrollable, const std::string& name, const Vector2i& offset = Vector2i());
 	~ListBox();
 	void SetLine(unsigned short line, const std::string& message);
 	void Render();

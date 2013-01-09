@@ -6,8 +6,8 @@ Label::Label() : Control(CTRLTYPE_LABEL), m_message("Label"), m_docking(TEXTDOCK
 {
 }
 
-Label::Label(Control* parent, Vector2i position, Texture* color, std::string message, Docking dock, 
-			 bool italic, float charHeight, float charWidth, float charinterval, Vector2f offset, const std::string& name) :
+Label::Label(Control* parent, const Vector2i& position, Texture* color, const std::string& message, Docking dock, 
+			 bool italic, float charHeight, float charWidth, float charinterval, const Vector2f& offset, const std::string& name) :
 Control(CTRLTYPE_LABEL, parent, position, Vector2i(), color, name), m_message(message), m_docking(dock), m_italic(italic), 
 	m_fontWidth(charWidth), m_fontHeight(charHeight), m_charInterval(charinterval), m_offset(offset)
 {

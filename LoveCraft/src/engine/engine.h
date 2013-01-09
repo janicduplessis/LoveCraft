@@ -31,8 +31,8 @@
 #include "util/vector2.h"
 
 /**
- * @brief Engin graphique
- */
+* @brief Engin graphique
+*/
 class Engine : public OpenglContext
 {
 public:
@@ -68,6 +68,14 @@ public:
 	virtual void LoadResource();
 
 	virtual void UnloadResource();
+
+	/**
+	* Met à jour toutes les valeurs du jeu (Game loop)
+	*
+	* @param elapsedTime	Temps en millisecondes depuis le dernier
+	*						tour de boucle
+	*/
+	virtual void Update(float elapsedTime);
 
 	/**
 	* Render tous les vertex du jeu (Game loop)
@@ -170,7 +178,7 @@ private:
 
 	Player m_player;
 	Camera m_camera;
-	
+
 	Character m_character;
 	Pig m_testpig;
 

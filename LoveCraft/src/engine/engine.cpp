@@ -374,6 +374,7 @@ void Engine::LoadResource()
 	m_testButton = new Button(m_pnl_playscreen, Vector2i(200,200), Vector2i(100,50),
 		&m_textureInterface[IMAGE_CLOCK_BG], &m_texturefontColor[TEXTCOLOR_RED], "Test", "testb");
 	m_pnl_playscreen->AddControl(m_testButton);
+	m_testButton->SetRepeatTexture(false);
 	// Abonnement a levent onClick
 	m_testButton->OnClick.Attach(this, &Engine::OnClick);
 
@@ -415,7 +416,6 @@ void Engine::LoadResource()
 		Vector2i(PNL_PORTRAIT_SIZE_W, PNL_PORTRAIT_SIZE_H),
 		&m_textureInterface[IMAGE_PORTRAIT_FRAME], PNL_PORTRAIT_CONTROLS_NBR, PNL_PORTRAIT_NAME);
 	m_pnl_playscreen->AddControl(m_pnl_portrait);
-
 
 #pragma region Enfants pnl portrait
 
@@ -501,9 +501,14 @@ void Engine::LoadResource()
 	m_pnl_time = new Panel(m_pnl_playscreen, Vector2i(m_pnl_playscreen->Size().x - 128, m_pnl_playscreen->Size().y - 64), 
 		Vector2i(128, 64), &m_textureInterface[IMAGE_CLOCK_BG], 1, "clock");
 	m_pnl_playscreen->AddControl(m_pnl_time);
+
+#pragma region Enfants de m_pnl_time
+
 	m_lbl_time = new Label(m_pnl_time, Vector2i(0,0), &m_texturefontColor[TEXTCOLOR_WHITE], "", Label::TEXTDOCK_MIDDLECENTER, false, 
 		LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "time");
 	m_pnl_time->AddControl(m_lbl_time);
+
+#pragma endregion
 
 #pragma endregion
 
@@ -544,14 +549,14 @@ void Engine::UnloadResource()
 {
 }
 
-void Engine::Render(float elapsedTime)
+void Engine::Update(float elapsedTime)
 {
 
-#pragma region Game time
+#pragma region GameTime
 
-	m_character.ReduceGlobalCooldown(elapsedTime);
 	static float gameTime = elapsedTime;
 	gameTime += elapsedTime;
+	m_character.ReduceGlobalCooldown(elapsedTime);
 
 #pragma endregion
 
@@ -569,6 +574,127 @@ void Engine::Render(float elapsedTime)
 		CW("Vous etes mort!");
 
 	}
+
+#pragma endregion
+
+#pragma region premier tour de boucle de l application
+
+	//Solution temporaire pour changer la musique lors du premier render de l'engine
+	static bool ttt = true;
+	if (ttt)
+	{
+		Info::Get().Sound().PlayNextTrack();
+		ttt = false;
+		CW("Premier Render de l'engine termine avec succes.");
+	}
+
+#pragma endregion
+
+#pragma region Proprietes des controles
+
+	//Affiche ou cache les infos s'il y a un changement
+	if (m_lb_infos->Visible() && !Info::Get().Options().GetOptInfos())
+		m_lb_infos->SetVisible(false);
+	else if (!m_lb_infos->Visible() && Info::Get().Options().GetOptInfos())
+		m_lb_infos->SetVisible(true);
+	//Change la texture de la barre de vie en fonction du %. Ne réassigne la texture que si on en a besoin
+	if (m_character.HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_pgb_health->GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH])
+		m_pgb_health->SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW]);
+	else if (m_character.HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_pgb_health->GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW])
+		m_pgb_health->SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH]);
+	//Affiche ou cache la barre d'énergie selon la situation
+	if (m_character.Energy() == m_character.EnergyMax())
+	{
+		m_pgb_energy->SetVisible(false);
+		m_lbl_energy->SetVisible(false);
+	}
+	else if (m_character.Energy() != m_character.EnergyMax() || sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+	{
+		m_pgb_energy->SetVisible(true);
+		m_lbl_energy->SetVisible(true);
+	}
+
+#pragma endregion
+
+#pragma region Actualisation des valeurs
+
+	//Actualisation des valeurs des progressbars
+	m_pgb_health->SetValue(m_character.HealthPerc());
+	m_pgb_energy->SetValue(m_character.EnergyPerc());
+	m_pgb_mana->SetValue(m_character.ManaPerc());
+	m_pgb_exp->SetValue(m_character.ExpPerc());
+	//Actualisation du texte dans les différents Label
+	TextUpdate();
+
+#pragma endregion
+
+#pragma region Ecriture console a partir de l exterieur
+
+	if (Info::Get().LineToPrint() != "")
+	{
+		m_lb_console->AddLine(Info::Get().LineToPrint());
+		Info::Get().NextPrint("");
+	}
+
+#pragma endregion
+
+#pragma region Reseau
+
+	//Test réseau - Dessigne un carré en haut de la position du joueur
+	//sf::Packet p;
+	//if (Info::Get().Network().Receive(p))
+	//{
+	//	float x;
+	//	float y;
+	//	float z;
+	//	p >> x >> y >> z;
+	//	glLoadIdentity();
+	//	glTranslated(x, y+5, z);
+	//	m_textureFloor.Bind();
+	//	glBegin(GL_QUADS);
+
+	//	glTexCoord2f(0, 0);
+	//	glVertex3f(x - 0.5f, y, z - 0.5f);
+
+	//	glTexCoord2f(0, 1);
+	//	glVertex3f(x + 0.5f, y, z - 0.5f);
+
+	//	glTexCoord2f(1, 1);
+	//	glVertex3f(x + 0.5f, y, z + 0.5f);
+
+	//	glTexCoord2f(1, 0);
+	//	glVertex3f(x - 0.5f, y, z + 0.5f);
+
+	//	glEnd();
+	//}
+
+#pragma endregion
+
+#pragma region FPS
+
+	m_fpstmr += gameTime;
+	if (m_fpstmr > 1.5f)
+	{
+		float fps = 1 / elapsedTime;
+		m_fps = fps >= 60 ? 60 : fps;
+		m_fpstmr = 0;
+	}
+
+#pragma endregion
+
+}
+
+void Engine::Render(float elapsedTime)
+{
+
+#pragma region Game time
+
+	static float gameTime = elapsedTime;
+	gameTime += elapsedTime;
+
+#pragma endregion
+
+#pragma region OpenGl
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -674,63 +800,6 @@ void Engine::Render(float elapsedTime)
 
 #pragma endregion
 
-#pragma region Reseau
-
-	//Test réseau - Dessigne un carré en haut de la position du joueur
-	//sf::Packet p;
-	//if (Info::Get().Network().Receive(p))
-	//{
-	//	float x;
-	//	float y;
-	//	float z;
-	//	p >> x >> y >> z;
-	//	glLoadIdentity();
-	//	glTranslated(x, y+5, z);
-	//	m_textureFloor.Bind();
-	//	glBegin(GL_QUADS);
-
-	//	glTexCoord2f(0, 0);
-	//	glVertex3f(x - 0.5f, y, z - 0.5f);
-
-	//	glTexCoord2f(0, 1);
-	//	glVertex3f(x + 0.5f, y, z - 0.5f);
-
-	//	glTexCoord2f(1, 1);
-	//	glVertex3f(x + 0.5f, y, z + 0.5f);
-
-	//	glTexCoord2f(1, 0);
-	//	glVertex3f(x - 0.5f, y, z + 0.5f);
-
-	//	glEnd();
-	//}
-
-#pragma endregion
-
-#pragma region Musique
-
-	//Solution temporaire pour changer la musique lors du premier render de l'engine
-	static bool ttt = true;
-	if (ttt)
-	{
-		Info::Get().Sound().PlayNextTrack();
-		ttt = false;
-		CW("Premier Render de l'engine termine avec succes.");
-	}
-
-#pragma endregion
-
-#pragma region FPS
-
-	m_fpstmr += gameTime;
-	if (m_fpstmr > 1.5f)
-	{
-		float fps = 1 / elapsedTime;
-		m_fps = fps >= 60 ? 60 : fps;
-		m_fpstmr = 0;
-	}
-
-#pragma endregion
-
 }
 
 void Engine::Render2D(float elapsedTime)
@@ -748,6 +817,13 @@ void Engine::Render2D(float elapsedTime)
 	glOrtho(0, Width(), 0, Height(), -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
+
+#pragma endregion
+
+#pragma region Affichage des controles
+
+	//Render de l'écran au complet avec tous ses contrôles.
+	m_pnl_screen->Render();
 
 #pragma endregion
 
@@ -773,35 +849,6 @@ void Engine::Render2D(float elapsedTime)
 
 #pragma endregion
 
-#pragma region Proprietes des controles
-
-	//Affiche ou cache les infos s'il y a un changement
-	if (m_lb_infos->Visible() && !Info::Get().Options().GetOptInfos())
-		m_lb_infos->SetVisible(false);
-	else if (!m_lb_infos->Visible() && Info::Get().Options().GetOptInfos())
-		m_lb_infos->SetVisible(true);
-	//Change la texture de la barre de vie en fonction du %. Ne réassigne la texture que si on en a besoin
-	if (m_character.HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_pgb_health->GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH])
-		m_pgb_health->SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW]);
-	else if (m_character.HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_pgb_health->GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW])
-		m_pgb_health->SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH]);
-	//Affiche ou cache la barre d'énergie selon la situation
-	if (m_character.Energy() == m_character.EnergyMax())
-	{
-		m_pgb_energy->SetVisible(false);
-		m_lbl_energy->SetVisible(false);
-	}
-	else if (m_character.Energy() != m_character.EnergyMax() || sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-	{
-		m_pgb_energy->SetVisible(true);
-		m_lbl_energy->SetVisible(true);
-	}
-
-	//Render de l'écran au complet avec tous ses contrôles.
-	m_pnl_screen->Render();
-
-#pragma endregion
-
 #pragma region Affichage de l interface sans transparence
 
 	//============================================
@@ -814,24 +861,7 @@ void Engine::Render2D(float elapsedTime)
 	//============================================
 	RenderSpells();
 	//============================================
-	//Mise à jour des données
-	m_pgb_health->SetValue(m_character.HealthPerc());
-	m_pgb_energy->SetValue(m_character.EnergyPerc());
-	m_pgb_mana->SetValue(m_character.ManaPerc());
-	m_pgb_exp->SetValue(m_character.ExpPerc());
-	//============================================
-	TextUpdate();
-	//============================================
 
-#pragma endregion
-
-#pragma region Ecriture console
-
-	if (Info::Get().LineToPrint() != "")
-	{
-		m_lb_console->AddLine(Info::Get().LineToPrint());
-		Info::Get().NextPrint("");
-	}
 
 #pragma endregion
 
@@ -848,135 +878,6 @@ void Engine::Render2D(float elapsedTime)
 
 }
 
-void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat)
-{
-	texture.Bind();
-	glLoadIdentity();
-	glTranslated(position.x, position.y, 0);
-
-	glBegin(GL_QUADS);
-
-	glTexCoord2f(0, 0);
-	glVertex2f(0, 0);
-
-	glTexCoord2f((repeat ? size.x / texture.GetWidth() : 1), 0);
-	glVertex2i(size.x, 0);
-
-	glTexCoord2f((repeat ? size.x / texture.GetWidth() : 1), (repeat ? size.y / texture.GetHeight() : 1));
-	glVertex2i(size.x, size.y);
-
-	glTexCoord2f(0, (repeat ? size.y / texture.GetHeight() : 1));
-	glVertex2i(0, size.y);
-
-	glEnd();
-}
-
-void Engine::RenderSpells()
-{
-	static short spellSize = SPELL_ICON_SIZE;
-	static short spellPadding = SPELL_ICON_PADDING;
-	static short spellBarWidth = SPELL_BAR_SPELL_NUMBER * (spellSize + spellPadding);
-	static short spellBarPosX = Width() / 2 - spellBarWidth / 2;
-	static short spellBarPosY = INTERFACE_BOTTOM_HEIGHT;
-	std::string nombre;
-
-	for (int i = 0; i < SPELL_BAR_SPELL_NUMBER; i++)
-	{
-		if (m_textureSpell[i].IsValid())
-		{
-			RenderSquare(Vector2i(i == 0 ? spellBarPosX : (spellBarPosX + i * (spellSize + spellPadding)), 0), Vector2i(spellSize, spellSize), m_textureSpell[i], false);
-
-			std::ostringstream convertisseur;
-			convertisseur << (i + 1) % 10;
-			nombre = convertisseur.str();
-			PrintText(spellBarPosX + i * (spellSize + spellPadding), spellSize - 12, nombre);
-			nombre = "";
-		}
-	}
-}
-
-void Engine::TextUpdate()
-{
-	std::ostringstream ss;
-	//Vie
-	ss << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
-	m_lbl_health->SetMessage(ss.str());
-	ss.str("");
-	//Energie
-	ss << (int)m_character.Energy() << " / " << (int)m_character.EnergyMax();
-	m_lbl_energy->SetMessage(ss.str());
-	ss.str("");
-	//Mana
-	ss << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
-	m_lbl_mana->SetMessage(ss.str());
-	ss.str("");
-	//Experience
-	ss << (int)m_character.Exp() << " / " << (int)m_character.ExpNext();
-	m_lbl_exp->SetMessage(ss.str());
-	ss.str("");
-	//Niveau
-	ss << m_character.Level();
-	m_lbl_playerLevel->SetMessage(ss.str());
-	ss.str("");
-	//Position
-	ss << "Position :     ( " << std::setprecision(4) << m_player.Position().x << ", " << std::setprecision(4) <<
-		m_player.Position().y << ", " << std::setprecision(4) << m_player.Position().z << " )";
-	m_lbl_plrPos->SetMessage(ss.str());
-	ss.str("");
-	//Vitesse
-	ss << "Vitesse :      " << m_player.Speed();
-	m_lbl_plrSpd->SetMessage(ss.str());
-	ss.str("");
-	//Accélération
-	ss << "Acceleration : " << m_player.Acceleration();
-	m_lbl_plrAcc->SetMessage(ss.str());
-	ss.str("");
-	//FPS
-	ss << "Fps :          " << std::setprecision(2) << m_fps;
-	m_lbl_FPS->SetMessage(ss.str());
-	ss.str("");
-	//Heure
-	time_t currentTime;
-	time (&currentTime);
-	struct tm ptm;
-	localtime_s(&ptm, &currentTime);
-	ss << std::setfill('0');
-	ss << std::setw(2) << ptm.tm_hour << ":" << std::setw(2) << ptm.tm_min;
-	m_lbl_time->SetMessage(ss.str());
-	ss.str("");
-}
-
-void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
-{
-	m_texturefontColor[TEXTCOLOR_WHITE].Bind();
-	glLoadIdentity();
-	glTranslated(x, y, 0);
-	for (unsigned int i = 0; i < t.length(); ++i)
-	{
-		float left = (float)((t[i] - 32) % 16) / 16.0f;
-		float top = (float)((t[i] - 32) / 16) / 16.0f;
-		top += 1.0f;
-		glBegin(GL_QUADS);
-		glTexCoord2f(left, 1.0f - top - 0.0625f);
-		glVertex2i(0, 0);
-		glTexCoord2f(left + 0.0625f, 1.0f - top - 0.0625f);
-		glVertex2i(12 , 0);
-		glTexCoord2f(left + 0.0625f, 1.0f - top);
-		glVertex2i(12, 12);
-		glTexCoord2f(left , 1.0f - top);
-		glVertex2i(0, 12);
-		glEnd();
-		glTranslated(8, 0, 0);
-	}
-}
-
-void Engine::StartBlendPNG(bool value) const
-{
-	glEnable(GL_BLEND);
-	if (value)
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Blend PNG
-	else glBlendFunc(GL_SRC_ALPHA, GL_ONE); //Blend original
-}
 
 void Engine::TextenteredEvent(unsigned int val)
 {
@@ -1317,6 +1218,139 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 	}
 }
 
+//Private
+
+
+void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat)
+{
+	texture.Bind();
+	glLoadIdentity();
+	glTranslated(position.x, position.y, 0);
+
+	glBegin(GL_QUADS);
+
+	glTexCoord2f(0, 0);
+	glVertex2f(0, 0);
+
+	glTexCoord2f((repeat ? size.x / texture.GetWidth() : 1), 0);
+	glVertex2i(size.x, 0);
+
+	glTexCoord2f((repeat ? size.x / texture.GetWidth() : 1), (repeat ? size.y / texture.GetHeight() : 1));
+	glVertex2i(size.x, size.y);
+
+	glTexCoord2f(0, (repeat ? size.y / texture.GetHeight() : 1));
+	glVertex2i(0, size.y);
+
+	glEnd();
+}
+
+void Engine::RenderSpells()
+{
+	static short spellSize = SPELL_ICON_SIZE;
+	static short spellPadding = SPELL_ICON_PADDING;
+	static short spellBarWidth = SPELL_BAR_SPELL_NUMBER * (spellSize + spellPadding);
+	static short spellBarPosX = Width() / 2 - spellBarWidth / 2;
+	static short spellBarPosY = INTERFACE_BOTTOM_HEIGHT;
+	std::string nombre;
+
+	for (int i = 0; i < SPELL_BAR_SPELL_NUMBER; i++)
+	{
+		if (m_textureSpell[i].IsValid())
+		{
+			RenderSquare(Vector2i(i == 0 ? spellBarPosX : (spellBarPosX + i * (spellSize + spellPadding)), 0), Vector2i(spellSize, spellSize), m_textureSpell[i], false);
+
+			std::ostringstream convertisseur;
+			convertisseur << (i + 1) % 10;
+			nombre = convertisseur.str();
+			PrintText(spellBarPosX + i * (spellSize + spellPadding), spellSize - 12, nombre);
+			nombre = "";
+		}
+	}
+}
+
+void Engine::TextUpdate()
+{
+	std::ostringstream ss;
+	//Vie
+	ss << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
+	m_lbl_health->SetMessage(ss.str());
+	ss.str("");
+	//Energie
+	ss << (int)m_character.Energy() << " / " << (int)m_character.EnergyMax();
+	m_lbl_energy->SetMessage(ss.str());
+	ss.str("");
+	//Mana
+	ss << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
+	m_lbl_mana->SetMessage(ss.str());
+	ss.str("");
+	//Experience
+	ss << (int)m_character.Exp() << " / " << (int)m_character.ExpNext();
+	m_lbl_exp->SetMessage(ss.str());
+	ss.str("");
+	//Niveau
+	ss << m_character.Level();
+	m_lbl_playerLevel->SetMessage(ss.str());
+	ss.str("");
+	//Position
+	ss << "Position :     ( " << std::setprecision(4) << m_player.Position().x << ", " << std::setprecision(4) <<
+		m_player.Position().y << ", " << std::setprecision(4) << m_player.Position().z << " )";
+	m_lbl_plrPos->SetMessage(ss.str());
+	ss.str("");
+	//Vitesse
+	ss << "Vitesse :      " << m_player.Speed();
+	m_lbl_plrSpd->SetMessage(ss.str());
+	ss.str("");
+	//Accélération
+	ss << "Acceleration : " << m_player.Acceleration();
+	m_lbl_plrAcc->SetMessage(ss.str());
+	ss.str("");
+	//FPS
+	ss << "Fps :          " << std::setprecision(2) << m_fps;
+	m_lbl_FPS->SetMessage(ss.str());
+	ss.str("");
+	//Heure
+	time_t currentTime;
+	time (&currentTime);
+	struct tm ptm;
+	localtime_s(&ptm, &currentTime);
+	ss << std::setfill('0');
+	ss << std::setw(2) << ptm.tm_hour << ":" << std::setw(2) << ptm.tm_min;
+	m_lbl_time->SetMessage(ss.str());
+	ss.str("");
+}
+
+void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
+{
+	m_texturefontColor[TEXTCOLOR_WHITE].Bind();
+	glLoadIdentity();
+	glTranslated(x, y, 0);
+	for (unsigned int i = 0; i < t.length(); ++i)
+	{
+		float left = (float)((t[i] - 32) % 16) / 16.0f;
+		float top = (float)((t[i] - 32) / 16) / 16.0f;
+		top += 1.0f;
+		glBegin(GL_QUADS);
+		glTexCoord2f(left, 1.0f - top - 0.0625f);
+		glVertex2i(0, 0);
+		glTexCoord2f(left + 0.0625f, 1.0f - top - 0.0625f);
+		glVertex2i(12 , 0);
+		glTexCoord2f(left + 0.0625f, 1.0f - top);
+		glVertex2i(12, 12);
+		glTexCoord2f(left , 1.0f - top);
+		glVertex2i(0, 12);
+		glEnd();
+		glTranslated(8, 0, 0);
+	}
+}
+
+void Engine::StartBlendPNG(bool value) const
+{
+	glEnable(GL_BLEND);
+	if (value)
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Blend PNG
+	else glBlendFunc(GL_SRC_ALPHA, GL_ONE); //Blend original
+}
+
 bool Engine::LoadTexture(Texture& texture, const std::string& filename, bool stopOnError)
 {
 	texture.Load(filename);
@@ -1331,8 +1365,6 @@ bool Engine::LoadTexture(Texture& texture, const std::string& filename, bool sto
 
 	return true;
 }
-
-//Private
 
 void Engine::CW(const std::string& line)
 {

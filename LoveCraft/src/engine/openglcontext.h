@@ -25,6 +25,7 @@ public:
     virtual void DeInit() = 0;
     virtual void LoadResource() = 0;
     virtual void UnloadResource() = 0;
+	virtual void Update(float elapsedTime) = 0;
     virtual void Render(float elapsedTime) = 0;
 	virtual void Render2D( float elapsedTime ) = 0;
 	virtual void TextenteredEvent(unsigned int val) = 0;

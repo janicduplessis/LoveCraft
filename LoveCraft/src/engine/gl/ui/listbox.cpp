@@ -7,8 +7,8 @@ ListBox::ListBox() : Control(CTRLTYPE_LISTBOX), m_lines(0), m_fontMainColor(0), 
 
 }
 
-ListBox::ListBox(Control* parent, Vector2i &position, float lineWidth, Texture* textMainColor, Texture* background, unsigned short linenbr,
-				 short linegap, float charwidth, float charheight, float charinterval, bool scrollable, const std::string& name, Vector2i offset) : 
+ListBox::ListBox(Control* parent, const Vector2i &position, float lineWidth, Texture* textMainColor, Texture* background, unsigned short linenbr,
+				 short linegap, float charwidth, float charheight, float charinterval, bool scrollable, const std::string& name, const Vector2i& offset) : 
 Control(CTRLTYPE_LISTBOX, parent, position, Vector2i(lineWidth + offset.x * 2, (charheight + linegap) * linenbr + offset.y * 2), background, name), 
 	m_fontMainColor(textMainColor), m_lineNbr(linenbr), m_gapBetLines(linegap), m_charWidth(charwidth), m_charHeight(charheight), m_charInterval(charinterval),
 	m_curLineIndex(0), m_scrollable(scrollable), m_offset(offset)

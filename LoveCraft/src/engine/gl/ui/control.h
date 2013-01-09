@@ -137,7 +137,7 @@ public:
 	* @param size		La taille du controle
 	* @param name		Le nom du controle
 	*/
-	Control(Type type, Control* parent, Vector2i position, Vector2i size, Texture* texture, const std::string& name);
+	Control(Type type, Control* parent, const Vector2i& position, const Vector2i& size, Texture* texture, const std::string& name);
 	/**
 	* Destructeur par défaut
 	*/

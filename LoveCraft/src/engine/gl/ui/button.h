@@ -11,6 +11,8 @@ class Button : public Control
 {
 public:
 	Button();
+	Button(Control* parent, const Vector2i& position, const Vector2i &size, Texture* background, 
+		Texture* textColor, const std::string& text, const std::string& name);
 	~Button();
 
 	/**

@@ -10,7 +10,7 @@ Control::Control(Type type) : m_type(type), m_visible(true), m_name("default"),
 {
 }
 
-Control::Control(Type type, Control* parent, Vector2i position, Vector2i size, Texture* texture, const std::string& name) : 
+Control::Control(Type type, Control* parent, const Vector2i& position, const Vector2i& size, Texture* texture, const std::string& name) : 
 	m_type(type), m_visible(true), m_name(name), m_parent(parent), m_position(position), m_texture(texture),
 	m_size(size), m_pngBlend(true), m_repeatTexture(true)
 {

@@ -941,9 +941,11 @@ void Engine::KeyPressEvent(unsigned char key)
 {
 	Son& sound = Info::Get().Sound();
 	static std::ostringstream ss;
-	ss << (int)key;
-	CW(ss.str());
-	ss.str("");
+	Controls& c = Info::Get().Ctrls();
+	//Affiche les numéros de touche dans la console de jeu
+	//ss << (int)key;
+	//CW(ss.str());
+	//ss.str("");
 	if (key == 58 && !m_txb_console->HasFocus())
 	{
 		m_txb_console->SetFocus(true);
@@ -982,15 +984,137 @@ void Engine::KeyPressEvent(unsigned char key)
 	}
 	else
 	{
-		switch(key)
+		c.Set(key, true);
+		//Sorts qui subissent le global cooldown
+		if(m_character.GlobalCooldown() == 0)
 		{
-		case 36:	// ESC
+			if (c.n1())
+			{
+				Spell newSpell;
+				newSpell.SetPosition(m_player.Position());
+				newSpell.Init(4.f, m_player.RotationQ(), &m_texSpell);
+				newSpell.Shoot();
+				m_spells.push_back(newSpell);
+				sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
+				m_character.ResetGlobalCooldown();
+				CW("Lancement de sort: Trail orange!");
+			}
+
+			if (c.n2())
+			{
+				m_testpig.SetPosition(Vector3f(m_testpig.Position().x, 10, m_testpig.Position().z));
+				sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
+				m_character.ResetGlobalCooldown();
+				CW("Lancement de sort: teleportation de cochon!");
+			}
+			if (c.n3())
+			{
+				sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
+				m_character.ResetGlobalCooldown();
+				CW("Lancement de sort: Glace");
+			}
+			if (c.n4())
+			{
+				sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
+				m_character.ResetGlobalCooldown();
+				CW("Lancement de sort: Shock");
+			}
+			if (c.n5())
+			{
+				sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
+				m_character.ResetGlobalCooldown();
+				CW("Lancement de sort: Poison");
+			}
+			if (c.n7())
+			{
+				if (m_character.Mana() - 15 >= 0)
+				{
+					sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
+					m_character.ResetGlobalCooldown();
+					m_character.SetHealth(15);
+					m_character.SetMana(-15);
+					CW("Lancement de sort: Soin");
+				}
+			}
+			if (c.n8())
+			{
+				if (m_character.Mana() - 10 >= 0)
+				{
+					sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
+					m_character.ResetGlobalCooldown();
+					m_character.SetEnergy(10);
+					m_character.SetMana(-10);
+					CW("Lancement de sort: Rafraichissement");
+				}
+			}
+			if (c.n9())
+			{
+				sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
+				m_character.ResetGlobalCooldown();
+				CW("Lancement de sort: Defense");
+			}
+			if (c.n0())
+			{
+				sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
+				m_character.ResetGlobalCooldown();
+				CW("Lancement de sort: Bouclier magique");
+			}
+		}
+		//Sorts hors global cooldown
+		if (c.n6())
+		{
+			if (m_character.Mana() - 5 >= 0)
+			{
+				sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
+				m_character.SetMana(-5);
+				m_player.Teleport();
+				CW("Lancement de sort: Teleportation");
+			}
+		}
+	}
+	ss.str("");
+}
+
+void Engine::KeyReleaseEvent(unsigned char key)
+{
+	static std::ostringstream ss;
+	Controls& c = Info::Get().Ctrls();
+	if (!m_txb_console->HasFocus())
+	{
+		if (c.Esc())
 			Stop();
-			break;
-		case 94:	// F10
+		if (c.f9())
+		{
+			Info::Get().Options().SetOptInfos(!Info::Get().Options().GetOptInfos());
+			ss << "Affichage des infos a: " << (Info::Get().Options().GetOptInfos() ? "on" : "off");
+			CW(ss.str());
+		}
+		if (c.f10())
 			SetFullscreen(!IsFullscreen());
-			break;
-		case 21:	// V
+		if (c.G())
+		{
+			m_ghostMode = !m_ghostMode;
+			ss << "Mode fantome mis a: " << (m_ghostMode ? "on" : "off");
+			CW(ss.str());
+		}
+		if (c.Y())
+		{
+			m_wireframe = !m_wireframe;
+			if(m_wireframe)
+			{
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				glDisable(GL_CULL_FACE);
+			}
+			else
+			{
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				glEnable(GL_CULL_FACE);
+			}
+			ss << "Affichage Wireframe mis a: " << (m_wireframe ? "on" : "off");
+			CW(ss.str());
+		}
+		if (c.V())
+		{
 			if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON) 
 			{
 				m_camera.SetMode(Camera::CAM_THIRD_PERSON);
@@ -1002,124 +1126,23 @@ void Engine::KeyPressEvent(unsigned char key)
 				m_camera.SetMode(Camera::CAM_FIRST_PERSON);
 				CW("Affichage de la camera a la premiere personne");
 			}
-			break;
-		case 27:
-			if(m_character.GlobalCooldown() == 0)
-			{
-				Spell newSpell;
-				newSpell.SetPosition(m_player.Position());
-				newSpell.Init(4.f, m_player.RotationQ(), &m_texSpell);
-				newSpell.Shoot();
-				m_spells.push_back(newSpell);
-				sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
-				m_character.ResetGlobalCooldown();
-			}
-			CW("Lancement de sort: Trail orange!");
-			break;
-		case 28:
-			m_testpig.SetPosition(Vector3f(m_testpig.Position().x, 10, m_testpig.Position().z));
-			sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
-			CW("Lancement de sort: teleportation de cochon!");
-			break;
-		case 29:
-			sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
-			CW("Lancement de sort: Glace");
-			break;
-		case 30:
-			sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
-			CW("Lancement de sort: Shock");
-			break;
-		case 31:
-			sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
-			CW("Lancement de sort: Poison");
-			break;
-		case 32:
-			if (m_character.Mana() - 5 >= 0)
-			{
-				sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
-				m_character.SetMana(-5);
-				m_player.Teleport();
-				CW("Lancement de sort: Teleportation");
-			}
-			break;
-		case 33:
-			if (m_character.Mana() - 15 >= 0)
-			{
-				sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
-				m_character.SetHealth(15);
-				m_character.SetMana(-15);
-				CW("Lancement de sort: Soin");
-			}
-			break;
-		case 34:
-			if (m_character.Mana() - 10 >= 0)
-			{
-				sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
-				m_character.SetEnergy(10);
-				m_character.SetMana(-10);
-				CW("Lancement de sort: Rafraichissement");
-			}
-			break;
-		case 35:
-			sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
-			CW("Lancement de sort: Defense");
-			break;
-		case 26:
-			sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
-			CW("Lancement de sort: Bouclier magique");
-			break;
-		default:
-			std::cout << "Unhandled key: " << (int)key << std::endl;
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
-				Info::Get().Sound().PlayNextTrack();
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
-			{
-				Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
-				ss << "Musique mis a: " << (Info::Get().Options().GetOptMusic() ? "on" : "off");
-				CW(ss.str());
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
-			{
-				m_character.SetExp(75);
-				CW("Ajout de 75 points d'exp");
-			}
 		}
-	}
-	ss.str("");
-}
-
-void Engine::KeyReleaseEvent(unsigned char key)
-{
-	static std::ostringstream ss;
-	switch(key)
-	{
-	case 24:       // Y
-		m_wireframe = !m_wireframe;
-		if(m_wireframe)
+		if (c.M())
+			Info::Get().Sound().PlayNextTrack();
+		if (c.O())
 		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			glDisable(GL_CULL_FACE);
+			Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
+			ss << "Musique mis a: " << (Info::Get().Options().GetOptMusic() ? "on" : "off");
+			CW(ss.str());
 		}
-		else
+		if (c.P())
 		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			glEnable(GL_CULL_FACE);
+			m_character.SetExp(75);
+			CW("Ajout de 75 points d'exp");
 		}
-		ss << "Affichage Wireframe mis a: " << (m_wireframe ? "on" : "off");
-		CW(ss.str());
-		break;
-	case 93:	// F9
-		Info::Get().Options().SetOptInfos(!Info::Get().Options().GetOptInfos());
-		ss << "Affichage des infos a: " << (Info::Get().Options().GetOptInfos() ? "on" : "off");
-		CW(ss.str());
-		break;
-	case 6:		   // G
-		m_ghostMode = !m_ghostMode;
-		ss << "Mode fantome mis a: " << (m_ghostMode ? "on" : "off");
-		CW(ss.str());
-		break;
+		ss.str("");
 	}
-	ss.str("");
+	c.Set(key, false);
 }
 
 void Engine::MouseMoveEvent(int x, int y)

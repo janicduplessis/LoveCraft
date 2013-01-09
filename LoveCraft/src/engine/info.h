@@ -9,6 +9,7 @@
 #include "network.h"
 #include "options.h"
 #include "camera.h"
+#include "controls.h"
 
 #include <util/vector3.h>
 #include <util/array2d.h>
@@ -47,6 +48,8 @@ public:
 	* Retourne une référence vers l'instance de réseau
 	*/
 	Nwork& Network();
+
+	Controls& Ctrls();
 
 	/**
 	* Retourne le bloc info pour le type donné
@@ -100,6 +103,7 @@ private:
 	Son m_sound;
 	Nwork m_network;
 	Camera* m_cam;
+	Controls m_controls;
 	std::string m_lineToPrint;
 };
 

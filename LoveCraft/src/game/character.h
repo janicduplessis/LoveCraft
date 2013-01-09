@@ -110,6 +110,8 @@ public:
 	float ManaPerc() const;
 	float ExpPerc() const;
 
+	void Refill();
+
 	float GlobalCooldown() const;
 	void ReduceGlobalCooldown(float time);
 	void ResetGlobalCooldown();

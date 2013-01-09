@@ -157,6 +157,12 @@ float Character::ExpPerc() const
 	return (m_exp / ExpNext() * 100);
 }
 
+void Character::Refill()
+{
+	m_mana = m_manaMax;
+	m_health = m_healthMax;
+}
+
 float Character::GlobalCooldown() const
 {
 	return m_globalCooldown;
@@ -204,4 +210,5 @@ void Character::ApplyBonus()
 	m_healthMax += CHARACTER_HEALTH_INCREASE;
 	m_manaMax += CHARACTER_MANA_INCREASE;
 	m_energyMax += CHARACTER_ENERGY_INCREASE;
+	Refill();
 }

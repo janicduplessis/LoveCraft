@@ -52,15 +52,15 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 {
 
 #pragma region Raccourcis des touches
-
-	bool w = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
-	bool s = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
-	bool a = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
-	bool d = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
-	bool c = sf::Keyboard::isKeyPressed(sf::Keyboard::C);
-	bool shift = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
-	bool ctrl = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl);
-	bool space = sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_speed.y == 0;
+	Controls& ctrls = Info::Get().Ctrls();
+	bool w = ctrls.W();
+	bool s = ctrls.S();
+	bool a = ctrls.A();
+	bool d = ctrls.D();
+	bool c = ctrls.C();
+	bool shift = ctrls.Shift();
+	bool ctrl = ctrls.Ctrl();
+	bool space = ctrls.Space() && m_speed.y == 0;
 
 #pragma endregion
 

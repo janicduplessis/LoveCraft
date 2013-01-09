@@ -62,12 +62,12 @@ public:
 	/**
 	* Set le pointeur vers l'array 2d de chunks
 	*/
-	void SetChunkArray(Array2d<Chunk>* arrayPtr);
+	void SetChunkArray(Array2d<Chunk*>* arrayPtr);
 
 	/**
 	* Retourne un pointeur vers l'array 2d de chunks
 	*/
-	Array2d<Chunk>* GetChunkArray() const;
+	Array2d<Chunk*>* GetChunkArray() const;
 
 	/**
 	* Retourne le bloc à la position donné en 
@@ -96,7 +96,7 @@ private:
 	void GenerateBlocInfos();
 
 private:
-	Array2d<Chunk>* m_chunks;
+	Array2d<Chunk*>* m_chunks;
 	static Info* m_info;
 	BlockInfo* m_blocInfos[BTYPE_COUNT];
 	Option m_options;

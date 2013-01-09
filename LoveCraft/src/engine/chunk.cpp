@@ -30,19 +30,19 @@ BlockType Chunk::GetBloc(uint32 x, uint32 y, uint32 z)
 	Chunk* frontChunk = 0;
 	Chunk* backChunk = 0;
 
-	Array2d<Chunk>* chunks = Info::Get().GetChunkArray();
+	Array2d<Chunk*>* chunks = Info::Get().GetChunkArray();
 
 	if (m_pos.x != 0)
-		leftChunk = &chunks->Get(m_pos.x - 1, m_pos.y);
+		leftChunk = chunks->Get(m_pos.x - 1, m_pos.y);
 
 	if(m_pos.x != VIEW_DISTANCE / CHUNK_SIZE_X * 2 - 1)
-		rightChunk = &chunks->Get(m_pos.x + 1, m_pos.y);
+		rightChunk = chunks->Get(m_pos.x + 1, m_pos.y);
 
 	if (m_pos.y != 0)
-		frontChunk = &chunks->Get(m_pos.x, m_pos.y - 1);
+		frontChunk = chunks->Get(m_pos.x, m_pos.y - 1);
 
 	if(m_pos.y != VIEW_DISTANCE / CHUNK_SIZE_Z * 2 - 1)
-		backChunk = &chunks->Get(m_pos.x, m_pos.y + 1);
+		backChunk = chunks->Get(m_pos.x, m_pos.y + 1);
 
 	// Bottom et top
 	if (y == -1 || y == CHUNK_SIZE_Y)

@@ -176,7 +176,7 @@ private:
 	Shader m_shaderCube;
 	Shader m_shaderSpells;
 
-	Array2d<Chunk>* m_chunks;
+	Array2d<Chunk*>* m_chunks;
 
 	Panel* m_pnl_screen;
 	Panel* m_pnl_playscreen;

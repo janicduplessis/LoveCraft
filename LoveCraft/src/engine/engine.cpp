@@ -22,32 +22,37 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 
 Engine::~Engine()
 {
+	// delete les chunks
+	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
+	{
+		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
+		{
+			delete m_chunks->Get(i, j);
+		}
+	}
+
 	delete m_textureArray;
 	delete m_testButton;
+
+	// delete l'interface
 	delete m_pnl_screen;
 	delete m_pnl_playscreen;
 	delete m_pnl_portrait;
-
 	delete m_pgb_health;
 	delete m_pgb_energy;
 	delete m_pgb_mana;
 	delete m_pgb_exp;
-
 	delete m_lb_infos;
 	delete m_lb_console;
 	delete m_txb_console;
-
 	delete m_pnl_playerImage;
 	delete m_lbl_playerLevel;
-
 	delete m_lbl_plrPos;
 	delete m_lbl_plrSpd;
 	delete m_lbl_plrAcc;
 	delete m_lbl_FPS;
-
 	delete m_pnl_time;
 	delete m_lbl_time;
-
 	delete m_lbl_health;
 	delete m_lbl_mana;
 	delete m_lbl_exp;
@@ -130,7 +135,7 @@ void Engine::Init()
 
 #pragma region Initilisation du chunk principal
 
-	m_chunks = new Array2d<Chunk>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
+	m_chunks = new Array2d<Chunk*>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
 	Info::Get().SetChunkArray(m_chunks);
 
 	//Genere un chunk plancher
@@ -218,7 +223,9 @@ void Engine::Init()
 		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
 		{
 			chunk.SetPosition(Vector2i(i, j));
-			m_chunks->Set(i, j, chunk);
+			Chunk* c = new Chunk();
+			*c = chunk;
+			m_chunks->Set(i, j, c);
 		}
 	}
 
@@ -607,10 +614,10 @@ void Engine::Render(float elapsedTime)
 	{
 		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
 		{
-			Chunk &c = m_chunks->Get(i,j);
-			if (c.IsDirty())
-				c.Update();
-			c.Render();
+			Chunk* c = m_chunks->Get(i,j);
+			if (c->IsDirty())
+				c->Update();
+			c->Render();
 		}
 	}
 

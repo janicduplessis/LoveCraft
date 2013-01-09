@@ -82,14 +82,14 @@ BlockType Info::GetBlocFromWorld(Vector3f pos, const Vector3f& offset) const
 	int chunkX, chunkZ;
 	chunkX = iPos.x / CHUNK_SIZE_X;
 	chunkZ = iPos.z / CHUNK_SIZE_Z;
-	Chunk& c = GetChunkArray()->Get(chunkX, chunkZ);
+	Chunk* c = GetChunkArray()->Get(chunkX, chunkZ);
 	// Calcul dans quel bloc la position est
 	int blocX, blocY, blocZ;
 	blocX = iPos.x - chunkX * CHUNK_SIZE_X;
 	blocY = iPos.y;
 	blocZ = iPos.z - chunkZ * CHUNK_SIZE_Z;
 
-	return c.GetBloc(blocX, blocY, blocZ);
+	return c->GetBloc(blocX, blocY, blocZ);
 }
 
 void Info::GenerateBlocInfos()
@@ -111,12 +111,12 @@ void Info::GenerateBlocInfos()
 	m_blocInfos[BTYPE_SWAMP] = new BlockInfo(BTYPE_SWAMP, "Swamp");
 }
 
-void Info::SetChunkArray( Array2d<Chunk>* arrayPtr )
+void Info::SetChunkArray( Array2d<Chunk*>* arrayPtr )
 {
 	m_chunks = arrayPtr;
 }
 
-Array2d<Chunk>* Info::GetChunkArray() const
+Array2d<Chunk*>* Info::GetChunkArray() const
 {
 	return m_chunks;
 }

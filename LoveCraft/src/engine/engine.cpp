@@ -129,10 +129,10 @@ void Engine::Init()
 
 	m_testpig.Init(&m_player);
 	m_testpig.SetPosition(Vector3f(10,5,10));
-	//m_testpig2.Init();
-	//m_testpig2.SetPosition(Vector3f(-10,5,-10));
-	//m_testpig3.Init();
-	//m_testpig3.SetPosition(Vector3f(10,5,-10));
+	m_testpig2.Init(&m_player);
+	m_testpig2.SetPosition(Vector3f(-10,5,-10));
+	m_testpig3.Init(&m_player);
+	m_testpig3.SetPosition(Vector3f(10,5,-10));
 	m_character = Character();
 
 #pragma endregion
@@ -763,10 +763,10 @@ void Engine::Render(float elapsedTime)
 
 	m_testpig.Update(elapsedTime);
 	m_testpig.Render();
-	//m_testpig2.Update(elapsedTime);
-	//m_testpig2.Render();
-	//m_testpig3.Update(elapsedTime);
-	//m_testpig3.Render();
+	m_testpig2.Update(elapsedTime);
+	m_testpig2.Render();
+	m_testpig3.Update(elapsedTime);
+	m_testpig3.Render();
 
 	Shader::Disable();
 
@@ -1381,7 +1381,7 @@ void Engine::CW(const std::string& line)
 	m_lb_console->AddLine(line);
 }
 
-void Engine::CW(const std::string& line)
+void Engine::CWL(const std::string& line)
 {
 	//m_lb_console->SetLine(0, m_lb_console->GetLine(0) + line);
 }

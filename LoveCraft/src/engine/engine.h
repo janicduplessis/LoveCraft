@@ -162,6 +162,7 @@ private:
 	void StartBlendPNG(bool value = true) const;
 	void OnClick(Control* sender);
 	void CW(const std::string& line);
+	void CWL(const std::string& line);
 
 
 	bool m_wireframe;

@@ -79,6 +79,9 @@ public:
 	*/
 	BlockType GetBlocFromWorld(Vector3f pos, const Vector3f& offset = Vector3f(0,0,0)) const;
 
+	Vector2i GetMouse();
+	void SetMouse(Vector2i pos);
+
 	/**
 	 * Pointeur vers la camera
 	 */
@@ -105,6 +108,7 @@ private:
 	Camera* m_cam;
 	Controls m_controls;
 	std::string m_lineToPrint;
+	Vector2i m_mouse;
 };
 
 #endif

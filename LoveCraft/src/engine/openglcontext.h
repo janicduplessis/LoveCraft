@@ -26,6 +26,7 @@ public:
     virtual void DeInit() = 0;
     virtual void LoadResource() = 0;
     virtual void UnloadResource() = 0;
+	virtual void Update(float elapsedTime) = 0;
     virtual void Render(float elapsedTime) = 0;
 	virtual void Render2D( float elapsedTime ) = 0;
 	virtual void TextenteredEvent(unsigned int val) = 0;
@@ -69,6 +70,7 @@ private:
     bool		m_fullscreen;
     std::string m_title;
 	float m_lastFrameTime;
+protected:
 	sf::Vector2i m_mousePos; // position de la souris pour calculer la position relative
 	sf::Sprite* m_cursor;
 };

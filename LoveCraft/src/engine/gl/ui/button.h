@@ -41,9 +41,11 @@ public:
 	 */
 	void Press();
 
+	void Render();
 private:
 	bool m_clicked;
 	Label* m_label;
+	std::string m_text;
 };
 
 #endif

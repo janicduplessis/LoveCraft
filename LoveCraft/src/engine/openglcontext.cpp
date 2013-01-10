@@ -63,6 +63,7 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 			}
 		}
 		m_app.setActive();
+		Update(m_lastFrameTime);
 		Render(m_lastFrameTime);
 		m_app.display();
 

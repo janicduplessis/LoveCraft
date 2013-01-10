@@ -3,7 +3,7 @@
 #include <cmath>
 
 AI::AI(AiType type, Npc* npc, Player* player) : 
-	m_player(player), m_type(type), m_npc(npc), m_posIni(npc->Position()), m_currentState(STATE_NONE),
+	m_player(player), m_type(type), m_npc(npc), m_posIni(npc->Position()), m_currentState(STATE_PATROL),
 	m_patrolDestination(0)
 {
 

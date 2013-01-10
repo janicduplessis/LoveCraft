@@ -129,6 +129,10 @@ void Engine::Init()
 
 	m_testpig.Init(&m_player);
 	m_testpig.SetPosition(Vector3f(10,5,10));
+	//m_testpig2.Init();
+	//m_testpig2.SetPosition(Vector3f(-10,5,-10));
+	//m_testpig3.Init();
+	//m_testpig3.SetPosition(Vector3f(10,5,-10));
 	m_character = Character();
 
 #pragma endregion
@@ -535,7 +539,7 @@ void Engine::LoadResource()
 		std::cout << " Failed to load cube shader" << std::endl;
 		exit(1) ;
 	}
-	CWL("Chargement des shaders termine");
+	CW("Chargement des shaders termine");
 #pragma endregion
 
 }
@@ -571,7 +575,7 @@ void Engine::Update(float elapsedTime)
 		m_player.ResetPosition();
 		m_character.SetHealth(m_character.HealthMax());
 		Info::Get().Sound().PlaySnd(Son::SON_DEATH, Son::CHANNEL_INTERFACE, true);
-		CWL("Vous etes mort!");
+		CW("Vous etes mort!");
 
 	}
 
@@ -759,6 +763,10 @@ void Engine::Render(float elapsedTime)
 
 	m_testpig.Update(elapsedTime);
 	m_testpig.Render();
+	//m_testpig2.Update(elapsedTime);
+	//m_testpig2.Render();
+	//m_testpig3.Update(elapsedTime);
+	//m_testpig3.Render();
 
 	Shader::Disable();
 
@@ -920,7 +928,7 @@ void Engine::TextenteredEvent(unsigned int val)
 		if (val == 13)
 		{
 			if (m_txb_console->GetMsg() != "")
-				CWL(m_txb_console->GetMsg());
+				CW(m_txb_console->GetMsg());
 			m_txb_console->SetVisible(false);
 			m_txb_console->SetFocus(false);
 			if (m_txb_console->GetMsg() == "/dance")
@@ -956,7 +964,7 @@ void Engine::KeyPressEvent(unsigned char key)
 				m_spells.push_back(newSpell);
 				sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CWL("Lancement de sort: Trail orange!");
+				CW("Lancement de sort: Trail orange!");
 			}
 
 			if (c.n2())
@@ -964,25 +972,25 @@ void Engine::KeyPressEvent(unsigned char key)
 				m_testpig.SetPosition(Vector3f(m_testpig.Position().x, 10, m_testpig.Position().z));
 				sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CWL("Lancement de sort: teleportation de cochon!");
+				CW("Lancement de sort: teleportation de cochon!");
 			}
 			if (c.n3())
 			{
 				sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CWL("Lancement de sort: Glace");
+				CW("Lancement de sort: Glace");
 			}
 			if (c.n4())
 			{
 				sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CWL("Lancement de sort: Shock");
+				CW("Lancement de sort: Shock");
 			}
 			if (c.n5())
 			{
 				sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CWL("Lancement de sort: Poison");
+				CW("Lancement de sort: Poison");
 			}
 			if (c.n7())
 			{
@@ -992,7 +1000,7 @@ void Engine::KeyPressEvent(unsigned char key)
 					m_character.ResetGlobalCooldown();
 					m_character.SetHealth(15);
 					m_character.SetMana(-15);
-					CWL("Lancement de sort: Soin");
+					CW("Lancement de sort: Soin");
 				}
 			}
 			if (c.n8())
@@ -1003,20 +1011,20 @@ void Engine::KeyPressEvent(unsigned char key)
 					m_character.ResetGlobalCooldown();
 					m_character.SetEnergy(10);
 					m_character.SetMana(-10);
-					CWL("Lancement de sort: Rafraichissement");
+					CW("Lancement de sort: Rafraichissement");
 				}
 			}
 			if (c.n9())
 			{
 				sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CWL("Lancement de sort: Defense");
+				CW("Lancement de sort: Defense");
 			}
 			if (c.n0())
 			{
 				sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CWL("Lancement de sort: Bouclier magique");
+				CW("Lancement de sort: Bouclier magique");
 			}
 		}
 		//Sorts hors global cooldown
@@ -1027,7 +1035,7 @@ void Engine::KeyPressEvent(unsigned char key)
 				sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
 				m_character.SetMana(-5);
 				m_player.Teleport();
-				CWL("Lancement de sort: Teleportation");
+				CW("Lancement de sort: Teleportation");
 			}
 		}
 	}
@@ -1046,7 +1054,7 @@ void Engine::KeyReleaseEvent(unsigned char key)
 		{
 			Info::Get().Options().SetOptInfos(!Info::Get().Options().GetOptInfos());
 			ss << "Affichage des infos a: " << (Info::Get().Options().GetOptInfos() ? "on" : "off");
-			CWL(ss.str());
+			CW(ss.str());
 		}
 		if (c.f10())
 			SetFullscreen(!IsFullscreen());
@@ -1054,7 +1062,7 @@ void Engine::KeyReleaseEvent(unsigned char key)
 		{
 			m_ghostMode = !m_ghostMode;
 			ss << "Mode fantome mis a: " << (m_ghostMode ? "on" : "off");
-			CWL(ss.str());
+			CW(ss.str());
 		}
 		if (c.Y())
 		{
@@ -1070,20 +1078,20 @@ void Engine::KeyReleaseEvent(unsigned char key)
 				glEnable(GL_CULL_FACE);
 			}
 			ss << "Affichage Wireframe mis a: " << (m_wireframe ? "on" : "off");
-			CWL(ss.str());
+			CW(ss.str());
 		}
 		if (c.V())
 		{
 			if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON) 
 			{
 				m_camera.SetMode(Camera::CAM_THIRD_PERSON);
-				CWL("Affichage de la camera a la troisieme personne");
+				CW("Affichage de la camera a la troisieme personne");
 			}
 			else 
 			{
 				HideCursor();
 				m_camera.SetMode(Camera::CAM_FIRST_PERSON);
-				CWL("Affichage de la camera a la premiere personne");
+				CW("Affichage de la camera a la premiere personne");
 			}
 		}
 		if (c.M())
@@ -1092,12 +1100,12 @@ void Engine::KeyReleaseEvent(unsigned char key)
 		{
 			Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
 			ss << "Musique mis a: " << (Info::Get().Options().GetOptMusic() ? "on" : "off");
-			CWL(ss.str());
+			CW(ss.str());
 		}
 		if (c.P())
 		{
 			m_character.SetExp(75);
-			CWL("Ajout de 75 points d'exp");
+			CW("Ajout de 75 points d'exp");
 		}
 		ss.str("");
 	}
@@ -1201,9 +1209,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 
 void Engine::OnClick(Control* sender)
 {
-	CWL("Test Bouton");
-	CW("test");
-	CW("test");
+	CW("Test Bouton");
 }
 
 void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
@@ -1370,12 +1376,7 @@ bool Engine::LoadTexture(Texture& texture, const std::string& filename, bool sto
 	return true;
 }
 
-void Engine::CWL(const std::string& line)
-{
-	m_lb_console->AddLine(line);
-}
-
 void Engine::CW(const std::string& line)
 {
-	m_lb_console->SetLine(0, m_lb_console-line);
+	m_lb_console->AddLine(line);
 }

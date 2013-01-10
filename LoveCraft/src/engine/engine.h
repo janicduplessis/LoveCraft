@@ -160,11 +160,10 @@ private:
 	virtual void RenderSpells();
 	void TextUpdate();
 	void StartBlendPNG(bool value = true) const;
-private:
-	//CONSOLE.WRITELINE()
-	void CWL(const std::string& line);
 	void OnClick(Control* sender);
 	void CW(const std::string& line);
+
+
 	bool m_wireframe;
 	float m_angle;
 	float m_camRadius;
@@ -182,6 +181,8 @@ private:
 
 	Character m_character;
 	Pig m_testpig;
+	Pig m_testpig2;
+	Pig m_testpig3;
 
 	Shader m_shaderModel;
 	Shader m_shaderCube;

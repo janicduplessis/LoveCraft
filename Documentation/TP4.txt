@@ -1,0 +1,24 @@
+021c9686e5988f86789fd45e430b5a6a32ec8c4d
+
+Ajouts
+-Optimisation mesh des chunks
+-Son qui varie selon le bloc type
+-3rd person cam
+-modeles 3d a partir de fichiers
+-AI de base
+-movement avec acceleration
+-mouvement limité lors des sauts
+-progressbars
+-console ingame
+-heure
+-projectile
+-particules
+-classes de charactéristiques (vie, mana, xp, etc)
+-classes controles ui (label, listbox, panel, etc)
+-évenements (pas encore utilisé)
+-shader fog
+-texture array avec mipmaps
+
+je pense que c'est tout..
+
+les controles sont affichés ingame

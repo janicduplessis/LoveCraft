@@ -5,6 +5,7 @@
 
 #include <string>
 #include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 
 // Documentation de SFML: http://www.sfml-dev.org/documentation/index-fr.php
 class OpenglContext
@@ -57,11 +58,11 @@ protected:
 
     void ShowCursor();
     void HideCursor();
-    void ShowCrossCursor() const;
 
 private:
     void InitWindow(int width, int height);
     MOUSE_BUTTON ConvertMouseButton(sf::Mouse::Button button) const;
+
 private:
     sf::Window	m_app;
     int			m_maxFps;
@@ -69,6 +70,7 @@ private:
     std::string m_title;
 	float m_lastFrameTime;
 	sf::Vector2i m_mousePos; // position de la souris pour calculer la position relative
+	sf::Sprite* m_cursor;
 };
 
 #endif // OPENGLCONTEXT_H__

@@ -2,7 +2,7 @@
 #include "define.h"
 #include "info.h"
 
-OpenglContext::OpenglContext() : m_maxFps(999999), m_fullscreen(false), m_title(""), m_lastFrameTime(0)
+OpenglContext::OpenglContext() : m_maxFps(999999), m_fullscreen(false), m_title(""), m_lastFrameTime(0), m_cursor(0)
 {
 }
 
@@ -62,7 +62,6 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 				break;
 			}
 		}
-			
 		m_app.setActive();
 		Render(m_lastFrameTime);
 		m_app.display();
@@ -160,10 +159,6 @@ void OpenglContext::ShowCursor()
 void OpenglContext::HideCursor()
 {
 	m_app.setMouseCursorVisible(false);
-}
-
-void OpenglContext::ShowCrossCursor() const
-{
 }
 
 void OpenglContext::InitWindow(int width, int height)

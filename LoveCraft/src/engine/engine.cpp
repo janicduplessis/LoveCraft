@@ -1377,5 +1377,5 @@ void Engine::CWL(const std::string& line)
 
 void Engine::CW(const std::string& line)
 {
-	m_lb_console->SetLine(0, m_lb_console-line);
+	//m_lb_console->SetLine(0, m_lb_console->GetLine(0) + line);
 }

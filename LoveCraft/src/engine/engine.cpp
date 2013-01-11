@@ -18,6 +18,7 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureInterface = new Texture[IMAGE::IMAGE_LAST];
 	m_texturefontColor = new Texture[COLOR::TEXTCOLOR_LAST];
+	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
 }
 
 Engine::~Engine()
@@ -30,6 +31,10 @@ Engine::~Engine()
 			delete m_chunks->Get(i, j);
 		}
 	}
+	// delete les monstres
+	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
+		delete m_monsters[i];
+	delete [] m_monsters;
 
 	delete m_textureArray;
 	delete m_testButton;
@@ -127,12 +132,30 @@ void Engine::Init()
 
 	m_player.Init();
 
-	m_testpig.Init(&m_player);
-	m_testpig.SetPosition(Vector3f(10,5,10));
-	m_testpig2.Init(&m_player);
-	m_testpig2.SetPosition(Vector3f(-10,5,-10));
-	m_testpig3.Init(&m_player);
-	m_testpig3.SetPosition(Vector3f(10,5,-10));
+	for (int i = 0; i < MONSTER_MAX_NUMBER; i++)
+		m_monsters[i] = new Animal();
+	m_monsters[0]->Init(Animal::ANL_GRD_RHINO, &m_player);
+	m_monsters[0]->SetPosition(Vector3f(-10,8,-20));
+	m_monsters[1]->Init(Animal::ANL_GRD_PIG, &m_player);
+	m_monsters[1]->SetPosition(Vector3f(-10,8,-20));
+	m_monsters[2]->Init(Animal::ANL_GRD_PIG, &m_player);
+	m_monsters[2]->SetPosition(Vector3f(-5,8,-10));
+	m_monsters[3]->Init(Animal::ANL_GRD_PIG, &m_player);
+	m_monsters[3]->SetPosition(Vector3f(-0,8,-10));
+	m_monsters[4]->Init(Animal::ANL_GRD_PIG, &m_player);
+	m_monsters[4]->SetPosition(Vector3f(7,8,-15));
+	m_monsters[5]->Init(Animal::ANL_GRD_PIG, &m_player);
+	m_monsters[5]->SetPosition(Vector3f(12,8,0));
+	m_monsters[6]->Init(Animal::ANL_GRD_PIG, &m_player);
+	m_monsters[6]->SetPosition(Vector3f(8,8,8));
+
+	//m_testpig.Init(&m_player);
+	//m_testpig.SetPosition(Vector3f(10,5,10));
+	//m_testpig2.Init(&m_player);
+	//m_testpig2.SetPosition(Vector3f(-10,5,-10));
+	//m_testpig3.Init(&m_player);
+	//m_testpig3.SetPosition(Vector3f(10,5,-10));
+
 	m_character = Character();
 
 #pragma endregion
@@ -761,12 +784,20 @@ void Engine::Render(float elapsedTime)
 
 	m_shaderModel.Use();
 
-	m_testpig.Update(elapsedTime);
-	m_testpig.Render();
-	m_testpig2.Update(elapsedTime);
-	m_testpig2.Render();
-	m_testpig3.Update(elapsedTime);
-	m_testpig3.Render();
+	//m_testpig.Update(elapsedTime);
+	//m_testpig.Render();
+	//m_testpig2.Update(elapsedTime);
+	//m_testpig2.Render();
+	//m_testpig3.Update(elapsedTime);
+	//m_testpig3.Render();
+	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
+	{
+		if (m_monsters[i]->Initialized())
+		{
+			m_monsters[i]->Update(elapsedTime);
+			m_monsters[i]->Render();
+		}
+	}
 
 	Shader::Disable();
 
@@ -782,7 +813,7 @@ void Engine::Render(float elapsedTime)
 
 	// Update et render tous les spells
 	for (SpellList::iterator it = m_spells.begin(); it != m_spells.end(); ++it) {
-		it->SetDestination(m_testpig.Position());
+		it->SetDestination(m_monsters[0]->Position());
 		it->Update(elapsedTime);
 		it->Render();
 		if (it->HasHit())
@@ -969,7 +1000,7 @@ void Engine::KeyPressEvent(unsigned char key)
 
 			if (c.n2())
 			{
-				m_testpig.SetPosition(Vector3f(m_testpig.Position().x, 10, m_testpig.Position().z));
+				m_monsters[0]->SetPosition(Vector3f(m_monsters[0]->Position().x, 10, m_monsters[0]->Position().z));
 				sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
 				CW("Lancement de sort: teleportation de cochon!");

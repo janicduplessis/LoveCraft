@@ -23,7 +23,7 @@
 #include "gl/ui/textbox.h"
 #include "gl/ui/button.h"
 
-#include "game/pig.h"
+#include "game/animal.h"
 #include "game/character.h"
 #include "game/spell.h"
 
@@ -181,9 +181,7 @@ private:
 	Camera m_camera;
 
 	Character m_character;
-	Pig m_testpig;
-	Pig m_testpig2;
-	Pig m_testpig3;
+	Animal** m_monsters;
 
 	Shader m_shaderModel;
 	Shader m_shaderCube;

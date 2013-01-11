@@ -8,13 +8,15 @@
 
 #include <string>
 
+#define MAX_BONES_PER_VERTEX 4
+
 /**
  * @brief Modèle loadé a partir d'un fichier lcm (LoveCraft Model)
  * 
  * Utiliser modelimport.exe pour convertir la plupart des format de model
  * en lcm
  */
-class Model : public Mesh
+class Model
 {
 public:
 	// Structure représentant toutes les informations de chacuns des vertex
@@ -30,6 +32,22 @@ public:
 
 		VertexData() {}
 		VertexData(float _x, float _y, float _z, float _r, float _g, float _b, float _u, float _v) : x(_x), y(_y), z(_z), r(_r), g(_g), b(_b), u(_u), v(_v) {}
+	};
+
+	struct VertexBoneData
+	{
+		uint16 IDs[MAX_BONES_PER_VERTEX];
+		float Weights[MAX_BONES_PER_VERTEX];
+	};
+
+	struct Mesh
+	{
+		VertexData* vertices;
+		uint32 verticesCount;
+		GLuint verticesVboId;
+		uint16* indices;
+		uint32 indicesCount;
+		GLuint indicesVboId;
 	};
 
 public:
@@ -54,7 +72,7 @@ public:
 	/**
 	 * Copie le mesh dans la carte graphique
 	 */
-	virtual void SetMeshData(VertexData* vd, int vertexCount, uint16* indexData = 0, int indexCount = 0);
+	virtual void SetMeshData(Mesh* meshes, uint32 meshesCount);
 
 	/**
 	 * Déplace le modèle par rapport à son origine
@@ -87,6 +105,11 @@ private:
 	Vector3f m_translation;
 	Quaternion m_rot;
 	Vector3f m_scale;
+
+	Mesh* m_meshes;
+	uint32 m_meshCount;
+
+	GLuint m_bonesVboId;
 };
 
 #endif

@@ -177,8 +177,8 @@ private:
 	Texture* m_texturefontColor;
 	Texture m_texSpell;
 
-	Player m_player;
-	Camera m_camera;
+	Player* m_player;
+	Camera* m_camera;
 
 	Character m_character;
 	Animal** m_monsters;

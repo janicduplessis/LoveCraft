@@ -23,13 +23,15 @@ bool AI::StateChanged() const
 void AI::Process(float elapsedTime)
 {
 	// Logique pour determiner le state
+	//bool checkPlayer = CheckPlayer(DETECTION_RANGE);
+	bool checkPlayer = false;
 	// Run Away Start
-	if (CheckPlayer(DETECTION_RANGE) && m_currentState != STATE_FOLLOW) {
+	if (checkPlayer && m_currentState != STATE_FOLLOW) {
 		m_currentState = STATE_FOLLOW;
 		m_stateChanged = true;
 	}	
 	// Run Away End
-	if (!CheckPlayer(DETECTION_RANGE)) {
+	if (!checkPlayer) {
 		m_currentState = STATE_PATROL;
 	}	
 
@@ -106,7 +108,7 @@ bool AI::CheckPlayer(float detectionRange, bool enableLOS)
 		iterator = iterator.Normalise() / 5;
 
 		// itère sur le vecteur distance et regarde si il y a
-		// collision a chaque 1m
+		// collision a chaque 0.2m
 		for (float i = 0; i < distance.Lenght() * 5; i++)
 		{
 			if(!CheckVision(npcPos + (iterator * i)))

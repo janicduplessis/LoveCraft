@@ -19,10 +19,16 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_textureInterface = new Texture[IMAGE::IMAGE_LAST];
 	m_texturefontColor = new Texture[COLOR::TEXTCOLOR_LAST];
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
+
+	m_camera = new Camera;
+	m_player = new Player;
 }
 
 Engine::~Engine()
 {
+	delete m_player;
+	delete m_camera;
+
 	// delete les chunks
 	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
 	{
@@ -79,7 +85,7 @@ void Engine::Init()
 	//seed random number generator
 	srand((unsigned)time(0));
 	//Donne une référence vers la camera a info
-	Info::Get().SetCamera(&m_camera);
+	Info::Get().SetCamera(m_camera);
 
 #pragma region Initilisation de Glew
 
@@ -130,23 +136,23 @@ void Engine::Init()
 
 #pragma region Initialisation des entites
 
-	m_player.Init();
+	m_player->Init();
 
 	for (int i = 0; i < MONSTER_MAX_NUMBER; i++)
 		m_monsters[i] = new Animal();
-	m_monsters[0]->Init(Animal::ANL_GRD_RHINO, &m_player);
+	m_monsters[0]->Init(Animal::ANL_GRD_RHINO, m_player);
 	m_monsters[0]->SetPosition(Vector3f(-10,8,-20));
-	m_monsters[1]->Init(Animal::ANL_GRD_PIG, &m_player);
+	m_monsters[1]->Init(Animal::ANL_GRD_PIG, m_player);
 	m_monsters[1]->SetPosition(Vector3f(-10,8,-20));
-	m_monsters[2]->Init(Animal::ANL_GRD_PIG, &m_player);
+	m_monsters[2]->Init(Animal::ANL_GRD_ARMDILLO, m_player);
 	m_monsters[2]->SetPosition(Vector3f(-5,8,-10));
-	m_monsters[3]->Init(Animal::ANL_GRD_PIG, &m_player);
-	m_monsters[3]->SetPosition(Vector3f(-0,8,-10));
-	m_monsters[4]->Init(Animal::ANL_GRD_PIG, &m_player);
+	m_monsters[3]->Init(Animal::ANL_GRD_PIG, m_player);
+	m_monsters[3]->SetPosition(Vector3f(0,8,-10));
+	m_monsters[4]->Init(Animal::ANL_GRD_PIG, m_player);
 	m_monsters[4]->SetPosition(Vector3f(7,8,-15));
-	m_monsters[5]->Init(Animal::ANL_GRD_PIG, &m_player);
+	m_monsters[5]->Init(Animal::ANL_GRD_PIG, m_player);
 	m_monsters[5]->SetPosition(Vector3f(12,8,0));
-	m_monsters[6]->Init(Animal::ANL_GRD_PIG, &m_player);
+	m_monsters[6]->Init(Animal::ANL_GRD_PIG, m_player);
 	m_monsters[6]->SetPosition(Vector3f(8,8,8));
 
 	//m_testpig.Init(&m_player);
@@ -467,7 +473,6 @@ void Engine::LoadResource()
 		&m_textureInterface[IMAGE_PGBTEXT_EXP], &m_textureInterface[IMAGE_PGBTEXT_EXP_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_EXP_BACKGROUND, PGB_EXP_BORDER_SIZE, PGB_EXP_NAME);
 	m_pnl_portrait->AddControl(m_pgb_exp);
-	// Label de vie
 	m_lbl_health = new Label(m_pnl_portrait, Vector2i(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), &m_texturefontColor[TEXTCOLOR_RED], "", 
 		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, PNL_PORTRAIT_CHAR_H, PNL_PORTRAIT_CHAR_W, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_HEALTH_NAME);
 	m_pnl_portrait->AddControl(m_lbl_health);
@@ -589,13 +594,13 @@ void Engine::Update(float elapsedTime)
 
 #pragma region Calcul la position du joueur et de la camera
 
-	m_player.Move(m_ghostMode, m_character, elapsedTime);
-	m_camera.SetPosition(m_player.Position());
+	m_player->Move(m_ghostMode, m_character, elapsedTime);
+	m_camera->SetPosition(m_player->Position());
 
 	//Vérification de la mort du personnage
 	if (m_character.Health() <= 0.999f)
 	{
-		m_player.ResetPosition();
+		m_player->ResetPosition();
 		m_character.SetHealth(m_character.HealthMax());
 		Info::Get().Sound().PlaySnd(Son::SON_DEATH, Son::CHANNEL_INTERFACE, true);
 		CW("Vous etes mort!");
@@ -734,7 +739,7 @@ void Engine::Render(float elapsedTime)
 #pragma region Elements de la camera
 
 	// 3rd person
-	if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON ) {
+	if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON ) {
 		// hide/show cursor
 		if (!m_rightClick && !m_leftClick)
 			ShowCursor();
@@ -744,19 +749,19 @@ void Engine::Render(float elapsedTime)
 		// recule la camera
 		glTranslatef(0,0,-m_camRadius);
 		// applique les transformations normales de la camera
-		m_camera.ApplyRotation();
-		m_camera.ApplyTranslation();
+		m_camera->ApplyRotation();
+		m_camera->ApplyTranslation();
 
 		// render le modele du player
 		m_shaderModel.Use();
-		m_player.Render(m_wireframe);
+		m_player->Render(m_wireframe);
 		Shader::Disable();
 	} 
 	// first person
 	else
 	{
-		m_camera.ApplyRotation();
-		m_camera.ApplyTranslation();
+		m_camera->ApplyRotation();
+		m_camera->ApplyTranslation();
 	}
 
 #pragma endregion
@@ -874,7 +879,7 @@ void Engine::Render2D(float elapsedTime)
 
 #pragma region Crosshair
 
-	if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
+	if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON)
 	{
 		RenderSquare(
 			Vector2i(Width() / 2 - CROSSHAIR_SIZE / 2, Height() / 2 - CROSSHAIR_SIZE / 2),
@@ -989,8 +994,8 @@ void Engine::KeyPressEvent(unsigned char key)
 			if (c.n1())
 			{
 				Spell newSpell;
-				newSpell.SetPosition(m_player.Position());
-				newSpell.Init(4.f, m_player.RotationQ(), &m_texSpell);
+				newSpell.SetPosition(m_player->Position());
+				newSpell.Init(4.f, m_player->RotationQ(), &m_texSpell);
 				newSpell.Shoot();
 				m_spells.push_back(newSpell);
 				sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
@@ -1065,7 +1070,7 @@ void Engine::KeyPressEvent(unsigned char key)
 			{
 				sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
 				m_character.SetMana(-5);
-				m_player.Teleport();
+				m_player->Teleport();
 				CW("Lancement de sort: Teleportation");
 			}
 		}
@@ -1113,15 +1118,15 @@ void Engine::KeyReleaseEvent(unsigned char key)
 		}
 		if (c.V())
 		{
-			if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON) 
+			if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON) 
 			{
-				m_camera.SetMode(Camera::CAM_THIRD_PERSON);
+				m_camera->SetMode(Camera::CAM_THIRD_PERSON);
 				CW("Affichage de la camera a la troisieme personne");
 			}
 			else 
 			{
 				HideCursor();
-				m_camera.SetMode(Camera::CAM_FIRST_PERSON);
+				m_camera->SetMode(Camera::CAM_FIRST_PERSON);
 				CW("Affichage de la camera a la premiere personne");
 			}
 		}
@@ -1152,31 +1157,31 @@ void Engine::MouseMoveEvent(int x, int y)
 	// MouseMoveEvent, etc
 
 	// Camera 3rd person
-	if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON && m_rightClick || m_leftClick)
+	if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON && m_rightClick || m_leftClick)
 	{
 		if (!MousePosChanged(x, y))
 			return;
 		MakeRelativeToMouse(x, y);
-		m_camera.TurnLeftRight((float)x);
-		m_camera.TurnTopBottom((float)y);
+		m_camera->TurnLeftRight((float)x);
+		m_camera->TurnTopBottom((float)y);
 
 		if (m_rightClick) 
 		{
-			m_player.SetRotation(m_camera.GetRotation());
+			m_player->SetRotation(m_camera->GetRotation());
 		}
 
 		ResetMouse();
 	}
 	// Camera first person
-	else if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
+	else if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON)
 	{
 		if(x == (Width() / 2) && y == (Height() / 2))
 			return;
 		MakeRelativeToCenter(x, y);
-		m_player.TurnLeftRight((float)x);
-		m_player.TurnTopBottom((float)y);
+		m_player->TurnLeftRight((float)x);
+		m_player->TurnTopBottom((float)y);
 
-		m_camera.SetRotation(m_player.Rotation());
+		m_camera->SetRotation(m_player->Rotation());
 
 		CenterMouse();
 	}
@@ -1191,29 +1196,29 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 	switch (button)
 	{
 	case MOUSE_BUTTON_RIGHT:
-		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
+		if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 		{
 			m_rightClick = true;
-			m_player.SetRotation(m_camera.GetRotation());
+			m_player->SetRotation(m_camera->GetRotation());
 			SetMousePos(x, y);
 		}
 		break;
 	case MOUSE_BUTTON_LEFT:
 		m_testButton->isClicked(x, m_pnl_screen->Size().y - y);
 		m_lb_console->MouseClick(x, m_pnl_playscreen->Size().y - y);
-		if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
+		if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 		{
 			m_leftClick = true;
 			SetMousePos(x, y);
 		}
-		if (m_camera.GetMode() == Camera::CAM_FIRST_PERSON)
+		if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON)
 			Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE);
 		break;
 	case MOUSE_BUTTON_WHEEL_UP:
 		if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
 			m_lb_console->Scroll(1);
 		} 
-		else if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
+		else if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 		{
 			// Zoom in camera
 			if (m_camRadius > 0)
@@ -1226,7 +1231,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
 			m_lb_console->Scroll(-1);
 		} 
-		else if (m_camera.GetMode() == Camera::CAM_THIRD_PERSON)
+		else if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 		{
 			// Zoom out camera
 			if (m_camRadius < 20)
@@ -1333,16 +1338,16 @@ void Engine::TextUpdate()
 	m_lbl_playerLevel->SetMessage(ss.str());
 	ss.str("");
 	//Position
-	ss << "Position :     ( " << std::setprecision(4) << m_player.Position().x << ", " << std::setprecision(4) <<
-		m_player.Position().y << ", " << std::setprecision(4) << m_player.Position().z << " )";
+	ss << "Position :     ( " << std::setprecision(4) << m_player->Position().x << ", " << std::setprecision(4) <<
+		m_player->Position().y << ", " << std::setprecision(4) << m_player->Position().z << " )";
 	m_lbl_plrPos->SetMessage(ss.str());
 	ss.str("");
 	//Vitesse
-	ss << "Vitesse :      " << m_player.Speed();
+	ss << "Vitesse :      " << m_player->Speed();
 	m_lbl_plrSpd->SetMessage(ss.str());
 	ss.str("");
 	//Accélération
-	ss << "Acceleration : " << m_player.Acceleration();
+	ss << "Acceleration : " << m_player->Acceleration();
 	m_lbl_plrAcc->SetMessage(ss.str());
 	ss.str("");
 	//FPS
@@ -1372,7 +1377,6 @@ void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 		top += 1.0f;
 		glBegin(GL_QUADS);
 		glTexCoord2f(left, 1.0f - top - 0.0625f);
-		glVertex2i(0, 0);
 		glTexCoord2f(left + 0.0625f, 1.0f - top - 0.0625f);
 		glVertex2i(12 , 0);
 		glTexCoord2f(left + 0.0625f, 1.0f - top);

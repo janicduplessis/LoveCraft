@@ -32,7 +32,7 @@ void Animal::Init(AnimalType type, Player* player)
 		break;
 	case Animal::ANL_GRD_RHINO:
 		m_model.Load(MODEL_RHINO);
-		m_model.Scale(0.025f, 0.025f, 0.025f);
+		m_model.Translate(0,-1.3f,0);
 		break;
 	case Animal::ANL_GRD_ARACHNID:
 		m_model.Load(MODEL_ARACHNID);

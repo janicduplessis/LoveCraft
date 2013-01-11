@@ -164,6 +164,7 @@ private:
 	void CW(const std::string& line);
 	void CWL(const std::string& line);
 
+
 	bool m_wireframe;
 	float m_angle;
 	float m_camRadius;

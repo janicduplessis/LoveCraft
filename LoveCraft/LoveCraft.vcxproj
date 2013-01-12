@@ -121,6 +121,7 @@
     <ClCompile Include="src\engine\gl\ui\textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\npcinfo.h" />
     <ClInclude Include="src\game\animal.h" />
     <ClInclude Include="src\engine\gl\ui\button.h" />
     <ClInclude Include="src\engine\gl\ui\icontainer.h" />

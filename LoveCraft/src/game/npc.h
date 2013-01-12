@@ -2,6 +2,7 @@
 #define NPC_H__
 
 #include "define.h"
+#include "npcinfo.h"
 #include "spell.h"
 #include "engine/gl/model.h"
 #include "engine/info.h"

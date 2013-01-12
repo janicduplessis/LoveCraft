@@ -140,17 +140,17 @@ void Engine::Init()
 
 	for (int i = 0; i < MONSTER_MAX_NUMBER; i++)
 		m_monsters[i] = new Animal();
-	m_monsters[0]->Init(Animal::ANL_GRD_RHINO, m_player);
-	m_monsters[0]->SetPosition(Vector3f(-10,8,-20));
+	m_monsters[0]->Init(Animal::ANL_GRN_DEER_M, m_player);
+	m_monsters[0]->SetPosition(Vector3f(0, 8, -10));
 	m_monsters[1]->Init(Animal::ANL_GRD_PIG, m_player);
 	m_monsters[1]->SetPosition(Vector3f(-10,8,-20));
 	m_monsters[2]->Init(Animal::ANL_GRD_ARMDILLO, m_player);
 	m_monsters[2]->SetPosition(Vector3f(-5,8,-10));
 	m_monsters[3]->Init(Animal::ANL_GRD_BWIDOW, m_player);
-	m_monsters[3]->SetPosition(Vector3f(0,8,-10));
+	m_monsters[3]->SetPosition(Vector3f(10,8,-10));
 	m_monsters[4]->Init(Animal::ANL_GRD_ARACHNID, m_player);
 	m_monsters[4]->SetPosition(Vector3f(7,8,-15));
-	m_monsters[5]->Init(Animal::ANL_GRD_PIG, m_player);
+	m_monsters[5]->Init(Animal::ANL_GRD_RHINO, m_player);
 	m_monsters[5]->SetPosition(Vector3f(12,8,0));
 	m_monsters[6]->Init(Animal::ANL_GRD_PIG, m_player);
 	m_monsters[6]->SetPosition(Vector3f(8,8,8));
@@ -640,7 +640,7 @@ void Engine::Update(float elapsedTime)
 		m_pgb_energy->SetVisible(false);
 		m_lbl_energy->SetVisible(false);
 	}
-	else if (m_character.Energy() != m_character.EnergyMax() || sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+	else if (m_character.Energy() != m_character.EnergyMax() || Info::Get().Ctrls().Shift())
 	{
 		m_pgb_energy->SetVisible(true);
 		m_lbl_energy->SetVisible(true);

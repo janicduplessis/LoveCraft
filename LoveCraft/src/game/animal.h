@@ -12,7 +12,8 @@ public:
 		ANL_GRD_BWIDOW,
 		ANL_GRD_ARMDILLO,
 		ANL_GRD_RHINO,
-		ANL_GRD_ARACHNID
+		ANL_GRD_ARACHNID,
+		ANL_GRN_DEER_M
 	};
 	Animal();
 	~Animal();

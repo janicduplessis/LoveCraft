@@ -79,7 +79,7 @@ void ChunkMesh::Render(bool wireFrame) const
 {
 	if(IsValid())
 	{
-		//glClientActiveTexture(GL_TEXTURE0);
+		glClientActiveTexture(GL_TEXTURE1);
 		glBindBuffer(GL_ARRAY_BUFFER, m_vertexVboId);
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glVertexPointer(3, GL_FLOAT, sizeof(VertexData), (char*)0);

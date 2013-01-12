@@ -69,18 +69,16 @@ bool Particles::Init()
 
 	m_updateShader.Use();
 
-	m_updateShader.SetRandomTextureUnit(1);
+	m_updateShader.SetRandomTextureUnit(3);
 	m_updateShader.SetLauncherLifetime(100.0f);
 	m_updateShader.SetShellLifetime(10000.0f);
 	m_updateShader.SetSecondaryShellLifetime(2500.0f);
 
-	Shader::Disable();
+	//Shader::Disable();
 
 	if (!m_randomTexture.InitRandomTexture(1000)) {
 		return false;
 	}
-
-	m_randomTexture.Bind(GL_TEXTURE3);
 
 	if (!m_billboardShader.Init()) {
 		return false;
@@ -90,26 +88,24 @@ bool Particles::Init()
 
 	//m_billboardTechnique.SetColorTextureUnit(COLOR_TEXTURE_UNIT_INDEX);
 
-	m_billboardShader.SetBillboardSize(0.01f);
+	m_billboardShader.SetBillboardSize(0.1f);
 
-	Shader::Disable();
+	//Shader::Disable();
 
 	m_texture = new Texture;
 
-	if (!m_texture->Load(TEXTURE_PATH "fireworks_red.jpg")) {
+	if (!m_texture->Load(TEXTURE_PATH "particle1.png")) {
 		return false;
 	}        
 }
 
-void Particles::Update(float elapsedTime)
+void Particles::Update(int deltaTimeMilli)
 {
-	m_time += elapsedTime;
+	m_time += deltaTimeMilli;
 
 	m_updateShader.Use();
 	m_updateShader.SetTime(m_time);
-	m_updateShader.SetDeltaTimeMillis(elapsedTime);
-
-	CHECK_GL_ERROR();
+	m_updateShader.SetDeltaTimeMillis(deltaTimeMilli);
 
 	m_randomTexture.Bind(GL_TEXTURE3);
 	CHECK_GL_ERROR();
@@ -154,17 +150,14 @@ void Particles::Update(float elapsedTime)
 	glDisableVertexAttribArray(3);
 	CHECK_GL_ERROR();
 
-	Shader::Disable();
-	m_currVB = m_currTFB;
-	m_currTFB = (m_currTFB + 1) & 0x1;
-
+	//Shader::Disable();
 }
 
 void Particles::Render(Matrix4f VP, bool wireFrame)
 {
-
+	Shader::Disable();
 	m_billboardShader.Use();
-	m_billboardShader.SetCameraPosition(Info::Get().GetCamera()->GetPosition());
+	m_billboardShader.SetCameraPosition(Info::Get().GetCamera()->GetRealPosition());
 	m_billboardShader.SetVP(VP);
 	m_texture->Bind();
 
@@ -180,9 +173,10 @@ void Particles::Render(Matrix4f VP, bool wireFrame)
 
 	glDisableVertexAttribArray(0);
 
+	m_currVB = m_currTFB;
+	m_currTFB = (m_currTFB + 1) & 0x1;
 
-
-	Shader::Disable();
+	//Shader::Disable();
 }
 
 Vector3f Particles::AvgVelocity() const

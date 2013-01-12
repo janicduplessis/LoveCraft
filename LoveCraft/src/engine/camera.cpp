@@ -53,7 +53,6 @@ Vector3f Camera::GetRealPosition() const
 	realPos = qY * realPos;
 	realPos *= m_camRadius;
 	realPos += m_pos;
-	realPos.Afficher();
 	return realPos;
 }
 

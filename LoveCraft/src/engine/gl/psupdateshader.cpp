@@ -18,7 +18,6 @@ bool PSUpdateShader::Init()
 	Shader::Init();
 	AddShader(GL_VERTEX_SHADER_ARB, SHADER_PATH "psupdateshader.vert", true);
 	AddShader(GL_GEOMETRY_SHADER_ARB, SHADER_PATH "psupdateshader.geom", true);
-	Link();
 
 	const GLchar* Varyings[4];    
 	Varyings[0] = "Type1";
@@ -28,6 +27,8 @@ bool PSUpdateShader::Init()
 
 	glTransformFeedbackVaryings(m_program, 4, Varyings, GL_INTERLEAVED_ATTRIBS);
 
+	Link();
+
 	m_deltaTimeMillisLocation = BindUniform("gDeltaTimeMillis");
 	m_randomTextureLocation = BindUniform("gRandomTexture");
 	m_timeLocation = BindUniform("gTime");
@@ -35,17 +36,19 @@ bool PSUpdateShader::Init()
 	m_shellLifetimeLocation = BindUniform("gShellLifetime");
 	m_secondaryShellLifetimeLocation = BindUniform("gSecondaryShellLifetime");
 
+	Shader::Disable();
+
 	return true;
 }
 
-void PSUpdateShader::SetDeltaTimeMillis( float elapsedTime )
+void PSUpdateShader::SetDeltaTimeMillis( int deltaTimeMilli )
 {
-	glUniform1f(m_deltaTimeMillisLocation, elapsedTime);
+	glUniform1f(m_deltaTimeMillisLocation, (float)deltaTimeMilli);
 }
 
-void PSUpdateShader::SetTime( float time )
+void PSUpdateShader::SetTime( int time )
 {
-	glUniform1f(m_timeLocation, time);
+	glUniform1f(m_timeLocation, (float)time);
 }
 
 void PSUpdateShader::SetRandomTextureUnit( unsigned int textureUnit )

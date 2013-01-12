@@ -57,6 +57,7 @@ bool Texture::IsValid() const
 void Texture::Bind() const
 {
     assert(IsValid());
+	glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_textureId);
 }
 

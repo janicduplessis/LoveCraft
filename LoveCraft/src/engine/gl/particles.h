@@ -62,7 +62,7 @@ public:
 	* Update la position des particules
 	* Doit être appelé a chaque frame
 	*/
-	void Update(float elapsedTime);
+	void Update(int deltaTimeMilli);
 
 	/**
 	* Position du lanceur de particules
@@ -128,7 +128,7 @@ private:
 	unsigned int m_currVB;
 	unsigned int m_currTFB;
 
-	float m_time;
+	int m_time;
 
 	BillboardShader m_billboardShader;
 	PSUpdateShader m_updateShader;

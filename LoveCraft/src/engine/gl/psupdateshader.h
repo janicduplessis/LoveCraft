@@ -12,9 +12,9 @@ public:
 
 	virtual bool Init();    
 
-	void SetDeltaTimeMillis(float elapsedTime);
+	void SetDeltaTimeMillis(int deltaTimeMilli);
 
-	void SetTime(float time);
+	void SetTime(int time);
 
 	void SetRandomTextureUnit(unsigned int textureUnit);
 

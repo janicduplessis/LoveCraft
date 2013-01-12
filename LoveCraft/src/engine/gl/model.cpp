@@ -171,7 +171,7 @@ void Model::Render(bool wireFrame) const
 		glDisableClientState(GL_COLOR_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
-		//CHECK_GL_ERROR();
+		CHECK_GL_ERROR();
 	}
 
 	glPopMatrix();

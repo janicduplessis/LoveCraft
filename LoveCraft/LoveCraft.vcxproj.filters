@@ -323,5 +323,16 @@
     <None Include="media\shader\particleshader.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="media\shader\billboardshader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="media\shader\billboardshader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="media\shader\billboardshader.geom" />
+    <None Include="media\shader\psupdateshader.geom" />
+    <None Include="media\shader\psupdateshader.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
-﻿#ifndef BILLBOARDTECHNIQUE_H__
-#define BILLBOARDTECHNIQUE_H__
+﻿#ifndef BILLBOARD_SHADER_H__
+#define BILLBOARD_SHADER_H__
 
 #include "shader.h"
 #include "define.h"
@@ -23,7 +23,6 @@ private:
 	GLuint m_VPLocation;
 	GLuint m_cameraPosLocation;
 	GLuint m_sizeLocation;
-
 };
 
 #endif

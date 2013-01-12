@@ -856,7 +856,7 @@ void Engine::Render(float elapsedTime)
 	}
 	Shader::Disable();
 
-	//m_testParticules.Update(elapsedTime);
+	m_testParticules.Update(elapsedTime * 1000);
 
 	GLfloat mv[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, mv);
@@ -872,8 +872,8 @@ void Engine::Render(float elapsedTime)
 		p[8], p[9], p[10], p[11],
 		p[12], p[13], p[14], p[15]);
 
-	//m_testParticules.Render(modelView * projection);
-	m_bill.Render(modelView * projection, m_camera->GetRealPosition());
+	m_testParticules.Render(modelView * projection);
+	m_bill.Render( modelView * projection, m_camera->GetRealPosition());
 
 	glDisable(GL_BLEND);
 	glEnable(GL_CULL_FACE);

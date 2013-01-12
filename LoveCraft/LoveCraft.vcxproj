@@ -179,12 +179,17 @@
     <ClInclude Include="src\engine\gl\ui\textbox.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="media\shader\billboardshader.frag" />
+    <None Include="media\shader\billboardshader.geom" />
+    <None Include="media\shader\billboardshader.vert" />
     <None Include="media\shader\modelshader.vert" />
     <None Include="media\shader\modelshader.frag" />
     <None Include="media\shader\cubeshader.frag" />
     <None Include="media\shader\cubeshader.vert" />
     <None Include="media\shader\particleshader.frag" />
     <None Include="media\shader\particleshader.vert" />
+    <None Include="media\shader\psupdateshader.geom" />
+    <None Include="media\shader\psupdateshader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

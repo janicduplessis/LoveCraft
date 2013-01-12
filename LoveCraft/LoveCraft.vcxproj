@@ -81,6 +81,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\util\dice.cpp" />
     <ClCompile Include="src\game\animal.cpp" />
     <ClCompile Include="src\engine\gl\ui\button.cpp" />
     <ClCompile Include="src\engine\gl\ui\icontainer.cpp" />
@@ -121,6 +122,7 @@
     <ClCompile Include="src\engine\gl\ui\textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\util\dice.h" />
     <ClInclude Include="src\npcinfo.h" />
     <ClInclude Include="src\game\animal.h" />
     <ClInclude Include="src\engine\gl\ui\button.h" />

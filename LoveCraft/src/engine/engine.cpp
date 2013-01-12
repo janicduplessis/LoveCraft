@@ -1,4 +1,5 @@
 ﻿#include "engine.h"
+#include "npcinfo.h"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -22,12 +23,14 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 
 	m_camera = new Camera;
 	m_player = new Player;
+	m_dice = new Dice;
 }
 
 Engine::~Engine()
 {
 	delete m_player;
 	delete m_camera;
+	delete m_dice;
 
 	// delete les chunks
 	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
@@ -140,20 +143,32 @@ void Engine::Init()
 
 	for (int i = 0; i < MONSTER_MAX_NUMBER; i++)
 		m_monsters[i] = new Animal();
-	m_monsters[0]->Init(Animal::ANL_GRN_DEER_M, m_player);
-	m_monsters[0]->SetPosition(Vector3f(0, 8, -10));
-	m_monsters[1]->Init(Animal::ANL_GRD_PIG, m_player);
-	m_monsters[1]->SetPosition(Vector3f(-10,8,-20));
+	m_monsters[0]->Init(Animal::ANL_GRD_ALIGATR, m_player);
+	m_monsters[1]->Init(Animal::ANL_GRD_ARACHNID, m_player);
 	m_monsters[2]->Init(Animal::ANL_GRD_ARMDILLO, m_player);
-	m_monsters[2]->SetPosition(Vector3f(-5,8,-10));
-	m_monsters[3]->Init(Animal::ANL_GRD_BWIDOW, m_player);
-	m_monsters[3]->SetPosition(Vector3f(10,8,-10));
-	m_monsters[4]->Init(Animal::ANL_GRD_ARACHNID, m_player);
-	m_monsters[4]->SetPosition(Vector3f(7,8,-15));
-	m_monsters[5]->Init(Animal::ANL_GRD_RHINO, m_player);
-	m_monsters[5]->SetPosition(Vector3f(12,8,0));
-	m_monsters[6]->Init(Animal::ANL_GRD_PIG, m_player);
-	m_monsters[6]->SetPosition(Vector3f(8,8,8));
+	m_monsters[3]->Init(Animal::ANL_GRD_BISON, m_player);
+	m_monsters[4]->Init(Animal::ANL_GRD_BWIDOW, m_player);
+	m_monsters[5]->Init(Animal::ANL_GRD_CATBLK, m_player);
+	m_monsters[6]->Init(Animal::ANL_GRD_COYOTE, m_player);
+	m_monsters[7]->Init(Animal::ANL_GRD_DEER_M, m_player);
+	m_monsters[8]->Init(Animal::ANL_GRD_DONKEY, m_player);
+	m_monsters[9]->Init(Animal::ANL_GRD_HUSKY, m_player);
+	m_monsters[10]->Init(Animal::ANL_GRD_HYENA, m_player);
+	m_monsters[11]->Init(Animal::ANL_GRD_PIG, m_player);
+	m_monsters[12]->Init(Animal::ANL_GRD_REDFOX, m_player);
+	m_monsters[13]->Init(Animal::ANL_GRD_RHINO, m_player);
+	m_monsters[14]->Init(Animal::ANL_GRD_SCORPION, m_player);
+	m_monsters[15]->Init(Animal::ANL_GRD_SHEEP, m_player);
+	m_monsters[16]->Init(Animal::ANL_GRD_TORTOISE, m_player);
+	m_monsters[17]->Init(Animal::ANL_GRD_TRANTULA, m_player);
+	for (unsigned short i = 18; i < MONSTER_MAX_NUMBER; i++)
+		m_monsters[i]->Init(Animal::ANL_AIR_MONARCH, m_player);
+
+	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
+		m_monsters[i]->SetPosition(Vector3f(m_dice->Next(-(int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*0.5f)), 8,
+		m_dice->Next(-(int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*0.5f))));
+
+
 
 	//m_testpig.Init(&m_player);
 	//m_testpig.SetPosition(Vector3f(10,5,10));
@@ -803,7 +818,6 @@ void Engine::Render(float elapsedTime)
 			m_monsters[i]->Render();
 		}
 	}
-
 	Shader::Disable();
 
 #pragma endregion
@@ -1005,10 +1019,11 @@ void Engine::KeyPressEvent(unsigned char key)
 
 			if (c.n2())
 			{
-				m_monsters[0]->SetPosition(Vector3f(m_monsters[0]->Position().x, 10, m_monsters[0]->Position().z));
+				for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
+					m_monsters[i]->SetPosition(Vector3f(m_monsters[i]->Position().x, 10, m_monsters[i]->Position().z));
 				sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CW("Lancement de sort: teleportation de cochon!");
+				CW("Lancement de sort: teleportation de NPC!");
 			}
 			if (c.n3())
 			{
@@ -1246,6 +1261,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 void Engine::OnClick(Control* sender)
 {
 	CW("Test Bouton");
+	Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE, true);
 }
 
 void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)

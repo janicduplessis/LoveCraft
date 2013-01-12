@@ -81,6 +81,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\gl\billboardshader.cpp" />
+    <ClCompile Include="src\engine\gl\psupdateshader.cpp" />
+    <ClCompile Include="src\engine\gl\randomtexture.cpp" />
     <ClCompile Include="src\util\dice.cpp" />
     <ClCompile Include="src\game\animal.cpp" />
     <ClCompile Include="src\engine\gl\ui\button.cpp" />
@@ -122,6 +125,10 @@
     <ClCompile Include="src\engine\gl\ui\textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\gl\billboardshader.h" />
+    <ClInclude Include="src\engine\gl\psupdateshader.h" />
+    <ClInclude Include="src\engine\gl\randomtexture.h" />
+    <ClInclude Include="src\engine\gl\testbillboard.h" />
     <ClInclude Include="src\util\dice.h" />
     <ClInclude Include="src\npcinfo.h" />
     <ClInclude Include="src\game\animal.h" />

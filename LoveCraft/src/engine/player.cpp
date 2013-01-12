@@ -18,8 +18,9 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_model.Load(MODEL_PATH "monkey.lcm");
-	m_model.Scale(0.5f, 0.9f, 0.5f);
+	m_model.Load(MODEL_PATH_HUMANS "squirrel.lcm");
+	m_model.Scale(0.1f, 0.1f, 0.1f);
+	m_model.Translate(Vector3f(0, -1.05f, 0));
 }
 
 void Player::TurnLeftRight ( float value )

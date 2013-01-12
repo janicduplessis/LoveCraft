@@ -81,9 +81,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\gl\billboardshader.cpp" />
-    <ClCompile Include="src\engine\gl\psupdateshader.cpp" />
-    <ClCompile Include="src\engine\gl\randomtexture.cpp" />
+    <ClCompile Include="src\util\dice.cpp" />
     <ClCompile Include="src\game\animal.cpp" />
     <ClCompile Include="src\engine\gl\ui\button.cpp" />
     <ClCompile Include="src\engine\gl\ui\icontainer.cpp" />
@@ -124,10 +122,8 @@
     <ClCompile Include="src\engine\gl\ui\textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\engine\gl\billboardshader.h" />
-    <ClInclude Include="src\engine\gl\psupdateshader.h" />
-    <ClInclude Include="src\engine\gl\randomtexture.h" />
-    <ClInclude Include="src\engine\gl\testbillboard.h" />
+    <ClInclude Include="src\util\dice.h" />
+    <ClInclude Include="src\npcinfo.h" />
     <ClInclude Include="src\game\animal.h" />
     <ClInclude Include="src\engine\gl\ui\button.h" />
     <ClInclude Include="src\engine\gl\ui\icontainer.h" />
@@ -176,17 +172,12 @@
     <ClInclude Include="src\engine\gl\ui\textbox.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="media\shader\billboardshader.frag" />
-    <None Include="media\shader\billboardshader.geom" />
-    <None Include="media\shader\billboardshader.vert" />
     <None Include="media\shader\modelshader.vert" />
     <None Include="media\shader\modelshader.frag" />
     <None Include="media\shader\cubeshader.frag" />
     <None Include="media\shader\cubeshader.vert" />
     <None Include="media\shader\particleshader.frag" />
     <None Include="media\shader\particleshader.vert" />
-    <None Include="media\shader\psupdateshader.geom" />
-    <None Include="media\shader\psupdateshader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

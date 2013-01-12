@@ -29,6 +29,7 @@
 
 #include "util/array2d.h"
 #include "util/vector2.h"
+#include "util/dice.h"
 
 #include "gl/testbillboard.h"
 
@@ -183,6 +184,7 @@ private:
 
 	Player* m_player;
 	Camera* m_camera;
+	Dice* m_dice;
 
 	Character m_character;
 	Animal** m_monsters;
@@ -230,6 +232,7 @@ private:
 
 	float m_fpstmr;
 	float m_fps;
+	float m_loadTmr;
 
 	typedef std::list<Spell> SpellList;
 	SpellList m_spells;

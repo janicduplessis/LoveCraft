@@ -83,9 +83,6 @@ typedef long long int64;
 #define CHARACTER_MANA_INCREASE		15
 #define CHARACTER_ENERGY_INCREASE	10
 
-// Ennemy
-#define MONSTER_MAX_NUMBER			10
-
 // Vie (v/s)
 // Maximum de vie
 #define HEALTH_MAX					100
@@ -129,15 +126,10 @@ enum SPELLS {STYPE_BOLT, STYPE_FIRE, STYPE_FREEZE, STYPE_SHOCK, STYPE_POISON, ST
 #define MODEL_PATH				"../lovecraft/media/models/"
 #define MODEL_PATH_ANIMALS		MODEL_PATH "animals/"
 #define MODEL_PATH_ANIMALS_GRD	MODEL_PATH_ANIMALS "ground/"
+#define MODEL_PATH_ANIMALS_AIR	MODEL_PATH_ANIMALS "air/"
+#define MODEL_PATH_HUMANS		MODEL_PATH "humanlike/"
 #define SOUND_PATH				"../lovecraft/media/sound/"
 #define SOUND_FOOT_PATH			SOUND_PATH "footsteps/"
-
-//Noms de models
-#define MODEL_PIG			MODEL_PATH_ANIMALS_GRD "pig.lcm"
-#define MODEL_BWIDOW		MODEL_PATH_ANIMALS_GRD "bwidow.lcm"
-#define MODEL_ARACHNID		MODEL_PATH_ANIMALS_GRD "arachnid.lcm"
-#define MODEL_RHINO			MODEL_PATH_ANIMALS_GRD "rhino.lcm"
-#define MODEL_ARMDILLO		MODEL_PATH_ANIMALS_GRD "armdillo.lcm"
 
 //Network
 #define NW_PORT				10512

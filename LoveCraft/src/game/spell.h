@@ -15,7 +15,7 @@ public:
 	virtual void Update(float elapsedTime);
 
 	virtual void SetPosition(const Vector3f& pos);
-	void Render() const;
+	void Render();
 
 	virtual void Init( float speed, const Quaternion& rot, Texture* tex );
 

@@ -11,6 +11,8 @@
 #include "camera.h"
 #include "controls.h"
 
+#include "engine/gl/ui/listbox.h"
+
 #include <util/vector3.h>
 #include <util/array2d.h>
 
@@ -50,6 +52,9 @@ public:
 	Nwork& Network();
 
 	Controls& Ctrls();
+
+	ListBox* Console();
+	void SetConsole(ListBox* console);
 
 	/**
 	* Retourne le bloc info pour le type donné
@@ -109,6 +114,7 @@ private:
 	Controls m_controls;
 	std::string m_lineToPrint;
 	Vector2i m_mouse;
+	ListBox* m_console;
 };
 
 #endif

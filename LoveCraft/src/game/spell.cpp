@@ -24,9 +24,9 @@ void Spell::Update( float elapsedTime )
 	m_particles.SetRotation(m_rot);
 }
 
-void Spell::Render() const
+void Spell::Render()
 {
-	m_particles.Render();
+	//m_particles.Render();
 }
 
 void Spell::SetPosition( const Vector3f& pos )

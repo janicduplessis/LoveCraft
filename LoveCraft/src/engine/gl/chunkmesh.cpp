@@ -50,7 +50,7 @@ void ChunkMesh::SetMeshData(VertexData* vd, int vertexCount, TextureData* td)
 		glGenBuffers(1, &m_textureVboId);
 	}
 
-	m_textureLoc = glGetAttribLocation(m_shader->m_program, "Texture");
+	m_textureLoc = glGetAttribLocation(m_shader->GetProgram(), "Texture");
 
 	CHECK_GL_ERROR();
 

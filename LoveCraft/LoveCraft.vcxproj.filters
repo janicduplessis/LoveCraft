@@ -133,6 +133,15 @@
     <ClCompile Include="src\game\animal.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\gl\billboardshader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\randomtexture.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\psupdateshader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\util\array.h">
@@ -273,6 +282,18 @@
     <ClInclude Include="src\game\animal.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\gl\billboardshader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\randomtexture.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\psupdateshader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\testbillboard.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="media\shader\cubeshader.frag">
@@ -291,6 +312,17 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="media\shader\particleshader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="media\shader\billboardshader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="media\shader\billboardshader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="media\shader\billboardshader.geom" />
+    <None Include="media\shader\psupdateshader.geom" />
+    <None Include="media\shader\psupdateshader.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

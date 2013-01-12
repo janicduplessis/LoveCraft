@@ -7,249 +7,182 @@
 #include "../info.h"
 #include "../camera.h"
 
+#define PARTICLE_LIFETIME 10.0f
+
+#define PARTICLE_TYPE_LAUNCHER 0.0f
+#define PARTICLE_TYPE_SHELL 1.0f
+#define PARTICLE_TYPE_SECONDARY_SHELL 2.0f
+
 Particles::Particles(unsigned int particlesNumber) : m_particlesNumber(particlesNumber), 
 	m_pos(0), m_range(0.5f), m_color(0.5f), m_angle(Quaternion(1,0,0,0)), m_averageVelocity(2),
-	m_particlesSize(0.1f), m_averageLifespan(1.5), m_texture(0)
+	m_particlesSize(0.1f), m_averageLifespan(1.5), m_texture(0), m_isFirst(true), m_time(0), 
+	m_currTFB(1), m_currVB(0)
 {
-	m_particles = new Particle[m_particlesNumber];
+
 }
 
-Particles::Particles( const Particles& p) : m_particlesNumber(p.m_particlesNumber),
-	m_pos(p.m_pos), m_range(p.m_range), m_color(p.m_color), m_angle(p.m_angle), 
-	m_averageVelocity(p.m_averageVelocity), m_averageLifespan(p.m_averageLifespan), 
-	m_particlesSize(p.m_particlesSize), m_texture(p.m_texture)
-{
-	m_particles = new Particle[m_particlesNumber];
-	for (unsigned int i = 0; i < m_particlesNumber; i++)
-	{
-		m_particles[i] = p.m_particles[i];
-	}
-}
+//Particles::Particles( const Particles& p) : m_particlesNumber(p.m_particlesNumber),
+//	m_pos(p.m_pos), m_range(p.m_range), m_color(p.m_color), m_angle(p.m_angle), 
+//	m_averageVelocity(p.m_averageVelocity), m_averageLifespan(p.m_averageLifespan), 
+//	m_particlesSize(p.m_particlesSize), m_texture(p.m_texture), m_randomTexture(p.m_randomTexture),
+//	m_time(p.m_time), m_currVB(p.m_currVB), m_currTFB(p.m_currTFB), m_updateShader(p.m_updateShader),
+//	m_billboardShader(p.m_billboardShader), m_isFirst(p.m_isFirst)
+//{
+//
+//}
 
 Particles::~Particles()
 {
-	delete [] m_particles;
+	if (m_transformFeedback[0] != 0) {
+		glDeleteTransformFeedbacks(2, m_transformFeedback);
+	}
+
+	if (m_particleBuffer[0] != 0) {
+		glDeleteBuffers(2, m_particleBuffer);
+	}
 }
 
-void Particles::Init()
+bool Particles::Init()
 {
-	for(int i = 0; i < m_particlesNumber; ++i) {
-		CreateParticle(m_particles + i);
+	Particle* particles = new Particle[m_particlesNumber];
+
+	particles[0].type = PARTICLE_TYPE_LAUNCHER;
+	particles[0].pos = m_pos;
+	particles[0].velocity = Vector3f(0.f, 0.0001f, 0.f);
+	particles[0].lifespan = 0.f;
+
+	glGenTransformFeedbacks(2, m_transformFeedback);
+	glGenBuffers(2, m_particleBuffer);
+
+	for (unsigned int i = 0; i < 2 ; i++) {
+		glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, m_transformFeedback[i]);
+		glBindBuffer(GL_ARRAY_BUFFER, m_particleBuffer[i]);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Particle) * m_particlesNumber, particles, GL_DYNAMIC_DRAW);
+		glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_particleBuffer[i]);
 	}
+
+	delete [] particles;
+
+	if (!m_updateShader.Init()) {
+		return false;
+	}
+
+	m_updateShader.Use();
+
+	m_updateShader.SetRandomTextureUnit(1);
+	m_updateShader.SetLauncherLifetime(100.0f);
+	m_updateShader.SetShellLifetime(10000.0f);
+	m_updateShader.SetSecondaryShellLifetime(2500.0f);
+
+	Shader::Disable();
+
+	if (!m_randomTexture.InitRandomTexture(1000)) {
+		return false;
+	}
+
+	m_randomTexture.Bind(GL_TEXTURE3);
+
+	if (!m_billboardShader.Init()) {
+		return false;
+	}
+
+	m_billboardShader.Use();
+
+	//m_billboardTechnique.SetColorTextureUnit(COLOR_TEXTURE_UNIT_INDEX);
+
+	m_billboardShader.SetBillboardSize(0.01f);
+
+	Shader::Disable();
+
+	m_texture = new Texture;
+
+	if (!m_texture->Load(TEXTURE_PATH "fireworks_red.jpg")) {
+		return false;
+	}        
 }
 
 void Particles::Update(float elapsedTime)
 {
-	for (unsigned int i = 0; i < m_particlesNumber; ++i)
-	{
-		Particle* p = m_particles + i;
+	m_time += elapsedTime;
 
-		p->pos += p->velocity * elapsedTime;
-		p->timeAlive += elapsedTime;
-		if (p->timeAlive > p->lifespan) {
-			CreateParticle(p);
-		}
-	}
-
-	std::vector<Particle*> ps;
-	for(int i = 0; i < m_particlesNumber; i++) {
-		ps.push_back(m_particles + i);
-	}
-	std::sort(ps.begin(), ps.end(), CompareParticles);
-
-	VertexData* vd = new VertexData[m_particlesNumber * 4];
-	unsigned int vertexCount = 0;
-	float size = m_particlesSize;
-	Vector3f sizeX(0,0,-size);
-	sizeX = FaceCamera(m_particles) * sizeX;
-	for(unsigned int i = 0; i < ps.size(); i++) {
-		Particle* p = ps[i];
-		Vector3f pos = p->pos;
-		float r = p->color.x;
-		float g = p->color.y;
-		float b = p->color.z;
-		float a = 1 - p->timeAlive / p->lifespan;
-
-		/*vd[vertexCount++] = VertexData(pos.x - size, pos.y - size, pos.z, r, g, b, a, 0, 0);
-		vd[vertexCount++] = VertexData(pos.x - size, pos.y + size, pos.z, r, g, b, a, 0, 1);
-		vd[vertexCount++] = VertexData(pos.x + size, pos.y + size, pos.z, r, g, b, a, 1, 1);
-		vd[vertexCount++] = VertexData(pos.x + size, pos.y - size, pos.z, r, g, b, a, 1, 0);*/
-		vd[vertexCount++] = VertexData(pos.x, pos.y, pos.z, r, g, b, a, 0, 0);
-		vd[vertexCount++] = VertexData(pos.x + sizeX.x, pos.y, pos.z + sizeX.z, r, g, b, a, 0, 1);
-		vd[vertexCount++] = VertexData(pos.x + sizeX.x, pos.y + size, pos.z + sizeX.z, r, g, b, a, 1, 1);
-		vd[vertexCount++] = VertexData(pos.x, pos.y + size, pos.z, r, g, b, a, 1, 0);
-	}
-
-	SetMeshData(vd, vertexCount);
-
-	delete [] vd;
-}
-
-void Particles::SetMeshData(VertexData* vd, unsigned int vertexCount)
-{
-	glewInit();
-
-	assert(vertexCount <= USHRT_MAX);
-	if(vertexCount == 0)
-		return;
-
-	int indexCount = 0;
-	uint16* indexData = new uint16[3 * vertexCount / 2];
-
-	int faceCount = vertexCount / 4.f;
-	// Genere les index
-	for (int i = 0; i < faceCount; ++i)
-	{
-		int v = i * 4;
-		indexData[indexCount++] = v;
-		indexData[indexCount++] = v + 1;
-		indexData[indexCount++] = v + 2;
-		indexData[indexCount++] = v;
-		indexData[indexCount++] = v + 2;
-		indexData[indexCount++] = v + 3;
-	}
-	CHECK_GL_ERROR();
-
-	if(!m_isValid)
-	{
-		glGenBuffers(1, &m_vertexVboId);
-		glGenBuffers(1, &m_indexVboId);
-	}
+	m_updateShader.Use();
+	m_updateShader.SetTime(m_time);
+	m_updateShader.SetDeltaTimeMillis(elapsedTime);
 
 	CHECK_GL_ERROR();
 
-	glBindBuffer(GL_ARRAY_BUFFER, m_vertexVboId);
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexData) * vertexCount, vd, GL_STREAM_DRAW);
-
-	m_indicesCount = indexCount;
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16)* m_indicesCount, indexData, GL_STREAM_DRAW);
-
+	m_randomTexture.Bind(GL_TEXTURE3);
 	CHECK_GL_ERROR();
 
-	m_isValid = true;
-}
+	glEnable(GL_RASTERIZER_DISCARD);
+	CHECK_GL_ERROR();
 
-void Particles::Render(bool wireFrame) const
-{
-	if(IsValid())
-	{
-		m_texture->Bind();
-		glClientActiveTexture(GL_TEXTURE0);
-		glBindBuffer(GL_ARRAY_BUFFER, m_vertexVboId);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(3, GL_FLOAT, sizeof(VertexData), (char*)0);
-		glEnableClientState(GL_COLOR_ARRAY);
-		glColorPointer(4, GL_FLOAT, sizeof(VertexData), (char*)12);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glTexCoordPointer(2, GL_FLOAT, sizeof(VertexData), (char*)28);
+	glBindBuffer(GL_ARRAY_BUFFER, m_particleBuffer[m_currVB]);    
+	glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, m_transformFeedback[m_currTFB]);
+	CHECK_GL_ERROR();
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
-		glDrawElements(wireFrame ? GL_LINES : GL_TRIANGLES, m_indicesCount, GL_UNSIGNED_SHORT, (char*)0);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
+	CHECK_GL_ERROR();
 
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glDisableClientState(GL_COLOR_ARRAY);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glVertexAttribPointer(0, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), 0);                          // type
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)4);         // position
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)16);        // velocity
+	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)28);          // lifetime
+	CHECK_GL_ERROR();
+
+	glBeginTransformFeedback(GL_POINTS);
+	CHECK_GL_ERROR();
+
+	if (m_isFirst) {
+		glDrawArrays(GL_POINTS, 0, 1);
+
+		m_isFirst = false;
 	}
+	else {
+		glDrawTransformFeedback(GL_POINTS, m_transformFeedback[m_currVB]);
+	}            
+
+	glEndTransformFeedback();
+	CHECK_GL_ERROR();
+
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
+	glDisableVertexAttribArray(3);
+	CHECK_GL_ERROR();
+
+	Shader::Disable();
+	m_currVB = m_currTFB;
+	m_currTFB = (m_currTFB + 1) & 0x1;
+
 }
 
-float Particles::RandomFloat() const
+void Particles::Render(Matrix4f VP, bool wireFrame)
 {
-	return (float)rand() / (float)RAND_MAX;
-}
 
-bool Particles::CompareParticles( Particle* particle1, Particle* particle2 )
-{
-	Camera* cam = Info::Get().GetCamera();
-	Vector3f dist1 = (particle1->pos - cam->GetPosition());
-	Vector3f dist2 = (particle2->pos - cam->GetPosition());
-	return dist1.Lenght() > dist2.Lenght();
-}
+	m_billboardShader.Use();
+	m_billboardShader.SetCameraPosition(Info::Get().GetCamera()->GetPosition());
+	m_billboardShader.SetVP(VP);
+	m_texture->Bind();
 
-Quaternion Particles::FaceCamera(Particle* p) const
-{
-	// Billboarding
-	// http://www.lighthouse3d.com/opengl/billboarding/index.php3?billSphe
+	glDisable(GL_RASTERIZER_DISCARD);
 
-	Vector3f camPos = Info::Get().GetCamera()->GetPosition();
-	Vector3f partPos = p->pos;
-	Vector3f lookAt, objToCamProj, objToCam, upAux;
-	float modelview[16],angleCosine;
+	glBindBuffer(GL_ARRAY_BUFFER, m_particleBuffer[m_currTFB]);    
 
-	glPushMatrix();
+	glEnableVertexAttribArray(0);
 
-	// objToCamProj is the vector in world coordinates from the 
-	// local origin to the camera projected in the XZ plane
-	objToCamProj.x = camPos.x - partPos.x;
-	objToCamProj.y = 0;
-	objToCamProj.z = camPos.z - partPos.z ;
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)4);  // position
 
-	// This is the original lookAt vector for the object 
-	// in world coordinates
-	lookAt.x = 1;
-	lookAt.y = 0;
-	lookAt.z = 0;
+	glDrawTransformFeedback(GL_POINTS, m_transformFeedback[m_currTFB]);
+
+	glDisableVertexAttribArray(0);
 
 
-	// normalize both vectors to get the cosine directly afterwards
-	objToCamProj.Normalise();
 
-	// easy fix to determine wether the angle is negative or positive
-	// for positive angles upAux will be a vector pointing in the 
-	// positive y direction, otherwise upAux will point downwards
-	// effectively reversing the rotation.
-
-	upAux = lookAt.Cross(objToCamProj);
-
-	// compute the angle
-	angleCosine = lookAt.Dot(objToCamProj);
-
-	Quaternion q;
-	// perform the rotation. The if statement is used for stability reasons
-	// if the lookAt and objToCamProj vectors are too close together then 
-	// |angleCosine| could be bigger than 1 due to lack of precision
-	if ((angleCosine < 0.99990) && (angleCosine > -0.9999)) {
-		q.FromAxis(acos(angleCosine), upAux);
-		//glRotatef(acos(angleCosine)*180/3.14,upAux.x,upAux.y,upAux.z);
-	}
-
-	// so far it is just like the cylindrical billboard. The code for the 
-	// second rotation comes now
-	// The second part tilts the object so that it faces the camera
-
-	// objToCam is the vector in world coordinates from 
-	// the local origin to the camera
-	objToCam = camPos - partPos;
-
-	// Normalize to get the cosine afterwards
-	objToCam.Normalise();
-
-	// Compute the angle between objToCamProj and objToCam, 
-	//i.e. compute the required angle for the lookup vector
-
-	angleCosine = objToCamProj.Dot(objToCam);
-
-	// Tilt the object. The test is done to prevent instability 
-	// when objToCam and objToCamProj have a very small
-	// angle between them
-	Quaternion l;
-	if ((angleCosine < 0.99990) && (angleCosine > -0.9999)) {
-		if (objToCam.y < 0)
-		{
-			//glRotatef(acos(angleCosine)*180/3.14,1,0,0);
-			l.FromAxis(acos(angleCosine), Vector3f(1,0,0));
-		}
-		else
-		{
-			//glRotatef(acos(angleCosine)*180/3.14,-1,0,0);
-			l.FromAxis(acos(angleCosine), Vector3f(-1,0,0));
-		}
-	}
-	//return l * q;
-	q.Normalise();
-	return q;
+	Shader::Disable();
 }
 
 Vector3f Particles::AvgVelocity() const
@@ -257,16 +190,6 @@ Vector3f Particles::AvgVelocity() const
 	return m_angle * Vector3f(-1,0,0) * m_averageVelocity;
 }
 
-void Particles::CreateParticle( Particle* p ) const
-{
-	p->pos = m_pos;
-	p->velocity = AvgVelocity() + Vector3f(m_range * RandomFloat() - m_range / 2,
-		m_range * RandomFloat() - m_range / 2,
-		m_range * RandomFloat() - m_range / 2);
-	p->color = m_color;
-	p->timeAlive = 0;
-	p->lifespan = m_averageLifespan + RandomFloat() - 0.5f;
-}
 
 void Particles::SetPosition( const Vector3f& pos )
 {

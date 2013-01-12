@@ -30,6 +30,8 @@
 #include "util/array2d.h"
 #include "util/vector2.h"
 
+#include "gl/testbillboard.h"
+
 /**
 * @brief Engin graphique
 */
@@ -177,6 +179,8 @@ private:
 	Texture* m_texturefontColor;
 	Texture m_texSpell;
 
+	Particles m_testParticules;
+
 	Player* m_player;
 	Camera* m_camera;
 
@@ -229,6 +233,8 @@ private:
 
 	typedef std::list<Spell> SpellList;
 	SpellList m_spells;
+
+	TestBillboard m_bill;
 
 	time_t m_time;
 };

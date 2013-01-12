@@ -21,6 +21,7 @@ public:
     static void CheckTypes();
     static bool LoadTextFile(const std::string& filename, std::string& buffer);
     static void CheckGLError(const char* file, int line);
+	static float RandomFloat();
 };
 
 #endif // TOOL_H__

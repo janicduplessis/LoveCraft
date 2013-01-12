@@ -80,3 +80,8 @@ void Tool::CheckGLError(const char* file, int line)
     }
 }
 
+float Tool::RandomFloat()
+{
+	return (float)rand() / (float)RAND_MAX;
+}
+

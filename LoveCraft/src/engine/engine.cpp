@@ -12,7 +12,8 @@
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
-	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0)
+	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0),
+	m_testParticules(30)
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
@@ -154,6 +155,7 @@ void Engine::Init()
 	m_monsters[5]->SetPosition(Vector3f(12,8,0));
 	m_monsters[6]->Init(Animal::ANL_GRD_PIG, m_player);
 	m_monsters[6]->SetPosition(Vector3f(8,8,8));
+
 
 	//m_testpig.Init(&m_player);
 	//m_testpig.SetPosition(Vector3f(10,5,10));
@@ -427,6 +429,7 @@ void Engine::LoadResource()
 		Vector2i(LB_CONSOLE_BODER_OFFSET_S, LB_CONSOLE_BODER_OFFSET_B));
 	m_pnl_playscreen->AddControl(m_lb_console);
 	m_lb_console->SetRepeatTexture(false);
+	Info::Get().SetConsole(m_lb_console);
 	//Texbox de la console
 	m_txb_console = new Textbox(m_pnl_playscreen,
 		Vector2i(m_pnl_playscreen->Size().x - 64 - (int)LB_CONSOLE_SIZE_W, 0),
@@ -568,6 +571,9 @@ void Engine::LoadResource()
 		exit(1) ;
 	}
 	CW("Chargement des shaders termine");
+
+	m_testParticules.Init();
+	m_bill.Init();
 #pragma endregion
 
 }
@@ -827,8 +833,27 @@ void Engine::Render(float elapsedTime)
 			break;
 		}
 	}
-
 	Shader::Disable();
+
+	//m_testParticules.Update(elapsedTime);
+
+	GLfloat mv[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mv);
+	Matrix4f modelView(mv[0], mv[1], mv[2], mv[3],
+					   mv[4], mv[5], mv[6], mv[7],
+					   mv[8], mv[9], mv[10], mv[11],
+					   mv[12], mv[13], mv[14], mv[15]);
+
+	GLfloat p[16];
+	glGetFloatv(GL_PROJECTION_MATRIX, p);
+	Matrix4f projection(p[0], p[1], p[2], p[3],
+					   p[4], p[5], p[6], p[7],
+					   p[8], p[9], p[10], p[11],
+					   p[12], p[13], p[14], p[15]);
+
+	//m_testParticules.Render(modelView * projection);
+	m_bill.Render(modelView * projection, m_camera->GetPosition());
+
 	glDisable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
 

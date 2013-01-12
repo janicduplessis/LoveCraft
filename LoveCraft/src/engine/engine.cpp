@@ -146,9 +146,9 @@ void Engine::Init()
 	m_monsters[1]->SetPosition(Vector3f(-10,8,-20));
 	m_monsters[2]->Init(Animal::ANL_GRD_ARMDILLO, m_player);
 	m_monsters[2]->SetPosition(Vector3f(-5,8,-10));
-	m_monsters[3]->Init(Animal::ANL_GRD_PIG, m_player);
+	m_monsters[3]->Init(Animal::ANL_GRD_BWIDOW, m_player);
 	m_monsters[3]->SetPosition(Vector3f(0,8,-10));
-	m_monsters[4]->Init(Animal::ANL_GRD_PIG, m_player);
+	m_monsters[4]->Init(Animal::ANL_GRD_ARACHNID, m_player);
 	m_monsters[4]->SetPosition(Vector3f(7,8,-15));
 	m_monsters[5]->Init(Animal::ANL_GRD_PIG, m_player);
 	m_monsters[5]->SetPosition(Vector3f(12,8,0));

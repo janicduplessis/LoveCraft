@@ -26,9 +26,11 @@ void Animal::Init(AnimalType type, Player* player)
 		break;
 	case Animal::ANL_GRD_BWIDOW:
 		m_model.Load(MODEL_BWIDOW);
+		m_model.Translate(0,-1.3f,0);
 		break;
 	case Animal::ANL_GRD_ARMDILLO:
 		m_model.Load(MODEL_ARMDILLO);
+		m_model.Translate(0,-1.3f,0);
 		break;
 	case Animal::ANL_GRD_RHINO:
 		m_model.Load(MODEL_RHINO);
@@ -36,6 +38,7 @@ void Animal::Init(AnimalType type, Player* player)
 		break;
 	case Animal::ANL_GRD_ARACHNID:
 		m_model.Load(MODEL_ARACHNID);
+		m_model.Translate(0,-1.3f,0);
 		break;
 	}
 	m_ai = new AI(AI::TYPE_PASSIVE_HARMLESS, this, player);

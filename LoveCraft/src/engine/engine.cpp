@@ -42,8 +42,10 @@ Engine::~Engine()
 		}
 	}
 	// delete les monstres
+#ifdef LOAD_MODELS
 	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
 		delete m_monsters[i];
+#endif
 	delete [] m_monsters;
 
 	delete m_textureArray;
@@ -142,6 +144,7 @@ void Engine::Init()
 
 	m_player->Init();
 
+#ifdef LOAD_MODELS
 	for (int i = 0; i < MONSTER_MAX_NUMBER; i++)
 		m_monsters[i] = new Animal();
 	m_monsters[0]->Init(Animal::ANL_GRD_ALIGATR, m_player);
@@ -166,10 +169,10 @@ void Engine::Init()
 		m_monsters[i]->Init(Animal::ANL_AIR_MONARCH, m_player);
 
 	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
-		m_monsters[i]->SetPosition(Vector3f(m_dice->Next(-(int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*0.5f)), 8,
+		m_monsters[i]->SetPosition(Vector3f(m_dice->Next(-(int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*0.5f)), 10 + m_dice->Next(0, 10),
 		m_dice->Next(-(int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*0.5f))));
 
-
+#endif
 
 
 	//m_testpig.Init(&m_player);
@@ -816,15 +819,19 @@ void Engine::Render(float elapsedTime)
 	//m_testpig2.Render();
 	//m_testpig3.Update(elapsedTime);
 	//m_testpig3.Render();
+
+#ifdef LOAD_MODELS
 	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
 	{
-		if (m_monsters[i]->Initialized())
-		{
-			m_monsters[i]->Update(elapsedTime);
-			m_monsters[i]->Render();
-		}
+	if (m_monsters[i]->Initialized())
+	{
+	m_monsters[i]->Update(elapsedTime);
+	m_monsters[i]->Render();
+	}
 	}
 	Shader::Disable();
+
+#endif
 
 #pragma endregion
 
@@ -854,19 +861,19 @@ void Engine::Render(float elapsedTime)
 	GLfloat mv[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, mv);
 	Matrix4f modelView(mv[0], mv[1], mv[2], mv[3],
-					   mv[4], mv[5], mv[6], mv[7],
-					   mv[8], mv[9], mv[10], mv[11],
-					   mv[12], mv[13], mv[14], mv[15]);
+		mv[4], mv[5], mv[6], mv[7],
+		mv[8], mv[9], mv[10], mv[11],
+		mv[12], mv[13], mv[14], mv[15]);
 
 	GLfloat p[16];
 	glGetFloatv(GL_PROJECTION_MATRIX, p);
 	Matrix4f projection(p[0], p[1], p[2], p[3],
-					   p[4], p[5], p[6], p[7],
-					   p[8], p[9], p[10], p[11],
-					   p[12], p[13], p[14], p[15]);
+		p[4], p[5], p[6], p[7],
+		p[8], p[9], p[10], p[11],
+		p[12], p[13], p[14], p[15]);
 
 	//m_testParticules.Render(modelView * projection);
-	m_bill.Render(modelView * projection, m_camera->GetPosition());
+	m_bill.Render(modelView * projection, m_camera->GetRealPosition());
 
 	glDisable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
@@ -1265,6 +1272,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 			{
 				m_camRadius -= 1;
 			}
+			m_camera->SetCamRadius(m_camRadius);
 		}
 		break;
 	case MOUSE_BUTTON_WHEEL_DOWN:
@@ -1278,6 +1286,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 			{
 				m_camRadius += 1;
 			}
+			m_camera->SetCamRadius(m_camRadius);
 		}
 		break;
 	}

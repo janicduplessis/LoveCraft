@@ -50,7 +50,9 @@ void AI::Process(float elapsedTime)
 			totalTime = 0;
 			Patrol();
 		}
-		m_npc->Move(Vector3f(m_patrolDestination->x, m_npc->Position().y, m_patrolDestination->z), elapsedTime);
+		m_npc->Move(Vector3f(m_patrolDestination->x, 
+			(m_type == TYPE_PASSIVE_FLYING) ? m_patrolDestination->y : m_npc->Position().y, 
+			m_patrolDestination->z), elapsedTime);
 	} 
 	else if (m_currentState == STATE_FOLLOW)
 	{
@@ -141,9 +143,10 @@ void AI::Patrol()
 	{
 		if (m_patrolDestination)
 			delete m_patrolDestination;
-		float x = m_posIni.x + rand() % (2 * PATROL_RANGE) - PATROL_RANGE; 
+		float x = m_posIni.x + rand() % (2 * PATROL_RANGE) - PATROL_RANGE;
+		float y = m_posIni.y + rand() % (2 * FLYING_Y_RANGE) - FLYING_Y_RANGE;
 		float z = m_posIni.z + rand() % (2 * PATROL_RANGE) - PATROL_RANGE; 
-		m_patrolDestination = new Vector3f(x, m_posIni.y, z);
+		m_patrolDestination = new Vector3f(x, y, z);
 	}
 }
 
@@ -165,4 +168,9 @@ void AI::Follow()
 void AI::Stay()
 {
 
+}
+
+void AI::SetInitialPosition(Vector3f pos)
+{
+	m_posIni = pos;
 }

@@ -51,9 +51,13 @@ public:
 	void TurnLeftRight ( float value );
 
 	~Camera();
+	void SetCamRadius(float radius);
+	Vector3f GetRealPosition() const;
 private:
 	Vector3f m_pos;
 	Vector2f m_rot;
+
+	float m_camRadius;
 
 	Mode m_mode;
 };

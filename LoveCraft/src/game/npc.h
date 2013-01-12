@@ -71,6 +71,7 @@ protected:
 	Quaternion m_rot;
 	float m_maxRot;
 	float m_speedGravity;
+	bool m_flying;
 
 	Type m_type;
 	Spell* m_spells;

@@ -19,7 +19,7 @@ Spell::~Spell()
 void Spell::Update( float elapsedTime )
 {
 	Projectile::Update(elapsedTime);
-	m_particles.Update(elapsedTime);
+	m_particles.Update(elapsedTime * 1000);
 	m_particles.SetPosition(m_pos);
 	m_particles.SetRotation(m_rot);
 }

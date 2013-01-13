@@ -13,7 +13,7 @@
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
-	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0)
+	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0), m_testParticules(0)
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
@@ -174,8 +174,11 @@ void Engine::Init()
 	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
 		m_monsters[i]->SetPosition(Vector3f(m_dice->Next(-(int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*0.5f)), 10 + m_dice->Next(0, 10),
 		m_dice->Next(-(int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*0.5f))));
-
 #endif
+
+	m_testParticules = new Spell;
+	m_testParticules->Init(1, m_player->RotationQ());
+	m_testParticules->SetPosition(m_player->Position());
 
 
 	//m_testpig.Init(&m_player);
@@ -593,7 +596,6 @@ void Engine::LoadResource()
 	}
 	CW("Chargement des shaders termine");
 
-	m_testParticules.Init(1, Quaternion(1,0,0,0));
 	m_bill.Init();
 #pragma endregion
 
@@ -873,10 +875,12 @@ void Engine::Render(float elapsedTime)
 			break;
 		}
 	}
-	m_testParticules.SetDestination(m_monsters[0]->Position());
-	m_testParticules.Update(elapsedTime * 1000);
+	if (m_testParticules) {
+	m_testParticules->SetDestination(m_monsters[0]->Position());
+	m_testParticules->Update(elapsedTime);
+	}
 
-	m_testParticules.Render(vp);
+	m_testParticules->Render(vp);
 	m_bill.Render( vp, m_camera->GetRealPosition());
 
 	glDisable(GL_BLEND);
@@ -1063,8 +1067,8 @@ void Engine::KeyPressEvent(unsigned char key)
 			}
 			if (c.n3())
 			{
-				m_testParticules.SetPosition(m_player->Position());
-				m_testParticules.Shoot();
+				m_testParticules->SetPosition(m_player->Position());
+				m_testParticules->Shoot();
 				sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
 				CW("Lancement de sort: Glace");

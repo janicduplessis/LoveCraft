@@ -15,9 +15,9 @@ public:
 	virtual void Update(float elapsedTime);
 
 	virtual void SetPosition(const Vector3f& pos);
-	void Render();
+	void Render(Matrix4f VP);
 
-	virtual void Init( float speed, const Quaternion& rot, Texture* tex );
+	virtual void Init( float speed, const Quaternion& rot);
 
 private:
 	Particles m_particles;

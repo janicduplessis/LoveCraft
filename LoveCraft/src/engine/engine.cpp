@@ -13,8 +13,7 @@
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
-	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0),
-	m_testParticules(2000)
+	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0)
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
@@ -45,6 +44,8 @@ Engine::~Engine()
 #ifdef LOAD_MODELS
 	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
 		delete m_monsters[i];
+#else
+	delete m_monsters[0];
 #endif
 	delete [] m_monsters;
 
@@ -144,10 +145,12 @@ void Engine::Init()
 
 	m_player->Init();
 
-#ifdef LOAD_MODELS
+
 	for (int i = 0; i < MONSTER_MAX_NUMBER; i++)
 		m_monsters[i] = new Animal();
 	m_monsters[0]->Init(Animal::ANL_GRD_ALIGATR, m_player);
+
+#ifdef LOAD_MODELS
 	m_monsters[1]->Init(Animal::ANL_GRD_ARACHNID, m_player);
 	m_monsters[2]->Init(Animal::ANL_GRD_ARMDILLO, m_player);
 	m_monsters[3]->Init(Animal::ANL_GRD_BISON, m_player);
@@ -590,7 +593,7 @@ void Engine::LoadResource()
 	}
 	CW("Chargement des shaders termine");
 
-	m_testParticules.Init();
+	m_testParticules.Init(1, Quaternion(1,0,0,0));
 	m_bill.Init();
 #pragma endregion
 
@@ -788,6 +791,24 @@ void Engine::Render(float elapsedTime)
 		m_camera->ApplyTranslation();
 	}
 
+	// Différentes matrices de opengl
+	// pour utiliser avec render (fix batard)
+	GLfloat mv[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mv);
+	Matrix4f modelView(mv[0], mv[1], mv[2], mv[3],
+		mv[4], mv[5], mv[6], mv[7],
+		mv[8], mv[9], mv[10], mv[11],
+		mv[12], mv[13], mv[14], mv[15]);
+
+	GLfloat p[16];
+	glGetFloatv(GL_PROJECTION_MATRIX, p);
+	Matrix4f projection(p[0], p[1], p[2], p[3],
+		p[4], p[5], p[6], p[7],
+		p[8], p[9], p[10], p[11],
+		p[12], p[13], p[14], p[15]);
+
+	Matrix4f vp = modelView * projection;
+
 #pragma endregion
 
 #pragma region Render les cubes
@@ -821,7 +842,6 @@ void Engine::Render(float elapsedTime)
 	//m_testpig3.Update(elapsedTime);
 	//m_testpig3.Render();
 
-#ifdef LOAD_MODELS
 	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
 	{
 	if (m_monsters[i]->Initialized())
@@ -832,7 +852,6 @@ void Engine::Render(float elapsedTime)
 	}
 	Shader::Disable();
 
-#endif
 
 #pragma endregion
 
@@ -842,39 +861,23 @@ void Engine::Render(float elapsedTime)
 	glDisable(GL_CULL_FACE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	m_shaderSpells.Use();
 
 	// Update et render tous les spells
 	for (SpellList::iterator it = m_spells.begin(); it != m_spells.end(); ++it) {
 		it->SetDestination(m_monsters[0]->Position());
 		it->Update(elapsedTime);
-		it->Render();
+		it->Render(vp);
 		if (it->HasHit())
 		{
 			m_spells.erase(it);
 			break;
 		}
 	}
-	Shader::Disable();
-
+	m_testParticules.SetDestination(m_monsters[0]->Position());
 	m_testParticules.Update(elapsedTime * 1000);
 
-	GLfloat mv[16];
-	glGetFloatv(GL_MODELVIEW_MATRIX, mv);
-	Matrix4f modelView(mv[0], mv[1], mv[2], mv[3],
-		mv[4], mv[5], mv[6], mv[7],
-		mv[8], mv[9], mv[10], mv[11],
-		mv[12], mv[13], mv[14], mv[15]);
-
-	GLfloat p[16];
-	glGetFloatv(GL_PROJECTION_MATRIX, p);
-	Matrix4f projection(p[0], p[1], p[2], p[3],
-		p[4], p[5], p[6], p[7],
-		p[8], p[9], p[10], p[11],
-		p[12], p[13], p[14], p[15]);
-
-	m_testParticules.Render(modelView * projection);
-	m_bill.Render( modelView * projection, m_camera->GetRealPosition());
+	m_testParticules.Render(vp);
+	m_bill.Render( vp, m_camera->GetRealPosition());
 
 	glDisable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
@@ -1040,11 +1043,11 @@ void Engine::KeyPressEvent(unsigned char key)
 		{
 			if (c.n1())
 			{
-				Spell newSpell;
-				newSpell.SetPosition(m_player->Position());
-				newSpell.Init(4.f, m_player->RotationQ(), &m_texSpell);
-				newSpell.Shoot();
-				m_spells.push_back(newSpell);
+				Spell* newSpell = new Spell;
+				newSpell->SetPosition(m_player->Position());
+				newSpell->Init(4.f, m_player->RotationQ());
+				newSpell->Shoot();
+				m_spells.push_back(*newSpell);
 				sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
 				CW("Lancement de sort: Trail orange!");
@@ -1060,6 +1063,8 @@ void Engine::KeyPressEvent(unsigned char key)
 			}
 			if (c.n3())
 			{
+				m_testParticules.SetPosition(m_player->Position());
+				m_testParticules.Shoot();
 				sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
 				CW("Lancement de sort: Glace");

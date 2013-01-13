@@ -182,7 +182,7 @@ private:
 	Texture* m_texturefontColor;
 	Texture m_texSpell;
 
-	Particles m_testParticules;
+	Spell m_testParticules;
 
 	Player* m_player;
 	Camera* m_camera;

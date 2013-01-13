@@ -1,7 +1,7 @@
 ﻿#include "spell.h"
 
 
-Spell::Spell() : m_particles(50), m_spellTexture(0)
+Spell::Spell() : m_particles(2000), m_spellTexture(0)
 {
 	
 }
@@ -24,9 +24,9 @@ void Spell::Update( float elapsedTime )
 	m_particles.SetRotation(m_rot);
 }
 
-void Spell::Render()
+void Spell::Render(Matrix4f VP)
 {
-	//m_particles.Render();
+	m_particles.Render(VP);
 }
 
 void Spell::SetPosition( const Vector3f& pos )
@@ -35,15 +35,15 @@ void Spell::SetPosition( const Vector3f& pos )
 	m_particles.SetPosition(pos);
 }
 
-void Spell::Init( float speed, const Quaternion& rot, Texture* tex )
+void Spell::Init( float speed, const Quaternion& rot)
 {
 	Projectile::Init(speed, rot);
 	m_particles.SetRotation(rot);
-	m_spellTexture = tex;
+	m_spellTexture = new Texture;
 	m_spellTexture->Load(TEXTURE_PATH "particle1.png");
 	m_particles.SetTexture(m_spellTexture);
 	m_particles.SetColor(Vector3f(1,0,0));
-	m_particles.SetParticlesSize(0.3);
+	m_particles.SetParticlesSize(0.1);
 	m_particles.SetAverageVelocity(0.01);
 	m_particles.SetColor(Vector3f(1, 153/255.f, 0));
 	m_particles.SetRange(0.2);

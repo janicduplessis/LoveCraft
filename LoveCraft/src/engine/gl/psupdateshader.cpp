@@ -35,8 +35,7 @@ bool PSUpdateShader::Init()
 	m_launcherLifetimeLocation = BindUniform("gLauncherLifetime");
 	m_shellLifetimeLocation = BindUniform("gShellLifetime");
 	m_secondaryShellLifetimeLocation = BindUniform("gSecondaryShellLifetime");
-
-	Shader::Disable();
+	m_launcherPosLocation = BindUniform("gLauncherPosition");
 
 	return true;
 }
@@ -69,5 +68,10 @@ void PSUpdateShader::SetShellLifetime( float lifetime )
 void PSUpdateShader::SetSecondaryShellLifetime( float lifetime )
 {
 	glUniform1f(m_secondaryShellLifetimeLocation, lifetime);
+}
+
+void PSUpdateShader::SetLauncherPosition( Vector3f pos )
+{
+	glUniform3f(m_launcherPosLocation, pos.x, pos.y, pos.z);
 }
 

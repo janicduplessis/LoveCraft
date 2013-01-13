@@ -4,6 +4,8 @@
 #include "shader.h"
 #include "define.h"
 
+#include <util/vector3.h>
+
 class PSUpdateShader : public Shader
 {
 public:
@@ -23,7 +25,7 @@ public:
 	void SetShellLifetime(float lifetime);
 
 	void SetSecondaryShellLifetime(float lifetime);
-
+	void SetLauncherPosition( Vector3f pos );
 private:
 	GLuint m_deltaTimeMillisLocation;
 	GLuint m_randomTextureLocation;
@@ -31,6 +33,7 @@ private:
 	GLuint m_launcherLifetimeLocation;
 	GLuint m_shellLifetimeLocation;
 	GLuint m_secondaryShellLifetimeLocation;
+	GLuint m_launcherPosLocation;
 };
 
 

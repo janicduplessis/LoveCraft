@@ -57,7 +57,7 @@ public:
 	/**
 	* Render les particules
 	*/
-	void Render(Matrix4f VP, bool wireFrame = false);
+	void Render(const Matrix4f& VP, bool wireFrame = false);
 	/**
 	* Update la position des particules
 	* Doit être appelé a chaque frame

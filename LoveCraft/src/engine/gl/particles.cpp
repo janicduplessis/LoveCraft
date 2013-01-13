@@ -47,8 +47,8 @@ bool Particles::Init()
 	Particle* particles = new Particle[m_particlesNumber];
 
 	particles[0].type = PARTICLE_TYPE_LAUNCHER;
-	particles[0].pos = m_pos;
-	particles[0].velocity = Vector3f(0.f, 0.0001f, 0.f);
+	particles[0].pos = Vector3f(0);
+	particles[0].velocity = Vector3f(0.f, 0.01f, 0.f);
 	particles[0].lifespan = 0.f;
 
 	glGenTransformFeedbacks(2, m_transformFeedback);
@@ -70,9 +70,10 @@ bool Particles::Init()
 	m_updateShader.Use();
 
 	m_updateShader.SetRandomTextureUnit(3);
-	m_updateShader.SetLauncherLifetime(100.0f);
-	m_updateShader.SetShellLifetime(10000.0f);
-	m_updateShader.SetSecondaryShellLifetime(2500.0f);
+	m_updateShader.SetLauncherLifetime(10.0f);
+	m_updateShader.SetShellLifetime(3000.0f);
+	m_updateShader.SetSecondaryShellLifetime(2000.0f);
+	m_updateShader.SetLauncherPosition(m_pos);
 
 	//Shader::Disable();
 
@@ -88,7 +89,7 @@ bool Particles::Init()
 
 	//m_billboardTechnique.SetColorTextureUnit(COLOR_TEXTURE_UNIT_INDEX);
 
-	m_billboardShader.SetBillboardSize(0.01f);
+	m_billboardShader.SetBillboardSize(0.02f);
 
 	//Shader::Disable();
 
@@ -153,7 +154,7 @@ void Particles::Update(int deltaTimeMilli)
 	//Shader::Disable();
 }
 
-void Particles::Render(Matrix4f VP, bool wireFrame)
+void Particles::Render(const Matrix4f& VP, bool wireFrame)
 {
 	Shader::Disable();
 	m_billboardShader.Use();
@@ -188,6 +189,8 @@ Vector3f Particles::AvgVelocity() const
 void Particles::SetPosition( const Vector3f& pos )
 {
 	m_pos = pos;
+	m_updateShader.Use();
+	m_updateShader.SetLauncherPosition(m_pos);
 }
 
 void Particles::SetRotation( const Quaternion& q )

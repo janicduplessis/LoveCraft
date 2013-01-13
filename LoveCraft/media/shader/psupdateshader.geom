@@ -20,6 +20,7 @@ uniform sampler1D gRandomTexture;
 uniform float gLauncherLifetime;
 uniform float gShellLifetime;
 uniform float gSecondaryShellLifetime;
+uniform vec3 gLauncherPosition;
 
 #define PARTICLE_TYPE_LAUNCHER 0.0f
 #define PARTICLE_TYPE_SHELL 1.0f
@@ -39,10 +40,10 @@ void main()
     if (Type0[0] == PARTICLE_TYPE_LAUNCHER) {
         if (Age >= gLauncherLifetime) {
             Type1 = PARTICLE_TYPE_SHELL;
-            Position1 = Position0[0];
+            Position1 = gLauncherPosition;
             vec3 Dir = GetRandomDir(gTime/1000.0);
-            Dir.y = max(Dir.y, 0.5);
-            Velocity1 = normalize(Dir) / 20.0;
+            //Dir.y = max(Dir.y, 0.5);
+            Velocity1 = normalize(Dir) / 5.0;
             Age1 = 0.0;
             EmitVertex();
             EndPrimitive();

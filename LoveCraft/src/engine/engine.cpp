@@ -14,7 +14,7 @@
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0),
-	m_testParticules(30)
+	m_testParticules(2000)
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
@@ -792,6 +792,7 @@ void Engine::Render(float elapsedTime)
 
 #pragma region Render les cubes
 
+	Shader::Disable();
 	m_shaderCube.Use();
 	m_textureArray->Use();
 	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)

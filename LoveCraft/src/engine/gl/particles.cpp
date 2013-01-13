@@ -88,7 +88,7 @@ bool Particles::Init()
 
 	//m_billboardTechnique.SetColorTextureUnit(COLOR_TEXTURE_UNIT_INDEX);
 
-	m_billboardShader.SetBillboardSize(0.1f);
+	m_billboardShader.SetBillboardSize(0.01f);
 
 	//Shader::Disable();
 
@@ -176,7 +176,7 @@ void Particles::Render(Matrix4f VP, bool wireFrame)
 	m_currVB = m_currTFB;
 	m_currTFB = (m_currTFB + 1) & 0x1;
 
-	//Shader::Disable();
+	Shader::Disable();
 }
 
 Vector3f Particles::AvgVelocity() const

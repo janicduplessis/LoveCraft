@@ -51,7 +51,7 @@ void main()
         }
 
         Type1 = PARTICLE_TYPE_LAUNCHER;
-        Position1 = Position0[0];
+        Position1 = gLauncherPosition;
         Velocity1 = Velocity0[0];
         Age1 = Age;
         EmitVertex();

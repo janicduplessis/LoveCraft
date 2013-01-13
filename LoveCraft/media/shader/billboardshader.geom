@@ -16,25 +16,26 @@ void main()
 
 	vec3 toCamera = normalize(gCameraPos - Pos);
     vec3 up = vec3(0.0, 1.0, 0.0);
-    vec3 right = cross(toCamera, up) * gBillboardSize;
-
+    vec3 right = normalize(cross(toCamera, up)) * gBillboardSize;
+	up = normalize(cross(toCamera, right)) * gBillboardSize;
+	
 	Pos -= right;
     gl_Position = gVP * vec4(Pos, 1.0);
     TexCoord = vec2(0.0, 0.0);
     EmitVertex();
 
-    Pos.y += gBillboardSize;
+    Pos += up;
     gl_Position = gVP * vec4(Pos, 1.0);
     TexCoord = vec2(0.0, 1.0);
     EmitVertex();
 
-    Pos.y -= gBillboardSize;
+    Pos -= up;
     Pos += right;
     gl_Position = gVP * vec4(Pos, 1.0);
     TexCoord = vec2(1.0, 0.0);
     EmitVertex();
 
-    Pos.y += gBillboardSize;
+    Pos += up;
     gl_Position = gVP * vec4(Pos, 1.0);
     TexCoord = vec2(1.0, 1.0);
     EmitVertex();

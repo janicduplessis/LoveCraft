@@ -4,8 +4,8 @@
 #include "texture.h"
 #include "mesh.h"
 #include "randomtexture.h"
-#include "billboardshader.h"
-#include "psupdateshader.h"
+#include "shaders/billboardshader.h"
+#include "shaders/psupdateshader.h"
 
 #include <util/vector3.h>
 #include <util/quaternion.h>

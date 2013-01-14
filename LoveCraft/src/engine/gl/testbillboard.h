@@ -2,7 +2,7 @@
 #define TEST_BILL_H__
 
 #include "util/matrix4.h"
-#include "billboardshader.h"
+#include "shaders/billboardshader.h"
 #include "texture.h"
 #include "define.h"
 

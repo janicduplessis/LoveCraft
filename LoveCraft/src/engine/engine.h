@@ -8,7 +8,7 @@
 #include "openglcontext.h"
 
 #include "gl/texture.h"
-#include "gl/shader.h"
+#include "gl/shaders/shader.h"
 #include "gl/texturearray.h"
 
 #include "player.h"

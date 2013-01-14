@@ -5,7 +5,7 @@
 
 #include "info.h"
 #include "gl/chunkmesh.h"
-#include "gl/shader.h"
+#include "gl/shaders/shader.h"
 #include <iostream>
 
 #include <util/array3d.h>

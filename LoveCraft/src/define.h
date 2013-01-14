@@ -122,7 +122,7 @@ enum SPELLS {STYPE_BOLT, STYPE_FIRE, STYPE_FREEZE, STYPE_SHOCK, STYPE_POISON, ST
 
 //Chemins d'accès
 #define TEXTURE_PATH			"../lovecraft/media/textures/"
-#define SHADER_PATH				"../lovecraft/media/shader/"
+#define SHADER_PATH				"../lovecraft/src/engine/gl/shaders/"
 #define MODEL_PATH				"../lovecraft/media/models/"
 #define MODEL_PATH_ANIMALS		MODEL_PATH "animals/"
 #define MODEL_PATH_ANIMALS_GRD	MODEL_PATH_ANIMALS "ground/"

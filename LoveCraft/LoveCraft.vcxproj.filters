@@ -85,9 +85,6 @@
     <ClCompile Include="src\game\npc.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\shader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\gl\ui\progressbar.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -136,13 +133,19 @@
     <ClCompile Include="src\util\dice.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\billboardshader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\psupdateshader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\gl\randomtexture.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\billboardshader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\psupdateshader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\shader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\lightingshader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -234,9 +237,6 @@
     <ClInclude Include="src\engine\gl\model.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\shader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\gl\ui\progressbar.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -291,48 +291,60 @@
     <ClInclude Include="src\util\dice.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\billboardshader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\psupdateshader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\gl\randomtexture.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\gl\testbillboard.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\billboardshader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\psupdateshader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\shader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\lightingshader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="media\shader\cubeshader.frag">
+    <None Include="src\engine\gl\shaders\billboardshader.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="media\shader\cubeshader.vert">
+    <None Include="src\engine\gl\shaders\billboardshader.geom" />
+    <None Include="src\engine\gl\shaders\billboardshader.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="media\shader\modelshader.frag">
+    <None Include="src\engine\gl\shaders\cubeshader.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="media\shader\modelshader.vert">
+    <None Include="src\engine\gl\shaders\cubeshader.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="media\shader\particleshader.frag">
+    <None Include="src\engine\gl\shaders\modelshader.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="media\shader\particleshader.vert">
+    <None Include="src\engine\gl\shaders\modelshader.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="media\shader\billboardshader.vert">
+    <None Include="src\engine\gl\shaders\particleshader.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="media\shader\billboardshader.frag">
+    <None Include="src\engine\gl\shaders\particleshader.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="media\shader\billboardshader.geom" />
-    <None Include="media\shader\psupdateshader.geom" />
-    <None Include="media\shader\psupdateshader.vert">
+    <None Include="src\engine\gl\shaders\psupdateshader.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="src\engine\gl\shaders\lightingshader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="src\engine\gl\shaders\lightingshader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="src\engine\gl\shaders\psupdateshader.geom" />
   </ItemGroup>
 </Project>

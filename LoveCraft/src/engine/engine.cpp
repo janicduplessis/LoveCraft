@@ -366,6 +366,7 @@ void Engine::LoadResource()
 	m_textureInterface[IMAGE_CLOCK_BG].Load(TEXTURE_PATH "i_clock_bg.png");
 	m_textureInterface[IMAGE_CONSOLE_BACK].Load(TEXTURE_PATH "i_console_back.png");
 	m_textureInterface[IMAGE_CONSOLE_TEXTBOX_BACK].Load(TEXTURE_PATH "i_console_textbox_back.png");
+	m_textureInterface[IMAGE_PERSONAL_CURSOR].Load(TEXTURE_PATH "i_cursor.png");
 
 #pragma endregion
 
@@ -388,6 +389,12 @@ void Engine::LoadResource()
 	m_pnl_screen = new Panel(0, Vector2i(), Vector2i(Width(), Height()), 0, 1, "main");
 
 #pragma region Enfants de Main
+
+	//Cursor
+	m_pb_cursor = new PictureBox(m_pnl_screen, Vector2i(), Vector2i(50, 50), &m_textureInterface[IMAGE_PERSONAL_CURSOR], "pb_cursor");
+	//Appel singulier du cursor afin qu'il soit dessiné par dessus tous les éléments de l'interface
+	//m_pnl_screen->AddControl(m_pb_cursor);
+	m_pb_cursor->SetRepeatTexture(false);
 
 	// Zone de jeu
 	m_pnl_playscreen = new Panel(m_pnl_screen, 
@@ -771,9 +778,9 @@ void Engine::Render(float elapsedTime)
 	if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON ) {
 		// hide/show cursor
 		if (!m_rightClick && !m_leftClick)
-			ShowCursor();
+			m_pb_cursor->SetVisible(true);
 		else
-			HideCursor();
+			m_pb_cursor->SetVisible(false);
 
 		// recule la camera
 		glTranslatef(0,0,-m_camRadius);
@@ -962,6 +969,8 @@ void Engine::Render2D(float elapsedTime)
 
 
 #pragma endregion
+
+	m_pb_cursor->Render();
 
 #pragma region OpenGl
 
@@ -1186,7 +1195,7 @@ void Engine::KeyReleaseEvent(unsigned char key)
 			}
 			else 
 			{
-				HideCursor();
+				m_pb_cursor->SetVisible(false);
 				m_camera->SetMode(Camera::CAM_FIRST_PERSON);
 				ss << "Affichage de la camera a la premiere personne";
 			}
@@ -1234,7 +1243,6 @@ void Engine::MouseMoveEvent(int x, int y)
 		{
 			m_player->SetRotation(m_camera->GetRotation());
 		}
-
 		ResetMouse();
 	}
 	// Camera first person
@@ -1250,6 +1258,7 @@ void Engine::MouseMoveEvent(int x, int y)
 
 		CenterMouse();
 	}
+	m_pb_cursor->SetPosition(Vector2i(MousePosition().x, MousePosition().y - m_pb_cursor->Size().y));
 
 }
 

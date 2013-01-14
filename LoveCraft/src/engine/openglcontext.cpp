@@ -152,6 +152,11 @@ void OpenglContext::MakeRelativeToMouse(int& x, int& y) const
 	y = y - m_mousePos.y;
 }
 
+Vector2i OpenglContext::MousePosition() const
+{
+	return Vector2i(sf::Mouse::getPosition(m_app).x, Height() - sf::Mouse::getPosition(m_app).y);
+}
+
 void OpenglContext::ShowCursor()
 {
 	m_app.setMouseCursorVisible(true);

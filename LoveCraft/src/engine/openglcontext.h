@@ -6,6 +6,7 @@
 #include <string>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include "util/vector2.h"
 
 // Documentation de SFML: http://www.sfml-dev.org/documentation/index-fr.php
 class OpenglContext
@@ -56,7 +57,7 @@ protected:
 	bool MousePosChanged(int x, int y);
     void MakeRelativeToCenter(int& x, int& y) const;
 	void MakeRelativeToMouse(int& x, int& y) const;
-
+	Vector2i MousePosition() const;
     void ShowCursor();
     void HideCursor();
 

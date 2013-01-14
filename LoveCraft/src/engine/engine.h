@@ -33,7 +33,7 @@
 
 #include "gl/testbillboard.h"
 
-//#define LOAD_MODELS
+#define LOAD_MODELS
 
 /**
 * @brief Engin graphique

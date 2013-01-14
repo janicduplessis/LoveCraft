@@ -95,7 +95,7 @@ Vector2<T> Vector2<T>::operator-() const
 template <class T>
 Vector2<T> Vector2<T>::operator-( const Vector2<T>& v ) const
 {
-	return Vector2<T>(x - v.y, y - v.y);
+	return Vector2<T>(x - v.x, y - v.y);
 }
 
 template <class T>

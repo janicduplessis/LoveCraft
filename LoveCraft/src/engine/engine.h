@@ -201,6 +201,8 @@ private:
 	Panel* m_pnl_playscreen;
 	Panel* m_pnl_portrait;
 
+	PictureBox* m_pb_cursor;
+
 	Button* m_testButton;
 
 	ProgressBar* m_pgb_health;

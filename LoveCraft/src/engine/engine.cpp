@@ -366,6 +366,7 @@ void Engine::LoadResource()
 	m_textureInterface[IMAGE_CLOCK_BG].Load(TEXTURE_PATH "i_clock_bg.png");
 	m_textureInterface[IMAGE_CONSOLE_BACK].Load(TEXTURE_PATH "i_console_back.png");
 	m_textureInterface[IMAGE_CONSOLE_TEXTBOX_BACK].Load(TEXTURE_PATH "i_console_textbox_back.png");
+	m_textureInterface[IMAGE_PERSONAL_CURSOR].Load(TEXTURE_PATH "i_cursor.png");
 
 #pragma endregion
 
@@ -388,6 +389,12 @@ void Engine::LoadResource()
 	m_pnl_screen = new Panel(0, Vector2i(), Vector2i(Width(), Height()), 0, 1, "main");
 
 #pragma region Enfants de Main
+
+	//Cursor
+	m_pb_cursor = new PictureBox(m_pnl_screen, Vector2i(), Vector2i(50, 50), &m_textureInterface[IMAGE_PERSONAL_CURSOR], "pb_cursor");
+	//Appel singulier du cursor afin qu'il soit dessiné par dessus tous les éléments de l'interface
+	//m_pnl_screen->AddControl(m_pb_cursor);
+	m_pb_cursor->SetRepeatTexture(false);
 
 	// Zone de jeu
 	m_pnl_playscreen = new Panel(m_pnl_screen, 
@@ -771,9 +778,9 @@ void Engine::Render(float elapsedTime)
 	if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON ) {
 		// hide/show cursor
 		if (!m_rightClick && !m_leftClick)
-			ShowCursor();
+			m_pb_cursor->SetVisible(true);
 		else
-			HideCursor();
+			m_pb_cursor->SetVisible(false);
 
 		// recule la camera
 		glTranslatef(0,0,-m_camRadius);
@@ -846,11 +853,11 @@ void Engine::Render(float elapsedTime)
 
 	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
 	{
-	if (m_monsters[i]->Initialized())
-	{
-	m_monsters[i]->Update(elapsedTime);
-	m_monsters[i]->Render();
-	}
+		if (m_monsters[i]->Initialized())
+		{
+			m_monsters[i]->Update(elapsedTime);
+			m_monsters[i]->Render();
+		}
 	}
 	Shader::Disable();
 
@@ -876,8 +883,8 @@ void Engine::Render(float elapsedTime)
 		}
 	}
 	if (m_testParticules) {
-	m_testParticules->SetDestination(m_monsters[0]->Position());
-	m_testParticules->Update(elapsedTime);
+		m_testParticules->SetDestination(m_monsters[0]->Position());
+		m_testParticules->Update(elapsedTime);
 	}
 
 	m_testParticules->Render(vp);
@@ -962,6 +969,8 @@ void Engine::Render2D(float elapsedTime)
 
 
 #pragma endregion
+
+	m_pb_cursor->Render();
 
 #pragma region OpenGl
 
@@ -1054,7 +1063,7 @@ void Engine::KeyPressEvent(unsigned char key)
 				m_spells.push_back(*newSpell);
 				sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CW("Lancement de sort: Trail orange!");
+				ss << "Lancement de sort: Test  de particule!";
 			}
 
 			if (c.n2())
@@ -1063,7 +1072,7 @@ void Engine::KeyPressEvent(unsigned char key)
 					m_monsters[i]->SetPosition(Vector3f(m_monsters[i]->Position().x, 10, m_monsters[i]->Position().z));
 				sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CW("Lancement de sort: teleportation de NPC!");
+				ss << "Lancement de sort: teleportation de NPC!";
 			}
 			if (c.n3())
 			{
@@ -1071,19 +1080,19 @@ void Engine::KeyPressEvent(unsigned char key)
 				m_testParticules->Shoot();
 				sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CW("Lancement de sort: Glace");
+				ss << "Lancement de sort: Glace";
 			}
 			if (c.n4())
 			{
 				sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CW("Lancement de sort: Shock");
+				ss << "Lancement de sort: Shock";
 			}
 			if (c.n5())
 			{
 				sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CW("Lancement de sort: Poison");
+				ss << "Lancement de sort: Poison";
 			}
 			if (c.n7())
 			{
@@ -1093,7 +1102,7 @@ void Engine::KeyPressEvent(unsigned char key)
 					m_character.ResetGlobalCooldown();
 					m_character.SetHealth(15);
 					m_character.SetMana(-15);
-					CW("Lancement de sort: Soin");
+					ss << "Lancement de sort: Soin";
 				}
 			}
 			if (c.n8())
@@ -1104,20 +1113,20 @@ void Engine::KeyPressEvent(unsigned char key)
 					m_character.ResetGlobalCooldown();
 					m_character.SetEnergy(10);
 					m_character.SetMana(-10);
-					CW("Lancement de sort: Rafraichissement");
+					ss << "Lancement de sort: Rafraichissement";
 				}
 			}
 			if (c.n9())
 			{
 				sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CW("Lancement de sort: Defense");
+				ss << "Lancement de sort: Defense";
 			}
 			if (c.n0())
 			{
 				sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CW("Lancement de sort: Bouclier magique");
+				ss << "Lancement de sort: Bouclier magique";
 			}
 		}
 		//Sorts hors global cooldown
@@ -1128,11 +1137,15 @@ void Engine::KeyPressEvent(unsigned char key)
 				sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
 				m_character.SetMana(-5);
 				m_player->Teleport();
-				CW("Lancement de sort: Teleportation");
+				ss << "Lancement de sort: Teleportation";
 			}
 		}
 	}
-	ss.str("");
+	if (ss.str() != "")
+	{
+		CW(ss.str());
+		ss.str("");
+	}
 }
 
 void Engine::KeyReleaseEvent(unsigned char key)
@@ -1147,15 +1160,16 @@ void Engine::KeyReleaseEvent(unsigned char key)
 		{
 			Info::Get().Options().SetOptInfos(!Info::Get().Options().GetOptInfos());
 			ss << "Affichage des infos a: " << (Info::Get().Options().GetOptInfos() ? "on" : "off");
-			CW(ss.str());
 		}
 		if (c.f10())
+		{
 			SetFullscreen(!IsFullscreen());
+			ss << "Mode plein ecran mis a: " << (IsFullscreen() ? "on" : "off");
+		}
 		if (c.G())
 		{
 			m_ghostMode = !m_ghostMode;
 			ss << "Mode fantome mis a: " << (m_ghostMode ? "on" : "off");
-			CW(ss.str());
 		}
 		if (c.Y())
 		{
@@ -1171,20 +1185,19 @@ void Engine::KeyReleaseEvent(unsigned char key)
 				glEnable(GL_CULL_FACE);
 			}
 			ss << "Affichage Wireframe mis a: " << (m_wireframe ? "on" : "off");
-			CW(ss.str());
 		}
 		if (c.V())
 		{
 			if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON) 
 			{
 				m_camera->SetMode(Camera::CAM_THIRD_PERSON);
-				CW("Affichage de la camera a la troisieme personne");
+				ss << "Affichage de la camera a la troisieme personne";
 			}
 			else 
 			{
-				HideCursor();
+				m_pb_cursor->SetVisible(false);
 				m_camera->SetMode(Camera::CAM_FIRST_PERSON);
-				CW("Affichage de la camera a la premiere personne");
+				ss << "Affichage de la camera a la premiere personne";
 			}
 		}
 		if (c.M())
@@ -1193,14 +1206,18 @@ void Engine::KeyReleaseEvent(unsigned char key)
 		{
 			Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
 			ss << "Musique mis a: " << (Info::Get().Options().GetOptMusic() ? "on" : "off");
-			CW(ss.str());
+
 		}
 		if (c.P())
 		{
 			m_character.SetExp(75);
-			CW("Ajout de 75 points d'exp");
+			ss << "Ajout de 75 points d'exp";
 		}
-		ss.str("");
+		if (ss.str() != "")
+		{
+			CW(ss.str());
+			ss.str("");
+		}
 	}
 	c.Set(key, false);
 }
@@ -1226,7 +1243,6 @@ void Engine::MouseMoveEvent(int x, int y)
 		{
 			m_player->SetRotation(m_camera->GetRotation());
 		}
-
 		ResetMouse();
 	}
 	// Camera first person
@@ -1242,6 +1258,7 @@ void Engine::MouseMoveEvent(int x, int y)
 
 		CenterMouse();
 	}
+	m_pb_cursor->SetPosition(Vector2i(MousePosition().x, MousePosition().y - m_pb_cursor->Size().y));
 
 }
 

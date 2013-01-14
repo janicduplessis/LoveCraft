@@ -16,6 +16,7 @@ bool LightingShader::Init()
 	AddShader(GL_VERTEX_SHADER, SHADER_PATH "lightingshader.vert");
 	AddShader(GL_FRAGMENT_SHADER, SHADER_PATH "lightingshader.frag");
 	Link();
+	return true;
 }
 
 void LightingShader::SetWVP( const Matrix4f& WVP )

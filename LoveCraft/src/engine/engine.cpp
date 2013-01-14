@@ -846,11 +846,11 @@ void Engine::Render(float elapsedTime)
 
 	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
 	{
-	if (m_monsters[i]->Initialized())
-	{
-	m_monsters[i]->Update(elapsedTime);
-	m_monsters[i]->Render();
-	}
+		if (m_monsters[i]->Initialized())
+		{
+			m_monsters[i]->Update(elapsedTime);
+			m_monsters[i]->Render();
+		}
 	}
 	Shader::Disable();
 
@@ -876,8 +876,8 @@ void Engine::Render(float elapsedTime)
 		}
 	}
 	if (m_testParticules) {
-	m_testParticules->SetDestination(m_monsters[0]->Position());
-	m_testParticules->Update(elapsedTime);
+		m_testParticules->SetDestination(m_monsters[0]->Position());
+		m_testParticules->Update(elapsedTime);
 	}
 
 	m_testParticules->Render(vp);
@@ -1054,7 +1054,7 @@ void Engine::KeyPressEvent(unsigned char key)
 				m_spells.push_back(*newSpell);
 				sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CW("Lancement de sort: Trail orange!");
+				ss << "Lancement de sort: Test  de particule!";
 			}
 
 			if (c.n2())
@@ -1063,7 +1063,7 @@ void Engine::KeyPressEvent(unsigned char key)
 					m_monsters[i]->SetPosition(Vector3f(m_monsters[i]->Position().x, 10, m_monsters[i]->Position().z));
 				sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CW("Lancement de sort: teleportation de NPC!");
+				ss << "Lancement de sort: teleportation de NPC!";
 			}
 			if (c.n3())
 			{
@@ -1071,19 +1071,19 @@ void Engine::KeyPressEvent(unsigned char key)
 				m_testParticules->Shoot();
 				sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CW("Lancement de sort: Glace");
+				ss << "Lancement de sort: Glace";
 			}
 			if (c.n4())
 			{
 				sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CW("Lancement de sort: Shock");
+				ss << "Lancement de sort: Shock";
 			}
 			if (c.n5())
 			{
 				sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CW("Lancement de sort: Poison");
+				ss << "Lancement de sort: Poison";
 			}
 			if (c.n7())
 			{
@@ -1093,7 +1093,7 @@ void Engine::KeyPressEvent(unsigned char key)
 					m_character.ResetGlobalCooldown();
 					m_character.SetHealth(15);
 					m_character.SetMana(-15);
-					CW("Lancement de sort: Soin");
+					ss << "Lancement de sort: Soin";
 				}
 			}
 			if (c.n8())
@@ -1104,20 +1104,20 @@ void Engine::KeyPressEvent(unsigned char key)
 					m_character.ResetGlobalCooldown();
 					m_character.SetEnergy(10);
 					m_character.SetMana(-10);
-					CW("Lancement de sort: Rafraichissement");
+					ss << "Lancement de sort: Rafraichissement";
 				}
 			}
 			if (c.n9())
 			{
 				sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CW("Lancement de sort: Defense");
+				ss << "Lancement de sort: Defense";
 			}
 			if (c.n0())
 			{
 				sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
 				m_character.ResetGlobalCooldown();
-				CW("Lancement de sort: Bouclier magique");
+				ss << "Lancement de sort: Bouclier magique";
 			}
 		}
 		//Sorts hors global cooldown
@@ -1128,11 +1128,15 @@ void Engine::KeyPressEvent(unsigned char key)
 				sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
 				m_character.SetMana(-5);
 				m_player->Teleport();
-				CW("Lancement de sort: Teleportation");
+				ss << "Lancement de sort: Teleportation";
 			}
 		}
 	}
-	ss.str("");
+	if (ss.str() != "")
+	{
+		CW(ss.str());
+		ss.str("");
+	}
 }
 
 void Engine::KeyReleaseEvent(unsigned char key)
@@ -1147,15 +1151,16 @@ void Engine::KeyReleaseEvent(unsigned char key)
 		{
 			Info::Get().Options().SetOptInfos(!Info::Get().Options().GetOptInfos());
 			ss << "Affichage des infos a: " << (Info::Get().Options().GetOptInfos() ? "on" : "off");
-			CW(ss.str());
 		}
 		if (c.f10())
+		{
 			SetFullscreen(!IsFullscreen());
+			ss << "Mode plein ecran mis a: " << (IsFullscreen() ? "on" : "off");
+		}
 		if (c.G())
 		{
 			m_ghostMode = !m_ghostMode;
 			ss << "Mode fantome mis a: " << (m_ghostMode ? "on" : "off");
-			CW(ss.str());
 		}
 		if (c.Y())
 		{
@@ -1171,20 +1176,19 @@ void Engine::KeyReleaseEvent(unsigned char key)
 				glEnable(GL_CULL_FACE);
 			}
 			ss << "Affichage Wireframe mis a: " << (m_wireframe ? "on" : "off");
-			CW(ss.str());
 		}
 		if (c.V())
 		{
 			if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON) 
 			{
 				m_camera->SetMode(Camera::CAM_THIRD_PERSON);
-				CW("Affichage de la camera a la troisieme personne");
+				ss << "Affichage de la camera a la troisieme personne";
 			}
 			else 
 			{
 				HideCursor();
 				m_camera->SetMode(Camera::CAM_FIRST_PERSON);
-				CW("Affichage de la camera a la premiere personne");
+				ss << "Affichage de la camera a la premiere personne";
 			}
 		}
 		if (c.M())
@@ -1193,14 +1197,18 @@ void Engine::KeyReleaseEvent(unsigned char key)
 		{
 			Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
 			ss << "Musique mis a: " << (Info::Get().Options().GetOptMusic() ? "on" : "off");
-			CW(ss.str());
+
 		}
 		if (c.P())
 		{
 			m_character.SetExp(75);
-			CW("Ajout de 75 points d'exp");
+			ss << "Ajout de 75 points d'exp";
 		}
-		ss.str("");
+		if (ss.str() != "")
+		{
+			CW(ss.str());
+			ss.str("");
+		}
 	}
 	c.Set(key, false);
 }

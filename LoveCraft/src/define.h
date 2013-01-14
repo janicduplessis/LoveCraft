@@ -28,6 +28,7 @@ typedef long long int64;
 #define CHUNK_SIZE_Z 16
 
 #define VIEW_DISTANCE				64
+#define MAX_SELECTION_DISTANCE		20
 
 // Options
 // Musique à l'ouverture du programme

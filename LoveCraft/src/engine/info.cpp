@@ -74,6 +74,8 @@ BlockType Info::GetBlocFromWorld(Vector3f pos, const Vector3f& offset) const
 {
 	// Ajoute le offset
 	pos += offset;
+	if (pos.x >= VIEW_DISTANCE * 2 - 2 || pos.y >= CHUNK_SIZE_Y - 1 || pos.z >= VIEW_DISTANCE * 2 - 2)
+		return BTYPE_AIR;
 	// Replace la position par rapport au premier cube
 	pos.x += VIEW_DISTANCE + 0.5f;
 	pos.z += VIEW_DISTANCE + 0.5f;

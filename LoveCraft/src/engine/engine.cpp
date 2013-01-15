@@ -511,8 +511,6 @@ void Engine::LoadMenuResource()
 		std::cout << " Failed to load cube shader" << std::endl;
 		exit(1) ;
 	}
-
-	m_bill.Init();
 #pragma endregion
 
 }
@@ -1256,8 +1254,6 @@ void Engine::KeyPressEvent(unsigned char key)
 				}
 				if (c.n3())
 				{
-					m_testParticules->SetPosition(m_player->Position());
-					m_testParticules->Shoot();
 					sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
 					m_character.ResetGlobalCooldown();
 					ss << "Lancement de sort: Glace";
@@ -1487,45 +1483,20 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		Vector2i& play = m_pnl_screen->Size();
 		switch (button)
 		{
+		case MOUSE_BUTTON_RIGHT:
 			m_rightClick = true;
 			m_player->SetRotation(m_camera->GetRotation());
 			SetMousePos(x, y);
-		}
-		RemoveBlock();
-		break;
-	case MOUSE_BUTTON_LEFT:
-		m_lb_console->MouseClick(x, m_pnl_playscreen->Size().y - y);
-		if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
-		{
-			m_leftClick = true;
-			SetMousePos(x, y);
-		}
-		AddBlock(BTYPE_BRICK);
-		if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON)
-			Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE);
-		break;
-	case MOUSE_BUTTON_WHEEL_UP:
-		if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
-			m_lb_console->Scroll(1);
-		} 
-		else if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
-		{
-			// Zoom in camera
-			if (m_camRadius > 0)
-			{
-				m_rightClick = true;
-				m_player->SetRotation(m_camera->GetRotation());
-				SetMousePos(x, y);
-			}
+			RemoveBlock();
 			break;
 		case MOUSE_BUTTON_LEFT:
-			m_testButton->isClicked(x, m_pnl_screen->Size().y - y);
 			m_lb_console->MouseClick(x, m_pnl_playscreen->Size().y - y);
 			if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 			{
 				m_leftClick = true;
 				SetMousePos(x, y);
 			}
+			AddBlock(BTYPE_BRICK);
 			if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON)
 				Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE);
 			break;
@@ -1538,11 +1509,11 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 				// Zoom in camera
 				if (m_camRadius > 0)
 				{
-					m_camRadius -= 1;
+					m_rightClick = true;
+					m_player->SetRotation(m_camera->GetRotation());
+					SetMousePos(x, y);
 				}
-				m_camera->SetCamRadius(m_camRadius);
-			}
-			break;
+				break;
 		case MOUSE_BUTTON_WHEEL_DOWN:
 			if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
 				m_lb_console->Scroll(-1);
@@ -1557,6 +1528,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 				m_camera->SetCamRadius(m_camRadius);
 			}
 			break;
+			}
 		}
 	}
 	else
@@ -1571,7 +1543,6 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		}
 	}
 }
-
 void Engine::OnClick(Control* sender)
 {
 	std::string n = sender->Name();
@@ -1607,14 +1578,15 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 {
 	if (!IsMenuOpen())
 	{
-	case MOUSE_BUTTON_RIGHT:
-		m_rightClick = false;
-		break;
-	case MOUSE_BUTTON_LEFT:
-		m_leftClick = false;
-		m_lb_console->MouseRelease();
-		break;
-
+		switch (button)
+		{
+		case MOUSE_BUTTON_RIGHT:
+			m_rightClick = false;
+			break;
+		case MOUSE_BUTTON_LEFT:
+			m_leftClick = false;
+			m_lb_console->MouseRelease();
+			break;
 		}
 	}
 	else
@@ -1672,7 +1644,7 @@ void Engine::RemoveBlock()
 		iPos.z - chunkZ * CHUNK_SIZE_Z);
 
 	c->SetBloc(bloc.x, bloc.y, bloc.z, BTYPE_AIR);
-	}
+}
 
 //Private
 
@@ -1827,99 +1799,99 @@ bool Engine::LoadTexture(Texture& texture, const std::string& filename, bool sto
 
 void Engine::GetBlocAtCursor()
 {
-    int x = MousePosition().x;
+	int x = MousePosition().x;
 	int y = Height() - MousePosition().y;
 
-    GLint viewport[4];
-    GLdouble modelview[16];
-    GLdouble projection[16];
-    GLfloat winX, winY, winZ;
-    GLdouble posX, posY, posZ;
+	GLint viewport[4];
+	GLdouble modelview[16];
+	GLdouble projection[16];
+	GLfloat winX, winY, winZ;
+	GLdouble posX, posY, posZ;
 
-    glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
-    glGetDoublev( GL_PROJECTION_MATRIX, projection );
-    glGetIntegerv( GL_VIEWPORT, viewport );
+	glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
+	glGetDoublev( GL_PROJECTION_MATRIX, projection );
+	glGetIntegerv( GL_VIEWPORT, viewport );
 
-    winX = (float)x;
-    winY = (float)viewport[3] - (float)y;
-    glReadPixels( x, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
+	winX = (float)x;
+	winY = (float)viewport[3] - (float)y;
+	glReadPixels( x, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
 
-    gluUnProject( winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
+	gluUnProject( winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
 
-    posX += .5f + VIEW_DISTANCE;
-    posY += 2.2;
-    posZ += .5f + VIEW_DISTANCE;
+	posX += .5f + VIEW_DISTANCE;
+	posY += 2.2;
+	posZ += .5f + VIEW_DISTANCE;
 
-    // Le cast vers int marche juste pour les valeurs entiere, utiliser une fonction de la libc si besoin
-    // de valeurs negatives
-    int px = (int)(posX);
-    int py = (int)(posY);
-    int pz = (int)(posZ);
+	// Le cast vers int marche juste pour les valeurs entiere, utiliser une fonction de la libc si besoin
+	// de valeurs negatives
+	int px = (int)(posX);
+	int py = (int)(posY);
+	int pz = (int)(posZ);
 
-    bool found = false;
+	bool found = false;
 
-    //if((m_player->Position() - Vector3f(posX, posY, posZ)).Lenght() < MAX_SELECTION_DISTANCE)
-    //{
-        // Apres avoir determine la position du bloc en utilisant la partie entiere du hit
-        // point retourne par opengl, on doit verifier de chaque cote du bloc trouve pour trouver
-        // le vrai bloc. Le vrai bloc peut etre different a cause d'erreurs de precision de nos
-        // nombres flottants (si z = 14.999 par exemple, et qu'il n'y a pas de blocs a la position
-        // 14 (apres arrondi vers l'entier) on doit trouver et retourner le bloc en position 15 s'il existe
-        // A cause des erreurs de precisions, ils arrive que le cote d'un bloc qui doit pourtant etre a la
-        // position 15 par exemple nous retourne plutot la position 15.0001
-        for(int x = px - 1; !found && x <= px + 1; ++x)
-        {
-            for(int y = py - 1; !found && x >= 0 && y <= py + 1; ++y)
-            {
-                for(int z = pz - 1; !found && y >= 0  && z <= pz + 1; ++z)
-                {
-                    if(z >= 0)
-                    {
-                        BlockType bt = Info::Get().GetBlocFromWorld(Vector3f(x - VIEW_DISTANCE - 0.5f, y, z - VIEW_DISTANCE - 0.5f));
-                        if(bt == BTYPE_AIR)
-                            continue;
+	//if((m_player->Position() - Vector3f(posX, posY, posZ)).Lenght() < MAX_SELECTION_DISTANCE)
+	//{
+	// Apres avoir determine la position du bloc en utilisant la partie entiere du hit
+	// point retourne par opengl, on doit verifier de chaque cote du bloc trouve pour trouver
+	// le vrai bloc. Le vrai bloc peut etre different a cause d'erreurs de precision de nos
+	// nombres flottants (si z = 14.999 par exemple, et qu'il n'y a pas de blocs a la position
+	// 14 (apres arrondi vers l'entier) on doit trouver et retourner le bloc en position 15 s'il existe
+	// A cause des erreurs de precisions, ils arrive que le cote d'un bloc qui doit pourtant etre a la
+	// position 15 par exemple nous retourne plutot la position 15.0001
+	for(int x = px - 1; !found && x <= px + 1; ++x)
+	{
+		for(int y = py - 1; !found && x >= 0 && y <= py + 1; ++y)
+		{
+			for(int z = pz - 1; !found && y >= 0  && z <= pz + 1; ++z)
+			{
+				if(z >= 0)
+				{
+					BlockType bt = Info::Get().GetBlocFromWorld(Vector3f(x - VIEW_DISTANCE - 0.5f, y, z - VIEW_DISTANCE - 0.5f));
+					if(bt == BTYPE_AIR)
+						continue;
 
-                        // Skip water blocs
-                        //if(bloc->Type == BT_WATER)
-                        //    continue;
+					// Skip water blocs
+					//if(bloc->Type == BT_WATER)
+					//    continue;
 
-                        m_currentBlock.x = x;
-                        m_currentBlock.y = y;
-                        m_currentBlock.z = z;
+					m_currentBlock.x = x;
+					m_currentBlock.y = y;
+					m_currentBlock.z = z;
 
-                        if(Tool::InRangeWithEpsilon<float>(posX, x, x+1, 0.05) && Tool::InRangeWithEpsilon<float>(posY, y, y+1, 0.05) && Tool::InRangeWithEpsilon<float>(posZ, z, z+1, 0.05))
-                        {
-                            found = true;
-                        }
-                    }
-                }
-            }
-       // }
-    }
+					if(Tool::InRangeWithEpsilon<float>(posX, x, x+1, 0.05) && Tool::InRangeWithEpsilon<float>(posY, y, y+1, 0.05) && Tool::InRangeWithEpsilon<float>(posZ, z, z+1, 0.05))
+					{
+						found = true;
+					}
+				}
+			}
+		}
+		// }
+	}
 
-    if(!found)
-    {
-        m_currentBlock.x = -1;
-    }
-    else
-    {
-        // Find on which face of the bloc we got an hit
-        m_currentFaceNormal.Zero();
+	if(!found)
+	{
+		m_currentBlock.x = -1;
+	}
+	else
+	{
+		// Find on which face of the bloc we got an hit
+		m_currentFaceNormal.Zero();
 
-        // Front et back:
-        if(Tool::EqualWithEpsilon<float>(posZ, m_currentBlock.z, 0.005f))
-            m_currentFaceNormal.z = -1;
-        else if(Tool::EqualWithEpsilon<float>(posZ, m_currentBlock.z + 1, 0.005f))
-            m_currentFaceNormal.z = 1;
-        else if(Tool::EqualWithEpsilon<float>(posX, m_currentBlock.x, 0.005f))
-            m_currentFaceNormal.x = -1;
-        else if(Tool::EqualWithEpsilon<float>(posX, m_currentBlock.x + 1, 0.005f))
-            m_currentFaceNormal.x = 1;
-        else if(Tool::EqualWithEpsilon<float>(posY, m_currentBlock.y, 0.005f))
-            m_currentFaceNormal.y = -1;
-        else if(Tool::EqualWithEpsilon<float>(posY, m_currentBlock.y + 1, 0.005f))
-            m_currentFaceNormal.y = 1;
-    }
+		// Front et back:
+		if(Tool::EqualWithEpsilon<float>(posZ, m_currentBlock.z, 0.005f))
+			m_currentFaceNormal.z = -1;
+		else if(Tool::EqualWithEpsilon<float>(posZ, m_currentBlock.z + 1, 0.005f))
+			m_currentFaceNormal.z = 1;
+		else if(Tool::EqualWithEpsilon<float>(posX, m_currentBlock.x, 0.005f))
+			m_currentFaceNormal.x = -1;
+		else if(Tool::EqualWithEpsilon<float>(posX, m_currentBlock.x + 1, 0.005f))
+			m_currentFaceNormal.x = 1;
+		else if(Tool::EqualWithEpsilon<float>(posY, m_currentBlock.y, 0.005f))
+			m_currentFaceNormal.y = -1;
+		else if(Tool::EqualWithEpsilon<float>(posY, m_currentBlock.y + 1, 0.005f))
+			m_currentFaceNormal.y = 1;
+	}
 }
 
 

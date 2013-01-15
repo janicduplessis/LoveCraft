@@ -111,7 +111,6 @@
     <ClCompile Include="src\engine\gl\model.cpp" />
     <ClCompile Include="src\engine\network.cpp" />
     <ClCompile Include="src\game\npc.cpp" />
-    <ClCompile Include="src\game\monsters\pig.cpp" />
     <ClCompile Include="src\engine\openglcontext.cpp" />
     <ClCompile Include="src\engine\player.cpp" />
     <ClCompile Include="src\engine\gl\ui\progressbar.cpp" />
@@ -164,7 +163,6 @@
     <ClInclude Include="src\engine\gl\model.h" />
     <ClInclude Include="src\engine\network.h" />
     <ClInclude Include="src\game\npc.h" />
-    <ClInclude Include="src\game\monsters\pig.h" />
     <ClInclude Include="src\engine\gl\ui\progressbar.h" />
     <ClInclude Include="src\engine\projectile.h" />
     <ClInclude Include="src\util\quaternion.h" />

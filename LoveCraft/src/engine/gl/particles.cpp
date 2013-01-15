@@ -97,7 +97,8 @@ bool Particles::Init()
 
 	if (!m_texture->Load(TEXTURE_PATH "particle1.png")) {
 		return false;
-	}        
+	}  
+	return true;
 }
 
 void Particles::Update(int deltaTimeMilli)

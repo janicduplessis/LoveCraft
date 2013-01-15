@@ -24,7 +24,7 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
 
 	m_menuUI = new MenuInterface();
-	m_gameUI = new GameInterface();
+	m_gameUI = new GameInterface(this);
 
 	m_camera = new Camera;
 	m_player = new Player;
@@ -849,7 +849,7 @@ void Engine::Update(float elapsedTime)
 	m_gameUI->m_pgb_mana->SetValue(m_character.ManaPerc());
 	m_gameUI->m_pgb_exp->SetValue(m_character.ExpPerc());
 	//Actualisation du texte dans les différents Label
-	TextUpdate();
+	m_gameUI->TextUpdate();
 
 #pragma endregion
 
@@ -1000,13 +1000,6 @@ void Engine::Render(float elapsedTime)
 #pragma region Render models
 
 	m_shaderModel.Use();
-
-	//m_testpig.Update(elapsedTime);
-	//m_testpig.Render();
-	//m_testpig2.Update(elapsedTime);
-	//m_testpig2.Render();
-	//m_testpig3.Update(elapsedTime);
-	//m_testpig3.Render();
 
 	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
 	{
@@ -1585,6 +1578,7 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 void Engine::AddBlock(BlockType type)
 {
 	m_currentBlock.Afficher();
+	m_currentFaceNormal.Afficher();
 	if(m_currentBlock.x == -1)
 		return;
 	Vector3f pos = m_currentBlock;
@@ -1675,61 +1669,6 @@ void Engine::RenderSpells()
 	}
 }
 
-void Engine::TextUpdate()
-{
-	std::ostringstream ss;
-	//Vie
-	ss << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
-	m_gameUI->m_lbl_health->SetMessage(ss.str());
-	ss.str("");
-	//Energie
-	ss << (int)m_character.Energy() << " / " << (int)m_character.EnergyMax();
-	m_gameUI->m_lbl_energy->SetMessage(ss.str());
-	ss.str("");
-	//Mana
-	ss << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
-	m_gameUI->m_lbl_mana->SetMessage(ss.str());
-	ss.str("");
-	//Experience
-	ss << (int)m_character.Exp() << " / " << (int)m_character.ExpNext();
-	m_gameUI->m_lbl_exp->SetMessage(ss.str());
-	ss.str("");
-	//Niveau
-	ss << m_character.Level();
-	m_gameUI->m_lbl_playerLevel->SetMessage(ss.str());
-	ss.str("");
-	//Position
-	ss << "Position :     ( " << std::setprecision(4) << m_player->Position().x << ", " << std::setprecision(4) <<
-		m_player->Position().y << ", " << std::setprecision(4) << m_player->Position().z << " )";
-	m_gameUI->m_lbl_plrPos->SetMessage(ss.str());
-	ss.str("");
-	//Vitesse
-	ss << "Vitesse :      " << m_player->Speed();
-	m_gameUI->m_lbl_plrSpd->SetMessage(ss.str());
-	ss.str("");
-	//Accélération
-	ss << "Acceleration : " << m_player->Acceleration();
-	m_gameUI->m_lbl_plrAcc->SetMessage(ss.str());
-	ss.str("");
-	//Psotion souris
-	ss << "Pos. Souris :  " << "( " << MousePosition().x << ", " << MousePosition().y << " )";
-	m_gameUI->m_lbl_mousePos->SetMessage(ss.str());
-	ss.str("");
-	//FPS
-	ss << "Fps :          " << std::setprecision(2) << m_fps;
-	m_gameUI->m_lbl_FPS->SetMessage(ss.str());
-	ss.str("");
-	//Heure
-	time_t currentTime;
-	time (&currentTime);
-	struct tm ptm;
-	localtime_s(&ptm, &currentTime);
-	ss << std::setfill('0');
-	ss << std::setw(2) << ptm.tm_hour << ":" << std::setw(2) << ptm.tm_min;
-	m_gameUI->m_lbl_time->SetMessage(ss.str());
-	ss.str("");
-}
-
 void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 {
 	m_texturefontColor[TEXTCOLOR_WHITE].Bind();
@@ -1798,7 +1737,7 @@ void Engine::GetBlocAtCursor()
 	gluUnProject( winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
 
 	posX += .5f + VIEW_DISTANCE;
-	posY += 2.2;
+	posY += 2.5f;
 	posZ += .5f + VIEW_DISTANCE;
 
 	// Le cast vers int marche juste pour les valeurs entiere, utiliser une fonction de la libc si besoin

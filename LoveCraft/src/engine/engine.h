@@ -37,6 +37,8 @@
 class Engine : public OpenglContext
 {
 public:
+	friend class GameInterface;
+
 	/**
 	* Constructeur par défaut de la classe
 	*/
@@ -169,7 +171,6 @@ private:
 	*/
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat = true);
 	virtual void RenderSpells();
-	void TextUpdate();
 	void StartBlendPNG(bool value = true) const;
 	void OnClick(Control* sender);
 	void CW(const std::string& line);

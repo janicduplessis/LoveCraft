@@ -2,16 +2,22 @@
 #define GAMEINTERFACE_H_
 
 #include "interface.h"
+#include "engine/engine.h"
 
 class GameInterface : public Interface
 {
 public:
-	GameInterface();
+	friend class Engine;
+
+	GameInterface(Engine* engine);
 	~GameInterface();
 	void Init();
+	void TextUpdate();
 
-	//Controles
-		Panel* m_pnl_screen;
+private:
+	Engine* m_engine;
+
+	Panel* m_pnl_screen;
 	Panel* m_pnl_playscreen;
 	Panel* m_pnl_portrait;
 

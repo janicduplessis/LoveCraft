@@ -13,11 +13,12 @@
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
-	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0), m_testParticules(0)
+	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0), m_testParticules(0),
+	m_debugMode(false)
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
-	m_textureInterface = new Texture[IMAGE::IMAGE_LAST];
+	m_textureInterface = new Texture[IMAGE::CUSTIMAGE_LAST];
 	m_texturefontColor = new Texture[COLOR::TEXTCOLOR_LAST];
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
 
@@ -32,14 +33,18 @@ Engine::~Engine()
 	delete m_camera;
 	delete m_dice;
 
+#ifdef CHUNK_INITIALIZED
 	// delete les chunks
 	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
 	{
 		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
 		{
-			delete m_chunks->Get(i, j);
+			if (m_chunks != 0)
+				delete m_chunks->Get(i, j);
 		}
 	}
+#endif
+#ifdef MONSTERS_INIALIZED
 	// delete les monstres
 #ifdef LOAD_MODELS
 	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
@@ -47,12 +52,27 @@ Engine::~Engine()
 #else
 	delete m_monsters[0];
 #endif
+#endif
 	delete [] m_monsters;
 
+#ifdef TEXTUREARRAY_INITIALIZED
 	delete m_textureArray;
-	delete m_testButton;
+#endif
 
-	// delete l'interface
+#ifdef MENU_INTERFACE_INITIALIZED
+
+	delete m_menu_close;
+	delete m_menu_controls;
+	delete m_menu_fullscreen;
+	delete m_menu_logo;
+	delete m_menu_panel;
+	delete m_menu_screen;
+	delete m_menu_start;
+
+#endif
+
+#ifdef GAME_INTERFACE_INITIALIZED
+
 	delete m_pnl_screen;
 	delete m_pnl_playscreen;
 	delete m_pnl_portrait;
@@ -75,6 +95,8 @@ Engine::~Engine()
 	delete m_lbl_mana;
 	delete m_lbl_exp;
 	delete m_lbl_energy;
+
+#endif
 }
 
 const Engine& Engine::Get() const
@@ -87,7 +109,7 @@ Engine& Engine::Get()
 	return *this;
 }
 
-void Engine::Init()
+void Engine::MenuInit()
 {
 	//seed random number generator
 	srand((unsigned)time(0));
@@ -141,10 +163,20 @@ void Engine::Init()
 
 #pragma endregion
 
+	CenterMouse();
+	HideCursor();
+}
+
+void Engine::GameInit()
+{
+
 #pragma region Initialisation des entites
 
 	m_player->Init();
 
+#ifndef MONSTERS_INIALIZED
+#define MONSTERS_INIALIZED
+#endif
 
 	for (int i = 0; i < MONSTER_MAX_NUMBER; i++)
 		m_monsters[i] = new Animal();
@@ -193,6 +225,10 @@ void Engine::Init()
 #pragma endregion
 
 #pragma region Initilisation du chunk principal
+
+#ifndef CHUNK_INITIALIZED
+#define CHUNK_INITIALIZED
+#endif
 
 	m_chunks = new Array2d<Chunk*>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
 	Info::Get().SetChunkArray(m_chunks);
@@ -291,19 +327,23 @@ void Engine::Init()
 #pragma endregion
 
 	CenterMouse();
-	HideCursor();
 }
 
 void Engine::DeInit()
 {
 }
 
-void Engine::LoadResource()
+void Engine::LoadMenuResource()
 {
 
 #pragma region Chargement des textures
 
 #pragma region Blocs
+
+#ifndef TEXTUREARRAY_INITIALIZED
+#define TEXTUREARRAY_INITIALIZED
+#endif
+
 	// Texture des blocs 128x128 px
 	m_textureArray = new TextureArray(128);
 
@@ -315,11 +355,12 @@ void Engine::LoadResource()
 	LoadBlocTexture(BTYPE_SNOW, TEXTURE_PATH "b_snow.jpg");
 	LoadBlocTexture(BTYPE_SWAMP, TEXTURE_PATH "b_swamp.jpg");
 
+	m_textureArray->Generate();
+
 #pragma endregion
 
 #pragma region Boutons des spells
 
-	m_textureArray->Generate();
 	//Texture des spells
 	m_textureSpell[SPELL_IMAGE_BOLT].Load(TEXTURE_PATH "s_spellbolt.gif");
 	m_textureSpell[SPELL_IMAGE_FIRE].Load(TEXTURE_PATH "s_spellfire.png");
@@ -347,26 +388,30 @@ void Engine::LoadResource()
 
 #pragma region Images et textures
 
-	m_textureInterface[IMAGE_BLACK_BACK].Load(TEXTURE_PATH "noir.jpg");
-	m_textureInterface[IMAGE_BOO].Load(TEXTURE_PATH "i_boo.png");
-	m_textureInterface[IMAGE_RUN].Load(TEXTURE_PATH "i_bewareofcthulhu.png");
-	m_textureInterface[IMAGE_CROSSHAIR].Load(TEXTURE_PATH "i_cross.bmp");
-	m_textureInterface[IMAGE_INTERFACE_FRAME].Load(TEXTURE_PATH "b_rock.jpg");
-	m_textureInterface[IMAGE_PORTRAIT_FRAME].Load(TEXTURE_PATH "i_portrait-frame.png");
-	m_textureInterface[IMAGE_PORTRAIT_MALE].Load(TEXTURE_PATH "i_portrait-male.png");
-	m_textureInterface[IMAGE_PGBTEXT_HEALTH].Load(TEXTURE_PATH "i_pgb_health.png");
-	m_textureInterface[IMAGE_PGBTEXT_ENERGY].Load(TEXTURE_PATH "i_pgb_energy.png");
-	m_textureInterface[IMAGE_PGBTEXT_MANA].Load(TEXTURE_PATH "i_pgb_mana.png");
-	m_textureInterface[IMAGE_PGBTEXT_EXP].Load(TEXTURE_PATH "i_pgb_exp.png");
-	m_textureInterface[IMAGE_PGBTEXT_HEALTH_BACK].Load(TEXTURE_PATH "i_pgb_health_back.png");
-	m_textureInterface[IMAGE_PGBTEXT_ENERGY_BACK].Load(TEXTURE_PATH "i_pgb_energy_back.png");
-	m_textureInterface[IMAGE_PGBTEXT_MANA_BACK].Load(TEXTURE_PATH "i_pgb_mana_back.png");
-	m_textureInterface[IMAGE_PGBTEXT_EXP_BACK].Load(TEXTURE_PATH "i_pgb_exp_back.png");
-	m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW].Load(TEXTURE_PATH "i_pgb_health_low.png");
-	m_textureInterface[IMAGE_CLOCK_BG].Load(TEXTURE_PATH "i_clock_bg.png");
-	m_textureInterface[IMAGE_CONSOLE_BACK].Load(TEXTURE_PATH "i_console_back.png");
-	m_textureInterface[IMAGE_CONSOLE_TEXTBOX_BACK].Load(TEXTURE_PATH "i_console_textbox_back.png");
-	m_textureInterface[IMAGE_PERSONAL_CURSOR].Load(TEXTURE_PATH "i_cursor.png");
+	m_textureInterface[CUSTIMAGE_BLACK_BACK].Load(TEXTURE_PATH "noir.jpg");
+	m_textureInterface[CUSTIMAGE_BOO].Load(TEXTURE_PATH "i_boo.png");
+	m_textureInterface[CUSTIMAGE_RUN].Load(TEXTURE_PATH "i_bewareofcthulhu.png");
+	m_textureInterface[CUSTIMAGE_CROSSHAIR].Load(TEXTURE_PATH "i_cross.bmp");
+	m_textureInterface[CUSTIMAGE_INTERFACE_FRAME].Load(TEXTURE_PATH "b_rock.jpg");
+	m_textureInterface[CUSTIMAGE_PORTRAIT_FRAME].Load(TEXTURE_PATH "i_portrait-frame.png");
+	m_textureInterface[CUSTIMAGE_PORTRAIT_MALE].Load(TEXTURE_PATH "i_portrait-male.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH].Load(TEXTURE_PATH "i_pgb_health.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY].Load(TEXTURE_PATH "i_pgb_energy.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_MANA].Load(TEXTURE_PATH "i_pgb_mana.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_EXP].Load(TEXTURE_PATH "i_pgb_exp.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_BACK].Load(TEXTURE_PATH "i_pgb_health_back.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY_BACK].Load(TEXTURE_PATH "i_pgb_energy_back.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_MANA_BACK].Load(TEXTURE_PATH "i_pgb_mana_back.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_EXP_BACK].Load(TEXTURE_PATH "i_pgb_exp_back.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW].Load(TEXTURE_PATH "i_pgb_health_low.png");
+	m_textureInterface[CUSTIMAGE_CLOCK_BG].Load(TEXTURE_PATH "i_clock_bg.png");
+	m_textureInterface[CUSTIMAGE_CONSOLE_BACK].Load(TEXTURE_PATH "i_console_back.png");
+	m_textureInterface[CUSTIMAGE_CONSOLE_TEXTBOX_BACK].Load(TEXTURE_PATH "i_console_textbox_back.png");
+	m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR].Load(TEXTURE_PATH "i_cursor.png");
+	m_textureInterface[CUSTIMAGE_MENU_BACKGROUND].Load(TEXTURE_PATH "i_menu_back.png");
+	m_textureInterface[CUSTIMAGE_MENU_MAIN_WINDOW].Load(TEXTURE_PATH "i_menu_main.png");
+	m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK].Load(TEXTURE_PATH "i_menu_button.png");
+	m_textureInterface[CUSTIMAGE_MENU_LOGO].Load(TEXTURE_PATH "i_menu_logo.png");
 
 #pragma endregion
 
@@ -385,16 +430,117 @@ void Engine::LoadResource()
 
 #pragma region Chargement des elements de l interface
 
+#pragma region Controles du menu
+
+#ifndef MENU_INTERFACE_INITIALIZED
+#define MENU_INTERFACE_INITIALIZED
+#endif
+
+	//Cursor
+	m_pb_cursor = new PictureBox(0, Vector2i(), Vector2i(50, 50), &m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], "pb_cursor");
+	//Appel singulier du cursor afin qu'il soit dessiné par dessus tous les éléments de l'interface
+	//m_pnl_screen->AddControl(m_pb_cursor);
+	m_pb_cursor->SetRepeatTexture(false);
+
+	//Fond d'écran
+	m_menu_screen = new Panel(0, Vector2i(), Vector2i(Width(), Height()), &m_textureInterface[CUSTIMAGE_MENU_BACKGROUND], 1, "menu_main");
+	m_menu_screen->SetRepeatTexture(false);
+
+	//Paneau principal du menu
+	m_menu_panel = new Panel(m_menu_screen, 
+		Vector2i(Width() / 2 - MENU_PANEL_SIZE_X / 2, Height() / 2 - MENU_PANEL_SIZE_Y / 2), 
+		Vector2i(MENU_PANEL_SIZE_X, MENU_PANEL_SIZE_Y), &m_textureInterface[CUSTIMAGE_MENU_MAIN_WINDOW], 2, MENU_PANEL_NAME);
+	m_menu_screen->AddControl(m_menu_panel);
+	m_menu_panel->SetRepeatTexture(false);
+
+	int controlWidth = m_menu_panel->Size().x * 0.8f;
+	int controlPosX = m_menu_panel->Size().x / 2 - controlWidth / 2;
+
+	//Logo du jeu
+	m_menu_logo = new PictureBox(m_menu_panel, 
+		Vector2i(controlPosX, m_menu_panel->Size().y - MENU_LOGO_SIZE_Y - controlPosX),
+		Vector2i(controlWidth, MENU_LOGO_SIZE_Y), &m_textureInterface[CUSTIMAGE_MENU_LOGO], "logo");
+	m_menu_panel->AddControl(m_menu_logo);
+	m_menu_logo->SetRepeatTexture(false);
+
+	//Panneau de controle utilisateur
+	m_menu_controls = new Panel(m_menu_panel,
+		Vector2i(controlPosX, controlPosX),
+		Vector2i(controlWidth, MENU_CONTROLS_SIZE_Y),
+		&m_textureInterface[CUSTIMAGE_MENU_MAIN_WINDOW], 3, "menu_controls");
+	m_menu_panel->AddControl(m_menu_controls);
+	m_menu_controls->SetRepeatTexture(false);
+
+	int buttonWidth = m_menu_controls->Size().x * 0.8f;
+	int buttonPosX = m_menu_controls->Size().x / 2 - buttonWidth / 2;
+
+	//Button demarrer fullscreen
+	m_menu_fullscreen = new Button(m_menu_controls,
+		Vector2i(buttonPosX, buttonPosX + MENU_BUTTONS_SIZE_Y * 3 - MENU_BUTTONS_INTERVAL), Vector2i(buttonWidth, MENU_BUTTONS_SIZE_Y),
+		&m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK], &m_texturefontColor[TEXTCOLOR_YELLOW],
+		"Demarrer en mode Normal", MENU_BUTTON_START_FULL_NAME);
+	m_menu_controls->AddControl(m_menu_fullscreen);
+	m_menu_fullscreen->SetRepeatTexture(false);
+	m_menu_fullscreen->OnClick.Attach(this, &Engine::OnClick);
+
+	//Button demarrer debug
+	m_menu_start = new Button(m_menu_controls,
+		Vector2i(buttonPosX, buttonPosX + MENU_BUTTONS_SIZE_Y * 2 - MENU_BUTTONS_INTERVAL * 2), Vector2i(buttonWidth, MENU_BUTTONS_SIZE_Y),
+		&m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK], &m_texturefontColor[TEXTCOLOR_YELLOW],
+		"Demarrer en mode Debug", MENU_BUTTON_DEBUG);
+	m_menu_controls->AddControl(m_menu_start);
+	m_menu_start->SetRepeatTexture(false);
+	m_menu_start->OnClick.Attach(this, &Engine::OnClick);
+
+	//Button fermer
+	m_menu_close = new Button(m_menu_controls,
+		Vector2i(buttonPosX, buttonPosX + MENU_BUTTONS_SIZE_Y * 1 - MENU_BUTTONS_INTERVAL * 3), Vector2i(buttonWidth, MENU_BUTTONS_SIZE_Y),
+		&m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK], &m_texturefontColor[TEXTCOLOR_YELLOW],
+		"Fermer le jeu", MENU_BUTTON_CLOSE);
+	m_menu_controls->AddControl(m_menu_close);
+	m_menu_close->SetRepeatTexture(false);
+	m_menu_close->OnClick.Attach(this, &Engine::OnClick);
+
+#pragma endregion
+
+#pragma endregion
+
+#pragma region Load et compile les shaders
+	std::cout << " Loading and compiling shaders ..." << std::endl;
+	if (!m_shaderModel.Load(SHADER_PATH "modelshader.vert", SHADER_PATH "modelshader.frag", true))
+	{
+		std::cout << " Failed to load model shader" << std::endl;
+		exit(1) ;
+	}
+	if (!m_shaderCube.Load(SHADER_PATH "cubeshader.vert", SHADER_PATH "cubeshader.frag", true))
+	{
+		std::cout << " Failed to load cube shader" << std::endl;
+		exit(1) ;
+	}
+	if (!m_shaderSpells.Load(SHADER_PATH "particleshader.vert", SHADER_PATH "particleshader.frag", true))
+	{
+		std::cout << " Failed to load cube shader" << std::endl;
+		exit(1) ;
+	}
+
+	m_bill.Init();
+#pragma endregion
+
+}
+
+void Engine::LoadGameResource()
+{
+
+#pragma region Controles du jeu
+
+#ifndef GAME_INTERFACE_INITIALIZED
+#define GAME_INTERFACE_INITIALIZED
+#endif
+
 	// Écran
 	m_pnl_screen = new Panel(0, Vector2i(), Vector2i(Width(), Height()), 0, 1, "main");
 
 #pragma region Enfants de Main
-
-	//Cursor
-	m_pb_cursor = new PictureBox(m_pnl_screen, Vector2i(), Vector2i(50, 50), &m_textureInterface[IMAGE_PERSONAL_CURSOR], "pb_cursor");
-	//Appel singulier du cursor afin qu'il soit dessiné par dessus tous les éléments de l'interface
-	//m_pnl_screen->AddControl(m_pb_cursor);
-	m_pb_cursor->SetRepeatTexture(false);
 
 	// Zone de jeu
 	m_pnl_playscreen = new Panel(m_pnl_screen, 
@@ -438,7 +584,7 @@ void Engine::LoadResource()
 
 	// Test bouton
 	m_testButton = new Button(m_pnl_playscreen, Vector2i(200,200), Vector2i(100,50),
-		&m_textureInterface[IMAGE_CLOCK_BG], &m_texturefontColor[TEXTCOLOR_RED], "Test", "testb");
+		&m_textureInterface[CUSTIMAGE_CLOCK_BG], &m_texturefontColor[TEXTCOLOR_RED], "Test", "testb");
 	m_pnl_playscreen->AddControl(m_testButton);
 	m_testButton->SetRepeatTexture(false);
 	// Abonnement a levent onClick
@@ -449,7 +595,7 @@ void Engine::LoadResource()
 		Vector2i(m_pnl_playscreen->Size().x - 64 - (int)LB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H + 5), 
 		LB_CONSOLE_SIZE_W, 
 		&m_texturefontColor[TEXTCOLOR_YELLOW], 
-		&m_textureInterface[IMAGE_CONSOLE_BACK], 
+		&m_textureInterface[CUSTIMAGE_CONSOLE_BACK], 
 		LB_CONSOLE_LINE_NUMBER, 
 		LB_CONSOLE_LINE_GAP, 
 		LB_CONSOLE_CHAR_W, 
@@ -466,7 +612,7 @@ void Engine::LoadResource()
 		Vector2i(m_pnl_playscreen->Size().x - 64 - (int)LB_CONSOLE_SIZE_W, 0),
 		Vector2i(TXB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H),
 		&m_texturefontColor[TEXTCOLOR_WHITE],
-		&m_textureInterface[IMAGE_CONSOLE_TEXTBOX_BACK],
+		&m_textureInterface[CUSTIMAGE_CONSOLE_TEXTBOX_BACK],
 		Label::TEXTDOCK_MIDDLELEFT,
 		LBL_GENERIC_ITALIC,
 		TXB_CONSOLE_SIZE_H * 0.75f,
@@ -481,7 +627,7 @@ void Engine::LoadResource()
 	m_pnl_portrait = new Panel(m_pnl_playscreen,
 		Vector2i(PNL_PORTRAIT_POSITION_X, PNL_PORTRAIT_POSITION_Y),
 		Vector2i(PNL_PORTRAIT_SIZE_W, PNL_PORTRAIT_SIZE_H),
-		&m_textureInterface[IMAGE_PORTRAIT_FRAME], PNL_PORTRAIT_CONTROLS_NBR, PNL_PORTRAIT_NAME);
+		&m_textureInterface[CUSTIMAGE_PORTRAIT_FRAME], PNL_PORTRAIT_CONTROLS_NBR, PNL_PORTRAIT_NAME);
 	m_pnl_playscreen->AddControl(m_pnl_portrait);
 
 #pragma region Enfants pnl portrait
@@ -490,21 +636,21 @@ void Engine::LoadResource()
 	m_pgb_health = new ProgressBar(m_pnl_portrait,
 		Vector2i(PGB_HEALTH_POSITION_X, PGB_HEALTH_POSITION_Y),
 		Vector2i(PGB_HEALTH_SIZE_W, PGB_HEALTH_SIZE_H),
-		&m_textureInterface[IMAGE_PGBTEXT_HEALTH], &m_textureInterface[IMAGE_PGBTEXT_HEALTH_BACK],
+		&m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH], &m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_HEALTH_BACKGROUND, PGB_HEALTH_BORDER_SIZE, PGB_HEALTH_NAME);
 	m_pnl_portrait->AddControl(m_pgb_health);
 	// Barre de mana
 	m_pgb_mana = new ProgressBar(m_pnl_portrait,
 		Vector2i(PGB_MANA_POSITION_X, PGB_MANA_POSITION_Y),
 		Vector2i(PGB_MANA_SIZE_W, PGB_MANA_SIZE_H),
-		&m_textureInterface[IMAGE_PGBTEXT_MANA], &m_textureInterface[IMAGE_PGBTEXT_MANA_BACK],
+		&m_textureInterface[CUSTIMAGE_PGBTEXT_MANA], &m_textureInterface[CUSTIMAGE_PGBTEXT_MANA_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_MANA_BACKGROUND, PGB_MANA_BORDER_SIZE, PGB_MANA_NAME);
 	m_pnl_portrait->AddControl(m_pgb_mana);
 	// Barre d'expérience
 	m_pgb_exp = new ProgressBar(m_pnl_portrait,
 		Vector2i(PGB_EXP_POSITION_X, PGB_EXP_POSITION_Y),
 		Vector2i(PGB_EXP_SIZE_W, PGB_EXP_SIZE_H),
-		&m_textureInterface[IMAGE_PGBTEXT_EXP], &m_textureInterface[IMAGE_PGBTEXT_EXP_BACK],
+		&m_textureInterface[CUSTIMAGE_PGBTEXT_EXP], &m_textureInterface[CUSTIMAGE_PGBTEXT_EXP_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_EXP_BACKGROUND, PGB_EXP_BORDER_SIZE, PGB_EXP_NAME);
 	m_pnl_portrait->AddControl(m_pgb_exp);
 	m_lbl_health = new Label(m_pnl_portrait, Vector2i(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), &m_texturefontColor[TEXTCOLOR_RED], "", 
@@ -523,7 +669,7 @@ void Engine::LoadResource()
 	m_pnl_playerImage = new Panel(m_pnl_portrait, 
 		Vector2i(PB_PORTRAIT_POSITION_X, PB_PORTRAIT_POSITION_Y),
 		Vector2i(PB_PORTRAIT_SIZE_W, PB_PORTRAIT_SIZE_H),
-		&m_textureInterface[IMAGE_PORTRAIT_MALE], 1, PB_PORTRAIT_NAME);
+		&m_textureInterface[CUSTIMAGE_PORTRAIT_MALE], 1, PB_PORTRAIT_NAME);
 	m_pnl_portrait->AddControl(m_pnl_playerImage);
 
 #pragma region Enfants de m_pnl_playerImage
@@ -540,13 +686,16 @@ void Engine::LoadResource()
 	m_pgb_energy = new ProgressBar(m_pnl_playscreen,
 		Vector2i(PGB_ENERGY_POSITION_X, PGB_ENERGY_POSITION_Y),
 		Vector2i(PGB_ENERGY_SIZE_W, PGB_ENERGY_SIZE_H),
-		&m_textureInterface[IMAGE_PGBTEXT_ENERGY], &m_textureInterface[IMAGE_PGBTEXT_ENERGY_BACK],
+		&m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY], &m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY_BACK],
 		ProgressBar::BARMODE_VERTICAL_DTU, PGB_ENERGY_BACKGROUND, PGB_ENERGY_BORDER_SIZE, PGB_ENERGY_NAME);
 	m_pnl_playscreen->AddControl(m_pgb_energy);
 	//Label d'énergie
 	m_lbl_energy = new Label(m_pnl_playscreen, Vector2i(LBL_ENERGY_POSITION_X, LBL_ENERGY_POSITION_Y), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
 		Label::TEXTDOCK_NONE, LBL_ENERGY_ITALIC, LBL_ENERGY_CHAR_H, LBL_ENERGY_CHAR_W, LBL_ENERGY_CHAR_I, Vector2f(), LBL_ENERGY_NAME);
 	m_pnl_playscreen->AddControl(m_lbl_energy);
+
+#pragma region Controles de debug
+
 	//Label Position
 	m_lbl_plrPos = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "pos");
@@ -559,13 +708,20 @@ void Engine::LoadResource()
 	m_lbl_plrAcc = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*3), &m_texturefontColor[TEXTCOLOR_RED], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "acc");
 	m_pnl_playscreen->AddControl(m_lbl_plrAcc);
+	//Label mouse position
+	m_lbl_mousePos = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*4), &m_texturefontColor[TEXTCOLOR_WHITE], "", 
+		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "Mpos");
+	m_pnl_playscreen->AddControl(m_lbl_mousePos);
 	//Label FPS
-	m_lbl_FPS = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*4), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
+	m_lbl_FPS = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*5), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "fps");
 	m_pnl_playscreen->AddControl(m_lbl_FPS);
+
+#pragma endregion
+
 	//Heure
 	m_pnl_time = new Panel(m_pnl_playscreen, Vector2i(m_pnl_playscreen->Size().x - 128, m_pnl_playscreen->Size().y - 64), 
-		Vector2i(128, 64), &m_textureInterface[IMAGE_CLOCK_BG], 1, "clock");
+		Vector2i(128, 64), &m_textureInterface[CUSTIMAGE_CLOCK_BG], 1, "clock");
 	m_pnl_playscreen->AddControl(m_pnl_time);
 
 #pragma region Enfants de m_pnl_time
@@ -582,30 +738,6 @@ void Engine::LoadResource()
 
 #pragma endregion
 
-	CW("Chargement des controles termine");
-
-#pragma region Load et compile les shaders
-	std::cout << " Loading and compiling shaders ..." << std::endl;
-	if (!m_shaderModel.Load(SHADER_PATH "modelshader.vert", SHADER_PATH "modelshader.frag", true))
-	{
-		std::cout << " Failed to load model shader" << std::endl;
-		exit(1) ;
-	}
-	if (!m_shaderCube.Load(SHADER_PATH "cubeshader.vert", SHADER_PATH "cubeshader.frag", true))
-	{
-		std::cout << " Failed to load cube shader" << std::endl;
-		exit(1) ;
-	}
-	if (!m_shaderSpells.Load(SHADER_PATH "particleshader.vert", SHADER_PATH "particleshader.frag", true))
-	{
-		std::cout << " Failed to load cube shader" << std::endl;
-		exit(1) ;
-	}
-	CW("Chargement des shaders termine");
-
-	m_bill.Init();
-#pragma endregion
-
 }
 
 void Engine::LoadBlocTexture(BLOCK_TYPE type, std::string path)
@@ -615,6 +747,55 @@ void Engine::LoadBlocTexture(BLOCK_TYPE type, std::string path)
 
 void Engine::UnloadResource()
 {
+}
+
+void Engine::RenderMenu(float elapsedTime)
+{
+
+#pragma region OpenGl
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Transformations initiales
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glDisable(GL_LIGHTING);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glDisable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0, Width(), 0, Height(), -1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+
+#pragma endregion
+
+	m_menu_screen->Render();
+	m_pb_cursor->Render();
+
+	if (!IsFirstRun())
+	{
+		if (m_menu_fullscreen->GetText() != "Continuer")
+			m_menu_fullscreen->SetTextTo("Continuer");
+		if (m_menu_start->GetText() != "Activer le mode debug" && !m_debugMode)
+			m_menu_start->SetTextTo("Activer le mode debug");
+		else if (m_menu_start->GetText() != "Desactiver le mode debug" && m_debugMode)
+			m_menu_start->SetTextTo("Desactiver le mode debug");
+	}
+
+#pragma region OpenGl
+
+	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+
+#pragma endregion
+
 }
 
 void Engine::Update(float elapsedTime)
@@ -666,10 +847,10 @@ void Engine::Update(float elapsedTime)
 	else if (!m_lb_infos->Visible() && Info::Get().Options().GetOptInfos())
 		m_lb_infos->SetVisible(true);
 	//Change la texture de la barre de vie en fonction du %. Ne réassigne la texture que si on en a besoin
-	if (m_character.HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_pgb_health->GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH])
-		m_pgb_health->SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW]);
-	else if (m_character.HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_pgb_health->GetTexture() == &m_textureInterface[IMAGE_PGBTEXT_HEALTH_LOW])
-		m_pgb_health->SetTexture(&m_textureInterface[IMAGE_PGBTEXT_HEALTH]);
+	if (m_character.HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_pgb_health->GetTexture() == &m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH])
+		m_pgb_health->SetTexture(&m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW]);
+	else if (m_character.HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_pgb_health->GetTexture() == &m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW])
+		m_pgb_health->SetTexture(&m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH]);
 	//Affiche ou cache la barre d'énergie selon la situation
 	if (m_character.Energy() == m_character.EnergyMax())
 	{
@@ -680,6 +861,23 @@ void Engine::Update(float elapsedTime)
 	{
 		m_pgb_energy->SetVisible(true);
 		m_lbl_energy->SetVisible(true);
+	}
+	// Controles de debug
+	if (m_debugMode && !m_lbl_FPS->Visible())
+	{
+		m_lbl_plrPos->SetVisible(true);
+		m_lbl_plrSpd->SetVisible(true);
+		m_lbl_plrAcc->SetVisible(true);
+		m_lbl_mousePos->SetVisible(true);
+		m_lbl_FPS->SetVisible(true);
+	}
+	else if (!m_debugMode && m_lbl_FPS->Visible())
+	{
+		m_lbl_plrPos->SetVisible(false);
+		m_lbl_plrSpd->SetVisible(false);
+		m_lbl_plrAcc->SetVisible(false);
+		m_lbl_mousePos->SetVisible(false);
+		m_lbl_FPS->SetVisible(false);
 	}
 
 #pragma endregion
@@ -740,7 +938,7 @@ void Engine::Update(float elapsedTime)
 
 #pragma region FPS
 
-	m_fpstmr += gameTime;
+	m_fpstmr += elapsedTime;
 	if (m_fpstmr > 1.5f)
 	{
 		float fps = 1 / elapsedTime;
@@ -912,7 +1110,6 @@ void Engine::Render2D(float elapsedTime)
 
 #pragma region OpenGl
 
-	//Setter le blend function, tout ce qui sera noir sera transparent
 	glDisable(GL_LIGHTING);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glDisable(GL_DEPTH_TEST);
@@ -945,7 +1142,7 @@ void Engine::Render2D(float elapsedTime)
 		RenderSquare(
 			Vector2i(Width() / 2 - CROSSHAIR_SIZE / 2, Height() / 2 - CROSSHAIR_SIZE / 2),
 			Vector2i(CROSSHAIR_SIZE, CROSSHAIR_SIZE),
-			m_textureInterface[IMAGE_CROSSHAIR], false);
+			m_textureInterface[CUSTIMAGE_CROSSHAIR], false);
 	}
 
 #pragma endregion
@@ -962,7 +1159,7 @@ void Engine::Render2D(float elapsedTime)
 	RenderSquare(
 		Vector2i(0, 0), 
 		Vector2i(Width(), INTERFACE_BOTTOM_HEIGHT), 
-		m_textureInterface[IMAGE_INTERFACE_FRAME]);
+		m_textureInterface[CUSTIMAGE_INTERFACE_FRAME]);
 	//============================================
 	RenderSpells();
 	//============================================
@@ -985,54 +1182,56 @@ void Engine::Render2D(float elapsedTime)
 
 }
 
-
 void Engine::TextenteredEvent(unsigned int val)
 {
-	static std::ostringstream ss;
-
-	//Appuie sur Enter pour acquérir le focus
-	if (val == 13 && !m_txb_console->HasFocus())
+	if (!IsMenuOpen())
 	{
-		m_txb_console->SetFocus(true);
-		m_txb_console->SetVisible(true);
-		return;
-	}
+		static std::ostringstream ss;
 
-	//Capture du texte en mode Textbox
-	if (m_txb_console->HasFocus())
-	{
-		//Vérification qu'il s'agit d'un caractère valide
-		if (val >= 32 && val <= 126)
+		//Appuie sur Enter pour acquérir le focus
+		if (val == 13 && !m_txb_console->HasFocus())
 		{
-			ss << m_txb_console->GetMsg() << static_cast<char>(val);
-			m_txb_console->SetMessage(ss.str());
-			ss.str("");
+			m_txb_console->SetFocus(true);
+			m_txb_console->SetVisible(true);
 			return;
 		}
-		//Si c'est un backspace
-		if (val == 8)
+
+		//Capture du texte en mode Textbox
+		if (m_txb_console->HasFocus())
 		{
-			std::string mes = m_txb_console->GetMsg();
-			if (mes.length() > 0)
+			//Vérification qu'il s'agit d'un caractère valide
+			if (val >= 32 && val <= 126)
 			{
-				for (int i = 0; i < mes.length()-1; i++)
-				{
-					ss << mes[i];
-				}
+				ss << m_txb_console->GetMsg() << static_cast<char>(val);
 				m_txb_console->SetMessage(ss.str());
 				ss.str("");
+				return;
 			}
-		}
-		//Si c'est un return
-		if (val == 13)
-		{
-			if (m_txb_console->GetMsg() != "")
-				CW(m_txb_console->GetMsg());
-			m_txb_console->SetVisible(false);
-			m_txb_console->SetFocus(false);
-			if (m_txb_console->GetMsg() == "/dance")
-				Info::Get().Sound().PlaySnd(Son::SON_DEATH, Son::CHANNEL_INTERFACE);
-			m_txb_console->SetMessage("");
+			//Si c'est un backspace
+			if (val == 8)
+			{
+				std::string mes = m_txb_console->GetMsg();
+				if (mes.length() > 0)
+				{
+					for (int i = 0; i < mes.length()-1; i++)
+					{
+						ss << mes[i];
+					}
+					m_txb_console->SetMessage(ss.str());
+					ss.str("");
+				}
+			}
+			//Si c'est un return
+			if (val == 13)
+			{
+				if (m_txb_console->GetMsg() != "")
+					CW(m_txb_console->GetMsg());
+				m_txb_console->SetVisible(false);
+				m_txb_console->SetFocus(false);
+				if (m_txb_console->GetMsg() == "/dance")
+					Info::Get().Sound().PlaySnd(Son::SON_DEATH, Son::CHANNEL_INTERFACE);
+				m_txb_console->SetMessage("");
+			}
 		}
 	}
 }
@@ -1042,184 +1241,220 @@ void Engine::KeyPressEvent(unsigned char key)
 	Son& sound = Info::Get().Sound();
 	static std::ostringstream ss;
 	Controls& c = Info::Get().Ctrls();
-	//Affiche les numéros de touche dans la console de jeu
-	//ss << (int)key;
-	//CW(ss.str());
-	//ss.str("");
 
-	//Si on est pas en train d'écrire, envoie les données de touches
-	if (!m_txb_console->HasFocus())
+	if (!IsMenuOpen())
 	{
-		c.Set(key, true);
-		//Sorts qui subissent le global cooldown
-		if(m_character.GlobalCooldown() == 0)
-		{
-			if (c.n1())
-			{
-				Spell* newSpell = new Spell;
-				newSpell->SetPosition(m_player->Position());
-				newSpell->Init(4.f, m_player->RotationQ());
-				newSpell->Shoot();
-				m_spells.push_back(*newSpell);
-				sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
-				m_character.ResetGlobalCooldown();
-				ss << "Lancement de sort: Test  de particule!";
-			}
+#pragma region Touches dans le jeu
+		//Affiche les numéros de touche dans la console de jeu
+		//ss << (int)key;
+		//CW(ss.str());
+		//ss.str("");
 
-			if (c.n2())
+		//Si on est pas en train d'écrire, envoie les données de touches
+		if (!m_txb_console->HasFocus())
+		{
+			c.Set(key, true);
+			//Sorts qui subissent le global cooldown
+			if(m_character.GlobalCooldown() == 0)
 			{
-				for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
-					m_monsters[i]->SetPosition(Vector3f(m_monsters[i]->Position().x, 10, m_monsters[i]->Position().z));
-				sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
-				m_character.ResetGlobalCooldown();
-				ss << "Lancement de sort: teleportation de NPC!";
-			}
-			if (c.n3())
-			{
-				m_testParticules->SetPosition(m_player->Position());
-				m_testParticules->Shoot();
-				sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
-				m_character.ResetGlobalCooldown();
-				ss << "Lancement de sort: Glace";
-			}
-			if (c.n4())
-			{
-				sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
-				m_character.ResetGlobalCooldown();
-				ss << "Lancement de sort: Shock";
-			}
-			if (c.n5())
-			{
-				sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
-				m_character.ResetGlobalCooldown();
-				ss << "Lancement de sort: Poison";
-			}
-			if (c.n7())
-			{
-				if (m_character.Mana() - 15 >= 0)
+				if (c.n1())
 				{
-					sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
+					Spell* newSpell = new Spell;
+					newSpell->SetPosition(m_player->Position());
+					newSpell->Init(4.f, m_player->RotationQ());
+					newSpell->Shoot();
+					m_spells.push_back(*newSpell);
+					sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
 					m_character.ResetGlobalCooldown();
-					m_character.SetHealth(15);
-					m_character.SetMana(-15);
-					ss << "Lancement de sort: Soin";
+					ss << "Lancement de sort: Test  de particule!";
+				}
+
+				if (c.n2())
+				{
+					for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
+						m_monsters[i]->SetPosition(Vector3f(m_monsters[i]->Position().x, 10, m_monsters[i]->Position().z));
+					sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
+					m_character.ResetGlobalCooldown();
+					ss << "Lancement de sort: teleportation de NPC!";
+				}
+				if (c.n3())
+				{
+					m_testParticules->SetPosition(m_player->Position());
+					m_testParticules->Shoot();
+					sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
+					m_character.ResetGlobalCooldown();
+					ss << "Lancement de sort: Glace";
+				}
+				if (c.n4())
+				{
+					sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
+					m_character.ResetGlobalCooldown();
+					ss << "Lancement de sort: Shock";
+				}
+				if (c.n5())
+				{
+					sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
+					m_character.ResetGlobalCooldown();
+					ss << "Lancement de sort: Poison";
+				}
+				if (c.n7())
+				{
+					if (m_character.Mana() - 15 >= 0)
+					{
+						sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
+						m_character.ResetGlobalCooldown();
+						m_character.SetHealth(15);
+						m_character.SetMana(-15);
+						ss << "Lancement de sort: Soin";
+					}
+				}
+				if (c.n8())
+				{
+					if (m_character.Mana() - 10 >= 0)
+					{
+						sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
+						m_character.ResetGlobalCooldown();
+						m_character.SetEnergy(10);
+						m_character.SetMana(-10);
+						ss << "Lancement de sort: Rafraichissement";
+					}
+				}
+				if (c.n9())
+				{
+					sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
+					m_character.ResetGlobalCooldown();
+					ss << "Lancement de sort: Defense";
+				}
+				if (c.n0())
+				{
+					sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
+					m_character.ResetGlobalCooldown();
+					ss << "Lancement de sort: Bouclier magique";
 				}
 			}
-			if (c.n8())
+			//Sorts hors global cooldown
+			if (c.n6())
 			{
-				if (m_character.Mana() - 10 >= 0)
+				if (m_character.Mana() - 5 >= 0)
 				{
-					sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
-					m_character.ResetGlobalCooldown();
-					m_character.SetEnergy(10);
-					m_character.SetMana(-10);
-					ss << "Lancement de sort: Rafraichissement";
+					sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
+					m_character.SetMana(-5);
+					m_player->Teleport();
+					ss << "Lancement de sort: Teleportation";
 				}
 			}
-			if (c.n9())
-			{
-				sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
-				m_character.ResetGlobalCooldown();
-				ss << "Lancement de sort: Defense";
-			}
-			if (c.n0())
-			{
-				sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
-				m_character.ResetGlobalCooldown();
-				ss << "Lancement de sort: Bouclier magique";
-			}
-		}
-		//Sorts hors global cooldown
-		if (c.n6())
-		{
-			if (m_character.Mana() - 5 >= 0)
-			{
-				sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
-				m_character.SetMana(-5);
-				m_player->Teleport();
-				ss << "Lancement de sort: Teleportation";
-			}
-		}
-	}
-	if (ss.str() != "")
-	{
-		CW(ss.str());
-		ss.str("");
-	}
-}
-
-void Engine::KeyReleaseEvent(unsigned char key)
-{
-	static std::ostringstream ss;
-	Controls& c = Info::Get().Ctrls();
-	if (!m_txb_console->HasFocus())
-	{
-		if (c.Esc())
-			Stop();
-		if (c.f9())
-		{
-			Info::Get().Options().SetOptInfos(!Info::Get().Options().GetOptInfos());
-			ss << "Affichage des infos a: " << (Info::Get().Options().GetOptInfos() ? "on" : "off");
-		}
-		if (c.f10())
-		{
-			SetFullscreen(!IsFullscreen());
-			ss << "Mode plein ecran mis a: " << (IsFullscreen() ? "on" : "off");
-		}
-		if (c.G())
-		{
-			m_ghostMode = !m_ghostMode;
-			ss << "Mode fantome mis a: " << (m_ghostMode ? "on" : "off");
-		}
-		if (c.Y())
-		{
-			m_wireframe = !m_wireframe;
-			if(m_wireframe)
-			{
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				glDisable(GL_CULL_FACE);
-			}
-			else
-			{
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				glEnable(GL_CULL_FACE);
-			}
-			ss << "Affichage Wireframe mis a: " << (m_wireframe ? "on" : "off");
-		}
-		if (c.V())
-		{
-			if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON) 
-			{
-				m_camera->SetMode(Camera::CAM_THIRD_PERSON);
-				ss << "Affichage de la camera a la troisieme personne";
-			}
-			else 
-			{
-				m_pb_cursor->SetVisible(false);
-				m_camera->SetMode(Camera::CAM_FIRST_PERSON);
-				ss << "Affichage de la camera a la premiere personne";
-			}
-		}
-		if (c.M())
-			Info::Get().Sound().PlayNextTrack();
-		if (c.O())
-		{
-			Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
-			ss << "Musique mis a: " << (Info::Get().Options().GetOptMusic() ? "on" : "off");
-
-		}
-		if (c.P())
-		{
-			m_character.SetExp(75);
-			ss << "Ajout de 75 points d'exp";
 		}
 		if (ss.str() != "")
 		{
 			CW(ss.str());
 			ss.str("");
 		}
+#pragma endregion
 	}
-	c.Set(key, false);
+	else
+	{
+#pragma region Touches dans le menu
+		c.Set(key, true);
+		//Actions à prendre lors de l'appui de touches dans le menu
+#pragma endregion
+	}
+
+}
+
+void Engine::KeyReleaseEvent(unsigned char key)
+{
+	static std::ostringstream ss;
+	Controls& c = Info::Get().Ctrls();
+
+	if (!IsMenuOpen())
+	{
+#pragma region Touches dans le jeu
+
+		if (!m_txb_console->HasFocus())
+		{
+			if (c.Esc())
+			{
+				SetMenuStatus(!IsMenuOpen());
+			}
+			if (c.f9())
+			{
+				Info::Get().Options().SetOptInfos(!Info::Get().Options().GetOptInfos());
+				ss << "Affichage des infos a: " << (Info::Get().Options().GetOptInfos() ? "on" : "off");
+			}
+			if (c.f10())
+			{
+				SetFullscreen(!IsFullscreen());
+				ss << "Mode plein ecran mis a: " << (IsFullscreen() ? "on" : "off");
+			}
+			if (c.G())
+			{
+				m_ghostMode = !m_ghostMode;
+				ss << "Mode fantome mis a: " << (m_ghostMode ? "on" : "off");
+			}
+			if (c.Y())
+			{
+				m_wireframe = !m_wireframe;
+				if(m_wireframe)
+				{
+					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+					glDisable(GL_CULL_FACE);
+				}
+				else
+				{
+					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+					glEnable(GL_CULL_FACE);
+				}
+				ss << "Affichage Wireframe mis a: " << (m_wireframe ? "on" : "off");
+			}
+			if (c.V())
+			{
+				if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON) 
+				{
+					m_camera->SetMode(Camera::CAM_THIRD_PERSON);
+					ss << "Affichage de la camera a la troisieme personne";
+				}
+				else 
+				{
+					m_pb_cursor->SetVisible(false);
+					m_camera->SetMode(Camera::CAM_FIRST_PERSON);
+					ss << "Affichage de la camera a la premiere personne";
+				}
+			}
+			if (c.M())
+				Info::Get().Sound().PlayNextTrack();
+			if (c.O())
+			{
+				Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
+				ss << "Musique mis a: " << (Info::Get().Options().GetOptMusic() ? "on" : "off");
+
+			}
+			if (c.P())
+			{
+				m_character.SetExp(75);
+				ss << "Ajout de 75 points d'exp";
+			}
+			if (ss.str() != "")
+			{
+				CW(ss.str());
+				ss.str("");
+			}
+		}
+		c.Set(key, false);
+#pragma endregion
+	}
+	else
+	{
+#pragma region Touches dans le menu
+		//Actions à prendre lors du relachement des touches dans le menu
+		if (c.Esc())
+		{
+			if (IsFirstRun())
+				Stop();
+			else SetMenuStatus(!IsMenuOpen());
+		}
+		c.Set(key, false);
+#pragma endregion
+	}
 }
 
 void Engine::MouseMoveEvent(int x, int y)
@@ -1230,33 +1465,37 @@ void Engine::MouseMoveEvent(int x, int y)
 	// MouseMoveEvent, qui rapelle CenterMouse qui rapelle un autre 
 	// MouseMoveEvent, etc
 
-	// Camera 3rd person
-	if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON && m_rightClick || m_leftClick)
+	if (!IsMenuOpen())
 	{
-		if (!MousePosChanged(x, y))
-			return;
-		MakeRelativeToMouse(x, y);
-		m_camera->TurnLeftRight((float)x);
-		m_camera->TurnTopBottom((float)y);
 
-		if (m_rightClick) 
+		// Camera 3rd person
+		if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON && m_rightClick || m_leftClick)
 		{
-			m_player->SetRotation(m_camera->GetRotation());
+			if (x == (Width() / 2) && y == (Height() / 2))
+				return;
+			MakeRelativeToMouse(x, y);
+			m_camera->TurnLeftRight((float)x);
+			m_camera->TurnTopBottom((float)y);
+
+			if (m_rightClick) 
+			{
+				m_player->SetRotation(m_camera->GetRotation());
+			}
+			CenterMouse();
 		}
-		ResetMouse();
-	}
-	// Camera first person
-	else if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON)
-	{
-		if(x == (Width() / 2) && y == (Height() / 2))
-			return;
-		MakeRelativeToCenter(x, y);
-		m_player->TurnLeftRight((float)x);
-		m_player->TurnTopBottom((float)y);
+		// Camera first person
+		else if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON)
+		{
+			if(x == (Width() / 2) && y == (Height() / 2))
+				return;
+			MakeRelativeToCenter(x, y);
+			m_player->TurnLeftRight((float)x);
+			m_player->TurnTopBottom((float)y);
 
-		m_camera->SetRotation(m_player->Rotation());
+			m_camera->SetRotation(m_player->Rotation());
 
-		CenterMouse();
+			CenterMouse();
+		}
 	}
 	m_pb_cursor->SetPosition(Vector2i(MousePosition().x, MousePosition().y - m_pb_cursor->Size().y));
 
@@ -1264,80 +1503,133 @@ void Engine::MouseMoveEvent(int x, int y)
 
 void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 {
-	Vector2i& pos = m_lb_console->AbsolutePosition();
-	Vector2i& size = m_lb_console->Size();
-	Vector2i& play = m_pnl_screen->Size();
-	switch (button)
+	if (!IsMenuOpen())
 	{
-	case MOUSE_BUTTON_RIGHT:
-		if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
+		Vector2i& pos = m_lb_console->AbsolutePosition();
+		Vector2i& size = m_lb_console->Size();
+		Vector2i& play = m_pnl_screen->Size();
+		switch (button)
 		{
-			m_rightClick = true;
-			m_player->SetRotation(m_camera->GetRotation());
-			SetMousePos(x, y);
-		}
-		break;
-	case MOUSE_BUTTON_LEFT:
-		m_testButton->isClicked(x, m_pnl_screen->Size().y - y);
-		m_lb_console->MouseClick(x, m_pnl_playscreen->Size().y - y);
-		if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
-		{
-			m_leftClick = true;
-			SetMousePos(x, y);
-		}
-		if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON)
-			Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE);
-		break;
-	case MOUSE_BUTTON_WHEEL_UP:
-		if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
-			m_lb_console->Scroll(1);
-		} 
-		else if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
-		{
-			// Zoom in camera
-			if (m_camRadius > 0)
+		case MOUSE_BUTTON_RIGHT:
+			if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 			{
-				m_camRadius -= 1;
+				m_rightClick = true;
+				m_player->SetRotation(m_camera->GetRotation());
+				SetMousePos(x, y);
 			}
-			m_camera->SetCamRadius(m_camRadius);
-		}
-		break;
-	case MOUSE_BUTTON_WHEEL_DOWN:
-		if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
-			m_lb_console->Scroll(-1);
-		} 
-		else if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
-		{
-			// Zoom out camera
-			if (m_camRadius < 20)
+			break;
+		case MOUSE_BUTTON_LEFT:
+			m_testButton->isClicked(x, m_pnl_screen->Size().y - y);
+			m_lb_console->MouseClick(x, m_pnl_playscreen->Size().y - y);
+			if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 			{
-				m_camRadius += 1;
+				m_leftClick = true;
+				SetMousePos(x, y);
 			}
-			m_camera->SetCamRadius(m_camRadius);
+			if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON)
+				Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE);
+			break;
+		case MOUSE_BUTTON_WHEEL_UP:
+			if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
+				m_lb_console->Scroll(1);
+			} 
+			else if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
+			{
+				// Zoom in camera
+				if (m_camRadius > 0)
+				{
+					m_camRadius -= 1;
+				}
+				m_camera->SetCamRadius(m_camRadius);
+			}
+			break;
+		case MOUSE_BUTTON_WHEEL_DOWN:
+			if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
+				m_lb_console->Scroll(-1);
+			} 
+			else if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
+			{
+				// Zoom out camera
+				if (m_camRadius < 20)
+				{
+					m_camRadius += 1;
+				}
+				m_camera->SetCamRadius(m_camRadius);
+			}
+			break;
 		}
-		break;
+	}
+	else
+	{
+		switch (button)
+		{
+		case MOUSE_BUTTON_LEFT:
+			m_menu_close->isClicked(x, m_menu_screen->Size().y - y);
+			m_menu_start->isClicked(x, m_menu_screen->Size().y - y);
+			m_menu_fullscreen->isClicked(x, m_menu_screen->Size().y - y);
+			break;
+		}
 	}
 }
 
 void Engine::OnClick(Control* sender)
 {
-	CW("Test Bouton");
-	Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE, true);
+	std::string n = sender->Name();
+	//CW("Test Bouton");
+	//Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE, true);
+	if (n == MENU_BUTTON_START_FULL_NAME)
+	{
+		if (!IsFirstRun())
+			SetMenuStatus(false);
+		else
+		{
+			ActivateFirstRun();
+			SetMenuStatus(false);
+		}
+
+	}
+	if (n == MENU_BUTTON_DEBUG)
+	{
+		if (!IsFirstRun())
+			m_debugMode = !m_debugMode;
+		else
+		{
+			m_debugMode = true;
+			ActivateFirstRun();
+			SetMenuStatus(false);
+		}
+	}
+	if (n == MENU_BUTTON_CLOSE)
+		Stop();
 }
 
 void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 {
-	switch (button)
+	if (!IsMenuOpen())
 	{
-	case MOUSE_BUTTON_RIGHT:
-		m_rightClick = false;
-		break;
-	case MOUSE_BUTTON_LEFT:
-		m_leftClick = false;
-		m_testButton->Release();
-		m_lb_console->MouseRelease();
-		break;
+		switch (button)
+		{
+		case MOUSE_BUTTON_RIGHT:
+			m_rightClick = false;
+			break;
+		case MOUSE_BUTTON_LEFT:
+			m_leftClick = false;
+			m_testButton->Release();
+			m_lb_console->MouseRelease();
+			break;
 
+		}
+	}
+	else
+	{
+		switch (button)
+		{
+		case MOUSE_BUTTON_LEFT:
+			m_menu_close->Release();
+			m_menu_start->Release();
+			m_menu_fullscreen->Release();
+			break;
+		}
 	}
 }
 
@@ -1426,6 +1718,10 @@ void Engine::TextUpdate()
 	//Accélération
 	ss << "Acceleration : " << m_player->Acceleration();
 	m_lbl_plrAcc->SetMessage(ss.str());
+	ss.str("");
+	//Psotion souris
+	ss << "Pos. Souris :  " << "( " << MousePosition().x << ", " << MousePosition().y << " )";
+	m_lbl_mousePos->SetMessage(ss.str());
 	ss.str("");
 	//FPS
 	ss << "Fps :          " << std::setprecision(2) << m_fps;

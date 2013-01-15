@@ -2,7 +2,8 @@
 #include "define.h"
 #include "info.h"
 
-OpenglContext::OpenglContext() : m_maxFps(999999), m_fullscreen(false), m_title(""), m_lastFrameTime(0), m_cursor(0)
+OpenglContext::OpenglContext() : m_maxFps(60), m_fullscreen(false), m_title(""), m_lastFrameTime(0), 
+	m_cursor(0), m_menu(true), m_firstOpen(true), m_sentClose(false)
 {
 }
 
@@ -16,58 +17,140 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 	m_fullscreen = fullscreen;
 	InitWindow(width, height);
 
-	Init();
-	LoadResource();
-
 	sf::Clock clock;	
 
 	while (m_app.isOpen())
 	{
-		clock.restart();
-
-		sf::Event Event;
-		while (m_app.pollEvent(Event))
+		while (!m_menu && !m_sentClose)
 		{
-			switch(Event.type)
-			{
-			case sf::Event::Closed:
-				m_app.close();
-				break;
-			case sf::Event::Resized:
-				glViewport(0, 0, Event.size.width, Event.size.height);
-				break;
-			case sf::Event::KeyPressed:
-				KeyPressEvent(Event.key.code);
-				break;
-			case sf::Event::KeyReleased:
-				KeyReleaseEvent(Event.key.code);
-				break;
-			case sf::Event::MouseMoved:
-				MouseMoveEvent(Event.mouseMove.x, Event.mouseMove.y);
-				break;
-			case sf::Event::TextEntered:
-				TextenteredEvent(Event.text.unicode);
-				break;
-			case sf::Event::MouseButtonPressed:
-				MousePressEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
-				break;
-			case sf::Event::MouseButtonReleased:
-				MouseReleaseEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
-				break;
-			case sf::Event::MouseWheelMoved:
-				if(Event.mouseWheel.delta > 0)
-					MousePressEvent(MOUSE_BUTTON_WHEEL_UP, Event.mouseButton.x, Event.mouseButton.y);
-				else
-					MousePressEvent(MOUSE_BUTTON_WHEEL_DOWN, Event.mouseButton.x, Event.mouseButton.y);
-				break;
-			}
-		}
-		m_app.setActive();
-		Update(m_lastFrameTime);
-		Render(m_lastFrameTime);
-		m_app.display();
+			clock.restart();
 
-		m_lastFrameTime = clock.getElapsedTime().asSeconds();
+#pragma region Premier Tour
+
+			static bool preGame = true;
+			if (preGame)
+			{
+				// Instrcutions du premier tour
+				GameInit();
+				LoadGameResource();
+				preGame = false;
+			}
+
+#pragma endregion
+
+#pragma region Poll Event
+
+			sf::Event Event;
+			while (m_app.pollEvent(Event))
+			{
+				switch(Event.type)
+				{
+				case sf::Event::Closed:
+					m_sentClose = true;
+					m_app.close();
+					break;
+				case sf::Event::Resized:
+					glViewport(0, 0, Event.size.width, Event.size.height);
+					break;
+				case sf::Event::KeyPressed:
+					KeyPressEvent(Event.key.code);
+					break;
+				case sf::Event::KeyReleased:
+					KeyReleaseEvent(Event.key.code);
+					break;
+				case sf::Event::MouseMoved:
+					MouseMoveEvent(Event.mouseMove.x, Event.mouseMove.y);
+					break;
+				case sf::Event::TextEntered:
+					TextenteredEvent(Event.text.unicode);
+					break;
+				case sf::Event::MouseButtonPressed:
+					MousePressEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
+					break;
+				case sf::Event::MouseButtonReleased:
+					MouseReleaseEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
+					break;
+				case sf::Event::MouseWheelMoved:
+					if(Event.mouseWheel.delta > 0)
+						MousePressEvent(MOUSE_BUTTON_WHEEL_UP, Event.mouseButton.x, Event.mouseButton.y);
+					else
+						MousePressEvent(MOUSE_BUTTON_WHEEL_DOWN, Event.mouseButton.x, Event.mouseButton.y);
+					break;
+				}
+			}
+#pragma endregion
+			m_app.setActive();
+			Update(m_lastFrameTime);
+			Render(m_lastFrameTime);
+			m_app.display();
+			m_lastFrameTime = clock.getElapsedTime().asSeconds();
+		}
+
+		while(m_menu && !m_sentClose)
+		{
+			clock.restart();
+
+#pragma region Premier Tour
+
+			static bool preMenu = true;
+			if (preMenu)
+			{
+				// Instrcutions du premier tour
+				MenuInit();
+				LoadMenuResource();
+				preMenu = false;
+			}
+
+#pragma endregion
+
+#pragma region Poll Event
+
+			sf::Event Event;
+			while (m_app.pollEvent(Event))
+			{
+				switch(Event.type)
+				{
+				case sf::Event::Closed:
+					m_sentClose = true;
+					m_app.close();
+					break;
+				case sf::Event::Resized:
+					glViewport(0, 0, Event.size.width, Event.size.height);
+					break;
+				case sf::Event::KeyPressed:
+					KeyPressEvent(Event.key.code);
+					break;
+				case sf::Event::KeyReleased:
+					KeyReleaseEvent(Event.key.code);
+					break;
+				case sf::Event::MouseMoved:
+					MouseMoveEvent(Event.mouseMove.x, Event.mouseMove.y);
+					break;
+				case sf::Event::TextEntered:
+					TextenteredEvent(Event.text.unicode);
+					break;
+				case sf::Event::MouseButtonPressed:
+					MousePressEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
+					break;
+				case sf::Event::MouseButtonReleased:
+					MouseReleaseEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
+					break;
+				case sf::Event::MouseWheelMoved:
+					if(Event.mouseWheel.delta > 0)
+						MousePressEvent(MOUSE_BUTTON_WHEEL_UP, Event.mouseButton.x, Event.mouseButton.y);
+					else
+						MousePressEvent(MOUSE_BUTTON_WHEEL_DOWN, Event.mouseButton.x, Event.mouseButton.y);
+					break;
+				}
+			}
+
+#pragma endregion
+
+			m_app.setActive();
+			RenderMenu(m_lastFrameTime);
+			m_app.display();
+			m_lastFrameTime = clock.getElapsedTime().asSeconds();
+		}
 	}
 
 	UnloadResource();
@@ -79,6 +162,7 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 bool OpenglContext::Stop()
 {
 	m_app.close();
+	m_sentClose = true;
 	return true;
 }
 
@@ -130,9 +214,9 @@ void OpenglContext::SetFullscreen(bool fullscreen)
 
 	m_fullscreen = !m_fullscreen;
 
-	DeInit();
+	//DeInit();
 	InitWindow(Width(), Height());
-	Init();
+	//Init();
 }
 
 bool OpenglContext::IsFullscreen() const
@@ -165,6 +249,25 @@ void OpenglContext::ShowCursor()
 void OpenglContext::HideCursor()
 {
 	m_app.setMouseCursorVisible(false);
+}
+
+bool OpenglContext::IsMenuOpen() const
+{
+	return m_menu;
+}
+void OpenglContext::SetMenuStatus(const bool value)
+{
+	m_menu = value;
+}
+
+void OpenglContext::ActivateFirstRun()
+{
+	m_firstOpen = false;
+}
+
+bool OpenglContext::IsFirstRun() const
+{
+	return m_firstOpen;
 }
 
 void OpenglContext::InitWindow(int width, int height)

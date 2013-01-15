@@ -22,6 +22,12 @@ typedef short int16;
 typedef int int32;
 typedef long long int64;
 
+// Screen resolution
+#define SCREEN_RES_FULL_X	GetSystemMetrics(SM_CXSCREEN)
+#define SCREEN_RES_FULL_Y	GetSystemMetrics(SM_CYSCREEN)
+#define SCREEN_RES_SMALL_X	1024
+#define SCREEN_RES_SMALL_Y	768
+
 // Chunk size
 #define CHUNK_SIZE_X 16
 #define CHUNK_SIZE_Y 128

@@ -23,10 +23,13 @@ public:
     OpenglContext();
     virtual ~OpenglContext();
 
-    virtual void Init() = 0;
+    virtual void GameInit() = 0;
+	virtual void MenuInit() = 0;
     virtual void DeInit() = 0;
-    virtual void LoadResource() = 0;
+    virtual void LoadMenuResource() = 0;
+	virtual void LoadGameResource() = 0;
     virtual void UnloadResource() = 0;
+	virtual void RenderMenu(float elapsedTime) = 0;
 	virtual void Update(float elapsedTime) = 0;
     virtual void Render(float elapsedTime) = 0;
 	virtual void Render2D( float elapsedTime ) = 0;
@@ -60,6 +63,10 @@ protected:
 	Vector2i MousePosition() const;
     void ShowCursor();
     void HideCursor();
+	bool IsMenuOpen() const;
+	void SetMenuStatus(const bool value);
+	void ActivateFirstRun();
+	bool IsFirstRun() const;
 
 private:
     void InitWindow(int width, int height);
@@ -69,6 +76,9 @@ private:
     sf::Window	m_app;
     int			m_maxFps;
     bool		m_fullscreen;
+	bool		m_menu;
+	bool		m_firstOpen;
+	bool		m_sentClose;
     std::string m_title;
 	float m_lastFrameTime;
 protected:

@@ -33,7 +33,7 @@
 
 #include "gl/testbillboard.h"
 
-#define LOAD_MODELS
+//#define LOAD_MODELS
 
 /**
 * @brief Engin graphique
@@ -61,18 +61,24 @@ public:
 	*/
 	virtual Engine& Get();
 
+	virtual void MenuInit();
+
 	/**
 	* Initialisation des composantes du jeu
 	*/
-	virtual void Init();
+	virtual void GameInit();
 
 	virtual void DeInit();
 	/**
 	* Chargement des ressources en mémoire
 	*/
-	virtual void LoadResource();
+	virtual void LoadMenuResource();
+
+	virtual void LoadGameResource();
 
 	virtual void UnloadResource();
+
+	virtual void RenderMenu(float elapsedTime);
 
 	/**
 	* Met à jour toutes les valeurs du jeu (Game loop)
@@ -197,6 +203,14 @@ private:
 
 	Array2d<Chunk*>* m_chunks;
 
+	Panel* m_menu_screen;
+	Panel* m_menu_panel;
+	PictureBox* m_menu_logo;
+	Panel* m_menu_controls;
+	Button* m_menu_start;
+	Button* m_menu_fullscreen;
+	Button* m_menu_close;
+
 	Panel* m_pnl_screen;
 	Panel* m_pnl_playscreen;
 	Panel* m_pnl_portrait;
@@ -220,6 +234,7 @@ private:
 	Label* m_lbl_plrPos;
 	Label* m_lbl_plrSpd;
 	Label* m_lbl_plrAcc;
+	Label* m_lbl_mousePos;
 	Label* m_lbl_FPS;
 
 	Panel* m_pnl_time;
@@ -231,6 +246,7 @@ private:
 	Label* m_lbl_energy;
 
 	bool m_ghostMode;
+	bool m_debugMode;
 	bool m_rightClick;
 	bool m_leftClick;
 

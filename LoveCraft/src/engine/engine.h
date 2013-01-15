@@ -147,6 +147,10 @@ public:
 	*/
 	virtual void MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y);
 
+	void GetBlocAtCursor();
+	void AddBlock(BlockType type);
+	void RemoveBlock();
+
 private:
 	bool LoadTexture(Texture& texture, const std::string& filename, bool stopOnError = true);
 	void LoadBlocTexture(BLOCK_TYPE type, std::string path);
@@ -180,6 +184,9 @@ private:
 	float m_angle;
 	float m_camRadius;
 
+	Vector3f m_currentBlock;
+	Vector3f m_currentFaceNormal;
+
 	TextureArray* m_textureArray;
 
 	Texture* m_textureSpell;
@@ -187,8 +194,6 @@ private:
 	Texture* m_textureInterface;
 	Texture* m_texturefontColor;
 	Texture m_texSpell;
-
-	Spell* m_testParticules;
 
 	Player* m_player;
 	Camera* m_camera;
@@ -216,8 +221,6 @@ private:
 	Panel* m_pnl_portrait;
 
 	PictureBox* m_pb_cursor;
-
-	Button* m_testButton;
 
 	ProgressBar* m_pgb_health;
 	ProgressBar* m_pgb_energy;
@@ -256,8 +259,6 @@ private:
 
 	typedef std::list<Spell> SpellList;
 	SpellList m_spells;
-
-	TestBillboard m_bill;
 
 	time_t m_time;
 };

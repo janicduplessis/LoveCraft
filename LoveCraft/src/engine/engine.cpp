@@ -15,7 +15,7 @@
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0),
-	m_debugMode(false)
+	m_debugMode(false), m_clicktimer(0)
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
@@ -397,6 +397,7 @@ void Engine::LoadMenuResource()
 	m_textureInterface[CUSTIMAGE_CONSOLE_BACK].Load(TEXTURE_PATH "i_console_back.png");
 	m_textureInterface[CUSTIMAGE_CONSOLE_TEXTBOX_BACK].Load(TEXTURE_PATH "i_console_textbox_back.png");
 	m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR].Load(TEXTURE_PATH "i_cursor.png");
+	m_textureInterface[CUSTIMAGE_LOADING_SCREEN].Load(TEXTURE_PATH "i_loading.jpg");
 	m_textureInterface[CUSTIMAGE_MENU_BACKGROUND].Load(TEXTURE_PATH "i_menu_back.png");
 	m_textureInterface[CUSTIMAGE_MENU_MAIN_WINDOW].Load(TEXTURE_PATH "i_menu_main.png");
 	m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK].Load(TEXTURE_PATH "i_menu_button.png");
@@ -435,6 +436,11 @@ void Engine::LoadMenuResource()
 	m_menu_screen = new Panel(0, Vector2i(), Vector2i(Width(), Height()), &m_textureInterface[CUSTIMAGE_MENU_BACKGROUND], 1, "menu_main");
 	m_menu_screen->SetRepeatTexture(false);
 
+	//Loading screen
+	m_menu_loading = new PictureBox(0, Vector2i(0, 0), Vector2i(Width(), Height()),&m_textureInterface[CUSTIMAGE_LOADING_SCREEN], "loading");
+	m_menu_loading->SetVisible(false);
+	m_menu_loading->SetRepeatTexture(false);
+
 	//Paneau principal du menu
 	m_menu_panel = new Panel(m_menu_screen, 
 		Vector2i(Width() / 2 - MENU_PANEL_SIZE_X / 2, Height() / 2 - MENU_PANEL_SIZE_Y / 2), 
@@ -467,7 +473,7 @@ void Engine::LoadMenuResource()
 	m_menu_fullscreen = new Button(m_menu_controls,
 		Vector2i(buttonPosX, buttonPosX + MENU_BUTTONS_SIZE_Y * 3 - MENU_BUTTONS_INTERVAL), Vector2i(buttonWidth, MENU_BUTTONS_SIZE_Y),
 		&m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK], &m_texturefontColor[TEXTCOLOR_YELLOW],
-		"Demarrer en mode Normal", MENU_BUTTON_START_FULL_NAME);
+		STRING_BUTTON_NORM_START, MENU_BUTTON_START_FULL_NAME);
 	m_menu_controls->AddControl(m_menu_fullscreen);
 	m_menu_fullscreen->SetRepeatTexture(false);
 	m_menu_fullscreen->OnClick.Attach(this, &Engine::OnClick);
@@ -476,7 +482,7 @@ void Engine::LoadMenuResource()
 	m_menu_start = new Button(m_menu_controls,
 		Vector2i(buttonPosX, buttonPosX + MENU_BUTTONS_SIZE_Y * 2 - MENU_BUTTONS_INTERVAL * 2), Vector2i(buttonWidth, MENU_BUTTONS_SIZE_Y),
 		&m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK], &m_texturefontColor[TEXTCOLOR_YELLOW],
-		"Demarrer en mode Debug", MENU_BUTTON_DEBUG);
+		STRING_BUTTON_DEBUG_START, MENU_BUTTON_DEBUG);
 	m_menu_controls->AddControl(m_menu_start);
 	m_menu_start->SetRepeatTexture(false);
 	m_menu_start->OnClick.Attach(this, &Engine::OnClick);
@@ -485,7 +491,7 @@ void Engine::LoadMenuResource()
 	m_menu_close = new Button(m_menu_controls,
 		Vector2i(buttonPosX, buttonPosX + MENU_BUTTONS_SIZE_Y * 1 - MENU_BUTTONS_INTERVAL * 3), Vector2i(buttonWidth, MENU_BUTTONS_SIZE_Y),
 		&m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK], &m_texturefontColor[TEXTCOLOR_YELLOW],
-		"Fermer le jeu", MENU_BUTTON_CLOSE);
+		STRING_BUTTON_CLOSE, MENU_BUTTON_CLOSE);
 	m_menu_controls->AddControl(m_menu_close);
 	m_menu_close->SetRepeatTexture(false);
 	m_menu_close->OnClick.Attach(this, &Engine::OnClick);
@@ -566,7 +572,7 @@ void Engine::LoadGameResource()
 	m_lb_infos->AddLine("Music On/off       O");
 	m_lb_infos->AddLine("Music Next         M");
 	m_lb_infos->AddLine("Aff/Cach Infos:    F9");
-	m_lb_infos->AddLine("Fullscreen         F10");
+	//m_lb_infos->AddLine("Fullscreen         F10");
 	m_lb_infos->AddLine("Quitter            Esc");
 
 	//Fenetre de console
@@ -717,7 +723,6 @@ void Engine::LoadGameResource()
 
 #pragma endregion
 
-
 }
 
 void Engine::LoadBlocTexture(BLOCK_TYPE type, std::string path)
@@ -754,16 +759,21 @@ void Engine::RenderMenu(float elapsedTime)
 
 	m_menu_screen->Render();
 	m_pb_cursor->Render();
+	m_menu_loading->Render();
+
+#pragma region Premier render
 
 	if (!IsFirstRun())
 	{
-		if (m_menu_fullscreen->GetText() != "Continuer")
-			m_menu_fullscreen->SetTextTo("Continuer");
-		if (m_menu_start->GetText() != "Activer le mode debug" && !m_debugMode)
-			m_menu_start->SetTextTo("Activer le mode debug");
-		else if (m_menu_start->GetText() != "Desactiver le mode debug" && m_debugMode)
-			m_menu_start->SetTextTo("Desactiver le mode debug");
+		if (m_menu_fullscreen->GetText() != STRING_BUTTON_NORM_CONT)
+			m_menu_fullscreen->SetTextTo(STRING_BUTTON_NORM_CONT);
+		if (m_menu_start->GetText() != STRING_BUTTON_DEBUG_ON && !m_debugMode)
+			m_menu_start->SetTextTo(STRING_BUTTON_DEBUG_ON);
+		else if (m_menu_start->GetText() != STRING_BUTTON_DEBUG_OFF && m_debugMode)
+			m_menu_start->SetTextTo(STRING_BUTTON_DEBUG_OFF);
 	}
+
+#pragma endregion
 
 #pragma region OpenGl
 
@@ -814,6 +824,7 @@ void Engine::Update(float elapsedTime)
 	{
 		Info::Get().Sound().PlayNextTrack();
 		ttt = false;
+		m_menu_loading->SetVisible(false);
 		CW("Premier Render de l'engine termine avec succes.");
 	}
 
@@ -1354,11 +1365,11 @@ void Engine::KeyReleaseEvent(unsigned char key)
 				Info::Get().Options().SetOptInfos(!Info::Get().Options().GetOptInfos());
 				ss << "Affichage des infos a: " << (Info::Get().Options().GetOptInfos() ? "on" : "off");
 			}
-			if (c.f10())
-			{
-				SetFullscreen(!IsFullscreen());
-				ss << "Mode plein ecran mis a: " << (IsFullscreen() ? "on" : "off");
-			}
+			//if (c.f10())
+			//{
+			//	SetFullscreen(!IsFullscreen());
+			//	ss << "Mode plein ecran mis a: " << (IsFullscreen() ? "on" : "off");
+			//}
 			if (c.G())
 			{
 				m_ghostMode = !m_ghostMode;
@@ -1440,13 +1451,12 @@ void Engine::MouseMoveEvent(int x, int y)
 
 	if (!IsMenuOpen())
 	{
-
 		// Camera 3rd person
 		if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON && m_rightClick || m_leftClick)
 		{
 			if (x == (Width() / 2) && y == (Height() / 2))
 				return;
-			MakeRelativeToMouse(x, y);
+			MakeRelativeToCenter(x, y);
 			m_camera->TurnLeftRight((float)x);
 			m_camera->TurnTopBottom((float)y);
 
@@ -1470,8 +1480,8 @@ void Engine::MouseMoveEvent(int x, int y)
 			CenterMouse();
 		}
 	}
-	m_pb_cursor->SetPosition(Vector2i(MousePosition().x, MousePosition().y - m_pb_cursor->Size().y));
 
+	m_pb_cursor->SetPosition(Vector2i(MousePosition().x, MousePosition().y - m_pb_cursor->Size().y));
 }
 
 void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
@@ -1509,10 +1519,9 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 				// Zoom in camera
 				if (m_camRadius > 0)
 				{
-					m_rightClick = true;
-					m_player->SetRotation(m_camera->GetRotation());
-					SetMousePos(x, y);
+					m_camRadius--;
 				}
+				m_camera->SetCamRadius(m_camRadius);
 				break;
 		case MOUSE_BUTTON_WHEEL_DOWN:
 			if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
@@ -1523,7 +1532,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 				// Zoom out camera
 				if (m_camRadius < 20)
 				{
-					m_camRadius += 1;
+					m_camRadius++;
 				}
 				m_camera->SetCamRadius(m_camRadius);
 			}
@@ -1543,11 +1552,12 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		}
 	}
 }
+
 void Engine::OnClick(Control* sender)
 {
 	std::string n = sender->Name();
-	//CW("Test Bouton");
-	//Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE, true);
+	Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE, true);
+
 	if (n == MENU_BUTTON_START_FULL_NAME)
 	{
 		if (!IsFirstRun())
@@ -1555,9 +1565,9 @@ void Engine::OnClick(Control* sender)
 		else
 		{
 			ActivateFirstRun();
+			m_menu_loading->SetVisible(true);
 			SetMenuStatus(false);
 		}
-
 	}
 	if (n == MENU_BUTTON_DEBUG)
 	{
@@ -1567,6 +1577,7 @@ void Engine::OnClick(Control* sender)
 		{
 			m_debugMode = true;
 			ActivateFirstRun();
+			m_menu_loading->SetVisible(true);
 			SetMenuStatus(false);
 		}
 	}
@@ -1647,7 +1658,6 @@ void Engine::RemoveBlock()
 }
 
 //Private
-
 
 void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat)
 {

@@ -214,9 +214,10 @@ void OpenglContext::SetFullscreen(bool fullscreen)
 
 	m_fullscreen = !m_fullscreen;
 
-	//DeInit();
+	DeInit();
 	InitWindow(Width(), Height());
-	//Init();
+	MenuInit();
+	GameInit();
 }
 
 bool OpenglContext::IsFullscreen() const

@@ -209,6 +209,7 @@ private:
 	Array2d<Chunk*>* m_chunks;
 
 	Panel* m_menu_screen;
+	PictureBox* m_menu_loading;
 	Panel* m_menu_panel;
 	PictureBox* m_menu_logo;
 	Panel* m_menu_controls;
@@ -255,7 +256,7 @@ private:
 
 	float m_fpstmr;
 	float m_fps;
-	float m_loadTmr;
+	float m_clicktimer;
 
 	typedef std::list<Spell> SpellList;
 	SpellList m_spells;

@@ -23,6 +23,7 @@ enum IMAGE
 	CUSTIMAGE_CONSOLE_TEXTBOX_BACK,
 	CUSTIMAGE_CLOCK_BG,
 	CUSTIMAGE_PERSONAL_CURSOR,
+	CUSTIMAGE_LOADING_SCREEN,
 	CUSTIMAGE_MENU_BACKGROUND,
 	CUSTIMAGE_MENU_MAIN_WINDOW,
 	CUSTIMAGE_MENU_BUTTON_BACK,
@@ -81,9 +82,16 @@ enum COLOR
 #define LBL_GENERIC_CHAR_I			0.6f
 
 //Controles de menu
+#define STRING_BUTTON_NORM_START	"Demarrer en mode Normal"
+#define STRING_BUTTON_DEBUG_START	"Demarrer en mode Debug"
+#define STRING_BUTTON_CLOSE			"Fermer le jeu"
+#define STRING_BUTTON_NORM_CONT		"Continuer"
+#define STRING_BUTTON_DEBUG_ON		"Activer le mode debug"
+#define STRING_BUTTON_DEBUG_OFF		"Desactiver le mode debug"
+
 #define MENU_PANEL_NAME				"menu_panel"
 #define MENU_PANEL_SIZE_X			750
-#define MENU_PANEL_SIZE_Y			750
+#define MENU_PANEL_SIZE_Y			650
 
 #define MENU_LOGO_SIZE_Y			100
 

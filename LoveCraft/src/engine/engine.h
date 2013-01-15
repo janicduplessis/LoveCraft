@@ -15,13 +15,9 @@
 #include "camera.h"
 #include "chunk.h"
 #include "info.h"
-#include "gl/ui/panel.h"
-#include "gl/ui/progressbar.h"
-#include "gl/ui/label.h"
-#include "gl/ui/listbox.h"
+#include "gl/ui/gameinterface.h"
+#include "gl/ui/menuinterface.h"
 #include "gl/ui/picturebox.h"
-#include "gl/ui/textbox.h"
-#include "gl/ui/button.h"
 
 #include "game/animal.h"
 #include "game/character.h"
@@ -208,49 +204,12 @@ private:
 
 	Array2d<Chunk*>* m_chunks;
 
-	Panel* m_menu_screen;
-	PictureBox* m_menu_loading;
-	Panel* m_menu_panel;
-	PictureBox* m_menu_logo;
-	Panel* m_menu_controls;
-	Button* m_menu_start;
-	Button* m_menu_fullscreen;
-	Button* m_menu_close;
-
-	Panel* m_pnl_screen;
-	Panel* m_pnl_playscreen;
-	Panel* m_pnl_portrait;
+	MenuInterface* m_menuUI;
+	GameInterface* m_gameUI;
 
 	PictureBox* m_pb_cursor;
 
-	ProgressBar* m_pgb_health;
-	ProgressBar* m_pgb_energy;
-	ProgressBar* m_pgb_mana;
-	ProgressBar* m_pgb_exp;
-
-	ListBox* m_lb_infos;
-	ListBox* m_lb_console;
-	Textbox* m_txb_console;
-
-	Panel* m_pnl_playerImage;
-	Label* m_lbl_playerLevel;
-
-	Label* m_lbl_plrPos;
-	Label* m_lbl_plrSpd;
-	Label* m_lbl_plrAcc;
-	Label* m_lbl_mousePos;
-	Label* m_lbl_FPS;
-
-	Panel* m_pnl_time;
-	Label* m_lbl_time;
-
-	Label* m_lbl_health;
-	Label* m_lbl_mana;
-	Label* m_lbl_exp;
-	Label* m_lbl_energy;
-
 	bool m_ghostMode;
-	bool m_debugMode;
 	bool m_rightClick;
 	bool m_leftClick;
 

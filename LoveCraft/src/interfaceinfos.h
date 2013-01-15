@@ -1,5 +1,5 @@
-﻿#ifndef INTERFACE_H_
-#define INTERFACE_H_
+﻿#ifndef INTERFACEINFOS_H_
+#define INTERFACEINFOS_H_
 
 enum IMAGE
 {
@@ -90,8 +90,8 @@ enum COLOR
 #define STRING_BUTTON_DEBUG_OFF		"Desactiver le mode debug"
 
 #define MENU_PANEL_NAME				"menu_panel"
-#define MENU_PANEL_SIZE_X			750
-#define MENU_PANEL_SIZE_Y			650
+#define MENU_PANEL_SIZE_X			500
+#define MENU_PANEL_SIZE_Y			600
 
 #define MENU_LOGO_SIZE_Y			100
 
@@ -103,7 +103,7 @@ enum COLOR
 #define MENU_BUTTONS_INTERVAL		20
 #define MENU_BUTTONS_SIZE_Y			50
 #define MENU_BUTTONS_TEXT_H			25
-#define MENU_BUTTONS_TEXT_W			25
+#define MENU_BUTTONS_TEXT_W			30
 #define MENU_BUTTONS_TEXT_I			0.8f
 
 // ListBox Console

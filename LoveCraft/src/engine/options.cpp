@@ -41,3 +41,12 @@ void Option::SetOptInfos(const bool value)
 {
 	m_showInfo = value;
 }
+
+bool Option::GetOptDebug() const
+{
+	return m_debug;
+}
+void Option::SetOptDebug(const bool value)
+{
+	m_debug = value;
+}

@@ -8,20 +8,23 @@
 #include <cmath>
 #include "son.h"
 #include <SFML/Network.hpp>
-#include "interface.h"
+#include "interfaceinfos.h"
 #include "util/tool.h"
 
 
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0),
-	m_debugMode(false), m_clicktimer(0)
+	m_clicktimer(0)
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureInterface = new Texture[IMAGE::CUSTIMAGE_LAST];
 	m_texturefontColor = new Texture[COLOR::TEXTCOLOR_LAST];
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
+
+	m_menuUI = new MenuInterface();
+	m_gameUI = new GameInterface();
 
 	m_camera = new Camera;
 	m_player = new Player;
@@ -60,44 +63,9 @@ Engine::~Engine()
 	delete m_textureArray;
 #endif
 
-#ifdef MENU_INTERFACE_INITIALIZED
+	delete m_menuUI;
 
-	delete m_menu_close;
-	delete m_menu_controls;
-	delete m_menu_fullscreen;
-	delete m_menu_logo;
-	delete m_menu_panel;
-	delete m_menu_screen;
-	delete m_menu_start;
-
-#endif
-
-#ifdef GAME_INTERFACE_INITIALIZED
-
-	delete m_pnl_screen;
-	delete m_pnl_playscreen;
-	delete m_pnl_portrait;
-	delete m_pgb_health;
-	delete m_pgb_energy;
-	delete m_pgb_mana;
-	delete m_pgb_exp;
-	delete m_lb_infos;
-	delete m_lb_console;
-	delete m_txb_console;
-	delete m_pnl_playerImage;
-	delete m_lbl_playerLevel;
-	delete m_lbl_plrPos;
-	delete m_lbl_plrSpd;
-	delete m_lbl_plrAcc;
-	delete m_lbl_FPS;
-	delete m_pnl_time;
-	delete m_lbl_time;
-	delete m_lbl_health;
-	delete m_lbl_mana;
-	delete m_lbl_exp;
-	delete m_lbl_energy;
-
-#endif
+	delete m_gameUI;
 }
 
 const Engine& Engine::Get() const
@@ -433,68 +401,68 @@ void Engine::LoadMenuResource()
 	m_pb_cursor->SetRepeatTexture(false);
 
 	//Fond d'écran
-	m_menu_screen = new Panel(0, Vector2i(), Vector2i(Width(), Height()), &m_textureInterface[CUSTIMAGE_MENU_BACKGROUND], 1, "menu_main");
-	m_menu_screen->SetRepeatTexture(false);
+	m_menuUI->m_menu_screen = new Panel(0, Vector2i(), Vector2i(Width(), Height()), &m_textureInterface[CUSTIMAGE_MENU_BACKGROUND], 1, "menu_main");
+	m_menuUI->m_menu_screen->SetRepeatTexture(false);
 
 	//Loading screen
-	m_menu_loading = new PictureBox(0, Vector2i(0, 0), Vector2i(Width(), Height()),&m_textureInterface[CUSTIMAGE_LOADING_SCREEN], "loading");
-	m_menu_loading->SetVisible(false);
-	m_menu_loading->SetRepeatTexture(false);
+	m_menuUI->m_menu_loading = new PictureBox(0, Vector2i(0, 0), Vector2i(Width(), Height()),&m_textureInterface[CUSTIMAGE_LOADING_SCREEN], "loading");
+	m_menuUI->m_menu_loading->SetVisible(false);
+	m_menuUI->m_menu_loading->SetRepeatTexture(false);
 
 	//Paneau principal du menu
-	m_menu_panel = new Panel(m_menu_screen, 
+	m_menuUI->m_menu_panel = new Panel(m_menuUI->m_menu_screen, 
 		Vector2i(Width() / 2 - MENU_PANEL_SIZE_X / 2, Height() / 2 - MENU_PANEL_SIZE_Y / 2), 
 		Vector2i(MENU_PANEL_SIZE_X, MENU_PANEL_SIZE_Y), &m_textureInterface[CUSTIMAGE_MENU_MAIN_WINDOW], 2, MENU_PANEL_NAME);
-	m_menu_screen->AddControl(m_menu_panel);
-	m_menu_panel->SetRepeatTexture(false);
+	m_menuUI->m_menu_screen->AddControl(m_menuUI->m_menu_panel);
+	m_menuUI->m_menu_panel->SetRepeatTexture(false);
 
-	int controlWidth = m_menu_panel->Size().x * 0.8f;
-	int controlPosX = m_menu_panel->Size().x / 2 - controlWidth / 2;
+	int controlWidth = m_menuUI->m_menu_panel->Size().x * 0.8f;
+	int controlPosX = m_menuUI->m_menu_panel->Size().x / 2 - controlWidth / 2;
 
 	//Logo du jeu
-	m_menu_logo = new PictureBox(m_menu_panel, 
-		Vector2i(controlPosX, m_menu_panel->Size().y - MENU_LOGO_SIZE_Y - controlPosX),
+	m_menuUI->m_menu_logo = new PictureBox(m_menuUI->m_menu_panel, 
+		Vector2i(controlPosX, m_menuUI->m_menu_panel->Size().y - MENU_LOGO_SIZE_Y - controlPosX),
 		Vector2i(controlWidth, MENU_LOGO_SIZE_Y), &m_textureInterface[CUSTIMAGE_MENU_LOGO], "logo");
-	m_menu_panel->AddControl(m_menu_logo);
-	m_menu_logo->SetRepeatTexture(false);
+	m_menuUI->m_menu_panel->AddControl(m_menuUI->m_menu_logo);
+	m_menuUI->m_menu_logo->SetRepeatTexture(false);
 
 	//Panneau de controle utilisateur
-	m_menu_controls = new Panel(m_menu_panel,
+	m_menuUI->m_menu_controls = new Panel(m_menuUI->m_menu_panel,
 		Vector2i(controlPosX, controlPosX),
 		Vector2i(controlWidth, MENU_CONTROLS_SIZE_Y),
 		&m_textureInterface[CUSTIMAGE_MENU_MAIN_WINDOW], 3, "menu_controls");
-	m_menu_panel->AddControl(m_menu_controls);
-	m_menu_controls->SetRepeatTexture(false);
+	m_menuUI->m_menu_panel->AddControl(m_menuUI->m_menu_controls);
+	m_menuUI->m_menu_controls->SetRepeatTexture(false);
 
-	int buttonWidth = m_menu_controls->Size().x * 0.8f;
-	int buttonPosX = m_menu_controls->Size().x / 2 - buttonWidth / 2;
+	int buttonWidth = m_menuUI->m_menu_controls->Size().x * 0.8f;
+	int buttonPosX = m_menuUI->m_menu_controls->Size().x / 2 - buttonWidth / 2;
 
 	//Button demarrer fullscreen
-	m_menu_fullscreen = new Button(m_menu_controls,
+	m_menuUI->m_menu_fullscreen = new Button(m_menuUI->m_menu_controls,
 		Vector2i(buttonPosX, buttonPosX + MENU_BUTTONS_SIZE_Y * 3 - MENU_BUTTONS_INTERVAL), Vector2i(buttonWidth, MENU_BUTTONS_SIZE_Y),
 		&m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK], &m_texturefontColor[TEXTCOLOR_YELLOW],
 		STRING_BUTTON_NORM_START, MENU_BUTTON_START_FULL_NAME);
-	m_menu_controls->AddControl(m_menu_fullscreen);
-	m_menu_fullscreen->SetRepeatTexture(false);
-	m_menu_fullscreen->OnClick.Attach(this, &Engine::OnClick);
+	m_menuUI->m_menu_controls->AddControl(m_menuUI->m_menu_fullscreen);
+	m_menuUI->m_menu_fullscreen->SetRepeatTexture(false);
+	m_menuUI->m_menu_fullscreen->OnClick.Attach(this, &Engine::OnClick);
 
 	//Button demarrer debug
-	m_menu_start = new Button(m_menu_controls,
+	m_menuUI->m_menu_start = new Button(m_menuUI->m_menu_controls,
 		Vector2i(buttonPosX, buttonPosX + MENU_BUTTONS_SIZE_Y * 2 - MENU_BUTTONS_INTERVAL * 2), Vector2i(buttonWidth, MENU_BUTTONS_SIZE_Y),
 		&m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK], &m_texturefontColor[TEXTCOLOR_YELLOW],
 		STRING_BUTTON_DEBUG_START, MENU_BUTTON_DEBUG);
-	m_menu_controls->AddControl(m_menu_start);
-	m_menu_start->SetRepeatTexture(false);
-	m_menu_start->OnClick.Attach(this, &Engine::OnClick);
+	m_menuUI->m_menu_controls->AddControl(m_menuUI->m_menu_start);
+	m_menuUI->m_menu_start->SetRepeatTexture(false);
+	m_menuUI->m_menu_start->OnClick.Attach(this, &Engine::OnClick);
 
 	//Button fermer
-	m_menu_close = new Button(m_menu_controls,
+	m_menuUI->m_menu_close = new Button(m_menuUI->m_menu_controls,
 		Vector2i(buttonPosX, buttonPosX + MENU_BUTTONS_SIZE_Y * 1 - MENU_BUTTONS_INTERVAL * 3), Vector2i(buttonWidth, MENU_BUTTONS_SIZE_Y),
 		&m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK], &m_texturefontColor[TEXTCOLOR_YELLOW],
 		STRING_BUTTON_CLOSE, MENU_BUTTON_CLOSE);
-	m_menu_controls->AddControl(m_menu_close);
-	m_menu_close->SetRepeatTexture(false);
-	m_menu_close->OnClick.Attach(this, &Engine::OnClick);
+	m_menuUI->m_menu_controls->AddControl(m_menuUI->m_menu_close);
+	m_menuUI->m_menu_close->SetRepeatTexture(false);
+	m_menuUI->m_menu_close->OnClick.Attach(this, &Engine::OnClick);
 
 #pragma endregion
 
@@ -531,53 +499,53 @@ void Engine::LoadGameResource()
 #endif
 
 	// Écran
-	m_pnl_screen = new Panel(0, Vector2i(), Vector2i(Width(), Height()), 0, 1, "main");
+	m_gameUI->m_pnl_screen = new Panel(0, Vector2i(), Vector2i(Width(), Height()), 0, 1, "main");
 
 #pragma region Enfants de Main
 
 	// Zone de jeu
-	m_pnl_playscreen = new Panel(m_pnl_screen, 
+	m_gameUI->m_pnl_playscreen = new Panel(m_gameUI->m_pnl_screen, 
 		Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
-		Vector2i(m_pnl_screen->Size().x - INTERFACE_SIDE_LEFT_WIDTH - INTERFACE_SIDE_RIGHT_WIDTH, 
-		m_pnl_screen->Size().y - INTERFACE_BOTTOM_HEIGHT - INTERFACE_TOP_HEIGHT),
+		Vector2i(m_gameUI->m_pnl_screen->Size().x - INTERFACE_SIDE_LEFT_WIDTH - INTERFACE_SIDE_RIGHT_WIDTH, 
+		m_gameUI->m_pnl_screen->Size().y - INTERFACE_BOTTOM_HEIGHT - INTERFACE_TOP_HEIGHT),
 		0, PNL_PLAYSCREEN_CONTROLS_NBR, "playscreen");
-	m_pnl_screen->AddControl(m_pnl_playscreen);
+	m_gameUI->m_pnl_screen->AddControl(m_gameUI->m_pnl_playscreen);
 
 #pragma region Enfants de Playscreen
 
 	// Informations
-	m_lb_infos = new ListBox(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*6 - 26*12), 200, &m_texturefontColor[TEXTCOLOR_RED], 
+	m_gameUI->m_lb_infos = new ListBox(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*6 - 26*12), 200, &m_texturefontColor[TEXTCOLOR_RED], 
 		0, 26, 2, 12.f, 12.f, 0.5f, false, "lb_infos");
-	m_pnl_playscreen->AddControl(m_lb_infos);
-	m_lb_infos->AddLine("Controles Mouvements");
-	m_lb_infos->AddLine("Avancer:           W");
-	m_lb_infos->AddLine("Reculer:           S");
-	m_lb_infos->AddLine("Droite:            D");
-	m_lb_infos->AddLine("Gauche:            A");
-	m_lb_infos->AddLine("Sauter:            Espace");
-	m_lb_infos->AddLine("Marcher:           Ctrl");
-	//m_lb_infos->AddLine("Se pencher:        C");
-	m_lb_infos->AddLine("Courir:            Shift");
-	m_lb_infos->AddLine("");
-	m_lb_infos->AddLine("Controles Debug");
-	m_lb_infos->AddLine("Tirer:             1");
-	m_lb_infos->AddLine("Cochon:            2");
-	m_lb_infos->AddLine("Teleporter:        6");
-	m_lb_infos->AddLine("Remplir Vie:       7");
-	m_lb_infos->AddLine("Remplir Energie:   8");
-	m_lb_infos->AddLine("Augmenter Exp:     P");
-	m_lb_infos->AddLine("");
-	m_lb_infos->AddLine("Options");
-	m_lb_infos->AddLine("Wireframe:         Y");
-	m_lb_infos->AddLine("Music On/off       O");
-	m_lb_infos->AddLine("Music Next         M");
-	m_lb_infos->AddLine("Aff/Cach Infos:    F9");
-	//m_lb_infos->AddLine("Fullscreen         F10");
-	m_lb_infos->AddLine("Quitter            Esc");
+	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lb_infos);
+	m_gameUI->m_lb_infos->AddLine("Controles Mouvements");
+	m_gameUI->m_lb_infos->AddLine("Avancer:           W");
+	m_gameUI->m_lb_infos->AddLine("Reculer:           S");
+	m_gameUI->m_lb_infos->AddLine("Droite:            D");
+	m_gameUI->m_lb_infos->AddLine("Gauche:            A");
+	m_gameUI->m_lb_infos->AddLine("Sauter:            Espace");
+	m_gameUI->m_lb_infos->AddLine("Marcher:           Ctrl");
+	//m_gameUI->m_lb_infos->AddLine("Se pencher:        C");
+	m_gameUI->m_lb_infos->AddLine("Courir:            Shift");
+	m_gameUI->m_lb_infos->AddLine("");
+	m_gameUI->m_lb_infos->AddLine("Controles Debug");
+	m_gameUI->m_lb_infos->AddLine("Tirer:             1");
+	m_gameUI->m_lb_infos->AddLine("Cochon:            2");
+	m_gameUI->m_lb_infos->AddLine("Teleporter:        6");
+	m_gameUI->m_lb_infos->AddLine("Remplir Vie:       7");
+	m_gameUI->m_lb_infos->AddLine("Remplir Energie:   8");
+	m_gameUI->m_lb_infos->AddLine("Augmenter Exp:     P");
+	m_gameUI->m_lb_infos->AddLine("");
+	m_gameUI->m_lb_infos->AddLine("Options");
+	m_gameUI->m_lb_infos->AddLine("Wireframe:         Y");
+	m_gameUI->m_lb_infos->AddLine("Music On/off       O");
+	m_gameUI->m_lb_infos->AddLine("Music Next         M");
+	m_gameUI->m_lb_infos->AddLine("Aff/Cach Infos:    F9");
+	//m_gameUI->m_lb_infos->AddLine("Fullscreen         F10");
+	m_gameUI->m_lb_infos->AddLine("Quitter            Esc");
 
 	//Fenetre de console
-	m_lb_console = new ListBox(m_pnl_playscreen, 
-		Vector2i(m_pnl_playscreen->Size().x - 64 - (int)LB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H + 5), 
+	m_gameUI->m_lb_console = new ListBox(m_gameUI->m_pnl_playscreen, 
+		Vector2i(m_gameUI->m_pnl_playscreen->Size().x - 64 - (int)LB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H + 5), 
 		LB_CONSOLE_SIZE_W, 
 		&m_texturefontColor[TEXTCOLOR_YELLOW], 
 		&m_textureInterface[CUSTIMAGE_CONSOLE_BACK], 
@@ -589,12 +557,12 @@ void Engine::LoadGameResource()
 		LB_CONSOLE_SCROLLABLE, 
 		LB_CONSOLE_NAME,
 		Vector2i(LB_CONSOLE_BODER_OFFSET_S, LB_CONSOLE_BODER_OFFSET_B));
-	m_pnl_playscreen->AddControl(m_lb_console);
-	m_lb_console->SetRepeatTexture(false);
-	Info::Get().SetConsole(m_lb_console);
+	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lb_console);
+	m_gameUI->m_lb_console->SetRepeatTexture(false);
+	Info::Get().SetConsole(m_gameUI->m_lb_console);
 	//Texbox de la console
-	m_txb_console = new Textbox(m_pnl_playscreen,
-		Vector2i(m_pnl_playscreen->Size().x - 64 - (int)LB_CONSOLE_SIZE_W, 0),
+	m_gameUI->m_txb_console = new Textbox(m_gameUI->m_pnl_playscreen,
+		Vector2i(m_gameUI->m_pnl_playscreen->Size().x - 64 - (int)LB_CONSOLE_SIZE_W, 0),
 		Vector2i(TXB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H),
 		&m_texturefontColor[TEXTCOLOR_WHITE],
 		&m_textureInterface[CUSTIMAGE_CONSOLE_TEXTBOX_BACK],
@@ -604,116 +572,116 @@ void Engine::LoadGameResource()
 		TXB_CONSOLE_CHAR_I,
 		Vector2f(TXB_CONSOLE_OFFSET_X, TXB_CONSOLE_OFFSET_Y),
 		TXB_CONSOLE_NAME);
-	m_pnl_playscreen->AddControl(m_txb_console);
-	m_txb_console->SetRepeatTexture(false);
-	m_txb_console->SetVisible(false);
-	m_txb_console->SetFocus(false);
+	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_txb_console);
+	m_gameUI->m_txb_console->SetRepeatTexture(false);
+	m_gameUI->m_txb_console->SetVisible(false);
+	m_gameUI->m_txb_console->SetFocus(false);
 	// Frame portrait
-	m_pnl_portrait = new Panel(m_pnl_playscreen,
+	m_gameUI->m_pnl_portrait = new Panel(m_gameUI->m_pnl_playscreen,
 		Vector2i(PNL_PORTRAIT_POSITION_X, PNL_PORTRAIT_POSITION_Y),
 		Vector2i(PNL_PORTRAIT_SIZE_W, PNL_PORTRAIT_SIZE_H),
 		&m_textureInterface[CUSTIMAGE_PORTRAIT_FRAME], PNL_PORTRAIT_CONTROLS_NBR, PNL_PORTRAIT_NAME);
-	m_pnl_playscreen->AddControl(m_pnl_portrait);
+	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_pnl_portrait);
 
 #pragma region Enfants pnl portrait
 
 	// Barre de vie
-	m_pgb_health = new ProgressBar(m_pnl_portrait,
+	m_gameUI->m_pgb_health = new ProgressBar(m_gameUI->m_pnl_portrait,
 		Vector2i(PGB_HEALTH_POSITION_X, PGB_HEALTH_POSITION_Y),
 		Vector2i(PGB_HEALTH_SIZE_W, PGB_HEALTH_SIZE_H),
 		&m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH], &m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_HEALTH_BACKGROUND, PGB_HEALTH_BORDER_SIZE, PGB_HEALTH_NAME);
-	m_pnl_portrait->AddControl(m_pgb_health);
+	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_pgb_health);
 	// Barre de mana
-	m_pgb_mana = new ProgressBar(m_pnl_portrait,
+	m_gameUI->m_pgb_mana = new ProgressBar(m_gameUI->m_pnl_portrait,
 		Vector2i(PGB_MANA_POSITION_X, PGB_MANA_POSITION_Y),
 		Vector2i(PGB_MANA_SIZE_W, PGB_MANA_SIZE_H),
 		&m_textureInterface[CUSTIMAGE_PGBTEXT_MANA], &m_textureInterface[CUSTIMAGE_PGBTEXT_MANA_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_MANA_BACKGROUND, PGB_MANA_BORDER_SIZE, PGB_MANA_NAME);
-	m_pnl_portrait->AddControl(m_pgb_mana);
+	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_pgb_mana);
 	// Barre d'expérience
-	m_pgb_exp = new ProgressBar(m_pnl_portrait,
+	m_gameUI->m_pgb_exp = new ProgressBar(m_gameUI->m_pnl_portrait,
 		Vector2i(PGB_EXP_POSITION_X, PGB_EXP_POSITION_Y),
 		Vector2i(PGB_EXP_SIZE_W, PGB_EXP_SIZE_H),
 		&m_textureInterface[CUSTIMAGE_PGBTEXT_EXP], &m_textureInterface[CUSTIMAGE_PGBTEXT_EXP_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_EXP_BACKGROUND, PGB_EXP_BORDER_SIZE, PGB_EXP_NAME);
-	m_pnl_portrait->AddControl(m_pgb_exp);
-	m_lbl_health = new Label(m_pnl_portrait, Vector2i(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), &m_texturefontColor[TEXTCOLOR_RED], "", 
+	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_pgb_exp);
+	m_gameUI->m_lbl_health = new Label(m_gameUI->m_pnl_portrait, Vector2i(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), &m_texturefontColor[TEXTCOLOR_RED], "", 
 		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, PNL_PORTRAIT_CHAR_H, PNL_PORTRAIT_CHAR_W, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_HEALTH_NAME);
-	m_pnl_portrait->AddControl(m_lbl_health);
+	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_lbl_health);
 	// Label de mana
-	m_lbl_mana = new Label(m_pnl_portrait, Vector2i(LBL_MANA_POSITION_X, LBL_MANA_POSITION_Y), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
+	m_gameUI->m_lbl_mana = new Label(m_gameUI->m_pnl_portrait, Vector2i(LBL_MANA_POSITION_X, LBL_MANA_POSITION_Y), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
 		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, PNL_PORTRAIT_CHAR_H, PNL_PORTRAIT_CHAR_W, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_MANA_NAME);
-	m_pnl_portrait->AddControl(m_lbl_mana);
+	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_lbl_mana);
 	// Label d'exp
-	m_lbl_exp = new Label(m_pnl_portrait, Vector2i(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
+	m_gameUI->m_lbl_exp = new Label(m_gameUI->m_pnl_portrait, Vector2i(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
 		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, LBL_EXP_CHAR_W, LBL_EXP_CHAR_H, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_EXP_NAME);
-	m_pnl_portrait->AddControl(m_lbl_exp);
+	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_lbl_exp);
 
 	// Image du joueur
-	m_pnl_playerImage = new Panel(m_pnl_portrait, 
+	m_gameUI->m_pnl_playerImage = new Panel(m_gameUI->m_pnl_portrait, 
 		Vector2i(PB_PORTRAIT_POSITION_X, PB_PORTRAIT_POSITION_Y),
 		Vector2i(PB_PORTRAIT_SIZE_W, PB_PORTRAIT_SIZE_H),
 		&m_textureInterface[CUSTIMAGE_PORTRAIT_MALE], 1, PB_PORTRAIT_NAME);
-	m_pnl_portrait->AddControl(m_pnl_playerImage);
+	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_pnl_playerImage);
 
 #pragma region Enfants de m_pnl_playerImage
 
-	m_lbl_playerLevel = new Label(m_pnl_playerImage, Vector2i(), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
+	m_gameUI->m_lbl_playerLevel = new Label(m_gameUI->m_pnl_playerImage, Vector2i(), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
 		Label::TEXTDOCK_TOPCENTER, LBL_GENERIC_ITALIC, LBL_PLAYER_LEVEL_W, LBL_PLAYER_LEVEL_H, LBL_PLAYER_LEVEL_I, Vector2f(), LBL_PLAYER_LEVEL_NAME);
-	m_pnl_playerImage->AddControl(m_lbl_playerLevel);
+	m_gameUI->m_pnl_playerImage->AddControl(m_gameUI->m_lbl_playerLevel);
 
 #pragma endregion
 
 #pragma endregion
 
 	//Barre d'énergie verticale
-	m_pgb_energy = new ProgressBar(m_pnl_playscreen,
+	m_gameUI->m_pgb_energy = new ProgressBar(m_gameUI->m_pnl_playscreen,
 		Vector2i(PGB_ENERGY_POSITION_X, PGB_ENERGY_POSITION_Y),
 		Vector2i(PGB_ENERGY_SIZE_W, PGB_ENERGY_SIZE_H),
 		&m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY], &m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY_BACK],
 		ProgressBar::BARMODE_VERTICAL_DTU, PGB_ENERGY_BACKGROUND, PGB_ENERGY_BORDER_SIZE, PGB_ENERGY_NAME);
-	m_pnl_playscreen->AddControl(m_pgb_energy);
+	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_pgb_energy);
 	//Label d'énergie
-	m_lbl_energy = new Label(m_pnl_playscreen, Vector2i(LBL_ENERGY_POSITION_X, LBL_ENERGY_POSITION_Y), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
+	m_gameUI->m_lbl_energy = new Label(m_gameUI->m_pnl_playscreen, Vector2i(LBL_ENERGY_POSITION_X, LBL_ENERGY_POSITION_Y), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
 		Label::TEXTDOCK_NONE, LBL_ENERGY_ITALIC, LBL_ENERGY_CHAR_H, LBL_ENERGY_CHAR_W, LBL_ENERGY_CHAR_I, Vector2f(), LBL_ENERGY_NAME);
-	m_pnl_playscreen->AddControl(m_lbl_energy);
+	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_energy);
 
 #pragma region Controles de debug
 
 	//Label Position
-	m_lbl_plrPos = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
+	m_gameUI->m_lbl_plrPos = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "pos");
-	m_pnl_playscreen->AddControl(m_lbl_plrPos);
+	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_plrPos);
 	//Label Vitesse
-	m_lbl_plrSpd = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*2), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
+	m_gameUI->m_lbl_plrSpd = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*2), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "spd");
-	m_pnl_playscreen->AddControl(m_lbl_plrSpd);
+	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_plrSpd);
 	//Label Acceleration
-	m_lbl_plrAcc = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*3), &m_texturefontColor[TEXTCOLOR_RED], "", 
+	m_gameUI->m_lbl_plrAcc = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*3), &m_texturefontColor[TEXTCOLOR_RED], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "acc");
-	m_pnl_playscreen->AddControl(m_lbl_plrAcc);
+	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_plrAcc);
 	//Label mouse position
-	m_lbl_mousePos = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*4), &m_texturefontColor[TEXTCOLOR_WHITE], "", 
+	m_gameUI->m_lbl_mousePos = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*4), &m_texturefontColor[TEXTCOLOR_WHITE], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "Mpos");
-	m_pnl_playscreen->AddControl(m_lbl_mousePos);
+	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_mousePos);
 	//Label FPS
-	m_lbl_FPS = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*5), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
+	m_gameUI->m_lbl_FPS = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*5), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "fps");
-	m_pnl_playscreen->AddControl(m_lbl_FPS);
+	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_FPS);
 
 #pragma endregion
 
 	//Heure
-	m_pnl_time = new Panel(m_pnl_playscreen, Vector2i(m_pnl_playscreen->Size().x - 128, m_pnl_playscreen->Size().y - 64), 
+	m_gameUI->m_pnl_time = new Panel(m_gameUI->m_pnl_playscreen, Vector2i(m_gameUI->m_pnl_playscreen->Size().x - 128, m_gameUI->m_pnl_playscreen->Size().y - 64), 
 		Vector2i(128, 64), &m_textureInterface[CUSTIMAGE_CLOCK_BG], 1, "clock");
-	m_pnl_playscreen->AddControl(m_pnl_time);
+	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_pnl_time);
 
 #pragma region Enfants de m_pnl_time
 
-	m_lbl_time = new Label(m_pnl_time, Vector2i(0,0), &m_texturefontColor[TEXTCOLOR_WHITE], "", Label::TEXTDOCK_MIDDLECENTER, false, 
+	m_gameUI->m_lbl_time = new Label(m_gameUI->m_pnl_time, Vector2i(0,0), &m_texturefontColor[TEXTCOLOR_WHITE], "", Label::TEXTDOCK_MIDDLECENTER, false, 
 		LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "time");
-	m_pnl_time->AddControl(m_lbl_time);
+	m_gameUI->m_pnl_time->AddControl(m_gameUI->m_lbl_time);
 
 #pragma endregion
 
@@ -757,20 +725,20 @@ void Engine::RenderMenu(float elapsedTime)
 
 #pragma endregion
 
-	m_menu_screen->Render();
+	m_menuUI->m_menu_screen->Render();
 	m_pb_cursor->Render();
-	m_menu_loading->Render();
+	m_menuUI->m_menu_loading->Render();
 
 #pragma region Premier render
 
 	if (!IsFirstRun())
 	{
-		if (m_menu_fullscreen->GetText() != STRING_BUTTON_NORM_CONT)
-			m_menu_fullscreen->SetTextTo(STRING_BUTTON_NORM_CONT);
-		if (m_menu_start->GetText() != STRING_BUTTON_DEBUG_ON && !m_debugMode)
-			m_menu_start->SetTextTo(STRING_BUTTON_DEBUG_ON);
-		else if (m_menu_start->GetText() != STRING_BUTTON_DEBUG_OFF && m_debugMode)
-			m_menu_start->SetTextTo(STRING_BUTTON_DEBUG_OFF);
+		if (m_menuUI->m_menu_fullscreen->GetText() != STRING_BUTTON_NORM_CONT)
+			m_menuUI->m_menu_fullscreen->SetTextTo(STRING_BUTTON_NORM_CONT);
+		if (m_menuUI->m_menu_start->GetText() != STRING_BUTTON_DEBUG_ON && !Info::Get().Options().GetOptDebug())
+			m_menuUI->m_menu_start->SetTextTo(STRING_BUTTON_DEBUG_ON);
+		else if (m_menuUI->m_menu_start->GetText() != STRING_BUTTON_DEBUG_OFF && Info::Get().Options().GetOptDebug())
+			m_menuUI->m_menu_start->SetTextTo(STRING_BUTTON_DEBUG_OFF);
 	}
 
 #pragma endregion
@@ -824,7 +792,7 @@ void Engine::Update(float elapsedTime)
 	{
 		Info::Get().Sound().PlayNextTrack();
 		ttt = false;
-		m_menu_loading->SetVisible(false);
+		m_menuUI->m_menu_loading->SetVisible(false);
 		CW("Premier Render de l'engine termine avec succes.");
 	}
 
@@ -833,42 +801,42 @@ void Engine::Update(float elapsedTime)
 #pragma region Proprietes des controles
 
 	//Affiche ou cache les infos s'il y a un changement
-	if (m_lb_infos->Visible() && !Info::Get().Options().GetOptInfos())
-		m_lb_infos->SetVisible(false);
-	else if (!m_lb_infos->Visible() && Info::Get().Options().GetOptInfos())
-		m_lb_infos->SetVisible(true);
+	if (m_gameUI->m_lb_infos->Visible() && !Info::Get().Options().GetOptInfos())
+		m_gameUI->m_lb_infos->SetVisible(false);
+	else if (!m_gameUI->m_lb_infos->Visible() && Info::Get().Options().GetOptInfos())
+		m_gameUI->m_lb_infos->SetVisible(true);
 	//Change la texture de la barre de vie en fonction du %. Ne réassigne la texture que si on en a besoin
-	if (m_character.HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_pgb_health->GetTexture() == &m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH])
-		m_pgb_health->SetTexture(&m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW]);
-	else if (m_character.HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_pgb_health->GetTexture() == &m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW])
-		m_pgb_health->SetTexture(&m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH]);
+	if (m_character.HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetTexture() == &m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH])
+		m_gameUI->m_pgb_health->SetTexture(&m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW]);
+	else if (m_character.HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetTexture() == &m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW])
+		m_gameUI->m_pgb_health->SetTexture(&m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH]);
 	//Affiche ou cache la barre d'énergie selon la situation
-	if (m_character.Energy() == m_character.EnergyMax())
+	if (m_character.Energy() != m_character.EnergyMax() || Info::Get().Ctrls().Shift())
 	{
-		m_pgb_energy->SetVisible(false);
-		m_lbl_energy->SetVisible(false);
+		m_gameUI->m_pgb_energy->SetVisible(true);
+		m_gameUI->m_lbl_energy->SetVisible(true);
 	}
-	else if (m_character.Energy() != m_character.EnergyMax() || Info::Get().Ctrls().Shift())
+	else if (m_character.Energy() == m_character.EnergyMax())
 	{
-		m_pgb_energy->SetVisible(true);
-		m_lbl_energy->SetVisible(true);
+		m_gameUI->m_pgb_energy->SetVisible(false);
+		m_gameUI->m_lbl_energy->SetVisible(false);
 	}
 	// Controles de debug
-	if (m_debugMode && !m_lbl_FPS->Visible())
+	if (Info::Get().Options().GetOptDebug() && !m_gameUI->m_lbl_FPS->Visible())
 	{
-		m_lbl_plrPos->SetVisible(true);
-		m_lbl_plrSpd->SetVisible(true);
-		m_lbl_plrAcc->SetVisible(true);
-		m_lbl_mousePos->SetVisible(true);
-		m_lbl_FPS->SetVisible(true);
+		m_gameUI->m_lbl_plrPos->SetVisible(true);
+		m_gameUI->m_lbl_plrSpd->SetVisible(true);
+		m_gameUI->m_lbl_plrAcc->SetVisible(true);
+		m_gameUI->m_lbl_mousePos->SetVisible(true);
+		m_gameUI->m_lbl_FPS->SetVisible(true);
 	}
-	else if (!m_debugMode && m_lbl_FPS->Visible())
+	else if (!Info::Get().Options().GetOptDebug() && m_gameUI->m_lbl_FPS->Visible())
 	{
-		m_lbl_plrPos->SetVisible(false);
-		m_lbl_plrSpd->SetVisible(false);
-		m_lbl_plrAcc->SetVisible(false);
-		m_lbl_mousePos->SetVisible(false);
-		m_lbl_FPS->SetVisible(false);
+		m_gameUI->m_lbl_plrPos->SetVisible(false);
+		m_gameUI->m_lbl_plrSpd->SetVisible(false);
+		m_gameUI->m_lbl_plrAcc->SetVisible(false);
+		m_gameUI->m_lbl_mousePos->SetVisible(false);
+		m_gameUI->m_lbl_FPS->SetVisible(false);
 	}
 
 #pragma endregion
@@ -876,10 +844,10 @@ void Engine::Update(float elapsedTime)
 #pragma region Actualisation des valeurs
 
 	//Actualisation des valeurs des progressbars
-	m_pgb_health->SetValue(m_character.HealthPerc());
-	m_pgb_energy->SetValue(m_character.EnergyPerc());
-	m_pgb_mana->SetValue(m_character.ManaPerc());
-	m_pgb_exp->SetValue(m_character.ExpPerc());
+	m_gameUI->m_pgb_health->SetValue(m_character.HealthPerc());
+	m_gameUI->m_pgb_energy->SetValue(m_character.EnergyPerc());
+	m_gameUI->m_pgb_mana->SetValue(m_character.ManaPerc());
+	m_gameUI->m_pgb_exp->SetValue(m_character.ExpPerc());
 	//Actualisation du texte dans les différents Label
 	TextUpdate();
 
@@ -889,7 +857,7 @@ void Engine::Update(float elapsedTime)
 
 	if (Info::Get().LineToPrint() != "")
 	{
-		m_lb_console->AddLine(Info::Get().LineToPrint());
+		m_gameUI->m_lb_console->AddLine(Info::Get().LineToPrint());
 		Info::Get().NextPrint("");
 	}
 
@@ -1111,7 +1079,7 @@ void Engine::Render2D(float elapsedTime)
 #pragma region Affichage des controles
 
 	//Render de l'écran au complet avec tous ses contrôles.
-	m_pnl_screen->Render();
+	m_gameUI->m_pnl_screen->Render();
 
 #pragma endregion
 
@@ -1175,48 +1143,48 @@ void Engine::TextenteredEvent(unsigned int val)
 		static std::ostringstream ss;
 
 		//Appuie sur Enter pour acquérir le focus
-		if (val == 13 && !m_txb_console->HasFocus())
+		if (val == 13 && !m_gameUI->m_txb_console->HasFocus())
 		{
-			m_txb_console->SetFocus(true);
-			m_txb_console->SetVisible(true);
+			m_gameUI->m_txb_console->SetFocus(true);
+			m_gameUI->m_txb_console->SetVisible(true);
 			return;
 		}
 
 		//Capture du texte en mode Textbox
-		if (m_txb_console->HasFocus())
+		if (m_gameUI->m_txb_console->HasFocus())
 		{
 			//Vérification qu'il s'agit d'un caractère valide
 			if (val >= 32 && val <= 126)
 			{
-				ss << m_txb_console->GetMsg() << static_cast<char>(val);
-				m_txb_console->SetMessage(ss.str());
+				ss << m_gameUI->m_txb_console->GetMsg() << static_cast<char>(val);
+				m_gameUI->m_txb_console->SetMessage(ss.str());
 				ss.str("");
 				return;
 			}
 			//Si c'est un backspace
 			if (val == 8)
 			{
-				std::string mes = m_txb_console->GetMsg();
+				std::string mes = m_gameUI->m_txb_console->GetMsg();
 				if (mes.length() > 0)
 				{
 					for (int i = 0; i < mes.length()-1; i++)
 					{
 						ss << mes[i];
 					}
-					m_txb_console->SetMessage(ss.str());
+					m_gameUI->m_txb_console->SetMessage(ss.str());
 					ss.str("");
 				}
 			}
 			//Si c'est un return
 			if (val == 13)
 			{
-				if (m_txb_console->GetMsg() != "")
-					CW(m_txb_console->GetMsg());
-				m_txb_console->SetVisible(false);
-				m_txb_console->SetFocus(false);
-				if (m_txb_console->GetMsg() == "/dance")
+				if (m_gameUI->m_txb_console->GetMsg() != "")
+					CW(m_gameUI->m_txb_console->GetMsg());
+				m_gameUI->m_txb_console->SetVisible(false);
+				m_gameUI->m_txb_console->SetFocus(false);
+				if (m_gameUI->m_txb_console->GetMsg() == "/dance")
 					Info::Get().Sound().PlaySnd(Son::SON_DEATH, Son::CHANNEL_INTERFACE);
-				m_txb_console->SetMessage("");
+				m_gameUI->m_txb_console->SetMessage("");
 			}
 		}
 	}
@@ -1237,7 +1205,7 @@ void Engine::KeyPressEvent(unsigned char key)
 		//ss.str("");
 
 		//Si on est pas en train d'écrire, envoie les données de touches
-		if (!m_txb_console->HasFocus())
+		if (!m_gameUI->m_txb_console->HasFocus())
 		{
 			c.Set(key, true);
 			//Sorts qui subissent le global cooldown
@@ -1354,7 +1322,7 @@ void Engine::KeyReleaseEvent(unsigned char key)
 	{
 #pragma region Touches dans le jeu
 
-		if (!m_txb_console->HasFocus())
+		if (!m_gameUI->m_txb_console->HasFocus())
 		{
 			if (c.Esc())
 			{
@@ -1488,9 +1456,9 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 {
 	if (!IsMenuOpen())
 	{
-		Vector2i& pos = m_lb_console->AbsolutePosition();
-		Vector2i& size = m_lb_console->Size();
-		Vector2i& play = m_pnl_screen->Size();
+		Vector2i& pos = m_gameUI->m_lb_console->AbsolutePosition();
+		Vector2i& size = m_gameUI->m_lb_console->Size();
+		Vector2i& play = m_gameUI->m_pnl_screen->Size();
 		switch (button)
 		{
 		case MOUSE_BUTTON_RIGHT:
@@ -1500,7 +1468,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 			RemoveBlock();
 			break;
 		case MOUSE_BUTTON_LEFT:
-			m_lb_console->MouseClick(x, m_pnl_playscreen->Size().y - y);
+			m_gameUI->m_lb_console->MouseClick(x, m_gameUI->m_pnl_playscreen->Size().y - y);
 			if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 			{
 				m_leftClick = true;
@@ -1512,7 +1480,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 			break;
 		case MOUSE_BUTTON_WHEEL_UP:
 			if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
-				m_lb_console->Scroll(1);
+				m_gameUI->m_lb_console->Scroll(1);
 			} 
 			else if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 			{
@@ -1525,7 +1493,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 				break;
 		case MOUSE_BUTTON_WHEEL_DOWN:
 			if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
-				m_lb_console->Scroll(-1);
+				m_gameUI->m_lb_console->Scroll(-1);
 			} 
 			else if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 			{
@@ -1545,9 +1513,9 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		switch (button)
 		{
 		case MOUSE_BUTTON_LEFT:
-			m_menu_close->isClicked(x, m_menu_screen->Size().y - y);
-			m_menu_start->isClicked(x, m_menu_screen->Size().y - y);
-			m_menu_fullscreen->isClicked(x, m_menu_screen->Size().y - y);
+			m_menuUI->m_menu_close->isClicked(x, m_menuUI->m_menu_screen->Size().y - y);
+			m_menuUI->m_menu_start->isClicked(x, m_menuUI->m_menu_screen->Size().y - y);
+			m_menuUI->m_menu_fullscreen->isClicked(x, m_menuUI->m_menu_screen->Size().y - y);
 			break;
 		}
 	}
@@ -1564,20 +1532,21 @@ void Engine::OnClick(Control* sender)
 			SetMenuStatus(false);
 		else
 		{
+			Info::Get().Options().SetOptDebug(false);
 			ActivateFirstRun();
-			m_menu_loading->SetVisible(true);
+			m_menuUI->m_menu_loading->SetVisible(true);
 			SetMenuStatus(false);
 		}
 	}
 	if (n == MENU_BUTTON_DEBUG)
 	{
 		if (!IsFirstRun())
-			m_debugMode = !m_debugMode;
+			Info::Get().Options().SetOptDebug(!Info::Get().Options().GetOptDebug());
 		else
 		{
-			m_debugMode = true;
+			Info::Get().Options().SetOptDebug(true);
 			ActivateFirstRun();
-			m_menu_loading->SetVisible(true);
+			m_menuUI->m_menu_loading->SetVisible(true);
 			SetMenuStatus(false);
 		}
 	}
@@ -1596,7 +1565,7 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 			break;
 		case MOUSE_BUTTON_LEFT:
 			m_leftClick = false;
-			m_lb_console->MouseRelease();
+			m_gameUI->m_lb_console->MouseRelease();
 			break;
 		}
 	}
@@ -1605,9 +1574,9 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 		switch (button)
 		{
 		case MOUSE_BUTTON_LEFT:
-			m_menu_close->Release();
-			m_menu_start->Release();
-			m_menu_fullscreen->Release();
+			m_menuUI->m_menu_close->Release();
+			m_menuUI->m_menu_start->Release();
+			m_menuUI->m_menu_fullscreen->Release();
 			break;
 		}
 	}
@@ -1711,44 +1680,44 @@ void Engine::TextUpdate()
 	std::ostringstream ss;
 	//Vie
 	ss << (int)m_character.Health() << " / " << (int)m_character.HealthMax();
-	m_lbl_health->SetMessage(ss.str());
+	m_gameUI->m_lbl_health->SetMessage(ss.str());
 	ss.str("");
 	//Energie
 	ss << (int)m_character.Energy() << " / " << (int)m_character.EnergyMax();
-	m_lbl_energy->SetMessage(ss.str());
+	m_gameUI->m_lbl_energy->SetMessage(ss.str());
 	ss.str("");
 	//Mana
 	ss << (int)m_character.Mana() << " / " << (int)m_character.ManaMax();
-	m_lbl_mana->SetMessage(ss.str());
+	m_gameUI->m_lbl_mana->SetMessage(ss.str());
 	ss.str("");
 	//Experience
 	ss << (int)m_character.Exp() << " / " << (int)m_character.ExpNext();
-	m_lbl_exp->SetMessage(ss.str());
+	m_gameUI->m_lbl_exp->SetMessage(ss.str());
 	ss.str("");
 	//Niveau
 	ss << m_character.Level();
-	m_lbl_playerLevel->SetMessage(ss.str());
+	m_gameUI->m_lbl_playerLevel->SetMessage(ss.str());
 	ss.str("");
 	//Position
 	ss << "Position :     ( " << std::setprecision(4) << m_player->Position().x << ", " << std::setprecision(4) <<
 		m_player->Position().y << ", " << std::setprecision(4) << m_player->Position().z << " )";
-	m_lbl_plrPos->SetMessage(ss.str());
+	m_gameUI->m_lbl_plrPos->SetMessage(ss.str());
 	ss.str("");
 	//Vitesse
 	ss << "Vitesse :      " << m_player->Speed();
-	m_lbl_plrSpd->SetMessage(ss.str());
+	m_gameUI->m_lbl_plrSpd->SetMessage(ss.str());
 	ss.str("");
 	//Accélération
 	ss << "Acceleration : " << m_player->Acceleration();
-	m_lbl_plrAcc->SetMessage(ss.str());
+	m_gameUI->m_lbl_plrAcc->SetMessage(ss.str());
 	ss.str("");
 	//Psotion souris
 	ss << "Pos. Souris :  " << "( " << MousePosition().x << ", " << MousePosition().y << " )";
-	m_lbl_mousePos->SetMessage(ss.str());
+	m_gameUI->m_lbl_mousePos->SetMessage(ss.str());
 	ss.str("");
 	//FPS
 	ss << "Fps :          " << std::setprecision(2) << m_fps;
-	m_lbl_FPS->SetMessage(ss.str());
+	m_gameUI->m_lbl_FPS->SetMessage(ss.str());
 	ss.str("");
 	//Heure
 	time_t currentTime;
@@ -1757,7 +1726,7 @@ void Engine::TextUpdate()
 	localtime_s(&ptm, &currentTime);
 	ss << std::setfill('0');
 	ss << std::setw(2) << ptm.tm_hour << ":" << std::setw(2) << ptm.tm_min;
-	m_lbl_time->SetMessage(ss.str());
+	m_gameUI->m_lbl_time->SetMessage(ss.str());
 	ss.str("");
 }
 
@@ -1907,7 +1876,7 @@ void Engine::GetBlocAtCursor()
 
 void Engine::CW(const std::string& line)
 {
-	m_lb_console->AddLine(line);
+	m_gameUI->m_lb_console->AddLine(line);
 }
 
 void Engine::CWL(const std::string& line)

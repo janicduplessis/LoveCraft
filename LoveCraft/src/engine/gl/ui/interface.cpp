@@ -1,7 +1,7 @@
 #include "interface.h"
 
 
-Interface::Interface()
+Interface::Interface() : m_loaded(false)
 {
 }
 

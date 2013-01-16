@@ -185,11 +185,11 @@ Vector2i Control::GetProperty(PropVector2 vector2prop) const
 }
 std::string Control::GetProperty(PropString stringprop) const
 {
-
+	return "";
 }
 Texture* Control::GetProperty(PropTexture textureprop) const
 {
-
+	return 0;
 }
 
 void Control::RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture)

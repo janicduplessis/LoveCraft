@@ -209,6 +209,8 @@ void Engine::LoadMenuResource()
 	LoadBlocTexture(BTYPE_SNOW, TEXTURE_PATH "b_snow.jpg");
 	LoadBlocTexture(BTYPE_SWAMP, TEXTURE_PATH "b_swamp.jpg");
 
+	m_textureArray->AddTexture(TEXTURE_PATH "b_semidirt.bmp");
+
 	m_textureArray->Generate();
 
 #pragma endregion

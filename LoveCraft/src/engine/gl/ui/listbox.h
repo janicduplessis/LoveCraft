@@ -23,8 +23,8 @@ public:
 	void Scroll(int lines);
 	void ScrollUp(Control* sender);
 	void ScrollDown(Control* sender);
-	void MouseClick(int x, int y);
-	void MouseRelease();
+	virtual bool MousePressEvents(int x, int y);
+	virtual bool MouseReleaseEvents(int x, int y);
 private:
 	(Label*)* m_lines;
 	typedef std::list<std::string> StringList;

@@ -138,10 +138,12 @@ void AI::Patrol()
 	if (!m_patrolDestination || rand() % 100 < 10)
 	{
 		if (m_patrolDestination)
+			a:
 			delete m_patrolDestination;
 		float x = m_posIni.x + rand() % (2 * PATROL_RANGE) - PATROL_RANGE; 
 		float z = m_posIni.z + rand() % (2 * PATROL_RANGE) - PATROL_RANGE; 
 		m_patrolDestination = new Vector3f(x, m_posIni.y, z);
+		goto a;
 	}
 }
 

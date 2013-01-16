@@ -27,14 +27,14 @@ public:
 	 * 
 	 * @param x position de la souris en x
 	 * @param y position de la souris en y
-	 * @return si le bouton est clic
+	 * @return si l'event a été géré
 	 */
-	bool isClicked(int x, int y);
+	virtual bool MousePressEvents(int x, int y);
 
 	/**
 	 * Relache le bouton
 	 */
-	void Release();
+	virtual bool MouseReleaseEvents(int x, int y);
 
 	/**
 	 * Pèse sur le bouton

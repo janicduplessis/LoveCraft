@@ -100,6 +100,11 @@ void Control::SetRepeatTexture(const bool value)
 	m_repeatTexture = value;
 }
 
+bool Control::MousePressEvents( int x, int y )
+{
+	return false;
+}
+
 Control& Control::operator=(const Control& c)
 {
 	m_name = c.m_name;
@@ -147,4 +152,19 @@ void Control::RenderSquare(const Vector2i& position, const Vector2i& size, Textu
 void Control::RenderSquare(const Vector2i& position, const Vector2i& size)
 {
 	RenderSquare(position, size, m_texture);
+}
+
+bool Control::KeyPressEvents( int keycode )
+{
+	return false;
+}
+
+bool Control::KeyReleaseEvents( int keycode )
+{
+	return false;
+}
+
+bool Control::MouseReleaseEvents( int x, int y )
+{
+	return false;
 }

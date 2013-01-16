@@ -215,12 +215,16 @@ public:
 	virtual bool GetRepeatTexture() const;
 	virtual void SetRepeatTexture(const bool value);
 
+	virtual bool MousePressEvents( int x, int y );
+	virtual bool MouseReleaseEvents(int x, int y);
+	virtual bool KeyPressEvents(int keycode);
+	virtual bool KeyReleaseEvents(int keycode);
+
 	Control& operator=(const Control& c);
 
 protected:
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size);
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture);
-
 	std::string m_name;
 	Type m_type;
 	bool m_pngBlend;

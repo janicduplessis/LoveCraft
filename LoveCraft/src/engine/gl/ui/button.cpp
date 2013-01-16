@@ -27,7 +27,7 @@ void Button::Render()
 		m_label->Render();
 }
 
-bool Button::isClicked( int x, int y )
+bool Button::MousePressEvents( int x, int y )
 {
 	if (m_clicked)
 		return true;
@@ -42,9 +42,10 @@ bool Button::isClicked( int x, int y )
 	return false;
 }
 
-void Button::Release()
+bool Button::MouseReleaseEvents(int x, int y)
 {
 	m_clicked = false;
+	return true;
 }
 
 void Button::Press()

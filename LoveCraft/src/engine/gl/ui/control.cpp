@@ -100,6 +100,7 @@ void Control::SetRepeatTexture(const bool value)
 	m_repeatTexture = value;
 }
 
+void Control::SetProperty(PropBool boolprop, bool value)
 bool Control::MousePressEvents( int x, int y )
 {
 	return false;
@@ -107,16 +108,94 @@ bool Control::MousePressEvents( int x, int y )
 
 Control& Control::operator=(const Control& c)
 {
-	m_name = c.m_name;
-	m_parent = c.m_parent;
-	m_position = c.m_position;
-	m_size = c.m_size;
-	m_texture = c.m_texture;
-	m_type = c.m_type;
-	m_visible = c.m_visible;
-	m_pngBlend = c.m_pngBlend;
+	switch (boolprop)
+	{
+	case Control::PROPBOL_PNGBLEND:
+		m_pngBlend = value;
+		break;
+	case Control::PROPBOL_REPEATTEXTURE:
+		m_repeatTexture = value;
+		break;
+	case Control::PROPBOL_VISIBLE:
+		m_visible = value;
+		break;
+	case Control::PROPBOL_ENABLED:
+		m_enabled = value;
+		break;
+	default:
+		assert(false);
+		break;
+	}
+}
+void Control::SetProperty(PropVector2 vector2prop, Vector2i value)
+{
+	switch (vector2prop)
+	{
+	case Control::PROPVCT2_POSITION:
+		m_position = value;
+		break;
+	case Control::PROPVCT2_SIZE:
+		m_size = value;
+		break;
+	default:
+		assert(false);
+		break;
+	}
+}
+void Control::SetProperty(PropString stringprop, std::string value)
+{
+	switch (stringprop)
+	{
+	case Control::PROPSTR_NAME:
+		m_name = value;
+		break;
+	default:
+		assert(false);
+		break;
+	}
+}
+void Control::SetProperty(PropTexture textureprop, Texture* value)
+{
 
-	return *this;
+}
+
+bool Control::GetProperty(PropBool boolprop) const
+{
+	switch (boolprop)
+	{
+	case Control::PROPBOL_PNGBLEND:
+		return m_pngBlend;
+	case Control::PROPBOL_REPEATTEXTURE:
+		return m_repeatTexture;
+	case Control::PROPBOL_VISIBLE:
+		return m_visible;
+	case Control::PROPBOL_ENABLED:
+		return m_enabled;
+	default:
+		assert(false);
+		return false;
+	}
+}
+Vector2i Control::GetProperty(PropVector2 vector2prop) const
+{
+	switch (vector2prop)
+	{
+	case Control::PROPVCT2_POSITION:
+		return m_position;
+	case Control::PROPVCT2_SIZE:
+		return m_size;
+	default:
+		assert(false);
+		return Vector2i();
+	}
+}
+std::string Control::GetProperty(PropString stringprop) const
+{
+
+}
+Texture* Control::GetProperty(PropTexture textureprop) const
+{
+
 }
 
 void Control::RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture)

@@ -9,6 +9,8 @@
 #include <iostream>
 #include <map>
 
+#pragma region Events
+
 /**
  * Event handler
  */
@@ -101,6 +103,8 @@ private:
 	EventHandlerID m_count;
 };
 
+#pragma endregion
+
 /**
  * @Brief Controle de l'interface 2d
  */
@@ -117,6 +121,28 @@ public:
 		CTRLTYPE_PANEL,
 		CTRLTYPE_LISTBOX,
 		CTRLTYPE_TEXTBOX
+	};
+	enum PropBool
+	{
+		PROPBOL_PNGBLEND,
+		PROPBOL_REPEATTEXTURE,
+		PROPBOL_VISIBLE,
+		PROPBOL_ENABLED
+	};
+	enum PropVector2
+	{
+		PROPVCT2_POSITION,
+		PROPVCT2_SIZE
+	};
+	enum PropString
+	{
+		PROPSTR_NAME,
+		PROPSTR_TEXT
+	};
+	enum PropTexture
+	{
+		PROPTEXT_BACKGROUND,
+		PROPTEXT_FONT_COLOR
 	};
 	/**
 	* Constructeur par défaut
@@ -215,12 +241,21 @@ public:
 	virtual bool GetRepeatTexture() const;
 	virtual void SetRepeatTexture(const bool value);
 
+	virtual void SetProperty(PropBool boolprop, bool value);
+	virtual void SetProperty(PropVector2 vector2prop, Vector2i value);
+	virtual void SetProperty(PropString stringprop, std::string value);
+	virtual void SetProperty(PropTexture textureprop, Texture* value);
 	virtual bool MousePressEvents( int x, int y );
 	virtual bool MouseReleaseEvents(int x, int y);
 	virtual bool KeyPressEvents(int keycode);
 	virtual bool KeyReleaseEvents(int keycode);
 
 	Control& operator=(const Control& c);
+
+	virtual bool GetProperty(PropBool boolprop) const;
+	virtual Vector2i GetProperty(PropVector2 vector2prop) const;
+	virtual std::string GetProperty(PropString stringprop) const;
+	virtual Texture* GetProperty(PropTexture textureprop) const;
 
 protected:
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size);
@@ -230,6 +265,7 @@ protected:
 	bool m_pngBlend;
 	bool m_repeatTexture;
 	bool m_visible;
+	bool m_enabled;
 	Texture* m_texture;
 	Control* m_parent;
 	Vector2i m_position;

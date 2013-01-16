@@ -17,6 +17,8 @@ public:
 	Interface();
 	virtual ~Interface();
 	virtual void Init() = 0;
+protected:
+	bool m_loaded;
 };
 
 #endif

@@ -250,8 +250,6 @@ public:
 	virtual bool KeyPressEvents(int keycode);
 	virtual bool KeyReleaseEvents(int keycode);
 
-	Control& operator=(const Control& c);
-
 	virtual bool GetProperty(PropBool boolprop) const;
 	virtual Vector2i GetProperty(PropVector2 vector2prop) const;
 	virtual std::string GetProperty(PropString stringprop) const;

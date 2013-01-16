@@ -100,13 +100,12 @@ void Control::SetRepeatTexture(const bool value)
 	m_repeatTexture = value;
 }
 
-void Control::SetProperty(PropBool boolprop, bool value)
 bool Control::MousePressEvents( int x, int y )
 {
 	return false;
 }
 
-Control& Control::operator=(const Control& c)
+void Control::SetProperty(PropBool boolprop, bool value)
 {
 	switch (boolprop)
 	{
@@ -191,11 +190,11 @@ Vector2i Control::GetProperty(PropVector2 vector2prop) const
 }
 std::string Control::GetProperty(PropString stringprop) const
 {
-
+	return "";
 }
 Texture* Control::GetProperty(PropTexture textureprop) const
 {
-
+	return 0;
 }
 
 void Control::RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture)

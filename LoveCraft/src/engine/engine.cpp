@@ -199,11 +199,6 @@ void Engine::LoadMenuResource()
 #pragma region Chargement des textures
 
 #pragma region Blocs
-
-#ifndef TEXTUREARRAY_INITIALIZED
-#define TEXTUREARRAY_INITIALIZED
-#endif
-
 	// Texture des blocs 128x128 px
 	m_textureArray = new TextureArray(128);
 	LoadBlocTexture(BTYPE_DIRT, TEXTURE_PATH "b_dirt.bmp");

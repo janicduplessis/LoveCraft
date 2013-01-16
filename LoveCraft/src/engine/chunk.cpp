@@ -1,9 +1,40 @@
 ﻿#include "chunk.h"
+#include <util/perlin.h>
 
-Chunk::Chunk(Shader* shader) : m_pos(0), m_blocks(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z), m_chunkMesh(shader),
-	m_left(0), m_right(0), m_back(0), m_front(0)
+Chunk::Chunk(Vector2i pos, Shader* shader) : m_blocks(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z), m_chunkMesh(shader),
+	m_left(0), m_right(0), m_back(0), m_front(0), m_pos(pos)
 {
 	m_blocks.Reset(BTYPE_AIR);
+	// The first parameter is the number of octaves , this is how noisy or smooth the function is. This is valid between 1 and 16. A value of
+	// 4 to 8 octaves produces fairly conventional noise results . The second parameter is the noise frequency . Values betwen 1 and 8 are
+	// reasonable here . You can try sampling the data and plotting it to the screen to see what numbers you like . The last parameter is
+	// the amplitude . Setting this to a value of 1 will return randomized samples between -1 and +1. The last parameter is the random
+	// number seed .
+	Perlin perlin(16 ,6 ,1 ,95);
+
+	for ( int x = 0; x < CHUNK_SIZE_X ; ++x)
+	{
+		for ( int z = 0; z < CHUNK_SIZE_Z ; ++z)
+		{
+			// La methode Get accepte deux param^etre ( coordonnee en X et Z) et retourne une valeur qui respecte
+			// les valeurs utilisees lors de la creation de l' objet Perlin
+			// La valeur retournee est entre 0 et 1
+			float val = perlin . Get (( float )( m_pos.x * CHUNK_SIZE_X + x) / 2000.f, ( float )( m_pos.y * CHUNK_SIZE_Z + z) / 2000.f);
+			int yMax = (int)(CHUNK_SIZE_Y / 3.f) + (int)(val * CHUNK_SIZE_Y / 3.f);
+			for(int y = 0; y <= yMax; y++)
+			{
+				if (y == yMax)
+					m_blocks.Set(x,y,z, BTYPE_GRASS);
+				else
+					m_blocks.Set(x,y,z, BTYPE_DIRT);
+
+			}
+			// Utiliser val pour determiner la hauteur du terrain a la position x,z
+			// Vous devez vous assurer que la hauteur ne depasse pas CHUNK_SIZE_Y
+			// Remplir les blocs du bas du terrain (le 'bed rock ') jusqu 'a la hauteur calculee .
+			// N' hesitez pas a jouer avec la valeur retournee pour obtenir un resultat qui vous semble satisfaisant
+		}
+	}
 }
 
 Chunk::~Chunk()

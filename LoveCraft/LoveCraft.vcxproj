@@ -118,6 +118,7 @@
     <ClCompile Include="src\engine\player.cpp" />
     <ClCompile Include="src\engine\gl\ui\progressbar.cpp" />
     <ClCompile Include="src\engine\projectile.cpp" />
+    <ClCompile Include="src\util\perlin.cpp" />
     <ClCompile Include="src\util\quaternion.cpp" />
     <ClCompile Include="src\engine\gl\shaders\shader.cpp" />
     <ClCompile Include="src\engine\son.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="src\game\npc.h" />
     <ClInclude Include="src\engine\gl\ui\progressbar.h" />
     <ClInclude Include="src\engine\projectile.h" />
+    <ClInclude Include="src\util\perlin.h" />
     <ClInclude Include="src\util\quaternion.h" />
     <ClInclude Include="src\engine\son.h" />
     <ClInclude Include="src\engine\gl\texturearray.h" />

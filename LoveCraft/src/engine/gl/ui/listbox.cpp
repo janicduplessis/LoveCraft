@@ -131,17 +131,16 @@ void ListBox::ScrollDown(Control* sender)
 {
 	Scroll(-1);
 }
-
-void ListBox::MouseClick(int x, int y)
+bool ListBox::MousePressEvents(int x, int y)
 {
-	m_downArrow->isClicked(x,y);
-	m_upArrow->isClicked(x,y);
+	return m_downArrow->MousePressEvents(x,y) ||
+	m_upArrow->MousePressEvents(x,y);
 }
 
-void ListBox::MouseRelease()
+bool ListBox::MouseReleaseEvents(int x, int y)
 {
-	m_downArrow->Release();
-	m_upArrow->Release();
+	return m_downArrow->MouseReleaseEvents(x,y) ||
+	m_upArrow->MouseReleaseEvents(x,y);
 }
 
 ListBox& ListBox::operator=(const ListBox& l)

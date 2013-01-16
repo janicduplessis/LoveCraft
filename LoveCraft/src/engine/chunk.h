@@ -23,7 +23,7 @@ class Chunk
 	};
 
 public:
-	Chunk(Shader* shader = 0);
+	Chunk(Vector2i pos, Shader* shader = 0);
 	~Chunk();
 
 	void RemoveBloc(uint32 x, uint32 y, uint32 z);

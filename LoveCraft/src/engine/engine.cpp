@@ -173,107 +173,17 @@ void Engine::GameInit()
 
 #pragma endregion
 
-#pragma region Initilisation du chunk principal
-
-#ifndef CHUNK_INITIALIZED
-#define CHUNK_INITIALIZED
-#endif
-
 	m_chunks = new Array2d<Chunk*>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
 	Info::Get().SetChunkArray(m_chunks);
 
-	//Genere un chunk plancher
-	Chunk chunk(&m_shaderCube);
-	for (int i = 0; i < CHUNK_SIZE_X; ++i)
-	{
-		for (int j = 0; j < CHUNK_SIZE_Z; ++j)
-		{
-			chunk.SetBloc(i, 0, j, BTYPE_DIRT);
-		}
-	}
-
-	//Blocs en escalier
-	for (int k = 1; k <= 3; k++)
-	{
-		for (int j = 1; j < CHUNK_SIZE_Z-2; j++)
-		{
-			for (int i = 1; i < CHUNK_SIZE_X-2; i++)
-			{
-				if (i <= j)
-					chunk.SetBloc(k,i,j, BTYPE_BRICK);
-			}
-		}
-	}
-	//Blocs dans le trou de sable
-	for (int i = 1; i <= 8; i++)
-	{
-		for (int j = 1; j <= 6; j++)
-		{
-			chunk.SetBloc(i,0,j, BTYPE_SAND);
-
-		}
-	}
-
-	//Blocs de l'igloo
-	for (int k = 0; k <= 4; k++)
-	{
-		for (int i = 10; i < CHUNK_SIZE_X - 1; i++)
-		{
-			for (int j = 8; j < CHUNK_SIZE_Z - 1; j++)
-			{
-				if (k == 0 || k == 4)
-					chunk.SetBloc(i,k,j, BTYPE_SNOW);
-				else
-				{
-					if (i == 10 || j == 8 || i == CHUNK_SIZE_X - 2 || j == CHUNK_SIZE_Z - 2)
-						chunk.SetBloc(i,k,j, BTYPE_SNOW);
-				}
-			}
-		}
-	}
-	chunk.SetBloc(12, 1, 14, BTYPE_AIR);
-	chunk.SetBloc(12, 2, 14, BTYPE_AIR);
-	chunk.SetBloc(12, 1, 8, BTYPE_AIR);
-	chunk.SetBloc(12, 2, 8, BTYPE_AIR);
-
-	//Blocs de roche
-	for (int i = 1; i <= 7; i++)
-	{
-		for (int j = 7; j < CHUNK_SIZE_Z - 1; j++)
-		{
-			chunk.SetBloc(i,0,j, BTYPE_ROCK);
-		}
-	}
-
-	//Platforme de gazon + lac
-	for (int k = 14; k < 16; k++)
-	{
-		for (int i = CHUNK_SIZE_X-1; i >= 4; i--)
-		{
-			for (int j = CHUNK_SIZE_Z-1; j >= 2; j--)
-			{
-				chunk.SetBloc(i,k,j, BTYPE_GRASS);
-				if (k == 15 && (i < CHUNK_SIZE_X - 3 && i > 6 && j < CHUNK_SIZE_Z - 3 && j > 4))
-					chunk.SetBloc(i,k,j, BTYPE_SWAMP);
-				if (k == 15 && (i == CHUNK_SIZE_X - 3 || i == 6 || j == CHUNK_SIZE_Z - 3 || j == 4))
-					chunk.SetBloc(i,k,j, BTYPE_ROCK);
-			}
-		}
-	}
-
-	//Place les chunks
 	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
 	{
 		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
 		{
-			chunk.SetPosition(Vector2i(i, j));
-			Chunk* c = new Chunk();
-			*c = chunk;
+			Chunk* c = new Chunk(Vector2i(i,j), &m_shaderCube);
 			m_chunks->Set(i, j, c);
 		}
 	}
-
-#pragma endregion
 
 	CenterMouse();
 }
@@ -288,11 +198,6 @@ void Engine::LoadMenuResource()
 #pragma region Chargement des textures
 
 #pragma region Blocs
-
-#ifndef TEXTUREARRAY_INITIALIZED
-#define TEXTUREARRAY_INITIALIZED
-#endif
-
 	// Texture des blocs 128x128 px
 	m_textureArray = new TextureArray(128);
 	LoadBlocTexture(BTYPE_DIRT, TEXTURE_PATH "b_dirt.bmp");
@@ -1485,7 +1390,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		case MOUSE_BUTTON_LEFT:
 			m_clickTimerOn = true;
 			m_clickTimer = 0;
-			m_gameUI->m_lb_console->MouseClick(x, m_gameUI->m_pnl_playscreen->Size().y - y);
+			m_gameUI->m_lb_console->MousePressEvents(x, m_gameUI->m_pnl_playscreen->Size().y - y);
 			if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 			{
 				m_leftClick = true;
@@ -1530,9 +1435,9 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		switch (button)
 		{
 		case MOUSE_BUTTON_LEFT:
-			m_menuUI->m_menu_close->isClicked(x, m_menuUI->m_menu_screen->Size().y - y);
-			m_menuUI->m_menu_start->isClicked(x, m_menuUI->m_menu_screen->Size().y - y);
-			m_menuUI->m_menu_fullscreen->isClicked(x, m_menuUI->m_menu_screen->Size().y - y);
+			m_menuUI->m_menu_close->MousePressEvents(x, m_menuUI->m_menu_screen->Size().y - y);
+			m_menuUI->m_menu_start->MousePressEvents(x, m_menuUI->m_menu_screen->Size().y - y);
+			m_menuUI->m_menu_fullscreen->MousePressEvents(x, m_menuUI->m_menu_screen->Size().y - y);
 			break;
 		}
 	}
@@ -1588,7 +1493,7 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 			m_leftClick = false;
 			m_clickTimerOn = false;
 			std::cout << (float)m_currentBlockType << std::endl;
-			m_gameUI->m_lb_console->MouseRelease();
+			m_gameUI->m_lb_console->MouseReleaseEvents(x,y);
 			if (m_clickTimer < 0.5f && m_lastRot == m_camera->GetRotation())
 				AddBlock(m_currentBlockType);
 			break;
@@ -1599,9 +1504,9 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 		switch (button)
 		{
 		case MOUSE_BUTTON_LEFT:
-			m_menuUI->m_menu_close->Release();
-			m_menuUI->m_menu_start->Release();
-			m_menuUI->m_menu_fullscreen->Release();
+			m_menuUI->m_menu_close->MouseReleaseEvents(x,y);
+			m_menuUI->m_menu_start->MouseReleaseEvents(x,y);
+			m_menuUI->m_menu_fullscreen->MouseReleaseEvents(x,y);
 			break;
 		}
 	}

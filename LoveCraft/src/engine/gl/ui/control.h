@@ -245,6 +245,10 @@ public:
 	virtual void SetProperty(PropVector2 vector2prop, Vector2i value);
 	virtual void SetProperty(PropString stringprop, std::string value);
 	virtual void SetProperty(PropTexture textureprop, Texture* value);
+	virtual bool MousePressEvents( int x, int y );
+	virtual bool MouseReleaseEvents(int x, int y);
+	virtual bool KeyPressEvents(int keycode);
+	virtual bool KeyReleaseEvents(int keycode);
 
 	virtual bool GetProperty(PropBool boolprop) const;
 	virtual Vector2i GetProperty(PropVector2 vector2prop) const;
@@ -254,7 +258,6 @@ public:
 protected:
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size);
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture);
-
 	std::string m_name;
 	Type m_type;
 	bool m_pngBlend;

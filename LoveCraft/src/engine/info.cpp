@@ -19,6 +19,7 @@ Info::~Info()
 	{
 		delete m_blocInfos[i];
 	}
+	delete [] m_blocInfos;
 	delete m_info;
 }
 
@@ -97,6 +98,8 @@ BlockType Info::GetBlocFromWorld(Vector3f pos, const Vector3f& offset) const
 
 void Info::GenerateBlocInfos()
 {
+	m_blocInfos = new BlockInfo*[BTYPE_COUNT];
+
 	m_blocInfos[BTYPE_AIR] = new BlockInfo(BTYPE_AIR, "Air");
 
 	m_blocInfos[BTYPE_DIRT] = new BlockInfo(BTYPE_DIRT, "Dirt");

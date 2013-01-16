@@ -106,7 +106,7 @@ private:
 private:
 	Array2d<Chunk*>* m_chunks;
 	static Info* m_info;
-	BlockInfo* m_blocInfos[BTYPE_COUNT];
+	BlockInfo** m_blocInfos;
 	Option m_options;
 	Son m_sound;
 	Nwork m_network;

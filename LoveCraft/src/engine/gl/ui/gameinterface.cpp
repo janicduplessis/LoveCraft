@@ -66,9 +66,6 @@ void GameInterface::TextUpdate()
 
 GameInterface::~GameInterface()
 {
-
-#ifdef GAME_INTERFACE_INITIALIZED
-
 	delete m_pnl_screen;
 	delete m_pnl_playscreen;
 	delete m_pnl_portrait;
@@ -91,12 +88,11 @@ GameInterface::~GameInterface()
 	delete m_lbl_mana;
 	delete m_lbl_exp;
 	delete m_lbl_energy;
-
-#endif
-
+	delete m_lbl_currentBlockType;
+	delete m_pb_currentBlockType;
 }
 
 void GameInterface::Init()
 {
-
+	
 }

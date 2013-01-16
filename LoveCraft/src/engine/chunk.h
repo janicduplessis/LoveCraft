@@ -48,6 +48,11 @@ private:
 	Vector2i m_pos;
 	Array3d<BlockType> m_blocks;
 	ChunkMesh m_chunkMesh;
+
+	Chunk* m_left;
+	Chunk* m_right;
+	Chunk* m_front;
+	Chunk* m_back;
 };
 
 #endif // CHUNK_H__

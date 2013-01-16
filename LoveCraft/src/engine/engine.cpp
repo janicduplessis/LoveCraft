@@ -15,7 +15,7 @@
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0),
-	m_clicktimer(0)
+	m_clickTimer(0), m_currentBlockType(0)
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
@@ -37,18 +37,15 @@ Engine::~Engine()
 	delete m_camera;
 	delete m_dice;
 
-#ifdef CHUNK_INITIALIZED
 	// delete les chunks
-	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
+	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2 - 1; i++)
 	{
-		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
+		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2 - 1; ++j)
 		{
 			if (m_chunks != 0)
 				delete m_chunks->Get(i, j);
 		}
 	}
-#endif
-#ifdef MONSTERS_INIALIZED
 	// delete les monstres
 #ifdef LOAD_MODELS
 	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
@@ -56,15 +53,10 @@ Engine::~Engine()
 #else
 	delete m_monsters[0];
 #endif
-#endif
 	delete [] m_monsters;
 
-#ifdef TEXTUREARRAY_INITIALIZED
 	delete m_textureArray;
-#endif
-
 	delete m_menuUI;
-
 	delete m_gameUI;
 }
 
@@ -138,6 +130,7 @@ void Engine::MenuInit()
 
 void Engine::GameInit()
 {
+	m_currentBlockType = BTYPE_DIRT;
 
 #pragma region Initialisation des entites
 
@@ -303,12 +296,11 @@ void Engine::LoadMenuResource()
 
 	// Texture des blocs 128x128 px
 	m_textureArray = new TextureArray(128);
-
-	LoadBlocTexture(BTYPE_BRICK, TEXTURE_PATH "b_brick_red.jpg");
 	LoadBlocTexture(BTYPE_DIRT, TEXTURE_PATH "b_dirt.bmp");
 	LoadBlocTexture(BTYPE_GRASS, TEXTURE_PATH "b_grass.jpg");
-	LoadBlocTexture(BTYPE_ROCK, TEXTURE_PATH "b_rock.jpg");
+	LoadBlocTexture(BTYPE_BRICK, TEXTURE_PATH "b_brick_red.jpg");
 	LoadBlocTexture(BTYPE_SAND, TEXTURE_PATH "b_sand.jpg");
+	LoadBlocTexture(BTYPE_ROCK, TEXTURE_PATH "b_rock.jpg");
 	LoadBlocTexture(BTYPE_SNOW, TEXTURE_PATH "b_snow.jpg");
 	LoadBlocTexture(BTYPE_SWAMP, TEXTURE_PATH "b_swamp.jpg");
 
@@ -497,7 +489,6 @@ void Engine::LoadGameResource()
 #ifndef GAME_INTERFACE_INITIALIZED
 #define GAME_INTERFACE_INITIALIZED
 #endif
-
 	// Écran
 	m_gameUI->m_pnl_screen = new Panel(0, Vector2i(), Vector2i(Width(), Height()), 0, 1, "main");
 
@@ -582,6 +573,14 @@ void Engine::LoadGameResource()
 		Vector2i(PNL_PORTRAIT_SIZE_W, PNL_PORTRAIT_SIZE_H),
 		&m_textureInterface[CUSTIMAGE_PORTRAIT_FRAME], PNL_PORTRAIT_CONTROLS_NBR, PNL_PORTRAIT_NAME);
 	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_pnl_portrait);
+
+	m_gameUI->m_lbl_currentBlockType = new Label(m_gameUI->m_pnl_playscreen, Vector2i(m_gameUI->m_pnl_portrait->Position().x,
+		m_gameUI->m_pnl_portrait->Position().y + m_gameUI->m_pnl_portrait->Size().y + 10),
+		&m_texturefontColor[TEXTCOLOR_BLUE], "Bloc : ", Label::TEXTDOCK_NONE, false, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "lblcurblock");
+	m_gameUI->m_pb_currentBlockType = new PictureBox(m_gameUI->m_pnl_playscreen, Vector2i(m_gameUI->m_lbl_currentBlockType->Position().x + 84, m_gameUI->m_lbl_currentBlockType->Position().y), Vector2i(20,20), 
+		m_textureArray->GetTexture(m_currentBlockType - 1), "pbcurbloc");
+	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_currentBlockType);
+	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_pb_currentBlockType);
 
 #pragma region Enfants pnl portrait
 
@@ -764,6 +763,8 @@ void Engine::Update(float elapsedTime)
 	static float gameTime = elapsedTime;
 	gameTime += elapsedTime;
 	m_character.ReduceGlobalCooldown(elapsedTime);
+	if (m_clickTimerOn)
+		m_clickTimer += elapsedTime;
 
 #pragma endregion
 
@@ -1317,6 +1318,24 @@ void Engine::KeyReleaseEvent(unsigned char key)
 
 		if (!m_gameUI->m_txb_console->HasFocus())
 		{
+			if(c.E())
+			{
+				m_currentBlockType++;
+				if (m_currentBlockType % BTYPE_COUNT == BTYPE_AIR)
+					m_currentBlockType++;
+				m_currentBlockType = m_currentBlockType % BTYPE_COUNT;
+				m_gameUI->m_pb_currentBlockType->SetTexture(m_textureArray->GetTexture(
+					Info::Get().GetBlocInfo(m_currentBlockType)->GetTextureIndex()));
+			}
+			if(c.Q())
+			{
+				m_currentBlockType--;
+				if (m_currentBlockType == BTYPE_AIR)
+					m_currentBlockType--;
+				m_currentBlockType = (m_currentBlockType + BTYPE_COUNT) % BTYPE_COUNT;
+				m_gameUI->m_pb_currentBlockType->SetTexture(m_textureArray->GetTexture(
+					Info::Get().GetBlocInfo(m_currentBlockType)->GetTextureIndex()));
+			}
 			if (c.Esc())
 			{
 				SetMenuStatus(!IsMenuOpen());
@@ -1415,9 +1434,10 @@ void Engine::MouseMoveEvent(int x, int y)
 		// Camera 3rd person
 		if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON && m_rightClick || m_leftClick)
 		{
-			if (x == (Width() / 2) && y == (Height() / 2))
+			if (!MousePosChanged(x, y))
 				return;
-			MakeRelativeToCenter(x, y);
+
+			MakeRelativeToMouse(x, y);
 			m_camera->TurnLeftRight((float)x);
 			m_camera->TurnTopBottom((float)y);
 
@@ -1425,7 +1445,8 @@ void Engine::MouseMoveEvent(int x, int y)
 			{
 				m_player->SetRotation(m_camera->GetRotation());
 			}
-			CenterMouse();
+
+			ResetMouse();
 		}
 		// Camera first person
 		else if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON)
@@ -1455,21 +1476,25 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		switch (button)
 		{
 		case MOUSE_BUTTON_RIGHT:
+			m_clickTimerOn = true;
+			m_clickTimer = 0;
 			m_rightClick = true;
 			m_player->SetRotation(m_camera->GetRotation());
 			SetMousePos(x, y);
-			RemoveBlock();
+			m_lastRot = m_camera->GetRotation();
 			break;
 		case MOUSE_BUTTON_LEFT:
+			m_clickTimerOn = true;
+			m_clickTimer = 0;
 			m_gameUI->m_lb_console->MouseClick(x, m_gameUI->m_pnl_playscreen->Size().y - y);
 			if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 			{
 				m_leftClick = true;
 				SetMousePos(x, y);
 			}
-			AddBlock(BTYPE_BRICK);
 			if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON)
 				Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE);
+			m_lastRot = m_camera->GetRotation();
 			break;
 		case MOUSE_BUTTON_WHEEL_UP:
 			if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
@@ -1555,10 +1580,18 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 		{
 		case MOUSE_BUTTON_RIGHT:
 			m_rightClick = false;
+			m_clickTimerOn = false;
+			if (m_clickTimer < 0.5f && abs(m_lastRot.x - m_camera->GetRotation().x) <= 1 
+				&& abs(m_lastRot.y - m_camera->GetRotation().y) <= 1 && m_currentBlock.y != 0)
+				RemoveBlock();
 			break;
 		case MOUSE_BUTTON_LEFT:
 			m_leftClick = false;
+			m_clickTimerOn = false;
+			std::cout << (float)m_currentBlockType << std::endl;
 			m_gameUI->m_lb_console->MouseRelease();
+			if (m_clickTimer < 0.5f && m_lastRot == m_camera->GetRotation())
+				AddBlock(m_currentBlockType);
 			break;
 		}
 	}
@@ -1577,8 +1610,6 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 
 void Engine::AddBlock(BlockType type)
 {
-	m_currentBlock.Afficher();
-	m_currentFaceNormal.Afficher();
 	if(m_currentBlock.x == -1)
 		return;
 	Vector3f pos = m_currentBlock;
@@ -1748,43 +1779,43 @@ void Engine::GetBlocAtCursor()
 
 	bool found = false;
 
-	//if((m_player->Position() - Vector3f(posX, posY, posZ)).Lenght() < MAX_SELECTION_DISTANCE)
-	//{
-	// Apres avoir determine la position du bloc en utilisant la partie entiere du hit
-	// point retourne par opengl, on doit verifier de chaque cote du bloc trouve pour trouver
-	// le vrai bloc. Le vrai bloc peut etre different a cause d'erreurs de precision de nos
-	// nombres flottants (si z = 14.999 par exemple, et qu'il n'y a pas de blocs a la position
-	// 14 (apres arrondi vers l'entier) on doit trouver et retourner le bloc en position 15 s'il existe
-	// A cause des erreurs de precisions, ils arrive que le cote d'un bloc qui doit pourtant etre a la
-	// position 15 par exemple nous retourne plutot la position 15.0001
-	for(int x = px - 1; !found && x <= px + 1; ++x)
+	if((m_player->Position() - Vector3f(posX - VIEW_DISTANCE, posY, posZ - VIEW_DISTANCE)).Lenght() < MAX_SELECTION_DISTANCE)
 	{
-		for(int y = py - 1; !found && x >= 0 && y <= py + 1; ++y)
+		// Apres avoir determine la position du bloc en utilisant la partie entiere du hit
+		// point retourne par opengl, on doit verifier de chaque cote du bloc trouve pour trouver
+		// le vrai bloc. Le vrai bloc peut etre different a cause d'erreurs de precision de nos
+		// nombres flottants (si z = 14.999 par exemple, et qu'il n'y a pas de blocs a la position
+		// 14 (apres arrondi vers l'entier) on doit trouver et retourner le bloc en position 15 s'il existe
+		// A cause des erreurs de precisions, ils arrive que le cote d'un bloc qui doit pourtant etre a la
+		// position 15 par exemple nous retourne plutot la position 15.0001
+		for(int x = px - 1; !found && x <= px + 1; ++x)
 		{
-			for(int z = pz - 1; !found && y >= 0  && z <= pz + 1; ++z)
+			for(int y = py - 1; !found && x >= 0 && y <= py + 1; ++y)
 			{
-				if(z >= 0)
+				for(int z = pz - 1; !found && y >= 0  && z <= pz + 1; ++z)
 				{
-					BlockType bt = Info::Get().GetBlocFromWorld(Vector3f(x - VIEW_DISTANCE - 0.5f, y, z - VIEW_DISTANCE - 0.5f));
-					if(bt == BTYPE_AIR)
-						continue;
-
-					// Skip water blocs
-					//if(bloc->Type == BT_WATER)
-					//    continue;
-
-					m_currentBlock.x = x;
-					m_currentBlock.y = y;
-					m_currentBlock.z = z;
-
-					if(Tool::InRangeWithEpsilon<float>(posX, x, x+1, 0.05) && Tool::InRangeWithEpsilon<float>(posY, y, y+1, 0.05) && Tool::InRangeWithEpsilon<float>(posZ, z, z+1, 0.05))
+					if(z >= 0)
 					{
-						found = true;
+						BlockType bt = Info::Get().GetBlocFromWorld(Vector3f(x - VIEW_DISTANCE - 0.5f, y, z - VIEW_DISTANCE - 0.5f));
+						if(bt == BTYPE_AIR)
+							continue;
+
+						// Skip water blocs
+						//if(bloc->Type == BT_WATER)
+						//    continue;
+
+						m_currentBlock.x = x;
+						m_currentBlock.y = y;
+						m_currentBlock.z = z;
+
+						if(Tool::InRangeWithEpsilon<float>(posX, x, x+1, 0.05) && Tool::InRangeWithEpsilon<float>(posY, y, y+1, 0.05) && Tool::InRangeWithEpsilon<float>(posZ, z, z+1, 0.05))
+						{
+							found = true;
+						}
 					}
 				}
 			}
 		}
-		// }
 	}
 
 	if(!found)

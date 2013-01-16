@@ -1,6 +1,7 @@
 ﻿#include "chunk.h"
 
-Chunk::Chunk(Shader* shader) : m_pos(0), m_blocks(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z), m_chunkMesh(shader)
+Chunk::Chunk(Shader* shader) : m_pos(0), m_blocks(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z), m_chunkMesh(shader),
+	m_left(0), m_right(0), m_back(0), m_front(0)
 {
 	m_blocks.Reset(BTYPE_AIR);
 }
@@ -12,37 +13,60 @@ Chunk::~Chunk()
 void Chunk::RemoveBloc(uint32 x, uint32 y, uint32 z)
 {
 	m_blocks.Set(x, y, z, BTYPE_AIR);
-	m_isDirty = true;
 }
 
 void Chunk::SetBloc(uint32 x, uint32 y, uint32 z, BlockType type)
 {
-	m_blocks.Set(x, y, z, type);
-	m_isDirty = true;
+	Chunk* editedChunk = this;
+
+	// Front
+	if (z == -1)
+	{
+		if(m_front)
+			m_front->SetBloc(x, y, CHUNK_SIZE_Z - 1, type);
+	}
+	// Back
+	else if (z == CHUNK_SIZE_Z)
+	{
+		if(m_back)
+			m_back->SetBloc(x, y, 0, type);
+	}
+	// Left
+	else if (x == -1)
+	{
+		if(m_left)
+			m_left->SetBloc(CHUNK_SIZE_X - 1, y, z, type);
+	}
+	// Right
+	else if (x == CHUNK_SIZE_X)
+	{
+		if(m_right)
+			m_right->SetBloc(0, y, z, type);
+	}
+	else
+	{
+		m_blocks.Set(x, y, z, type);
+	}
+	editedChunk->m_isDirty = true;
 }
 
 BlockType Chunk::GetBloc(uint32 x, uint32 y, uint32 z)
 {
 	BlockType result;
 
-	Chunk* leftChunk = 0;
-	Chunk* rightChunk = 0;
-	Chunk* frontChunk = 0;
-	Chunk* backChunk = 0;
-
 	Array2d<Chunk*>* chunks = Info::Get().GetChunkArray();
 
 	if (m_pos.x != 0)
-		leftChunk = chunks->Get(m_pos.x - 1, m_pos.y);
+		m_left = chunks->Get(m_pos.x - 1, m_pos.y);
 
 	if(m_pos.x != VIEW_DISTANCE / CHUNK_SIZE_X * 2 - 1)
-		rightChunk = chunks->Get(m_pos.x + 1, m_pos.y);
+		m_right = chunks->Get(m_pos.x + 1, m_pos.y);
 
 	if (m_pos.y != 0)
-		frontChunk = chunks->Get(m_pos.x, m_pos.y - 1);
+		m_front = chunks->Get(m_pos.x, m_pos.y - 1);
 
 	if(m_pos.y != VIEW_DISTANCE / CHUNK_SIZE_Z * 2 - 1)
-		backChunk = chunks->Get(m_pos.x, m_pos.y + 1);
+		m_back = chunks->Get(m_pos.x, m_pos.y + 1);
 
 	// Bottom et top
 	if (y == -1 || y == CHUNK_SIZE_Y)
@@ -52,32 +76,32 @@ BlockType Chunk::GetBloc(uint32 x, uint32 y, uint32 z)
 	// Front
 	else if (z == -1)
 	{
-		if(frontChunk)
-			result = frontChunk->GetBloc(x, y, CHUNK_SIZE_Z - 1);
+		if(m_front)
+			result = m_front->GetBloc(x, y, CHUNK_SIZE_Z - 1);
 		else
 			result = BTYPE_AIR;
 	}
 	// Back
 	else if (z == CHUNK_SIZE_Z)
 	{
-		if(backChunk)
-			result = backChunk->GetBloc(x, y, 0);
+		if(m_back)
+			result = m_back->GetBloc(x, y, 0);
 		else
 			result = BTYPE_AIR;
 	}
 	// Left
 	else if (x == -1)
 	{
-		if(leftChunk)
-			result = leftChunk->GetBloc(CHUNK_SIZE_X - 1, y, z);
+		if(m_left)
+			result = m_left->GetBloc(CHUNK_SIZE_X - 1, y, z);
 		else
 			result = BTYPE_AIR;
 	}
 	// Right
 	else if (x == CHUNK_SIZE_X)
 	{
-		if(rightChunk)
-			result = rightChunk->GetBloc(0, y, z);
+		if(m_right)
+			result = m_right->GetBloc(0, y, z);
 		else
 			result = BTYPE_AIR;
 	}

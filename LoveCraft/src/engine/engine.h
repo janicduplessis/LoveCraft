@@ -216,7 +216,11 @@ private:
 
 	float m_fpstmr;
 	float m_fps;
-	float m_clicktimer;
+	float m_clickTimer;
+	bool m_clickTimerOn;
+	Vector2f m_lastRot;
+
+	BlockType m_currentBlockType;
 
 	typedef std::list<Spell> SpellList;
 	SpellList m_spells;

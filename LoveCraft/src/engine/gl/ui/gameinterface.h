@@ -46,6 +46,10 @@ private:
 	Label* m_lbl_mana;
 	Label* m_lbl_exp;
 	Label* m_lbl_energy;
+
+	Label* m_lbl_currentBlockType;
+	PictureBox* m_pb_currentBlockType;
+
 };
 
 #endif

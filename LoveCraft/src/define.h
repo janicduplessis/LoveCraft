@@ -22,12 +22,19 @@ typedef short int16;
 typedef int int32;
 typedef long long int64;
 
+// Screen resolution
+#define SCREEN_RES_FULL_X	GetSystemMetrics(SM_CXSCREEN)
+#define SCREEN_RES_FULL_Y	GetSystemMetrics(SM_CYSCREEN)
+#define SCREEN_RES_SMALL_X	1024
+#define SCREEN_RES_SMALL_Y	768
+
 // Chunk size
 #define CHUNK_SIZE_X 16
 #define CHUNK_SIZE_Y 128
 #define CHUNK_SIZE_Z 16
 
 #define VIEW_DISTANCE				64
+#define MAX_SELECTION_DISTANCE		10
 
 // Options
 // Musique à l'ouverture du programme
@@ -121,11 +128,15 @@ enum SPELLS {STYPE_BOLT, STYPE_FIRE, STYPE_FREEZE, STYPE_SHOCK, STYPE_POISON, ST
 				 STYPE_HEAL, STYPE_RAIN, STYPE_DEFEND, STYPE_SHIELD, STYPE_LAST};
 
 //Chemins d'accès
-#define TEXTURE_PATH        "../lovecraft/media/textures/"
-#define SHADER_PATH			"../lovecraft/media/shader/"
-#define MODEL_PATH			"../lovecraft/media/models/"
-#define SOUND_PATH			"../lovecraft/media/sound/"
-#define SOUND_FOOT_PATH		SOUND_PATH "footsteps/"
+#define TEXTURE_PATH			"../lovecraft/media/textures/"
+#define SHADER_PATH				"../lovecraft/src/engine/gl/shaders/"
+#define MODEL_PATH				"../lovecraft/media/models/"
+#define MODEL_PATH_ANIMALS		MODEL_PATH "animals/"
+#define MODEL_PATH_ANIMALS_GRD	MODEL_PATH_ANIMALS "ground/"
+#define MODEL_PATH_ANIMALS_AIR	MODEL_PATH_ANIMALS "air/"
+#define MODEL_PATH_HUMANS		MODEL_PATH "humanlike/"
+#define SOUND_PATH				"../lovecraft/media/sound/"
+#define SOUND_FOOT_PATH			SOUND_PATH "footsteps/"
 
 //Network
 #define NW_PORT				10512

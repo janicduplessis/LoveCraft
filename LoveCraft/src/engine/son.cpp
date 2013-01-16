@@ -191,5 +191,5 @@ bool Son::LoadFootSteps(const Son::Foots type, const std::string filename)
 		//Réinitialisation du stream
 		ss.str("");
 	}
-
+	return true;
 }

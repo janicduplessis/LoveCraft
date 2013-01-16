@@ -15,6 +15,6 @@ int main()
 	int resY = GetSystemMetrics(SM_CYSCREEN);
 	std::cout << "Screen resolution : " << resX << " x " << resY << std::endl; 
 	Info::Get().Sound().PlayMusic();
-	FreeConsole();
-    engine.Start("LoveCraft", resX, resY, true);
+	//FreeConsole();
+    engine.Start("LoveCraft", resX, resY, false);
 }

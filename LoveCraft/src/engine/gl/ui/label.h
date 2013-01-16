@@ -1,7 +1,7 @@
 #ifndef LABEL_H_
 #define LABEL_H_
 
-#include "interface.h"
+#include "interfaceinfos.h"
 #include "control.h"
 
 /**

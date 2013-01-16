@@ -8,27 +8,28 @@
 #include "openglcontext.h"
 
 #include "gl/texture.h"
-#include "gl/shader.h"
+#include "gl/shaders/shader.h"
 #include "gl/texturearray.h"
 
 #include "player.h"
 #include "camera.h"
 #include "chunk.h"
 #include "info.h"
-#include "gl/ui/panel.h"
-#include "gl/ui/progressbar.h"
-#include "gl/ui/label.h"
-#include "gl/ui/listbox.h"
+#include "gl/ui/gameinterface.h"
+#include "gl/ui/menuinterface.h"
 #include "gl/ui/picturebox.h"
-#include "gl/ui/textbox.h"
-#include "gl/ui/button.h"
 
-#include "game/pig.h"
+#include "game/animal.h"
 #include "game/character.h"
 #include "game/spell.h"
 
 #include "util/array2d.h"
 #include "util/vector2.h"
+#include "util/dice.h"
+
+#include "gl/testbillboard.h"
+
+//#define LOAD_MODELS
 
 /**
 * @brief Engin graphique
@@ -36,6 +37,8 @@
 class Engine : public OpenglContext
 {
 public:
+	friend class GameInterface;
+
 	/**
 	* Constructeur par défaut de la classe
 	*/
@@ -56,18 +59,24 @@ public:
 	*/
 	virtual Engine& Get();
 
+	virtual void MenuInit();
+
 	/**
 	* Initialisation des composantes du jeu
 	*/
-	virtual void Init();
+	virtual void GameInit();
 
 	virtual void DeInit();
 	/**
 	* Chargement des ressources en mémoire
 	*/
-	virtual void LoadResource();
+	virtual void LoadMenuResource();
+
+	virtual void LoadGameResource();
 
 	virtual void UnloadResource();
+
+	virtual void RenderMenu(float elapsedTime);
 
 	/**
 	* Met à jour toutes les valeurs du jeu (Game loop)
@@ -136,6 +145,10 @@ public:
 	*/
 	virtual void MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y);
 
+	void GetBlocAtCursor();
+	void AddBlock(BlockType type);
+	void RemoveBlock();
+
 private:
 	bool LoadTexture(Texture& texture, const std::string& filename, bool stopOnError = true);
 	void LoadBlocTexture(BLOCK_TYPE type, std::string path);
@@ -158,7 +171,6 @@ private:
 	*/
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat = true);
 	virtual void RenderSpells();
-	void TextUpdate();
 	void StartBlendPNG(bool value = true) const;
 	void OnClick(Control* sender);
 	void CW(const std::string& line);
@@ -169,6 +181,9 @@ private:
 	float m_angle;
 	float m_camRadius;
 
+	Vector3f m_currentBlock;
+	Vector3f m_currentFaceNormal;
+
 	TextureArray* m_textureArray;
 
 	Texture* m_textureSpell;
@@ -177,13 +192,12 @@ private:
 	Texture* m_texturefontColor;
 	Texture m_texSpell;
 
-	Player m_player;
-	Camera m_camera;
+	Player* m_player;
+	Camera* m_camera;
+	Dice* m_dice;
 
 	Character m_character;
-	Pig m_testpig;
-	Pig m_testpig2;
-	Pig m_testpig3;
+	Animal** m_monsters;
 
 	Shader m_shaderModel;
 	Shader m_shaderCube;
@@ -191,36 +205,10 @@ private:
 
 	Array2d<Chunk*>* m_chunks;
 
-	Panel* m_pnl_screen;
-	Panel* m_pnl_playscreen;
-	Panel* m_pnl_portrait;
+	MenuInterface* m_menuUI;
+	GameInterface* m_gameUI;
 
-	Button* m_testButton;
-
-	ProgressBar* m_pgb_health;
-	ProgressBar* m_pgb_energy;
-	ProgressBar* m_pgb_mana;
-	ProgressBar* m_pgb_exp;
-
-	ListBox* m_lb_infos;
-	ListBox* m_lb_console;
-	Textbox* m_txb_console;
-
-	Panel* m_pnl_playerImage;
-	Label* m_lbl_playerLevel;
-
-	Label* m_lbl_plrPos;
-	Label* m_lbl_plrSpd;
-	Label* m_lbl_plrAcc;
-	Label* m_lbl_FPS;
-
-	Panel* m_pnl_time;
-	Label* m_lbl_time;
-
-	Label* m_lbl_health;
-	Label* m_lbl_mana;
-	Label* m_lbl_exp;
-	Label* m_lbl_energy;
+	PictureBox* m_pb_cursor;
 
 	bool m_ghostMode;
 	bool m_rightClick;
@@ -228,6 +216,11 @@ private:
 
 	float m_fpstmr;
 	float m_fps;
+	float m_clickTimer;
+	bool m_clickTimerOn;
+	Vector2f m_lastRot;
+
+	BlockType m_currentBlockType;
 
 	typedef std::list<Spell> SpellList;
 	SpellList m_spells;

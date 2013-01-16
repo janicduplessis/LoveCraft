@@ -2,13 +2,14 @@
 #define TEXTUREARRAY_H__
 
 #include "define.h"
+#include "texture.h"
 
 #include <string>
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
 #include <IL/ilu.h>
-#include <map>
+#include <list>
 
 #include <iostream>
 
@@ -54,17 +55,17 @@ public:
 	 * Bind la texture
 	 */
 	void Use();
-
+	Texture* GetTexture(unsigned int index);
 private:
 	struct TextureInfo
 	{
 		ILuint texId;
-		TextureIndex texIdx;
+		std::string texPath;
 
-		TextureInfo(ILuint _texId, unsigned int _texIdx) : texId(_texId), texIdx(_texIdx) {}
+		TextureInfo(ILuint _texId, std::string path) : texId(_texId), texPath(path) {}
 	};
 
-	typedef std::map<std::string, TextureInfo> TextureList;
+	typedef std::list<TextureInfo> TextureList;
 	TextureList m_textureList; // Liste avec les path des textures
 
 	TextureIndex m_currentTextureIndex; // Index courant
@@ -73,6 +74,8 @@ private:
 	unsigned char* m_data; // Data des textures
 
 	GLuint m_texture; // Id du vbo
+
+	Texture* m_individualTextures;
 };
 
 #endif // TEXTUREARRAY_H

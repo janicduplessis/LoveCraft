@@ -26,10 +26,14 @@ public:
 	*/
 	void SetOptSound(const bool value);
 	void SetOptInfos(const bool value);
+
+	bool GetOptDebug() const;
+	void SetOptDebug(const bool value);
 private:
 	bool m_music;
 	bool m_sound;
 	bool m_showInfo;
+	bool m_debug;
 };
 
 #endif

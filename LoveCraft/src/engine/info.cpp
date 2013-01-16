@@ -1,6 +1,7 @@
 ﻿#include "info.h"
 #include "engine/gl/ui/label.h"
-Info::Info() : m_lineToPrint("")
+
+Info::Info() : m_lineToPrint(""), m_console(0)
 {
 	GenerateBlocInfos();
 	if (!m_sound.LoadSounds())
@@ -18,6 +19,7 @@ Info::~Info()
 	{
 		delete m_blocInfos[i];
 	}
+	delete [] m_blocInfos;
 	delete m_info;
 }
 
@@ -73,6 +75,8 @@ BlockType Info::GetBlocFromWorld(Vector3f pos, const Vector3f& offset) const
 {
 	// Ajoute le offset
 	pos += offset;
+	if (pos.x >= VIEW_DISTANCE * 2 - 2 || pos.y >= CHUNK_SIZE_Y - 1 || pos.z >= VIEW_DISTANCE * 2 - 2)
+		return BTYPE_AIR;
 	// Replace la position par rapport au premier cube
 	pos.x += VIEW_DISTANCE + 0.5f;
 	pos.z += VIEW_DISTANCE + 0.5f;
@@ -94,6 +98,8 @@ BlockType Info::GetBlocFromWorld(Vector3f pos, const Vector3f& offset) const
 
 void Info::GenerateBlocInfos()
 {
+	m_blocInfos = new BlockInfo*[BTYPE_COUNT];
+
 	m_blocInfos[BTYPE_AIR] = new BlockInfo(BTYPE_AIR, "Air");
 
 	m_blocInfos[BTYPE_DIRT] = new BlockInfo(BTYPE_DIRT, "Dirt");
@@ -150,4 +156,14 @@ Vector2i Info::GetMouse()
 void Info::SetMouse( Vector2i pos )
 {
 	m_mouse = pos;
+}
+
+ListBox* Info::Console()
+{
+	return m_console;
+}
+
+void Info::SetConsole( ListBox* console )
+{
+	m_console = console;
 }

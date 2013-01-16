@@ -2,6 +2,7 @@
 #define NPC_H__
 
 #include "define.h"
+#include "npcinfo.h"
 #include "spell.h"
 #include "engine/gl/model.h"
 #include "engine/info.h"
@@ -70,6 +71,7 @@ protected:
 	Quaternion m_rot;
 	float m_maxRot;
 	float m_speedGravity;
+	bool m_flying;
 
 	Type m_type;
 	Spell* m_spells;

@@ -31,6 +31,9 @@ public:
 	 */
 	virtual bool MousePressEvents(int x, int y);
 
+	void SetTextTo(std::string text);
+	std::string GetText() const;
+
 	/**
 	 * Relache le bouton
 	 */

@@ -7,12 +7,12 @@ Button::Button() : m_clicked(false), m_label(0)
 
 Button::Button(Control* parent, const Vector2i& position, const Vector2i &size, Texture* background, 
 			   Texture* textColor, const std::string& text, const std::string& name) : 
-	Control(CTRLTYPE_BOUTON, parent, position, size, background, name), m_clicked(false), m_label(0),
-		m_text(text)
+Control(CTRLTYPE_BOUTON, parent, position, size, background, name), m_clicked(false), m_label(0),
+	m_text(text)
 {
-	if (m_text != "")
-		m_label = new Label(this, Vector2i(), textColor, m_text, Label::TEXTDOCK_MIDDLECENTER, false, 
+	m_label = new Label(this, Vector2i(), textColor, m_text, Label::TEXTDOCK_MIDDLECENTER, false, 
 		LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "label_");
+	m_label->SetMessage(text);
 }
 
 Button::~Button()
@@ -23,7 +23,7 @@ Button::~Button()
 void Button::Render()
 {
 	Control::Render(m_texture);
-	if (m_text != "")
+	if (m_text != "" && m_visible)
 		m_label->Render();
 }
 
@@ -32,12 +32,14 @@ bool Button::MousePressEvents( int x, int y )
 	if (m_clicked)
 		return true;
 
-	Vector2i& pos = AbsolutePosition();
-	if (x >= pos.x && x <= pos.x + m_size.x && y >= pos.y && y <= pos.y + m_size.y) {
-		OnClick.Notify(this);
-		m_clicked = true;
-		Press();
-		return true;
+	if (m_visible)
+	{
+		Vector2i& pos = AbsolutePosition();
+		if (x >= pos.x && x <= pos.x + m_size.x && y >= pos.y && y <= pos.y + m_size.y) {
+			OnClick.Notify(this);
+			Press();
+			return true;
+		}
 	}
 	return false;
 }
@@ -51,4 +53,13 @@ bool Button::MouseReleaseEvents(int x, int y)
 void Button::Press()
 {
 	m_clicked = true;
+}
+
+void Button::SetTextTo(std::string text)
+{
+	m_label->SetMessage(text);
+}
+std::string Button::GetText() const
+{
+	return m_label->GetMsg();
 }

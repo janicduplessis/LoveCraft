@@ -2,19 +2,21 @@
 #include "util/tool.h"
 
 
-TextureArray::TextureArray(int textureSize ) : m_textureSize(textureSize), m_currentTextureIndex(0)
+TextureArray::TextureArray(int textureSize ) : m_textureSize(textureSize), m_currentTextureIndex(0), m_individualTextures(0)
 {
 	
 }
 
 void TextureArray::Use()
 {
-	glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, m_texture);
 }
 
 void TextureArray::Generate()
 {
+	m_individualTextures = new Texture[m_textureList.size()];
+
 	int slotSize = m_textureSize * m_textureSize * 4; // size de une texture (height * width * 4 ( RGBA))
 	int size = m_textureList.size() * slotSize;  // size total
 	m_data = new unsigned char[size];
@@ -34,18 +36,17 @@ void TextureArray::Generate()
 	int count = 0;
 	for(TextureList::iterator it = m_textureList.begin(); it != m_textureList.end(); ++it)
 	{
-		ILuint texid = it->second.texId;
+		ILuint texid = it->texId;
 		if(texid == (ILuint)-1)
 		{
 			// Load l'image
-			std::cout << "Loading " << it->first << " (id=" << it->second.texIdx << ")..." << std::endl;
 			ilGenImages(1, &texid);
 			ilBindImage(texid);
 
 			ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
 			ilEnable(IL_ORIGIN_SET);
 
-			if (!ilLoadImage((const ILstring)it->first.c_str()))
+			if (!ilLoadImage((const ILstring)it->texPath.c_str()))
 				return;
 
 			if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
@@ -54,7 +55,7 @@ void TextureArray::Generate()
 			// Resize avec le texture size
 			iluScale(m_textureSize, m_textureSize, 1);
 
-			it->second.texId = texid;
+			it->texId = texid;
 
 			// Ajoute le data de l'image
 			memcpy(m_data + (count * slotSize), ilGetData(), slotSize);
@@ -83,21 +84,29 @@ void TextureArray::Generate()
 
 	// Delete le data de la mémoire
 	delete m_data;
+
+	// Genere les textures avec des objets Textures pour usage individuel
+	count = 0;
+	for(TextureList::iterator it = m_textureList.begin(); it != m_textureList.end(); ++it)
+	{
+		m_individualTextures[count].Load(it->texPath);
+		count++;
+	}
 }
 
 TextureArray::TextureIndex TextureArray::AddTexture(const std::string& fname)
 {
-	TextureList::iterator it = m_textureList.find(fname);
-
-	if(it != m_textureList.end())
-		return it->second.texIdx;
-
 	TextureIndex id = m_currentTextureIndex++;
-	m_textureList.insert(std::make_pair(fname, TextureInfo((ILuint)-1, id)));
-
+	m_textureList.push_back(TextureInfo((ILuint)-1, fname));
 	return id;
+}
+
+Texture* TextureArray::GetTexture(unsigned int index)
+{
+	return m_individualTextures + index;
 }
 
 TextureArray::~TextureArray()
 {
+	delete [] m_individualTextures;
 }

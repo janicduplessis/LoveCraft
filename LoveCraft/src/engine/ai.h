@@ -10,6 +10,7 @@
 #define DETECTION_RANGE 20
 #define RUN_AWAY_RANGE 20
 #define PATROL_RANGE 30
+#define FLYING_Y_RANGE 5
 
 class Npc;
 /**
@@ -49,7 +50,8 @@ public:
 	{
 		TYPE_PASSIVE_HARMLESS,
 		TYPE_PASSIVE,
-		TYPE_AGGRESSIVE
+		TYPE_AGGRESSIVE,
+		TYPE_PASSIVE_FLYING
 	};
 
 	/**
@@ -91,6 +93,8 @@ public:
 	virtual void Attack();
 	virtual void Follow();
 	virtual void Stay();
+
+	void SetInitialPosition(Vector3f pos);
 
 protected:
 	virtual bool CheckVision(const Vector3f& pos) const;

@@ -10,3 +10,8 @@ PictureBox::PictureBox(Control* parent, Vector2i &position, Vector2i &size, Text
 PictureBox::~PictureBox()
 {
 }
+
+void PictureBox::SetTexture( Texture* tex )
+{
+	m_texture = tex;
+}

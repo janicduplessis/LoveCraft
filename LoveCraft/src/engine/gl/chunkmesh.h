@@ -3,7 +3,7 @@
 
 #include "mesh.h"
 #include "texture.h"
-#include "shader.h"
+#include "shaders/shader.h"
 
 class ChunkMesh : public Mesh
 {

@@ -81,6 +81,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\gl\ui\gameinterface.cpp" />
+    <ClCompile Include="src\engine\gl\ui\interface.cpp" />
+    <ClCompile Include="src\engine\gl\ui\menuinterface.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\billboardshader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\lightingshader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\psupdateshader.cpp" />
+    <ClCompile Include="src\engine\gl\randomtexture.cpp" />
+    <ClCompile Include="src\util\dice.cpp" />
+    <ClCompile Include="src\game\animal.cpp" />
     <ClCompile Include="src\engine\gl\ui\button.cpp" />
     <ClCompile Include="src\engine\gl\ui\icontainer.cpp" />
     <ClCompile Include="src\engine\gl\ui\listbox.cpp" />
@@ -105,13 +114,12 @@
     <ClCompile Include="src\engine\gl\model.cpp" />
     <ClCompile Include="src\engine\network.cpp" />
     <ClCompile Include="src\game\npc.cpp" />
-    <ClCompile Include="src\game\pig.cpp" />
     <ClCompile Include="src\engine\openglcontext.cpp" />
     <ClCompile Include="src\engine\player.cpp" />
     <ClCompile Include="src\engine\gl\ui\progressbar.cpp" />
     <ClCompile Include="src\engine\projectile.cpp" />
     <ClCompile Include="src\util\quaternion.cpp" />
-    <ClCompile Include="src\engine\gl\shader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\shader.cpp" />
     <ClCompile Include="src\engine\son.cpp" />
     <ClCompile Include="src\engine\gl\texture.cpp" />
     <ClCompile Include="src\engine\gl\texturearray.cpp" />
@@ -120,6 +128,17 @@
     <ClCompile Include="src\engine\gl\ui\textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\gl\ui\gameinterface.h" />
+    <ClInclude Include="src\engine\gl\ui\interface.h" />
+    <ClInclude Include="src\engine\gl\ui\menuinterface.h" />
+    <ClInclude Include="src\engine\gl\shaders\billboardshader.h" />
+    <ClInclude Include="src\engine\gl\shaders\lightingshader.h" />
+    <ClInclude Include="src\engine\gl\shaders\psupdateshader.h" />
+    <ClInclude Include="src\engine\gl\randomtexture.h" />
+    <ClInclude Include="src\engine\gl\testbillboard.h" />
+    <ClInclude Include="src\util\dice.h" />
+    <ClInclude Include="src\npcinfo.h" />
+    <ClInclude Include="src\game\animal.h" />
     <ClInclude Include="src\engine\gl\ui\button.h" />
     <ClInclude Include="src\engine\gl\ui\icontainer.h" />
     <ClInclude Include="src\engine\gl\ui\listbox.h" />
@@ -127,7 +146,7 @@
     <ClInclude Include="src\engine\gl\ui\label.h" />
     <ClInclude Include="src\engine\gl\ui\picturebox.h" />
     <ClInclude Include="src\game\spell.h" />
-    <ClInclude Include="src\interface.h" />
+    <ClInclude Include="src\interfaceinfos.h" />
     <ClInclude Include="src\engine\gl\ui\panel.h" />
     <ClInclude Include="src\engine\gl\ui\control.h" />
     <ClInclude Include="src\engine\options.h" />
@@ -150,7 +169,6 @@
     <ClInclude Include="src\engine\gl\model.h" />
     <ClInclude Include="src\engine\network.h" />
     <ClInclude Include="src\game\npc.h" />
-    <ClInclude Include="src\game\pig.h" />
     <ClInclude Include="src\engine\gl\ui\progressbar.h" />
     <ClInclude Include="src\engine\projectile.h" />
     <ClInclude Include="src\util\quaternion.h" />
@@ -160,19 +178,26 @@
     <ClInclude Include="src\util\vector2.h" />
     <ClInclude Include="src\engine\openglcontext.h" />
     <ClInclude Include="src\engine\player.h" />
-    <ClInclude Include="src\engine\gl\shader.h" />
+    <ClInclude Include="src\engine\gl\shaders\shader.h" />
     <ClInclude Include="src\engine\gl\texture.h" />
     <ClInclude Include="src\util\tool.h" />
     <ClInclude Include="src\util\vector3.h" />
     <ClInclude Include="src\engine\gl\ui\textbox.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="media\shader\modelshader.vert" />
-    <None Include="media\shader\modelshader.frag" />
-    <None Include="media\shader\cubeshader.frag" />
-    <None Include="media\shader\cubeshader.vert" />
-    <None Include="media\shader\particleshader.frag" />
-    <None Include="media\shader\particleshader.vert" />
+    <None Include="src\engine\gl\shaders\billboardshader.frag" />
+    <None Include="src\engine\gl\shaders\billboardshader.geom" />
+    <None Include="src\engine\gl\shaders\billboardshader.vert" />
+    <None Include="src\engine\gl\shaders\lightingshader.frag" />
+    <None Include="src\engine\gl\shaders\lightingshader.vert" />
+    <None Include="src\engine\gl\shaders\modelshader.vert" />
+    <None Include="src\engine\gl\shaders\modelshader.frag" />
+    <None Include="src\engine\gl\shaders\cubeshader.frag" />
+    <None Include="src\engine\gl\shaders\cubeshader.vert" />
+    <None Include="src\engine\gl\shaders\particleshader.frag" />
+    <None Include="src\engine\gl\shaders\particleshader.vert" />
+    <None Include="src\engine\gl\shaders\psupdateshader.geom" />
+    <None Include="src\engine\gl\shaders\psupdateshader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

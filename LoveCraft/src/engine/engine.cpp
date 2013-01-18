@@ -24,7 +24,7 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
 
 	m_menuUI = new MenuInterface();
-	m_gameUI = new GameInterface(this);
+	m_gameUI = new GameInterface();
 
 	m_camera = new Camera;
 	m_player = new Player;
@@ -289,6 +289,8 @@ void Engine::LoadMenuResource()
 #ifndef MENU_INTERFACE_INITIALIZED
 #define MENU_INTERFACE_INITIALIZED
 #endif
+
+	m_menuUI->Init(this);
 
 	//Cursor
 	m_pb_cursor = new PictureBox(0, Vector2i(), Vector2i(50, 50), &m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], "pb_cursor");

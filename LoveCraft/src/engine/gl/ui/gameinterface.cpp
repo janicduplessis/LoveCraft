@@ -4,9 +4,9 @@
 #include <sstream>
 
 
-GameInterface::GameInterface(Engine* engine) : Interface()
+GameInterface::GameInterface() : Interface()
 {
-	m_engine = engine;
+	
 }
 
 void GameInterface::TextUpdate()
@@ -95,7 +95,7 @@ GameInterface::~GameInterface()
 	}
 }
 
-void GameInterface::Init()
+void GameInterface::InitControls()
 {
-	m_loaded = true;
+
 }

@@ -245,6 +245,7 @@ public:
 	virtual void SetProperty(PropVector2 vector2prop, Vector2i value);
 	virtual void SetProperty(PropString stringprop, std::string value);
 	virtual void SetProperty(PropTexture textureprop, Texture* value);
+
 	virtual bool MousePressEvents( int x, int y );
 	virtual bool MouseReleaseEvents(int x, int y);
 	virtual bool KeyPressEvents(int keycode);

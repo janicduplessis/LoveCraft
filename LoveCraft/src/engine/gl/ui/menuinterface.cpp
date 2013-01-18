@@ -20,7 +20,7 @@ MenuInterface::~MenuInterface()
 	}
 }
 
-void MenuInterface::Init()
+void MenuInterface::InitControls()
 {
-	m_loaded = true;
+
 }

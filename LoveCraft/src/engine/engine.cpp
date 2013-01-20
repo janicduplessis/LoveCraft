@@ -27,7 +27,6 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 		m_texturefontColor[i] = new Texture();
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
 
-	m_interfaceValues = new ValuesGameInterface();
 	m_menuUI = new MenuInterface();
 	m_gameUI = new GameInterface();
 
@@ -89,7 +88,6 @@ Engine::~Engine()
 	delete m_dice;
 	delete [] m_monsters;
 	delete m_textureArray;
-	delete m_interfaceValues;
 	delete m_menuUI;
 	delete m_gameUI;
 }
@@ -111,7 +109,7 @@ void Engine::MenuInit()
 	//Donne une référence vers la camera a info
 	Info::Get().SetCamera(m_camera);
 
-	m_interfaceValues->Init(m_textureInterface, m_texturefontColor, m_textureArray, m_player, m_character);
+	m_valuesMenuInterface.Init(m_textureInterface, m_texturefontColor);
 
 #pragma region Initilisation de Glew
 
@@ -224,7 +222,11 @@ void Engine::GameInit()
 
 #pragma endregion
 
-	CenterMouse();
+	m_player->Init();
+
+	m_valuesGameInterface.Init(m_textureInterface, m_texturefontColor, m_textureArray, m_player, m_character);
+	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
+	m_gameUI->Init(m_valuesGameInterface);
 }
 
 void Engine::DeInit()
@@ -328,8 +330,8 @@ void Engine::LoadMenuResource()
 
 #pragma region Controles du menu
 
-	m_interfaceValues->Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
-	m_menuUI->Init(m_interfaceValues);
+	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
+	m_menuUI->Init(m_valuesMenuInterface);
 
 	//Cursor
 	m_pb_cursor = new PictureBox(0, Vector2i(), Vector2i(50, 50), m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], "pb_cursor");
@@ -402,7 +404,7 @@ void Engine::RenderMenu(float elapsedTime)
 
 #pragma endregion
 
-	m_interfaceValues->Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
+	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
 	m_menuUI->Render();
 	m_pb_cursor->Render();
 	m_menuUI->m_menu_loading->Render();
@@ -447,7 +449,9 @@ void Engine::Update(float elapsedTime)
 
 #pragma endregion
 
-	m_interfaceValues->Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
+	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
+	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
+	m_gameUI->Update(m_valuesGameInterface);
 
 #pragma region Calcul la position du joueur et de la camera
 
@@ -462,71 +466,6 @@ void Engine::Update(float elapsedTime)
 		Info::Get().Sound().PlaySnd(Son::SON_DEATH, Son::CHANNEL_INTERFACE, true);
 		CW("Vous etes mort!");
 
-	}
-
-#pragma endregion
-
-#pragma region Proprietes des controles
-
-	//Affiche ou cache les infos s'il y a un changement
-	if (m_gameUI->m_lb_infos->GetProperty(Control::PROPBOL_VISIBLE) && !Info::Get().Options().GetOptInfos())
-		m_gameUI->m_lb_infos->SetProperty(Control::PROPBOL_VISIBLE, false);
-	else if (!m_gameUI->m_lb_infos->GetProperty(Control::PROPBOL_VISIBLE) && Info::Get().Options().GetOptInfos())
-		m_gameUI->m_lb_infos->SetProperty(Control::PROPBOL_VISIBLE, true);
-	//Change la texture de la barre de vie en fonction du %. Ne réassigne la texture que si on en a besoin
-	if (m_character->HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetProperty(Control::PROPTEXT_BAR) == m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH])
-		m_gameUI->m_pgb_health->SetProperty(Control::PROPTEXT_BAR, m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW]);
-	else if (m_character->HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetProperty(Control::PROPTEXT_BAR) == m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW])
-		m_gameUI->m_pgb_health->SetProperty(Control::PROPTEXT_BAR, m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH]);
-	//Affiche ou cache la barre d'énergie selon la situation
-	if (m_character->Energy() != m_character->EnergyMax() || Info::Get().Ctrls().Shift())
-	{
-		m_gameUI->m_pgb_energy->SetProperty(Control::PROPBOL_VISIBLE, true);
-		m_gameUI->m_lbl_energy->SetProperty(Control::PROPBOL_VISIBLE, true);
-	}
-	else if (m_character->Energy() == m_character->EnergyMax())
-	{
-		m_gameUI->m_pgb_energy->SetProperty(Control::PROPBOL_VISIBLE, false);
-		m_gameUI->m_lbl_energy->SetProperty(Control::PROPBOL_VISIBLE, false);
-	}
-	// Controles de debug
-	if (Info::Get().Options().GetOptDebug() && !m_gameUI->m_lbl_FPS->GetProperty(Control::PROPBOL_VISIBLE))
-	{
-		m_gameUI->m_lbl_plrPos->SetProperty(Control::PROPBOL_VISIBLE, true);
-		m_gameUI->m_lbl_plrSpd->SetProperty(Control::PROPBOL_VISIBLE, true);
-		m_gameUI->m_lbl_plrAcc->SetProperty(Control::PROPBOL_VISIBLE, true);
-		m_gameUI->m_lbl_mousePos->SetProperty(Control::PROPBOL_VISIBLE, true);
-		m_gameUI->m_lbl_FPS->SetProperty(Control::PROPBOL_VISIBLE, true);
-	}
-	else if (!Info::Get().Options().GetOptDebug() && m_gameUI->m_lbl_FPS->GetProperty(Control::PROPBOL_VISIBLE))
-	{
-		m_gameUI->m_lbl_plrPos->SetProperty(Control::PROPBOL_VISIBLE, false);
-		m_gameUI->m_lbl_plrSpd->SetProperty(Control::PROPBOL_VISIBLE, false);
-		m_gameUI->m_lbl_plrAcc->SetProperty(Control::PROPBOL_VISIBLE, false);
-		m_gameUI->m_lbl_mousePos->SetProperty(Control::PROPBOL_VISIBLE, false);
-		m_gameUI->m_lbl_FPS->SetProperty(Control::PROPBOL_VISIBLE, false);
-	}
-
-#pragma endregion
-
-#pragma region Actualisation des valeurs
-
-	//Actualisation des valeurs des progressbars
-	m_gameUI->m_pgb_health->SetValue(m_character->HealthPerc());
-	m_gameUI->m_pgb_energy->SetValue(m_character->EnergyPerc());
-	m_gameUI->m_pgb_mana->SetValue(m_character->ManaPerc());
-	m_gameUI->m_pgb_exp->SetValue(m_character->ExpPerc());
-	//Actualisation du texte dans les différents Label
-	m_gameUI->TextUpdate();
-
-#pragma endregion
-
-#pragma region Ecriture console a partir de l exterieur
-
-	if (Info::Get().LineToPrint() != "")
-	{
-		m_gameUI->m_lb_console->AddLine(Info::Get().LineToPrint());
-		Info::Get().NextPrint("");
 	}
 
 #pragma endregion
@@ -753,7 +692,7 @@ void Engine::Render2D(float elapsedTime)
 #pragma region Affichage des controles
 
 	//Render de l'écran au complet avec tous ses contrôles.
-	m_gameUI->m_pnl_screen->Render();
+	m_gameUI->Render();
 
 #pragma endregion
 
@@ -814,53 +753,8 @@ void Engine::TextenteredEvent(unsigned int val)
 {
 	if (!IsMenuOpen())
 	{
-		static std::ostringstream ss;
-
-		//Appuie sur Enter pour acquérir le focus
-		if (val == 13 && !m_gameUI->m_txb_console->HasFocus())
-		{
-			m_gameUI->m_txb_console->SetFocus(true);
-			m_gameUI->m_txb_console->SetProperty(Control::PROPBOL_VISIBLE, true);
+		if(m_gameUI->TextenteredEvent(val))
 			return;
-		}
-
-		//Capture du texte en mode Textbox
-		if (m_gameUI->m_txb_console->HasFocus())
-		{
-			//Vérification qu'il s'agit d'un caractère valide
-			if (val >= 32 && val <= 126)
-			{
-				ss << m_gameUI->m_txb_console->GetMsg() << static_cast<char>(val);
-				m_gameUI->m_txb_console->SetMessage(ss.str());
-				ss.str("");
-				return;
-			}
-			//Si c'est un backspace
-			if (val == 8)
-			{
-				std::string mes = m_gameUI->m_txb_console->GetMsg();
-				if (mes.length() > 0)
-				{
-					for (int i = 0; i < mes.length()-1; i++)
-					{
-						ss << mes[i];
-					}
-					m_gameUI->m_txb_console->SetMessage(ss.str());
-					ss.str("");
-				}
-			}
-			//Si c'est un return
-			if (val == 13)
-			{
-				if (m_gameUI->m_txb_console->GetMsg() != "")
-					CW(m_gameUI->m_txb_console->GetMsg());
-				m_gameUI->m_txb_console->SetProperty(Control::PROPBOL_VISIBLE, false);
-				m_gameUI->m_txb_console->SetFocus(false);
-				if (m_gameUI->m_txb_console->GetMsg() == "/dance")
-					Info::Get().Sound().PlaySnd(Son::SON_DEATH, Son::CHANNEL_INTERFACE);
-				m_gameUI->m_txb_console->SetMessage("");
-			}
-		}
 	}
 }
 
@@ -878,96 +772,95 @@ void Engine::KeyPressEvent(unsigned char key)
 		//CW(ss.str());
 		//ss.str("");
 
-		//Si on est pas en train d'écrire, envoie les données de touches
-		if (!m_gameUI->m_txb_console->HasFocus())
-		{
-			c.Set(key, true);
-			//Sorts qui subissent le global cooldown
-			if(m_character->GlobalCooldown() == 0)
-			{
-				if (c.n1())
-				{
-					Spell* newSpell = new Spell;
-					newSpell->SetPosition(m_player->Position());
-					newSpell->Init(4.f, m_player->RotationQ());
-					newSpell->Shoot();
-					m_spells.push_back(*newSpell);
-					sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
-					m_character->ResetGlobalCooldown();
-					ss << "Lancement de sort: Test  de particule!";
-				}
+		if (m_gameUI->KeyPressEvent(key))
+			return;
 
-				if (c.n2())
+		c.Set(key, true);
+		//Sorts qui subissent le global cooldown
+		if(m_character->GlobalCooldown() == 0)
+		{
+			if (c.n1())
+			{
+				Spell* newSpell = new Spell;
+				newSpell->SetPosition(m_player->Position());
+				newSpell->Init(4.f, m_player->RotationQ());
+				newSpell->Shoot();
+				m_spells.push_back(*newSpell);
+				sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
+				m_character->ResetGlobalCooldown();
+				ss << "Lancement de sort: Test  de particule!";
+			}
+
+			if (c.n2())
+			{
+				for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
+					m_monsters[i]->SetPosition(Vector3f(m_monsters[i]->Position().x, 10, m_monsters[i]->Position().z));
+				sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
+				m_character->ResetGlobalCooldown();
+				ss << "Lancement de sort: teleportation de NPC!";
+			}
+			if (c.n3())
+			{
+				sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
+				m_character->ResetGlobalCooldown();
+				ss << "Lancement de sort: Glace";
+			}
+			if (c.n4())
+			{
+				sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
+				m_character->ResetGlobalCooldown();
+				ss << "Lancement de sort: Shock";
+			}
+			if (c.n5())
+			{
+				sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
+				m_character->ResetGlobalCooldown();
+				ss << "Lancement de sort: Poison";
+			}
+			if (c.n7())
+			{
+				if (m_character->Mana() - 15 >= 0)
 				{
-					for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
-						m_monsters[i]->SetPosition(Vector3f(m_monsters[i]->Position().x, 10, m_monsters[i]->Position().z));
-					sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
+					sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
 					m_character->ResetGlobalCooldown();
-					ss << "Lancement de sort: teleportation de NPC!";
-				}
-				if (c.n3())
-				{
-					sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
-					m_character->ResetGlobalCooldown();
-					ss << "Lancement de sort: Glace";
-				}
-				if (c.n4())
-				{
-					sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
-					m_character->ResetGlobalCooldown();
-					ss << "Lancement de sort: Shock";
-				}
-				if (c.n5())
-				{
-					sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
-					m_character->ResetGlobalCooldown();
-					ss << "Lancement de sort: Poison";
-				}
-				if (c.n7())
-				{
-					if (m_character->Mana() - 15 >= 0)
-					{
-						sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
-						m_character->ResetGlobalCooldown();
-						m_character->SetHealth(15);
-						m_character->SetMana(-15);
-						ss << "Lancement de sort: Soin";
-					}
-				}
-				if (c.n8())
-				{
-					if (m_character->Mana() - 10 >= 0)
-					{
-						sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
-						m_character->ResetGlobalCooldown();
-						m_character->SetEnergy(10);
-						m_character->SetMana(-10);
-						ss << "Lancement de sort: Rafraichissement";
-					}
-				}
-				if (c.n9())
-				{
-					sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
-					m_character->ResetGlobalCooldown();
-					ss << "Lancement de sort: Defense";
-				}
-				if (c.n0())
-				{
-					sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
-					m_character->ResetGlobalCooldown();
-					ss << "Lancement de sort: Bouclier magique";
+					m_character->SetHealth(15);
+					m_character->SetMana(-15);
+					ss << "Lancement de sort: Soin";
 				}
 			}
-			//Sorts hors global cooldown
-			if (c.n6())
+			if (c.n8())
 			{
-				if (m_character->Mana() - 5 >= 0)
+				if (m_character->Mana() - 10 >= 0)
 				{
-					sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
-					m_character->SetMana(-5);
-					m_player->Teleport();
-					ss << "Lancement de sort: Teleportation";
+					sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
+					m_character->ResetGlobalCooldown();
+					m_character->SetEnergy(10);
+					m_character->SetMana(-10);
+					ss << "Lancement de sort: Rafraichissement";
 				}
+			}
+			if (c.n9())
+			{
+				sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
+				m_character->ResetGlobalCooldown();
+				ss << "Lancement de sort: Defense";
+			}
+			if (c.n0())
+			{
+				sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
+				m_character->ResetGlobalCooldown();
+				ss << "Lancement de sort: Bouclier magique";
+			}
+		}
+		//Sorts hors global cooldown
+		if (c.n6())
+		{
+			if (m_character->Mana() - 5 >= 0)
+			{
+				sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
+				m_character->SetMana(-5);
+				m_player->Teleport();
+				ss << "Lancement de sort: Teleportation";
 			}
 		}
 		if (ss.str() != "")
@@ -989,100 +882,97 @@ void Engine::KeyPressEvent(unsigned char key)
 
 void Engine::KeyReleaseEvent(unsigned char key)
 {
-	static std::ostringstream ss;
+	std::ostringstream ss;
 	Controls& c = Info::Get().Ctrls();
 
 	if (!IsMenuOpen())
 	{
 #pragma region Touches dans le jeu
 
-		if (!m_gameUI->m_txb_console->HasFocus())
-		{
-			if(c.E())
-			{
-				m_currentBlockType++;
-				if (m_currentBlockType % BTYPE_COUNT == BTYPE_AIR)
-					m_currentBlockType++;
-				m_currentBlockType = m_currentBlockType % BTYPE_COUNT;
-				m_gameUI->m_pb_currentBlockType->SetTexture(m_textureArray->GetTexture(
-					Info::Get().GetBlocInfo(m_currentBlockType)->GetTextureIndex()));
-			}
-			if(c.Q())
-			{
-				m_currentBlockType--;
-				if (m_currentBlockType == BTYPE_AIR)
-					m_currentBlockType--;
-				m_currentBlockType = (m_currentBlockType + BTYPE_COUNT) % BTYPE_COUNT;
-				m_gameUI->m_pb_currentBlockType->SetTexture(m_textureArray->GetTexture(
-					Info::Get().GetBlocInfo(m_currentBlockType)->GetTextureIndex()));
-			}
-			if (c.Esc())
-			{
-				SetMenuStatus(!IsMenuOpen());
-			}
-			if (c.f9())
-			{
-				Info::Get().Options().SetOptInfos(!Info::Get().Options().GetOptInfos());
-				ss << "Affichage des infos a: " << (Info::Get().Options().GetOptInfos() ? "on" : "off");
-			}
-			//if (c.f10())
-			//{
-			//	SetFullscreen(!IsFullscreen());
-			//	ss << "Mode plein ecran mis a: " << (IsFullscreen() ? "on" : "off");
-			//}
-			if (c.G())
-			{
-				m_ghostMode = !m_ghostMode;
-				ss << "Mode fantome mis a: " << (m_ghostMode ? "on" : "off");
-			}
-			if (c.Y())
-			{
-				m_wireframe = !m_wireframe;
-				if(m_wireframe)
-				{
-					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-					glDisable(GL_CULL_FACE);
-				}
-				else
-				{
-					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-					glEnable(GL_CULL_FACE);
-				}
-				ss << "Affichage Wireframe mis a: " << (m_wireframe ? "on" : "off");
-			}
-			if (c.V())
-			{
-				if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON) 
-				{
-					m_camera->SetMode(Camera::CAM_THIRD_PERSON);
-					ss << "Affichage de la camera a la troisieme personne";
-				}
-				else 
-				{
-					m_pb_cursor->SetProperty(Control::PROPBOL_VISIBLE, false);
-					m_camera->SetMode(Camera::CAM_FIRST_PERSON);
-					ss << "Affichage de la camera a la premiere personne";
-				}
-			}
-			if (c.M())
-				Info::Get().Sound().PlayNextTrack();
-			if (c.O())
-			{
-				Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
-				ss << "Musique mis a: " << (Info::Get().Options().GetOptMusic() ? "on" : "off");
+		if (m_gameUI->KeyReleaseEvent(key))
+			return;
 
-			}
-			if (c.P())
+		if(c.E())
+		{
+			m_currentBlockType++;
+			if (m_currentBlockType % BTYPE_COUNT == BTYPE_AIR)
+				m_currentBlockType++;
+			m_currentBlockType = m_currentBlockType % BTYPE_COUNT;
+		}
+		if(c.Q())
+		{
+			m_currentBlockType--;
+			if (m_currentBlockType == BTYPE_AIR)
+				m_currentBlockType--;
+			m_currentBlockType = (m_currentBlockType + BTYPE_COUNT) % BTYPE_COUNT;
+		}
+		if (c.Esc())
+		{
+			SetMenuStatus(!IsMenuOpen());
+		}
+		if (c.f9())
+		{
+			Info::Get().Options().SetOptInfos(!Info::Get().Options().GetOptInfos());
+			ss << "Affichage des infos a: " << (Info::Get().Options().GetOptInfos() ? "on" : "off");
+		}
+		//if (c.f10())
+		//{
+		//	SetFullscreen(!IsFullscreen());
+		//	ss << "Mode plein ecran mis a: " << (IsFullscreen() ? "on" : "off");
+		//}
+		if (c.G())
+		{
+			m_ghostMode = !m_ghostMode;
+			ss << "Mode fantome mis a: " << (m_ghostMode ? "on" : "off");
+		}
+		if (c.Y())
+		{
+			m_wireframe = !m_wireframe;
+			if(m_wireframe)
 			{
-				m_character->SetExp(75);
-				ss << "Ajout de 75 points d'exp";
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				glDisable(GL_CULL_FACE);
 			}
-			if (ss.str() != "")
+			else
 			{
-				CW(ss.str());
-				ss.str("");
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				glEnable(GL_CULL_FACE);
+			}
+			ss << "Affichage Wireframe mis a: " << (m_wireframe ? "on" : "off");
+		}
+		if (c.V())
+		{
+			if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON) 
+			{
+				m_camera->SetMode(Camera::CAM_THIRD_PERSON);
+				ss << "Affichage de la camera a la troisieme personne";
+			}
+			else 
+			{
+				m_pb_cursor->SetProperty(Control::PROPBOL_VISIBLE, false);
+				m_camera->SetMode(Camera::CAM_FIRST_PERSON);
+				ss << "Affichage de la camera a la premiere personne";
 			}
 		}
+		if (c.M())
+			Info::Get().Sound().PlayNextTrack();
+		if (c.O())
+		{
+			Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
+			ss << "Musique mis a: " << (Info::Get().Options().GetOptMusic() ? "on" : "off");
+
+		}
+		if (c.P())
+		{
+			m_character->SetExp(75);
+			ss << "Ajout de 75 points d'exp";
+		}
+		if (ss.str() != "")
+		{
+			CW(ss.str());
+			ss.str("");
+		}
+
 		c.Set(key, false);
 #pragma endregion
 	}
@@ -1150,9 +1040,9 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 {
 	if (!IsMenuOpen())
 	{
-		Vector2i& pos = m_gameUI->m_lb_console->AbsolutePosition();
-		Vector2i& size = m_gameUI->m_lb_console->GetProperty(Control::PROPVCT2_SIZE);
-		Vector2i& play = m_gameUI->m_pnl_screen->GetProperty(Control::PROPVCT2_SIZE);
+		if (m_gameUI->MousePressEvent(button, x, y))
+			return;
+
 		switch (button)
 		{
 		case MOUSE_BUTTON_RIGHT:
@@ -1166,7 +1056,6 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		case MOUSE_BUTTON_LEFT:
 			m_clickTimerOn = true;
 			m_clickTimer = 0;
-			m_gameUI->m_lb_console->MousePressEvents(x, m_gameUI->m_pnl_playscreen->GetProperty(Control::PROPVCT2_SIZE).y - y);
 			if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 			{
 				m_leftClick = true;
@@ -1177,10 +1066,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 			m_lastRot = m_camera->GetRotation();
 			break;
 		case MOUSE_BUTTON_WHEEL_UP:
-			if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
-				m_gameUI->m_lb_console->Scroll(1);
-			} 
-			else if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
+			if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 			{
 				// Zoom in camera
 				if (m_camRadius > 0)
@@ -1190,10 +1076,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 				m_camera->SetCamRadius(m_camRadius);
 				break;
 		case MOUSE_BUTTON_WHEEL_DOWN:
-			if (x >= pos.x && x <= pos.x + size.x && play.y - y <= pos.y + size.y && play.y - y >= pos.y) {
-				m_gameUI->m_lb_console->Scroll(-1);
-			} 
-			else if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
+			if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 			{
 				// Zoom out camera
 				if (m_camRadius < 20)
@@ -1256,6 +1139,8 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 {
 	if (!IsMenuOpen())
 	{
+		m_gameUI->MouseRleaseEvent(button, x, y);
+
 		switch (button)
 		{
 		case MOUSE_BUTTON_RIGHT:
@@ -1269,7 +1154,6 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 			m_leftClick = false;
 			m_clickTimerOn = false;
 			std::cout << (float)m_currentBlockType << std::endl;
-			m_gameUI->m_lb_console->MouseReleaseEvents(x,y);
 			if (m_clickTimer < 0.5f && m_lastRot == m_camera->GetRotation())
 				AddBlock(m_currentBlockType);
 			break;
@@ -1526,7 +1410,7 @@ void Engine::GetBlocAtCursor()
 
 void Engine::CW(const std::string& line)
 {
-	m_gameUI->m_lb_console->AddLine(line);
+	m_gameUI->ConsoleWriteLine(line);
 }
 
 void Engine::CWL(const std::string& line)

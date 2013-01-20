@@ -19,12 +19,9 @@ public:
 	Interface();
 	virtual ~Interface();
 	virtual void DeInit();
-	virtual void Init(ValuesInterface* values);
-	virtual void InitControls() = 0;
 	virtual void Render() = 0;
 protected:
 	bool m_loaded;
-	ValuesInterface* m_val;
 };
 
 #endif

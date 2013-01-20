@@ -4,15 +4,30 @@
 #include "interface.h"
 #include "valuesgameinterface.h"
 
+#include <string>
+
 class GameInterface : public Interface
 {
 public:
 	GameInterface();
 	~GameInterface();
-	virtual void InitControls();
-	void Render();
-	void TextUpdate();
 
+	virtual void Init(const ValuesGameInterface& val);
+	virtual void Update(const ValuesGameInterface& val);
+	virtual void Render();
+
+	virtual void ConsoleWriteLine(const std::string& line);
+
+	virtual bool MousePressEvent(const MOUSE_BUTTON &button, int x, int y);
+	virtual bool MouseRleaseEvent(const MOUSE_BUTTON &button, int x, int y);
+	virtual bool KeyPressEvent(unsigned char key);
+	virtual bool KeyReleaseEvent(unsigned char key);
+	virtual bool TextenteredEvent(unsigned int val);
+
+private:
+	virtual void TextUpdate(const ValuesGameInterface& val);
+
+private:
 	Panel* m_pnl_screen;
 	Panel* m_pnl_playscreen;
 	Panel* m_pnl_portrait;
@@ -45,9 +60,6 @@ public:
 
 	Label* m_lbl_currentBlockType;
 	PictureBox* m_pb_currentBlockType;
-
-	ValuesGameInterface* m_val;
-
 };
 
 #endif

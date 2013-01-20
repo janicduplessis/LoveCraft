@@ -8,7 +8,7 @@ class MenuInterface : public Interface
 public:
 	MenuInterface();
 	~MenuInterface();
-	virtual void InitControls();
+	virtual void Init(const ValuesInterface& val);
 	void Render();
 
 	//Controles

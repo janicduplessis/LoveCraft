@@ -127,6 +127,15 @@ typedef uint8 SpellType;
 enum SPELLS {STYPE_BOLT, STYPE_FIRE, STYPE_FREEZE, STYPE_SHOCK, STYPE_POISON, STYPE_STORM,
 				 STYPE_HEAL, STYPE_RAIN, STYPE_DEFEND, STYPE_SHIELD, STYPE_LAST};
 
+enum MOUSE_BUTTON {
+	MOUSE_BUTTON_NONE       = 0x00,
+	MOUSE_BUTTON_LEFT       = 0x01,
+	MOUSE_BUTTON_MIDDLE     = 0x02,
+	MOUSE_BUTTON_RIGHT      = 0x04,
+	MOUSE_BUTTON_WHEEL_UP   = 0x08,
+	MOUSE_BUTTON_WHEEL_DOWN = 0x10
+};
+
 //Chemins d'accès
 #define TEXTURE_PATH			"../lovecraft/media/textures/"
 #define SHADER_PATH				"../lovecraft/src/engine/gl/shaders/"

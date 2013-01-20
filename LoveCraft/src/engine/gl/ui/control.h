@@ -150,7 +150,8 @@ public:
 	enum PropTexture
 	{
 		PROPTEXT_BACKGROUND,
-		PROPTEXT_FONT_COLOR
+		PROPTEXT_FONT_COLOR,
+		PROPTEXT_BAR
 	};
 	/**
 	* Constructeur par défaut

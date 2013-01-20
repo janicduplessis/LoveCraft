@@ -13,7 +13,7 @@ void GameInterface::TextUpdate()
 {
 	std::ostringstream ss;
 	//Vie
-	ss << (int)m_val->GetCharacter()->Health() << " / " << (int)m_val->GetCharacter()->HealthMax();
+	ss << (int)m_val->Character->Health() << " / " << (int)m_val->Character->HealthMax();
 	ss << (int)m_val->Character->Health() << " / " << (int)m_val->Character->HealthMax();
 	m_lbl_health->SetProperty(Label::PropString::PROPSTR_TEXT, ss.str());
 	ss.str("");
@@ -106,15 +106,15 @@ void GameInterface::InitControls()
 	// Zone de jeu
 	m_pnl_playscreen = new Panel(m_pnl_screen, 
 		Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
-		Vector2i(m_pnl_screen->Size().x - INTERFACE_SIDE_LEFT_WIDTH - INTERFACE_SIDE_RIGHT_WIDTH, 
-		m_pnl_screen->Size().y - INTERFACE_BOTTOM_HEIGHT - INTERFACE_TOP_HEIGHT),
+		Vector2i(m_pnl_screen->GetProperty(Control::PROPVCT2_SIZE).x - INTERFACE_SIDE_LEFT_WIDTH - INTERFACE_SIDE_RIGHT_WIDTH, 
+		m_pnl_screen->GetProperty(Control::PROPVCT2_SIZE).y - INTERFACE_BOTTOM_HEIGHT - INTERFACE_TOP_HEIGHT),
 		0, PNL_PLAYSCREEN_CONTROLS_NBR, "playscreen");
 	m_pnl_screen->AddControl(m_pnl_playscreen);
 
 #pragma region Enfants de Playscreen
 
 	// Informations
-	m_lb_infos = new ListBox(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*6 - 26*12), 200, m_val->FontTextures[TEXTCOLOR_RED], 
+	m_lb_infos = new ListBox(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->GetProperty(Control::PROPVCT2_SIZE).y - LBL_GENERIC_CHAR_H*6 - 26*12), 200, m_val->FontTextures[TEXTCOLOR_RED], 
 		0, 26, 2, 12.f, 12.f, 0.5f, false, "lb_infos");
 	m_pnl_playscreen->AddControl(m_lb_infos);
 	m_lb_infos->AddLine("Controles Mouvements");
@@ -145,7 +145,7 @@ void GameInterface::InitControls()
 
 	//Fenetre de console
 	m_lb_console = new ListBox(m_pnl_playscreen, 
-		Vector2i(m_pnl_playscreen->Size().x - 64 - (int)LB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H + 5), 
+		Vector2i(m_pnl_playscreen->GetProperty(Control::PROPVCT2_SIZE).x - 64 - (int)LB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H + 5), 
 		LB_CONSOLE_SIZE_W, 
 		m_val->FontTextures[TEXTCOLOR_YELLOW], 
 		m_val->UITextures[CUSTIMAGE_CONSOLE_BACK], 
@@ -158,11 +158,11 @@ void GameInterface::InitControls()
 		LB_CONSOLE_NAME,
 		Vector2i(LB_CONSOLE_BODER_OFFSET_S, LB_CONSOLE_BODER_OFFSET_B));
 	m_pnl_playscreen->AddControl(m_lb_console);
-	m_lb_console->SetRepeatTexture(false);
+	m_lb_console->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
 	Info::Get().SetConsole(m_lb_console);
 	//Texbox de la console
 	m_txb_console = new Textbox(m_pnl_playscreen,
-		Vector2i(m_pnl_playscreen->Size().x - 64 - (int)LB_CONSOLE_SIZE_W, 0),
+		Vector2i(m_pnl_playscreen->GetProperty(Control::PROPVCT2_SIZE).x - 64 - (int)LB_CONSOLE_SIZE_W, 0),
 		Vector2i(TXB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H),
 		m_val->FontTextures[TEXTCOLOR_WHITE],
 		m_val->UITextures[CUSTIMAGE_CONSOLE_TEXTBOX_BACK],
@@ -173,8 +173,8 @@ void GameInterface::InitControls()
 		Vector2f(TXB_CONSOLE_OFFSET_X, TXB_CONSOLE_OFFSET_Y),
 		TXB_CONSOLE_NAME);
 	m_pnl_playscreen->AddControl(m_txb_console);
-	m_txb_console->SetRepeatTexture(false);
-	m_txb_console->SetVisible(false);
+	m_txb_console->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
+	m_txb_console->SetProperty(Control::PROPBOL_VISIBLE, false);
 	m_txb_console->SetFocus(false);
 	// Frame portrait
 	m_pnl_portrait = new Panel(m_pnl_playscreen,
@@ -183,10 +183,10 @@ void GameInterface::InitControls()
 		m_val->UITextures[CUSTIMAGE_PORTRAIT_FRAME], PNL_PORTRAIT_CONTROLS_NBR, PNL_PORTRAIT_NAME);
 	m_pnl_playscreen->AddControl(m_pnl_portrait);
 
-	m_lbl_currentBlockType = new Label(m_pnl_playscreen, Vector2i(m_pnl_portrait->Position().x,
-		m_pnl_portrait->Position().y + m_pnl_portrait->Size().y + 10),
+	m_lbl_currentBlockType = new Label(m_pnl_playscreen, Vector2i(m_pnl_portrait->GetProperty(Panel::PROPVCT2_POSITION).x,
+		m_pnl_portrait->GetProperty(Panel::PROPVCT2_POSITION).y + m_pnl_portrait->GetProperty(Panel::PROPVCT2_SIZE).y + 10),
 		m_val->FontTextures[TEXTCOLOR_BLUE], "Bloc : ", Label::TEXTDOCK_NONE, false, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "lblcurblock");
-	m_pb_currentBlockType = new PictureBox(m_pnl_playscreen, Vector2i(m_lbl_currentBlockType->Position().x + 84, m_lbl_currentBlockType->Position().y), Vector2i(20,20), 
+	m_pb_currentBlockType = new PictureBox(m_pnl_playscreen, Vector2i(m_lbl_currentBlockType->GetProperty(Panel::PROPVCT2_POSITION).x + 84, m_lbl_currentBlockType->GetProperty(Panel::PROPVCT2_POSITION).y), Vector2i(20,20), 
 		m_val->BlocTextures->GetTexture(m_val->CurrentBlocType - 1), "pbcurbloc");
 	m_pnl_playscreen->AddControl(m_lbl_currentBlockType);
 	m_pnl_playscreen->AddControl(m_pb_currentBlockType);
@@ -258,30 +258,30 @@ void GameInterface::InitControls()
 #pragma region Controles de debug
 
 	//Label Position
-	m_lbl_plrPos = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H), m_val->FontTextures[TEXTCOLOR_GREEN], "", 
+	m_lbl_plrPos = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->GetProperty(Panel::PROPVCT2_SIZE).y - LBL_GENERIC_CHAR_H), m_val->FontTextures[TEXTCOLOR_GREEN], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "pos");
 	m_pnl_playscreen->AddControl(m_lbl_plrPos);
 	//Label Vitesse
-	m_lbl_plrSpd = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*2), m_val->FontTextures[TEXTCOLOR_BLUE], "", 
+	m_lbl_plrSpd = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->GetProperty(Panel::PROPVCT2_SIZE).y - LBL_GENERIC_CHAR_H*2), m_val->FontTextures[TEXTCOLOR_BLUE], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "spd");
 	m_pnl_playscreen->AddControl(m_lbl_plrSpd);
 	//Label Acceleration
-	m_lbl_plrAcc = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*3), m_val->FontTextures[TEXTCOLOR_RED], "", 
+	m_lbl_plrAcc = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->GetProperty(Panel::PROPVCT2_SIZE).y - LBL_GENERIC_CHAR_H*3), m_val->FontTextures[TEXTCOLOR_RED], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "acc");
 	m_pnl_playscreen->AddControl(m_lbl_plrAcc);
 	//Label mouse position
-	m_lbl_mousePos = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*4), m_val->FontTextures[TEXTCOLOR_WHITE], "", 
+	m_lbl_mousePos = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->GetProperty(Panel::PROPVCT2_SIZE).y - LBL_GENERIC_CHAR_H*4), m_val->FontTextures[TEXTCOLOR_WHITE], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "Mpos");
 	m_pnl_playscreen->AddControl(m_lbl_mousePos);
 	//Label FPS
-	m_lbl_FPS = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*5), m_val->FontTextures[TEXTCOLOR_YELLOW], "", 
+	m_lbl_FPS = new Label(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->GetProperty(Panel::PROPVCT2_SIZE).y - LBL_GENERIC_CHAR_H*5), m_val->FontTextures[TEXTCOLOR_YELLOW], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "fps");
 	m_pnl_playscreen->AddControl(m_lbl_FPS);
 
 #pragma endregion
 
 	//Heure
-	m_pnl_time = new Panel(m_pnl_playscreen, Vector2i(m_pnl_playscreen->Size().x - 128, m_pnl_playscreen->Size().y - 64), 
+	m_pnl_time = new Panel(m_pnl_playscreen, Vector2i(m_pnl_playscreen->GetProperty(Panel::PROPVCT2_SIZE).x - 128, m_pnl_playscreen->GetProperty(Panel::PROPVCT2_SIZE).y - 64), 
 		Vector2i(128, 64), m_val->UITextures[CUSTIMAGE_CLOCK_BG], 1, "clock");
 	m_pnl_playscreen->AddControl(m_pnl_time);
 

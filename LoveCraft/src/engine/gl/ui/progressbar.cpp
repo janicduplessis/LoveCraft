@@ -149,3 +149,59 @@ void ProgressBar::SetBorderSize(unsigned short size)
 {
 	m_borderSize = size;
 }
+
+void ProgressBar::SetProperty(PropBool boolprop, bool value)
+{
+	Control::SetProperty(boolprop, value);
+}
+void ProgressBar::SetProperty(PropVector2 vector2prop, Vector2i value)
+{
+	Control::SetProperty(vector2prop, value);
+}
+void ProgressBar::SetProperty(PropString stringprop, std::string value)
+{
+	Control::SetProperty(stringprop, value);
+}
+void ProgressBar::SetProperty(PropTexture textureprop, Texture* value)
+{
+	switch (textureprop)
+	{
+	case Control::PROPTEXT_BACKGROUND:
+		m_textureBack = value;
+		break;
+	case Control::PROPTEXT_BAR:
+		m_texture = value;
+		break;
+	default:
+		assert(false);
+		break;
+	}
+}
+
+
+
+bool ProgressBar::GetProperty(PropBool boolprop) const
+{
+	return Control::GetProperty(boolprop);
+}
+Vector2i ProgressBar::GetProperty(PropVector2 vector2prop) const
+{
+	return Control::GetProperty(vector2prop);
+}
+std::string ProgressBar::GetProperty(PropString stringprop) const
+{
+	return Control::GetProperty(stringprop);
+}
+Texture* ProgressBar::GetProperty(PropTexture textureprop) const
+{
+	switch (textureprop)
+	{
+	case Control::PROPTEXT_BACKGROUND:
+		return m_textureBack;
+	case Control::PROPTEXT_BAR:
+		return m_texture;
+	default:
+		assert(false);
+		return 0;
+	}
+}

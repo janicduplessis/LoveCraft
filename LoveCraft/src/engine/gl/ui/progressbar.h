@@ -100,6 +100,16 @@ public:
 	*/
 	void SetBorderSize(unsigned short size);
 
+	void SetProperty(PropBool boolprop, bool value);
+	void SetProperty(PropVector2 vector2prop, Vector2i value);
+	void SetProperty(PropString stringprop, std::string value);
+	void SetProperty(PropTexture textureprop, Texture* value);
+
+	bool GetProperty(PropBool boolprop) const;
+	Vector2i GetProperty(PropVector2 vector2prop) const;
+	std::string GetProperty(PropString stringprop) const;
+	Texture* GetProperty(PropTexture textureprop) const;
+
 private:
 	void RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture, bool repeat = true);
 	void RenderCircle(const Vector2i& origin, float rayon, Texture* texture, bool repeat = true);

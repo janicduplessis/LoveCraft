@@ -111,7 +111,7 @@ void Engine::MenuInit()
 	//Donne une référence vers la camera a info
 	Info::Get().SetCamera(m_camera);
 
-	m_interfaceValues->Init(m_textureInterface, m_texturefontColor, m_textureArray, m_player, &m_character);
+	m_interfaceValues->Init(m_textureInterface, m_texturefontColor, m_textureArray, m_player, m_character);
 
 #pragma region Initilisation de Glew
 
@@ -335,7 +335,7 @@ void Engine::LoadMenuResource()
 	m_pb_cursor = new PictureBox(0, Vector2i(), Vector2i(50, 50), m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], "pb_cursor");
 	//Appel singulier du cursor afin qu'il soit dessiné par dessus tous les éléments de l'interface
 	//m_pnl_screen->AddControl(m_pb_cursor);
-	m_pb_cursor->SetRepeatTexture(false);
+	m_pb_cursor->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
 	m_menuUI->m_menu_fullscreen->OnClick.Attach(this, &Engine::OnClick);
 	m_menuUI->m_menu_start->OnClick.Attach(this, &Engine::OnClick);
 	m_menuUI->m_menu_close->OnClick.Attach(this, &Engine::OnClick);
@@ -469,42 +469,42 @@ void Engine::Update(float elapsedTime)
 #pragma region Proprietes des controles
 
 	//Affiche ou cache les infos s'il y a un changement
-	if (m_gameUI->m_lb_infos->Visible() && !Info::Get().Options().GetOptInfos())
-		m_gameUI->m_lb_infos->SetVisible(false);
-	else if (!m_gameUI->m_lb_infos->Visible() && Info::Get().Options().GetOptInfos())
-		m_gameUI->m_lb_infos->SetVisible(true);
+	if (m_gameUI->m_lb_infos->GetProperty(Control::PROPBOL_VISIBLE) && !Info::Get().Options().GetOptInfos())
+		m_gameUI->m_lb_infos->SetProperty(Control::PROPBOL_VISIBLE, false);
+	else if (!m_gameUI->m_lb_infos->GetProperty(Control::PROPBOL_VISIBLE) && Info::Get().Options().GetOptInfos())
+		m_gameUI->m_lb_infos->SetProperty(Control::PROPBOL_VISIBLE, true);
 	//Change la texture de la barre de vie en fonction du %. Ne réassigne la texture que si on en a besoin
-	if (m_character->HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetTexture() == m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH])
-		m_gameUI->m_pgb_health->SetTexture(m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW]);
-	else if (m_character->HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetTexture() == m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW])
-		m_gameUI->m_pgb_health->SetTexture(m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH]);
+	if (m_character->HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetProperty(Control::PROPTEXT_BAR) == m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH])
+		m_gameUI->m_pgb_health->SetProperty(Control::PROPTEXT_BAR, m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW]);
+	else if (m_character->HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetProperty(Control::PROPTEXT_BAR) == m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW])
+		m_gameUI->m_pgb_health->SetProperty(Control::PROPTEXT_BAR, m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH]);
 	//Affiche ou cache la barre d'énergie selon la situation
 	if (m_character->Energy() != m_character->EnergyMax() || Info::Get().Ctrls().Shift())
 	{
-		m_gameUI->m_pgb_energy->SetVisible(true);
-		m_gameUI->m_lbl_energy->SetVisible(true);
+		m_gameUI->m_pgb_energy->SetProperty(Control::PROPBOL_VISIBLE, true);
+		m_gameUI->m_lbl_energy->SetProperty(Control::PROPBOL_VISIBLE, true);
 	}
 	else if (m_character->Energy() == m_character->EnergyMax())
 	{
-		m_gameUI->m_pgb_energy->SetVisible(false);
-		m_gameUI->m_lbl_energy->SetVisible(false);
+		m_gameUI->m_pgb_energy->SetProperty(Control::PROPBOL_VISIBLE, false);
+		m_gameUI->m_lbl_energy->SetProperty(Control::PROPBOL_VISIBLE, false);
 	}
 	// Controles de debug
-	if (Info::Get().Options().GetOptDebug() && !m_gameUI->m_lbl_FPS->Visible())
+	if (Info::Get().Options().GetOptDebug() && !m_gameUI->m_lbl_FPS->GetProperty(Control::PROPBOL_VISIBLE))
 	{
-		m_gameUI->m_lbl_plrPos->SetVisible(true);
-		m_gameUI->m_lbl_plrSpd->SetVisible(true);
-		m_gameUI->m_lbl_plrAcc->SetVisible(true);
-		m_gameUI->m_lbl_mousePos->SetVisible(true);
-		m_gameUI->m_lbl_FPS->SetVisible(true);
+		m_gameUI->m_lbl_plrPos->SetProperty(Control::PROPBOL_VISIBLE, true);
+		m_gameUI->m_lbl_plrSpd->SetProperty(Control::PROPBOL_VISIBLE, true);
+		m_gameUI->m_lbl_plrAcc->SetProperty(Control::PROPBOL_VISIBLE, true);
+		m_gameUI->m_lbl_mousePos->SetProperty(Control::PROPBOL_VISIBLE, true);
+		m_gameUI->m_lbl_FPS->SetProperty(Control::PROPBOL_VISIBLE, true);
 	}
-	else if (!Info::Get().Options().GetOptDebug() && m_gameUI->m_lbl_FPS->Visible())
+	else if (!Info::Get().Options().GetOptDebug() && m_gameUI->m_lbl_FPS->GetProperty(Control::PROPBOL_VISIBLE))
 	{
-		m_gameUI->m_lbl_plrPos->SetVisible(false);
-		m_gameUI->m_lbl_plrSpd->SetVisible(false);
-		m_gameUI->m_lbl_plrAcc->SetVisible(false);
-		m_gameUI->m_lbl_mousePos->SetVisible(false);
-		m_gameUI->m_lbl_FPS->SetVisible(false);
+		m_gameUI->m_lbl_plrPos->SetProperty(Control::PROPBOL_VISIBLE, false);
+		m_gameUI->m_lbl_plrSpd->SetProperty(Control::PROPBOL_VISIBLE, false);
+		m_gameUI->m_lbl_plrAcc->SetProperty(Control::PROPBOL_VISIBLE, false);
+		m_gameUI->m_lbl_mousePos->SetProperty(Control::PROPBOL_VISIBLE, false);
+		m_gameUI->m_lbl_FPS->SetProperty(Control::PROPBOL_VISIBLE, false);
 	}
 
 #pragma endregion
@@ -603,9 +603,9 @@ void Engine::Render(float elapsedTime)
 	if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON ) {
 		// hide/show cursor
 		if (!m_rightClick && !m_leftClick)
-			m_pb_cursor->SetVisible(true);
+			m_pb_cursor->SetProperty(Control::PROPBOL_VISIBLE, true);
 		else
-			m_pb_cursor->SetVisible(false);
+			m_pb_cursor->SetProperty(Control::PROPBOL_VISIBLE, false);
 
 		// recule la camera
 		glTranslatef(0,0,-m_camRadius);
@@ -820,7 +820,7 @@ void Engine::TextenteredEvent(unsigned int val)
 		if (val == 13 && !m_gameUI->m_txb_console->HasFocus())
 		{
 			m_gameUI->m_txb_console->SetFocus(true);
-			m_gameUI->m_txb_console->SetVisible(true);
+			m_gameUI->m_txb_console->SetProperty(Control::PROPBOL_VISIBLE, true);
 			return;
 		}
 
@@ -854,7 +854,7 @@ void Engine::TextenteredEvent(unsigned int val)
 			{
 				if (m_gameUI->m_txb_console->GetMsg() != "")
 					CW(m_gameUI->m_txb_console->GetMsg());
-				m_gameUI->m_txb_console->SetVisible(false);
+				m_gameUI->m_txb_console->SetProperty(Control::PROPBOL_VISIBLE, false);
 				m_gameUI->m_txb_console->SetFocus(false);
 				if (m_gameUI->m_txb_console->GetMsg() == "/dance")
 					Info::Get().Sound().PlaySnd(Son::SON_DEATH, Son::CHANNEL_INTERFACE);
@@ -1059,7 +1059,7 @@ void Engine::KeyReleaseEvent(unsigned char key)
 				}
 				else 
 				{
-					m_pb_cursor->SetVisible(false);
+					m_pb_cursor->SetProperty(Control::PROPBOL_VISIBLE, false);
 					m_camera->SetMode(Camera::CAM_FIRST_PERSON);
 					ss << "Affichage de la camera a la premiere personne";
 				}
@@ -1143,7 +1143,7 @@ void Engine::MouseMoveEvent(int x, int y)
 		}
 	}
 
-	m_pb_cursor->SetPosition(Vector2i(MousePosition().x, MousePosition().y - m_pb_cursor->Size().y));
+	m_pb_cursor->SetProperty(Control::PROPVCT2_POSITION, (Vector2i(MousePosition().x, MousePosition().y - m_pb_cursor->GetProperty(Control::PROPVCT2_SIZE).y)));
 }
 
 void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
@@ -1151,8 +1151,8 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 	if (!IsMenuOpen())
 	{
 		Vector2i& pos = m_gameUI->m_lb_console->AbsolutePosition();
-		Vector2i& size = m_gameUI->m_lb_console->Size();
-		Vector2i& play = m_gameUI->m_pnl_screen->Size();
+		Vector2i& size = m_gameUI->m_lb_console->GetProperty(Control::PROPVCT2_SIZE);
+		Vector2i& play = m_gameUI->m_pnl_screen->GetProperty(Control::PROPVCT2_SIZE);
 		switch (button)
 		{
 		case MOUSE_BUTTON_RIGHT:
@@ -1166,7 +1166,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		case MOUSE_BUTTON_LEFT:
 			m_clickTimerOn = true;
 			m_clickTimer = 0;
-			m_gameUI->m_lb_console->MousePressEvents(x, m_gameUI->m_pnl_playscreen->Size().y - y);
+			m_gameUI->m_lb_console->MousePressEvents(x, m_gameUI->m_pnl_playscreen->GetProperty(Control::PROPVCT2_SIZE).y - y);
 			if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON)
 			{
 				m_leftClick = true;
@@ -1211,9 +1211,9 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		switch (button)
 		{
 		case MOUSE_BUTTON_LEFT:
-			m_menuUI->m_menu_close->MousePressEvents(x, m_menuUI->m_menu_screen->Size().y - y);
-			m_menuUI->m_menu_start->MousePressEvents(x, m_menuUI->m_menu_screen->Size().y - y);
-			m_menuUI->m_menu_fullscreen->MousePressEvents(x, m_menuUI->m_menu_screen->Size().y - y);
+			m_menuUI->m_menu_close->MousePressEvents(x, m_menuUI->m_menu_screen->GetProperty(Control::PROPVCT2_SIZE).y - y);
+			m_menuUI->m_menu_start->MousePressEvents(x, m_menuUI->m_menu_screen->GetProperty(Control::PROPVCT2_SIZE).y - y);
+			m_menuUI->m_menu_fullscreen->MousePressEvents(x, m_menuUI->m_menu_screen->GetProperty(Control::PROPVCT2_SIZE).y - y);
 			break;
 		}
 	}
@@ -1221,7 +1221,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 
 void Engine::OnClick(Control* sender)
 {
-	std::string n = sender->Name();
+	std::string n = sender->GetProperty(Control::PROPSTR_NAME);
 	Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE, true);
 
 	if (n == MENU_BUTTON_START_FULL_NAME)
@@ -1232,7 +1232,7 @@ void Engine::OnClick(Control* sender)
 		{
 			Info::Get().Options().SetOptDebug(false);
 			ActivateFirstRun();
-			m_menuUI->m_menu_loading->SetVisible(true);
+			m_menuUI->m_menu_loading->SetProperty(Control::PROPBOL_VISIBLE, true);
 			SetMenuStatus(false);
 		}
 	}
@@ -1244,7 +1244,7 @@ void Engine::OnClick(Control* sender)
 		{
 			Info::Get().Options().SetOptDebug(true);
 			ActivateFirstRun();
-			m_menuUI->m_menu_loading->SetVisible(true);
+			m_menuUI->m_menu_loading->SetProperty(Control::PROPBOL_VISIBLE, true);
 			SetMenuStatus(false);
 		}
 	}

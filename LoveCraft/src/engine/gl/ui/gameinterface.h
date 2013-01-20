@@ -6,8 +6,6 @@
 class GameInterface : public Interface
 {
 public:
-	friend class Engine;
-
 	GameInterface();
 	~GameInterface();
 	virtual void InitControls();

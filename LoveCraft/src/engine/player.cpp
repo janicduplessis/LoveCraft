@@ -21,6 +21,7 @@ void Player::Init()
 	m_model.Load(MODEL_PATH_HUMANS "squirrel.lcm");
 	m_model.Scale(0.1f, 0.1f, 0.1f);
 	m_model.Translate(Vector3f(0, -1.05f, 0));
+	ResetPosition();
 }
 
 void Player::TurnLeftRight ( float value )
@@ -44,9 +45,16 @@ void Player::Teleport()
 
 void Player::ResetPosition()
 {
-	m_pos = Vector3f(0, 3.0f, 0);
+	m_pos = Vector3f(0);
 	m_rot = Vector2f(0, 0);
 	m_speed = Vector3f(0, 0, 0);
+
+	Info& info = Info::Get();
+	while (info.GetBlocFromWorld(m_pos) != BTYPE_AIR)
+	{
+		m_pos += Vector3f(0,1,0);
+	}
+	
 }
 
 void Player::Move(bool ghost, Character &cter, float elapsedTime)
@@ -435,4 +443,9 @@ Quaternion Player::RotationQ() const
 	q = qY * q;
 	q.Normalise();
 	return q;
+}
+
+void Player::SetPosition( Vector3f pos )
+{
+	m_pos = pos;
 }

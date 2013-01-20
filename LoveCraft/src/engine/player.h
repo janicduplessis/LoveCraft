@@ -38,6 +38,7 @@ public:
 	 * @return Vector3f
 	 */
 	Vector3f Position() const;
+	void SetPosition(Vector3f pos);
 
 	/**
 	 * Rotation du joueur

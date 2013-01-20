@@ -79,6 +79,15 @@ void Chunk::SetBloc(uint32 x, uint32 y, uint32 z, BlockType type)
 		m_blocks.Set(x, y, z, type);
 	}
 	editedChunk->m_isDirty = true;
+
+	if (z == 0 && m_front)
+		m_front->m_isDirty = true;
+	else if (z == CHUNK_SIZE_Z - 1 && m_back)
+		m_back->m_isDirty = true;
+	else if (x == 0 && m_left)
+		m_left->m_isDirty = true;
+	else if (x == CHUNK_SIZE_X - 1 && m_right)
+		m_right->m_isDirty = true;
 }
 
 BlockType Chunk::GetBloc(uint32 x, uint32 y, uint32 z)

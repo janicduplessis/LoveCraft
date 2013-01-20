@@ -28,13 +28,13 @@ class Info
 public:
 	enum LoadedStatus
 	{
-		LSTATUS_NONE = 0x0,
 		LSTATUS_CHARACTER = 0x1,
 		LSTATUS_PLAYER = 0x2,
 		LSTATUS_CAMERA = 0x4,
 		LSTATUS_CHUNK = 0x8,
 		LSTATUS_MONSTERS = 0x10,
-		LSTATUS_TEXTURES = 0x20
+		LSTATUS_TEXTURE_IMAGE = 0x20,
+		LSTATUS_TEXTURE_FONTS = 0x40
 	};
 	/**
 	* Retourne une reference vers l'instance Info

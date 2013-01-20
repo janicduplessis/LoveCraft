@@ -1,7 +1,7 @@
 ﻿#include "info.h"
 #include "engine/gl/ui/label.h"
 
-Info::Info() : m_lineToPrint(""), m_console(0), m_lstatus(Info::LSTATUS_NONE)
+Info::Info() : m_lineToPrint(""), m_console(0), m_lstatus(0)
 {
 	GenerateBlocInfos();
 	if (!m_sound.LoadSounds())

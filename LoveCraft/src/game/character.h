@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 
-#define GLOBAL_COOLDOWN 1.5f
+#define GLOBAL_COOLDOWN 1.0f
 
 /**
 * @brief Classe représentant les infos du personnage

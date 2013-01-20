@@ -185,70 +185,11 @@ public:
 	*/
 	virtual void Render(Texture* texture);
 	/**
-	* Obtient le nom du cotnrole
-	* 
-	* @return std::string
-	*/
-	virtual std::string Name() const;
-	/**
-	* Obtient la valeur indiquant si le controle est visible
-	* 
-	* @return bool
-	*/
-	virtual bool Visible() const;
-	/**
-	* Définit la valeur indiquant si le controle est visible
-	*/
-	virtual void SetVisible(const bool value);
-	/**
-	* Obtient la taille du controle
-	* 
-	* @return Vector2i
-	*/
-	virtual Vector2i Size() const;
-	/**
-	* Définit la taille du controle
-	*/
-	virtual void SetSize(Vector2i value);
-	/**
-	* Obtient la position relative au conteneur du controle
-	* 
-	* @return Vector2i
-	*/
-	virtual Vector2i Position() const;
-	/**
-	* Définit la position relative au conteneur du controle
-	*/
-	virtual void SetPosition(Vector2i value);
-	/**
 	* Obtient la position absolue du controle
 	* 
 	* @return Vector2i
 	*/
 	virtual Vector2i AbsolutePosition() const;
-	/**
-	* Définit la texture qui sera utilisée lors du Render
-	*/
-	virtual void SetTexture(Texture* text);
-	/**
-	* Obtient la texture qui sera utilisée lors du Render
-	* 
-	* @return Texture*
-	*/
-	virtual Texture* GetTexture() const;
-	/**
-	* Obtient la valeur indiquant si le blend doit être activé lors du Render
-	* 
-	* @return bool
-	*/
-	virtual bool GetPngBlend() const;
-	/**
-	* Définit la valeur indiquant si le blend doit être activé lors du Render
-	*/
-	virtual void SetPngBlend(const bool value);
-	virtual bool GetRepeatTexture() const;
-	virtual void SetRepeatTexture(const bool value);
-
 	virtual void SetProperty(PropBool boolprop, bool value);
 	virtual void SetProperty(PropVector2 vector2prop, Vector2i value);
 	virtual void SetProperty(PropString stringprop, std::string value);

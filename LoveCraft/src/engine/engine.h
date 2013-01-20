@@ -195,7 +195,7 @@ private:
 	Camera* m_camera;
 	Dice* m_dice;
 
-	Character m_character;
+	Character* m_character;
 	Animal** m_monsters;
 
 	Shader m_shaderModel;

@@ -2,7 +2,7 @@
 #include "info.h"
 #include <sstream>
 
-Son::Son() : m_music(sf::Music()), m_stepTmr(0), m_trackNumber(0), m_footStep(0), m_soundStep(0)
+Son::Son() : m_music(sf::Music()), m_stepTmr(0), m_trackNumber(2), m_footStep(0), m_soundStep(0)
 {
 	m_sndBuffers = new sf::SoundBuffer[Sons::SON_LAST];
 	m_footSteps = new sf::SoundBuffer[Foots::FOOT_LAST * SOUND_FOOT_NUMBER + 1];
@@ -71,8 +71,9 @@ bool Son::LoadSounds()
 
 
 	//Musiques
-	m_musicList[Musics::MUSIC_OVERWORLD1] = SOUND_PATH "m_overworld1.ogg";
-	m_musicList[Musics::MUSIC_OVERWORLD2] = SOUND_PATH "m_overworld2.ogg";
+	m_musicList[Musics::MUSIC_MENU] = SOUND_PATH "m_menu.ogg";
+	m_musicList[Musics::MUSIC_LOADING] = SOUND_PATH "m_loading.ogg";
+	m_musicList[Musics::MUSIC_PLAY1] = SOUND_PATH "m_play1.ogg";
 	return true;
 }
 
@@ -92,6 +93,22 @@ bool Son::PlayMusic()
 			}
 			m_music.play();
 		}
+	}
+	return true;
+}
+bool Son::PlayMusic(Son::Musics music)
+{
+	if (Info::Get().Options().GetOptMusic())
+	{
+		m_music.stop();
+		if (!m_music.openFromFile(m_musicList[music]))
+		{
+			//Sort en console le fichier qui n'a pas pu être ouvert
+			std::cout << "Erreur lors du chargement de la musique: " << 
+				m_musicList[music] << std::endl;
+			return false;
+		}
+		m_music.play();
 	}
 	return true;
 }

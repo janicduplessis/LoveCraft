@@ -36,68 +36,9 @@ void Control::Render(Texture* texture)
 	}
 }
 
-std::string Control::Name() const
-{
-	return m_name;
-}
-
-bool Control::Visible() const
-{
-	return m_visible;
-}
-void Control::SetVisible(const bool value)
-{
-	m_visible = value;
-}
-Vector2i Control::Size() const
-{
-	return m_size;
-}
-Vector2i Control::Position() const
-{
-	return m_position;
-}
-void Control::SetSize(Vector2i value)
-{
-	m_size = value;
-}
-
-void Control::SetPosition(Vector2i value)
-{
-	m_position = value;
-}
-
 Vector2i Control::AbsolutePosition() const
 {
 	return m_position + (m_parent != 0 ? m_parent->AbsolutePosition() : 0);
-}
-
-void Control::SetTexture(Texture* text)
-{
-	m_texture = text;
-}
-
-Texture* Control::GetTexture() const
-{
-	return m_texture;
-}
-
-bool Control::GetPngBlend() const
-{
-	return m_pngBlend;
-}
-
-void Control::SetPngBlend(const bool value)
-{
-	m_pngBlend = value;
-}
-bool Control::GetRepeatTexture() const
-{
-	return m_repeatTexture;
-}
-void Control::SetRepeatTexture(const bool value)
-{
-	m_repeatTexture = value;
 }
 
 bool Control::MousePressEvents( int x, int y )

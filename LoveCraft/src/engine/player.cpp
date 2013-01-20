@@ -49,7 +49,7 @@ void Player::ResetPosition()
 	m_speed = Vector3f(0, 0, 0);
 }
 
-void Player::Move(bool ghost, Character &cter, float elapsedTime)
+void Player::Move(bool ghost, Character* cter, float elapsedTime)
 {
 	Vector3f delta;
 
@@ -90,7 +90,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 			//Perte de vie quand on tombe de trop haut
 			if (m_speed.y > 8)
 			{
-				cter.SetHealth(-(int)(m_speed.y * m_speed.y * HEALTH_GRAVITY_LOST));
+				cter->SetHealth(-(int)(m_speed.y * m_speed.y * HEALTH_GRAVITY_LOST));
 				Info::Get().Sound().PlaySnd(Son::SON_FALLPAIN, Son::CHANNEL_STEP);
 			}
 			m_speed.y = 0;
@@ -171,7 +171,7 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 	//Assignation de base de la vitesse maximale
 	float speedMaxZ = MOUVEMENT_SPEED_MAX;
 	//vérification si le joueur est en mode course
-	if (shift && w && cter.Energy() > 0)
+	if (shift && w && cter->Energy() > 0)
 		speedMaxZ *= MOUVEMENT_SPEED_MAX_RUN_M;
 	else if (s)
 		//Est-ce qu'il recule
@@ -332,11 +332,11 @@ void Player::Move(bool ghost, Character &cter, float elapsedTime)
 
 	//Dépenses d'énergie lorsque le joueur se déplace et tient shift
 	if (shift && m_speed.z > 1)
-		cter.SetEnergy(-ENERGY_SPENDING);
+		cter->SetEnergy(-ENERGY_SPENDING);
 	//Commence la régénération de l'énergie que si le joueur bouge presque pas
 	if (!shift && fabs(m_speed.z) + fabs(m_speed.x) <= ENERGY_REGEN_THRESHOLD)
-		cter.SetEnergy(ENERGY_REGEN);
-	cter.PassiveRegen();
+		cter->SetEnergy(ENERGY_REGEN);
+	cter->PassiveRegen();
 
 #pragma endregion
 

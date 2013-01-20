@@ -44,8 +44,9 @@ public:
 	};
 	enum Musics
 	{
-		MUSIC_OVERWORLD1,
-		MUSIC_OVERWORLD2,
+		MUSIC_MENU,
+		MUSIC_LOADING,
+		MUSIC_PLAY1,
 		MUSIC_LAST
 	};
 	enum Channel
@@ -78,6 +79,7 @@ public:
 	* @return Succès
 	*/
 	bool PlayMusic();
+	bool PlayMusic(Musics music);
 	/**
 	* Arrête la musique en cours, incrémente la numéro de piste et refait jouer la musique
 	*/

@@ -27,39 +27,67 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 		m_texturefontColor[i] = new Texture();
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
 
-	m_interfaceValues = new InterfaceValues();
-	m_menuUI = new MenuInterface();
-	m_gameUI = new GameInterface();
+	m_interfaceValues = new InterfaceValues;
+	m_menuUI = new MenuInterface;
+	m_gameUI = new GameInterface;
 
 	m_camera = new Camera;
+	Info::Get().StatusOn(Info::LSTATUS_CAMERA);
 	m_player = new Player;
+	Info::Get().StatusOn(Info::LSTATUS_PLAYER);
+	m_character = new Character;
+	Info::Get().StatusOn(Info::LSTATUS_CHARACTER);
 	m_dice = new Dice;
 }
 
 Engine::~Engine()
 {
-	delete m_player;
-	delete m_camera;
-	delete m_dice;
-
-	// delete les chunks
-	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2 - 1; i++)
+	if (Info::Get().GetStatus(Info::LSTATUS_PLAYER))
+		delete m_player;
+	if (Info::Get().GetStatus(Info::LSTATUS_CAMERA))
+		delete m_camera;
+	if (Info::Get().GetStatus(Info::LSTATUS_CHARACTER))
+		delete m_character;
+	if (Info::Get().GetStatus(Info::LSTATUS_CHUNK))
 	{
-		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2 - 1; ++j)
+		// delete les chunks
+		for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2 - 1; i++)
 		{
-			if (m_chunks != 0)
-				delete m_chunks->Get(i, j);
+			for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2 - 1; ++j)
+			{
+				if (m_chunks != 0)
+					delete m_chunks->Get(i, j);
+			}
 		}
 	}
-	// delete les monstres
+	if (Info::Get().GetStatus(Info::LSTATUS_TEXTURE_IMAGE))
+	{
+		for (int i = 0; i < CUSTIMAGE_LAST; i++)
+		{
+			delete m_textureInterface[i];
+		}
+		delete [] m_textureInterface;
+	}
+	if (Info::Get().GetStatus(Info::LSTATUS_TEXTURE_FONTS))
+	{
+		for (int i = 0; i < TEXTCOLOR_LAST; i++)
+		{
+			delete m_texturefontColor[i];
+		}
+		delete [] m_texturefontColor;
+	}
+	if (Info::Get().GetStatus(Info::LSTATUS_MONSTERS))
+	{
+		// delete les monstres
 #ifdef LOAD_MODELS
-	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
-		delete m_monsters[i];
+		for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
+			delete m_monsters[i];
 #else
-	delete m_monsters[0];
+		delete m_monsters[0];
 #endif
+	}
+	delete m_dice;
 	delete [] m_monsters;
-
 	delete m_textureArray;
 	delete m_interfaceValues;
 	delete m_menuUI;
@@ -83,7 +111,7 @@ void Engine::MenuInit()
 	//Donne une référence vers la camera a info
 	Info::Get().SetCamera(m_camera);
 
-	m_interfaceValues->Init(m_player, &m_character, m_textureInterface, m_texturefontColor);
+	m_interfaceValues->Init(m_player, m_character, m_textureInterface, m_texturefontColor);
 
 #pragma region Initilisation de Glew
 
@@ -177,9 +205,11 @@ void Engine::GameInit()
 		m_dice->Next(-(int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*0.5f))));
 #endif
 
-	m_character = Character();
+	Info::Get().StatusOn(Info::LSTATUS_MONSTERS);
 
 #pragma endregion
+
+#pragma region Initialisation des chunks
 
 	m_chunks = new Array2d<Chunk*>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
 	Info::Get().SetChunkArray(m_chunks);
@@ -192,6 +222,9 @@ void Engine::GameInit()
 			m_chunks->Set(i, j, c);
 		}
 	}
+	Info::Get().StatusOn(Info::LSTATUS_CHUNK);
+
+#pragma endregion
 
 	CenterMouse();
 }
@@ -277,6 +310,7 @@ void Engine::LoadMenuResource()
 	m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK]->Load(TEXTURE_PATH "i_menu_button.png");
 	m_textureInterface[CUSTIMAGE_MENU_LOGO]->Load(TEXTURE_PATH "i_menu_logo.png");
 
+	Info::Get().StatusOn(Info::LSTATUS_TEXTURE_IMAGE);
 #pragma endregion
 
 #pragma region Couleurs label
@@ -287,7 +321,7 @@ void Engine::LoadMenuResource()
 	m_texturefontColor[TEXTCOLOR_BLUE]->Load(TEXTURE_PATH "font_blue.png");
 	m_texturefontColor[TEXTCOLOR_YELLOW]->Load(TEXTURE_PATH "font_yellow.png");
 
-
+	Info::Get().StatusOn(Info::LSTATUS_TEXTURE_FONTS);
 #pragma endregion
 
 #pragma endregion
@@ -622,7 +656,7 @@ void Engine::Update(float elapsedTime)
 
 	static float gameTime = elapsedTime;
 	gameTime += elapsedTime;
-	m_character.ReduceGlobalCooldown(elapsedTime);
+	m_character->ReduceGlobalCooldown(elapsedTime);
 	if (m_clickTimerOn)
 		m_clickTimer += elapsedTime;
 
@@ -636,27 +670,13 @@ void Engine::Update(float elapsedTime)
 	m_camera->SetPosition(m_player->Position());
 
 	//Vérification de la mort du personnage
-	if (m_character.Health() <= 0.999f)
+	if (m_character->Health() <= 0.999f)
 	{
 		m_player->ResetPosition();
-		m_character.SetHealth(m_character.HealthMax());
+		m_character->SetHealth(m_character->HealthMax());
 		Info::Get().Sound().PlaySnd(Son::SON_DEATH, Son::CHANNEL_INTERFACE, true);
 		CW("Vous etes mort!");
 
-	}
-
-#pragma endregion
-
-#pragma region premier tour de boucle de l application
-
-	//Solution temporaire pour changer la musique lors du premier render de l'engine
-	static bool ttt = true;
-	if (ttt)
-	{
-		Info::Get().Sound().PlayNextTrack();
-		ttt = false;
-		m_menuUI->m_menu_loading->SetVisible(false);
-		CW("Premier Render de l'engine termine avec succes.");
 	}
 
 #pragma endregion
@@ -669,17 +689,17 @@ void Engine::Update(float elapsedTime)
 	else if (!m_gameUI->m_lb_infos->Visible() && Info::Get().Options().GetOptInfos())
 		m_gameUI->m_lb_infos->SetVisible(true);
 	//Change la texture de la barre de vie en fonction du %. Ne réassigne la texture que si on en a besoin
-	if (m_character.HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetTexture() == m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH])
+	if (m_character->HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetTexture() == m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH])
 		m_gameUI->m_pgb_health->SetTexture(m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW]);
-	else if (m_character.HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetTexture() == m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW])
+	else if (m_character->HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetTexture() == m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW])
 		m_gameUI->m_pgb_health->SetTexture(m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH]);
 	//Affiche ou cache la barre d'énergie selon la situation
-	if (m_character.Energy() != m_character.EnergyMax() || Info::Get().Ctrls().Shift())
+	if (m_character->Energy() != m_character->EnergyMax() || Info::Get().Ctrls().Shift())
 	{
 		m_gameUI->m_pgb_energy->SetVisible(true);
 		m_gameUI->m_lbl_energy->SetVisible(true);
 	}
-	else if (m_character.Energy() == m_character.EnergyMax())
+	else if (m_character->Energy() == m_character->EnergyMax())
 	{
 		m_gameUI->m_pgb_energy->SetVisible(false);
 		m_gameUI->m_lbl_energy->SetVisible(false);
@@ -707,10 +727,10 @@ void Engine::Update(float elapsedTime)
 #pragma region Actualisation des valeurs
 
 	//Actualisation des valeurs des progressbars
-	m_gameUI->m_pgb_health->SetValue(m_character.HealthPerc());
-	m_gameUI->m_pgb_energy->SetValue(m_character.EnergyPerc());
-	m_gameUI->m_pgb_mana->SetValue(m_character.ManaPerc());
-	m_gameUI->m_pgb_exp->SetValue(m_character.ExpPerc());
+	m_gameUI->m_pgb_health->SetValue(m_character->HealthPerc());
+	m_gameUI->m_pgb_energy->SetValue(m_character->EnergyPerc());
+	m_gameUI->m_pgb_mana->SetValue(m_character->ManaPerc());
+	m_gameUI->m_pgb_exp->SetValue(m_character->ExpPerc());
 	//Actualisation du texte dans les différents Label
 	m_gameUI->TextUpdate();
 
@@ -913,6 +933,19 @@ void Engine::Render(float elapsedTime)
 
 #pragma endregion
 
+#pragma region Fin du premier Render
+
+	static bool ttt = true;
+	if (ttt)
+	{
+		Info::Get().Sound().PlayMusic(Son::MUSIC_PLAY1);
+		m_menuUI->m_menu_loading->SetProperty(Control::PROPBOL_VISIBLE, false);
+		CW("Premier Render de l'engine termine avec succes.");
+		ttt = false;
+	}
+
+#pragma endregion
+
 }
 
 void Engine::Render2D(float elapsedTime)
@@ -1065,7 +1098,7 @@ void Engine::KeyPressEvent(unsigned char key)
 		{
 			c.Set(key, true);
 			//Sorts qui subissent le global cooldown
-			if(m_character.GlobalCooldown() == 0)
+			if(m_character->GlobalCooldown() == 0)
 			{
 				if (c.n1())
 				{
@@ -1075,7 +1108,7 @@ void Engine::KeyPressEvent(unsigned char key)
 					newSpell->Shoot();
 					m_spells.push_back(*newSpell);
 					sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
-					m_character.ResetGlobalCooldown();
+					m_character->ResetGlobalCooldown();
 					ss << "Lancement de sort: Test  de particule!";
 				}
 
@@ -1084,69 +1117,69 @@ void Engine::KeyPressEvent(unsigned char key)
 					for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
 						m_monsters[i]->SetPosition(Vector3f(m_monsters[i]->Position().x, 10, m_monsters[i]->Position().z));
 					sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
-					m_character.ResetGlobalCooldown();
+					m_character->ResetGlobalCooldown();
 					ss << "Lancement de sort: teleportation de NPC!";
 				}
 				if (c.n3())
 				{
 					sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
-					m_character.ResetGlobalCooldown();
+					m_character->ResetGlobalCooldown();
 					ss << "Lancement de sort: Glace";
 				}
 				if (c.n4())
 				{
 					sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
-					m_character.ResetGlobalCooldown();
+					m_character->ResetGlobalCooldown();
 					ss << "Lancement de sort: Shock";
 				}
 				if (c.n5())
 				{
 					sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
-					m_character.ResetGlobalCooldown();
+					m_character->ResetGlobalCooldown();
 					ss << "Lancement de sort: Poison";
 				}
 				if (c.n7())
 				{
-					if (m_character.Mana() - 15 >= 0)
+					if (m_character->Mana() - 15 >= 0)
 					{
 						sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
-						m_character.ResetGlobalCooldown();
-						m_character.SetHealth(15);
-						m_character.SetMana(-15);
+						m_character->ResetGlobalCooldown();
+						m_character->SetHealth(15);
+						m_character->SetMana(-15);
 						ss << "Lancement de sort: Soin";
 					}
 				}
 				if (c.n8())
 				{
-					if (m_character.Mana() - 10 >= 0)
+					if (m_character->Mana() - 10 >= 0)
 					{
 						sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
-						m_character.ResetGlobalCooldown();
-						m_character.SetEnergy(10);
-						m_character.SetMana(-10);
+						m_character->ResetGlobalCooldown();
+						m_character->SetEnergy(10);
+						m_character->SetMana(-10);
 						ss << "Lancement de sort: Rafraichissement";
 					}
 				}
 				if (c.n9())
 				{
 					sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
-					m_character.ResetGlobalCooldown();
+					m_character->ResetGlobalCooldown();
 					ss << "Lancement de sort: Defense";
 				}
 				if (c.n0())
 				{
 					sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
-					m_character.ResetGlobalCooldown();
+					m_character->ResetGlobalCooldown();
 					ss << "Lancement de sort: Bouclier magique";
 				}
 			}
 			//Sorts hors global cooldown
 			if (c.n6())
 			{
-				if (m_character.Mana() - 5 >= 0)
+				if (m_character->Mana() - 5 >= 0)
 				{
 					sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
-					m_character.SetMana(-5);
+					m_character->SetMana(-5);
 					m_player->Teleport();
 					ss << "Lancement de sort: Teleportation";
 				}
@@ -1256,7 +1289,7 @@ void Engine::KeyReleaseEvent(unsigned char key)
 			}
 			if (c.P())
 			{
-				m_character.SetExp(75);
+				m_character->SetExp(75);
 				ss << "Ajout de 75 points d'exp";
 			}
 			if (ss.str() != "")

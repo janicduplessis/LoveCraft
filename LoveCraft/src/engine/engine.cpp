@@ -19,10 +19,15 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
-	m_textureInterface = new Texture[IMAGE::CUSTIMAGE_LAST];
-	m_texturefontColor = new Texture[COLOR::TEXTCOLOR_LAST];
+	m_textureInterface = new Texture*[IMAGE::CUSTIMAGE_LAST];
+	for (unsigned short i = 0; i < IMAGE::CUSTIMAGE_LAST; i++)
+		m_textureInterface[i] = new Texture();
+	m_texturefontColor = new Texture*[COLOR::TEXTCOLOR_LAST];
+	for (unsigned short i = 0; i < COLOR::TEXTCOLOR_LAST; i++)
+		m_texturefontColor[i] = new Texture();
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
 
+	m_interfaceValues = new InterfaceValues();
 	m_menuUI = new MenuInterface();
 	m_gameUI = new GameInterface();
 
@@ -56,6 +61,7 @@ Engine::~Engine()
 	delete [] m_monsters;
 
 	delete m_textureArray;
+	delete m_interfaceValues;
 	delete m_menuUI;
 	delete m_gameUI;
 }
@@ -76,6 +82,8 @@ void Engine::MenuInit()
 	srand((unsigned)time(0));
 	//Donne une référence vers la camera a info
 	Info::Get().SetCamera(m_camera);
+
+	m_interfaceValues->Init(m_player, &m_character, m_textureInterface, m_texturefontColor);
 
 #pragma region Initilisation de Glew
 
@@ -243,41 +251,41 @@ void Engine::LoadMenuResource()
 
 #pragma region Images et textures
 
-	m_textureInterface[CUSTIMAGE_BLACK_BACK].Load(TEXTURE_PATH "noir.jpg");
-	m_textureInterface[CUSTIMAGE_BOO].Load(TEXTURE_PATH "i_boo.png");
-	m_textureInterface[CUSTIMAGE_RUN].Load(TEXTURE_PATH "i_bewareofcthulhu.png");
-	m_textureInterface[CUSTIMAGE_CROSSHAIR].Load(TEXTURE_PATH "i_cross.bmp");
-	m_textureInterface[CUSTIMAGE_INTERFACE_FRAME].Load(TEXTURE_PATH "b_rock.jpg");
-	m_textureInterface[CUSTIMAGE_PORTRAIT_FRAME].Load(TEXTURE_PATH "i_portrait-frame.png");
-	m_textureInterface[CUSTIMAGE_PORTRAIT_MALE].Load(TEXTURE_PATH "i_portrait-male.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH].Load(TEXTURE_PATH "i_pgb_health.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY].Load(TEXTURE_PATH "i_pgb_energy.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_MANA].Load(TEXTURE_PATH "i_pgb_mana.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_EXP].Load(TEXTURE_PATH "i_pgb_exp.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_BACK].Load(TEXTURE_PATH "i_pgb_health_back.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY_BACK].Load(TEXTURE_PATH "i_pgb_energy_back.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_MANA_BACK].Load(TEXTURE_PATH "i_pgb_mana_back.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_EXP_BACK].Load(TEXTURE_PATH "i_pgb_exp_back.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW].Load(TEXTURE_PATH "i_pgb_health_low.png");
-	m_textureInterface[CUSTIMAGE_CLOCK_BG].Load(TEXTURE_PATH "i_clock_bg.png");
-	m_textureInterface[CUSTIMAGE_CONSOLE_BACK].Load(TEXTURE_PATH "i_console_back.png");
-	m_textureInterface[CUSTIMAGE_CONSOLE_TEXTBOX_BACK].Load(TEXTURE_PATH "i_console_textbox_back.png");
-	m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR].Load(TEXTURE_PATH "i_cursor.png");
-	m_textureInterface[CUSTIMAGE_LOADING_SCREEN].Load(TEXTURE_PATH "i_loading.jpg");
-	m_textureInterface[CUSTIMAGE_MENU_BACKGROUND].Load(TEXTURE_PATH "i_menu_back.png");
-	m_textureInterface[CUSTIMAGE_MENU_MAIN_WINDOW].Load(TEXTURE_PATH "i_menu_main.png");
-	m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK].Load(TEXTURE_PATH "i_menu_button.png");
-	m_textureInterface[CUSTIMAGE_MENU_LOGO].Load(TEXTURE_PATH "i_menu_logo.png");
+	m_textureInterface[CUSTIMAGE_BLACK_BACK]->Load(TEXTURE_PATH "noir.jpg");
+	m_textureInterface[CUSTIMAGE_BOO]->Load(TEXTURE_PATH "i_boo.png");
+	m_textureInterface[CUSTIMAGE_RUN]->Load(TEXTURE_PATH "i_bewareofcthulhu.png");
+	m_textureInterface[CUSTIMAGE_CROSSHAIR]->Load(TEXTURE_PATH "i_cross.bmp");
+	m_textureInterface[CUSTIMAGE_INTERFACE_FRAME]->Load(TEXTURE_PATH "b_rock.jpg");
+	m_textureInterface[CUSTIMAGE_PORTRAIT_FRAME]->Load(TEXTURE_PATH "i_portrait-frame.png");
+	m_textureInterface[CUSTIMAGE_PORTRAIT_MALE]->Load(TEXTURE_PATH "i_portrait-male.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH]->Load(TEXTURE_PATH "i_pgb_health.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY]->Load(TEXTURE_PATH "i_pgb_energy.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_MANA]->Load(TEXTURE_PATH "i_pgb_mana.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_EXP]->Load(TEXTURE_PATH "i_pgb_exp.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_BACK]->Load(TEXTURE_PATH "i_pgb_health_back.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY_BACK]->Load(TEXTURE_PATH "i_pgb_energy_back.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_MANA_BACK]->Load(TEXTURE_PATH "i_pgb_mana_back.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_EXP_BACK]->Load(TEXTURE_PATH "i_pgb_exp_back.png");
+	m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW]->Load(TEXTURE_PATH "i_pgb_health_low.png");
+	m_textureInterface[CUSTIMAGE_CLOCK_BG]->Load(TEXTURE_PATH "i_clock_bg.png");
+	m_textureInterface[CUSTIMAGE_CONSOLE_BACK]->Load(TEXTURE_PATH "i_console_back.png");
+	m_textureInterface[CUSTIMAGE_CONSOLE_TEXTBOX_BACK]->Load(TEXTURE_PATH "i_console_textbox_back.png");
+	m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR]->Load(TEXTURE_PATH "i_cursor.png");
+	m_textureInterface[CUSTIMAGE_LOADING_SCREEN]->Load(TEXTURE_PATH "i_loading.jpg");
+	m_textureInterface[CUSTIMAGE_MENU_BACKGROUND]->Load(TEXTURE_PATH "i_menu_back.png");
+	m_textureInterface[CUSTIMAGE_MENU_MAIN_WINDOW]->Load(TEXTURE_PATH "i_menu_main.png");
+	m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK]->Load(TEXTURE_PATH "i_menu_button.png");
+	m_textureInterface[CUSTIMAGE_MENU_LOGO]->Load(TEXTURE_PATH "i_menu_logo.png");
 
 #pragma endregion
 
 #pragma region Couleurs label
 
-	m_texturefontColor[TEXTCOLOR_WHITE].Load(TEXTURE_PATH "font.png");
-	m_texturefontColor[TEXTCOLOR_RED].Load(TEXTURE_PATH "font_red.png");
-	m_texturefontColor[TEXTCOLOR_GREEN].Load(TEXTURE_PATH "font_green.png");
-	m_texturefontColor[TEXTCOLOR_BLUE].Load(TEXTURE_PATH "font_blue.png");
-	m_texturefontColor[TEXTCOLOR_YELLOW].Load(TEXTURE_PATH "font_yellow.png");
+	m_texturefontColor[TEXTCOLOR_WHITE]->Load(TEXTURE_PATH "font.png");
+	m_texturefontColor[TEXTCOLOR_RED]->Load(TEXTURE_PATH "font_red.png");
+	m_texturefontColor[TEXTCOLOR_GREEN]->Load(TEXTURE_PATH "font_green.png");
+	m_texturefontColor[TEXTCOLOR_BLUE]->Load(TEXTURE_PATH "font_blue.png");
+	m_texturefontColor[TEXTCOLOR_YELLOW]->Load(TEXTURE_PATH "font_yellow.png");
 
 
 #pragma endregion
@@ -292,76 +300,15 @@ void Engine::LoadMenuResource()
 #define MENU_INTERFACE_INITIALIZED
 #endif
 
-	m_menuUI->Init(this);
+	m_menuUI->Init(m_interfaceValues);
 
 	//Cursor
-	m_pb_cursor = new PictureBox(0, Vector2i(), Vector2i(50, 50), &m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], "pb_cursor");
+	m_pb_cursor = new PictureBox(0, Vector2i(), Vector2i(50, 50), m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], "pb_cursor");
 	//Appel singulier du cursor afin qu'il soit dessiné par dessus tous les éléments de l'interface
 	//m_pnl_screen->AddControl(m_pb_cursor);
 	m_pb_cursor->SetRepeatTexture(false);
-
-	//Fond d'écran
-	m_menuUI->m_menu_screen = new Panel(0, Vector2i(), Vector2i(Width(), Height()), &m_textureInterface[CUSTIMAGE_MENU_BACKGROUND], 1, "menu_main");
-	m_menuUI->m_menu_screen->SetRepeatTexture(false);
-
-	//Loading screen
-	m_menuUI->m_menu_loading = new PictureBox(0, Vector2i(0, 0), Vector2i(Width(), Height()),&m_textureInterface[CUSTIMAGE_LOADING_SCREEN], "loading");
-	m_menuUI->m_menu_loading->SetVisible(false);
-	m_menuUI->m_menu_loading->SetRepeatTexture(false);
-
-	//Paneau principal du menu
-	m_menuUI->m_menu_panel = new Panel(m_menuUI->m_menu_screen, 
-		Vector2i(Width() / 2 - MENU_PANEL_SIZE_X / 2, Height() / 2 - MENU_PANEL_SIZE_Y / 2), 
-		Vector2i(MENU_PANEL_SIZE_X, MENU_PANEL_SIZE_Y), &m_textureInterface[CUSTIMAGE_MENU_MAIN_WINDOW], 2, MENU_PANEL_NAME);
-	m_menuUI->m_menu_screen->AddControl(m_menuUI->m_menu_panel);
-	m_menuUI->m_menu_panel->SetRepeatTexture(false);
-
-	int controlWidth = m_menuUI->m_menu_panel->Size().x * 0.8f;
-	int controlPosX = m_menuUI->m_menu_panel->Size().x / 2 - controlWidth / 2;
-
-	//Logo du jeu
-	m_menuUI->m_menu_logo = new PictureBox(m_menuUI->m_menu_panel, 
-		Vector2i(controlPosX, m_menuUI->m_menu_panel->Size().y - MENU_LOGO_SIZE_Y - controlPosX),
-		Vector2i(controlWidth, MENU_LOGO_SIZE_Y), &m_textureInterface[CUSTIMAGE_MENU_LOGO], "logo");
-	m_menuUI->m_menu_panel->AddControl(m_menuUI->m_menu_logo);
-	m_menuUI->m_menu_logo->SetRepeatTexture(false);
-
-	//Panneau de controle utilisateur
-	m_menuUI->m_menu_controls = new Panel(m_menuUI->m_menu_panel,
-		Vector2i(controlPosX, controlPosX),
-		Vector2i(controlWidth, MENU_CONTROLS_SIZE_Y),
-		&m_textureInterface[CUSTIMAGE_MENU_MAIN_WINDOW], 3, "menu_controls");
-	m_menuUI->m_menu_panel->AddControl(m_menuUI->m_menu_controls);
-	m_menuUI->m_menu_controls->SetRepeatTexture(false);
-
-	int buttonWidth = m_menuUI->m_menu_controls->Size().x * 0.8f;
-	int buttonPosX = m_menuUI->m_menu_controls->Size().x / 2 - buttonWidth / 2;
-
-	//Button demarrer fullscreen
-	m_menuUI->m_menu_fullscreen = new Button(m_menuUI->m_menu_controls,
-		Vector2i(buttonPosX, buttonPosX + MENU_BUTTONS_SIZE_Y * 3 - MENU_BUTTONS_INTERVAL), Vector2i(buttonWidth, MENU_BUTTONS_SIZE_Y),
-		&m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK], &m_texturefontColor[TEXTCOLOR_YELLOW],
-		STRING_BUTTON_NORM_START, MENU_BUTTON_START_FULL_NAME);
-	m_menuUI->m_menu_controls->AddControl(m_menuUI->m_menu_fullscreen);
-	m_menuUI->m_menu_fullscreen->SetRepeatTexture(false);
 	m_menuUI->m_menu_fullscreen->OnClick.Attach(this, &Engine::OnClick);
-
-	//Button demarrer debug
-	m_menuUI->m_menu_start = new Button(m_menuUI->m_menu_controls,
-		Vector2i(buttonPosX, buttonPosX + MENU_BUTTONS_SIZE_Y * 2 - MENU_BUTTONS_INTERVAL * 2), Vector2i(buttonWidth, MENU_BUTTONS_SIZE_Y),
-		&m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK], &m_texturefontColor[TEXTCOLOR_YELLOW],
-		STRING_BUTTON_DEBUG_START, MENU_BUTTON_DEBUG);
-	m_menuUI->m_menu_controls->AddControl(m_menuUI->m_menu_start);
-	m_menuUI->m_menu_start->SetRepeatTexture(false);
 	m_menuUI->m_menu_start->OnClick.Attach(this, &Engine::OnClick);
-
-	//Button fermer
-	m_menuUI->m_menu_close = new Button(m_menuUI->m_menu_controls,
-		Vector2i(buttonPosX, buttonPosX + MENU_BUTTONS_SIZE_Y * 1 - MENU_BUTTONS_INTERVAL * 3), Vector2i(buttonWidth, MENU_BUTTONS_SIZE_Y),
-		&m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK], &m_texturefontColor[TEXTCOLOR_YELLOW],
-		STRING_BUTTON_CLOSE, MENU_BUTTON_CLOSE);
-	m_menuUI->m_menu_controls->AddControl(m_menuUI->m_menu_close);
-	m_menuUI->m_menu_close->SetRepeatTexture(false);
 	m_menuUI->m_menu_close->OnClick.Attach(this, &Engine::OnClick);
 
 #pragma endregion
@@ -397,6 +344,9 @@ void Engine::LoadGameResource()
 #ifndef GAME_INTERFACE_INITIALIZED
 #define GAME_INTERFACE_INITIALIZED
 #endif
+
+	m_gameUI->Init(m_interfaceValues);
+
 	// Écran
 	m_gameUI->m_pnl_screen = new Panel(0, Vector2i(), Vector2i(Width(), Height()), 0, 1, "main");
 
@@ -413,7 +363,7 @@ void Engine::LoadGameResource()
 #pragma region Enfants de Playscreen
 
 	// Informations
-	m_gameUI->m_lb_infos = new ListBox(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*6 - 26*12), 200, &m_texturefontColor[TEXTCOLOR_RED], 
+	m_gameUI->m_lb_infos = new ListBox(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*6 - 26*12), 200, m_texturefontColor[TEXTCOLOR_RED], 
 		0, 26, 2, 12.f, 12.f, 0.5f, false, "lb_infos");
 	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lb_infos);
 	m_gameUI->m_lb_infos->AddLine("Controles Mouvements");
@@ -446,8 +396,8 @@ void Engine::LoadGameResource()
 	m_gameUI->m_lb_console = new ListBox(m_gameUI->m_pnl_playscreen, 
 		Vector2i(m_gameUI->m_pnl_playscreen->Size().x - 64 - (int)LB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H + 5), 
 		LB_CONSOLE_SIZE_W, 
-		&m_texturefontColor[TEXTCOLOR_YELLOW], 
-		&m_textureInterface[CUSTIMAGE_CONSOLE_BACK], 
+		m_texturefontColor[TEXTCOLOR_YELLOW], 
+		m_textureInterface[CUSTIMAGE_CONSOLE_BACK], 
 		LB_CONSOLE_LINE_NUMBER, 
 		LB_CONSOLE_LINE_GAP, 
 		LB_CONSOLE_CHAR_W, 
@@ -463,8 +413,8 @@ void Engine::LoadGameResource()
 	m_gameUI->m_txb_console = new Textbox(m_gameUI->m_pnl_playscreen,
 		Vector2i(m_gameUI->m_pnl_playscreen->Size().x - 64 - (int)LB_CONSOLE_SIZE_W, 0),
 		Vector2i(TXB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H),
-		&m_texturefontColor[TEXTCOLOR_WHITE],
-		&m_textureInterface[CUSTIMAGE_CONSOLE_TEXTBOX_BACK],
+		m_texturefontColor[TEXTCOLOR_WHITE],
+		m_textureInterface[CUSTIMAGE_CONSOLE_TEXTBOX_BACK],
 		Label::TEXTDOCK_MIDDLELEFT,
 		LBL_GENERIC_ITALIC,
 		TXB_CONSOLE_SIZE_H * 0.75f,
@@ -479,12 +429,12 @@ void Engine::LoadGameResource()
 	m_gameUI->m_pnl_portrait = new Panel(m_gameUI->m_pnl_playscreen,
 		Vector2i(PNL_PORTRAIT_POSITION_X, PNL_PORTRAIT_POSITION_Y),
 		Vector2i(PNL_PORTRAIT_SIZE_W, PNL_PORTRAIT_SIZE_H),
-		&m_textureInterface[CUSTIMAGE_PORTRAIT_FRAME], PNL_PORTRAIT_CONTROLS_NBR, PNL_PORTRAIT_NAME);
+		m_textureInterface[CUSTIMAGE_PORTRAIT_FRAME], PNL_PORTRAIT_CONTROLS_NBR, PNL_PORTRAIT_NAME);
 	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_pnl_portrait);
 
 	m_gameUI->m_lbl_currentBlockType = new Label(m_gameUI->m_pnl_playscreen, Vector2i(m_gameUI->m_pnl_portrait->Position().x,
 		m_gameUI->m_pnl_portrait->Position().y + m_gameUI->m_pnl_portrait->Size().y + 10),
-		&m_texturefontColor[TEXTCOLOR_BLUE], "Bloc : ", Label::TEXTDOCK_NONE, false, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "lblcurblock");
+		m_texturefontColor[TEXTCOLOR_BLUE], "Bloc : ", Label::TEXTDOCK_NONE, false, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "lblcurblock");
 	m_gameUI->m_pb_currentBlockType = new PictureBox(m_gameUI->m_pnl_playscreen, Vector2i(m_gameUI->m_lbl_currentBlockType->Position().x + 84, m_gameUI->m_lbl_currentBlockType->Position().y), Vector2i(20,20), 
 		m_textureArray->GetTexture(m_currentBlockType - 1), "pbcurbloc");
 	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_currentBlockType);
@@ -496,32 +446,32 @@ void Engine::LoadGameResource()
 	m_gameUI->m_pgb_health = new ProgressBar(m_gameUI->m_pnl_portrait,
 		Vector2i(PGB_HEALTH_POSITION_X, PGB_HEALTH_POSITION_Y),
 		Vector2i(PGB_HEALTH_SIZE_W, PGB_HEALTH_SIZE_H),
-		&m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH], &m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_BACK],
+		m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH], m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_HEALTH_BACKGROUND, PGB_HEALTH_BORDER_SIZE, PGB_HEALTH_NAME);
 	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_pgb_health);
 	// Barre de mana
 	m_gameUI->m_pgb_mana = new ProgressBar(m_gameUI->m_pnl_portrait,
 		Vector2i(PGB_MANA_POSITION_X, PGB_MANA_POSITION_Y),
 		Vector2i(PGB_MANA_SIZE_W, PGB_MANA_SIZE_H),
-		&m_textureInterface[CUSTIMAGE_PGBTEXT_MANA], &m_textureInterface[CUSTIMAGE_PGBTEXT_MANA_BACK],
+		m_textureInterface[CUSTIMAGE_PGBTEXT_MANA], m_textureInterface[CUSTIMAGE_PGBTEXT_MANA_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_MANA_BACKGROUND, PGB_MANA_BORDER_SIZE, PGB_MANA_NAME);
 	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_pgb_mana);
 	// Barre d'expérience
 	m_gameUI->m_pgb_exp = new ProgressBar(m_gameUI->m_pnl_portrait,
 		Vector2i(PGB_EXP_POSITION_X, PGB_EXP_POSITION_Y),
 		Vector2i(PGB_EXP_SIZE_W, PGB_EXP_SIZE_H),
-		&m_textureInterface[CUSTIMAGE_PGBTEXT_EXP], &m_textureInterface[CUSTIMAGE_PGBTEXT_EXP_BACK],
+		m_textureInterface[CUSTIMAGE_PGBTEXT_EXP], m_textureInterface[CUSTIMAGE_PGBTEXT_EXP_BACK],
 		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_EXP_BACKGROUND, PGB_EXP_BORDER_SIZE, PGB_EXP_NAME);
 	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_pgb_exp);
-	m_gameUI->m_lbl_health = new Label(m_gameUI->m_pnl_portrait, Vector2i(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), &m_texturefontColor[TEXTCOLOR_RED], "", 
+	m_gameUI->m_lbl_health = new Label(m_gameUI->m_pnl_portrait, Vector2i(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), m_texturefontColor[TEXTCOLOR_RED], "", 
 		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, PNL_PORTRAIT_CHAR_H, PNL_PORTRAIT_CHAR_W, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_HEALTH_NAME);
 	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_lbl_health);
 	// Label de mana
-	m_gameUI->m_lbl_mana = new Label(m_gameUI->m_pnl_portrait, Vector2i(LBL_MANA_POSITION_X, LBL_MANA_POSITION_Y), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
+	m_gameUI->m_lbl_mana = new Label(m_gameUI->m_pnl_portrait, Vector2i(LBL_MANA_POSITION_X, LBL_MANA_POSITION_Y), m_texturefontColor[TEXTCOLOR_BLUE], "", 
 		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, PNL_PORTRAIT_CHAR_H, PNL_PORTRAIT_CHAR_W, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_MANA_NAME);
 	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_lbl_mana);
 	// Label d'exp
-	m_gameUI->m_lbl_exp = new Label(m_gameUI->m_pnl_portrait, Vector2i(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
+	m_gameUI->m_lbl_exp = new Label(m_gameUI->m_pnl_portrait, Vector2i(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), m_texturefontColor[TEXTCOLOR_YELLOW], "", 
 		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, LBL_EXP_CHAR_W, LBL_EXP_CHAR_H, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_EXP_NAME);
 	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_lbl_exp);
 
@@ -529,12 +479,12 @@ void Engine::LoadGameResource()
 	m_gameUI->m_pnl_playerImage = new Panel(m_gameUI->m_pnl_portrait, 
 		Vector2i(PB_PORTRAIT_POSITION_X, PB_PORTRAIT_POSITION_Y),
 		Vector2i(PB_PORTRAIT_SIZE_W, PB_PORTRAIT_SIZE_H),
-		&m_textureInterface[CUSTIMAGE_PORTRAIT_MALE], 1, PB_PORTRAIT_NAME);
+		m_textureInterface[CUSTIMAGE_PORTRAIT_MALE], 1, PB_PORTRAIT_NAME);
 	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_pnl_playerImage);
 
 #pragma region Enfants de m_pnl_playerImage
 
-	m_gameUI->m_lbl_playerLevel = new Label(m_gameUI->m_pnl_playerImage, Vector2i(), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
+	m_gameUI->m_lbl_playerLevel = new Label(m_gameUI->m_pnl_playerImage, Vector2i(), m_texturefontColor[TEXTCOLOR_BLUE], "", 
 		Label::TEXTDOCK_TOPCENTER, LBL_GENERIC_ITALIC, LBL_PLAYER_LEVEL_W, LBL_PLAYER_LEVEL_H, LBL_PLAYER_LEVEL_I, Vector2f(), LBL_PLAYER_LEVEL_NAME);
 	m_gameUI->m_pnl_playerImage->AddControl(m_gameUI->m_lbl_playerLevel);
 
@@ -546,34 +496,34 @@ void Engine::LoadGameResource()
 	m_gameUI->m_pgb_energy = new ProgressBar(m_gameUI->m_pnl_playscreen,
 		Vector2i(PGB_ENERGY_POSITION_X, PGB_ENERGY_POSITION_Y),
 		Vector2i(PGB_ENERGY_SIZE_W, PGB_ENERGY_SIZE_H),
-		&m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY], &m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY_BACK],
+		m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY], m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY_BACK],
 		ProgressBar::BARMODE_VERTICAL_DTU, PGB_ENERGY_BACKGROUND, PGB_ENERGY_BORDER_SIZE, PGB_ENERGY_NAME);
 	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_pgb_energy);
 	//Label d'énergie
-	m_gameUI->m_lbl_energy = new Label(m_gameUI->m_pnl_playscreen, Vector2i(LBL_ENERGY_POSITION_X, LBL_ENERGY_POSITION_Y), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
+	m_gameUI->m_lbl_energy = new Label(m_gameUI->m_pnl_playscreen, Vector2i(LBL_ENERGY_POSITION_X, LBL_ENERGY_POSITION_Y), m_texturefontColor[TEXTCOLOR_GREEN], "", 
 		Label::TEXTDOCK_NONE, LBL_ENERGY_ITALIC, LBL_ENERGY_CHAR_H, LBL_ENERGY_CHAR_W, LBL_ENERGY_CHAR_I, Vector2f(), LBL_ENERGY_NAME);
 	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_energy);
 
 #pragma region Controles de debug
 
 	//Label Position
-	m_gameUI->m_lbl_plrPos = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H), &m_texturefontColor[TEXTCOLOR_GREEN], "", 
+	m_gameUI->m_lbl_plrPos = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H), m_texturefontColor[TEXTCOLOR_GREEN], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "pos");
 	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_plrPos);
 	//Label Vitesse
-	m_gameUI->m_lbl_plrSpd = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*2), &m_texturefontColor[TEXTCOLOR_BLUE], "", 
+	m_gameUI->m_lbl_plrSpd = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*2), m_texturefontColor[TEXTCOLOR_BLUE], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "spd");
 	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_plrSpd);
 	//Label Acceleration
-	m_gameUI->m_lbl_plrAcc = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*3), &m_texturefontColor[TEXTCOLOR_RED], "", 
+	m_gameUI->m_lbl_plrAcc = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*3), m_texturefontColor[TEXTCOLOR_RED], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "acc");
 	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_plrAcc);
 	//Label mouse position
-	m_gameUI->m_lbl_mousePos = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*4), &m_texturefontColor[TEXTCOLOR_WHITE], "", 
+	m_gameUI->m_lbl_mousePos = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*4), m_texturefontColor[TEXTCOLOR_WHITE], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "Mpos");
 	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_mousePos);
 	//Label FPS
-	m_gameUI->m_lbl_FPS = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*5), &m_texturefontColor[TEXTCOLOR_YELLOW], "", 
+	m_gameUI->m_lbl_FPS = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*5), m_texturefontColor[TEXTCOLOR_YELLOW], "", 
 		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "fps");
 	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_FPS);
 
@@ -581,12 +531,12 @@ void Engine::LoadGameResource()
 
 	//Heure
 	m_gameUI->m_pnl_time = new Panel(m_gameUI->m_pnl_playscreen, Vector2i(m_gameUI->m_pnl_playscreen->Size().x - 128, m_gameUI->m_pnl_playscreen->Size().y - 64), 
-		Vector2i(128, 64), &m_textureInterface[CUSTIMAGE_CLOCK_BG], 1, "clock");
+		Vector2i(128, 64), m_textureInterface[CUSTIMAGE_CLOCK_BG], 1, "clock");
 	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_pnl_time);
 
 #pragma region Enfants de m_pnl_time
 
-	m_gameUI->m_lbl_time = new Label(m_gameUI->m_pnl_time, Vector2i(0,0), &m_texturefontColor[TEXTCOLOR_WHITE], "", Label::TEXTDOCK_MIDDLECENTER, false, 
+	m_gameUI->m_lbl_time = new Label(m_gameUI->m_pnl_time, Vector2i(0,0), m_texturefontColor[TEXTCOLOR_WHITE], "", Label::TEXTDOCK_MIDDLECENTER, false, 
 		LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "time");
 	m_gameUI->m_pnl_time->AddControl(m_gameUI->m_lbl_time);
 
@@ -676,6 +626,8 @@ void Engine::Update(float elapsedTime)
 
 #pragma endregion
 
+	m_interfaceValues->Update(m_fps, MousePosition(), Width(), Height());
+
 #pragma region Calcul la position du joueur et de la camera
 
 	m_player->Move(m_ghostMode, m_character, elapsedTime);
@@ -715,10 +667,10 @@ void Engine::Update(float elapsedTime)
 	else if (!m_gameUI->m_lb_infos->Visible() && Info::Get().Options().GetOptInfos())
 		m_gameUI->m_lb_infos->SetVisible(true);
 	//Change la texture de la barre de vie en fonction du %. Ne réassigne la texture que si on en a besoin
-	if (m_character.HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetTexture() == &m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH])
-		m_gameUI->m_pgb_health->SetTexture(&m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW]);
-	else if (m_character.HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetTexture() == &m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW])
-		m_gameUI->m_pgb_health->SetTexture(&m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH]);
+	if (m_character.HealthPerc() <= PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetTexture() == m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH])
+		m_gameUI->m_pgb_health->SetTexture(m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW]);
+	else if (m_character.HealthPerc() > PGB_HEALTH_LOW_TRESHOLD && m_gameUI->m_pgb_health->GetTexture() == m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW])
+		m_gameUI->m_pgb_health->SetTexture(m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH]);
 	//Affiche ou cache la barre d'énergie selon la situation
 	if (m_character.Energy() != m_character.EnergyMax() || Info::Get().Ctrls().Shift())
 	{
@@ -1561,9 +1513,9 @@ void Engine::RemoveBlock()
 
 //Private
 
-void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat)
+void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture, bool repeat)
 {
-	texture.Bind();
+	texture->Bind();
 	glLoadIdentity();
 	glTranslated(position.x, position.y, 0);
 
@@ -1572,13 +1524,13 @@ void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Textur
 	glTexCoord2f(0, 0);
 	glVertex2f(0, 0);
 
-	glTexCoord2f((repeat ? size.x / texture.GetWidth() : 1), 0);
+	glTexCoord2f((repeat ? size.x / texture->GetWidth() : 1), 0);
 	glVertex2i(size.x, 0);
 
-	glTexCoord2f((repeat ? size.x / texture.GetWidth() : 1), (repeat ? size.y / texture.GetHeight() : 1));
+	glTexCoord2f((repeat ? size.x / texture->GetWidth() : 1), (repeat ? size.y / texture->GetHeight() : 1));
 	glVertex2i(size.x, size.y);
 
-	glTexCoord2f(0, (repeat ? size.y / texture.GetHeight() : 1));
+	glTexCoord2f(0, (repeat ? size.y / texture->GetHeight() : 1));
 	glVertex2i(0, size.y);
 
 	glEnd();
@@ -1597,7 +1549,7 @@ void Engine::RenderSpells()
 	{
 		if (m_textureSpell[i].IsValid())
 		{
-			RenderSquare(Vector2i(i == 0 ? spellBarPosX : (spellBarPosX + i * (spellSize + spellPadding)), 0), Vector2i(spellSize, spellSize), m_textureSpell[i], false);
+			RenderSquare(Vector2i(i == 0 ? spellBarPosX : (spellBarPosX + i * (spellSize + spellPadding)), 0), Vector2i(spellSize, spellSize), &m_textureSpell[i], false);
 
 			std::ostringstream convertisseur;
 			convertisseur << (i + 1) % 10;
@@ -1610,7 +1562,7 @@ void Engine::RenderSpells()
 
 void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 {
-	m_texturefontColor[TEXTCOLOR_WHITE].Bind();
+	m_texturefontColor[TEXTCOLOR_WHITE]->Bind();
 	glLoadIdentity();
 	glTranslated(x, y, 0);
 	for (unsigned int i = 0; i < t.length(); ++i)

@@ -3,7 +3,8 @@
 
 #include "interfaceinfos.h"
 #include "define.h"
-#include "engine/engine.h"
+#include "engine/gl/ui/interfacevalues.h"
+#include "engine/gl/ui/control.h"
 #include "engine/gl/ui/button.h"
 #include "engine/gl/ui/panel.h"
 #include "engine/gl/ui/label.h"
@@ -12,17 +13,17 @@
 #include "engine/gl/ui/progressbar.h"
 #include "engine/gl/ui/textbox.h"
 
-class Engine;
 class Interface
 {
 public:
 	Interface();
 	virtual ~Interface();
-	virtual void Init(Engine* engine);
+	virtual void DeInit();
+	virtual void Init(InterfaceValues* values);
 	virtual void InitControls() = 0;
 protected:
 	bool m_loaded;
-	Engine* m_engine;
+	InterfaceValues* m_val;
 };
 
 #endif

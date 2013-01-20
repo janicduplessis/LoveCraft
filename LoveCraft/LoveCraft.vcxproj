@@ -81,6 +81,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\gl\ui\interfacevalues.cpp" />
     <ClCompile Include="src\engine\gl\ui\gameinterface.cpp" />
     <ClCompile Include="src\engine\gl\ui\interface.cpp" />
     <ClCompile Include="src\engine\gl\ui\menuinterface.cpp" />
@@ -129,6 +130,7 @@
     <ClCompile Include="src\engine\gl\ui\textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\gl\ui\interfacevalues.h" />
     <ClInclude Include="src\engine\gl\ui\gameinterface.h" />
     <ClInclude Include="src\engine\gl\ui\interface.h" />
     <ClInclude Include="src\engine\gl\ui\menuinterface.h" />

@@ -1,7 +1,7 @@
 #include "interface.h"
 
 
-Interface::Interface() : m_loaded(false)
+Interface::Interface() : m_loaded(false), m_val(0)
 {
 }
 
@@ -10,9 +10,14 @@ Interface::~Interface()
 {
 }
 
-void Interface::Init(Engine* engine)
+void Interface::DeInit()
+{
+	m_val = 0;
+}
+
+void Interface::Init(InterfaceValues* values)
 {
 	m_loaded = true;
-	m_engine = engine;
+	m_val = values;
 	InitControls();
 }

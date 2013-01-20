@@ -15,6 +15,7 @@
 #include "camera.h"
 #include "chunk.h"
 #include "info.h"
+#include "gl/ui/interfacevalues.h"
 #include "gl/ui/gameinterface.h"
 #include "gl/ui/menuinterface.h"
 #include "gl/ui/picturebox.h"
@@ -37,8 +38,6 @@
 class Engine : public OpenglContext
 {
 public:
-	friend class GameInterface;
-
 	/**
 	* Constructeur par défaut de la classe
 	*/
@@ -169,7 +168,7 @@ private:
 	* @param texture		Texture qui doit être utiliser avec l'element
 	* 
 	*/
-	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture& texture, bool repeat = true);
+	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture, bool repeat = true);
 	virtual void RenderSpells();
 	void StartBlendPNG(bool value = true) const;
 	void OnClick(Control* sender);
@@ -188,8 +187,8 @@ private:
 
 	Texture* m_textureSpell;
 	Texture* m_textureSpellX;
-	Texture* m_textureInterface;
-	Texture* m_texturefontColor;
+	Texture** m_textureInterface;
+	Texture** m_texturefontColor;
 	Texture m_texSpell;
 
 	Player* m_player;
@@ -205,6 +204,7 @@ private:
 
 	Array2d<Chunk*>* m_chunks;
 
+	InterfaceValues* m_interfaceValues;
 	MenuInterface* m_menuUI;
 	GameInterface* m_gameUI;
 

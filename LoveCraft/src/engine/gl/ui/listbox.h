@@ -15,7 +15,6 @@ public:
 	~ListBox();
 	void SetLine(unsigned short line, const std::string& message);
 	void Render();
-	ListBox& operator=(const ListBox& p);
 	void AddLine(const std::string& message);
 	std::string GetLine(int index);
 	ListBox& operator<<(const std::string& text);

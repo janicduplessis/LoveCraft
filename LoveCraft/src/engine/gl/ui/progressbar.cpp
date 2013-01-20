@@ -149,23 +149,3 @@ void ProgressBar::SetBorderSize(unsigned short size)
 {
 	m_borderSize = size;
 }
-
-ProgressBar& ProgressBar::operator=(const ProgressBar& pgb)
-{
-	m_minimum = pgb.m_minimum;
-	m_maximum = pgb.m_maximum;
-	m_mode = pgb.m_mode;
-	m_textureBack = pgb.m_textureBack;
-	m_value = pgb.m_value;
-	m_name = pgb.m_name;
-	m_parent = pgb.m_parent;
-	m_position = pgb.m_position;
-	m_size = pgb.m_size;
-	m_texture = pgb.m_texture;
-	m_type = pgb.m_type;
-	m_background = pgb.m_background;
-	m_borderSize = pgb.m_borderSize;
-	m_visible = pgb.m_visible;
-
-	return *this;
-}

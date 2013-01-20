@@ -13,6 +13,7 @@ public:
 	void SetFocus(const bool value);
 	void SetMessage(std::string text);
 	std::string GetMsg() const;
+	Label* TLabel();
 	void Render();
 private:
 	Label* m_label;

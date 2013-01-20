@@ -7,12 +7,11 @@ Button::Button() : m_clicked(false), m_label(0)
 
 Button::Button(Control* parent, const Vector2i& position, const Vector2i &size, Texture* background, 
 			   Texture* textColor, const std::string& text, const std::string& name) : 
-Control(CTRLTYPE_BOUTON, parent, position, size, background, name), m_clicked(false), m_label(0),
-	m_text(text)
+Control(CTRLTYPE_BOUTON, parent, position, size, background, name), m_clicked(false), m_label(0)
 {
-	m_label = new Label(this, Vector2i(), textColor, m_text, Label::TEXTDOCK_MIDDLECENTER, false, 
+	m_label = new Label(this, Vector2i(), textColor, text, Label::TEXTDOCK_MIDDLECENTER, false, 
 		LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "label_");
-	m_label->SetMessage(text);
+	m_label->SetProperty(Label::PropString::PROPSTR_TEXT, text);
 }
 
 Button::~Button()
@@ -23,7 +22,7 @@ Button::~Button()
 void Button::Render()
 {
 	Control::Render(m_texture);
-	if (m_text != "" && m_visible)
+	if (GetText() != "" && m_visible)
 		m_label->Render();
 }
 
@@ -57,9 +56,14 @@ void Button::Press()
 
 void Button::SetTextTo(std::string text)
 {
-	m_label->SetMessage(text);
+	m_label->SetProperty(Label::PropString::PROPSTR_TEXT, text);
 }
 std::string Button::GetText() const
 {
-	return m_label->GetMsg();
+	return m_label->GetProperty(Label::PropString::PROPSTR_TEXT);
+}
+
+Label* Button::TLabel()
+{
+	return m_label;
 }

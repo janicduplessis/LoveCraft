@@ -26,11 +26,16 @@ void Textbox::SetFocus(const bool value)
 }
 void Textbox::SetMessage(std::string text)
 {
-	m_label->SetMessage(text);
+	m_label->SetProperty(PropString::PROPSTR_TEXT, text);
 }
 std::string Textbox::GetMsg() const
 {
-	return m_label->GetMsg();
+	return m_label->GetProperty(PropString::PROPSTR_TEXT);
+}
+
+Label* Textbox::TLabel()
+{
+	return m_label;
 }
 
 void Textbox::Render()

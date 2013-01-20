@@ -1,7 +1,7 @@
 ﻿#include "info.h"
 #include "engine/gl/ui/label.h"
 
-Info::Info() : m_lineToPrint(""), m_console(0)
+Info::Info() : m_lineToPrint(""), m_console(0), m_lstatus(Info::LSTATUS_NONE)
 {
 	GenerateBlocInfos();
 	if (!m_sound.LoadSounds())
@@ -166,4 +166,13 @@ ListBox* Info::Console()
 void Info::SetConsole( ListBox* console )
 {
 	m_console = console;
+}
+
+void Info::StatusOn(LoadedStatus status)
+{
+	m_lstatus = m_lstatus | status;
+}
+bool Info::GetStatus(LoadedStatus status) const
+{
+	return (m_lstatus & status == 1);
 }

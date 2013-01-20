@@ -34,6 +34,8 @@ public:
 	void SetTextTo(std::string text);
 	std::string GetText() const;
 
+	Label* TLabel();
+
 	/**
 	 * Relache le bouton
 	 */
@@ -49,7 +51,6 @@ public:
 private:
 	bool m_clicked;
 	Label* m_label;
-	std::string m_text;
 };
 
 #endif

@@ -26,6 +26,16 @@ class Chunk;
 class Info
 {
 public:
+	enum LoadedStatus
+	{
+		LSTATUS_NONE = 0x0,
+		LSTATUS_CHARACTER = 0x1,
+		LSTATUS_PLAYER = 0x2,
+		LSTATUS_CAMERA = 0x4,
+		LSTATUS_CHUNK = 0x8,
+		LSTATUS_MONSTERS = 0x10,
+		LSTATUS_TEXTURES = 0x20
+	};
 	/**
 	* Retourne une reference vers l'instance Info
 	*/
@@ -96,6 +106,9 @@ public:
 	void NextPrint(const std::string& text);
 	std::string LineToPrint() const;
 
+	void StatusOn(LoadedStatus status);
+	bool GetStatus(LoadedStatus status) const;
+
 private:
 	Info();
 	~Info();
@@ -115,6 +128,7 @@ private:
 	std::string m_lineToPrint;
 	Vector2i m_mouse;
 	ListBox* m_console;
+	int m_lstatus;
 };
 
 #endif

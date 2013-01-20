@@ -28,6 +28,11 @@ public:
 		TEXTDOCK_BOTTOMRIGHT,
 		TEXTDOCK_LAST
 	};
+	enum PropDock
+	{
+		PROPDOCK_DOCKING
+	};
+
 	/**
 	* Constructeur par défaut
 	*/
@@ -38,102 +43,25 @@ public:
 	* Destructeur par défaut
 	*/
 	~Label();
-	/**
-	* Définit le message qui sera affiché dans le label
-	*
-	* @param message	Le message à afficher
-	*/
-	void SetMessage(const std::string& message);
-	std::string GetMsg() const;
-	/**
-	* Définit la texture de la couleur du texte
-	*
-	* @param texture	La référence de la texture représentant la couleur
-	*/
-	void SetColor(Texture* texture);
-	/**
-	* Obient la texture de la couleur du texte
-	*
-	* @return Texture*
-	*/
-	Texture* GetColor() const;
-	/**
-	* Définit la position de l'ancrage lorsque la position du controle est (0, 0)
-	*
-	* @param dock		La position de l'ancrage
-	*/
-	void SetDock(Docking dock);
-	/**
-	* Obient la position de l'ancrage lorsque la position du controle est (0, 0)
-	*
-	* @return Docking (enum)
-	*/
-	Docking GetDock() const;
-	/**
-	* Définit si le texte est écrit en italique
-	*
-	* @param value		Texte en italic
-	*/
-	void SetItalic(bool value);
-	/**
-	* Obient si le texte est écrit en italique
-	*
-	* @return bool
-	*/
-	bool GetItalic() const;
-	/**
-	* Définit la taille en largeur que chaque lettre aura
-	*
-	* @param value		Largeur de chaque lettre - Défaut 12.0f
-	*/
-	void SetFontWidth(float value);
-	/**
-	* Obient la taille en largeur que chaque lettre a
-	*
-	* @return float
-	*/
-	float GetFontWidth() const;
-	/**
-	* Définit la taille en hauteur que chaque lettre aura
-	*
-	* @param value		Hauteur de chaque lettre - Défaut 12.0f
-	*/
-	void SetFontHeight(float value);
-	/**
-	* Obient la taille en hauteur que chaque lettre a
-	*
-	* @return float
-	*/
-	float GetFontHeight() const;
-	/**
-	* Obient le Vector correspondant au décalage
-	*
-	* @return Vector2f
-	*/
-	Vector2f GetOffset() const;
-	/**
-	* Définit la valeur du décalage
-	*
-	* @param offset		Le Vector représentant le décalage
-	*/
-	void SetOffset(Vector2f offset);
-	/**
-	* Définit la valeur de l'espacement entre les lettres - défaut 8
-	*
-	* @param interval	La valeur entière représentant le décalage
-	*/
-	void SetInterval(unsigned short interval);
-	/**
-	* Définit le pourcentage d'espacement entre les lettres - défaut 66%
-	*
-	* @param interval	La valeur float représentant le décalage
-	*/
-	void SetInterval(float interval);
+
+	void SetProperty(PropBool boolprop, bool value);
+	void SetProperty(PropVector2 vector2prop, Vector2i value);
+	void SetProperty(PropString stringprop, std::string value);
+	void SetProperty(PropTexture textureprop, Texture* value);
+	void SetProperty(PropFloat floatprop, float value);
+	void SetProperty(PropDock dockprop, Docking value);
+
+	bool GetProperty(PropBool boolprop) const;
+	Vector2i GetProperty(PropVector2 vector2prop) const;
+	std::string GetProperty(PropString stringprop) const;
+	Texture* GetProperty(PropTexture textureprop) const;
+	float GetProperty(PropFloat floatprop) const;
+	Docking GetProperty(PropDock dockprop) const;
+
 	/**
 	* Dessine le contrôle
 	*/
 	void Render();
-	Label& operator=(const Label& l);
 private:
 	Vector2f GetNewPosition(unsigned short length);
 

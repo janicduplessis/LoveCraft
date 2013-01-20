@@ -155,7 +155,15 @@ void Control::SetProperty(PropString stringprop, std::string value)
 }
 void Control::SetProperty(PropTexture textureprop, Texture* value)
 {
-
+	switch (textureprop)
+	{
+	case Control::PROPTEXT_BACKGROUND:
+		m_texture = value;
+		break;
+	default:
+		assert(false);
+		break;
+	}
 }
 
 bool Control::GetProperty(PropBool boolprop) const
@@ -190,11 +198,25 @@ Vector2i Control::GetProperty(PropVector2 vector2prop) const
 }
 std::string Control::GetProperty(PropString stringprop) const
 {
-	return "";
+	switch (stringprop)
+	{
+	case Control::PROPSTR_NAME:
+		return m_name;
+	default:
+		assert(false);
+		return "";
+	}
 }
 Texture* Control::GetProperty(PropTexture textureprop) const
 {
-	return 0;
+	switch (textureprop)
+	{
+	case Control::PROPTEXT_BACKGROUND:
+		return m_texture;
+	default:
+		assert(false);
+		return 0;
+	}
 }
 
 void Control::RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture)

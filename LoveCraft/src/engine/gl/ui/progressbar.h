@@ -99,7 +99,6 @@ public:
 	* Définit la valeur indiquant la taille de la bordure
 	*/
 	void SetBorderSize(unsigned short size);
-	ProgressBar& operator=(const ProgressBar& pgb);
 
 private:
 	void RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture, bool repeat = true);

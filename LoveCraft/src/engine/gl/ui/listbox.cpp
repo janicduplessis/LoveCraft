@@ -86,9 +86,9 @@ void ListBox::Update()
 	for(int i = 0; i < m_lineNbr; ++i)
 	{
 		if (it == m_messages.end())
-			m_lines[i]->SetMessage("");
+			m_lines[i]->SetProperty(PropString::PROPSTR_TEXT, "");
 		else {
-			m_lines[i]->SetMessage(it->data());
+			m_lines[i]->SetProperty(PropString::PROPSTR_TEXT, it->data());
 			++it;
 		}
 	}
@@ -141,28 +141,6 @@ bool ListBox::MouseReleaseEvents(int x, int y)
 {
 	return m_downArrow->MouseReleaseEvents(x,y) ||
 	m_upArrow->MouseReleaseEvents(x,y);
-}
-
-ListBox& ListBox::operator=(const ListBox& l)
-{
-	m_charInterval = l.m_charInterval;
-	m_lines = l.m_lines;
-	m_lineNbr = l.m_lineNbr;
-	m_charHeight = l.m_charHeight;
-	m_charWidth = l.m_charWidth;
-	m_charInterval = l.m_charInterval;
-	m_fontMainColor = l.m_fontMainColor;
-	m_gapBetLines = l.m_gapBetLines;
-	m_name = l.m_name;
-	m_parent = l.m_parent;
-	m_pngBlend = l.m_pngBlend;
-	m_position = l.m_position;
-	m_size = l.m_size;
-	m_type = l.m_type;
-	m_visible = l.m_visible;
-	m_texture = l.m_texture;
-
-	return *this;
 }
 
 ListBox& ListBox::operator<<( const std::string& text )

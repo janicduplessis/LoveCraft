@@ -18,74 +18,189 @@ Label::~Label()
 {
 }
 
-void Label::SetMessage(const std::string& message)
+void Label::SetProperty(PropBool boolprop, bool value)
 {
-	m_message = message;
+	switch (boolprop)
+	{
+	case Control::PROPBOL_PNGBLEND:
+		Control::SetProperty(boolprop, value);
+		break;
+	case Control::PROPBOL_REPEATTEXTURE:
+		Control::SetProperty(boolprop, value);
+		break;
+	case Control::PROPBOL_VISIBLE:
+		Control::SetProperty(boolprop, value);
+		break;
+	case Control::PROPBOL_ENABLED:
+		Control::SetProperty(boolprop, value);
+		break;
+	case Control::PROPBOL_ITALIC:
+		m_italic = value;
+		break;
+	default:
+		assert(false);
+		break;
+	}
+}
+void Label::SetProperty(PropVector2 vector2prop, Vector2i value)
+{
+	switch (vector2prop)
+	{
+	case Control::PROPVCT2_POSITION:
+		Control::SetProperty(vector2prop, value);
+		break;
+	case Control::PROPVCT2_SIZE:
+		Control::SetProperty(vector2prop, value);
+		break;
+	case Control::PROPVCT2_TEXTOFFSET:
+		m_offset = Vector2f(value.x, value.y);
+		break;
+	default:
+		assert(false);
+		break;
+	}
+}
+void Label::SetProperty(PropString stringprop, std::string value)
+{
+	switch (stringprop)
+	{
+	case Control::PROPSTR_NAME:
+		Control::SetProperty(stringprop, value);
+		break;
+	case Control::PROPSTR_TEXT:
+		m_message = value;
+		break;
+	default:
+		assert(false);
+		break;
+	}
+}
+void Label::SetProperty(PropTexture textureprop, Texture* value)
+{
+	switch (textureprop)
+	{
+	case Control::PROPTEXT_FONT_COLOR:
+		m_texture = value;
+		break;
+	default:
+		assert(false);
+		break;
+	}
+}
+void Label::SetProperty(PropFloat floatprop, float value)
+{
+	switch (floatprop)
+	{
+	case Control::PROPFLT_FONTW:
+		m_fontWidth = value;
+		break;
+	case Control::PROPFLT_FONTH:
+		m_fontHeight = value;
+		break;
+	case Control::PROPFLT_FONTI:
+		m_charInterval = value;
+		break;
+	default:
+		assert(false);
+		break;
+	}
+}
+void Label::SetProperty(PropDock dockprop, Docking value)
+{
+	switch (dockprop)
+	{
+	case Label::PROPDOCK_DOCKING:
+		m_docking = value;
+		break;
+	default:
+		assert(false);
+		break;
+	}
 }
 
-std::string Label::GetMsg() const
+bool Label::GetProperty(PropBool boolprop) const
 {
-	return m_message;
+	switch (boolprop)
+	{
+	case Control::PROPBOL_PNGBLEND:
+		return Control::GetProperty(boolprop);
+	case Control::PROPBOL_REPEATTEXTURE:
+		return Control::GetProperty(boolprop);
+	case Control::PROPBOL_VISIBLE:
+		return Control::GetProperty(boolprop);
+	case Control::PROPBOL_ENABLED:
+		return Control::GetProperty(boolprop);
+	case Control::PROPBOL_ITALIC:
+		return m_italic;
+	default:
+		assert(false);
+		return false;
+	}
 }
-
-void Label::SetDock(Docking dock)
+Vector2i Label::GetProperty(PropVector2 vector2prop) const
 {
-	m_docking = dock;
+	switch (vector2prop)
+	{
+	case Control::PROPVCT2_POSITION:
+		return Control::GetProperty(vector2prop);
+	case Control::PROPVCT2_SIZE:
+		return Control::GetProperty(vector2prop);
+	case Control::PROPVCT2_TEXTOFFSET:
+		return Vector2i((int)m_offset.x, (int)m_offset.y);
+	default:
+		assert(false);
+		return Vector2i();
+	}
 }
-
-Label::Docking Label::GetDock() const
+std::string Label::GetProperty(PropString stringprop) const
 {
-	return m_docking;
+	switch (stringprop)
+	{
+	case Control::PROPSTR_NAME:
+		return Control::GetProperty(stringprop);
+	case Control::PROPSTR_TEXT:
+		return m_message;
+	default:
+		assert(false);
+		return "";
+	}
 }
-
-void Label::SetItalic(bool value)
+Texture* Label::GetProperty(PropTexture textureprop) const
 {
-	m_italic = value;
+	switch (textureprop)
+	{
+	case Control::PROPTEXT_FONT_COLOR:
+		return m_texture;
+	default:
+		assert(false);
+		return 0;
+	}
 }
-
-bool Label::GetItalic() const
+float Label::GetProperty(PropFloat floatprop) const
 {
-	return m_italic;
+	switch (floatprop)
+	{
+	case Control::PROPFLT_FONTW:
+		return m_fontWidth;
+	case Control::PROPFLT_FONTH:
+		return m_fontHeight;
+	case Control::PROPFLT_FONTI:
+		return m_charInterval;
+	default:
+		assert(false);
+		return 0.f;
+	}
 }
-
-void Label::SetFontWidth(float value)
+Label::Docking Label::GetProperty(PropDock dockprop) const
 {
-	m_fontWidth = value;
-}
-
-float Label::GetFontWidth() const
-{
-	return m_fontWidth;
-}
-
-void Label::SetFontHeight(float value)
-{
-	m_fontHeight = value;
-}
-
-float Label::GetFontHeight() const
-{
-	return m_fontHeight;
-}
-
-Vector2f Label::GetOffset() const
-{
-	return m_offset;
-}
-
-void Label::SetOffset(Vector2f offset)
-{
-	m_offset = offset;
-}
-
-void Label::SetInterval(unsigned short interval)
-{
-	m_charInterval = (float)(interval / m_fontWidth);
-}
-
-void Label::SetInterval(float interval)
-{
-	m_charInterval = interval;
+	switch (dockprop)
+	{
+	case Label::PROPDOCK_DOCKING:
+		return m_docking;
+	default:
+		assert(false);
+		return TEXTDOCK_NONE;
+	}
 }
 
 void Label::Render()
@@ -123,28 +238,6 @@ void Label::Render()
 			glDisable(GL_BLEND);
 		}
 	}
-}
-
-Label& Label::operator=(const Label& l)
-{
-	m_charInterval = l.m_charInterval;
-	m_docking = l.m_docking;
-	m_fontHeight = l.m_fontHeight;
-	m_fontWidth = l.m_fontWidth;
-	m_italic = l.m_italic;
-	m_message = l.m_message;
-	m_name = l.m_name;
-	m_newPosition = l.m_newPosition;
-	m_offset = l.m_offset;
-	m_parent = l.m_parent;
-	m_pngBlend = l.m_pngBlend;
-	m_position = l.m_position;
-	m_size = l.m_size;
-	m_texture = l.m_texture;
-	m_type = l.m_type;
-	m_visible = l.m_visible;
-
-	return *this;
 }
 
 // private

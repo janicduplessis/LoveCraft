@@ -21,6 +21,7 @@ public:
 	virtual void DeInit();
 	virtual void Init(InterfaceValues* values);
 	virtual void InitControls() = 0;
+	virtual void Render() = 0;
 protected:
 	bool m_loaded;
 	InterfaceValues* m_val;

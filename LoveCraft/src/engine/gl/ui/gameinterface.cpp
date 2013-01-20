@@ -99,3 +99,8 @@ void GameInterface::InitControls()
 {
 
 }
+
+void GameInterface::Render()
+{
+	
+}

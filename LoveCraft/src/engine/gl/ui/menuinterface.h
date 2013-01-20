@@ -9,6 +9,7 @@ public:
 	MenuInterface();
 	~MenuInterface();
 	virtual void InitControls();
+	void Render();
 
 	//Controles
 

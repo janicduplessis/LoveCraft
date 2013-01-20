@@ -11,6 +11,7 @@ public:
 	GameInterface();
 	~GameInterface();
 	virtual void InitControls();
+	void Render();
 	void TextUpdate();
 
 	Panel* m_pnl_screen;

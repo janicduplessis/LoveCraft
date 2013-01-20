@@ -300,6 +300,7 @@ void Engine::LoadMenuResource()
 #define MENU_INTERFACE_INITIALIZED
 #endif
 
+	m_interfaceValues->Update(m_fps, MousePosition(), Width(), Height());
 	m_menuUI->Init(m_interfaceValues);
 
 	//Cursor
@@ -582,7 +583,8 @@ void Engine::RenderMenu(float elapsedTime)
 
 #pragma endregion
 
-	m_menuUI->m_menu_screen->Render();
+	m_interfaceValues->Update(m_fps, MousePosition(), Width(), Height());
+	m_menuUI->Render();
 	m_pb_cursor->Render();
 	m_menuUI->m_menu_loading->Render();
 

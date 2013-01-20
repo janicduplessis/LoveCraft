@@ -83,3 +83,8 @@ void MenuInterface::InitControls()
 	m_menu_controls->AddControl(m_menu_close);
 	m_menu_close->SetRepeatTexture(false);
 }
+
+void MenuInterface::Render()
+{
+	m_menu_screen->Render();
+}

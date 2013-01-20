@@ -30,7 +30,7 @@
 
 #include "gl/testbillboard.h"
 
-//#define LOAD_MODELS
+#define LOAD_MODELS
 
 /**
 * @brief Engin graphique
@@ -207,8 +207,8 @@ private:
 	ValuesInterface m_valuesMenuInterface;
 	ValuesGameInterface m_valuesGameInterface;
 
-	MenuInterface* m_menuUI;
-	GameInterface* m_gameUI;
+	MenuInterface m_menuUI;
+	GameInterface m_gameUI;
 
 	PictureBox* m_pb_cursor;
 

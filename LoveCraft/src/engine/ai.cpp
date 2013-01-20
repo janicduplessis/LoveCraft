@@ -3,10 +3,10 @@
 #include <cmath>
 
 AI::AI(AiType type, Npc* npc, Player* player) : 
-	m_player(player), m_type(type), m_npc(npc), m_posIni(npc->Position()), m_currentState(STATE_PATROL),
+	m_player(player), m_type(type), m_npc(npc), m_posIni(0), m_currentState(STATE_PATROL),
 	m_patrolDestination(0)
 {
-
+	m_posIni = m_npc->Position();
 }
 
 AI::~AI()
@@ -85,7 +85,7 @@ bool AI::CheckVision(const Vector3f& pos) const
 
 bool AI::CheckCollision(Vector3f& pos ) const
 {
-	float offset = 0.2f;
+	float offset = 0.3f;
 	Info& info = Info::Get();
 	if (pos.y < 0)
 		pos.y = 0;
@@ -139,6 +139,10 @@ AI::State AI::GetState() const
 
 void AI::Patrol()
 {
+	if(CheckCollision(m_npc->Position() + Vector3f(0,1,0)) && !CheckCollision(m_npc->Position() + Vector3f(0,2,0))) {
+		m_npc->SetPosition(m_npc->Position() + Vector3f(0,1,0));
+	}
+
 	if (!m_patrolDestination || rand() % 100 < 10)
 	{
 		if (m_patrolDestination)

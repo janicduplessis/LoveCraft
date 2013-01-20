@@ -34,6 +34,7 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 				GameInit();
 				LoadGameResource();
 				preGame = false;
+				clock.restart();
 			}
 
 #pragma endregion

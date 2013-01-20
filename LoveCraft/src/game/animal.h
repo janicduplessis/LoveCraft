@@ -28,7 +28,7 @@ public:
 		ANL_GRD_SCORPION,
 		ANL_AIR_MONARCH
 	};
-	Animal();
+	Animal(const Vector3f& pos = Vector3f(0));
 	~Animal();
 	bool Initialized() const;
 	virtual void Init(AnimalType type, Player* player = 0);

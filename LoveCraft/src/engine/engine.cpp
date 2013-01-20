@@ -27,9 +27,6 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 		m_texturefontColor[i] = new Texture();
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
 
-	m_menuUI = new MenuInterface();
-	m_gameUI = new GameInterface();
-
 	m_camera = new Camera;
 	Info::Get().StatusOn(Info::LSTATUS_CAMERA);
 	m_player = new Player;
@@ -88,8 +85,6 @@ Engine::~Engine()
 	delete m_dice;
 	delete [] m_monsters;
 	delete m_textureArray;
-	delete m_menuUI;
-	delete m_gameUI;
 }
 
 const Engine& Engine::Get() const
@@ -166,13 +161,31 @@ void Engine::GameInit()
 {
 	m_currentBlockType = BTYPE_DIRT;
 
+#pragma region Initialisation des chunks
+
+	m_chunks = new Array2d<Chunk*>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
+	Info::Get().SetChunkArray(m_chunks);
+
+	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
+	{
+		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
+		{
+			Chunk* c = new Chunk(Vector2i(i,j), &m_shaderCube);
+			m_chunks->Set(i, j, c);
+		}
+	}
+	Info::Get().StatusOn(Info::LSTATUS_CHUNK);
+
+#pragma endregion
+
 #pragma region Initialisation des entites
 
 #ifndef MONSTERS_INIALIZED
 #define MONSTERS_INIALIZED
 #endif
 	for (int i = 0; i < MONSTER_MAX_NUMBER; i++)
-		m_monsters[i] = new Animal();
+		m_monsters[i] = new Animal(Vector3f(m_dice->Next(-(int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*0.5f)), 0,
+		m_dice->Next(-(int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*0.5f))));
 	m_monsters[0]->Init(Animal::ANL_GRD_ALIGATR, m_player);
 
 #ifdef LOAD_MODELS
@@ -196,29 +209,9 @@ void Engine::GameInit()
 	for (unsigned short i = 18; i < MONSTER_MAX_NUMBER; i++)
 		m_monsters[i]->Init(Animal::ANL_AIR_MONARCH, m_player);
 
-	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
-		m_monsters[i]->SetPosition(Vector3f(m_dice->Next(-(int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*0.5f)), 10 + m_dice->Next(0, 10),
-		m_dice->Next(-(int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*0.5f))));
 #endif
 
 	Info::Get().StatusOn(Info::LSTATUS_MONSTERS);
-
-#pragma endregion
-
-#pragma region Initialisation des chunks
-
-	m_chunks = new Array2d<Chunk*>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
-	Info::Get().SetChunkArray(m_chunks);
-
-	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
-	{
-		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
-		{
-			Chunk* c = new Chunk(Vector2i(i,j), &m_shaderCube);
-			m_chunks->Set(i, j, c);
-		}
-	}
-	Info::Get().StatusOn(Info::LSTATUS_CHUNK);
 
 #pragma endregion
 
@@ -226,7 +219,7 @@ void Engine::GameInit()
 
 	m_valuesGameInterface.Init(m_textureInterface, m_texturefontColor, m_textureArray, m_player, m_character);
 	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
-	m_gameUI->Init(m_valuesGameInterface);
+	m_gameUI.Init(m_valuesGameInterface);
 }
 
 void Engine::DeInit()
@@ -331,16 +324,16 @@ void Engine::LoadMenuResource()
 #pragma region Controles du menu
 
 	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
-	m_menuUI->Init(m_valuesMenuInterface);
+	m_menuUI.Init(m_valuesMenuInterface);
 
 	//Cursor
 	m_pb_cursor = new PictureBox(0, Vector2i(), Vector2i(50, 50), m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], "pb_cursor");
 	//Appel singulier du cursor afin qu'il soit dessiné par dessus tous les éléments de l'interface
 	//m_pnl_screen->AddControl(m_pb_cursor);
 	m_pb_cursor->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
-	m_menuUI->m_menu_fullscreen->OnClick.Attach(this, &Engine::OnClick);
-	m_menuUI->m_menu_start->OnClick.Attach(this, &Engine::OnClick);
-	m_menuUI->m_menu_close->OnClick.Attach(this, &Engine::OnClick);
+	m_menuUI.m_menu_fullscreen->OnClick.Attach(this, &Engine::OnClick);
+	m_menuUI.m_menu_start->OnClick.Attach(this, &Engine::OnClick);
+	m_menuUI.m_menu_close->OnClick.Attach(this, &Engine::OnClick);
 
 #pragma endregion
 
@@ -405,20 +398,20 @@ void Engine::RenderMenu(float elapsedTime)
 #pragma endregion
 
 	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
-	m_menuUI->Render();
+	m_menuUI.Render();
 	m_pb_cursor->Render();
-	m_menuUI->m_menu_loading->Render();
+	m_menuUI.m_menu_loading->Render();
 
 #pragma region Premier render
 
 	if (!IsFirstRun())
 	{
-		if (m_menuUI->m_menu_fullscreen->GetText() != STRING_BUTTON_NORM_CONT)
-			m_menuUI->m_menu_fullscreen->SetTextTo(STRING_BUTTON_NORM_CONT);
-		if (m_menuUI->m_menu_start->GetText() != STRING_BUTTON_DEBUG_ON && !Info::Get().Options().GetOptDebug())
-			m_menuUI->m_menu_start->SetTextTo(STRING_BUTTON_DEBUG_ON);
-		else if (m_menuUI->m_menu_start->GetText() != STRING_BUTTON_DEBUG_OFF && Info::Get().Options().GetOptDebug())
-			m_menuUI->m_menu_start->SetTextTo(STRING_BUTTON_DEBUG_OFF);
+		if (m_menuUI.m_menu_fullscreen->GetText() != STRING_BUTTON_NORM_CONT)
+			m_menuUI.m_menu_fullscreen->SetTextTo(STRING_BUTTON_NORM_CONT);
+		if (m_menuUI.m_menu_start->GetText() != STRING_BUTTON_DEBUG_ON && !Info::Get().Options().GetOptDebug())
+			m_menuUI.m_menu_start->SetTextTo(STRING_BUTTON_DEBUG_ON);
+		else if (m_menuUI.m_menu_start->GetText() != STRING_BUTTON_DEBUG_OFF && Info::Get().Options().GetOptDebug())
+			m_menuUI.m_menu_start->SetTextTo(STRING_BUTTON_DEBUG_OFF);
 	}
 
 #pragma endregion
@@ -451,7 +444,7 @@ void Engine::Update(float elapsedTime)
 
 	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
 	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
-	m_gameUI->Update(m_valuesGameInterface);
+	m_gameUI.Update(m_valuesGameInterface);
 
 #pragma region Calcul la position du joueur et de la camera
 
@@ -663,7 +656,7 @@ void Engine::Render(float elapsedTime)
 	if (ttt)
 	{
 		Info::Get().Sound().PlayMusic(Son::MUSIC_PLAY1);
-		m_menuUI->m_menu_loading->SetProperty(Control::PROPBOL_VISIBLE, false);
+		m_menuUI.m_menu_loading->SetProperty(Control::PROPBOL_VISIBLE, false);
 		CW("Premier Render de l'engine termine avec succes.");
 		ttt = false;
 	}
@@ -692,7 +685,7 @@ void Engine::Render2D(float elapsedTime)
 #pragma region Affichage des controles
 
 	//Render de l'écran au complet avec tous ses contrôles.
-	m_gameUI->Render();
+	m_gameUI.Render();
 
 #pragma endregion
 
@@ -753,7 +746,7 @@ void Engine::TextenteredEvent(unsigned int val)
 {
 	if (!IsMenuOpen())
 	{
-		if(m_gameUI->TextenteredEvent(val))
+		if(m_gameUI.TextenteredEvent(val))
 			return;
 	}
 }
@@ -772,7 +765,7 @@ void Engine::KeyPressEvent(unsigned char key)
 		//CW(ss.str());
 		//ss.str("");
 
-		if (m_gameUI->KeyPressEvent(key))
+		if (m_gameUI.KeyPressEvent(key))
 			return;
 
 		c.Set(key, true);
@@ -889,7 +882,7 @@ void Engine::KeyReleaseEvent(unsigned char key)
 	{
 #pragma region Touches dans le jeu
 
-		if (m_gameUI->KeyReleaseEvent(key))
+		if (m_gameUI.KeyReleaseEvent(key))
 			return;
 
 		if(c.E())
@@ -1040,7 +1033,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 {
 	if (!IsMenuOpen())
 	{
-		if (m_gameUI->MousePressEvent(button, x, y))
+		if (m_gameUI.MousePressEvent(button, x, y))
 			return;
 
 		switch (button)
@@ -1094,9 +1087,9 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		switch (button)
 		{
 		case MOUSE_BUTTON_LEFT:
-			m_menuUI->m_menu_close->MousePressEvents(x, m_menuUI->m_menu_screen->GetProperty(Control::PROPVCT2_SIZE).y - y);
-			m_menuUI->m_menu_start->MousePressEvents(x, m_menuUI->m_menu_screen->GetProperty(Control::PROPVCT2_SIZE).y - y);
-			m_menuUI->m_menu_fullscreen->MousePressEvents(x, m_menuUI->m_menu_screen->GetProperty(Control::PROPVCT2_SIZE).y - y);
+			m_menuUI.m_menu_close->MousePressEvents(x, m_menuUI.m_menu_screen->GetProperty(Control::PROPVCT2_SIZE).y - y);
+			m_menuUI.m_menu_start->MousePressEvents(x, m_menuUI.m_menu_screen->GetProperty(Control::PROPVCT2_SIZE).y - y);
+			m_menuUI.m_menu_fullscreen->MousePressEvents(x, m_menuUI.m_menu_screen->GetProperty(Control::PROPVCT2_SIZE).y - y);
 			break;
 		}
 	}
@@ -1115,7 +1108,7 @@ void Engine::OnClick(Control* sender)
 		{
 			Info::Get().Options().SetOptDebug(false);
 			ActivateFirstRun();
-			m_menuUI->m_menu_loading->SetProperty(Control::PROPBOL_VISIBLE, true);
+			m_menuUI.m_menu_loading->SetProperty(Control::PROPBOL_VISIBLE, true);
 			SetMenuStatus(false);
 		}
 	}
@@ -1127,7 +1120,7 @@ void Engine::OnClick(Control* sender)
 		{
 			Info::Get().Options().SetOptDebug(true);
 			ActivateFirstRun();
-			m_menuUI->m_menu_loading->SetProperty(Control::PROPBOL_VISIBLE, true);
+			m_menuUI.m_menu_loading->SetProperty(Control::PROPBOL_VISIBLE, true);
 			SetMenuStatus(false);
 		}
 	}
@@ -1139,7 +1132,7 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 {
 	if (!IsMenuOpen())
 	{
-		m_gameUI->MouseRleaseEvent(button, x, y);
+		m_gameUI.MouseRleaseEvent(button, x, y);
 
 		switch (button)
 		{
@@ -1164,9 +1157,9 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 		switch (button)
 		{
 		case MOUSE_BUTTON_LEFT:
-			m_menuUI->m_menu_close->MouseReleaseEvents(x,y);
-			m_menuUI->m_menu_start->MouseReleaseEvents(x,y);
-			m_menuUI->m_menu_fullscreen->MouseReleaseEvents(x,y);
+			m_menuUI.m_menu_close->MouseReleaseEvents(x,y);
+			m_menuUI.m_menu_start->MouseReleaseEvents(x,y);
+			m_menuUI.m_menu_fullscreen->MouseReleaseEvents(x,y);
 			break;
 		}
 	}
@@ -1410,7 +1403,7 @@ void Engine::GetBlocAtCursor()
 
 void Engine::CW(const std::string& line)
 {
-	m_gameUI->ConsoleWriteLine(line);
+	m_gameUI.ConsoleWriteLine(line);
 }
 
 void Engine::CWL(const std::string& line)

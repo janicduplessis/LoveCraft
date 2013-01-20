@@ -30,7 +30,7 @@ public:
 		NEUTRAL
 	};
 
-	Npc(const Vector3f& pos = Vector3f(0,0,0));
+	Npc(const Vector3f& pos = Vector3f(0));
 	virtual ~Npc();
 
 	/**

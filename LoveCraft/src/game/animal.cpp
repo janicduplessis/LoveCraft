@@ -1,7 +1,7 @@
 #include "animal.h"
 
 
-Animal::Animal() : Npc(), m_initialized(false)
+Animal::Animal(const Vector3f& pos) : Npc(pos), m_initialized(false)
 {
 }
 
@@ -131,12 +131,23 @@ void Animal::Init(AnimalType type, Player* player)
 		m_model.Load(NPC_MONARCH_MODEL);
 		m_model.Translate(0,-1.3f,0);
 		m_model.Scale(30, 30, 30);
+		m_ai = new AI(AI::TYPE_PASSIVE_HARMLESS, this, player);
 		m_ai = new AI(AI::TYPE_PASSIVE_FLYING, this, player);
 		m_flying = true;
 		break;
 	default:
 		break;
 	}
+
+	// place a la bonne hauteur
+	while (Info::Get().GetBlocFromWorld(m_pos) != BTYPE_AIR)
+	{
+		SetPosition(m_pos + Vector3f(0,1,0));
+	}
+
+	if (m_flying)
+		SetPosition(m_pos + Vector3f(0,10,0));
+
 	m_initialized = true;
 }
 

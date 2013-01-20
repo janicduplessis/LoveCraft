@@ -1,16 +1,11 @@
 ﻿#include "npc.h"
 
-Npc::Npc(const Vector3f& pos /*= Vector3f(0,0,0)*/ ) : m_ai(0), m_maxRot(0.01f), m_speed(0), m_speedGravity(0), m_spells(0), m_flying(false)
+Npc::Npc(const Vector3f& pos /*= Vector3f(0,0,0)*/ ) : m_ai(0), m_maxRot(0.01f), m_speed(0), m_speedGravity(0), m_spells(0), m_flying(false), m_pos(pos)
 {
 
 }
 
 Npc::~Npc()
-{
-
-}
-
-void Npc::Init(Player* player)
 {
 
 }
@@ -81,16 +76,36 @@ void Npc::Move(const Vector3f& destination, float elapsedTime)
 		m_rot = q * m_rot;
 		m_rot.Normalise();
 
-		// calcul la nouvelle position
-		m_pos += deplacement;
+		// Check collisions
+		Vector3f curPos = m_pos;
+		Vector3f newPos;
+		newPos.x = curPos.x + deplacement.x;
+		newPos.y = curPos.y;
+		newPos.z = curPos.z;
+		if(!CheckCollision(newPos + Vector3f(0,1,0)))
+			m_pos.x += deplacement.x;
+
+		newPos.x = curPos.x;
+		newPos.y = curPos.y + deplacement.y;
+		newPos.z = curPos.z;
+		if(!CheckCollision(newPos + Vector3f(0,1,0)))
+			m_pos.y += deplacement.y;
+
+		newPos.x = curPos.x;
+		newPos.y = curPos.y;
+		newPos.z = curPos.z + deplacement.z;
+		if(!CheckCollision(newPos + Vector3f(0,1,0)))
+			m_pos.z += deplacement.z;
+
 	}
+
 	if (!m_flying)
 		m_pos.y += distanceY;
 }
 
 bool Npc::CheckCollision(const Vector3f& pos) const
 {
-	static float offset = 0.2f;
+	float offset = 0.2f;
 	Info& info = Info::Get();
 	if(pos.y >=0 
 		&& info.GetBlocFromWorld(pos, Vector3f(offset, 1, offset)) == BTYPE_AIR

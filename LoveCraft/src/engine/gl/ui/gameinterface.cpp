@@ -64,6 +64,7 @@ void GameInterface::Update(const ValuesGameInterface& val)
 	m_pgb_energy->SetValue(val.Character->EnergyPerc());
 	m_pgb_mana->SetValue(val.Character->ManaPerc());
 	m_pgb_exp->SetValue(val.Character->ExpPerc());
+
 	//Actualisation du texte dans les différents Label
 	TextUpdate(val);
 
@@ -84,7 +85,6 @@ void GameInterface::TextUpdate(const ValuesGameInterface& val)
 {
 	std::ostringstream ss;
 	//Vie
-	ss << (int)val.Character->Health() << " / " << (int)val.Character->HealthMax();
 	ss << (int)val.Character->Health() << " / " << (int)val.Character->HealthMax();
 	m_lbl_health->SetProperty(Label::PropString::PROPSTR_TEXT, ss.str());
 	ss.str("");

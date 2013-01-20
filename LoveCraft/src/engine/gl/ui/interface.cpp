@@ -15,7 +15,7 @@ void Interface::DeInit()
 	m_val = 0;
 }
 
-void Interface::Init(InterfaceValues* values)
+void Interface::Init(ValuesInterface* values)
 {
 	m_loaded = true;
 	m_val = values;

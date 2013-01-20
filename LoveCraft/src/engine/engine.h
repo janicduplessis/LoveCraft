@@ -15,7 +15,7 @@
 #include "camera.h"
 #include "chunk.h"
 #include "info.h"
-#include "gl/ui/interfacevalues.h"
+#include "gl/ui/valuesgameinterface.h"
 #include "gl/ui/gameinterface.h"
 #include "gl/ui/menuinterface.h"
 #include "gl/ui/picturebox.h"
@@ -204,7 +204,7 @@ private:
 
 	Array2d<Chunk*>* m_chunks;
 
-	ValuesInterface* m_interfaceValues;
+	ValuesGameInterface* m_interfaceValues;
 	MenuInterface* m_menuUI;
 	GameInterface* m_gameUI;
 

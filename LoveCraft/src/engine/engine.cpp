@@ -27,7 +27,7 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 		m_texturefontColor[i] = new Texture();
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
 
-	m_interfaceValues = new InterfaceValues();
+	m_interfaceValues = new ValuesGameInterface();
 	m_menuUI = new MenuInterface();
 	m_gameUI = new GameInterface();
 
@@ -84,7 +84,7 @@ void Engine::MenuInit()
 	//Donne une référence vers la camera a info
 	Info::Get().SetCamera(m_camera);
 
-	m_interfaceValues->Init(m_player, &m_character, m_textureInterface, m_texturefontColor);
+	m_interfaceValues->Init(m_textureInterface, m_texturefontColor, m_textureArray, m_player, &m_character);
 
 #pragma region Initilisation de Glew
 
@@ -295,7 +295,7 @@ void Engine::LoadMenuResource()
 
 #pragma region Controles du menu
 
-	m_interfaceValues->Update(m_fps, MousePosition(), Width(), Height());
+	m_interfaceValues->Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_menuUI->Init(m_interfaceValues);
 
 	//Cursor
@@ -369,7 +369,7 @@ void Engine::RenderMenu(float elapsedTime)
 
 #pragma endregion
 
-	m_interfaceValues->Update(m_fps, MousePosition(), Width(), Height());
+	m_interfaceValues->Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_menuUI->Render();
 	m_pb_cursor->Render();
 	m_menuUI->m_menu_loading->Render();
@@ -414,7 +414,7 @@ void Engine::Update(float elapsedTime)
 
 #pragma endregion
 
-	m_interfaceValues->Update(m_fps, MousePosition(), Width(), Height());
+	m_interfaceValues->Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 
 #pragma region Calcul la position du joueur et de la camera
 

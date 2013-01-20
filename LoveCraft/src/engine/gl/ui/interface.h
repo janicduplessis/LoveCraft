@@ -3,7 +3,7 @@
 
 #include "interfaceinfos.h"
 #include "define.h"
-#include "engine/gl/ui/valuesInterface.h"
+#include "engine/gl/ui/valuesinterface.h"
 #include "engine/gl/ui/control.h"
 #include "engine/gl/ui/button.h"
 #include "engine/gl/ui/panel.h"

@@ -204,7 +204,7 @@ private:
 
 	Array2d<Chunk*>* m_chunks;
 
-	InterfaceValues* m_interfaceValues;
+	ValuesInterface* m_interfaceValues;
 	MenuInterface* m_menuUI;
 	GameInterface* m_gameUI;
 

@@ -27,9 +27,9 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 		m_texturefontColor[i] = new Texture();
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
 
-	m_interfaceValues = new InterfaceValues;
-	m_menuUI = new MenuInterface;
-	m_gameUI = new GameInterface;
+	m_interfaceValues = new ValuesGameInterface();
+	m_menuUI = new MenuInterface();
+	m_gameUI = new GameInterface();
 
 	m_camera = new Camera;
 	Info::Get().StatusOn(Info::LSTATUS_CAMERA);
@@ -111,7 +111,7 @@ void Engine::MenuInit()
 	//Donne une référence vers la camera a info
 	Info::Get().SetCamera(m_camera);
 
-	m_interfaceValues->Init(m_player, m_character, m_textureInterface, m_texturefontColor);
+	m_interfaceValues->Init(m_textureInterface, m_texturefontColor, m_textureArray, m_player, &m_character);
 
 #pragma region Initilisation de Glew
 
@@ -169,8 +169,6 @@ void Engine::GameInit()
 	m_currentBlockType = BTYPE_DIRT;
 
 #pragma region Initialisation des entites
-
-	m_player->Init();
 
 #ifndef MONSTERS_INIALIZED
 #define MONSTERS_INIALIZED
@@ -330,11 +328,7 @@ void Engine::LoadMenuResource()
 
 #pragma region Controles du menu
 
-#ifndef MENU_INTERFACE_INITIALIZED
-#define MENU_INTERFACE_INITIALIZED
-#endif
-
-	m_interfaceValues->Update(m_fps, MousePosition(), Width(), Height());
+	m_interfaceValues->Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_menuUI->Init(m_interfaceValues);
 
 	//Cursor
@@ -374,215 +368,6 @@ void Engine::LoadMenuResource()
 void Engine::LoadGameResource()
 {
 
-#pragma region Controles du jeu
-
-#ifndef GAME_INTERFACE_INITIALIZED
-#define GAME_INTERFACE_INITIALIZED
-#endif
-
-	m_gameUI->Init(m_interfaceValues);
-
-	// Écran
-	m_gameUI->m_pnl_screen = new Panel(0, Vector2i(), Vector2i(Width(), Height()), 0, 1, "main");
-
-#pragma region Enfants de Main
-
-	// Zone de jeu
-	m_gameUI->m_pnl_playscreen = new Panel(m_gameUI->m_pnl_screen, 
-		Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
-		Vector2i(m_gameUI->m_pnl_screen->Size().x - INTERFACE_SIDE_LEFT_WIDTH - INTERFACE_SIDE_RIGHT_WIDTH, 
-		m_gameUI->m_pnl_screen->Size().y - INTERFACE_BOTTOM_HEIGHT - INTERFACE_TOP_HEIGHT),
-		0, PNL_PLAYSCREEN_CONTROLS_NBR, "playscreen");
-	m_gameUI->m_pnl_screen->AddControl(m_gameUI->m_pnl_playscreen);
-
-#pragma region Enfants de Playscreen
-
-	// Informations
-	m_gameUI->m_lb_infos = new ListBox(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*6 - 26*12), 200, m_texturefontColor[TEXTCOLOR_RED], 
-		0, 26, 2, 12.f, 12.f, 0.5f, false, "lb_infos");
-	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lb_infos);
-	m_gameUI->m_lb_infos->AddLine("Controles Mouvements");
-	m_gameUI->m_lb_infos->AddLine("Avancer:           W");
-	m_gameUI->m_lb_infos->AddLine("Reculer:           S");
-	m_gameUI->m_lb_infos->AddLine("Droite:            D");
-	m_gameUI->m_lb_infos->AddLine("Gauche:            A");
-	m_gameUI->m_lb_infos->AddLine("Sauter:            Espace");
-	m_gameUI->m_lb_infos->AddLine("Marcher:           Ctrl");
-	//m_gameUI->m_lb_infos->AddLine("Se pencher:        C");
-	m_gameUI->m_lb_infos->AddLine("Courir:            Shift");
-	m_gameUI->m_lb_infos->AddLine("");
-	m_gameUI->m_lb_infos->AddLine("Controles Debug");
-	m_gameUI->m_lb_infos->AddLine("Tirer:             1");
-	m_gameUI->m_lb_infos->AddLine("Cochon:            2");
-	m_gameUI->m_lb_infos->AddLine("Teleporter:        6");
-	m_gameUI->m_lb_infos->AddLine("Remplir Vie:       7");
-	m_gameUI->m_lb_infos->AddLine("Remplir Energie:   8");
-	m_gameUI->m_lb_infos->AddLine("Augmenter Exp:     P");
-	m_gameUI->m_lb_infos->AddLine("");
-	m_gameUI->m_lb_infos->AddLine("Options");
-	m_gameUI->m_lb_infos->AddLine("Wireframe:         Y");
-	m_gameUI->m_lb_infos->AddLine("Music On/off       O");
-	m_gameUI->m_lb_infos->AddLine("Music Next         M");
-	m_gameUI->m_lb_infos->AddLine("Aff/Cach Infos:    F9");
-	//m_gameUI->m_lb_infos->AddLine("Fullscreen         F10");
-	m_gameUI->m_lb_infos->AddLine("Quitter            Esc");
-
-	//Fenetre de console
-	m_gameUI->m_lb_console = new ListBox(m_gameUI->m_pnl_playscreen, 
-		Vector2i(m_gameUI->m_pnl_playscreen->Size().x - 64 - (int)LB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H + 5), 
-		LB_CONSOLE_SIZE_W, 
-		m_texturefontColor[TEXTCOLOR_YELLOW], 
-		m_textureInterface[CUSTIMAGE_CONSOLE_BACK], 
-		LB_CONSOLE_LINE_NUMBER, 
-		LB_CONSOLE_LINE_GAP, 
-		LB_CONSOLE_CHAR_W, 
-		LB_CONSOLE_CHAR_H, 
-		LB_CONSOLE_CHAR_I, 
-		LB_CONSOLE_SCROLLABLE, 
-		LB_CONSOLE_NAME,
-		Vector2i(LB_CONSOLE_BODER_OFFSET_S, LB_CONSOLE_BODER_OFFSET_B));
-	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lb_console);
-	m_gameUI->m_lb_console->SetRepeatTexture(false);
-	Info::Get().SetConsole(m_gameUI->m_lb_console);
-	//Texbox de la console
-	m_gameUI->m_txb_console = new Textbox(m_gameUI->m_pnl_playscreen,
-		Vector2i(m_gameUI->m_pnl_playscreen->Size().x - 64 - (int)LB_CONSOLE_SIZE_W, 0),
-		Vector2i(TXB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H),
-		m_texturefontColor[TEXTCOLOR_WHITE],
-		m_textureInterface[CUSTIMAGE_CONSOLE_TEXTBOX_BACK],
-		Label::TEXTDOCK_MIDDLELEFT,
-		LBL_GENERIC_ITALIC,
-		TXB_CONSOLE_SIZE_H * 0.75f,
-		TXB_CONSOLE_CHAR_I,
-		Vector2f(TXB_CONSOLE_OFFSET_X, TXB_CONSOLE_OFFSET_Y),
-		TXB_CONSOLE_NAME);
-	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_txb_console);
-	m_gameUI->m_txb_console->SetRepeatTexture(false);
-	m_gameUI->m_txb_console->SetVisible(false);
-	m_gameUI->m_txb_console->SetFocus(false);
-	// Frame portrait
-	m_gameUI->m_pnl_portrait = new Panel(m_gameUI->m_pnl_playscreen,
-		Vector2i(PNL_PORTRAIT_POSITION_X, PNL_PORTRAIT_POSITION_Y),
-		Vector2i(PNL_PORTRAIT_SIZE_W, PNL_PORTRAIT_SIZE_H),
-		m_textureInterface[CUSTIMAGE_PORTRAIT_FRAME], PNL_PORTRAIT_CONTROLS_NBR, PNL_PORTRAIT_NAME);
-	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_pnl_portrait);
-
-	m_gameUI->m_lbl_currentBlockType = new Label(m_gameUI->m_pnl_playscreen, Vector2i(m_gameUI->m_pnl_portrait->Position().x,
-		m_gameUI->m_pnl_portrait->Position().y + m_gameUI->m_pnl_portrait->Size().y + 10),
-		m_texturefontColor[TEXTCOLOR_BLUE], "Bloc : ", Label::TEXTDOCK_NONE, false, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "lblcurblock");
-	m_gameUI->m_pb_currentBlockType = new PictureBox(m_gameUI->m_pnl_playscreen, Vector2i(m_gameUI->m_lbl_currentBlockType->Position().x + 84, m_gameUI->m_lbl_currentBlockType->Position().y), Vector2i(20,20), 
-		m_textureArray->GetTexture(m_currentBlockType - 1), "pbcurbloc");
-	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_currentBlockType);
-	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_pb_currentBlockType);
-
-#pragma region Enfants pnl portrait
-
-	// Barre de vie
-	m_gameUI->m_pgb_health = new ProgressBar(m_gameUI->m_pnl_portrait,
-		Vector2i(PGB_HEALTH_POSITION_X, PGB_HEALTH_POSITION_Y),
-		Vector2i(PGB_HEALTH_SIZE_W, PGB_HEALTH_SIZE_H),
-		m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH], m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_BACK],
-		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_HEALTH_BACKGROUND, PGB_HEALTH_BORDER_SIZE, PGB_HEALTH_NAME);
-	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_pgb_health);
-	// Barre de mana
-	m_gameUI->m_pgb_mana = new ProgressBar(m_gameUI->m_pnl_portrait,
-		Vector2i(PGB_MANA_POSITION_X, PGB_MANA_POSITION_Y),
-		Vector2i(PGB_MANA_SIZE_W, PGB_MANA_SIZE_H),
-		m_textureInterface[CUSTIMAGE_PGBTEXT_MANA], m_textureInterface[CUSTIMAGE_PGBTEXT_MANA_BACK],
-		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_MANA_BACKGROUND, PGB_MANA_BORDER_SIZE, PGB_MANA_NAME);
-	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_pgb_mana);
-	// Barre d'expérience
-	m_gameUI->m_pgb_exp = new ProgressBar(m_gameUI->m_pnl_portrait,
-		Vector2i(PGB_EXP_POSITION_X, PGB_EXP_POSITION_Y),
-		Vector2i(PGB_EXP_SIZE_W, PGB_EXP_SIZE_H),
-		m_textureInterface[CUSTIMAGE_PGBTEXT_EXP], m_textureInterface[CUSTIMAGE_PGBTEXT_EXP_BACK],
-		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_EXP_BACKGROUND, PGB_EXP_BORDER_SIZE, PGB_EXP_NAME);
-	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_pgb_exp);
-	m_gameUI->m_lbl_health = new Label(m_gameUI->m_pnl_portrait, Vector2i(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), m_texturefontColor[TEXTCOLOR_RED], "", 
-		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, PNL_PORTRAIT_CHAR_H, PNL_PORTRAIT_CHAR_W, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_HEALTH_NAME);
-	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_lbl_health);
-	// Label de mana
-	m_gameUI->m_lbl_mana = new Label(m_gameUI->m_pnl_portrait, Vector2i(LBL_MANA_POSITION_X, LBL_MANA_POSITION_Y), m_texturefontColor[TEXTCOLOR_BLUE], "", 
-		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, PNL_PORTRAIT_CHAR_H, PNL_PORTRAIT_CHAR_W, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_MANA_NAME);
-	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_lbl_mana);
-	// Label d'exp
-	m_gameUI->m_lbl_exp = new Label(m_gameUI->m_pnl_portrait, Vector2i(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), m_texturefontColor[TEXTCOLOR_YELLOW], "", 
-		Label::TEXTDOCK_NONE, PNL_PORTRAIT_ITALIC, LBL_EXP_CHAR_W, LBL_EXP_CHAR_H, PNL_PORTRAIT_CHAR_I, Vector2f(), LBL_EXP_NAME);
-	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_lbl_exp);
-
-	// Image du joueur
-	m_gameUI->m_pnl_playerImage = new Panel(m_gameUI->m_pnl_portrait, 
-		Vector2i(PB_PORTRAIT_POSITION_X, PB_PORTRAIT_POSITION_Y),
-		Vector2i(PB_PORTRAIT_SIZE_W, PB_PORTRAIT_SIZE_H),
-		m_textureInterface[CUSTIMAGE_PORTRAIT_MALE], 1, PB_PORTRAIT_NAME);
-	m_gameUI->m_pnl_portrait->AddControl(m_gameUI->m_pnl_playerImage);
-
-#pragma region Enfants de m_pnl_playerImage
-
-	m_gameUI->m_lbl_playerLevel = new Label(m_gameUI->m_pnl_playerImage, Vector2i(), m_texturefontColor[TEXTCOLOR_BLUE], "", 
-		Label::TEXTDOCK_TOPCENTER, LBL_GENERIC_ITALIC, LBL_PLAYER_LEVEL_W, LBL_PLAYER_LEVEL_H, LBL_PLAYER_LEVEL_I, Vector2f(), LBL_PLAYER_LEVEL_NAME);
-	m_gameUI->m_pnl_playerImage->AddControl(m_gameUI->m_lbl_playerLevel);
-
-#pragma endregion
-
-#pragma endregion
-
-	//Barre d'énergie verticale
-	m_gameUI->m_pgb_energy = new ProgressBar(m_gameUI->m_pnl_playscreen,
-		Vector2i(PGB_ENERGY_POSITION_X, PGB_ENERGY_POSITION_Y),
-		Vector2i(PGB_ENERGY_SIZE_W, PGB_ENERGY_SIZE_H),
-		m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY], m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY_BACK],
-		ProgressBar::BARMODE_VERTICAL_DTU, PGB_ENERGY_BACKGROUND, PGB_ENERGY_BORDER_SIZE, PGB_ENERGY_NAME);
-	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_pgb_energy);
-	//Label d'énergie
-	m_gameUI->m_lbl_energy = new Label(m_gameUI->m_pnl_playscreen, Vector2i(LBL_ENERGY_POSITION_X, LBL_ENERGY_POSITION_Y), m_texturefontColor[TEXTCOLOR_GREEN], "", 
-		Label::TEXTDOCK_NONE, LBL_ENERGY_ITALIC, LBL_ENERGY_CHAR_H, LBL_ENERGY_CHAR_W, LBL_ENERGY_CHAR_I, Vector2f(), LBL_ENERGY_NAME);
-	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_energy);
-
-#pragma region Controles de debug
-
-	//Label Position
-	m_gameUI->m_lbl_plrPos = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H), m_texturefontColor[TEXTCOLOR_GREEN], "", 
-		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "pos");
-	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_plrPos);
-	//Label Vitesse
-	m_gameUI->m_lbl_plrSpd = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*2), m_texturefontColor[TEXTCOLOR_BLUE], "", 
-		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "spd");
-	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_plrSpd);
-	//Label Acceleration
-	m_gameUI->m_lbl_plrAcc = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*3), m_texturefontColor[TEXTCOLOR_RED], "", 
-		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "acc");
-	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_plrAcc);
-	//Label mouse position
-	m_gameUI->m_lbl_mousePos = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*4), m_texturefontColor[TEXTCOLOR_WHITE], "", 
-		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "Mpos");
-	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_mousePos);
-	//Label FPS
-	m_gameUI->m_lbl_FPS = new Label(m_gameUI->m_pnl_playscreen, Vector2i(5, m_gameUI->m_pnl_playscreen->Size().y - LBL_GENERIC_CHAR_H*5), m_texturefontColor[TEXTCOLOR_YELLOW], "", 
-		Label::TEXTDOCK_NONE, LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "fps");
-	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_lbl_FPS);
-
-#pragma endregion
-
-	//Heure
-	m_gameUI->m_pnl_time = new Panel(m_gameUI->m_pnl_playscreen, Vector2i(m_gameUI->m_pnl_playscreen->Size().x - 128, m_gameUI->m_pnl_playscreen->Size().y - 64), 
-		Vector2i(128, 64), m_textureInterface[CUSTIMAGE_CLOCK_BG], 1, "clock");
-	m_gameUI->m_pnl_playscreen->AddControl(m_gameUI->m_pnl_time);
-
-#pragma region Enfants de m_pnl_time
-
-	m_gameUI->m_lbl_time = new Label(m_gameUI->m_pnl_time, Vector2i(0,0), m_texturefontColor[TEXTCOLOR_WHITE], "", Label::TEXTDOCK_MIDDLECENTER, false, 
-		LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "time");
-	m_gameUI->m_pnl_time->AddControl(m_gameUI->m_lbl_time);
-
-#pragma endregion
-
-#pragma endregion
-
-#pragma endregion
-
-#pragma endregion
-
 }
 
 void Engine::LoadBlocTexture(BLOCK_TYPE type, std::string path)
@@ -617,7 +402,7 @@ void Engine::RenderMenu(float elapsedTime)
 
 #pragma endregion
 
-	m_interfaceValues->Update(m_fps, MousePosition(), Width(), Height());
+	m_interfaceValues->Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_menuUI->Render();
 	m_pb_cursor->Render();
 	m_menuUI->m_menu_loading->Render();
@@ -662,7 +447,7 @@ void Engine::Update(float elapsedTime)
 
 #pragma endregion
 
-	m_interfaceValues->Update(m_fps, MousePosition(), Width(), Height());
+	m_interfaceValues->Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 
 #pragma region Calcul la position du joueur et de la camera
 

@@ -2,12 +2,11 @@
 #define GAMEINTERFACE_H_
 
 #include "interface.h"
+#include "valuesgameinterface.h"
 
 class GameInterface : public Interface
 {
 public:
-	friend class Engine;
-
 	GameInterface();
 	~GameInterface();
 	virtual void InitControls();
@@ -46,6 +45,8 @@ public:
 
 	Label* m_lbl_currentBlockType;
 	PictureBox* m_pb_currentBlockType;
+
+	ValuesGameInterface* m_val;
 
 };
 

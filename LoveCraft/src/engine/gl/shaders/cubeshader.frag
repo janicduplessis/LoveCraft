@@ -9,6 +9,9 @@ varying vec3 texpos;
 void main()
 {
 	vec4 texel = texture2DArray(tex,texpos);
+	if (texel.x == 0.f && texel.y == 0.f && texel.z == 0.f) {
+        discard;
+    }
 
     texel *= light;
 

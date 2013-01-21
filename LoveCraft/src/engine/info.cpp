@@ -75,8 +75,8 @@ BlockType Info::GetBlocFromWorld(Vector3f pos, const Vector3f& offset) const
 {
 	// Ajoute le offset
 	pos += offset;
-	if (pos.x >= VIEW_DISTANCE * 2 - 2 || pos.y >= CHUNK_SIZE_Y - 1 || pos.z >= VIEW_DISTANCE * 2 - 2)
-		return BTYPE_AIR;
+	if (abs(pos.x) >= VIEW_DISTANCE - 1 || pos.y >= CHUNK_SIZE_Y - 1 || abs(pos.z) >= VIEW_DISTANCE - 1)
+		return BTYPE_BRICK;
 	// Replace la position par rapport au premier cube
 	pos.x += VIEW_DISTANCE + 0.5f;
 	pos.z += VIEW_DISTANCE + 0.5f;
@@ -100,21 +100,25 @@ void Info::GenerateBlocInfos()
 {
 	m_blocInfos = new BlockInfo*[BTYPE_COUNT];
 
-	m_blocInfos[BTYPE_AIR] = new BlockInfo(BTYPE_AIR, "Air");
+	m_blocInfos[BTYPE_AIR] = new BlockInfo(BTYPE_AIR, "Air", false);
 
-	m_blocInfos[BTYPE_DIRT] = new BlockInfo(BTYPE_DIRT, "Dirt");
+	m_blocInfos[BTYPE_DIRT] = new BlockInfo(BTYPE_DIRT, "Dirt", true);
 
-	m_blocInfos[BTYPE_GRASS] = new BlockInfo(BTYPE_GRASS, "Grass");
+	m_blocInfos[BTYPE_GRASS] = new BlockInfo(BTYPE_GRASS, "Grass", true);
 
-	m_blocInfos[BTYPE_BRICK] = new BlockInfo(BTYPE_BRICK, "Brick");
+	m_blocInfos[BTYPE_BRICK] = new BlockInfo(BTYPE_BRICK, "Brick", true);
 
-	m_blocInfos[BTYPE_SAND] = new BlockInfo(BTYPE_SAND, "Sand");
+	m_blocInfos[BTYPE_SAND] = new BlockInfo(BTYPE_SAND, "Sand", true);
 
-	m_blocInfos[BTYPE_ROCK] = new BlockInfo(BTYPE_ROCK, "Rock");
+	m_blocInfos[BTYPE_ROCK] = new BlockInfo(BTYPE_ROCK, "Rock", true);
 
-	m_blocInfos[BTYPE_SNOW] = new BlockInfo(BTYPE_SNOW, "Snow");
+	m_blocInfos[BTYPE_SNOW] = new BlockInfo(BTYPE_SNOW, "Snow", true);
 
-	m_blocInfos[BTYPE_SWAMP] = new BlockInfo(BTYPE_SWAMP, "Swamp");
+	m_blocInfos[BTYPE_SWAMP] = new BlockInfo(BTYPE_SWAMP, "Swamp", false);
+
+	m_blocInfos[BTYPE_TREELEAF] = new BlockInfo(BTYPE_TREELEAF, "Tree leaf", false);
+
+	m_blocInfos[BTYPE_TREETRUNK] = new BlockInfo(BTYPE_TREETRUNK, "Tree trunk", true);
 }
 
 void Info::SetChunkArray( Array2d<Chunk*>* arrayPtr )

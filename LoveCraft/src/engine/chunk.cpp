@@ -1,5 +1,6 @@
 ﻿#include "chunk.h"
 #include <util/perlin.h>
+#include "treegenerator.h"
 
 Chunk::Chunk(Vector2i pos, Shader* shader) : m_blocks(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z), m_chunkMesh(shader),
 	m_left(0), m_right(0), m_back(0), m_front(0), m_pos(pos)
@@ -11,6 +12,7 @@ Chunk::Chunk(Vector2i pos, Shader* shader) : m_blocks(CHUNK_SIZE_X, CHUNK_SIZE_Y
 	// the amplitude . Setting this to a value of 1 will return randomized samples between -1 and +1. The last parameter is the random
 	// number seed .
 	Perlin perlin(16 ,6 ,1 ,95);
+	Perlin perlinElevation(16, 5, 1, 76);
 
 	for ( int x = 0; x < CHUNK_SIZE_X ; ++x)
 	{
@@ -19,12 +21,13 @@ Chunk::Chunk(Vector2i pos, Shader* shader) : m_blocks(CHUNK_SIZE_X, CHUNK_SIZE_Y
 			// La methode Get accepte deux param^etre ( coordonnee en X et Z) et retourne une valeur qui respecte
 			// les valeurs utilisees lors de la creation de l' objet Perlin
 			// La valeur retournee est entre 0 et 1
-			float val = perlin . Get (( float )( m_pos.x * CHUNK_SIZE_X + x) / 2000.f, ( float )( m_pos.y * CHUNK_SIZE_Z + z) / 2000.f);
-			int yMax = (int)(CHUNK_SIZE_Y / 3.f) + (int)(val * CHUNK_SIZE_Y / 3.f);
+			float valDetail = perlin . Get (( float )( m_pos.x * CHUNK_SIZE_X + x) / 2000.f, ( float )( m_pos.y * CHUNK_SIZE_Z + z) / 2000.f);
+			int yMax = 64 + (int)((valDetail) * 55.f);
 			for(int y = 0; y <= yMax; y++)
 			{
-				if (y == yMax)
+				if (y == yMax) {
 					m_blocks.Set(x,y,z, BTYPE_GRASS);
+				}
 				else
 					m_blocks.Set(x,y,z, BTYPE_DIRT);
 
@@ -41,6 +44,43 @@ Chunk::~Chunk()
 {
 }
 
+void Chunk::GenerateTrees()
+{
+	if (!m_left || !m_right || !m_front || !m_back)
+		return;
+
+	TreeGenerator treeGen(56);
+
+	for ( int x = 0; x < CHUNK_SIZE_X ; ++x)
+	{
+		for ( int z = 0; z < CHUNK_SIZE_Z ; ++z)
+		{
+			for(int y = 0; y < CHUNK_SIZE_Y; y++)
+			{
+				if (m_blocks.Get(x,y,z) == BTYPE_GRASS && NoCloseTree(Vector3f(x,y,z)) && rand() % 20 == 0) {
+					treeGen.GenerateTree(Vector3f(x, y, z), this, m_pos.x * CHUNK_SIZE_X + x * m_pos.y * CHUNK_SIZE_Z + z);
+				}
+			}
+		}
+	}
+}
+
+bool Chunk::NoCloseTree(Vector3f pos)
+{
+	for ( int x = pos.x - 5; x < pos.x + 5; ++x)
+	{
+		for ( int z = pos.z - 5; z < pos.z + 5 ; ++z)
+		{
+			for(int y = pos.y - 5; y < pos.y + 5; y++)
+			{
+				if(GetBloc(x,y,z) == BTYPE_TREETRUNK)
+					return false;
+			}
+		}
+	}
+	return true;
+}
+
 void Chunk::RemoveBloc(uint32 x, uint32 y, uint32 z)
 {
 	m_blocks.Set(x, y, z, BTYPE_AIR);
@@ -51,28 +91,28 @@ void Chunk::SetBloc(uint32 x, uint32 y, uint32 z, BlockType type)
 	Chunk* editedChunk = this;
 
 	// Front
-	if (z == -1)
+	if (z < 0)
 	{
 		if(m_front)
-			m_front->SetBloc(x, y, CHUNK_SIZE_Z - 1, type);
+			m_front->SetBloc(x, y, CHUNK_SIZE_Z + z, type);
 	}
 	// Back
-	else if (z == CHUNK_SIZE_Z)
+	else if (z >= CHUNK_SIZE_Z)
 	{
 		if(m_back)
-			m_back->SetBloc(x, y, 0, type);
+			m_back->SetBloc(x, y, z - CHUNK_SIZE_Z, type);
 	}
 	// Left
-	else if (x == -1)
+	else if (x < 0)
 	{
 		if(m_left)
-			m_left->SetBloc(CHUNK_SIZE_X - 1, y, z, type);
+			m_left->SetBloc(CHUNK_SIZE_X + x, y, z, type);
 	}
 	// Right
-	else if (x == CHUNK_SIZE_X)
+	else if (x >= CHUNK_SIZE_X)
 	{
 		if(m_right)
-			m_right->SetBloc(0, y, z, type);
+			m_right->SetBloc(x - CHUNK_SIZE_X, y, z, type);
 	}
 	else
 	{
@@ -94,54 +134,40 @@ BlockType Chunk::GetBloc(uint32 x, uint32 y, uint32 z)
 {
 	BlockType result;
 
-	Array2d<Chunk*>* chunks = Info::Get().GetChunkArray();
-
-	if (m_pos.x != 0)
-		m_left = chunks->Get(m_pos.x - 1, m_pos.y);
-
-	if(m_pos.x != VIEW_DISTANCE / CHUNK_SIZE_X * 2 - 1)
-		m_right = chunks->Get(m_pos.x + 1, m_pos.y);
-
-	if (m_pos.y != 0)
-		m_front = chunks->Get(m_pos.x, m_pos.y - 1);
-
-	if(m_pos.y != VIEW_DISTANCE / CHUNK_SIZE_Z * 2 - 1)
-		m_back = chunks->Get(m_pos.x, m_pos.y + 1);
-
 	// Bottom et top
 	if (y == -1 || y == CHUNK_SIZE_Y)
 	{
 		result = BTYPE_AIR;
 	}
 	// Front
-	else if (z == -1)
+	else if (z < 0)
 	{
 		if(m_front)
-			result = m_front->GetBloc(x, y, CHUNK_SIZE_Z - 1);
+			result = m_front->GetBloc(x, y, CHUNK_SIZE_Z + z);
 		else
 			result = BTYPE_AIR;
 	}
 	// Back
-	else if (z == CHUNK_SIZE_Z)
+	else if (z >= CHUNK_SIZE_Z)
 	{
 		if(m_back)
-			result = m_back->GetBloc(x, y, 0);
+			result = m_back->GetBloc(x, y, z - CHUNK_SIZE_Z);
 		else
 			result = BTYPE_AIR;
 	}
 	// Left
-	else if (x == -1)
+	else if (x < 0)
 	{
 		if(m_left)
-			result = m_left->GetBloc(CHUNK_SIZE_X - 1, y, z);
+			result = m_left->GetBloc(CHUNK_SIZE_X + z, y, z);
 		else
 			result = BTYPE_AIR;
 	}
 	// Right
-	else if (x == CHUNK_SIZE_X)
+	else if (x >= CHUNK_SIZE_X)
 	{
 		if(m_right)
-			result = m_right->GetBloc(0, y, z);
+			result = m_right->GetBloc(z - CHUNK_SIZE_X, y, z);
 		else
 			result = BTYPE_AIR;
 	}
@@ -560,4 +586,21 @@ Vector2f Chunk::GetRealPosition() const
 void Chunk::SetPosition( Vector2i pos )
 {
 	m_pos = pos;
+}
+
+void Chunk::SetSurroundings()
+{
+	Array2d<Chunk*>* chunks = Info::Get().GetChunkArray();
+
+	if (m_pos.x != 0)
+		m_left = chunks->Get(m_pos.x - 1, m_pos.y);
+
+	if(m_pos.x != VIEW_DISTANCE / CHUNK_SIZE_X * 2 - 1)
+		m_right = chunks->Get(m_pos.x + 1, m_pos.y);
+
+	if (m_pos.y != 0)
+		m_front = chunks->Get(m_pos.x, m_pos.y - 1);
+
+	if(m_pos.y != VIEW_DISTANCE / CHUNK_SIZE_Z * 2 - 1)
+		m_back = chunks->Get(m_pos.x, m_pos.y + 1);
 }

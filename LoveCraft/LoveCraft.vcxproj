@@ -88,6 +88,7 @@
     <ClCompile Include="src\engine\gl\shaders\lightingshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\psupdateshader.cpp" />
     <ClCompile Include="src\engine\gl\randomtexture.cpp" />
+    <ClCompile Include="src\engine\treegenerator.cpp" />
     <ClCompile Include="src\util\dice.cpp" />
     <ClCompile Include="src\game\animal.cpp" />
     <ClCompile Include="src\engine\gl\ui\button.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="src\engine\gl\shaders\psupdateshader.h" />
     <ClInclude Include="src\engine\gl\randomtexture.h" />
     <ClInclude Include="src\engine\gl\testbillboard.h" />
+    <ClInclude Include="src\engine\treegenerator.h" />
     <ClInclude Include="src\util\dice.h" />
     <ClInclude Include="src\npcinfo.h" />
     <ClInclude Include="src\game\animal.h" />

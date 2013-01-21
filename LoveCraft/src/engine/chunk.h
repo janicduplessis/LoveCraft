@@ -37,12 +37,16 @@ public:
 	Vector2i GetPosition() const;
 	Vector2f GetRealPosition() const;
 	void SetPosition(Vector2i pos);
+
+	void SetSurroundings();
+	void GenerateTrees();
+
 	
 private:
 	void CreateOptimizedTopBottomFace(MeshFace face, ChunkMesh::VertexData* vd, int& vertexCount, ChunkMesh::TextureData* td, int x, int y, int z, BlockType bt, Array3d<bool>& facesOptimized);
 	void CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* vd, int& vertexCount, ChunkMesh::TextureData* td, int x, int y, int z, BlockType bt, Array3d<bool>& facesOptimized);
 	void CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* vd, int& vertexCount, ChunkMesh::TextureData* td, int x, int y, int z, BlockType bt, Array3d<bool>& facesOptimized);
-
+	bool NoCloseTree(Vector3f pos);
 private:
 	bool m_isDirty;
 	Vector2i m_pos;

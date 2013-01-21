@@ -89,10 +89,10 @@ bool AI::CheckCollision(Vector3f& pos ) const
 	Info& info = Info::Get();
 	if (pos.y < 0)
 		pos.y = 0;
-	if(info.GetBlocFromWorld(pos, Vector3f(offset, 1, offset)) == BTYPE_AIR
-		&& info.GetBlocFromWorld(pos, Vector3f(-offset, 1, offset)) == BTYPE_AIR
-		&& info.GetBlocFromWorld(pos, Vector3f(-offset, 1, -offset)) == BTYPE_AIR
-		&& info.GetBlocFromWorld(pos, Vector3f(offset, 1, -offset)) == BTYPE_AIR)
+	if(!info.GetBlocInfo(info.GetBlocFromWorld(pos, Vector3f(offset, 1, offset)))->IsSolid()
+		&& !info.GetBlocInfo(info.GetBlocFromWorld(pos, Vector3f(-offset, 1, offset)))->IsSolid()
+		&& !info.GetBlocInfo(info.GetBlocFromWorld(pos, Vector3f(-offset, 1, -offset)))->IsSolid()
+		&& !info.GetBlocInfo(info.GetBlocFromWorld(pos, Vector3f(offset, 1, -offset)))->IsSolid())
 		return false;
 	return true;
 }

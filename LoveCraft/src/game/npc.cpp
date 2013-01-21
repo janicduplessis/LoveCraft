@@ -108,10 +108,10 @@ bool Npc::CheckCollision(const Vector3f& pos) const
 	float offset = 0.2f;
 	Info& info = Info::Get();
 	if(pos.y >=0 
-		&& info.GetBlocFromWorld(pos, Vector3f(offset, 1, offset)) == BTYPE_AIR
-		&& info.GetBlocFromWorld(pos, Vector3f(-offset, 1, offset)) == BTYPE_AIR
-		&& info.GetBlocFromWorld(pos, Vector3f(-offset, 1, -offset)) == BTYPE_AIR
-		&& info.GetBlocFromWorld(pos, Vector3f(offset, 1, -offset)) == BTYPE_AIR)
+		&& !info.GetBlocInfo(info.GetBlocFromWorld(pos, Vector3f(offset, 1, offset)))->IsSolid()
+		&& !info.GetBlocInfo(info.GetBlocFromWorld(pos, Vector3f(-offset, 1, offset)))->IsSolid()
+		&& !info.GetBlocInfo(info.GetBlocFromWorld(pos, Vector3f(-offset, 1, -offset)))->IsSolid()
+		&& !info.GetBlocInfo(info.GetBlocFromWorld(pos, Vector3f(offset, 1, -offset)))->IsSolid())
 		return false; 
 	return true;
 }

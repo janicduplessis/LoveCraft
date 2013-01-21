@@ -1,7 +1,7 @@
 ﻿#include "blockinfo.h"
 #include <iostream>
 
-BlockInfo::BlockInfo(BlockType type, const std::string& nom) : m_type(type), m_nom(nom), m_durabilite(1)
+BlockInfo::BlockInfo(BlockType type, const std::string& nom, bool isSolid) : m_type(type), m_nom(nom), m_durabilite(1), m_isSolid(isSolid)
 {
 }
 
@@ -39,6 +39,11 @@ void BlockInfo::SetTextureIndex( TextureArray::TextureIndex coords )
 TextureArray::TextureIndex BlockInfo::GetTextureIndex() const
 {
 	return m_textureIndex;
+}
+
+bool BlockInfo::IsSolid() const
+{
+	return m_isSolid;
 }
 
 

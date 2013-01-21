@@ -174,6 +174,16 @@ void Engine::GameInit()
 			m_chunks->Set(i, j, c);
 		}
 	}
+
+	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
+	{
+		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
+		{
+			m_chunks->Get(i,j)->SetSurroundings();
+			m_chunks->Get(i,j)->GenerateTrees();
+		}
+	}
+
 	Info::Get().StatusOn(Info::LSTATUS_CHUNK);
 
 #pragma endregion
@@ -241,6 +251,8 @@ void Engine::LoadMenuResource()
 	LoadBlocTexture(BTYPE_ROCK, TEXTURE_PATH "b_rock.jpg");
 	LoadBlocTexture(BTYPE_SNOW, TEXTURE_PATH "b_snow.jpg");
 	LoadBlocTexture(BTYPE_SWAMP, TEXTURE_PATH "b_swamp.jpg");
+	LoadBlocTexture(BTYPE_TREELEAF, TEXTURE_PATH "b_tree_leaf.png");
+	LoadBlocTexture(BTYPE_TREETRUNK, TEXTURE_PATH "b_tree_trunk.png");
 
 	m_textureArray->AddTexture(TEXTURE_PATH "b_semidirt.bmp");
 
@@ -592,7 +604,6 @@ void Engine::Render(float elapsedTime)
 			c->Render();
 		}
 	}
-
 	Shader::Disable();
 
 #pragma endregion

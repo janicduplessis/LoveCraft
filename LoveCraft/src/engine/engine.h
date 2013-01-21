@@ -150,7 +150,7 @@ public:
 
 private:
 	bool LoadTexture(Texture& texture, const std::string& filename, bool stopOnError = true);
-	void LoadBlocTexture(BLOCK_TYPE type, std::string path);
+	void LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, std::string path);
 	/**
 	* Render les elements 2D en premier plan
 	* 

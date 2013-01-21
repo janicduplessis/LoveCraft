@@ -49,7 +49,7 @@ void Chunk::GenerateTrees()
 	if (!m_left || !m_right || !m_front || !m_back)
 		return;
 
-	TreeGenerator treeGen(56);
+	TreeGenerator treeGen;
 
 	for ( int x = 0; x < CHUNK_SIZE_X ; ++x)
 	{
@@ -345,15 +345,8 @@ void Chunk::CreateOptimizedTopBottomFace(MeshFace face, ChunkMesh::VertexData* v
 	y -= 2.f;
 	z += pos.y;
 
-	float iTop;
-	float iBot;
-
-	iTop = iBot = Info::Get().GetBlocInfo(bt)->GetTextureIndex();
-
-	if (bt == BTYPE_GRASS) {
-		iBot = BTYPE_DIRT;
-	}
-
+	float iTop = Info::Get().GetBlocInfo(bt)->GetTextureIndex(0);
+	float iBot = Info::Get().GetBlocInfo(bt)->GetTextureIndex(2);
 
 	// Crée les vertices de la face
 	if(face == FACE_TOP)
@@ -441,11 +434,7 @@ void Chunk::CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* v
 	float iFront;
 	float iBack;
 
-	iFront = iBack = Info::Get().GetBlocInfo(bt)->GetTextureIndex();
-
-	if (bt == BTYPE_GRASS) {
-		iFront = iBack = BTYPE_COUNT;
-	}
+	iFront = iBack = Info::Get().GetBlocInfo(bt)->GetTextureIndex(1);
 
 	// Crée les vertices de la face
 	if(face == FACE_FRONT)
@@ -538,11 +527,7 @@ void Chunk::CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* v
 	float iLeft;
 	float iRight;
 
-	iLeft = iRight = Info::Get().GetBlocInfo(bt)->GetTextureIndex();
-
-	if (bt == BTYPE_GRASS) {
-		iLeft = iRight = BTYPE_COUNT;
-	}
+	iLeft = iRight = Info::Get().GetBlocInfo(bt)->GetTextureIndex(1);
 
 	// Crée les vertices de la face
 	if(face == FACE_LEFT)

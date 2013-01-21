@@ -31,14 +31,14 @@ void BlockInfo::Afficher() const
 	std::cout << "Durabilite: " << m_durabilite << std::endl;
 }
 
-void BlockInfo::SetTextureIndex( TextureArray::TextureIndex coords )
+void BlockInfo::SetTextureIndex( int index, TextureArray::TextureIndex coords )
 {
-	m_textureIndex = coords;
+	m_textureIndex[index] = coords;
 }
 
-TextureArray::TextureIndex BlockInfo::GetTextureIndex() const
+TextureArray::TextureIndex BlockInfo::GetTextureIndex(int index) const
 {
-	return m_textureIndex;
+	return m_textureIndex[index];
 }
 
 bool BlockInfo::IsSolid() const

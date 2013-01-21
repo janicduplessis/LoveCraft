@@ -96,8 +96,13 @@ void TextureArray::Generate()
 
 TextureArray::TextureIndex TextureArray::AddTexture(const std::string& fname)
 {
+	for(TextureList::iterator it = m_textureList.begin(); it != m_textureList.end(); ++it)
+	{
+		if(it->texPath == fname)
+			return it->index;
+	}
 	TextureIndex id = m_currentTextureIndex++;
-	m_textureList.push_back(TextureInfo((ILuint)-1, fname));
+	m_textureList.push_back(TextureInfo((ILuint)-1, fname, id));
 	return id;
 }
 

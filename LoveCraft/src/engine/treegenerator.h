@@ -7,8 +7,8 @@
 #include <util/vector3.h>
 #include <util/perlin.h>
 
-#define MAX_TRUNK_LENGHT 10
-#define MIN_TRUNK_LENGHT 5
+#define MAX_TRUNK_LENGHT 12
+#define MIN_TRUNK_LENGHT 7
 #define MAX_FOILIAGE_SIZE 6
 #define MIN_FOILIAGE_SIZE 3
 

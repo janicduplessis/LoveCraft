@@ -57,7 +57,7 @@ void Chunk::GenerateTrees()
 		{
 			for(int y = 0; y < CHUNK_SIZE_Y; y++)
 			{
-				if (m_blocks.Get(x,y,z) == BTYPE_GRASS && NoCloseTree(Vector3f(x,y,z)) && rand() % 20 == 0) {
+				if (m_blocks.Get(x,y,z) == BTYPE_GRASS && NoCloseTree(Vector3f(x,y,z)) && rand() % 30 == 0) {
 					treeGen.GenerateTree(Vector3f(x, y, z), this, m_pos.x * CHUNK_SIZE_X + x * m_pos.y * CHUNK_SIZE_Z + z);
 				}
 			}

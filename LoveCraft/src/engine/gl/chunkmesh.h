@@ -4,6 +4,8 @@
 #include "mesh.h"
 #include "texture.h"
 #include "shaders/shader.h"
+#include "util/vector3.h"
+#include "util/vector2.h"
 
 class ChunkMesh : public Mesh
 {
@@ -19,6 +21,7 @@ public:
 
 		VertexData() {}
 		VertexData(float _x, float _y, float _z, float _r, float _g, float _b) : x(_x), y(_y), z(_z), r(_r), g(_g), b(_b) {}
+		VertexData(Vector3f _vec) : x(_vec.x), y(_vec.y), z(_vec.z), r(1.0f), g(1.0f), b(1.0f) {}
 	};
 
 	struct TextureData
@@ -28,6 +31,7 @@ public:
 
 		TextureData() {}
 		TextureData(float _u, float _v, float _id) : u(_u), v(_v), id(_id) {}
+		TextureData(Vector2i _vec, unsigned short _id) : u(_vec.x), v(_vec.y), id(_id) {}
 	};
 
 public:

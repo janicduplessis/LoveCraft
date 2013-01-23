@@ -10,6 +10,7 @@
 #include "gl/texture.h"
 #include "gl/shaders/shader.h"
 #include "gl/texturearray.h"
+#include "gl/skybox.h"
 
 #include "player.h"
 #include "chunkloader.h"
@@ -204,6 +205,7 @@ private:
 	Shader m_shaderSpells;
 
 	Array2d<Chunk*>* m_chunks;
+	Skybox* m_skybox;
 
 	ValuesInterface m_valuesMenuInterface;
 	ValuesGameInterface m_valuesGameInterface;

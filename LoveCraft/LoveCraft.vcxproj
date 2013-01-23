@@ -81,6 +81,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+
+    <ClCompile Include="src\engine\gl\skybox.cpp" />
     <ClCompile Include="src\engine\chunkloader.cpp" />
     <ClCompile Include="src\engine\gl\ui\gameinterface.cpp" />
     <ClCompile Include="src\engine\gl\ui\interface.cpp" />
@@ -131,6 +133,8 @@
     <ClCompile Include="src\engine\gl\ui\textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
+
+    <ClInclude Include="src\engine\gl\skybox.h" />
     <ClInclude Include="src\engine\chunkloader.h" />
     <ClInclude Include="src\engine\gl\ui\valuesgameinterface.h" />
     <ClInclude Include="src\engine\gl\ui\valuesinterface.h" />

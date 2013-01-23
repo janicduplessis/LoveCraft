@@ -12,6 +12,7 @@
 #include "gl/texturearray.h"
 
 #include "player.h"
+#include "chunkloader.h"
 #include "camera.h"
 #include "chunk.h"
 #include "info.h"
@@ -227,7 +228,11 @@ private:
 	typedef std::list<Spell> SpellList;
 	SpellList m_spells;
 
+	ChunkLoader m_chunkLoader;
+
 	time_t m_time;
+
+	sf::Mutex m_mutex;
 };
 
 #endif // ENGINE_H__

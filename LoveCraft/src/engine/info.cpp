@@ -78,15 +78,16 @@ BlockType Info::GetBlocFromWorld(Vector3f pos, const Vector3f& offset) const
 	if (abs(pos.x) >= VIEW_DISTANCE - 1 || pos.y >= CHUNK_SIZE_Y - 1 || abs(pos.z) >= VIEW_DISTANCE - 1)
 		return BTYPE_BRICK;
 	// Replace la position par rapport au premier cube
+	Chunk* c = GetChunkArray()->Get(VIEW_DISTANCE * 2 / CHUNK_SIZE_X - 1, VIEW_DISTANCE * 2 / CHUNK_SIZE_Z - 1);
 	pos.x += VIEW_DISTANCE + 0.5f;
-	pos.z += VIEW_DISTANCE + 0.5f;
+	pos.z += (c->GetWorldPosition().y + 1) * CHUNK_SIZE_Z + 0.5f;
 	// Enleve la partie decimale
 	Vector3i iPos(pos.x, pos.y, pos.z);
 	// Calcul dans quel chunk la position est
 	int chunkX, chunkZ;
 	chunkX = iPos.x / CHUNK_SIZE_X;
 	chunkZ = iPos.z / CHUNK_SIZE_Z;
-	Chunk* c = GetChunkArray()->Get(chunkX, chunkZ);
+	c = GetChunkArray()->Get(chunkX, chunkZ);
 	// Calcul dans quel bloc la position est
 	int blocX, blocY, blocZ;
 	blocX = iPos.x - chunkX * CHUNK_SIZE_X;
@@ -129,6 +130,16 @@ void Info::SetChunkArray( Array2d<Chunk*>* arrayPtr )
 Array2d<Chunk*>* Info::GetChunkArray() const
 {
 	return m_chunks;
+}
+
+Shader* Info::GetCubeShader() 
+{
+	return m_shader;
+}
+
+void Info::SetCubeShader(Shader* shader)
+{
+	m_shader = shader;
 }
 
 Camera* Info::GetCamera() const

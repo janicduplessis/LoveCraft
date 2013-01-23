@@ -2,8 +2,8 @@
 #include <util/perlin.h>
 #include "treegenerator.h"
 
-Chunk::Chunk(Vector2i pos, Shader* shader) : m_blocks(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z), m_chunkMesh(shader),
-	m_left(0), m_right(0), m_back(0), m_front(0), m_pos(pos)
+Chunk::Chunk(const Vector2i& arrayPos, const Vector2f& worldPos) : m_blocks(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z), m_chunkMesh(Info::Get().GetCubeShader()),
+	m_left(0), m_right(0), m_back(0), m_front(0), m_chunkArrayPos(arrayPos), m_worldPos(worldPos), m_isReady(false)
 {
 	m_blocks.Reset(BTYPE_AIR);
 	// The first parameter is the number of octaves , this is how noisy or smooth the function is. This is valid between 1 and 16. A value of
@@ -21,7 +21,7 @@ Chunk::Chunk(Vector2i pos, Shader* shader) : m_blocks(CHUNK_SIZE_X, CHUNK_SIZE_Y
 			// La methode Get accepte deux param^etre ( coordonnee en X et Z) et retourne une valeur qui respecte
 			// les valeurs utilisees lors de la creation de l' objet Perlin
 			// La valeur retournee est entre 0 et 1
-			float valDetail = perlin . Get (( float )( m_pos.x * CHUNK_SIZE_X + x) / 2000.f, ( float )( m_pos.y * CHUNK_SIZE_Z + z) / 2000.f);
+			float valDetail = perlin . Get (( float )( m_worldPos.x * CHUNK_SIZE_X + x) / 2000.f, ( float )( m_worldPos.y * CHUNK_SIZE_Z + z) / 2000.f);
 			int yMax = 64 + (int)((valDetail) * 55.f);
 			for(int y = 0; y <= yMax; y++)
 			{
@@ -58,7 +58,7 @@ void Chunk::GenerateTrees()
 			for(int y = 0; y < CHUNK_SIZE_Y; y++)
 			{
 				if (m_blocks.Get(x,y,z) == BTYPE_GRASS && NoCloseTree(Vector3f(x,y,z)) && rand() % 30 == 0) {
-					treeGen.GenerateTree(Vector3f(x, y, z), this, m_pos.x * CHUNK_SIZE_X + x * m_pos.y * CHUNK_SIZE_Z + z);
+					treeGen.GenerateTree(Vector3f(x, y, z), this, m_worldPos.x * CHUNK_SIZE_X + x * m_worldPos.y * CHUNK_SIZE_Z + z);
 				}
 			}
 		}
@@ -189,7 +189,6 @@ void Chunk::Update()
 	{
 		int maxVertexCount = ( CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z ) * 24;
 		ChunkMesh :: VertexData * vd = new ChunkMesh :: VertexData [ maxVertexCount ];
-		uint16* id = new uint16[3 * maxVertexCount / 2]; 
 		ChunkMesh::TextureData* td = new ChunkMesh::TextureData[ maxVertexCount ];
 		int vertexCount = 0;
 
@@ -280,7 +279,6 @@ void Chunk::Update()
 		}
 		m_chunkMesh . SetMeshData (vd , vertexCount, td);
 		delete [] vd;
-		delete [] id;
 		delete [] td;
 	}
 	m_isDirty = false ;
@@ -340,7 +338,7 @@ void Chunk::CreateOptimizedTopBottomFace(MeshFace face, ChunkMesh::VertexData* v
 	int h = endZ - z + 1;
 
 	// Place la face relativement au monde
-	Vector2f pos = GetRealPosition();
+	Vector2f pos = Vector2f(m_worldPos.x * CHUNK_SIZE_X, m_worldPos.y * CHUNK_SIZE_Z);
 	x += pos.x;
 	y -= 2.f;
 	z += pos.y;
@@ -426,7 +424,7 @@ void Chunk::CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* v
 	int h = endY - y + 1;
 
 	// Place la face relativement au monde
-	Vector2f pos = GetRealPosition();
+	Vector2f pos = Vector2f(m_worldPos.x * CHUNK_SIZE_X, m_worldPos.y * CHUNK_SIZE_Z);
 	x += pos.x;
 	y -= 2.f;
 	z += pos.y;
@@ -519,7 +517,7 @@ void Chunk::CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* v
 	int h = endY - y + 1;
 
 	// Place la face relativement au monde
-	Vector2f pos = GetRealPosition();
+	Vector2f pos = Vector2f(m_worldPos.x * CHUNK_SIZE_X, m_worldPos.y * CHUNK_SIZE_Z);
 	x += pos.x;
 	y -= 2.f;
 	z += pos.y;
@@ -558,34 +556,45 @@ void Chunk::CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* v
 	}
 }
 
-Vector2i Chunk::GetPosition() const
+Vector2f Chunk::GetWorldPosition() const
 {
-	return m_pos;
+	return m_worldPos;
 }
 
-Vector2f Chunk::GetRealPosition() const
+Vector2i Chunk::GetArrayPosition() const
 {
-	return Vector2f(m_pos.x * CHUNK_SIZE_X - VIEW_DISTANCE, m_pos.y * CHUNK_SIZE_Z - VIEW_DISTANCE);
+	return m_chunkArrayPos;
 }
 
-void Chunk::SetPosition( Vector2i pos )
+void Chunk::SetWorldPosition( Vector2f pos )
 {
-	m_pos = pos;
+	m_worldPos = pos;
 }
 
-void Chunk::SetSurroundings()
+void Chunk::SetSurroundings(Vector2i arrayPos)
 {
+	m_chunkArrayPos = arrayPos;
 	Array2d<Chunk*>* chunks = Info::Get().GetChunkArray();
 
-	if (m_pos.x != 0)
-		m_left = chunks->Get(m_pos.x - 1, m_pos.y);
+	if (m_chunkArrayPos.x != 0)
+		m_left = chunks->Get(m_chunkArrayPos.x - 1, m_chunkArrayPos.y);
 
-	if(m_pos.x != VIEW_DISTANCE / CHUNK_SIZE_X * 2 - 1)
-		m_right = chunks->Get(m_pos.x + 1, m_pos.y);
+	if(m_chunkArrayPos.x != VIEW_DISTANCE / CHUNK_SIZE_X * 2 - 1)
+		m_right = chunks->Get(m_chunkArrayPos.x + 1, m_chunkArrayPos.y);
 
-	if (m_pos.y != 0)
-		m_front = chunks->Get(m_pos.x, m_pos.y - 1);
+	if (m_chunkArrayPos.y != 0)
+		m_front = chunks->Get(m_chunkArrayPos.x, m_chunkArrayPos.y - 1);
 
-	if(m_pos.y != VIEW_DISTANCE / CHUNK_SIZE_Z * 2 - 1)
-		m_back = chunks->Get(m_pos.x, m_pos.y + 1);
+	if(m_chunkArrayPos.y != VIEW_DISTANCE / CHUNK_SIZE_Z * 2 - 1)
+		m_back = chunks->Get(m_chunkArrayPos.x, m_chunkArrayPos.y + 1);
+}
+
+bool Chunk::IsReady() const
+{
+	return m_isReady;
+}
+
+void Chunk::SetIsReady( bool val )
+{
+	m_isReady = val;
 }

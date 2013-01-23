@@ -22,6 +22,8 @@ bool AI::StateChanged() const
 
 void AI::Process(float elapsedTime)
 {
+	if ((m_player->Position() - m_npc->Position()).Lenght() > VIEW_DISTANCE)
+		return;
 	// Logique pour determiner le state
 	//bool checkPlayer = CheckPlayer(DETECTION_RANGE);
 	bool checkPlayer = false;

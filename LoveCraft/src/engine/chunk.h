@@ -27,8 +27,8 @@ public:
 	~Chunk();
 
 	void RemoveBloc(uint32 x, uint32 y, uint32 z);
-	void SetBloc(uint32 x, uint32 y, uint32 z, BlockType type);
-	BlockType GetBloc(uint32 x, uint32 y, uint32 z);
+	void SetBloc(int x, int y, int z, BlockType type);
+	BlockType GetBloc(int x, int y, int z);
 
 	void Update();
 	void Render() const;

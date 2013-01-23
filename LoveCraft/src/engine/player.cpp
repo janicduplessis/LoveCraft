@@ -45,7 +45,7 @@ void Player::Teleport()
 
 void Player::ResetPosition()
 {
-	m_pos = Vector3f(0);
+	m_pos = Vector3f(VIEW_DISTANCE, 0, VIEW_DISTANCE);
 	m_rot = Vector2f(0, 0);
 	m_speed = Vector3f(0, 0, 0);
 

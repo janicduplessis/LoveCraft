@@ -114,6 +114,9 @@ public:
 	void SetCubeShader(Shader* shader);
 	Shader* GetCubeShader();
 
+	void SetOffsetMap(const Vector2i& offset);
+	Vector2i GetOffsetMap() const;
+
 private:
 	Info();
 	~Info();
@@ -134,6 +137,7 @@ private:
 	ListBox* m_console;
 	int m_lstatus;
 	Shader* m_shader;
+	Vector2i m_offsetMap;
 };
 
 #endif

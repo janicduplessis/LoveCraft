@@ -31,7 +31,7 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 
 	m_camera = new Camera;
 	Info::Get().StatusOn(Info::LSTATUS_CAMERA);
-	m_player = new Player;
+	m_player = new Player(Vector3f(VIEW_DISTANCE,0,VIEW_DISTANCE));
 	Info::Get().StatusOn(Info::LSTATUS_PLAYER);
 	m_character = new Character;
 	Info::Get().StatusOn(Info::LSTATUS_CHARACTER);
@@ -178,7 +178,7 @@ void Engine::GameInit()
 	{
 		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
 		{
-			Chunk* c = new Chunk(Vector2i(i,j), Vector2f(i - VIEW_DISTANCE / CHUNK_SIZE_X, j - VIEW_DISTANCE / CHUNK_SIZE_Z));
+			Chunk* c = new Chunk(Vector2i(i,j), Vector2f(i,j));
 			m_chunks->Set(i, j, c);
 		}
 	}
@@ -204,8 +204,8 @@ void Engine::GameInit()
 #define MONSTERS_INIALIZED
 #endif
 	for (int i = 0; i < MONSTER_MAX_NUMBER; i++)
-		m_monsters[i] = new Animal(Vector3f(m_dice->Next(-(int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*0.5f)), 0,
-		m_dice->Next(-(int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*0.5f))));
+		m_monsters[i] = new Animal(Vector3f(m_dice->Next((int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*1.5f)), 0,
+		m_dice->Next((int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*1.5f))));
 	m_monsters[0]->Init(Animal::ANL_GRD_ALIGATR, m_player);
 
 #ifdef LOAD_MODELS
@@ -235,7 +235,9 @@ void Engine::GameInit()
 	
 #pragma region Skybox
 
-	m_skybox->Init();
+	//m_shaderCube.Use();
+	//m_skybox->Init();
+	//Shader::Disable();
 
 #pragma endregion
 
@@ -659,9 +661,9 @@ void Engine::Render(float elapsedTime)
 
 #pragma region Render Skybox
 
-	m_shaderCube.Use();
-	m_skybox->Render();
-	Shader::Disable();
+	//m_shaderCube.Use();
+	//m_skybox->Render();
+	//Shader::Disable();
 
 #pragma endregion
 
@@ -1392,9 +1394,9 @@ void Engine::GetBlocAtCursor()
 
 	gluUnProject( winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
 
-	posX += .5f + VIEW_DISTANCE;
+	posX += 0.5f;
 	posY += 2.5f;
-	posZ += .5f + VIEW_DISTANCE;
+	posZ += 0.5f;
 
 	// Le cast vers int marche juste pour les valeurs entiere, utiliser une fonction de la libc si besoin
 	// de valeurs negatives
@@ -1404,7 +1406,7 @@ void Engine::GetBlocAtCursor()
 
 	bool found = false;
 
-	if((m_player->Position() - Vector3f(posX - VIEW_DISTANCE, posY, posZ - VIEW_DISTANCE)).Lenght() < MAX_SELECTION_DISTANCE)
+	if((m_player->Position() - Vector3f(posX, posY, posZ)).Lenght() < MAX_SELECTION_DISTANCE)
 	{
 		// Apres avoir determine la position du bloc en utilisant la partie entiere du hit
 		// point retourne par opengl, on doit verifier de chaque cote du bloc trouve pour trouver
@@ -1421,7 +1423,7 @@ void Engine::GetBlocAtCursor()
 				{
 					if(z >= 0)
 					{
-						BlockType bt = Info::Get().GetBlocFromWorld(Vector3f(x - VIEW_DISTANCE - 0.5f, y, z - VIEW_DISTANCE - 0.5f));
+						BlockType bt = Info::Get().GetBlocFromWorld(Vector3f(x - 0.5f, y, z - 0.5f));
 						if(bt == BTYPE_AIR)
 							continue;
 
@@ -1429,9 +1431,9 @@ void Engine::GetBlocAtCursor()
 						//if(bloc->Type == BT_WATER)
 						//    continue;
 
-						m_currentBlock.x = x;
+						m_currentBlock.x = x - Info::Get().GetOffsetMap().x * CHUNK_SIZE_X;
 						m_currentBlock.y = y;
-						m_currentBlock.z = z;
+						m_currentBlock.z = z - Info::Get().GetOffsetMap().y * CHUNK_SIZE_Z;
 
 						if(Tool::InRangeWithEpsilon<float>(posX, x, x+1, 0.05) && Tool::InRangeWithEpsilon<float>(posY, y, y+1, 0.05) && Tool::InRangeWithEpsilon<float>(posZ, z, z+1, 0.05))
 						{

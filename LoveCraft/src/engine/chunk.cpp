@@ -86,21 +86,21 @@ void Chunk::RemoveBloc(uint32 x, uint32 y, uint32 z)
 	m_blocks.Set(x, y, z, BTYPE_AIR);
 }
 
-void Chunk::SetBloc(uint32 x, uint32 y, uint32 z, BlockType type)
+void Chunk::SetBloc(int x, int y, int z, BlockType type)
 {
 	Chunk* editedChunk = this;
 
 	// Front
 	if (z < 0)
 	{
-		if(m_front)
-			m_front->SetBloc(x, y, CHUNK_SIZE_Z + z, type);
+		if(m_back)
+			m_back->SetBloc(x, y, CHUNK_SIZE_Z + z, type);
 	}
 	// Back
 	else if (z >= CHUNK_SIZE_Z)
 	{
-		if(m_back)
-			m_back->SetBloc(x, y, z - CHUNK_SIZE_Z, type);
+		if(m_front)
+			m_front->SetBloc(x, y, z - CHUNK_SIZE_Z, type);
 	}
 	// Left
 	else if (x < 0)
@@ -130,28 +130,28 @@ void Chunk::SetBloc(uint32 x, uint32 y, uint32 z, BlockType type)
 		m_right->m_isDirty = true;
 }
 
-BlockType Chunk::GetBloc(uint32 x, uint32 y, uint32 z)
+BlockType Chunk::GetBloc(int x, int y, int z)
 {
 	BlockType result;
 
 	// Bottom et top
-	if (y == -1 || y == CHUNK_SIZE_Y)
+	if (y == -1 || y >= CHUNK_SIZE_Y)
 	{
 		result = BTYPE_AIR;
 	}
 	// Front
 	else if (z < 0)
 	{
-		if(m_front)
-			result = m_front->GetBloc(x, y, CHUNK_SIZE_Z + z);
+		if(m_back)
+			result = m_back->GetBloc(x, y, CHUNK_SIZE_Z + z - 1);
 		else
 			result = BTYPE_AIR;
 	}
 	// Back
 	else if (z >= CHUNK_SIZE_Z)
 	{
-		if(m_back)
-			result = m_back->GetBloc(x, y, z - CHUNK_SIZE_Z);
+		if(m_front)
+			result = m_front->GetBloc(x, y, z - CHUNK_SIZE_Z);
 		else
 			result = BTYPE_AIR;
 	}
@@ -159,7 +159,7 @@ BlockType Chunk::GetBloc(uint32 x, uint32 y, uint32 z)
 	else if (x < 0)
 	{
 		if(m_left)
-			result = m_left->GetBloc(CHUNK_SIZE_X + z, y, z);
+			result = m_left->GetBloc(CHUNK_SIZE_X + x - 1, y, z);
 		else
 			result = BTYPE_AIR;
 	}
@@ -167,7 +167,7 @@ BlockType Chunk::GetBloc(uint32 x, uint32 y, uint32 z)
 	else if (x >= CHUNK_SIZE_X)
 	{
 		if(m_right)
-			result = m_right->GetBloc(z - CHUNK_SIZE_X, y, z);
+			result = m_right->GetBloc(x - CHUNK_SIZE_X, y, z);
 		else
 			result = BTYPE_AIR;
 	}
@@ -583,10 +583,10 @@ void Chunk::SetSurroundings(Vector2i arrayPos)
 		m_right = chunks->Get(m_chunkArrayPos.x + 1, m_chunkArrayPos.y);
 
 	if (m_chunkArrayPos.y != 0)
-		m_front = chunks->Get(m_chunkArrayPos.x, m_chunkArrayPos.y - 1);
+		m_back = chunks->Get(m_chunkArrayPos.x, m_chunkArrayPos.y - 1);
 
 	if(m_chunkArrayPos.y != VIEW_DISTANCE / CHUNK_SIZE_Z * 2 - 1)
-		m_back = chunks->Get(m_chunkArrayPos.x, m_chunkArrayPos.y + 1);
+		m_front = chunks->Get(m_chunkArrayPos.x, m_chunkArrayPos.y + 1);
 }
 
 bool Chunk::IsReady() const

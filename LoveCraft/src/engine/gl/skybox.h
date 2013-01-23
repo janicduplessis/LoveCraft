@@ -25,10 +25,8 @@ public:
 	void Update(Vector3f &playerpos = Vector3f());
 	void Render();
 private:
-	ChunkMesh* m_mesh;
-	ChunkMesh::VertexData* m_data;
-	ChunkMesh::TextureData* m_texData;
-	TextureArray* m_texArray;
+	ChunkMesh m_mesh;
+	TextureArray m_texArray;
 	Vector3f m_playerpos;
 };
 

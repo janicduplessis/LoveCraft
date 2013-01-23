@@ -80,7 +80,8 @@ BlockType Info::GetBlocFromWorld(Vector3f pos, const Vector3f& offset) const
 	// Replace la position par rapport au premier cube
 	Chunk* c = GetChunkArray()->Get(VIEW_DISTANCE * 2 / CHUNK_SIZE_X - 1, VIEW_DISTANCE * 2 / CHUNK_SIZE_Z - 1);
 	pos.x += VIEW_DISTANCE + 0.5f;
-	pos.z += (c->GetWorldPosition().y + 1) * CHUNK_SIZE_Z + 0.5f;
+	pos.z += VIEW_DISTANCE + 0.5f;
+	Vector2f c2 = c->GetWorldPosition();
 	// Enleve la partie decimale
 	Vector3i iPos(pos.x, pos.y, pos.z);
 	// Calcul dans quel chunk la position est

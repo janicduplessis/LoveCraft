@@ -16,7 +16,7 @@ Panel::Panel(Control* parent, Vector2i &position, Vector2i &size, Texture* textu
 
 Panel::~Panel()
 {
-	
+
 }
 
 void Panel::AddControl(Control* control)
@@ -29,7 +29,8 @@ void Panel::AddControl(Control* control)
 void Panel::Render()
 {
 	Control::Render();
-	RenderAllControls();
+	if (m_visible)
+		RenderAllControls();
 }
 
 void Panel::RenderAllControls()

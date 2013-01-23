@@ -27,10 +27,11 @@ public:
 private:
 	virtual void TextUpdate(const ValuesGameInterface& val);
 
-private:
+public:
 	Panel* m_pnl_screen;
 	Panel* m_pnl_playscreen;
 	Panel* m_pnl_portrait;
+	Panel* m_pnl_welcome;
 
 	ProgressBar* m_pgb_health;
 	ProgressBar* m_pgb_energy;
@@ -60,6 +61,8 @@ private:
 
 	Label* m_lbl_currentBlockType;
 	PictureBox* m_pb_currentBlockType;
+	PictureBox* m_pb_welcomeface;
+	Label* m_lbl_welcomemessage;
 };
 
 #endif

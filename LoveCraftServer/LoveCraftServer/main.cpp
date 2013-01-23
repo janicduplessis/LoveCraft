@@ -8,11 +8,12 @@ void StartServer()
 
 	sf::TcpListener Listener;
 
-	if (!Listener.listen(10512))
+	if (!Listener.listen(55001))
 	{
 		std::cout << "Erreur lors de l'ouverture du port" << std::endl;
 		return;
 	}
+	std::cout << "Adresse IP du serveur: " << serverAdress.toString() << std::endl;
 	std::cout << "Sur ecoute..." << std::endl;
 
 	sf::IpAddress clientAdress;

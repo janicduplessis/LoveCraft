@@ -34,7 +34,8 @@ public:
 		LSTATUS_CHUNK = 0x8,
 		LSTATUS_MONSTERS = 0x10,
 		LSTATUS_TEXTURE_IMAGE = 0x20,
-		LSTATUS_TEXTURE_FONTS = 0x40
+		LSTATUS_TEXTURE_FONTS = 0x40,
+		LSTATUS_SKYBOX = 0x80
 	};
 	/**
 	* Retourne une reference vers l'instance Info

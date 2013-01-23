@@ -27,6 +27,8 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 		m_texturefontColor[i] = new Texture();
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
 
+	m_skybox = new Skybox();
+
 	m_camera = new Camera;
 	Info::Get().StatusOn(Info::LSTATUS_CAMERA);
 	m_player = new Player;
@@ -82,6 +84,8 @@ Engine::~Engine()
 		delete m_monsters[0];
 #endif
 	}
+	if (Info::Get().GetStatus(Info::LSTATUS_SKYBOX))
+		delete m_skybox;
 	delete m_dice;
 	delete [] m_monsters;
 	delete m_textureArray;
@@ -222,6 +226,12 @@ void Engine::GameInit()
 #endif
 
 	Info::Get().StatusOn(Info::LSTATUS_MONSTERS);
+	
+#pragma region Skybox
+
+	m_skybox->Init();
+
+#pragma endregion
 
 #pragma endregion
 
@@ -230,6 +240,7 @@ void Engine::GameInit()
 	m_valuesGameInterface.Init(m_textureInterface, m_texturefontColor, m_textureArray, m_player, m_character);
 	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_gameUI.Init(m_valuesGameInterface);
+	
 }
 
 void Engine::DeInit()
@@ -403,7 +414,7 @@ void Engine::LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, std::string path
 		Info::Get().GetBlocInfo(type)->SetTextureIndex(2, m_textureArray->AddTexture(path));
 		break;
 	}
-	
+
 }
 
 void Engine::UnloadResource()
@@ -481,6 +492,7 @@ void Engine::Update(float elapsedTime)
 	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
 	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_gameUI.Update(m_valuesGameInterface);
+	m_skybox->Update(m_player->Position());
 
 #pragma region Calcul la position du joueur et de la camera
 
@@ -628,6 +640,14 @@ void Engine::Render(float elapsedTime)
 			c->Render();
 		}
 	}
+	Shader::Disable();
+
+#pragma endregion
+
+#pragma region Render Skybox
+
+	m_shaderCube.Use();
+	m_skybox->Render();
 	Shader::Disable();
 
 #pragma endregion
@@ -1434,7 +1454,6 @@ void Engine::GetBlocAtCursor()
 			m_currentFaceNormal.y = 1;
 	}
 }
-
 
 void Engine::CW(const std::string& line)
 {

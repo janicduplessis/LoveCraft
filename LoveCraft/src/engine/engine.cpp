@@ -244,17 +244,17 @@ void Engine::LoadMenuResource()
 #pragma region Blocs
 	// Texture des blocs 128x128 px
 	m_textureArray = new TextureArray(128);
-	LoadBlocTexture(BTYPE_DIRT, TEXTURE_PATH "b_dirt.bmp");
-	LoadBlocTexture(BTYPE_GRASS, TEXTURE_PATH "b_grass.jpg");
-	LoadBlocTexture(BTYPE_BRICK, TEXTURE_PATH "b_brick_red.jpg");
-	LoadBlocTexture(BTYPE_SAND, TEXTURE_PATH "b_sand.jpg");
-	LoadBlocTexture(BTYPE_ROCK, TEXTURE_PATH "b_rock.jpg");
-	LoadBlocTexture(BTYPE_SNOW, TEXTURE_PATH "b_snow.jpg");
-	LoadBlocTexture(BTYPE_SWAMP, TEXTURE_PATH "b_swamp.jpg");
-	LoadBlocTexture(BTYPE_TREELEAF, TEXTURE_PATH "b_tree_leaf.png");
-	LoadBlocTexture(BTYPE_TREETRUNK, TEXTURE_PATH "b_tree_trunk.png");
-
-	m_textureArray->AddTexture(TEXTURE_PATH "b_semidirt.bmp");
+	LoadBlocTexture(BTYPE_DIRT, BFACE_ALL, TEXTURE_PATH "b_dirt.png");
+	LoadBlocTexture(BTYPE_GRASS, BFACE_TOP, TEXTURE_PATH "b_grass.png");
+	LoadBlocTexture(BTYPE_GRASS, BFACE_SIDES, TEXTURE_PATH "b_half_dirt.png");
+	LoadBlocTexture(BTYPE_GRASS, BFACE_BOTTOM, TEXTURE_PATH "b_dirt.png");
+	LoadBlocTexture(BTYPE_BRICK, BFACE_ALL, TEXTURE_PATH "b_brick_red.jpg");
+	LoadBlocTexture(BTYPE_SAND, BFACE_ALL, TEXTURE_PATH "b_sand.jpg");
+	LoadBlocTexture(BTYPE_ROCK, BFACE_ALL, TEXTURE_PATH "b_rock.jpg");
+	LoadBlocTexture(BTYPE_SNOW, BFACE_ALL, TEXTURE_PATH "b_snow.jpg");
+	LoadBlocTexture(BTYPE_SWAMP, BFACE_ALL, TEXTURE_PATH "b_swamp.jpg");
+	LoadBlocTexture(BTYPE_TREELEAF, BFACE_ALL, TEXTURE_PATH "b_tree_leaf.png");
+	LoadBlocTexture(BTYPE_TREETRUNK, BFACE_ALL, TEXTURE_PATH "b_tree_trunk.png");
 
 	m_textureArray->Generate();
 
@@ -377,9 +377,33 @@ void Engine::LoadGameResource()
 
 }
 
-void Engine::LoadBlocTexture(BLOCK_TYPE type, std::string path)
+void Engine::LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, std::string path)
 {
-	Info::Get().GetBlocInfo(type)->SetTextureIndex(m_textureArray->AddTexture(path));
+	int index;
+	switch (faces)
+	{
+	case BFACE_ALL:
+		index = m_textureArray->AddTexture(path);
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(0, index);
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(1, index);
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(2, index);
+		break;
+	case BFACE_TOP_AND_BOT:
+		index = m_textureArray->AddTexture(path);
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(0, index);
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(2, index);
+		break;
+	case BFACE_TOP:
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(0, m_textureArray->AddTexture(path));
+		break;
+	case BFACE_SIDES:
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(1, m_textureArray->AddTexture(path));
+		break;
+	case BFACE_BOTTOM:
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(2, m_textureArray->AddTexture(path));
+		break;
+	}
+	
 }
 
 void Engine::UnloadResource()

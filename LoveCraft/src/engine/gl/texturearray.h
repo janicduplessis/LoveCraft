@@ -61,8 +61,9 @@ private:
 	{
 		ILuint texId;
 		std::string texPath;
+		TextureIndex index;
 
-		TextureInfo(ILuint _texId, std::string path) : texId(_texId), texPath(path) {}
+		TextureInfo(ILuint _texId, std::string _path, TextureIndex _index) : texId(_texId), texPath(_path), index(_index) {}
 	};
 
 	typedef std::list<TextureInfo> TextureList;

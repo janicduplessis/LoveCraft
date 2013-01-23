@@ -1,6 +1,6 @@
 ﻿#include "treegenerator.h"
 
-TreeGenerator::TreeGenerator( long long seed ) : m_perlin(8, 8, 1, seed)
+TreeGenerator::TreeGenerator()
 {
 
 }
@@ -32,9 +32,7 @@ void TreeGenerator::GenerateTree(const  Vector3f& pos, Chunk* c, unsigned int se
 			for (int z = pos.z - foiliageSize; z < pos.z + foiliageSize; ++z)
 			{
 				float val = perlin.Get((x - pos.x) / 2000.f, (y - pos.y) / 2000.f, (z - pos.z) / 2000.f);
-				//std::cout << val << std::endl;
-				//if (val < -0.03f && val > -0.1f && c->GetBloc(x,y,z) == BTYPE_AIR)
-					//c->SetBloc(x,y,z,BTYPE_TREELEAF);
+
 				int x0 = pos.x;
 				int y0 = pos.y + foiliageStart + foiliageSize;
 				int z0 = pos.z;

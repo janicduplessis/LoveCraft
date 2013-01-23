@@ -15,7 +15,7 @@ void GameInterface::Update(const ValuesGameInterface& val)
 
 	// Update le picturebox du current blocktype
 	m_pb_currentBlockType->SetTexture(val.BlocTextures->GetTexture(
-		Info::Get().GetBlocInfo(val.CurrentBlocType)->GetTextureIndex()));
+		Info::Get().GetBlocInfo(val.CurrentBlocType)->GetTextureIndex(0)));
 	//Affiche ou cache les infos s'il y a un changement
 	if (m_lb_infos->GetProperty(Control::PROPBOL_VISIBLE) && !Info::Get().Options().GetOptInfos())
 		m_lb_infos->SetProperty(Control::PROPBOL_VISIBLE, false);

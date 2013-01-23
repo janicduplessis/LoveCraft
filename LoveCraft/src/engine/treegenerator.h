@@ -15,13 +15,12 @@
 class TreeGenerator
 {
 public:
-	TreeGenerator(long long seed);
+	TreeGenerator();
 	~TreeGenerator();
 
 	void GenerateTree(const Vector3f& pos, Chunk* c, unsigned int seed);
 
 private:
-	Perlin m_perlin;
 };
 
 

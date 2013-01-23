@@ -23,7 +23,7 @@ class Chunk
 	};
 
 public:
-	Chunk(Vector2i pos, Shader* shader = 0);
+	Chunk(const Vector2i& arrayPos, const Vector2f& worldPos);
 	~Chunk();
 
 	void RemoveBloc(uint32 x, uint32 y, uint32 z);
@@ -33,12 +33,14 @@ public:
 	void Update();
 	void Render() const;
 	bool IsDirty() const;
+	bool IsReady() const;
+	void SetIsReady(bool val);
 
-	Vector2i GetPosition() const;
-	Vector2f GetRealPosition() const;
-	void SetPosition(Vector2i pos);
+	Vector2f GetWorldPosition() const;
+	Vector2i GetArrayPosition() const;
+	void SetWorldPosition(Vector2f pos);
 
-	void SetSurroundings();
+	void SetSurroundings(Vector2i arrayPos);
 	void GenerateTrees();
 
 	
@@ -49,7 +51,9 @@ private:
 	bool NoCloseTree(Vector3f pos);
 private:
 	bool m_isDirty;
-	Vector2i m_pos;
+	bool m_isReady;
+	Vector2i m_chunkArrayPos;
+	Vector2f m_worldPos;
 	Array3d<BlockType> m_blocks;
 	ChunkMesh m_chunkMesh;
 

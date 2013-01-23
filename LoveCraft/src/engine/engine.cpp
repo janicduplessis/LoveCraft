@@ -167,24 +167,30 @@ void Engine::GameInit()
 
 #pragma region Initialisation des chunks
 
+	Info::Get().SetCubeShader(&m_shaderCube);
+
 	m_chunks = new Array2d<Chunk*>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
 	Info::Get().SetChunkArray(m_chunks);
 
-	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
+	int test = VIEW_DISTANCE / CHUNK_SIZE_X * 2;
+
+	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; ++i)
 	{
 		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
 		{
-			Chunk* c = new Chunk(Vector2i(i,j), &m_shaderCube);
+			Chunk* c = new Chunk(Vector2i(i,j), Vector2f(i - VIEW_DISTANCE / CHUNK_SIZE_X, j - VIEW_DISTANCE / CHUNK_SIZE_Z));
 			m_chunks->Set(i, j, c);
 		}
 	}
 
-	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
+	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; ++i)
 	{
 		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
 		{
-			m_chunks->Get(i,j)->SetSurroundings();
-			m_chunks->Get(i,j)->GenerateTrees();
+			Chunk* c = m_chunks->Get(i,j);
+			c->SetSurroundings(Vector2i(i,j));
+			c->GenerateTrees();
+			c->SetIsReady(true);
 		}
 	}
 
@@ -265,7 +271,8 @@ void Engine::LoadMenuResource()
 	LoadBlocTexture(BTYPE_SNOW, BFACE_ALL, TEXTURE_PATH "b_snow.jpg");
 	LoadBlocTexture(BTYPE_SWAMP, BFACE_ALL, TEXTURE_PATH "b_swamp.jpg");
 	LoadBlocTexture(BTYPE_TREELEAF, BFACE_ALL, TEXTURE_PATH "b_tree_leaf.png");
-	LoadBlocTexture(BTYPE_TREETRUNK, BFACE_ALL, TEXTURE_PATH "b_tree_trunk.png");
+	LoadBlocTexture(BTYPE_TREETRUNK, BFACE_SIDES, TEXTURE_PATH "b_tree_trunk.png");
+	LoadBlocTexture(BTYPE_TREETRUNK, BFACE_TOP_AND_BOT, TEXTURE_PATH "b_trunk_topbot.png");
 
 	m_textureArray->Generate();
 
@@ -562,6 +569,8 @@ void Engine::Render(float elapsedTime)
 
 #pragma region Game time
 
+	m_chunkLoader.CheckPlayerPosition(m_player);
+
 	static float gameTime = elapsedTime;
 	gameTime += elapsedTime;
 
@@ -634,10 +643,14 @@ void Engine::Render(float elapsedTime)
 	{
 		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
 		{
+			m_mutex.lock();
 			Chunk* c = m_chunks->Get(i,j);
-			if (c->IsDirty())
-				c->Update();
-			c->Render();
+			if (c->IsReady()) {
+				if (c->IsDirty())
+					c->Update();
+				c->Render();
+			}
+			m_mutex.unlock();
 		}
 	}
 	Shader::Disable();

@@ -20,8 +20,6 @@ bool Mesh::IsValid() const
     return m_isValid;
 }
 
-void Mesh::Render(bool wireFrame) const {}
-
 int Mesh::Count() const
 {
     return m_indicesCount;

@@ -10,6 +10,7 @@
 #include "options.h"
 #include "camera.h"
 #include "controls.h"
+#include "gl/shaders/shader.h"
 
 #include "engine/gl/ui/listbox.h"
 
@@ -110,13 +111,15 @@ public:
 	void StatusOn(LoadedStatus status);
 	bool GetStatus(LoadedStatus status) const;
 
+	void SetCubeShader(Shader* shader);
+	Shader* GetCubeShader();
+
 private:
 	Info();
 	~Info();
 	Info(Info const& copy);
 	Info& operator=(Info const& copy); 
 	void GenerateBlocInfos();
-
 private:
 	Array2d<Chunk*>* m_chunks;
 	static Info* m_info;
@@ -130,6 +133,7 @@ private:
 	Vector2i m_mouse;
 	ListBox* m_console;
 	int m_lstatus;
+	Shader* m_shader;
 };
 
 #endif

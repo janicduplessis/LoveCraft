@@ -1,7 +1,7 @@
 ﻿#include "options.h"
 #include "info.h"
 
-Option::Option() : m_music(true), m_sound(OPTION_SOUND_STARTING_VALUE), 
+Option::Option() : m_music(OPTION_MUSIC_STARTING_VALUE), m_sound(OPTION_SOUND_STARTING_VALUE), 
 	m_showInfo(OPTION_INFO_STARTING_VALUE)
 {
 }

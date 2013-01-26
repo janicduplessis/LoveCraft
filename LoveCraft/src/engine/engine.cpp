@@ -334,6 +334,7 @@ void Engine::LoadMenuResource()
 	m_textureInterface[CUSTIMAGE_MENU_MAIN_WINDOW]->Load(TEXTURE_PATH "i_menu_main.png");
 	m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK]->Load(TEXTURE_PATH "i_menu_button.png");
 	m_textureInterface[CUSTIMAGE_MENU_LOGO]->Load(TEXTURE_PATH "i_menu_logo.png");
+	m_textureInterface[CUSTIMAGE_WELCOME_FACE]->Load(TEXTURE_PATH "i_welcomeface.png");
 
 	Info::Get().StatusOn(Info::LSTATUS_TEXTURE_IMAGE);
 #pragma endregion
@@ -495,6 +496,9 @@ void Engine::Update(float elapsedTime)
 	m_character->ReduceGlobalCooldown(elapsedTime);
 	if (m_clickTimerOn)
 		m_clickTimer += elapsedTime;
+
+	if (gameTime > 45)
+		m_gameUI.m_pnl_welcome->SetProperty(Control::PROPBOL_VISIBLE, false);
 
 #pragma endregion
 

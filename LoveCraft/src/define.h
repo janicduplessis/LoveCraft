@@ -38,7 +38,7 @@ typedef long long int64;
 
 // Options
 // Musique à l'ouverture du programme
-#define OPTION_MUSIC_STARTING_VALUE	false
+#define OPTION_MUSIC_STARTING_VALUE	true
 // Son à l'ouverture du programme
 #define OPTION_SOUND_STARTING_VALUE	true
 // Montrer les informations à l'ouverture du programme

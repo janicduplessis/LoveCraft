@@ -184,6 +184,21 @@ void GameInterface::Init(const ValuesGameInterface& val)
 
 #pragma region Enfants de Playscreen
 
+	// Panel welcome
+	m_pnl_welcome = new Panel(m_pnl_playscreen, Vector2i(m_pnl_playscreen->GetProperty(Control::PROPVCT2_SIZE).x / 2 - 300, 
+		m_pnl_playscreen->GetProperty(Control::PROPVCT2_SIZE).y - 300), Vector2i(600, 200), val.UITextures[CUSTIMAGE_MENU_BACKGROUND],
+		2, "welcomepanel");
+	m_pnl_playscreen->AddControl(m_pnl_welcome);
+	m_pnl_welcome->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
+
+	m_pb_welcomeface = new PictureBox(m_pnl_welcome, Vector2i(), Vector2i(200, 200), val.UITextures[CUSTIMAGE_WELCOME_FACE], "pb_welcome");
+	m_pnl_welcome->AddControl(m_pb_welcomeface);
+	m_pb_welcomeface->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
+
+	m_lbl_welcomemessage = new Label(m_pnl_welcome, Vector2i(), val.FontTextures[TEXTCOLOR_WHITE], "Welcome to the world of Cthulhu", 
+		Label::TEXTDOCK_MIDDLERIGHT, false, 32, 25, 0.5f, Vector2f(), "lblwelcome");
+	m_pnl_welcome->AddControl(m_lbl_welcomemessage);
+
 	// Informations
 	m_lb_infos = new ListBox(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->GetProperty(Control::PROPVCT2_SIZE).y - LBL_GENERIC_CHAR_H*6 - 26*12), 200, val.FontTextures[TEXTCOLOR_RED], 
 		0, 26, 2, 12.f, 12.f, 0.5f, false, "lb_infos");

@@ -23,9 +23,9 @@ void ChunkLoader::CheckPlayerPosition( Player* player )
 	Vector2i& size = chunks->Size();
 
 	std::cout << player->Position().z << std::endl;
-	std::cout << chunks->Get(0, size.y - 1)->GetWorldPosition().y * CHUNK_SIZE_Z << std::endl;
+	std::cout << VIEW_DISTANCE + Info::Get().GetOffsetMap().y * CHUNK_SIZE_Z << std::endl;
 
-	if (((chunks->Get(0, size.y - 1)->GetWorldPosition()).y + 1 ) * CHUNK_SIZE_Z - player->Position().z < m_maxViewPosY && !m_loading) {
+	if (player->Position().z > VIEW_DISTANCE + Info::Get().GetOffsetMap().y * CHUNK_SIZE_Z + CHUNK_SIZE_Z && !m_loading) {
   		m_loading = true;
 		//delete m_thread;
 		//m_thread = new sf::Thread(LoadFrontChunks(m_loading));
@@ -33,7 +33,7 @@ void ChunkLoader::CheckPlayerPosition( Player* player )
 		LoadFrontChunks l(m_loading);
 		l();
 	}
-	if (((chunks->Get(0, 0)->GetWorldPosition()).y) * CHUNK_SIZE_Z + player->Position().z < m_minViewPosY && !m_loading) {
+	if (player->Position().z < VIEW_DISTANCE + Info::Get().GetOffsetMap().y * CHUNK_SIZE_Z - CHUNK_SIZE_Z && !m_loading) {
 		m_loading = true;
 		//delete m_thread;
 		//m_thread = new sf::Thread(LoadFrontChunks(m_loading));
@@ -96,8 +96,6 @@ void LoadFrontChunks::operator()()
 			chunks->Get(x, y)->SetSurroundings(Vector2i(x, y));
 		}
 	}
-
-
 	for (unsigned int x = 0; x < size.x; ++x)
 	{
 		chunks->Get(x, size.y - 1)->Update();

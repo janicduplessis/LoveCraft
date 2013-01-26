@@ -143,7 +143,7 @@ BlockType Chunk::GetBloc(int x, int y, int z)
 	else if (z < 0)
 	{
 		if(m_back)
-			result = m_back->GetBloc(x, y, CHUNK_SIZE_Z + z - 1);
+			result = m_back->GetBloc(x, y, CHUNK_SIZE_Z + z);
 		else
 			result = BTYPE_AIR;
 	}
@@ -159,7 +159,7 @@ BlockType Chunk::GetBloc(int x, int y, int z)
 	else if (x < 0)
 	{
 		if(m_left)
-			result = m_left->GetBloc(CHUNK_SIZE_X + x - 1, y, z);
+			result = m_left->GetBloc(CHUNK_SIZE_X + x, y, z);
 		else
 			result = BTYPE_AIR;
 	}
@@ -172,7 +172,7 @@ BlockType Chunk::GetBloc(int x, int y, int z)
 			result = BTYPE_AIR;
 	}
 	else
-		result = m_blocks.Get(x,y,z);
+		result = m_blocks.Get(x, y, z);
 
 	return result;
 }

@@ -286,6 +286,8 @@ void Chunk::Update()
 
 void Chunk::Render() const
 {
+	if (m_isDirty)
+		return;
 	m_chunkMesh.Render();
 }
 

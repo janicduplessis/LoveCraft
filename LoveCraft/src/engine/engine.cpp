@@ -15,7 +15,7 @@
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0),
-	m_clickTimer(0), m_currentBlockType(0)
+	m_clickTimer(0), m_currentBlockType(0), m_chunkLoader(&m_mutex)
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
@@ -27,7 +27,7 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 		m_texturefontColor[i] = new Texture();
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
 
-	m_skybox = new Skybox();
+	//m_skybox = new Skybox();
 
 	m_camera = new Camera;
 	Info::Get().StatusOn(Info::LSTATUS_CAMERA);
@@ -232,7 +232,7 @@ void Engine::GameInit()
 #endif
 
 	Info::Get().StatusOn(Info::LSTATUS_MONSTERS);
-	
+
 #pragma region Skybox
 
 	//m_shaderCube.Use();
@@ -248,7 +248,7 @@ void Engine::GameInit()
 	m_valuesGameInterface.Init(m_textureInterface, m_texturefontColor, m_textureArray, m_player, m_character);
 	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_gameUI.Init(m_valuesGameInterface);
-	
+
 }
 
 void Engine::DeInit()
@@ -488,7 +488,7 @@ void Engine::RenderMenu(float elapsedTime)
 
 void Engine::Update(float elapsedTime)
 {
-
+	m_mutex.lock();
 #pragma region GameTime
 
 	static float gameTime = elapsedTime;
@@ -505,7 +505,8 @@ void Engine::Update(float elapsedTime)
 	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
 	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_gameUI.Update(m_valuesGameInterface);
-	m_skybox->Update(m_player->Position());
+	//m_skybox->Update(m_player->Position());
+	m_chunkLoader.CheckPlayerPosition(m_player);
 
 #pragma region Calcul la position du joueur et de la camera
 
@@ -521,6 +522,8 @@ void Engine::Update(float elapsedTime)
 		CW("Vous etes mort!");
 
 	}
+
+	m_mutex.unlock();
 
 #pragma endregion
 
@@ -574,8 +577,6 @@ void Engine::Render(float elapsedTime)
 {
 
 #pragma region Game time
-
-	m_chunkLoader.CheckPlayerPosition(m_player);
 
 	static float gameTime = elapsedTime;
 	gameTime += elapsedTime;
@@ -645,20 +646,25 @@ void Engine::Render(float elapsedTime)
 	Shader::Disable();
 	m_shaderCube.Use();
 	m_textureArray->Use();
+	m_mutex.lock();
+	bool updated = false;
+
 	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
 	{
 		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
 		{
-			m_mutex.lock();
 			Chunk* c = m_chunks->Get(i,j);
 			if (c->IsReady()) {
-				if (c->IsDirty())
+				if (c->IsDirty() && !updated) {
 					c->Update();
+					updated = true;
+				}
 				c->Render();
 			}
-			m_mutex.unlock();
 		}
 	}
+	m_mutex.unlock();
+
 	Shader::Disable();
 
 #pragma endregion
@@ -675,6 +681,7 @@ void Engine::Render(float elapsedTime)
 
 	m_shaderModel.Use();
 
+	m_mutex.lock();
 	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
 	{
 		if (m_monsters[i]->Initialized())
@@ -684,7 +691,7 @@ void Engine::Render(float elapsedTime)
 		}
 	}
 	Shader::Disable();
-
+	m_mutex.unlock();
 
 #pragma endregion
 
@@ -702,7 +709,7 @@ void Engine::Render(float elapsedTime)
 		it->Render(vp);
 		if (it->HasHit())
 		{
-			m_spells.erase(it);
+			//m_spells.erase(it);
 			break;
 		}
 	}

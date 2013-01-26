@@ -33,7 +33,7 @@ typedef long long int64;
 #define CHUNK_SIZE_Y 128
 #define CHUNK_SIZE_Z 16
 
-#define VIEW_DISTANCE				128
+#define VIEW_DISTANCE				256
 #define MAX_SELECTION_DISTANCE		10
 
 // Options

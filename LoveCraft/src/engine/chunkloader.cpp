@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-ChunkLoader::ChunkLoader() : m_thread(0), m_loading(false), m_maxViewPosX(VIEW_DISTANCE), m_minViewPosX(-VIEW_DISTANCE),
-	m_maxViewPosY(VIEW_DISTANCE), m_minViewPosY(-VIEW_DISTANCE)
+ChunkLoader::ChunkLoader(sf::Mutex* mutex) : m_thread(0), m_loading(false), m_maxViewPosX(VIEW_DISTANCE), m_minViewPosX(-VIEW_DISTANCE),
+	m_maxViewPosY(VIEW_DISTANCE), m_minViewPosY(-VIEW_DISTANCE), m_mutex(mutex)
 {
 
 }
@@ -26,11 +26,11 @@ void ChunkLoader::CheckPlayerPosition( Player* player )
 	std::cout << VIEW_DISTANCE + Info::Get().GetOffsetMap().y * CHUNK_SIZE_Z << std::endl;
 
 	if (player->Position().z > VIEW_DISTANCE + Info::Get().GetOffsetMap().y * CHUNK_SIZE_Z + CHUNK_SIZE_Z && !m_loading) {
-  		m_loading = true;
+		m_loading = true;
 		//delete m_thread;
-		//m_thread = new sf::Thread(LoadFrontChunks(m_loading));
+		//m_thread = new sf::Thread(LoadFrontChunks(m_mutex, m_loading));
 		//m_thread->launch();
-		LoadFrontChunks l(m_loading);
+		LoadFrontChunks l(m_mutex, m_loading);
 		l();
 	}
 	if (player->Position().z < VIEW_DISTANCE + Info::Get().GetOffsetMap().y * CHUNK_SIZE_Z - CHUNK_SIZE_Z && !m_loading) {
@@ -38,8 +38,8 @@ void ChunkLoader::CheckPlayerPosition( Player* player )
 		//delete m_thread;
 		//m_thread = new sf::Thread(LoadFrontChunks(m_loading));
 		//m_thread->launch();
-		LoadBackChunks l(m_loading);
-		l();
+		//LoadBackChunks l(m_loading);
+		//l();
 	}
 	/*else if (abs(playerPos.x - (Info::Get().GetChunkArray()->Get(0, 0)->GetRealPosition()).x) < VIEW_DISTANCE) {
 	m_loading = true;
@@ -52,8 +52,7 @@ void ChunkLoader::CheckPlayerPosition( Player* player )
 
 void LoadFrontChunks::operator()()
 {
-	sf::Mutex mutex;
-	mutex.lock();
+	m_mutex->lock();
 	Array2d<Chunk*>* chunks = Info::Get().GetChunkArray();
 	Vector2i& size = chunks->Size();
 
@@ -77,6 +76,8 @@ void LoadFrontChunks::operator()()
 
 	Info::Get().SetOffsetMap(Info::Get().GetOffsetMap() + Vector2i(0,1));
 
+	m_mutex->unlock();
+
 	// Creer les nouveau chunks
 	Chunk** newChunks = new Chunk*[size.x];
 	for (unsigned int x = 0; x < size.x; ++x)
@@ -84,6 +85,8 @@ void LoadFrontChunks::operator()()
 		Vector2f& pos = chunks->Get(x, size.y - 2)->GetWorldPosition();
 		newChunks[x] = new Chunk(Vector2i(x, size.y - 1), Vector2f(pos.x, pos.y + 1));
 	}
+
+	m_mutex->lock();
 
 	for (unsigned int x = 0; x < size.x; ++x)
 	{
@@ -98,15 +101,15 @@ void LoadFrontChunks::operator()()
 	}
 	for (unsigned int x = 0; x < size.x; ++x)
 	{
-		chunks->Get(x, size.y - 1)->Update();
+		chunks->Get(x, size.y - 2)->GenerateTrees();
+		//chunks->Get(x, size.y - 1)->Update();
 		chunks->Get(x, size.y - 1)->SetIsReady(true);
 	}
 
 	delete [] newChunks;
 
 	m_loading = false;
-
-	mutex.unlock();
+	m_mutex->unlock();
 }
 
 void LoadBackChunks::operator()()

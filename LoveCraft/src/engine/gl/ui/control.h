@@ -2,6 +2,7 @@
 #define CONTROL_H_
 
 #include "define.h"
+#include "structure.h"
 #include "../texture.h"
 #include "util/vector2.h"
 #include <cassert>
@@ -108,7 +109,7 @@ private:
 /**
  * @Brief Controle de l'interface 2d
  */
-class Control
+class Control : public Structure
 {
 public:
 	enum Type
@@ -185,10 +186,10 @@ public:
 	* @return Vector2i
 	*/
 	virtual Vector2i AbsolutePosition() const;
-	virtual void SetProperty(PropBool boolprop, bool value);
-	virtual void SetProperty(PropVector2 vector2prop, Vector2i value);
-	virtual void SetProperty(PropString stringprop, string value);
-	virtual void SetProperty(PropTexture textureprop, Texture* value);
+	virtual void SP(PropBool boolprop, bool value);
+	virtual void SP(PropVector2 vector2prop, Vector2i value);
+	virtual void SP(PropString stringprop, string value);
+	virtual void SP(PropTexture textureprop, Texture* value);
 	virtual void SetBlend(BlendType btype);
 
 	virtual bool MousePressEvents( int x, int y );
@@ -196,10 +197,10 @@ public:
 	virtual bool KeyPressEvents(int keycode);
 	virtual bool KeyReleaseEvents(int keycode);
 
-	virtual bool GetProperty(PropBool boolprop) const;
-	virtual Vector2i GetProperty(PropVector2 vector2prop) const;
-	virtual string GetProperty(PropString stringprop) const;
-	virtual Texture* GetProperty(PropTexture textureprop) const;
+	virtual bool GP(PropBool boolprop) const;
+	virtual Vector2i GP(PropVector2 vector2prop) const;
+	virtual string GP(PropString stringprop) const;
+	virtual Texture* GP(PropTexture textureprop) const;
 	virtual BlendType GetBlend() const;
 	virtual bool IsBlend(BlendType btype) const;
 

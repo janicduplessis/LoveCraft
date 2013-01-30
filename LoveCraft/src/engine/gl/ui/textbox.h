@@ -4,15 +4,16 @@
 #include "control.h"
 #include "label.h"
 
-class Textbox : public Control
+class Textbox : public Control, public IText
 {
 public:
-	Textbox(Control* parent, Vector2i position, Vector2i size, Texture* color, Texture* back, Label::Docking dock, bool italic, float charWidth, float charinterval, Vector2f offset, const std::string& name);
+	Textbox();
 	~Textbox();
+	void Init(Vector2i &offset = Vector2i());
 	bool HasFocus() const;
 	void SetFocus(const bool value);
-	void SetMessage(std::string text);
-	std::string GetMsg() const;
+	void SetMessage(string text);
+	string GetMsg() const;
 	Label* TLabel();
 	void Render();
 private:

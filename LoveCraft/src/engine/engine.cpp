@@ -335,6 +335,9 @@ void Engine::LoadMenuResource()
 	m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK]->Load(TEXTURE_PATH "i_menu_button.png");
 	m_textureInterface[CUSTIMAGE_MENU_LOGO]->Load(TEXTURE_PATH "i_menu_logo.png");
 	m_textureInterface[CUSTIMAGE_WELCOME_FACE]->Load(TEXTURE_PATH "i_welcomeface.png");
+	m_textureInterface[CUSTIMAGE_ARROWBUTTON_UP]->Load(TEXTURE_PATH "i_arrowbutton_up.jpg");
+	m_textureInterface[CUSTIMAGE_ARROWBUTTON_DOWN]->Load(TEXTURE_PATH "i_arrowbutton_down.jpg");
+
 
 	Info::Get().StatusOn(Info::LSTATUS_TEXTURE_IMAGE);
 #pragma endregion
@@ -363,7 +366,7 @@ void Engine::LoadMenuResource()
 	m_pb_cursor = new PictureBox(0, Vector2i(), Vector2i(50, 50), m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], "pb_cursor");
 	//Appel singulier du cursor afin qu'il soit dessiné par dessus tous les éléments de l'interface
 	//m_pnl_screen->AddControl(m_pb_cursor);
-	m_pb_cursor->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
+	m_pb_cursor->SP(Control::PROPBOL_REPEATTEXTURE, false);
 	m_menuUI.m_menu_fullscreen->OnClick.Attach(this, &Engine::OnClick);
 	m_menuUI.m_menu_start->OnClick.Attach(this, &Engine::OnClick);
 	m_menuUI.m_menu_close->OnClick.Attach(this, &Engine::OnClick);
@@ -498,7 +501,7 @@ void Engine::Update(float elapsedTime)
 		m_clickTimer += elapsedTime;
 
 	if (gameTime > 45)
-		m_gameUI.m_pnl_welcome->SetProperty(Control::PROPBOL_VISIBLE, false);
+		m_gameUI.m_pnl_welcome->SP(Control::PROPBOL_VISIBLE, false);
 
 #pragma endregion
 
@@ -599,9 +602,9 @@ void Engine::Render(float elapsedTime)
 	if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON ) {
 		// hide/show cursor
 		if (!m_rightClick && !m_leftClick)
-			m_pb_cursor->SetProperty(Control::PROPBOL_VISIBLE, true);
+			m_pb_cursor->SP(Control::PROPBOL_VISIBLE, true);
 		else
-			m_pb_cursor->SetProperty(Control::PROPBOL_VISIBLE, false);
+			m_pb_cursor->SP(Control::PROPBOL_VISIBLE, false);
 
 		// recule la camera
 		glTranslatef(0,0,-m_camRadius);
@@ -737,7 +740,7 @@ void Engine::Render(float elapsedTime)
 	if (ttt)
 	{
 		Info::Get().Sound().PlayMusic(Son::MUSIC_PLAY1);
-		m_menuUI.m_menu_loading->SetProperty(Control::PROPBOL_VISIBLE, false);
+		m_menuUI.m_menu_loading->SP(Control::PROPBOL_VISIBLE, false);
 		CW("Premier Render de l'engine termine avec succes.");
 		ttt = false;
 	}
@@ -1023,7 +1026,7 @@ void Engine::KeyReleaseEvent(unsigned char key)
 			}
 			else 
 			{
-				m_pb_cursor->SetProperty(Control::PROPBOL_VISIBLE, false);
+				m_pb_cursor->SP(Control::PROPBOL_VISIBLE, false);
 				m_camera->SetMode(Camera::CAM_FIRST_PERSON);
 				ss << "Affichage de la camera a la premiere personne";
 			}
@@ -1107,7 +1110,7 @@ void Engine::MouseMoveEvent(int x, int y)
 		}
 	}
 
-	m_pb_cursor->SetProperty(Control::PROPVCT2_POSITION, (Vector2i(MousePosition().x, MousePosition().y - m_pb_cursor->GetProperty(Control::PROPVCT2_SIZE).y)));
+	m_pb_cursor->SP(Control::PROPVCT2_POSITION, (Vector2i(MousePosition().x, MousePosition().y - m_pb_cursor->GP(Control::PROPVCT2_SIZE).y)));
 }
 
 void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
@@ -1168,9 +1171,9 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		switch (button)
 		{
 		case MOUSE_BUTTON_LEFT:
-			m_menuUI.m_menu_close->MousePressEvents(x, m_menuUI.m_menu_screen->GetProperty(Control::PROPVCT2_SIZE).y - y);
-			m_menuUI.m_menu_start->MousePressEvents(x, m_menuUI.m_menu_screen->GetProperty(Control::PROPVCT2_SIZE).y - y);
-			m_menuUI.m_menu_fullscreen->MousePressEvents(x, m_menuUI.m_menu_screen->GetProperty(Control::PROPVCT2_SIZE).y - y);
+			m_menuUI.m_menu_close->MousePressEvents(x, m_menuUI.m_menu_screen->GP(Control::PROPVCT2_SIZE).y - y);
+			m_menuUI.m_menu_start->MousePressEvents(x, m_menuUI.m_menu_screen->GP(Control::PROPVCT2_SIZE).y - y);
+			m_menuUI.m_menu_fullscreen->MousePressEvents(x, m_menuUI.m_menu_screen->GP(Control::PROPVCT2_SIZE).y - y);
 			break;
 		}
 	}
@@ -1178,7 +1181,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 
 void Engine::OnClick(Control* sender)
 {
-	std::string n = sender->GetProperty(Control::PROPSTR_NAME);
+	std::string n = sender->GP(Control::PROPSTR_NAME);
 	Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE, true);
 
 	if (n == MENU_BUTTON_START_FULL_NAME)
@@ -1189,7 +1192,7 @@ void Engine::OnClick(Control* sender)
 		{
 			Info::Get().Options().SetOptDebug(false);
 			ActivateFirstRun();
-			m_menuUI.m_menu_loading->SetProperty(Control::PROPBOL_VISIBLE, true);
+			m_menuUI.m_menu_loading->SP(Control::PROPBOL_VISIBLE, true);
 			SetMenuStatus(false);
 		}
 	}
@@ -1201,7 +1204,7 @@ void Engine::OnClick(Control* sender)
 		{
 			Info::Get().Options().SetOptDebug(true);
 			ActivateFirstRun();
-			m_menuUI.m_menu_loading->SetProperty(Control::PROPBOL_VISIBLE, true);
+			m_menuUI.m_menu_loading->SP(Control::PROPBOL_VISIBLE, true);
 			SetMenuStatus(false);
 		}
 	}

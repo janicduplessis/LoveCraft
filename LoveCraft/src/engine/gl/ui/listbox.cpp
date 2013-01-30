@@ -57,8 +57,11 @@ ListBox::~ListBox()
 	delete [] m_lines;
 	delete m_upArrow;
 	delete m_downArrow;
-	delete m_texDownArrow;
-	delete m_texUpArrow;
+}
+
+void ListBox::Init(unsigned short lineNbr, short gap, bool scrollable, bool updownbuttons = false)
+{
+
 }
 
 void ListBox::Render()
@@ -86,9 +89,9 @@ void ListBox::Update()
 	for(int i = 0; i < m_lineNbr; ++i)
 	{
 		if (it == m_messages.end())
-			m_lines[i]->SetProperty(PropString::PROPSTR_TEXT, "");
+			m_lines[i]->SP(PropString::PROPSTR_TEXT, "");
 		else {
-			m_lines[i]->SetProperty(PropString::PROPSTR_TEXT, it->data());
+			m_lines[i]->SP(PropString::PROPSTR_TEXT, it->data());
 			++it;
 		}
 	}

@@ -2,14 +2,14 @@
 #define ICONTAINER_H_
 
 #include "define.h"
-#include "../texture.h"
+#include "structure.h"
 #include "util/vector2.h"
 #include "control.h"
 #include <cassert>
 #include <string>
 #include <iostream>
 
-class IContainer
+class IContainer : public Structure
 {
 public:
 	IContainer();
@@ -17,7 +17,7 @@ public:
 	virtual void Init(unsigned short capacity);
 	virtual void AddControl(Control* control);
 	virtual Control* GetControlById(unsigned short index) const;
-	virtual Control* GetControlByName(const std::string& name) const;
+	virtual Control* GetControlByName(const string& name) const;
 protected:
 	void RenderAllControls();
 	Control** m_controls;

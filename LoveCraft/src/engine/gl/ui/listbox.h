@@ -13,6 +13,7 @@ public:
 	ListBox(Control* parent, const Vector2i& position, float lineWidth, Texture* textMainColor, Texture* background, unsigned short linenbr,
 		short linegap, float charwidth, float charheight, float charinterval, bool scrollable, const std::string& name, const Vector2i& offset = Vector2i());
 	~ListBox();
+	void Init(unsigned short lineNbr, short gap, bool scrollable, bool updownbuttons = false);
 	void SetLine(unsigned short line, const std::string& message);
 	void Render();
 	void AddLine(const std::string& message);
@@ -25,21 +26,15 @@ public:
 	virtual bool MousePressEvents(int x, int y);
 	virtual bool MouseReleaseEvents(int x, int y);
 private:
-	(Label*)* m_lines;
+	Label** m_lines;
 	typedef std::list<std::string> StringList;
 	StringList m_messages;
-	Texture* m_fontMainColor;
-	Texture* m_texDownArrow;
-	Texture* m_texUpArrow;
+	bool m_updownButtons;
 	Button* m_upArrow;
 	Button* m_downArrow;
 	unsigned short m_lineNbr;
 	short m_gapBetLines;
-	float m_charWidth;
-	float m_charHeight;
-	float m_charInterval;
 	bool m_scrollable;
-	Vector2i m_offset;
 	unsigned int m_curLineIndex;
 };
 

@@ -43,19 +43,19 @@ public:
 	*/
 	~Label();
 	void Init(Docking dock, const Vector2f& offset);
-	void SetProperty(PropBool boolprop, bool value);
-	void SetProperty(PropVector2 vector2prop, Vector2i value);
-	void SetProperty(PropString stringprop, string value);
-	void SetProperty(PropTexture textureprop, Texture* value);
-	void SetProperty(PropFloat floatprop, float value);
-	void SetProperty(PropDock dockprop, Docking value);
+	void SP(PropBool boolprop, bool value);
+	void SP(PropVector2 vector2prop, Vector2i value);
+	void SP(PropString stringprop, string value);
+	void SP(PropTexture textureprop, Texture* value);
+	void SP(PropFloat floatprop, float value);
+	void SP(PropDock dockprop, Docking value);
 
-	bool GetProperty(PropBool boolprop) const;
-	Vector2i GetProperty(PropVector2 vector2prop) const;
-	string GetProperty(PropString stringprop) const;
-	Texture* GetProperty(PropTexture textureprop) const;
-	float GetProperty(PropFloat floatprop) const;
-	Docking GetProperty(PropDock dockprop) const;
+	bool GP(PropBool boolprop) const;
+	Vector2i GP(PropVector2 vector2prop) const;
+	string GP(PropString stringprop) const;
+	Texture* GP(PropTexture textureprop) const;
+	float GP(PropFloat floatprop) const;
+	Docking GP(PropDock dockprop) const;
 
 	/**
 	* Dessine le contrôle

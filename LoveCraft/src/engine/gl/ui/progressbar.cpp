@@ -52,7 +52,7 @@ void ProgressBar::Render()
 }
 void ProgressBar::RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture, bool repeat)
 {
-	if (m_pngBlend)
+	if (blalba)
 	{
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
@@ -150,19 +150,19 @@ void ProgressBar::SetBorderSize(unsigned short size)
 	m_borderSize = size;
 }
 
-void ProgressBar::SetProperty(PropBool boolprop, bool value)
+void ProgressBar::SP(PropBool boolprop, bool value)
 {
-	Control::SetProperty(boolprop, value);
+	Control::SP(boolprop, value);
 }
-void ProgressBar::SetProperty(PropVector2 vector2prop, Vector2i value)
+void ProgressBar::SP(PropVector2 vector2prop, Vector2i value)
 {
-	Control::SetProperty(vector2prop, value);
+	Control::SP(vector2prop, value);
 }
-void ProgressBar::SetProperty(PropString stringprop, std::string value)
+void ProgressBar::SP(PropString stringprop, std::string value)
 {
-	Control::SetProperty(stringprop, value);
+	Control::SP(stringprop, value);
 }
-void ProgressBar::SetProperty(PropTexture textureprop, Texture* value)
+void ProgressBar::SP(PropTexture textureprop, Texture* value)
 {
 	switch (textureprop)
 	{
@@ -180,19 +180,19 @@ void ProgressBar::SetProperty(PropTexture textureprop, Texture* value)
 
 
 
-bool ProgressBar::GetProperty(PropBool boolprop) const
+bool ProgressBar::GP(PropBool boolprop) const
 {
-	return Control::GetProperty(boolprop);
+	return Control::GP(boolprop);
 }
-Vector2i ProgressBar::GetProperty(PropVector2 vector2prop) const
+Vector2i ProgressBar::GP(PropVector2 vector2prop) const
 {
-	return Control::GetProperty(vector2prop);
+	return Control::GP(vector2prop);
 }
-std::string ProgressBar::GetProperty(PropString stringprop) const
+std::string ProgressBar::GP(PropString stringprop) const
 {
-	return Control::GetProperty(stringprop);
+	return Control::GP(stringprop);
 }
-Texture* ProgressBar::GetProperty(PropTexture textureprop) const
+Texture* ProgressBar::GP(PropTexture textureprop) const
 {
 	switch (textureprop)
 	{

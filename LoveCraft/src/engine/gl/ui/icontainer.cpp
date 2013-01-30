@@ -1,7 +1,7 @@
 #include "icontainer.h"
 
 
-IContainer::IContainer() : m_ctrlNbr(0), m_capacity(0)
+IContainer::IContainer() : Structure(), m_ctrlNbr(0), m_capacity(0)
 {
 
 }
@@ -13,13 +13,17 @@ IContainer::~IContainer()
 
 void IContainer::Init(unsigned short capacity)
 {
-	if (capacity != 0)
+	if (!m_initialized)
 	{
-		m_controls = new Control*[capacity];
-		for (unsigned short i = 0; i < capacity; i++)
-			m_controls[i] = 0;
+		if (capacity != 0)
+		{
+			m_controls = new Control*[capacity];
+			for (unsigned short i = 0; i < capacity; i++)
+				m_controls[i] = 0;
+		}
+		else m_controls = 0;
+		Structure::Init();
 	}
-	else m_controls = 0;
 }
 
 void IContainer::AddControl(Control* control)
@@ -38,7 +42,7 @@ Control* IContainer::GetControlByName(const std::string& name) const
 	Control* ctrl = 0;
 	for (unsigned short i = 0; i < m_capacity; i++)
 	{
-		if (m_controls[i]->GetProperty(Control::PROPSTR_NAME) == name)
+		if (m_controls[i]->GP(Control::PROPSTR_NAME) == name)
 		{
 			ctrl = m_controls[i];
 			break;

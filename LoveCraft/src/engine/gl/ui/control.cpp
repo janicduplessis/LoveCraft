@@ -1,6 +1,6 @@
 #include "control.h"
 
-Control::Control(Type type) : m_type(type), m_visible(true), m_name("default"),
+Control::Control(Type type) : Structure(), m_type(type), m_visible(true), m_name("default"),
 	m_parent(0), m_position(Vector2i()), m_size(Vector2i(100, 100)), m_texture(0), 
 	m_blend(Control::CBLEND_PNG), m_repeatTexture(true), m_enabled(true)
 {
@@ -13,11 +13,15 @@ Control::~Control()
 
 void Control::PreInit(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, const string &name)
 {
-	m_parent = parent;
-	m_position = position;
-	m_size = size;
-	m_texture = texture;
-	m_name = name;
+	if (!m_initialized)
+	{
+		m_parent = parent;
+		m_position = position;
+		m_size = size;
+		m_texture = texture;
+		m_name = name;
+		Structure::Init();
+	}
 }
 
 void Control::Render()
@@ -46,7 +50,7 @@ bool Control::MousePressEvents( int x, int y )
 
 // =============================================================================
 
-void Control::SetProperty(PropBool boolprop, bool value)
+void Control::SP(PropBool boolprop, bool value)
 {
 	switch (boolprop)
 	{
@@ -64,7 +68,7 @@ void Control::SetProperty(PropBool boolprop, bool value)
 		break;
 	}
 }
-void Control::SetProperty(PropVector2 vector2prop, Vector2i value)
+void Control::SP(PropVector2 vector2prop, Vector2i value)
 {
 	switch (vector2prop)
 	{
@@ -79,7 +83,7 @@ void Control::SetProperty(PropVector2 vector2prop, Vector2i value)
 		break;
 	}
 }
-void Control::SetProperty(PropString stringprop, string value)
+void Control::SP(PropString stringprop, string value)
 {
 	switch (stringprop)
 	{
@@ -91,7 +95,7 @@ void Control::SetProperty(PropString stringprop, string value)
 		break;
 	}
 }
-void Control::SetProperty(PropTexture textureprop, Texture* value)
+void Control::SP(PropTexture textureprop, Texture* value)
 {
 	switch (textureprop)
 	{
@@ -110,7 +114,7 @@ void Control::SetBlend(BlendType btype)
 
 // =============================================================================
 
-bool Control::GetProperty(PropBool boolprop) const
+bool Control::GP(PropBool boolprop) const
 {
 	switch (boolprop)
 	{
@@ -125,7 +129,7 @@ bool Control::GetProperty(PropBool boolprop) const
 		return false;
 	}
 }
-Vector2i Control::GetProperty(PropVector2 vector2prop) const
+Vector2i Control::GP(PropVector2 vector2prop) const
 {
 	switch (vector2prop)
 	{
@@ -138,7 +142,7 @@ Vector2i Control::GetProperty(PropVector2 vector2prop) const
 		return Vector2i();
 	}
 }
-string Control::GetProperty(PropString stringprop) const
+string Control::GP(PropString stringprop) const
 {
 	switch (stringprop)
 	{
@@ -149,7 +153,7 @@ string Control::GetProperty(PropString stringprop) const
 		return "";
 	}
 }
-Texture* Control::GetProperty(PropTexture textureprop) const
+Texture* Control::GP(PropTexture textureprop) const
 {
 	switch (textureprop)
 	{

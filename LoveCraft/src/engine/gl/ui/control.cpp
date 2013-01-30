@@ -1,25 +1,23 @@
 #include "control.h"
 
-Control::Control() : m_texture(0), m_parent(0), m_name(""), m_pngBlend(true), m_position(Vector2i()), m_size(Vector2i()),
-	m_type(CTRLTYPE_NONE), m_visible(true), m_repeatTexture(true)
-{
-}
-
 Control::Control(Type type) : m_type(type), m_visible(true), m_name("default"),
-	m_parent(0), m_position(Vector2i()), m_size(Vector2i(100, 100)), m_texture(0), m_pngBlend(true), m_repeatTexture(true)
+	m_parent(0), m_position(Vector2i()), m_size(Vector2i(100, 100)), m_texture(0), 
+	m_blend(Control::CBLEND_PNG), m_repeatTexture(true), m_enabled(true)
 {
 }
-
-Control::Control(Type type, Control* parent, const Vector2i& position, const Vector2i& size, Texture* texture, const std::string& name) : 
-	m_type(type), m_visible(true), m_name(name), m_parent(parent), m_position(position), m_texture(texture),
-	m_size(size), m_pngBlend(true), m_repeatTexture(true)
-{
-}
-
 
 Control::~Control()
 {
 
+}
+
+void Control::PreInit(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, const string &name)
+{
+	m_parent = parent;
+	m_position = position;
+	m_size = size;
+	m_texture = texture;
+	m_name = name;
 }
 
 void Control::Render()
@@ -46,13 +44,12 @@ bool Control::MousePressEvents( int x, int y )
 	return false;
 }
 
+// =============================================================================
+
 void Control::SetProperty(PropBool boolprop, bool value)
 {
 	switch (boolprop)
 	{
-	case Control::PROPBOL_PNGBLEND:
-		m_pngBlend = value;
-		break;
 	case Control::PROPBOL_REPEATTEXTURE:
 		m_repeatTexture = value;
 		break;
@@ -82,7 +79,7 @@ void Control::SetProperty(PropVector2 vector2prop, Vector2i value)
 		break;
 	}
 }
-void Control::SetProperty(PropString stringprop, std::string value)
+void Control::SetProperty(PropString stringprop, string value)
 {
 	switch (stringprop)
 	{
@@ -106,13 +103,17 @@ void Control::SetProperty(PropTexture textureprop, Texture* value)
 		break;
 	}
 }
+void Control::SetBlend(BlendType btype)
+{
+	m_blend = btype;
+}
+
+// =============================================================================
 
 bool Control::GetProperty(PropBool boolprop) const
 {
 	switch (boolprop)
 	{
-	case Control::PROPBOL_PNGBLEND:
-		return m_pngBlend;
 	case Control::PROPBOL_REPEATTEXTURE:
 		return m_repeatTexture;
 	case Control::PROPBOL_VISIBLE:
@@ -137,7 +138,7 @@ Vector2i Control::GetProperty(PropVector2 vector2prop) const
 		return Vector2i();
 	}
 }
-std::string Control::GetProperty(PropString stringprop) const
+string Control::GetProperty(PropString stringprop) const
 {
 	switch (stringprop)
 	{
@@ -159,13 +160,26 @@ Texture* Control::GetProperty(PropTexture textureprop) const
 		return 0;
 	}
 }
+Control::BlendType Control::GetBlend() const
+{
+	return m_blend;
+}
+bool Control::IsBlend(BlendType btype) const
+{
+	return m_blend == btype;
+}
+
+// =============================================================================
 
 void Control::RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture)
 {
-	if (m_pngBlend)
+	if (m_blend != Control::CBLEND_NONE)
 	{
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
+		if (IsBlend(Control::CBLEND_PNG))
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		else if (IsBlend(Control::CBLEND_BLUR))
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	}
 	texture->Bind();
 	glLoadIdentity();
@@ -186,7 +200,7 @@ void Control::RenderSquare(const Vector2i& position, const Vector2i& size, Textu
 	glVertex2i(0, size.y);
 
 	glEnd();
-	if (m_pngBlend)
+	if (m_blend != Control::CBLEND_NONE)
 		glDisable(GL_BLEND);
 }
 

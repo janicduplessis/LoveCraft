@@ -122,9 +122,15 @@ public:
 		CTRLTYPE_LISTBOX,
 		CTRLTYPE_TEXTBOX
 	};
+	enum BlendType
+	{
+		CBLEND_NONE,
+		CBLEND_PNG,
+		CBLEND_BLUR
+	};
+
 	enum PropBool
 	{
-		PROPBOL_PNGBLEND,
 		PROPBOL_REPEATTEXTURE,
 		PROPBOL_VISIBLE,
 		PROPBOL_ENABLED,
@@ -153,10 +159,7 @@ public:
 		PROPTEXT_FONT_COLOR,
 		PROPTEXT_BAR
 	};
-	/**
-	* Constructeur par défaut
-	*/
-	Control();
+
 	/**
 	* Constructeur de la classe
 	*
@@ -164,19 +167,10 @@ public:
 	*/
 	Control(Type type);
 	/**
-	* Constructeur de la classe
-	*
-	* @param type		Le type du controle - Voir Enum Type
-	* @param parent		Le controle qui joue le rôle de parent
-	* @param position	La poisition initiale du controle par rapport a son parent
-	* @param size		La taille du controle
-	* @param name		Le nom du controle
-	*/
-	Control(Type type, Control* parent, const Vector2i& position, const Vector2i& size, Texture* texture, const std::string& name);
-	/**
 	* Destructeur par défaut
 	*/
 	virtual ~Control();
+	void PreInit(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, const string &name);
 	/**
 	* Dessine l'objet à l'écran
 	*/
@@ -193,8 +187,9 @@ public:
 	virtual Vector2i AbsolutePosition() const;
 	virtual void SetProperty(PropBool boolprop, bool value);
 	virtual void SetProperty(PropVector2 vector2prop, Vector2i value);
-	virtual void SetProperty(PropString stringprop, std::string value);
+	virtual void SetProperty(PropString stringprop, string value);
 	virtual void SetProperty(PropTexture textureprop, Texture* value);
+	virtual void SetBlend(BlendType btype);
 
 	virtual bool MousePressEvents( int x, int y );
 	virtual bool MouseReleaseEvents(int x, int y);
@@ -203,15 +198,17 @@ public:
 
 	virtual bool GetProperty(PropBool boolprop) const;
 	virtual Vector2i GetProperty(PropVector2 vector2prop) const;
-	virtual std::string GetProperty(PropString stringprop) const;
+	virtual string GetProperty(PropString stringprop) const;
 	virtual Texture* GetProperty(PropTexture textureprop) const;
+	virtual BlendType GetBlend() const;
+	virtual bool IsBlend(BlendType btype) const;
 
 protected:
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size);
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture);
-	std::string m_name;
+	string m_name;
 	Type m_type;
-	bool m_pngBlend;
+	BlendType m_blend;
 	bool m_repeatTexture;
 	bool m_visible;
 	bool m_enabled;

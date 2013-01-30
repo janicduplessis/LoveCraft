@@ -5,10 +5,6 @@
 //{
 //}
 
-Panel::Panel() : Control(CTRLTYPE_PANEL), IContainer(1)
-{
-}
-
 // Avant l'héritage multiple
 //Panel::Panel(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, 
 //			 const unsigned short controlnbr, const std::string& name) : Control(CTRLTYPE_PANEL, 
@@ -19,15 +15,18 @@ Panel::Panel() : Control(CTRLTYPE_PANEL), IContainer(1)
 //		m_controls[i] = 0;
 //}
 
-Panel::Panel(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, 
-			 const unsigned short controlnbr, const std::string& name) : Control(CTRLTYPE_PANEL, 
-			 parent, position, size, texture, name), IContainer(controlnbr)
+Panel::Panel() : Control(CTRLTYPE_PANEL), IContainer()
 {
 }
 
 Panel::~Panel()
 {
 
+}
+
+void Panel::Init(const unsigned short controlnbr)
+{
+	IContainer::Init(controlnbr);
 }
 
 // Avant l'héritage multiple

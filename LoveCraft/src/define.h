@@ -12,6 +12,8 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+using std::string;
+
 typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned int uint32;

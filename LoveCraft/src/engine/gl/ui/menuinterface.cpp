@@ -23,7 +23,9 @@ MenuInterface::~MenuInterface()
 void MenuInterface::Init(const ValuesInterface& val)
 {
 	//Fond d'écran
-	m_menu_screen = new Panel(0, Vector2i(), Vector2i(val.Width, val.Height), val.UITextures[CUSTIMAGE_MENU_BACKGROUND], 1, "menu_main");
+	m_menu_screen = new Panel();
+	m_menu_screen->PreInit(0, Vector2i(), Vector2i(val.Width, val.Height), val.UITextures[CUSTIMAGE_MENU_BACKGROUND], "menu_main");
+	m_menu_screen->Init(1);
 	m_menu_screen->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
 
 	//Loading screen
@@ -32,9 +34,11 @@ void MenuInterface::Init(const ValuesInterface& val)
 	m_menu_loading->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
 
 	//Paneau principal du menu
-	m_menu_panel = new Panel(m_menu_screen, 
+	m_menu_panel = new Panel();
+	m_menu_panel->PreInit(m_menu_screen, 
 		Vector2i(val.Width / 2 - MENU_PANEL_SIZE_X / 2, val.Height / 2 - MENU_PANEL_SIZE_Y / 2), 
-		Vector2i(MENU_PANEL_SIZE_X, MENU_PANEL_SIZE_Y), val.UITextures[CUSTIMAGE_MENU_MAIN_WINDOW], 2, MENU_PANEL_NAME);
+		Vector2i(MENU_PANEL_SIZE_X, MENU_PANEL_SIZE_Y), val.UITextures[CUSTIMAGE_MENU_MAIN_WINDOW], MENU_PANEL_NAME);
+	m_menu_panel->Init(2);
 	m_menu_screen->AddControl(m_menu_panel);
 	m_menu_panel->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
 
@@ -49,10 +53,12 @@ void MenuInterface::Init(const ValuesInterface& val)
 	m_menu_logo->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
 
 	//Panneau de controle utilisateur
-	m_menu_controls = new Panel(m_menu_panel,
+	m_menu_controls = new Panel();
+	m_menu_controls->PreInit(m_menu_panel,
 		Vector2i(controlPosX, controlPosX),
 		Vector2i(controlWidth, MENU_CONTROLS_SIZE_Y),
-		val.UITextures[CUSTIMAGE_MENU_MAIN_WINDOW], 3, "menu_controls");
+		val.UITextures[CUSTIMAGE_MENU_MAIN_WINDOW], "menu_controls");
+	m_menu_controls->Init(3);
 	m_menu_panel->AddControl(m_menu_controls);
 	m_menu_controls->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
 

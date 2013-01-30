@@ -170,34 +170,38 @@ GameInterface::~GameInterface()
 void GameInterface::Init(const ValuesGameInterface& val)
 {
 	// Écran
-	m_pnl_screen = new Panel(0, Vector2i(), Vector2i(val.Width, val.Height), 0, 1, "main");
+	m_pnl_screen = new Panel();
+	m_pnl_screen->PreInit(0, Vector2i(), Vector2i(val.Width, val.Height), 0, "main");
+	m_pnl_screen->Init(1);
 
 #pragma region Enfants de Main
 
 	// Zone de jeu
-	m_pnl_playscreen = new Panel(m_pnl_screen, 
+	m_pnl_playscreen = new Panel();
+	m_pnl_playscreen->PreInit(m_pnl_screen, 
 		Vector2i(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
 		Vector2i(m_pnl_screen->GetProperty(Control::PROPVCT2_SIZE).x - INTERFACE_SIDE_LEFT_WIDTH - INTERFACE_SIDE_RIGHT_WIDTH, 
 		m_pnl_screen->GetProperty(Control::PROPVCT2_SIZE).y - INTERFACE_BOTTOM_HEIGHT - INTERFACE_TOP_HEIGHT),
-		0, PNL_PLAYSCREEN_CONTROLS_NBR, "playscreen");
+		0, "playscreen");
+	m_pnl_playscreen->Init(PNL_PLAYSCREEN_CONTROLS_NBR);
 	m_pnl_screen->AddControl(m_pnl_playscreen);
 
 #pragma region Enfants de Playscreen
 
 	// Panel welcome
-	m_pnl_welcome = new Panel(m_pnl_playscreen, Vector2i(m_pnl_playscreen->GetProperty(Control::PROPVCT2_SIZE).x / 2 - 300, 
-		m_pnl_playscreen->GetProperty(Control::PROPVCT2_SIZE).y - 300), Vector2i(600, 200), val.UITextures[CUSTIMAGE_MENU_BACKGROUND],
-		2, "welcomepanel");
-	m_pnl_playscreen->AddControl(m_pnl_welcome);
-	m_pnl_welcome->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
+	//m_pnl_welcome = new Panel(m_pnl_playscreen, Vector2i(m_pnl_playscreen->GetProperty(Control::PROPVCT2_SIZE).x / 2 - 300, 
+	//	m_pnl_playscreen->GetProperty(Control::PROPVCT2_SIZE).y - 300), Vector2i(600, 200), val.UITextures[CUSTIMAGE_MENU_BACKGROUND],
+	//	2, "welcomepanel");
+	//m_pnl_playscreen->AddControl(m_pnl_welcome);
+	//m_pnl_welcome->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
 
-	m_pb_welcomeface = new PictureBox(m_pnl_welcome, Vector2i(), Vector2i(200, 200), val.UITextures[CUSTIMAGE_WELCOME_FACE], "pb_welcome");
-	m_pnl_welcome->AddControl(m_pb_welcomeface);
-	m_pb_welcomeface->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
+	//m_pb_welcomeface = new PictureBox(m_pnl_welcome, Vector2i(), Vector2i(200, 200), val.UITextures[CUSTIMAGE_WELCOME_FACE], "pb_welcome");
+	//m_pnl_welcome->AddControl(m_pb_welcomeface);
+	//m_pb_welcomeface->SetProperty(Control::PROPBOL_REPEATTEXTURE, false);
 
-	m_lbl_welcomemessage = new Label(m_pnl_welcome, Vector2i(), val.FontTextures[TEXTCOLOR_WHITE], "Welcome to the world of Cthulhu", 
-		Label::TEXTDOCK_MIDDLERIGHT, false, 32, 25, 0.5f, Vector2f(), "lblwelcome");
-	m_pnl_welcome->AddControl(m_lbl_welcomemessage);
+	//m_lbl_welcomemessage = new Label(m_pnl_welcome, Vector2i(), val.FontTextures[TEXTCOLOR_WHITE], "Welcome to the world of Cthulhu", 
+	//	Label::TEXTDOCK_MIDDLERIGHT, false, 32, 25, 0.5f, Vector2f(), "lblwelcome");
+	//m_pnl_welcome->AddControl(m_lbl_welcomemessage);
 
 	// Informations
 	m_lb_infos = new ListBox(m_pnl_playscreen, Vector2i(5, m_pnl_playscreen->GetProperty(Control::PROPVCT2_SIZE).y - LBL_GENERIC_CHAR_H*6 - 26*12), 200, val.FontTextures[TEXTCOLOR_RED], 
@@ -263,10 +267,12 @@ void GameInterface::Init(const ValuesGameInterface& val)
 	m_txb_console->SetProperty(Control::PROPBOL_VISIBLE, false);
 	m_txb_console->SetFocus(false);
 	// Frame portrait
-	m_pnl_portrait = new Panel(m_pnl_playscreen,
+	m_pnl_portrait = new Panel();
+	m_pnl_portrait->PreInit(m_pnl_playscreen,
 		Vector2i(PNL_PORTRAIT_POSITION_X, PNL_PORTRAIT_POSITION_Y),
 		Vector2i(PNL_PORTRAIT_SIZE_W, PNL_PORTRAIT_SIZE_H),
-		val.UITextures[CUSTIMAGE_PORTRAIT_FRAME], PNL_PORTRAIT_CONTROLS_NBR, PNL_PORTRAIT_NAME);
+		val.UITextures[CUSTIMAGE_PORTRAIT_FRAME], PNL_PORTRAIT_NAME);
+	m_pnl_portrait->Init(PNL_PORTRAIT_CONTROLS_NBR);
 	m_pnl_playscreen->AddControl(m_pnl_portrait);
 
 	m_lbl_currentBlockType = new Label(m_pnl_playscreen, Vector2i(m_pnl_portrait->GetProperty(Panel::PROPVCT2_POSITION).x,
@@ -313,10 +319,12 @@ void GameInterface::Init(const ValuesGameInterface& val)
 	m_pnl_portrait->AddControl(m_lbl_exp);
 
 	// Image du joueur
-	m_pnl_playerImage = new Panel(m_pnl_portrait, 
+	m_pnl_playerImage = new Panel();
+	m_pnl_playerImage->PreInit(m_pnl_portrait, 
 		Vector2i(PB_PORTRAIT_POSITION_X, PB_PORTRAIT_POSITION_Y),
 		Vector2i(PB_PORTRAIT_SIZE_W, PB_PORTRAIT_SIZE_H),
-		val.UITextures[CUSTIMAGE_PORTRAIT_MALE], 1, PB_PORTRAIT_NAME);
+		val.UITextures[CUSTIMAGE_PORTRAIT_MALE], PB_PORTRAIT_NAME);
+	m_pnl_playerImage->Init(1);
 	m_pnl_portrait->AddControl(m_pnl_playerImage);
 
 #pragma region Enfants de m_pnl_playerImage
@@ -367,8 +375,10 @@ void GameInterface::Init(const ValuesGameInterface& val)
 #pragma endregion
 
 	//Heure
-	m_pnl_time = new Panel(m_pnl_playscreen, Vector2i(m_pnl_playscreen->GetProperty(Panel::PROPVCT2_SIZE).x - 128, m_pnl_playscreen->GetProperty(Panel::PROPVCT2_SIZE).y - 64), 
-		Vector2i(128, 64), val.UITextures[CUSTIMAGE_CLOCK_BG], 1, "clock");
+	m_pnl_time = new Panel();
+	m_pnl_time->PreInit(m_pnl_playscreen, Vector2i(m_pnl_playscreen->GetProperty(Panel::PROPVCT2_SIZE).x - 128, m_pnl_playscreen->GetProperty(Panel::PROPVCT2_SIZE).y - 64), 
+		Vector2i(128, 64), val.UITextures[CUSTIMAGE_CLOCK_BG], "clock");
+	m_pnl_time->Init(1);
 	m_pnl_playscreen->AddControl(m_pnl_time);
 
 #pragma region Enfants de m_pnl_time

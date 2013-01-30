@@ -1,7 +1,17 @@
 #include "icontainer.h"
 
 
-IContainer::IContainer(unsigned short capacity) : m_ctrlNbr(0), m_capacity(capacity)
+IContainer::IContainer() : m_ctrlNbr(0), m_capacity(0)
+{
+
+}
+
+IContainer::~IContainer()
+{
+	delete m_controls;
+}
+
+void IContainer::Init(unsigned short capacity)
 {
 	if (capacity != 0)
 	{
@@ -10,11 +20,6 @@ IContainer::IContainer(unsigned short capacity) : m_ctrlNbr(0), m_capacity(capac
 			m_controls[i] = 0;
 	}
 	else m_controls = 0;
-}
-
-IContainer::~IContainer()
-{
-	delete m_controls;
 }
 
 void IContainer::AddControl(Control* control)

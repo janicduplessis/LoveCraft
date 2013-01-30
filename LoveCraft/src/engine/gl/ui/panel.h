@@ -3,14 +3,13 @@
 
 #include "control.h"
 #include "icontainer.h"
-#include "util/array.h"
 
 class Panel : public Control, public IContainer
 {
 public:
 	Panel();
-	Panel(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, const unsigned short controlnbr, const std::string& name);
 	~Panel();
+	void Init(const unsigned short controlnbr);
 	// Avant l'héritage multiple
 	//void AddControl(Control* control);
 	void Render();

@@ -12,8 +12,9 @@
 class IContainer
 {
 public:
-	IContainer(unsigned short capacity);
+	IContainer();
 	virtual ~IContainer();
+	virtual void Init(unsigned short capacity);
 	virtual void AddControl(Control* control);
 	virtual Control* GetControlById(unsigned short index) const;
 	virtual Control* GetControlByName(const std::string& name) const;

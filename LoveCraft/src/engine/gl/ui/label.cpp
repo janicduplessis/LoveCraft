@@ -1,21 +1,19 @@
 #include "label.h"
 
 
-Label::Label() : Control(CTRLTYPE_LABEL), m_message("Label"), m_docking(TEXTDOCK_NONE), m_italic(false),
-	m_fontHeight(12), m_fontWidth(12), m_offset(Vector2f()), m_charInterval(0.66f), m_newPosition(Vector2f())
+Label::Label() : Control(CTRLTYPE_LABEL), IText(), m_docking(Label::TEXTDOCK_NONE), m_offset(Vector2f()),
+	m_newPosition(Vector2f())
 {
-}
-
-Label::Label(Control* parent, const Vector2i& position, Texture* color, const std::string& message, Docking dock, 
-			 bool italic, float charHeight, float charWidth, float charinterval, const Vector2f& offset, const std::string& name) :
-Control(CTRLTYPE_LABEL, parent, position, Vector2i(), color, name), m_message(message), m_docking(dock), m_italic(italic), 
-	m_fontWidth(charWidth), m_fontHeight(charHeight), m_charInterval(charinterval), m_offset(offset)
-{
-
 }
 
 Label::~Label()
 {
+}
+
+void Label::Init(Docking dock, const Vector2f& offset)
+{
+	m_docking = dock;
+	m_offset = offset;
 }
 
 void Label::SetProperty(PropBool boolprop, bool value)
@@ -60,7 +58,7 @@ void Label::SetProperty(PropVector2 vector2prop, Vector2i value)
 		break;
 	}
 }
-void Label::SetProperty(PropString stringprop, std::string value)
+void Label::SetProperty(PropString stringprop, string value)
 {
 	switch (stringprop)
 	{
@@ -152,7 +150,7 @@ Vector2i Label::GetProperty(PropVector2 vector2prop) const
 		return Vector2i();
 	}
 }
-std::string Label::GetProperty(PropString stringprop) const
+string Label::GetProperty(PropString stringprop) const
 {
 	switch (stringprop)
 	{

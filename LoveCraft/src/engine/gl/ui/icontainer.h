@@ -14,7 +14,7 @@ class IContainer : public Structure
 public:
 	IContainer();
 	virtual ~IContainer();
-	virtual void Init(unsigned short capacity);
+	virtual void ContainInit(unsigned short capacity);
 	virtual void AddControl(Control* control);
 	virtual Control* GetControlById(unsigned short index) const;
 	virtual Control* GetControlByName(const string& name) const;

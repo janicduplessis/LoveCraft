@@ -12,7 +12,7 @@ class Button : public Control, public IText
 public:
 	Button();
 	~Button();
-	void Init(string &text, Texture* fontColor);
+	void Init();
 
 	/**
 	 * Évenement On Click trigger si le bouton est cliqué

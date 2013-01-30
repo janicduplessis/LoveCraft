@@ -6,14 +6,13 @@
 #include "button.h"
 #include <list>
 
-class ListBox : public Control
+class ListBox : public Control, public IText
 {
 public:
 	ListBox();
-	ListBox(Control* parent, const Vector2i& position, float lineWidth, Texture* textMainColor, Texture* background, unsigned short linenbr,
-		short linegap, float charwidth, float charheight, float charinterval, bool scrollable, const std::string& name, const Vector2i& offset = Vector2i());
 	~ListBox();
-	void Init(unsigned short lineNbr, short gap, bool scrollable, bool updownbuttons = false);
+	void Init(unsigned short lineNbr, short gap, Vector2i offset, bool scrollable);
+	void Init(unsigned short lineNbr, short gap, Vector2i offset, bool scrollable, Texture* uptext, Texture* downtext);
 	void SetLine(unsigned short line, const std::string& message);
 	void Render();
 	void AddLine(const std::string& message);

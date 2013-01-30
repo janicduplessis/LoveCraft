@@ -1,6 +1,6 @@
 #include "textbox.h"
 
-Textbox::Textbox() : Control(CTRLTYPE_TEXTBOX), IText()
+Textbox::Textbox() : Control(CTRLTYPE_TEXTBOX), IText(), m_hasFocus(false)
 {
 	m_label = new Label();
 }
@@ -12,7 +12,7 @@ Textbox::~Textbox()
 
 void Textbox::Init(Vector2i &offset)
 {
-	m_label->PreInit(this, Vector2i((int)offset.x, (int)offset.y), Vector2i(), 0, "message");
+	m_label->CtrlInit(this, Vector2i((int)offset.x, (int)offset.y), Vector2i(), 0, "message");
 	m_label->TextInit("", m_fontColor, m_italic, m_charHeight, m_charWidth, m_charInterval);
 	m_label->Init(Label::TEXTDOCK_MIDDLELEFT, Vector2f(offset.x, offset.y));
 }

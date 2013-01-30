@@ -1,7 +1,7 @@
 #include "itext.h"
 
 
-IText::IText() : Structure(), m_message("message"), m_italic(false), m_charHeight(0.f), 
+IText::IText() : Structure(), m_message(""), m_italic(false), m_charHeight(0.f), 
 	m_charWidth(0.f), m_charInterval(0.f), m_fontColor(0)
 {
 }

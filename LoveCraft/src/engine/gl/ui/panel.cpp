@@ -24,9 +24,9 @@ Panel::~Panel()
 
 }
 
-void Panel::Init(const unsigned short controlnbr)
+void Panel::Init()
 {
-	IContainer::Init(controlnbr);
+	
 }
 
 // Avant l'héritage multiple

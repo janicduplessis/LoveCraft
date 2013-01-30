@@ -171,7 +171,7 @@ public:
 	* Destructeur par défaut
 	*/
 	virtual ~Control();
-	void PreInit(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, const string &name);
+	void CtrlInit(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, const string &name);
 	/**
 	* Dessine l'objet à l'écran
 	*/

@@ -11,7 +11,7 @@ IContainer::~IContainer()
 	delete m_controls;
 }
 
-void IContainer::Init(unsigned short capacity)
+void IContainer::ContainInit(unsigned short capacity)
 {
 	if (!m_initialized)
 	{

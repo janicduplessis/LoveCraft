@@ -9,7 +9,7 @@ class Panel : public Control, public IContainer
 public:
 	Panel();
 	~Panel();
-	void Init(const unsigned short controlnbr);
+	void Init();
 	// Avant l'héritage multiple
 	//void AddControl(Control* control);
 	void Render();

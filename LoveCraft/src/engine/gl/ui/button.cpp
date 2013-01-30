@@ -12,9 +12,9 @@ Button::~Button()
 
 void Button::Init()
 {
-	m_label->PreInit(this, Vector2i(), Vector2i(), m_texture, "label");
+	m_label->CtrlInit(this, Vector2i(), Vector2i(), 0, "label");
 	m_label->Init(Label::TEXTDOCK_MIDDLECENTER, Vector2f());
-	m_label->TextInit(text, false, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
+	m_label->TextInit(m_message, m_fontColor, m_italic, m_charWidth, m_charHeight, m_charInterval);
 }
 
 void Button::Render()

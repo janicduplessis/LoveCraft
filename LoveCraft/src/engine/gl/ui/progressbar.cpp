@@ -52,10 +52,13 @@ void ProgressBar::Render()
 }
 void ProgressBar::RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture, bool repeat)
 {
-	if (blalba)
+	if (m_blend != Control::CBLEND_NONE)
 	{
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
+		if (IsBlend(Control::CBLEND_PNG))
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		else if (IsBlend(Control::CBLEND_BLUR))
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	}
 	texture->Bind();
 	glLoadIdentity();
@@ -79,7 +82,8 @@ void ProgressBar::RenderSquare(const Vector2i& position, const Vector2i& size, T
 	glVertex2i(0, size.y);
 
 	glEnd();
-	if (m_pngBlend)
+
+	if (m_blend != Control::CBLEND_NONE)
 		glDisable(GL_BLEND);
 }
 

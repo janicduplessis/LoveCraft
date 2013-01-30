@@ -2,7 +2,7 @@
 
 Control::Control(Type type) : Structure(), m_type(type), m_visible(true), m_name("default"),
 	m_parent(0), m_position(Vector2i()), m_size(Vector2i(100, 100)), m_texture(0), 
-	m_blend(Control::CBLEND_PNG), m_repeatTexture(true), m_enabled(true)
+	m_blend(Control::CBLEND_PNG), m_repeatTexture(false), m_enabled(true)
 {
 }
 
@@ -11,7 +11,7 @@ Control::~Control()
 
 }
 
-void Control::PreInit(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, const string &name)
+void Control::CtrlInit(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, const string &name)
 {
 	if (!m_initialized)
 	{

@@ -15,8 +15,8 @@ public:
 	void Init(unsigned short lineNbr, short gap, Vector2i offset, bool scrollable, Texture* uptext, Texture* downtext);
 	void SetLine(unsigned short line, const std::string& message);
 	void Render();
-	void AddLine(const std::string& message);
-	std::string GetLine(int index);
+	void AddLine(const string& message);
+	string GetLine(int index);
 	ListBox& operator<<(const std::string& text);
 	void Update();
 	void Scroll(int lines);
@@ -26,7 +26,7 @@ public:
 	virtual bool MouseReleaseEvents(int x, int y);
 private:
 	Label** m_lines;
-	typedef std::list<std::string> StringList;
+	typedef std::list<string> StringList;
 	StringList m_messages;
 	bool m_updownButtons;
 	Button* m_upArrow;

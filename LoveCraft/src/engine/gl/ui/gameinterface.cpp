@@ -14,7 +14,7 @@ void GameInterface::Update(const ValuesGameInterface& val)
 #pragma region Proprietes des controles
 
 	// Update le picturebox du current blocktype
-	m_pb_currentBlockType->SetTexture(val.BlocTextures->GetTexture(
+	m_pb_currentBlockType->SP(Control::PROPTEXT_BACKGROUND, val.BlocTextures->GetTexture(
 		Info::Get().GetBlocInfo(val.CurrentBlocType)->GetTextureIndex(0)));
 	//Affiche ou cache les infos s'il y a un changement
 	if (m_lb_infos->GP(Control::PROPBOL_VISIBLE) && !Info::Get().Options().GetOptInfos())
@@ -243,12 +243,11 @@ void GameInterface::Init(const ValuesGameInterface& val)
 	m_lb_console = new ListBox();
 	m_lb_console->CtrlInit(m_pnl_playscreen, 
 		Vector2i(m_pnl_playscreen->GP(Control::PROPVCT2_SIZE).x - 64 - (int)LB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H + 5), 
-		Vector2i(), val.UITextures[CUSTIMAGE_CONSOLE_BACK], LB_CONSOLE_NAME);
+		Vector2i(LB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H), val.UITextures[CUSTIMAGE_CONSOLE_BACK], LB_CONSOLE_NAME);
 	m_lb_console->TextInit("", val.FontTextures[TEXTCOLOR_YELLOW], false, LB_CONSOLE_CHAR_H, LB_CONSOLE_CHAR_W, LB_CONSOLE_CHAR_I);
 	m_lb_console->Init(LB_CONSOLE_LINE_NUMBER, LB_CONSOLE_LINE_GAP, Vector2i(LB_CONSOLE_BODER_OFFSET_S, LB_CONSOLE_BODER_OFFSET_B),
 		true, val.UITextures[CUSTIMAGE_ARROWBUTTON_UP], val.UITextures[CUSTIMAGE_ARROWBUTTON_DOWN]);
 	m_pnl_playscreen->AddControl(m_lb_console);
-	m_lb_console->SP(Control::PROPBOL_REPEATTEXTURE, false);
 	Info::Get().SetConsole(m_lb_console);
 	//Texbox de la console
 	m_txb_console = new Textbox();
@@ -259,7 +258,6 @@ void GameInterface::Init(const ValuesGameInterface& val)
 		TXB_CONSOLE_SIZE_H * 0.75f, TXB_CONSOLE_CHAR_I);
 	m_txb_console->Init(Vector2i(TXB_CONSOLE_OFFSET_X, TXB_CONSOLE_OFFSET_Y));
 	m_pnl_playscreen->AddControl(m_txb_console);
-	m_txb_console->SP(Control::PROPBOL_REPEATTEXTURE, false);
 	m_txb_console->SP(Control::PROPBOL_VISIBLE, false);
 	// Frame portrait
 	m_pnl_portrait = new Panel();
@@ -271,37 +269,28 @@ void GameInterface::Init(const ValuesGameInterface& val)
 	m_pnl_portrait->Init();
 	m_pnl_playscreen->AddControl(m_pnl_portrait);
 
-	m_lbl_currentBlockType = new Label();
-	m_lbl_currentBlockType->TextInit("Bloc : ", val.FontTextures[TEXTCOLOR_BLUE], false, 
-		LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
-	m_lbl_currentBlockType->Init(Label::TEXTDOCK_NONE, Vector2f());
-	m_pb_currentBlockType = new PictureBox(m_pnl_playscreen, Vector2i(m_lbl_currentBlockType->GP(Panel::PROPVCT2_POSITION).x + 84, m_lbl_currentBlockType->GP(Panel::PROPVCT2_POSITION).y), Vector2i(20,20), 
-		val.BlocTextures->GetTexture(val.CurrentBlocType - 1), "pbcurbloc");
-	m_pnl_playscreen->AddControl(m_lbl_currentBlockType);
-	m_pnl_playscreen->AddControl(m_pb_currentBlockType);
-
 #pragma region Enfants pnl portrait
 
 	// Barre de vie
-	m_pgb_health = new ProgressBar(m_pnl_portrait,
-		Vector2i(PGB_HEALTH_POSITION_X, PGB_HEALTH_POSITION_Y),
-		Vector2i(PGB_HEALTH_SIZE_W, PGB_HEALTH_SIZE_H),
-		val.UITextures[CUSTIMAGE_PGBTEXT_HEALTH], val.UITextures[CUSTIMAGE_PGBTEXT_HEALTH_BACK],
-		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_HEALTH_BACKGROUND, PGB_HEALTH_BORDER_SIZE, PGB_HEALTH_NAME);
+	m_pgb_health = new ProgressBar();
+	m_pgb_health->CtrlInit(m_pnl_portrait, Vector2i(PGB_HEALTH_POSITION_X, PGB_HEALTH_POSITION_Y),
+		Vector2i(PGB_HEALTH_SIZE_W, PGB_HEALTH_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_HEALTH_BACK], PGB_HEALTH_NAME);
+	m_pgb_health->Init(ProgressBar::BARMODE_HORIZONTAL_LTR, val.UITextures[CUSTIMAGE_PGBTEXT_HEALTH],
+		PGB_HEALTH_BACKGROUND, PGB_HEALTH_BORDER_SIZE);
 	m_pnl_portrait->AddControl(m_pgb_health);
 	// Barre de mana
-	m_pgb_mana = new ProgressBar(m_pnl_portrait,
-		Vector2i(PGB_MANA_POSITION_X, PGB_MANA_POSITION_Y),
-		Vector2i(PGB_MANA_SIZE_W, PGB_MANA_SIZE_H),
-		val.UITextures[CUSTIMAGE_PGBTEXT_MANA], val.UITextures[CUSTIMAGE_PGBTEXT_MANA_BACK],
-		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_MANA_BACKGROUND, PGB_MANA_BORDER_SIZE, PGB_MANA_NAME);
+	m_pgb_mana = new ProgressBar();
+	m_pgb_mana->CtrlInit(m_pnl_portrait, Vector2i(PGB_MANA_POSITION_X, PGB_MANA_POSITION_Y),
+		Vector2i(PGB_MANA_SIZE_W, PGB_MANA_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_MANA_BACK], PGB_MANA_NAME);
+	m_pgb_mana->Init(ProgressBar::BARMODE_HORIZONTAL_LTR, val.UITextures[CUSTIMAGE_PGBTEXT_MANA],
+		PGB_MANA_BACKGROUND, PGB_MANA_BORDER_SIZE);
 	m_pnl_portrait->AddControl(m_pgb_mana);
 	// Barre d'expérience
-	m_pgb_exp = new ProgressBar(m_pnl_portrait,
-		Vector2i(PGB_EXP_POSITION_X, PGB_EXP_POSITION_Y),
-		Vector2i(PGB_EXP_SIZE_W, PGB_EXP_SIZE_H),
-		val.UITextures[CUSTIMAGE_PGBTEXT_EXP], val.UITextures[CUSTIMAGE_PGBTEXT_EXP_BACK],
-		ProgressBar::BARMODE_HORIZONTAL_LTR, PGB_EXP_BACKGROUND, PGB_EXP_BORDER_SIZE, PGB_EXP_NAME);
+	m_pgb_exp = new ProgressBar();
+	m_pgb_exp->CtrlInit(m_pnl_portrait, Vector2i(PGB_EXP_POSITION_X, PGB_EXP_POSITION_Y),
+		Vector2i(PGB_EXP_SIZE_W, PGB_EXP_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_EXP_BACK], PGB_EXP_NAME);
+	m_pgb_exp->Init(ProgressBar::BARMODE_HORIZONTAL_LTR, val.UITextures[CUSTIMAGE_PGBTEXT_EXP],
+		PGB_EXP_BACKGROUND, PGB_EXP_BORDER_SIZE);
 	m_pnl_portrait->AddControl(m_pgb_exp);
 	m_lbl_health = new Label();
 	m_lbl_health->CtrlInit(m_pnl_portrait, Vector2i(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), Vector2i(), 0, LBL_HEALTH_NAME);
@@ -341,14 +330,29 @@ void GameInterface::Init(const ValuesGameInterface& val)
 
 #pragma endregion
 
+	m_lbl_currentBlockType = new Label();
+	m_lbl_currentBlockType->CtrlInit(m_pnl_playscreen, m_pnl_playerImage->GP(Control::PROPVCT2_POSITION) + Vector2i(0, 200), 
+		Vector2i(), 0, "lbl_blocinfo");
+	m_lbl_currentBlockType->TextInit("Bloc : ", val.FontTextures[TEXTCOLOR_BLUE], false, 
+		LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
+	m_lbl_currentBlockType->Init(Label::TEXTDOCK_NONE, Vector2f());
+	m_pb_currentBlockType = new PictureBox();
+	m_pb_currentBlockType->CtrlInit(m_pnl_playscreen, 
+		Vector2i(m_lbl_currentBlockType->GP(Panel::PROPVCT2_POSITION).x + 84, 
+		m_lbl_currentBlockType->GP(Panel::PROPVCT2_POSITION).y),
+		Vector2i(40,40), 0, "pbcurbloc");
+	m_pb_currentBlockType->Init();
+	m_pnl_playscreen->AddControl(m_lbl_currentBlockType);
+	m_pnl_playscreen->AddControl(m_pb_currentBlockType);
+
 #pragma endregion
 
 	//Barre d'énergie verticale
-	m_pgb_energy = new ProgressBar(m_pnl_playscreen,
-		Vector2i(PGB_ENERGY_POSITION_X, PGB_ENERGY_POSITION_Y),
-		Vector2i(PGB_ENERGY_SIZE_W, PGB_ENERGY_SIZE_H),
-		val.UITextures[CUSTIMAGE_PGBTEXT_ENERGY], val.UITextures[CUSTIMAGE_PGBTEXT_ENERGY_BACK],
-		ProgressBar::BARMODE_VERTICAL_DTU, PGB_ENERGY_BACKGROUND, PGB_ENERGY_BORDER_SIZE, PGB_ENERGY_NAME);
+	m_pgb_energy = new ProgressBar();
+	m_pgb_energy->CtrlInit(m_pnl_playscreen, Vector2i(PGB_ENERGY_POSITION_X, PGB_ENERGY_POSITION_Y),
+		Vector2i(PGB_ENERGY_SIZE_W, PGB_ENERGY_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_ENERGY_BACK], PGB_ENERGY_NAME);
+	m_pgb_energy->Init(ProgressBar::BARMODE_VERTICAL_DTU, val.UITextures[CUSTIMAGE_PGBTEXT_ENERGY],
+		PGB_ENERGY_BACKGROUND, PGB_ENERGY_BORDER_SIZE);
 	m_pnl_playscreen->AddControl(m_pgb_energy);
 	//Label d'énergie
 	m_lbl_energy = new Label();

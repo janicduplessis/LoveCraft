@@ -11,7 +11,7 @@ IText::~IText()
 {
 }
 
-void IText::TextInit(const string& message, Texture* color, bool italic, float charHeight, float charWidth, float charinterval)
+void IText::TextInit(string message, Texture* color, bool italic, float charHeight, float charWidth, float charinterval)
 {
 	if (!m_initialized)
 	{

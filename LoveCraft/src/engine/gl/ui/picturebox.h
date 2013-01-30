@@ -12,11 +12,10 @@ public:
 		IMAGEFORMAT_FIT,
 		IMAGEFORMAT_TILE
 	};
-	PictureBox(Control* parent, Vector2i &position, Vector2i &size, Texture* image, const std::string& name);
-	
-	void SetTexture(Texture* tex);
-
+	PictureBox();
 	~PictureBox();
+
+	void Init();
 };
 
 #endif

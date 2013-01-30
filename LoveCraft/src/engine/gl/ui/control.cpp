@@ -11,7 +11,7 @@ Control::~Control()
 
 }
 
-void Control::CtrlInit(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, const string &name)
+void Control::CtrlInit(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, string name)
 {
 	if (!m_initialized)
 	{

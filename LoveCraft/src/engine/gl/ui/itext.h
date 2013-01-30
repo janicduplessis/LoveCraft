@@ -9,7 +9,7 @@ class IText : public Structure
 public:
 	IText();
 	virtual ~IText();
-	virtual void TextInit(const string& message, Texture* color, bool italic, float charHeight, float charWidth, float charinterval);
+	virtual void TextInit(string message, Texture* color, bool italic, float charHeight, float charWidth, float charinterval);
 protected:
 	string m_message;
 	Texture* m_fontColor;

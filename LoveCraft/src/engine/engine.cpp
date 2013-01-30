@@ -363,10 +363,9 @@ void Engine::LoadMenuResource()
 	m_menuUI.Init(m_valuesMenuInterface);
 
 	//Cursor
-	m_pb_cursor = new PictureBox(0, Vector2i(), Vector2i(50, 50), m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], "pb_cursor");
-	//Appel singulier du cursor afin qu'il soit dessiné par dessus tous les éléments de l'interface
-	//m_pnl_screen->AddControl(m_pb_cursor);
-	m_pb_cursor->SP(Control::PROPBOL_REPEATTEXTURE, false);
+	m_pb_cursor = new PictureBox();
+	m_pb_cursor->CtrlInit(0, Vector2i(), Vector2i(50, 50), m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], "pb_cursor");
+	m_pb_cursor->Init();
 	m_menuUI.m_menu_fullscreen->OnClick.Attach(this, &Engine::OnClick);
 	m_menuUI.m_menu_start->OnClick.Attach(this, &Engine::OnClick);
 	m_menuUI.m_menu_close->OnClick.Attach(this, &Engine::OnClick);
@@ -500,8 +499,8 @@ void Engine::Update(float elapsedTime)
 	if (m_clickTimerOn)
 		m_clickTimer += elapsedTime;
 
-	if (gameTime > 45)
-		m_gameUI.m_pnl_welcome->SP(Control::PROPBOL_VISIBLE, false);
+	//if (gameTime > 45)
+	//	m_gameUI.m_pnl_welcome->SP(Control::PROPBOL_VISIBLE, false);
 
 #pragma endregion
 

@@ -211,7 +211,7 @@ void Label::Render()
 		{
 			//Dessine le fond du label s'il y en a un
 			RenderSquare(Vector2i(m_newPosition.x, m_newPosition.y), 
-				Vector2i(m_message.length() * m_charWidth * m_charInterval));
+				Vector2i(m_message.length() * m_charWidth * m_charInterval), m_texture);
 		}
 		if (m_fontColor)
 		{
@@ -219,7 +219,7 @@ void Label::Render()
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
-			m_texture->Bind();
+			m_fontColor->Bind();
 			glLoadIdentity();
 
 			glTranslatef(m_newPosition.x, m_newPosition.y, 0);

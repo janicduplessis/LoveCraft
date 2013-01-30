@@ -37,11 +37,12 @@ void ListBox::Init(unsigned short lineNbr, short gap, Vector2i offset, bool scro
 	std::ostringstream ss;
 	for (unsigned short i = 0; i < m_lineNbr; i++)
 	{
+		m_lines[i] = new Label();
 		ss << m_name << "_line" << (m_lineNbr - i - 1);
 		m_lines[i]->CtrlInit(this, Vector2i(offset.x, (m_charHeight + m_gapBetLines) * i + offset.y), 
 			Vector2i(), 0, ss.str());
 		m_lines[i]->TextInit("", m_fontColor, m_italic, m_charHeight, m_charWidth, m_charInterval);
-		m_lines[i]->Init(Label::TEXTDOCK_MIDDLELEFT, Vector2f(offset.x, offset.y));
+		m_lines[i]->Init(Label::TEXTDOCK_NONE, Vector2f(offset.x, offset.y));
 		ss.str("");
 	}
 	if (m_updownButtons)

@@ -135,13 +135,21 @@ public:
 		PROPBOL_REPEATTEXTURE,
 		PROPBOL_VISIBLE,
 		PROPBOL_ENABLED,
-		PROPBOL_ITALIC
+		PROPBOL_ITALIC,
+		PROPBOL_SHOWBACKGROUND
 	};
 	enum PropFloat
 	{
 		PROPFLT_FONTW,
 		PROPFLT_FONTH,
-		PROPFLT_FONTI
+		PROPFLT_FONTI,
+		PROPFLT_BARMIN,
+		PROPFLT_BARMAX
+	};
+	enum PropUShort
+	{
+		PROPUSHRT_LINEGAP,
+		PROPUSHRT_BORDERSIZE
 	};
 	enum PropVector2
 	{
@@ -171,7 +179,7 @@ public:
 	* Destructeur par défaut
 	*/
 	virtual ~Control();
-	void CtrlInit(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, const string &name);
+	void CtrlInit(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, string name);
 	/**
 	* Dessine l'objet à l'écran
 	*/

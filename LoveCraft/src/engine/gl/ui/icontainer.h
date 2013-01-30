@@ -17,12 +17,9 @@ public:
 	virtual void AddControl(Control* control);
 	virtual Control* GetControlById(unsigned short index) const;
 	virtual Control* GetControlByName(const std::string& name) const;
-	virtual IContainer& operator=(const IContainer& p);
-	virtual Vector2i AbsolutePosition() = 0;
-	virtual Vector2i Size() = 0;
 protected:
 	void RenderAllControls();
-	(Control*)* m_controls;
+	Control** m_controls;
 	unsigned short m_capacity;
 	unsigned short m_ctrlNbr;
 };

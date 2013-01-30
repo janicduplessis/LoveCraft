@@ -14,6 +14,7 @@ IContainer::IContainer(unsigned short capacity) : m_ctrlNbr(0), m_capacity(capac
 
 IContainer::~IContainer()
 {
+	delete m_controls;
 }
 
 void IContainer::AddControl(Control* control)
@@ -38,6 +39,9 @@ Control* IContainer::GetControlByName(const std::string& name) const
 			break;
 		}
 	}
+	// On s'assure que le controle existe
+	if (ctrl == 0)
+		assert(false);
 	return ctrl;
 }
 
@@ -49,13 +53,4 @@ void IContainer::RenderAllControls()
 		for (unsigned short i = 0; i < m_ctrlNbr; i++)
 			m_controls[i]->Render();
 	}
-}
-
-IContainer& IContainer::operator=(const IContainer& p)
-{
-	m_capacity = p.m_capacity;
-	m_ctrlNbr = m_ctrlNbr;
-	m_controls = p.m_controls;
-
-	return *this;
 }

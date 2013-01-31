@@ -1,6 +1,6 @@
 #include "control.h"
 
-Control::Control(Type type) : Structure(), m_type(type), m_visible(true), m_name("default"),
+Control::Control(Type type) : m_type(type), m_visible(true), m_name("default"),
 	m_parent(0), m_position(Vector2i()), m_size(Vector2i(100, 100)), m_texture(0), 
 	m_blend(Control::CBLEND_PNG), m_repeatTexture(false), m_enabled(true)
 {
@@ -13,15 +13,11 @@ Control::~Control()
 
 void Control::CtrlInit(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, string name)
 {
-	if (!m_initialized)
-	{
-		m_parent = parent;
-		m_position = position;
-		m_size = size;
-		m_texture = texture;
-		m_name = name;
-		Structure::Init();
-	}
+	m_parent = parent;
+	m_position = position;
+	m_size = size;
+	m_texture = texture;
+	m_name = name;
 }
 
 void Control::Render()

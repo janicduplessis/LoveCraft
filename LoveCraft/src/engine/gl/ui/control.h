@@ -109,7 +109,7 @@ private:
 /**
  * @Brief Controle de l'interface 2d
  */
-class Control : public Structure
+class Control
 {
 public:
 	enum Type

@@ -205,12 +205,11 @@ void Label::Render()
 {
 	if (m_visible)
 	{
-		m_newPosition = GetNewPosition(m_message.length());
-
+		Vector2f abspos = GetNewPosition(m_message.length());
 		if (m_texture)
 		{
 			//Dessine le fond du label s'il y en a un
-			RenderSquare(Vector2i(m_newPosition.x, m_newPosition.y), 
+			RenderSquare(Vector2i((int)abspos.x, (int)abspos.y), 
 				Vector2i(m_message.length() * m_charWidth * m_charInterval), m_texture);
 		}
 		if (m_fontColor)
@@ -222,7 +221,7 @@ void Label::Render()
 			m_fontColor->Bind();
 			glLoadIdentity();
 
-			glTranslatef(m_newPosition.x, m_newPosition.y, 0);
+			glTranslatef(abspos.x, abspos.y, 0);
 			for (unsigned int i = 0; i < m_message.length(); ++i)
 			{
 				float left = (float)((m_message[i] - 32) % 16) / 16.0f;

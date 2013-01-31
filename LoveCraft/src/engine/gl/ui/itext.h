@@ -4,7 +4,7 @@
 #include "../texture.h"
 #include "structure.h"
 
-class IText : public Structure
+class IText
 {
 public:
 	IText();

@@ -14,7 +14,7 @@ void Button::Init()
 {
 	m_label->CtrlInit(this, Vector2i(), Vector2i(), 0, "label");
 	m_label->Init(Label::TEXTDOCK_MIDDLECENTER, Vector2f());
-	m_label->TextInit(m_message, m_fontColor, m_italic, m_charWidth, m_charHeight, m_charInterval);
+	m_label->TextInit(m_message, m_fontColor, m_italic, m_charHeight, m_charWidth, m_charInterval);
 }
 
 void Button::Render()

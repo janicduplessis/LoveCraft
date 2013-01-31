@@ -1,7 +1,7 @@
 #include "icontainer.h"
 
 
-IContainer::IContainer() : Structure(), m_ctrlNbr(0), m_capacity(0)
+IContainer::IContainer() : m_ctrlNbr(0), m_capacity(0)
 {
 
 }
@@ -13,17 +13,13 @@ IContainer::~IContainer()
 
 void IContainer::ContainInit(unsigned short capacity)
 {
-	if (!m_initialized)
+	if (capacity != 0)
 	{
-		if (capacity != 0)
-		{
-			m_controls = new Control*[capacity];
-			for (unsigned short i = 0; i < capacity; i++)
-				m_controls[i] = 0;
-		}
-		else m_controls = 0;
-		Structure::Init();
+		m_controls = new Control*[capacity];
+		for (unsigned short i = 0; i < capacity; i++)
+			m_controls[i] = 0;
 	}
+	else m_controls = 0;
 }
 
 void IContainer::AddControl(Control* control)

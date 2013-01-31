@@ -31,7 +31,7 @@ void ListBox::Init(unsigned short lineNbr, short gap, Vector2i offset, bool scro
 	m_scrollable = scrollable;
 	m_updownButtons = uptext != 0 && downtext != 0;
 
-	m_size = Vector2i(m_charWidth + offset.x * 2, (m_charHeight + gap) * lineNbr + offset.y * 2);
+	m_size = Vector2i(m_size.x + offset.x * 2, (m_charHeight + gap) * lineNbr + offset.y * 2);
 
 	m_lines = new Label*[lineNbr];
 	std::ostringstream ss;
@@ -42,7 +42,7 @@ void ListBox::Init(unsigned short lineNbr, short gap, Vector2i offset, bool scro
 		m_lines[i]->CtrlInit(this, Vector2i(offset.x, (m_charHeight + m_gapBetLines) * i + offset.y), 
 			Vector2i(), 0, ss.str());
 		m_lines[i]->TextInit("", m_fontColor, m_italic, m_charHeight, m_charWidth, m_charInterval);
-		m_lines[i]->Init(Label::TEXTDOCK_NONE, Vector2f(offset.x, offset.y));
+		m_lines[i]->Init(Label::TEXTDOCK_NONE, Vector2f());
 		ss.str("");
 	}
 	if (m_updownButtons)

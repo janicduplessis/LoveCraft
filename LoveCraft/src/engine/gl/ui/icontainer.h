@@ -9,7 +9,7 @@
 #include <string>
 #include <iostream>
 
-class IContainer : public Structure
+class IContainer
 {
 public:
 	IContainer();

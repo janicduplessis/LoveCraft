@@ -1,8 +1,7 @@
 #include "label.h"
 
 
-Label::Label() : Control(CTRLTYPE_LABEL), IText(), m_docking(Label::TEXTDOCK_NONE), m_offset(Vector2f()),
-	m_newPosition(Vector2f())
+Label::Label() : Control(CTRLTYPE_LABEL), IText(), m_docking(Label::TEXTDOCK_NONE), m_offset(Vector2f())
 {
 }
 
@@ -14,6 +13,56 @@ void Label::Init(Docking dock, const Vector2f& offset)
 {
 	m_docking = dock;
 	m_offset = offset;
+	m_position = Vector2i(m_position.x + offset.x, m_position.y + offset.y);
+}
+
+Vector2i Label::AbsolutePosition() const
+{
+	Vector2f relposition;
+	Vector2f absposition;
+	int length = m_message.length();
+
+	// Vérification de l'ancrage et assignation de la position relative au parent
+	switch (m_docking)
+	{
+	case Label::TEXTDOCK_TOPLEFT:
+		relposition = Vector2f(0, m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight);
+		break;
+	case Label::TEXTDOCK_TOPCENTER:
+		relposition = Vector2f((m_parent->GP(Control::PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth)) / 2, m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight);
+		break;
+	case Label::TEXTDOCK_TOPRIGHT:
+		relposition = Vector2f(m_parent->GP(Control::PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth), m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight);
+		break;
+	case Label::TEXTDOCK_MIDDLELEFT:
+		relposition = Vector2f(0, (m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight) / 2);
+		break;
+	case Label::TEXTDOCK_MIDDLECENTER:
+		relposition = Vector2f((m_parent->GP(Control::PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth)) / 2, (m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight) / 2);
+		break;
+	case Label::TEXTDOCK_MIDDLERIGHT:
+		relposition = Vector2f(m_parent->GP(Control::PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth), (m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight) / 2);
+		break;
+	case Label::TEXTDOCK_BOTTOMLEFT:
+		relposition = Vector2f(0, 0);
+		break;
+	case Label::TEXTDOCK_BOTTOMCENTER:
+		relposition = Vector2f((m_parent->GP(Control::PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth)) / 2, 0);
+		break;
+	case Label::TEXTDOCK_BOTTOMRIGHT:
+		relposition = Vector2f(m_parent->GP(Control::PROPVCT2_SIZE).x  / 2 - (length * m_charInterval * m_charWidth), 0);
+		break;
+	default:
+		relposition = Vector2f(m_position.x, m_position.y);
+		break;
+	}
+	//Position relative avec le offset
+	if (m_docking != TEXTDOCK_NONE)
+		relposition = relposition + m_offset;
+	//Position absolue prete à être dessinée
+	Vector2i& posparent = m_parent->AbsolutePosition();
+	absposition = Vector2f(relposition.x + posparent.x, relposition.y + posparent.y);
+	return Vector2i((int)absposition.x, (int)absposition.y);
 }
 
 void Label::SP(PropBool boolprop, bool value)
@@ -205,12 +254,13 @@ void Label::Render()
 {
 	if (m_visible)
 	{
-		Vector2f abspos = GetNewPosition(m_message.length());
+		Vector2i abspos = AbsolutePosition();
 		if (m_texture)
 		{
 			//Dessine le fond du label s'il y en a un
-			RenderSquare(Vector2i((int)abspos.x, (int)abspos.y), 
-				Vector2i(m_message.length() * m_charWidth * m_charInterval), m_texture);
+			RenderSquare(abspos, 
+				Vector2i(m_message.length() * m_charWidth * m_charInterval - m_charWidth * m_charInterval), 
+				m_texture);
 		}
 		if (m_fontColor)
 		{
@@ -242,54 +292,4 @@ void Label::Render()
 			glDisable(GL_BLEND);
 		}
 	}
-}
-
-// private
-
-Vector2f Label::GetNewPosition(unsigned short length)
-{
-	Vector2f relposition;
-	Vector2f absposition;
-
-	// Vérification de l'ancrage et assignation de la position relative au parent
-	switch (m_docking)
-	{
-	case Label::TEXTDOCK_TOPLEFT:
-		relposition = Vector2f(0, m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight);
-		break;
-	case Label::TEXTDOCK_TOPCENTER:
-		relposition = Vector2f((m_parent->GP(Control::PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth)) / 2, m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight);
-		break;
-	case Label::TEXTDOCK_TOPRIGHT:
-		relposition = Vector2f(m_parent->GP(Control::PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth), m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight);
-		break;
-	case Label::TEXTDOCK_MIDDLELEFT:
-		relposition = Vector2f(0, (m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight) / 2);
-		break;
-	case Label::TEXTDOCK_MIDDLECENTER:
-		relposition = Vector2f((m_parent->GP(Control::PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth)) / 2, (m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight) / 2);
-		break;
-	case Label::TEXTDOCK_MIDDLERIGHT:
-		relposition = Vector2f(m_parent->GP(Control::PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth), (m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight) / 2);
-		break;
-	case Label::TEXTDOCK_BOTTOMLEFT:
-		relposition = Vector2f(0, 0);
-		break;
-	case Label::TEXTDOCK_BOTTOMCENTER:
-		relposition = Vector2f((m_parent->GP(Control::PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth)) / 2, 0);
-		break;
-	case Label::TEXTDOCK_BOTTOMRIGHT:
-		relposition = Vector2f(m_parent->GP(Control::PROPVCT2_SIZE).x  / 2 - (length * m_charInterval * m_charWidth), 0);
-		break;
-	default:
-		relposition = Vector2f((float)m_position.x, (float)m_position.y);
-		break;
-	}
-	//Position relative avec le offset
-	relposition = relposition + m_offset;
-	m_position = Vector2i((int)relposition.x, (int)relposition.y);
-	//Position absolue prete à être dessinée
-	Vector2i& posparent = m_parent->AbsolutePosition();
-	absposition = Vector2f(relposition.x + (float)posparent.x, relposition.y + (float)posparent.y);
-	return absposition;
 }

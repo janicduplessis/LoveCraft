@@ -1180,7 +1180,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 
 void Engine::OnClick(Control* sender)
 {
-	std::string n = sender->GP(Control::PROPSTR_NAME);
+	string n = sender->GP(Control::PROPSTR_NAME);
 	Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE, true);
 
 	if (n == MENU_BUTTON_START_FULL_NAME)

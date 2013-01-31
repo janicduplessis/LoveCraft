@@ -43,6 +43,9 @@ public:
 	*/
 	~Label();
 	void Init(Docking dock, const Vector2f& offset);
+
+	Vector2i AbsolutePosition() const;
+
 	void SP(PropBool boolprop, bool value);
 	void SP(PropVector2 vector2prop, Vector2i value);
 	void SP(PropString stringprop, string value);
@@ -62,10 +65,8 @@ public:
 	*/
 	void Render();
 private:
-	Vector2f GetNewPosition(unsigned short length);
 	Docking m_docking;
 	Vector2f m_offset;
-	Vector2f m_newPosition;
 };
 
 #endif

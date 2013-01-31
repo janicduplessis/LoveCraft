@@ -2,7 +2,6 @@
 #define CONTROL_H_
 
 #include "define.h"
-#include "structure.h"
 #include "../texture.h"
 #include "util/vector2.h"
 #include <cassert>

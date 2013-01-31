@@ -2,7 +2,6 @@
 #define ITEXT_H__
 
 #include "../texture.h"
-#include "structure.h"
 
 class IText
 {

@@ -1,22 +1,20 @@
 ﻿#include "button.h"
 
-Button::Button() : m_clicked(false), m_label(0)
+Button::Button() : Control(CTRLTYPE_BOUTON), IText(), m_clicked(false)
 {
-
-}
-
-Button::Button(Control* parent, const Vector2i& position, const Vector2i &size, Texture* background, 
-			   Texture* textColor, const std::string& text, const std::string& name) : 
-Control(CTRLTYPE_BOUTON, parent, position, size, background, name), m_clicked(false), m_label(0)
-{
-	m_label = new Label(this, Vector2i(), textColor, text, Label::TEXTDOCK_MIDDLECENTER, false, 
-		LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I, Vector2f(), "label_");
-	m_label->SetProperty(Label::PropString::PROPSTR_TEXT, text);
+	m_label = new Label();
 }
 
 Button::~Button()
 {
 	delete m_label;
+}
+
+void Button::Init()
+{
+	m_label->CtrlInit(this, Vector2i(), Vector2i(), 0, "label");
+	m_label->Init(Label::TEXTDOCK_MIDDLECENTER, Vector2f());
+	m_label->TextInit(m_message, m_fontColor, m_italic, m_charWidth, m_charHeight, m_charInterval);
 }
 
 void Button::Render()
@@ -31,7 +29,7 @@ bool Button::MousePressEvents( int x, int y )
 	if (m_clicked)
 		return true;
 
-	if (m_visible)
+	if (m_visible && m_enabled)
 	{
 		Vector2i& pos = AbsolutePosition();
 		if (x >= pos.x && x <= pos.x + m_size.x && y >= pos.y && y <= pos.y + m_size.y) {
@@ -56,11 +54,11 @@ void Button::Press()
 
 void Button::SetTextTo(std::string text)
 {
-	m_label->SetProperty(Label::PropString::PROPSTR_TEXT, text);
+	m_label->SP(Label::PropString::PROPSTR_TEXT, text);
 }
 std::string Button::GetText() const
 {
-	return m_label->GetProperty(Label::PropString::PROPSTR_TEXT);
+	return m_label->GP(Label::PropString::PROPSTR_TEXT);
 }
 
 Label* Button::TLabel()

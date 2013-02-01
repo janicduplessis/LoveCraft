@@ -81,7 +81,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-
+    <ClCompile Include="src\engine\gl\ui\itext.cpp" />
     <ClCompile Include="src\engine\gl\skybox.cpp" />
     <ClCompile Include="src\engine\chunkloader.cpp" />
     <ClCompile Include="src\engine\gl\ui\gameinterface.cpp" />
@@ -131,9 +131,10 @@
     <ClCompile Include="src\engine\gl\textureatlas.cpp" />
     <ClCompile Include="src\util\tool.cpp" />
     <ClCompile Include="src\engine\gl\ui\textbox.cpp" />
+    <ClCompile Include="src\engine\gl\ui\structure.cpp" />
   </ItemGroup>
   <ItemGroup>
-
+    <ClInclude Include="src\engine\gl\ui\itext.h" />
     <ClInclude Include="src\engine\gl\skybox.h" />
     <ClInclude Include="src\engine\chunkloader.h" />
     <ClInclude Include="src\engine\gl\ui\valuesgameinterface.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="src\util\tool.h" />
     <ClInclude Include="src\util\vector3.h" />
     <ClInclude Include="src\engine\gl\ui\textbox.h" />
+    <ClInclude Include="src\engine\gl\ui\structure.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\gl\shaders\billboardshader.frag" />

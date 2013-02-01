@@ -7,13 +7,12 @@
 /**
  * Class bouton
  */
-class Button : public Control
+class Button : public Control, public IText
 {
 public:
 	Button();
-	Button(Control* parent, const Vector2i& position, const Vector2i &size, Texture* background, 
-		Texture* textColor, const std::string& text, const std::string& name);
 	~Button();
+	void Init();
 
 	/**
 	 * Évenement On Click trigger si le bouton est cliqué
@@ -31,8 +30,8 @@ public:
 	 */
 	virtual bool MousePressEvents(int x, int y);
 
-	void SetTextTo(std::string text);
-	std::string GetText() const;
+	void SetTextTo(string text);
+	string GetText() const;
 
 	Label* TLabel();
 

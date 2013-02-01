@@ -2,49 +2,9 @@
 #include <sstream>
 #include "../../info.h"
 
-ListBox::ListBox() : Control(CTRLTYPE_LISTBOX), m_lines(0), m_fontMainColor(0), m_lineNbr(0), m_gapBetLines(2), m_charWidth(12.f),
-	m_charHeight(12.f), m_charInterval(0.66f), m_curLineIndex(0), m_scrollable(false)
+ListBox::ListBox() : Control(CTRLTYPE_LISTBOX), IText(), m_lines(0), m_lineNbr(0), m_gapBetLines(0), 
+	m_curLineIndex(0), m_scrollable(false), m_upArrow(0), m_downArrow(0)
 {
-
-}
-
-ListBox::ListBox(Control* parent, const Vector2i &position, float lineWidth, Texture* textMainColor, Texture* background, unsigned short linenbr,
-				 short linegap, float charwidth, float charheight, float charinterval, bool scrollable, const std::string& name, const Vector2i& offset) : 
-Control(CTRLTYPE_LISTBOX, parent, position, Vector2i(lineWidth + offset.x * 2, (charheight + linegap) * linenbr + offset.y * 2), background, name), 
-	m_fontMainColor(textMainColor), m_lineNbr(linenbr), m_gapBetLines(linegap), m_charWidth(charwidth), m_charHeight(charheight), m_charInterval(charinterval),
-	m_curLineIndex(0), m_scrollable(scrollable), m_offset(offset), m_upArrow(0), m_downArrow(0), m_texUpArrow(0), m_texDownArrow(0)
-{
-	m_lines = new Label*[linenbr];
-	std::ostringstream ss;
-	for (unsigned short i = 0; i < m_lineNbr; i++)
-	{
-		ss << m_name << "_line" << (m_lineNbr - i - 1);
-		m_lines[i] = new Label(this, 
-			Vector2i(m_offset.x, (m_charHeight + m_gapBetLines) * i + m_offset.y), 
-			m_fontMainColor,
-			"",
-			Label::TEXTDOCK_NONE,
-			false,
-			m_charHeight,
-			m_charWidth,
-			m_charInterval,
-			Vector2f(),
-			ss.str());
-		ss.str("");
-	}
-	if (m_scrollable) {
-		// Texture arrows
-		m_texDownArrow = new Texture();
-		m_texDownArrow->Load(TEXTURE_PATH "i_arrowbutton_down.jpg");
-		m_texUpArrow = new Texture();
-		m_texUpArrow->Load(TEXTURE_PATH "i_arrowbutton_up.jpg");
-		// Init boutons
-		m_upArrow = new Button(this, Vector2i(m_size.x - 30, 30), Vector2i(30,20), m_texUpArrow, m_fontMainColor, "", "bup");
-		m_downArrow = new Button(this, Vector2i(m_size.x - 30, 0), Vector2i(30,20), m_texDownArrow, m_fontMainColor, "", "bdown");
-		// Events
-		m_upArrow->OnClick.Attach(this, &ListBox::ScrollUp);
-		m_downArrow->OnClick.Attach(this, &ListBox::ScrollDown);
-	}
 
 }
 
@@ -57,8 +17,51 @@ ListBox::~ListBox()
 	delete [] m_lines;
 	delete m_upArrow;
 	delete m_downArrow;
-	delete m_texDownArrow;
-	delete m_texUpArrow;
+}
+
+void ListBox::Init(unsigned short lineNbr, short gap, Vector2i offset, bool scrollable)
+{
+	Init(lineNbr, gap, offset, scrollable, 0, 0);
+}
+
+void ListBox::Init(unsigned short lineNbr, short gap, Vector2i offset, bool scrollable, Texture* uptext, Texture* downtext)
+{
+	m_lineNbr = lineNbr;
+	m_gapBetLines = gap;
+	m_scrollable = scrollable;
+	m_updownButtons = uptext != 0 && downtext != 0;
+
+	m_size = Vector2i(m_charWidth + offset.x * 2, (m_charHeight + gap) * lineNbr + offset.y * 2);
+
+	m_lines = new Label*[lineNbr];
+	std::ostringstream ss;
+	for (unsigned short i = 0; i < m_lineNbr; i++)
+	{
+		m_lines[i] = new Label();
+		ss << m_name << "_line" << (m_lineNbr - i - 1);
+		m_lines[i]->CtrlInit(this, Vector2i(offset.x, (m_charHeight + m_gapBetLines) * i + offset.y), 
+			Vector2i(), 0, ss.str());
+		m_lines[i]->TextInit("", m_fontColor, m_italic, m_charHeight, m_charWidth, m_charInterval);
+		m_lines[i]->Init(Label::TEXTDOCK_NONE, Vector2f(offset.x, offset.y));
+		ss.str("");
+	}
+	if (m_updownButtons)
+	{
+		// Init boutons
+		m_upArrow = new Button();
+		ss << m_name << "_uparrow";
+		m_upArrow->CtrlInit(this, Vector2i(m_size.x - 30, 30), Vector2i(30,20), uptext, ss.str());
+		m_upArrow->Init();
+		ss.str("");
+		m_downArrow = new Button();
+		ss << m_name << "_downarrow";
+		m_downArrow->CtrlInit(this, Vector2i(m_size.x - 30, 0), Vector2i(30,20), downtext, ss.str());
+		m_downArrow->Init();
+		ss.str("");
+		// Events
+		m_upArrow->OnClick.Attach(this, &ListBox::ScrollUp);
+		m_downArrow->OnClick.Attach(this, &ListBox::ScrollDown);
+	}
 }
 
 void ListBox::Render()
@@ -68,7 +71,8 @@ void ListBox::Render()
 		Control::Render();
 		for (unsigned short i = 0; i < m_lineNbr; i++)
 			m_lines[i]->Render();
-		if (m_scrollable) {
+		if (m_upArrow != 0 && m_downArrow != 0)
+		{
 			m_upArrow->Render();
 			m_downArrow->Render();
 		}
@@ -86,9 +90,9 @@ void ListBox::Update()
 	for(int i = 0; i < m_lineNbr; ++i)
 	{
 		if (it == m_messages.end())
-			m_lines[i]->SetProperty(PropString::PROPSTR_TEXT, "");
+			m_lines[i]->SP(PropString::PROPSTR_TEXT, "");
 		else {
-			m_lines[i]->SetProperty(PropString::PROPSTR_TEXT, it->data());
+			m_lines[i]->SP(PropString::PROPSTR_TEXT, it->data());
 			++it;
 		}
 	}
@@ -134,22 +138,22 @@ void ListBox::ScrollDown(Control* sender)
 bool ListBox::MousePressEvents(int x, int y)
 {
 	return m_downArrow->MousePressEvents(x,y) ||
-	m_upArrow->MousePressEvents(x,y);
+		m_upArrow->MousePressEvents(x,y);
 }
 
 bool ListBox::MouseReleaseEvents(int x, int y)
 {
 	return m_downArrow->MouseReleaseEvents(x,y) ||
-	m_upArrow->MouseReleaseEvents(x,y);
+		m_upArrow->MouseReleaseEvents(x,y);
 }
 
-ListBox& ListBox::operator<<( const std::string& text )
+ListBox& ListBox::operator<<( const string& text )
 {
 	AddLine(text);
 	return *this;
 }
 
-std::string ListBox::GetLine( int index )
+string ListBox::GetLine( int index )
 {
 	StringList::iterator it = m_messages.begin();
 	return it->data();

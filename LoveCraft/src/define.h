@@ -12,6 +12,8 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+using std::string;
+
 typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned int uint32;
@@ -33,7 +35,7 @@ typedef long long int64;
 #define CHUNK_SIZE_Y 128
 #define CHUNK_SIZE_Z 16
 
-#define VIEW_DISTANCE				256
+#define VIEW_DISTANCE				64
 #define MAX_SELECTION_DISTANCE		10
 
 // Options

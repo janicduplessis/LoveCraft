@@ -1,19 +1,20 @@
 #include "textbox.h"
 
-
-Textbox::Textbox(Control* parent, Vector2i position, Vector2i size, Texture* color, Texture* back, 
-				 Label::Docking dock, bool italic, float charWidth, 
-				 float charinterval, Vector2f offset, const std::string& name) :
-Control(CTRLTYPE_TEXTBOX, parent, position, size, back, name)
+Textbox::Textbox() : Control(CTRLTYPE_TEXTBOX), IText(), m_label(0), m_hasFocus(false)
 {
-	m_label = new Label(this,
-		Vector2i((int)offset.x, (int)offset.y), color, "", dock, italic, (size.y - 2 - offset.y * 2), 
-		charWidth, charinterval, Vector2f(), "message");
 }
-
 
 Textbox::~Textbox()
 {
+	delete m_label;
+}
+
+void Textbox::Init(Vector2i &offset)
+{
+	m_label = new Label();
+	m_label->CtrlInit(this, Vector2i((int)offset.x, (int)offset.y), Vector2i(), 0, "message");
+	m_label->TextInit("", m_fontColor, m_italic, m_charHeight, m_charWidth, m_charInterval);
+	m_label->Init(Label::TEXTDOCK_MIDDLELEFT, Vector2f(offset.x, offset.y));
 }
 
 bool Textbox::HasFocus() const
@@ -24,13 +25,13 @@ void Textbox::SetFocus(const bool value)
 {
 	m_hasFocus = value;
 }
-void Textbox::SetMessage(std::string text)
+void Textbox::SetMessage(string text)
 {
-	m_label->SetProperty(PropString::PROPSTR_TEXT, text);
+	m_label->SP(PropString::PROPSTR_TEXT, text);
 }
-std::string Textbox::GetMsg() const
+string Textbox::GetMsg() const
 {
-	return m_label->GetProperty(PropString::PROPSTR_TEXT);
+	return m_label->GP(PropString::PROPSTR_TEXT);
 }
 
 Label* Textbox::TLabel()

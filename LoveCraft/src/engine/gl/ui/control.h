@@ -2,6 +2,7 @@
 #define CONTROL_H_
 
 #include "define.h"
+#include "structure.h"
 #include "../texture.h"
 #include "util/vector2.h"
 #include <cassert>
@@ -108,7 +109,7 @@ private:
 /**
  * @Brief Controle de l'interface 2d
  */
-class Control
+class Control : public Structure
 {
 public:
 	enum Type
@@ -122,19 +123,33 @@ public:
 		CTRLTYPE_LISTBOX,
 		CTRLTYPE_TEXTBOX
 	};
+	enum BlendType
+	{
+		CBLEND_NONE,
+		CBLEND_PNG,
+		CBLEND_BLUR
+	};
+
 	enum PropBool
 	{
-		PROPBOL_PNGBLEND,
 		PROPBOL_REPEATTEXTURE,
 		PROPBOL_VISIBLE,
 		PROPBOL_ENABLED,
-		PROPBOL_ITALIC
+		PROPBOL_ITALIC,
+		PROPBOL_SHOWBACKGROUND
 	};
 	enum PropFloat
 	{
 		PROPFLT_FONTW,
 		PROPFLT_FONTH,
-		PROPFLT_FONTI
+		PROPFLT_FONTI,
+		PROPFLT_BARMIN,
+		PROPFLT_BARMAX
+	};
+	enum PropUShort
+	{
+		PROPUSHRT_LINEGAP,
+		PROPUSHRT_BORDERSIZE
 	};
 	enum PropVector2
 	{
@@ -153,10 +168,7 @@ public:
 		PROPTEXT_FONT_COLOR,
 		PROPTEXT_BAR
 	};
-	/**
-	* Constructeur par défaut
-	*/
-	Control();
+
 	/**
 	* Constructeur de la classe
 	*
@@ -164,19 +176,10 @@ public:
 	*/
 	Control(Type type);
 	/**
-	* Constructeur de la classe
-	*
-	* @param type		Le type du controle - Voir Enum Type
-	* @param parent		Le controle qui joue le rôle de parent
-	* @param position	La poisition initiale du controle par rapport a son parent
-	* @param size		La taille du controle
-	* @param name		Le nom du controle
-	*/
-	Control(Type type, Control* parent, const Vector2i& position, const Vector2i& size, Texture* texture, const std::string& name);
-	/**
 	* Destructeur par défaut
 	*/
 	virtual ~Control();
+	void CtrlInit(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, string name);
 	/**
 	* Dessine l'objet à l'écran
 	*/
@@ -191,27 +194,30 @@ public:
 	* @return Vector2i
 	*/
 	virtual Vector2i AbsolutePosition() const;
-	virtual void SetProperty(PropBool boolprop, bool value);
-	virtual void SetProperty(PropVector2 vector2prop, Vector2i value);
-	virtual void SetProperty(PropString stringprop, std::string value);
-	virtual void SetProperty(PropTexture textureprop, Texture* value);
+	virtual void SP(PropBool boolprop, bool value);
+	virtual void SP(PropVector2 vector2prop, Vector2i value);
+	virtual void SP(PropString stringprop, string value);
+	virtual void SP(PropTexture textureprop, Texture* value);
+	virtual void SetBlend(BlendType btype);
 
 	virtual bool MousePressEvents( int x, int y );
 	virtual bool MouseReleaseEvents(int x, int y);
 	virtual bool KeyPressEvents(int keycode);
 	virtual bool KeyReleaseEvents(int keycode);
 
-	virtual bool GetProperty(PropBool boolprop) const;
-	virtual Vector2i GetProperty(PropVector2 vector2prop) const;
-	virtual std::string GetProperty(PropString stringprop) const;
-	virtual Texture* GetProperty(PropTexture textureprop) const;
+	virtual bool GP(PropBool boolprop) const;
+	virtual Vector2i GP(PropVector2 vector2prop) const;
+	virtual string GP(PropString stringprop) const;
+	virtual Texture* GP(PropTexture textureprop) const;
+	virtual BlendType GetBlend() const;
+	virtual bool IsBlend(BlendType btype) const;
 
 protected:
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size);
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture);
-	std::string m_name;
+	string m_name;
 	Type m_type;
-	bool m_pngBlend;
+	BlendType m_blend;
 	bool m_repeatTexture;
 	bool m_visible;
 	bool m_enabled;

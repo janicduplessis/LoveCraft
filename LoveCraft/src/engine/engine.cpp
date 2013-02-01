@@ -649,7 +649,7 @@ void Engine::Render(float elapsedTime)
 	m_shaderCube.Use();
 	m_textureArray->Use();
 	m_mutex.lock();
-	bool updated = false;
+	int updated = 0;
 
 	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
 	{
@@ -657,9 +657,9 @@ void Engine::Render(float elapsedTime)
 		{
 			Chunk* c = m_chunks->Get(i,j);
 			if (c->IsReady()) {
-				if (c->IsDirty() && !updated) {
+				if (c->IsDirty() && updated < 3) {
 					c->Update();
-					updated = true;
+					updated++;
 				}
 				c->Render();
 			}

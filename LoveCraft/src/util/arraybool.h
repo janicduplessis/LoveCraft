@@ -62,7 +62,8 @@ inline void Array<bool>::Reset(const bool& valeur)
 
 inline bool Array<bool>::Get(unsigned int position) const
 {
-	assert(position < m_size);
+	if (position >= m_size)
+		return false;
 	unsigned int positionOctet = position / 8;
 	unsigned int positionBit = position % 8;
 	return (m_data[positionOctet] & (1 << positionBit)) != 0;

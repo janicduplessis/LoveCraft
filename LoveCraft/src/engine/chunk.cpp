@@ -130,14 +130,21 @@ void Chunk::SetBloc(int x, int y, int z, BlockType type)
 		m_right->m_isDirty = true;
 }
 
+bool Chunk::CheckBoolArray(const Array3d<bool>& array, int x, int y, int z) const
+{
+	if (y < 0 || y >= CHUNK_SIZE_Y || z < 0 || z >= CHUNK_SIZE_Z || x < 0 || x >= CHUNK_SIZE_X)
+		return true;
+	return array.Get(x,y,z);
+}
+
 BlockType Chunk::GetBloc(int x, int y, int z)
 {
 	BlockType result;
 
 	// Bottom et top
-	if (y == -1 || y >= CHUNK_SIZE_Y)
+	if (y < 0 || y >= CHUNK_SIZE_Y)
 	{
-		result = BTYPE_AIR;
+		result = BTYPE_DIRT;
 	}
 	// Front
 	else if (z < 0)
@@ -145,7 +152,7 @@ BlockType Chunk::GetBloc(int x, int y, int z)
 		if(m_back)
 			result = m_back->GetBloc(x, y, CHUNK_SIZE_Z + z);
 		else
-			result = BTYPE_AIR;
+			result = BTYPE_DIRT;
 	}
 	// Back
 	else if (z >= CHUNK_SIZE_Z)
@@ -153,7 +160,7 @@ BlockType Chunk::GetBloc(int x, int y, int z)
 		if(m_front)
 			result = m_front->GetBloc(x, y, z - CHUNK_SIZE_Z);
 		else
-			result = BTYPE_AIR;
+			result = BTYPE_DIRT;
 	}
 	// Left
 	else if (x < 0)
@@ -161,7 +168,7 @@ BlockType Chunk::GetBloc(int x, int y, int z)
 		if(m_left)
 			result = m_left->GetBloc(CHUNK_SIZE_X + x, y, z);
 		else
-			result = BTYPE_AIR;
+			result = BTYPE_DIRT;
 	}
 	// Right
 	else if (x >= CHUNK_SIZE_X)
@@ -169,7 +176,7 @@ BlockType Chunk::GetBloc(int x, int y, int z)
 		if(m_right)
 			result = m_right->GetBloc(x - CHUNK_SIZE_X, y, z);
 		else
-			result = BTYPE_AIR;
+			result = BTYPE_DIRT;
 	}
 	else
 		result = m_blocks.Get(x, y, z);
@@ -310,7 +317,7 @@ void Chunk::CreateOptimizedTopBottomFace(MeshFace face, ChunkMesh::VertexData* v
 		for(int j = z; j < CHUNK_SIZE_Z; ++j)
 		{
 			// Si une des conditions d'arrêt est vraie
-			if ((j == CHUNK_SIZE_Z - 1) || (GetBloc(i, y, j + 1) != bt) || (GetBloc(i, y + (face == FACE_BOTTOM) ? -1 : 1, j + 1) != BTYPE_AIR) || facesOptimized.Get(i, y, j + 1))
+			if ((GetBloc(i, y, j + 1) != bt) || (GetBloc(i, y + (face == FACE_BOTTOM) ? -1 : 1, j + 1) != BTYPE_AIR) || CheckBoolArray(facesOptimized, i, y, j + 1))
 			{
 				// Trouve la plus petite position en Y qui répond à la condition d'arrêt
 				if (endZ == -1 || j < endZ)
@@ -319,7 +326,7 @@ void Chunk::CreateOptimizedTopBottomFace(MeshFace face, ChunkMesh::VertexData* v
 			}
 		}
 		// Si une des conditions d'arrêt est vraie
-		if ((i == CHUNK_SIZE_X - 1) || (GetBloc(i + 1, y, z) != bt) || (GetBloc(i + 1, y + (face == FACE_BOTTOM) ? -1 : 1, z) != BTYPE_AIR) || facesOptimized.Get(i + 1, y, z))
+		if ((GetBloc(i + 1, y, z) != bt) || (GetBloc(i + 1, y + (face == FACE_BOTTOM) ? -1 : 1, z) != BTYPE_AIR) || CheckBoolArray(facesOptimized, i + 1, y, z))
 		{
 			endX = i;
 			break;
@@ -396,7 +403,7 @@ void Chunk::CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* v
 		for(int j = y; j < CHUNK_SIZE_Y; ++j)
 		{
 			// Si une des conditions d'arrêt est vraie
-			if ((j == CHUNK_SIZE_Y - 1) || (GetBloc(i, j + 1, z) != bt) || (GetBloc(i, j + 1, z + (face == FACE_BACK) ? -1 : 1) != BTYPE_AIR) || facesOptimized.Get(i, j + 1, z))
+			if ((GetBloc(i, j + 1, z) != bt) || (GetBloc(i, j + 1, z + (face == FACE_BACK) ? -1 : 1) != BTYPE_AIR) || CheckBoolArray(facesOptimized, i, j + 1, z))
 			{
 				// Trouve la plus petite position en Y qui répond à la condition d'arrêt
 				if (endY == -1 || j < endY)
@@ -405,7 +412,7 @@ void Chunk::CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* v
 			}
 		}
 		// Si une des conditions d'arrêt est vraie
-		if ((i == CHUNK_SIZE_X - 1) || (GetBloc(i + 1, y, z) != bt) || (GetBloc(i + 1, y, z + (face == FACE_BACK) ? -1 : 1) != BTYPE_AIR) || facesOptimized.Get(i + 1, y, z))
+		if ((GetBloc(i + 1, y, z) != bt) || (GetBloc(i + 1, y, z + (face == FACE_BACK) ? -1 : 1) != BTYPE_AIR) || CheckBoolArray(facesOptimized, i + 1, y, z))
 		{
 			endX = i;
 			break;
@@ -485,9 +492,9 @@ void Chunk::CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* v
 		for(int j = y; j < CHUNK_SIZE_Y; ++j)
 		{
 			// Si une des conditions d'arrêt est vraie
-			if ((j == CHUNK_SIZE_Z - 1) || (GetBloc(x, j + 1, i) != bt)
+			if ((GetBloc(x, j + 1, i) != bt)
 				|| (GetBloc(x + (face == FACE_LEFT) ? - 1 : 1, j + 1, i) != BTYPE_AIR) 
-				|| (facesOptimized.Get(x, j + 1, i)))
+				|| (CheckBoolArray(facesOptimized, x, j + 1, i)))
 			{
 				// Trouve la plus petite position en Y qui répond à la condition d'arrêt
 				if (endY == -1 || j < endY)
@@ -496,9 +503,9 @@ void Chunk::CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* v
 			}
 		}
 		// Si une des conditions d'arrêt est vraie
-		if ((i == CHUNK_SIZE_Z - 1) || (GetBloc(x, y, i + 1) != bt) || 
+		if ((GetBloc(x, y, i + 1) != bt) || 
 			(GetBloc(x + (face == FACE_LEFT) ? - 1 : 1, y, i + 1) != BTYPE_AIR) || 
-			facesOptimized.Get(x, y, i + 1))
+			CheckBoolArray(facesOptimized, x, y, i + 1))
 		{
 			endZ = i;
 			break;

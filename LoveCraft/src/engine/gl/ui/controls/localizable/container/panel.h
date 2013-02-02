@@ -1,25 +1,17 @@
 #ifndef PANEL_H_
 #define PANEL_H_
 
-#include "control.h"
-#include "../icontainer.h"
+#include "../container.h"
 
-class Panel : public Control, public IContainer
+class Panel : public Container
 {
 public:
 	Panel();
 	~Panel();
-	void Init();
-	// Avant l'héritage multiple
-	//void AddControl(Control* control);
-	void Render();
-	// Avant l'héritage multiple
-	//private:
-	//virtual void RenderAllControls();
-
-	//(Control*)* m_controls;
-	//unsigned short m_capacity;
-	//unsigned short m_ctrlNbr;
+	virtual void Init(Texture* background);
+	virtual void Render();
+protected:
+	virtual void DrawingBindTexture();
 };
 
 #endif

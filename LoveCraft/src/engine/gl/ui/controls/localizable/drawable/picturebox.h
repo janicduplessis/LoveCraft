@@ -1,13 +1,13 @@
 #ifndef PICTUREBOX_H_
 #define PICTUREBOX_H_
 
-#include "../../../control.h"
+#include "../drawable.h"
 
-class PictureBox : public Control
+class PictureBox : public Drawable
 {
 public:
 	PictureBox();
-	~PictureBox();
+	virtual ~PictureBox();
 
 	void Init();
 };

@@ -1,7 +1,7 @@
 #include "picturebox.h"
 
 
-PictureBox::PictureBox() : Control(CTRLTYPE_PICTUREBOX)
+PictureBox::PictureBox() : Drawable(CTRLTYPE_PICTUREBOX)
 {
 }
 

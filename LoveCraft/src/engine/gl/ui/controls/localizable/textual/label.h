@@ -1,50 +1,35 @@
 #ifndef LABEL_H_
 #define LABEL_H_
 
-#include "interfaceinfos.h"
-#include "../../../control.h"
-#include "../itext.h"
+#include "../textual.h"
 
 /**
 * Obient Définit la valeur de
 */
 
-class Label : public Control, public IText
+class Label : public Textual
 {
 public:
-	/**
-	* Constructeur par défaut
-	*/
 	Label();
-	/**
-	* Destructeur par défaut
-	*/
-	~Label();
-	void Init(Docking dock, const Vector2f& offset);
+	virtual ~Label();
+	virtual void Init(Docking dock, Point offset = Point(0, 0));
+	virtual void Render();
 
-	Vector2i AbsolutePosition() const;
+	virtual void SetDocking(Docking dock);
+	virtual Docking GetDocking() const;
+	virtual bool IsDocking(Docking dock) const;
 
-	void SP(PropBool boolprop, bool value);
-	void SP(PropVector2 vector2prop, Vector2i value);
-	void SP(PropString stringprop, string value);
-	void SP(PropTexture textureprop, Texture* value);
-	void SP(PropFloat floatprop, float value);
-	void SP(PropDock dockprop, Docking value);
+	virtual void SetOffset(Point offset);
+	virtual Point GetOffset() const;
+	virtual bool IsOffset(Point &offset) const;
 
-	bool GP(PropBool boolprop) const;
-	Vector2i GP(PropVector2 vector2prop) const;
-	string GP(PropString stringprop) const;
-	Texture* GP(PropTexture textureprop) const;
-	float GP(PropFloat floatprop) const;
-	Docking GP(PropDock dockprop) const;
+	virtual void UseNextDocking();
 
-	/**
-	* Dessine le contrôle
-	*/
-	void Render();
-private:
+	virtual Point AbsolutePosition() const;
+protected:
+	virtual void DrawingBindTexture();
 	Docking m_docking;
-	Vector2f m_offset;
+	Point m_offset;
 };
 
 #endif

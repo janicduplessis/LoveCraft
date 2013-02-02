@@ -1,7 +1,7 @@
 #include "dialogbox.h"
 
 
-DialogBox::DialogBox()
+DialogBox::DialogBox() : Container(CTRLTYPE_DIALOGBOX)
 {
 }
 

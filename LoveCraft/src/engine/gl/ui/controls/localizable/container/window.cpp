@@ -1,7 +1,7 @@
 #include "window.h"
 
 
-Window::Window()
+Window::Window() : Container(CTRLTYPE_WINDOW)
 {
 }
 

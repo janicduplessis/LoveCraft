@@ -25,6 +25,33 @@ typedef short int16;
 typedef int int32;
 typedef long long int64;
 
+struct Point
+{
+	int x, y;
+	Point() : x(0), y(0) {}
+	Point(int px, int py) : x(px), y(py) {}
+	Point operator+(const Point p) const { return Point(x + p.x, y + p.y); }
+	Point operator+(int i) const { return Point(x + i, y + i); }
+	Point operator-(const Point p) const { return Point(x - p.x, y - p.y); }
+	Point operator-(int i) const { return Point(x - i, y - i); }
+	Point operator-() const { return Point(-x, -y); }
+	bool operator==(const Point p) const { return p.x == x && p.y == y; }
+	bool operator!=(const Point p) const { return p.x != x || p.y != y; }
+};
+struct Size
+{
+	int w, h;
+	Size() : w(50), h(50) {}
+	Size(int width, int height) : w(width), h(height) {}
+	Size operator+(const Size p) const { return Size(w + p.w, h + p.h); }
+	Size operator+(int i) const { return Size(w + i, h + i); }
+	Size operator-(const Size p) const { return Size(w - p.w, h - p.h); }
+	Size operator-(int i) const { return Size(w - i, h - i); }
+	Size operator-() const { return Size(-w, -h); }
+	bool operator==(const Size p) const { return p.w == w && p.h == h; }
+	bool operator!=(const Size p) const { return p.w != w || p.h != h; }
+};
+
 // Screen resolution
 #define SCREEN_RES_FULL_X	GetSystemMetrics(SM_CXSCREEN)
 #define SCREEN_RES_FULL_Y	GetSystemMetrics(SM_CYSCREEN)
@@ -124,11 +151,11 @@ typedef long long int64;
 
 typedef uint8 BlockType;
 enum BLOCK_TYPE {BTYPE_AIR, BTYPE_DIRT, BTYPE_GRASS, BTYPE_BRICK, BTYPE_SAND, BTYPE_ROCK, BTYPE_SNOW,
-				 BTYPE_SWAMP, BTYPE_TREELEAF, BTYPE_TREETRUNK, BTYPE_COUNT};
+	BTYPE_SWAMP, BTYPE_TREELEAF, BTYPE_TREETRUNK, BTYPE_COUNT};
 
 typedef uint8 SpellType;
 enum SPELLS {STYPE_BOLT, STYPE_FIRE, STYPE_FREEZE, STYPE_SHOCK, STYPE_POISON, STYPE_STORM,
-				 STYPE_HEAL, STYPE_RAIN, STYPE_DEFEND, STYPE_SHIELD, STYPE_LAST};
+	STYPE_HEAL, STYPE_RAIN, STYPE_DEFEND, STYPE_SHIELD, STYPE_LAST};
 
 enum BLOCK_FACE {
 	BFACE_ALL,

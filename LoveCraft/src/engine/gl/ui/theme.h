@@ -13,14 +13,24 @@ class Theme
 public:
 	Theme();
 	~Theme();
-	void Init();
+	static Theme* Default();
+	void Init(string name);
+	void Set(float height, float width, float interval, bool italic, Texture* color, Texture* background);
+	string GetName() const;
+	float GetHeight() const;
+	float GetWidth() const;
+	float GetInterval() const;
+	bool GetItalic() const;
+	Texture* GetForeColor() const;
+	Texture* GetBackColor() const;
 private:
+	string m_name;
 	float m_charH;
 	float m_charW;
 	float m_charI;
 	bool m_italicText;
-	Texture* m_fontColor;
-	Texture* m_background;
+	Texture* m_foreColor;
+	Texture* m_backColor
 
 };
 

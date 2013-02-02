@@ -1,12 +1,11 @@
 #ifndef LISTBOX_H_
 #define LISTBOX_H_
 
-#include "control.h"
 #include "label.h"
 #include "button.h"
 #include <list>
 
-class ListBox : public Control, public IText
+class ListBox : public Textual
 {
 public:
 	ListBox();

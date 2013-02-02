@@ -195,7 +195,6 @@ private:
 
 	Player* m_player;
 	Camera* m_camera;
-	Dice* m_dice;
 
 	Character* m_character;
 	Animal** m_monsters;

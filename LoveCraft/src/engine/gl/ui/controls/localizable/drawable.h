@@ -1,13 +1,16 @@
 #ifndef DRAWABLE_H__
 #define DRAWABLE_H__
 
+#include "../localizable.h"
 
-
-class Drawable
+class Drawable : public Localizable
 {
 public:
-	Drawable();
-	~Drawable();
+	Drawable(CONTROLTYPE type);
+	virtual ~Drawable();
+	virtual void Render();
+protected:
+	virtual void DrawingBindTexture();
 };
 
 #endif

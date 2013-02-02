@@ -2,9 +2,12 @@
 #define CONTROL_H_
 
 #include "define.h"
+#include "engine/info.h"
 #include "../texture.h"
 #include "util/vector2.h"
+#include "object.h"
 #include <cassert>
+#include <cmath>
 #include <string>
 #include <iostream>
 #include <map>
@@ -108,65 +111,24 @@ private:
 /**
  * @Brief Controle de l'interface 2d
  */
-class Control
+class Control : public Object
 {
 public:
-	/**
-	* Constructeur de la classe
-	*
-	* @param type	Le type du controle - Voir Enum Type
-	*/
 	Control(CONTROLTYPE type);
-	/**
-	* Destructeur par défaut
-	*/
 	virtual ~Control();
-	void CtrlInit(Control* parent, Vector2i &position, Vector2i &size, Texture* texture, string name);
-	/**
-	* Dessine l'objet à l'écran
-	*/
-	virtual void Render();
-	/**
-	* Dessine l'objet à l'écran en utilisant une texture
-	*/
-	virtual void Render(Texture* texture);
-	/**
-	* Obtient la position absolue du controle
-	* 
-	* @return Vector2i
-	*/
-	virtual Vector2i AbsolutePosition() const;
-	virtual void SP(PropBool boolprop, bool value);
-	virtual void SP(PropVector2 vector2prop, Vector2i value);
-	virtual void SP(PropString stringprop, string value);
-	virtual void SP(PropTexture textureprop, Texture* value);
-	virtual void SetBlend(BLENDTYPE btype);
+	void Init(string name, Control* parent = 0);
 
-	virtual bool MousePressEvents( int x, int y );
-	virtual bool MouseReleaseEvents(int x, int y);
-	virtual bool KeyPressEvents(int keycode);
-	virtual bool KeyReleaseEvents(int keycode);
+	bool IsEnabled() const;
+	void Enable();
+	void Disable();
 
-	virtual bool GP(PropBool boolprop) const;
-	virtual Vector2i GP(PropVector2 vector2prop) const;
-	virtual string GP(PropString stringprop) const;
-	virtual Texture* GP(PropTexture textureprop) const;
-	virtual BLENDTYPE GetBlend() const;
-	virtual bool IsBlend(BLENDTYPE btype) const;
+	Control* GetParent() const;
+	CONTROLTYPE GetType() const;
 
 protected:
-	virtual void RenderSquare(const Vector2i& position, const Vector2i& size);
-	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture);
-	string m_name;
 	CONTROLTYPE m_type;
-	BLENDTYPE m_blend;
-	bool m_repeatTexture;
-	bool m_visible;
 	bool m_enabled;
-	Texture* m_texture;
 	Control* m_parent;
-	Vector2i m_position;
-	Vector2i m_size;
 };
 
 #endif

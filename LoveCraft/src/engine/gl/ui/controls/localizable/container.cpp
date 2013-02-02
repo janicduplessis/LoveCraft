@@ -1,44 +1,57 @@
 #include "container.h"
 
 
-IContainer::IContainer() : m_ctrlNbr(0), m_capacity(0)
+Container::Container(CONTROLTYPE type) : Localizable(type), m_ctrlNbr(0), m_capacity(6)
 {
-
 }
 
-IContainer::~IContainer()
+Container::~Container()
 {
-	delete m_controls;
+	delete [] m_controls;
 }
 
-void IContainer::ContainInit(unsigned short capacity)
+void Container::Init(uint8 capacity)
 {
-	if (capacity != 0)
+	m_capacity = capacity;
+	m_controls = new Localizable*[capacity];
+	for (uint8 i = 0; i < m_capacity; i++)
+		m_controls[i] = 0;
+}
+
+void Container::Render()
+{
+	if (m_controls != 0)
 	{
-		m_controls = new Control*[capacity];
-		for (unsigned short i = 0; i < capacity; i++)
-			m_controls[i] = 0;
+		for (uint8 i = 0; i < m_ctrlNbr; i++)
+			m_controls[i]->Render();
 	}
-	else m_controls = 0;
 }
 
-void IContainer::AddControl(Control* control)
+void Container::AddControl(Localizable* control)
 {
-	m_controls[m_ctrlNbr] = control;
-	//Incrémentation du nombre de controles présents
-	m_ctrlNbr++;
+	if (m_controls != 0)
+	{
+		assert(m_ctrlNbr < 6);
+		m_controls[m_ctrlNbr] = control;
+		m_ctrlNbr++;
+	}
+	else
+	{
+		Init(m_capacity);
+		AddControl(control);
+	}
 }
-Control* IContainer::GetControlById(unsigned short index) const
+Localizable* Container::GetControlById(uint8 index) const
 {
 	assert(index < m_capacity);
 	return m_controls[index];
 }
-Control* IContainer::GetControlByName(const std::string& name) const
+Localizable* Container::GetControlByName(const string& name) const
 {
-	Control* ctrl = 0;
-	for (unsigned short i = 0; i < m_capacity; i++)
+	Localizable* ctrl = 0;
+	for (uint8 i = 0; i < m_capacity; i++)
 	{
-		if (m_controls[i]->GP(PROPSTR_NAME) == name)
+		if (m_controls[i]->GetName() == name)
 		{
 			ctrl = m_controls[i];
 			break;
@@ -48,14 +61,4 @@ Control* IContainer::GetControlByName(const std::string& name) const
 	if (ctrl == 0)
 		assert(false);
 	return ctrl;
-}
-
-
-void IContainer::RenderAllControls()
-{
-	if (m_ctrlNbr != 0 && m_controls != 0)
-	{
-		for (unsigned short i = 0; i < m_ctrlNbr; i++)
-			m_controls[i]->Render();
-	}
 }

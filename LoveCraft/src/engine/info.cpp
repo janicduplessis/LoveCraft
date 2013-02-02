@@ -1,11 +1,17 @@
 ﻿#include "info.h"
 #include "engine/gl/ui/controls/localizable/textual/label.h"
 
-Info::Info() : m_lineToPrint(""), m_console(0), m_lstatus(0), m_offsetMap(0)
+Info::Info() : m_lineToPrint(""), m_console(0), m_lstatus(0), m_offsetMap(0),
+	m_textInterface(0), m_fontColors(0)
 {
 	GenerateBlocInfos();
 	if (!m_sound.LoadSounds())
 		std::cout << "Une erreur est survenue lors du chargement des sons en memoire" << std::endl;
+	m_dice = new Dice();
+	m_themes = new Theme*[THEME_LAST];
+	for (uint8 i = 0; i < THEME_LAST; i++)
+		m_themes[i] = new Theme();
+	InitThemes();
 }
 
 Info::Info( Info const& copy )
@@ -197,4 +203,44 @@ void Info::SetOffsetMap( const Vector2i& offset )
 Vector2i Info::GetOffsetMap() const
 {
 	return m_offsetMap;
+}
+
+void Info::SetFonts(Texture** colors)
+{
+	m_fontColors = colors;
+}
+Texture* Info::GetFontColor(uint8 index) const
+{
+	return m_fontColors[index];
+}
+
+void Info::SetTexturesInterface(Texture** textures)
+{
+	m_textInterface = textures;
+}
+Texture* Info::GetTexture(uint8 index) const
+{
+	return m_textInterface[index];
+}
+
+void Info::InitThemes()
+{
+	m_themes[THEME_DEFAULT]->Init("default");
+	m_themes[THEME_DEFAULT]->Set(THEME_DEFAULT_CHAR_H, THEME_DEFAULT_CHAR_W, THEME_DEFAULT_CHAR_I, 
+		THEME_DEFAULT_ITALIC, GetFontColor(THEME_DEFAULT_COLOR), THEME_DEFAULT_BACK);
+	m_themes[THEME_MAINMENU]->Init("mainmenu");
+	m_themes[THEME_MAINMENU]->Set(THEME_MAIN_MENU_CHAR_H, THEME_MAIN_MENU_CHAR_W, THEME_MAIN_MENU_CHAR_I,
+		THEME_MAIN_MENU_ITALIC, GetFontColor(THEME_MAIN_MENU_COLOR), GetTexture(THEME_MAIN_MENU_BACK));
+	m_themes[THEME_CONSOLE]->Init("console");
+	m_themes[THEME_CONSOLE]->Set(THEME_CONSOLE_CHAR_H, THEME_CONSOLE_CHAR_W, THEME_CONSOLE_CHAR_I,
+		THEME_CONSOLE_ITALIC, GetFontColor(THEME_CONSOLE_COLOR), GetTexture(THEME_CONSOLE_BACK));
+}
+Theme* Info::GetTheme(uint8 index) const
+{
+	return m_themes[index];
+}
+
+Dice* Info::Dice() const
+{
+	return m_dice;
 }

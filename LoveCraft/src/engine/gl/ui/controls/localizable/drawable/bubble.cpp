@@ -1,7 +1,7 @@
 #include "bubble.h"
 
 
-Bubble::Bubble()
+Bubble::Bubble() : Drawable(CTRLTYPE_BUBBLE)
 {
 }
 

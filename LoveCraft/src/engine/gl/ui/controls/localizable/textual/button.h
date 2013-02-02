@@ -1,13 +1,12 @@
 ﻿#ifndef BUTTON_H__
 #define BUTTON_H__
 
-#include "control.h"
 #include "label.h"
 
 /**
  * Class bouton
  */
-class Button : public Control, public IText
+class Button : public Textual
 {
 public:
 	Button();

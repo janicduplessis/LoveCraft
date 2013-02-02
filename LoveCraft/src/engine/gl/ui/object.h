@@ -8,7 +8,9 @@ class Object
 public:
 	Object();
 	~Object();
-	std::string Name;
+	std::string GetName();
+protected:
+	std::string m_name;
 };
 
 #endif

@@ -2,7 +2,7 @@
 #include <sstream>
 #include "engine/info.h"
 
-ListBox::ListBox() : Control(CTRLTYPE_LISTBOX), IText(), m_lines(0), m_lineNbr(0), m_gapBetLines(0), 
+ListBox::ListBox() : Textual(CTRLTYPE_LISTBOX), m_lines(0), m_lineNbr(0), m_gapBetLines(0), 
 	m_curLineIndex(0), m_scrollable(false), m_upArrow(0), m_downArrow(0)
 {
 

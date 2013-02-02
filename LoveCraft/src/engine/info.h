@@ -13,9 +13,11 @@
 #include "gl/shaders/shader.h"
 
 #include "engine/gl/ui/controls/localizable/textual/listbox.h"
+#include "engine/gl/ui/theme.h"
 
 #include <util/vector3.h>
 #include <util/array2d.h>
+#include "util/dice.h"
 
 class Chunk;
 
@@ -100,8 +102,8 @@ public:
 	void SetMouse(Vector2i pos);
 
 	/**
-	 * Pointeur vers la camera
-	 */
+	* Pointeur vers la camera
+	*/
 	Camera* GetCamera() const;
 	void SetCamera(Camera* cam);
 
@@ -117,13 +119,26 @@ public:
 	void SetOffsetMap(const Vector2i& offset);
 	Vector2i GetOffsetMap() const;
 
+	void SetFonts(Texture** colors);
+	Texture* GetFontColor(uint8 index) const;
+
+	void SetTexturesInterface(Texture** textures);
+	Texture* GetTexture(uint8 index) const;
+
+	Theme* GetTheme(uint8 index) const;
+	Dice* Dice() const;
+
 private:
 	Info();
 	~Info();
 	Info(Info const& copy);
 	Info& operator=(Info const& copy); 
 	void GenerateBlocInfos();
+	void InitThemes();
 private:
+	Texture** m_fontColors;
+	Texture** m_textInterface;
+	Theme** m_themes;
 	Array2d<Chunk*>* m_chunks;
 	static Info* m_info;
 	BlockInfo** m_blocInfos;
@@ -132,12 +147,13 @@ private:
 	Nwork m_network;
 	Camera* m_cam;
 	Controls m_controls;
-	std::string m_lineToPrint;
+	string m_lineToPrint;
 	Vector2i m_mouse;
 	ListBox* m_console;
 	int m_lstatus;
 	Shader* m_shader;
 	Vector2i m_offsetMap;
+	Dice* m_dice;
 };
 
 #endif

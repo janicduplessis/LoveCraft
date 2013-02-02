@@ -35,7 +35,6 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	Info::Get().StatusOn(Info::LSTATUS_PLAYER);
 	m_character = new Character;
 	Info::Get().StatusOn(Info::LSTATUS_CHARACTER);
-	m_dice = new Dice;
 }
 
 Engine::~Engine()
@@ -86,7 +85,6 @@ Engine::~Engine()
 	}
 	if (Info::Get().GetStatus(Info::LSTATUS_SKYBOX))
 		delete m_skybox;
-	delete m_dice;
 	delete [] m_monsters;
 	delete m_textureArray;
 }
@@ -337,7 +335,7 @@ void Engine::LoadMenuResource()
 	m_textureInterface[CUSTIMAGE_WELCOME_FACE]->Load(TEXTURE_PATH "i_welcomeface.png");
 	m_textureInterface[CUSTIMAGE_ARROWBUTTON_UP]->Load(TEXTURE_PATH "i_arrowbutton_up.jpg");
 	m_textureInterface[CUSTIMAGE_ARROWBUTTON_DOWN]->Load(TEXTURE_PATH "i_arrowbutton_down.jpg");
-
+	Info::Get().SetTexturesInterface(m_textureInterface);
 
 	Info::Get().StatusOn(Info::LSTATUS_TEXTURE_IMAGE);
 #pragma endregion
@@ -349,6 +347,7 @@ void Engine::LoadMenuResource()
 	m_texturefontColor[TEXTCOLOR_GREEN]->Load(TEXTURE_PATH "font_green.png");
 	m_texturefontColor[TEXTCOLOR_BLUE]->Load(TEXTURE_PATH "font_blue.png");
 	m_texturefontColor[TEXTCOLOR_YELLOW]->Load(TEXTURE_PATH "font_yellow.png");
+	Info::Get().SetFonts(m_texturefontColor);
 
 	Info::Get().StatusOn(Info::LSTATUS_TEXTURE_FONTS);
 #pragma endregion

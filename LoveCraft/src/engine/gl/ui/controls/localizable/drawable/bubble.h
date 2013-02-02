@@ -1,13 +1,13 @@
 #ifndef BUBBLE_H__
 #define BUBBLE_H__
 
+#include "../drawable.h"
 
-
-class Bubble
+class Bubble : public Drawable
 {
 public:
 	Bubble();
-	~Bubble();
+	virtual ~Bubble();
 };
 
 #endif

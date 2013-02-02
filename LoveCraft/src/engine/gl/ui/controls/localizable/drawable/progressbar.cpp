@@ -5,7 +5,7 @@
 #include <iostream>
 #include <sstream>
 
-ProgressBar::ProgressBar() : Control(CTRLTYPE_PROGRESSBAR), m_textureBar(0), m_borderSize(0),
+ProgressBar::ProgressBar() : Drawable(CTRLTYPE_PROGRESSBAR), m_textureBar(0), m_borderSize(0),
 	m_mode(ProgressBar::BARMODE_HORIZONTAL_LTR), m_minimum(0), m_maximum(100), m_value(0)
 {
 
@@ -27,13 +27,28 @@ void ProgressBar::Init(BarMode mode, Texture* bartext, bool showback, unsigned s
 	//afin d'accomoder l'appel du glRotate dans le Render
 	if (m_mode == ProgressBar::BARMODE_HORIZONTAL_RTL || m_mode == ProgressBar::BARMODE_VERTICAL_UTD)
 	{
-		m_size = Vector2i(m_size.y, m_size.x);
+		m_size = Size(m_size.h, m_size.w);
 	}
 }
 
 void ProgressBar::Render()
 {
-	Render(m_texture, m_textureBar);
+	if (m_visible)
+	{
+		bool invertedBar = m_mode == BARMODE_HORIZONTAL_RTL || m_mode == BARMODE_VERTICAL_UTD;
+		//Render du fond
+		if (m_background && m_background)
+			RenderSquare(AbsolutePosition() - Vector2i(m_borderSize, m_borderSize),
+			m_size + Vector2i(m_borderSize * 2, m_borderSize * 2), 
+			m_background, false);
+		//Render de la bar
+		if (front)
+			RenderSquare(Vector2i(
+			invertedBar ? AbsolutePosition().x + m_size.x - ValuePerc() : AbsolutePosition().x, 
+			AbsolutePosition().y), 
+			Vector2i(ValuePerc(), m_size.y), 
+			front);
+	}
 }
 
 ProgressBar::BarMode ProgressBar::Mode() const
@@ -50,148 +65,7 @@ float ProgressBar::Value() const
 	return m_value;
 }
 
-void ProgressBar::SP(PropBool boolprop, bool value)
-{
-	switch (boolprop)
-	{
-	case PROPBOL_REPEATTEXTURE:
-		Control::SP(boolprop, value);
-		break;
-	case PROPBOL_VISIBLE:
-		Control::SP(boolprop, value);
-		break;
-	case PROPBOL_ENABLED:
-		Control::SP(boolprop, value);
-		break;
-	case PROPBOL_SHOWBACKGROUND:
-		m_background = value;
-		break;
-	default:
-		assert(false);
-		break;
-	}
-}
-void ProgressBar::SP(PropFloat floatprop, float value)
-{
-	switch (floatprop)
-	{
-	case PROPFLT_BARMIN:
-		assert(value <= m_maximum);
-		m_minimum = value;
-		break;
-	case PROPFLT_BARMAX:
-		assert(value >= m_minimum);
-		m_maximum = value;
-		break;
-	default:
-		assert(false);
-		break;
-	}
-}
-void ProgressBar::SP(PropUShort ushortprop, unsigned short value)
-{
-	switch (ushortprop)
-	{
-	case PROPUSHRT_BORDERSIZE:
-		m_borderSize = value;
-		break;
-	default:
-		assert(false);
-		break;
-	}
-}
-void ProgressBar::SP(PropTexture textureprop, Texture* value)
-{
-	switch (textureprop)
-	{
-	case PROPTEXT_BACKGROUND:
-		Control::SP(textureprop, value);
-		break;
-	case PROPTEXT_BAR:
-		m_textureBar = value;
-		break;
-	default:
-		assert(false);
-		break;
-	}
-}
-
-bool ProgressBar::GP(PropBool boolprop) const
-{
-	switch (boolprop)
-	{
-	case PROPBOL_REPEATTEXTURE:
-		return Control::GP(boolprop);
-	case PROPBOL_VISIBLE:
-		return Control::GP(boolprop);
-	case PROPBOL_ENABLED:
-		return Control::GP(boolprop);
-	case PROPBOL_SHOWBACKGROUND:
-		return m_background;
-	default:
-		assert(false);
-		return false;
-	}
-}
-float ProgressBar::GP(PropFloat floatprop) const
-{
-	switch (floatprop)
-	{
-	case PROPFLT_BARMIN:
-		return m_minimum;
-	case PROPFLT_BARMAX:
-		return m_maximum;
-	default:
-		assert(false);
-		return 0;
-	}
-}
-unsigned short ProgressBar::GP(PropUShort ushortprop) const
-{
-	switch (ushortprop)
-	{
-	case PROPUSHRT_BORDERSIZE:
-		return m_borderSize;
-	default:
-		assert(false);
-		return 0;
-	}
-}
-Texture* ProgressBar::GP(PropTexture textureprop) const
-{
-	switch (textureprop)
-	{
-	case PROPTEXT_BACKGROUND:
-		return Control::GP(textureprop);
-	case PROPTEXT_BAR:
-		return m_textureBar;
-	default:
-		assert(false);
-		return 0;
-	}
-}
-
 // Private
-
-void ProgressBar::Render(Texture* back, Texture* front)
-{
-	if (m_visible)
-	{
-		bool invertedBar = m_mode == BARMODE_HORIZONTAL_RTL || m_mode == BARMODE_VERTICAL_UTD;
-		//Render du fond
-		if (back && m_background)
-			RenderSquare(AbsolutePosition() - Vector2i(m_borderSize, m_borderSize),
-			m_size + Vector2i(m_borderSize * 2, m_borderSize * 2), 
-			back, false);
-		//Render de la bar
-		if (front)
-			RenderSquare(Vector2i(
-			invertedBar ? AbsolutePosition().x + m_size.x - ValuePerc() : AbsolutePosition().x, 
-			AbsolutePosition().y), 
-			Vector2i(ValuePerc(), m_size.y), 
-			front);
-	}
-}
 
 float ProgressBar::ValuePerc() const
 {

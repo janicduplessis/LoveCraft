@@ -1,6 +1,6 @@
 #include "textbox.h"
 
-Textbox::Textbox() : Control(CTRLTYPE_TEXTBOX), IText(), m_label(0), m_hasFocus(false)
+Textbox::Textbox() : Textual(CTRLTYPE_TEXTBOX), m_label(0), m_hasFocus(false)
 {
 }
 

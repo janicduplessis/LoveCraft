@@ -1,6 +1,6 @@
 ﻿#include "button.h"
 
-Button::Button() : Control(CTRLTYPE_BOUTON), IText(), m_clicked(false)
+Button::Button() : Textual(CTRLTYPE_BOUTON), m_clicked(false)
 {
 	m_label = new Label();
 }

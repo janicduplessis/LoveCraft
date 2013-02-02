@@ -1,13 +1,13 @@
 #ifndef WINDOW_H__
 #define WINDOW_H__
 
+#include "../container.h"
 
-
-class Window
+class Window : public Container
 {
 public:
 	Window();
-	~Window();
+	virtual ~Window();
 };
 
 #endif

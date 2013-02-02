@@ -1,9 +1,9 @@
 #ifndef PROGRESSBAR_H_
 #define PROGRESSBAR_H_
 
-#include "../../../control.h"
+#include "../drawable.h"
 
-class ProgressBar : public Control
+class ProgressBar : public Drawable
 {
 public:
 	/**
@@ -68,10 +68,9 @@ private:
 	void RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture, bool repeat = true);
 	void RenderCircle(const Vector2i& origin, float rayon, Texture* texture, bool repeat = true);
 	void ApplyRotationTransformation(BarMode type, Vector2i size) const;
-	bool m_background;
-	unsigned short m_borderSize;
+	uint8 m_borderSize;
 	BarMode m_mode;
-	Texture* m_textureBar;
+	Texture* m_foreground;
 	float m_minimum;
 	float m_maximum;
 	float m_value;

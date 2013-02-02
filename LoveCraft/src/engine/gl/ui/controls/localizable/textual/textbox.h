@@ -1,14 +1,13 @@
 #ifndef TEXTBOX_H_
 #define TEXTBOX_H_
 
-#include "control.h"
 #include "label.h"
 
-class Textbox : public Control, public IText
+class Textbox : public Textual
 {
 public:
 	Textbox();
-	~Textbox();
+	virtual ~Textbox();
 	void Init(Vector2i &offset = Vector2i());
 	bool HasFocus() const;
 	void SetFocus(const bool value);

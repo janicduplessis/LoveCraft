@@ -1,13 +1,13 @@
 #ifndef SPELLBUTTON_H__
 #define SPELLBUTTON_H__
 
+#include "button.h"
 
-
-class SpellButton
+class SpellButton : Button
 {
 public:
 	SpellButton();
-	~SpellButton();
+	virtual ~SpellButton();
 };
 
 #endif

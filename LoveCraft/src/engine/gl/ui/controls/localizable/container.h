@@ -3,25 +3,25 @@
 
 #include "define.h"
 #include "util/vector2.h"
-#include "../../control.h"
+#include "../localizable.h"
 #include <cassert>
 #include <string>
 #include <iostream>
 
-class IContainer
+class Container : public Localizable
 {
 public:
-	IContainer();
-	virtual ~IContainer();
-	virtual void ContainInit(unsigned short capacity);
-	virtual void AddControl(Control* control);
-	virtual Control* GetControlById(unsigned short index) const;
-	virtual Control* GetControlByName(const string& name) const;
+	Container(CONTROLTYPE type);
+	virtual ~Container();
+	virtual void Init(uint8 capacity);
+	virtual void Render();
+	virtual void AddControl(Localizable* control);
+	virtual Localizable* GetControlById(uint8 index) const;
+	virtual Localizable* GetControlByName(const string& name) const;
 protected:
-	void RenderAllControls();
-	Control** m_controls;
-	unsigned short m_capacity;
-	unsigned short m_ctrlNbr;
+	Localizable** m_controls;
+	uint8 m_ctrlNbr;
+	uint8 m_capacity;
 };
 
 #endif

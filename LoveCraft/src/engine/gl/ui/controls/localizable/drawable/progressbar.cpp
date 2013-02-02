@@ -54,16 +54,16 @@ void ProgressBar::SP(PropBool boolprop, bool value)
 {
 	switch (boolprop)
 	{
-	case Control::PROPBOL_REPEATTEXTURE:
+	case PROPBOL_REPEATTEXTURE:
 		Control::SP(boolprop, value);
 		break;
-	case Control::PROPBOL_VISIBLE:
+	case PROPBOL_VISIBLE:
 		Control::SP(boolprop, value);
 		break;
-	case Control::PROPBOL_ENABLED:
+	case PROPBOL_ENABLED:
 		Control::SP(boolprop, value);
 		break;
-	case Control::PROPBOL_SHOWBACKGROUND:
+	case PROPBOL_SHOWBACKGROUND:
 		m_background = value;
 		break;
 	default:
@@ -75,11 +75,11 @@ void ProgressBar::SP(PropFloat floatprop, float value)
 {
 	switch (floatprop)
 	{
-	case Control::PROPFLT_BARMIN:
+	case PROPFLT_BARMIN:
 		assert(value <= m_maximum);
 		m_minimum = value;
 		break;
-	case Control::PROPFLT_BARMAX:
+	case PROPFLT_BARMAX:
 		assert(value >= m_minimum);
 		m_maximum = value;
 		break;
@@ -92,7 +92,7 @@ void ProgressBar::SP(PropUShort ushortprop, unsigned short value)
 {
 	switch (ushortprop)
 	{
-	case Control::PROPUSHRT_BORDERSIZE:
+	case PROPUSHRT_BORDERSIZE:
 		m_borderSize = value;
 		break;
 	default:
@@ -104,10 +104,10 @@ void ProgressBar::SP(PropTexture textureprop, Texture* value)
 {
 	switch (textureprop)
 	{
-	case Control::PROPTEXT_BACKGROUND:
+	case PROPTEXT_BACKGROUND:
 		Control::SP(textureprop, value);
 		break;
-	case Control::PROPTEXT_BAR:
+	case PROPTEXT_BAR:
 		m_textureBar = value;
 		break;
 	default:
@@ -120,13 +120,13 @@ bool ProgressBar::GP(PropBool boolprop) const
 {
 	switch (boolprop)
 	{
-	case Control::PROPBOL_REPEATTEXTURE:
+	case PROPBOL_REPEATTEXTURE:
 		return Control::GP(boolprop);
-	case Control::PROPBOL_VISIBLE:
+	case PROPBOL_VISIBLE:
 		return Control::GP(boolprop);
-	case Control::PROPBOL_ENABLED:
+	case PROPBOL_ENABLED:
 		return Control::GP(boolprop);
-	case Control::PROPBOL_SHOWBACKGROUND:
+	case PROPBOL_SHOWBACKGROUND:
 		return m_background;
 	default:
 		assert(false);
@@ -137,9 +137,9 @@ float ProgressBar::GP(PropFloat floatprop) const
 {
 	switch (floatprop)
 	{
-	case Control::PROPFLT_BARMIN:
+	case PROPFLT_BARMIN:
 		return m_minimum;
-	case Control::PROPFLT_BARMAX:
+	case PROPFLT_BARMAX:
 		return m_maximum;
 	default:
 		assert(false);
@@ -150,7 +150,7 @@ unsigned short ProgressBar::GP(PropUShort ushortprop) const
 {
 	switch (ushortprop)
 	{
-	case Control::PROPUSHRT_BORDERSIZE:
+	case PROPUSHRT_BORDERSIZE:
 		return m_borderSize;
 	default:
 		assert(false);
@@ -161,9 +161,9 @@ Texture* ProgressBar::GP(PropTexture textureprop) const
 {
 	switch (textureprop)
 	{
-	case Control::PROPTEXT_BACKGROUND:
+	case PROPTEXT_BACKGROUND:
 		return Control::GP(textureprop);
-	case Control::PROPTEXT_BAR:
+	case PROPTEXT_BAR:
 		return m_textureBar;
 	default:
 		assert(false);
@@ -200,12 +200,12 @@ float ProgressBar::ValuePerc() const
 
 void ProgressBar::RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture, bool repeat)
 {
-	if (m_blend != Control::CBLEND_NONE)
+	if (m_blend != CBLEND_NONE)
 	{
 		glEnable(GL_BLEND);
-		if (IsBlend(Control::CBLEND_PNG))
+		if (IsBlend(CBLEND_PNG))
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		else if (IsBlend(Control::CBLEND_BLUR))
+		else if (IsBlend(CBLEND_BLUR))
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	}
 	texture->Bind();
@@ -231,7 +231,7 @@ void ProgressBar::RenderSquare(const Vector2i& position, const Vector2i& size, T
 
 	glEnd();
 
-	if (m_blend != Control::CBLEND_NONE)
+	if (m_blend != CBLEND_NONE)
 		glDisable(GL_BLEND);
 }
 

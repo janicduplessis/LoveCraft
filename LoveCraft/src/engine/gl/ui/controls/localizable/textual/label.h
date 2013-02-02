@@ -2,8 +2,8 @@
 #define LABEL_H_
 
 #include "interfaceinfos.h"
-#include "control.h"
-#include "itext.h"
+#include "../../../control.h"
+#include "../itext.h"
 
 /**
 * Obient Définit la valeur de
@@ -12,28 +12,6 @@
 class Label : public Control, public IText
 {
 public:
-	/**
-	* Affichera le texte à l'endroit spécifié par rapport au conteneur
-	*/
-	enum Docking
-	{
-		TEXTDOCK_NONE,
-		TEXTDOCK_TOPLEFT,
-		TEXTDOCK_TOPCENTER,
-		TEXTDOCK_TOPRIGHT,
-		TEXTDOCK_MIDDLELEFT,
-		TEXTDOCK_MIDDLECENTER,
-		TEXTDOCK_MIDDLERIGHT,
-		TEXTDOCK_BOTTOMLEFT,
-		TEXTDOCK_BOTTOMCENTER,
-		TEXTDOCK_BOTTOMRIGHT,
-		TEXTDOCK_LAST
-	};
-	enum PropDock
-	{
-		PROPDOCK_DOCKING
-	};
-
 	/**
 	* Constructeur par défaut
 	*/

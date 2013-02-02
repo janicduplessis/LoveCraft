@@ -3,7 +3,7 @@
 
 #include "define.h"
 #include "util/vector2.h"
-#include "control.h"
+#include "../../control.h"
 #include <cassert>
 #include <string>
 #include <iostream>

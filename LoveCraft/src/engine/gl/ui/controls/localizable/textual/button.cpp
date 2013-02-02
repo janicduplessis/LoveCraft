@@ -13,7 +13,7 @@ Button::~Button()
 void Button::Init()
 {
 	m_label->CtrlInit(this, Vector2i(), Vector2i(), 0, "label");
-	m_label->Init(Label::TEXTDOCK_MIDDLECENTER, Vector2f());
+	m_label->Init(TEXTDOCK_MIDDLECENTER, Vector2f());
 	m_label->TextInit(m_message, m_fontColor, m_italic, m_charHeight, m_charWidth, m_charInterval);
 }
 
@@ -54,11 +54,11 @@ void Button::Press()
 
 void Button::SetTextTo(std::string text)
 {
-	m_label->SP(Label::PropString::PROPSTR_TEXT, text);
+	m_label->SP(PROPSTR_TEXT, text);
 }
 std::string Button::GetText() const
 {
-	return m_label->GP(Label::PropString::PROPSTR_TEXT);
+	return m_label->GP(PROPSTR_TEXT);
 }
 
 Label* Button::TLabel()

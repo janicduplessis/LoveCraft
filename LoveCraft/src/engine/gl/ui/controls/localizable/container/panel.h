@@ -2,7 +2,7 @@
 #define PANEL_H_
 
 #include "control.h"
-#include "icontainer.h"
+#include "../icontainer.h"
 
 class Panel : public Control, public IContainer
 {

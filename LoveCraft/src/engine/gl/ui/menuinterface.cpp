@@ -30,9 +30,9 @@ void MenuInterface::Init(const ValuesInterface& val)
 
 	//Loading screen
 	m_menu_loading = new PictureBox();
-	m_menu_loading->CtrlInit(m_menu_screen, Vector2i(),  m_menu_screen->GP(PictureBox::PROPVCT2_SIZE), val.UITextures[CUSTIMAGE_LOADING_SCREEN], "loading");
+	m_menu_loading->CtrlInit(m_menu_screen, Vector2i(),  m_menu_screen->GP(PROPVCT2_SIZE), val.UITextures[CUSTIMAGE_LOADING_SCREEN], "loading");
 	m_menu_loading->Init();
-	m_menu_loading->SP(PictureBox::PROPBOL_VISIBLE, false);
+	m_menu_loading->SP(PROPBOL_VISIBLE, false);
 	m_menu_screen->AddControl(m_menu_loading);
 
 	//Paneau principal du menu
@@ -44,13 +44,13 @@ void MenuInterface::Init(const ValuesInterface& val)
 	m_menu_panel->Init();
 	m_menu_screen->AddControl(m_menu_panel);
 
-	int controlWidth = m_menu_panel->GP(Panel::PROPVCT2_SIZE).x * 0.8f;
-	int controlPosX = m_menu_panel->GP(Panel::PROPVCT2_SIZE).x / 2 - controlWidth / 2;
+	int controlWidth = m_menu_panel->GP(PROPVCT2_SIZE).x * 0.8f;
+	int controlPosX = m_menu_panel->GP(PROPVCT2_SIZE).x / 2 - controlWidth / 2;
 
 	//Logo du jeu
 	m_menu_logo = new PictureBox();
 	m_menu_logo->CtrlInit(m_menu_panel, 
-		Vector2i(controlPosX, m_menu_panel->GP(PictureBox::PROPVCT2_SIZE).y - MENU_LOGO_SIZE_Y - controlPosX),
+		Vector2i(controlPosX, m_menu_panel->GP(PROPVCT2_SIZE).y - MENU_LOGO_SIZE_Y - controlPosX),
 		Vector2i(controlWidth, MENU_LOGO_SIZE_Y), val.UITextures[CUSTIMAGE_MENU_LOGO], "logo");
 	m_menu_logo->Init();
 	m_menu_panel->AddControl(m_menu_logo);
@@ -65,8 +65,8 @@ void MenuInterface::Init(const ValuesInterface& val)
 	m_menu_controls->Init();
 	m_menu_panel->AddControl(m_menu_controls);
 
-	int buttonWidth = m_menu_controls->GP(Panel::PROPVCT2_SIZE).x * 0.8f;
-	int buttonPosX = m_menu_controls->GP(Panel::PROPVCT2_SIZE).x / 2 - buttonWidth / 2;
+	int buttonWidth = m_menu_controls->GP(PROPVCT2_SIZE).x * 0.8f;
+	int buttonPosX = m_menu_controls->GP(PROPVCT2_SIZE).x / 2 - buttonWidth / 2;
 
 	//Button demarrer fullscreen
 	m_menu_fullscreen = new Button();

@@ -38,7 +38,7 @@ Control* IContainer::GetControlByName(const std::string& name) const
 	Control* ctrl = 0;
 	for (unsigned short i = 0; i < m_capacity; i++)
 	{
-		if (m_controls[i]->GP(Control::PROPSTR_NAME) == name)
+		if (m_controls[i]->GP(PROPSTR_NAME) == name)
 		{
 			ctrl = m_controls[i];
 			break;

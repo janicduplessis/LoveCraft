@@ -12,7 +12,7 @@
 #include "controls.h"
 #include "gl/shaders/shader.h"
 
-#include "engine/gl/ui/listbox.h"
+#include "engine/gl/ui/controls/localizable/textual/listbox.h"
 
 #include <util/vector3.h>
 #include <util/array2d.h>

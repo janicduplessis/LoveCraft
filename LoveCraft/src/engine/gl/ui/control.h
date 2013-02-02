@@ -111,69 +111,12 @@ private:
 class Control
 {
 public:
-	enum Type
-	{
-		CTRLTYPE_NONE,
-		CTRLTYPE_PROGRESSBAR,
-		CTRLTYPE_LABEL,
-		CTRLTYPE_BOUTON,
-		CTRLTYPE_PICTUREBOX,
-		CTRLTYPE_PANEL,
-		CTRLTYPE_LISTBOX,
-		CTRLTYPE_TEXTBOX
-	};
-	enum BlendType
-	{
-		CBLEND_NONE,
-		CBLEND_PNG,
-		CBLEND_BLUR
-	};
-
-	enum PropBool
-	{
-		PROPBOL_REPEATTEXTURE,
-		PROPBOL_VISIBLE,
-		PROPBOL_ENABLED,
-		PROPBOL_ITALIC,
-		PROPBOL_SHOWBACKGROUND
-	};
-	enum PropFloat
-	{
-		PROPFLT_FONTW,
-		PROPFLT_FONTH,
-		PROPFLT_FONTI,
-		PROPFLT_BARMIN,
-		PROPFLT_BARMAX
-	};
-	enum PropUShort
-	{
-		PROPUSHRT_LINEGAP,
-		PROPUSHRT_BORDERSIZE
-	};
-	enum PropVector2
-	{
-		PROPVCT2_POSITION,
-		PROPVCT2_SIZE,
-		PROPVCT2_TEXTOFFSET
-	};
-	enum PropString
-	{
-		PROPSTR_NAME,
-		PROPSTR_TEXT
-	};
-	enum PropTexture
-	{
-		PROPTEXT_BACKGROUND,
-		PROPTEXT_FONT_COLOR,
-		PROPTEXT_BAR
-	};
-
 	/**
 	* Constructeur de la classe
 	*
 	* @param type	Le type du controle - Voir Enum Type
 	*/
-	Control(Type type);
+	Control(CONTROLTYPE type);
 	/**
 	* Destructeur par défaut
 	*/
@@ -197,7 +140,7 @@ public:
 	virtual void SP(PropVector2 vector2prop, Vector2i value);
 	virtual void SP(PropString stringprop, string value);
 	virtual void SP(PropTexture textureprop, Texture* value);
-	virtual void SetBlend(BlendType btype);
+	virtual void SetBlend(BLENDTYPE btype);
 
 	virtual bool MousePressEvents( int x, int y );
 	virtual bool MouseReleaseEvents(int x, int y);
@@ -208,15 +151,15 @@ public:
 	virtual Vector2i GP(PropVector2 vector2prop) const;
 	virtual string GP(PropString stringprop) const;
 	virtual Texture* GP(PropTexture textureprop) const;
-	virtual BlendType GetBlend() const;
-	virtual bool IsBlend(BlendType btype) const;
+	virtual BLENDTYPE GetBlend() const;
+	virtual bool IsBlend(BLENDTYPE btype) const;
 
 protected:
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size);
 	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture);
 	string m_name;
-	Type m_type;
-	BlendType m_blend;
+	CONTROLTYPE m_type;
+	BLENDTYPE m_blend;
 	bool m_repeatTexture;
 	bool m_visible;
 	bool m_enabled;

@@ -13,6 +13,7 @@
 #include <gl/GLU.h>
 
 using std::string;
+#include "enumerators.h"
 
 typedef unsigned char uint8;
 typedef unsigned short uint16;

@@ -20,7 +20,7 @@
 #include "gl/ui/valuesgameinterface.h"
 #include "gl/ui/gameinterface.h"
 #include "gl/ui/menuinterface.h"
-#include "gl/ui/picturebox.h"
+#include "gl/ui/controls/localizable/drawable/picturebox.h"
 
 #include "game/animal.h"
 #include "game/character.h"

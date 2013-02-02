@@ -1,7 +1,7 @@
 #ifndef ITEXT_H__
 #define ITEXT_H__
 
-#include "../texture.h"
+#include "../../../texture.h"
 
 class IText
 {

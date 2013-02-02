@@ -1,5 +1,5 @@
 ﻿#include "info.h"
-#include "engine/gl/ui/label.h"
+#include "engine/gl/ui/controls/localizable/textual/label.h"
 
 Info::Info() : m_lineToPrint(""), m_console(0), m_lstatus(0), m_offsetMap(0)
 {

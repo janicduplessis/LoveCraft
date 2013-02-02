@@ -81,27 +81,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\gl\ui\itext.cpp" />
-    <ClCompile Include="src\engine\gl\skybox.cpp" />
-    <ClCompile Include="src\engine\chunkloader.cpp" />
+    <ClCompile Include="src\engine\gl\ui\control.cpp" />
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\container\panel.cpp" />
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\drawable\picturebox.cpp" />
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\drawable\progressbar.cpp" />
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\icontainer.cpp" />
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\itext.cpp" />
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\button.cpp" />
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\label.cpp" />
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\listbox.cpp" />
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\textbox.cpp" />
     <ClCompile Include="src\engine\gl\ui\gameinterface.cpp" />
     <ClCompile Include="src\engine\gl\ui\interface.cpp" />
-    <ClCompile Include="src\engine\gl\ui\menuinterface.cpp" />
+    <ClCompile Include="src\engine\gl\skybox.cpp" />
+    <ClCompile Include="src\engine\chunkloader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\billboardshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\lightingshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\psupdateshader.cpp" />
     <ClCompile Include="src\engine\gl\randomtexture.cpp" />
+    <ClCompile Include="src\engine\gl\ui\menuinterface.cpp" />
+    <ClCompile Include="src\engine\gl\ui\theme.cpp" />
     <ClCompile Include="src\engine\treegenerator.cpp" />
     <ClCompile Include="src\util\dice.cpp" />
     <ClCompile Include="src\game\animal.cpp" />
-    <ClCompile Include="src\engine\gl\ui\button.cpp" />
-    <ClCompile Include="src\engine\gl\ui\icontainer.cpp" />
-    <ClCompile Include="src\engine\gl\ui\listbox.cpp" />
     <ClCompile Include="src\engine\gl\particles.cpp" />
-    <ClCompile Include="src\engine\gl\ui\label.cpp" />
-    <ClCompile Include="src\engine\gl\ui\panel.cpp" />
-    <ClCompile Include="src\engine\gl\ui\control.cpp" />
-    <ClCompile Include="src\engine\gl\ui\picturebox.cpp" />
     <ClCompile Include="src\engine\options.cpp" />
     <ClCompile Include="src\game\character.cpp" />
     <ClCompile Include="src\engine\ai.cpp" />
@@ -120,7 +123,6 @@
     <ClCompile Include="src\game\npc.cpp" />
     <ClCompile Include="src\engine\openglcontext.cpp" />
     <ClCompile Include="src\engine\player.cpp" />
-    <ClCompile Include="src\engine\gl\ui\progressbar.cpp" />
     <ClCompile Include="src\engine\projectile.cpp" />
     <ClCompile Include="src\util\perlin.cpp" />
     <ClCompile Include="src\util\quaternion.cpp" />
@@ -130,17 +132,27 @@
     <ClCompile Include="src\engine\gl\texturearray.cpp" />
     <ClCompile Include="src\engine\gl\textureatlas.cpp" />
     <ClCompile Include="src\util\tool.cpp" />
-    <ClCompile Include="src\engine\gl\ui\textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\engine\gl\ui\itext.h" />
-    <ClInclude Include="src\engine\gl\skybox.h" />
-    <ClInclude Include="src\engine\chunkloader.h" />
-    <ClInclude Include="src\engine\gl\ui\valuesgameinterface.h" />
-    <ClInclude Include="src\engine\gl\ui\valuesinterface.h" />
+    <ClInclude Include="src\engine\gl\ui\control.h" />
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\container\panel.h" />
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\drawable\picturebox.h" />
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\drawable\progressbar.h" />
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\icontainer.h" />
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\itext.h" />
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\button.h" />
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\label.h" />
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\listbox.h" />
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\textbox.h" />
     <ClInclude Include="src\engine\gl\ui\gameinterface.h" />
     <ClInclude Include="src\engine\gl\ui\interface.h" />
     <ClInclude Include="src\engine\gl\ui\menuinterface.h" />
+    <ClInclude Include="src\engine\gl\ui\theme.h" />
+    <ClInclude Include="src\engine\gl\ui\valuesgameinterface.h" />
+    <ClInclude Include="src\engine\gl\ui\valuesinterface.h" />
+    <ClInclude Include="src\enumerators.h" />
+    <ClInclude Include="src\engine\gl\skybox.h" />
+    <ClInclude Include="src\engine\chunkloader.h" />
     <ClInclude Include="src\engine\gl\shaders\billboardshader.h" />
     <ClInclude Include="src\engine\gl\shaders\lightingshader.h" />
     <ClInclude Include="src\engine\gl\shaders\psupdateshader.h" />
@@ -150,16 +162,9 @@
     <ClInclude Include="src\util\dice.h" />
     <ClInclude Include="src\npcinfo.h" />
     <ClInclude Include="src\game\animal.h" />
-    <ClInclude Include="src\engine\gl\ui\button.h" />
-    <ClInclude Include="src\engine\gl\ui\icontainer.h" />
-    <ClInclude Include="src\engine\gl\ui\listbox.h" />
     <ClInclude Include="src\engine\gl\particles.h" />
-    <ClInclude Include="src\engine\gl\ui\label.h" />
-    <ClInclude Include="src\engine\gl\ui\picturebox.h" />
     <ClInclude Include="src\game\spell.h" />
     <ClInclude Include="src\interfaceinfos.h" />
-    <ClInclude Include="src\engine\gl\ui\panel.h" />
-    <ClInclude Include="src\engine\gl\ui\control.h" />
     <ClInclude Include="src\engine\options.h" />
     <ClInclude Include="src\game\character.h" />
     <ClInclude Include="src\engine\ai.h" />
@@ -180,7 +185,6 @@
     <ClInclude Include="src\engine\gl\model.h" />
     <ClInclude Include="src\engine\network.h" />
     <ClInclude Include="src\game\npc.h" />
-    <ClInclude Include="src\engine\gl\ui\progressbar.h" />
     <ClInclude Include="src\engine\projectile.h" />
     <ClInclude Include="src\util\perlin.h" />
     <ClInclude Include="src\util\quaternion.h" />
@@ -194,7 +198,6 @@
     <ClInclude Include="src\engine\gl\texture.h" />
     <ClInclude Include="src\util\tool.h" />
     <ClInclude Include="src\util\vector3.h" />
-    <ClInclude Include="src\engine\gl\ui\textbox.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\gl\shaders\billboardshader.frag" />

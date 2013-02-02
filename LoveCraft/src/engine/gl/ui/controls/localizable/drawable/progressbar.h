@@ -1,7 +1,7 @@
 #ifndef PROGRESSBAR_H_
 #define PROGRESSBAR_H_
 
-#include "control.h"
+#include "../../../control.h"
 
 class ProgressBar : public Control
 {

@@ -1,8 +1,8 @@
 #include "control.h"
 
-Control::Control(Type type) : m_type(type), m_visible(true), m_name("default"),
+Control::Control(CONTROLTYPE type) : m_type(type), m_visible(true), m_name("default"),
 	m_parent(0), m_position(Vector2i()), m_size(Vector2i(100, 100)), m_texture(0), 
-	m_blend(Control::CBLEND_PNG), m_repeatTexture(false), m_enabled(true)
+	m_blend(CBLEND_PNG), m_repeatTexture(false), m_enabled(true)
 {
 }
 
@@ -50,13 +50,13 @@ void Control::SP(PropBool boolprop, bool value)
 {
 	switch (boolprop)
 	{
-	case Control::PROPBOL_REPEATTEXTURE:
+	case PROPBOL_REPEATTEXTURE:
 		m_repeatTexture = value;
 		break;
-	case Control::PROPBOL_VISIBLE:
+	case PROPBOL_VISIBLE:
 		m_visible = value;
 		break;
-	case Control::PROPBOL_ENABLED:
+	case PROPBOL_ENABLED:
 		m_enabled = value;
 		break;
 	default:
@@ -68,10 +68,10 @@ void Control::SP(PropVector2 vector2prop, Vector2i value)
 {
 	switch (vector2prop)
 	{
-	case Control::PROPVCT2_POSITION:
+	case PROPVCT2_POSITION:
 		m_position = value;
 		break;
-	case Control::PROPVCT2_SIZE:
+	case PROPVCT2_SIZE:
 		m_size = value;
 		break;
 	default:
@@ -83,7 +83,7 @@ void Control::SP(PropString stringprop, string value)
 {
 	switch (stringprop)
 	{
-	case Control::PROPSTR_NAME:
+	case PROPSTR_NAME:
 		m_name = value;
 		break;
 	default:
@@ -95,7 +95,7 @@ void Control::SP(PropTexture textureprop, Texture* value)
 {
 	switch (textureprop)
 	{
-	case Control::PROPTEXT_BACKGROUND:
+	case PROPTEXT_BACKGROUND:
 		m_texture = value;
 		break;
 	default:
@@ -103,7 +103,7 @@ void Control::SP(PropTexture textureprop, Texture* value)
 		break;
 	}
 }
-void Control::SetBlend(BlendType btype)
+void Control::SetBlend(BLENDTYPE btype)
 {
 	m_blend = btype;
 }
@@ -114,11 +114,11 @@ bool Control::GP(PropBool boolprop) const
 {
 	switch (boolprop)
 	{
-	case Control::PROPBOL_REPEATTEXTURE:
+	case PROPBOL_REPEATTEXTURE:
 		return m_repeatTexture;
-	case Control::PROPBOL_VISIBLE:
+	case PROPBOL_VISIBLE:
 		return m_visible;
-	case Control::PROPBOL_ENABLED:
+	case PROPBOL_ENABLED:
 		return m_enabled;
 	default:
 		assert(false);
@@ -129,9 +129,9 @@ Vector2i Control::GP(PropVector2 vector2prop) const
 {
 	switch (vector2prop)
 	{
-	case Control::PROPVCT2_POSITION:
+	case PROPVCT2_POSITION:
 		return m_position;
-	case Control::PROPVCT2_SIZE:
+	case PROPVCT2_SIZE:
 		return m_size;
 	default:
 		assert(false);
@@ -142,7 +142,7 @@ string Control::GP(PropString stringprop) const
 {
 	switch (stringprop)
 	{
-	case Control::PROPSTR_NAME:
+	case PROPSTR_NAME:
 		return m_name;
 	default:
 		assert(false);
@@ -153,18 +153,18 @@ Texture* Control::GP(PropTexture textureprop) const
 {
 	switch (textureprop)
 	{
-	case Control::PROPTEXT_BACKGROUND:
+	case PROPTEXT_BACKGROUND:
 		return m_texture;
 	default:
 		assert(false);
 		return 0;
 	}
 }
-Control::BlendType Control::GetBlend() const
+BLENDTYPE Control::GetBlend() const
 {
 	return m_blend;
 }
-bool Control::IsBlend(BlendType btype) const
+bool Control::IsBlend(BLENDTYPE btype) const
 {
 	return m_blend == btype;
 }
@@ -173,12 +173,12 @@ bool Control::IsBlend(BlendType btype) const
 
 void Control::RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture)
 {
-	if (m_blend != Control::CBLEND_NONE)
+	if (m_blend != CBLEND_NONE)
 	{
 		glEnable(GL_BLEND);
-		if (IsBlend(Control::CBLEND_PNG))
+		if (IsBlend(CBLEND_PNG))
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		else if (IsBlend(Control::CBLEND_BLUR))
+		else if (IsBlend(CBLEND_BLUR))
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	}
 	texture->Bind();
@@ -200,7 +200,7 @@ void Control::RenderSquare(const Vector2i& position, const Vector2i& size, Textu
 	glVertex2i(0, size.y);
 
 	glEnd();
-	if (m_blend != Control::CBLEND_NONE)
+	if (m_blend != CBLEND_NONE)
 		glDisable(GL_BLEND);
 }
 

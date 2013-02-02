@@ -1,7 +1,7 @@
 #include "label.h"
 
 
-Label::Label() : Control(CTRLTYPE_LABEL), IText(), m_docking(Label::TEXTDOCK_NONE), m_offset(Vector2f())
+Label::Label() : Control(CTRLTYPE_LABEL), IText(), m_docking(TEXTDOCK_NONE), m_offset(Vector2f())
 {
 }
 
@@ -25,32 +25,32 @@ Vector2i Label::AbsolutePosition() const
 	// Vérification de l'ancrage et assignation de la position relative au parent
 	switch (m_docking)
 	{
-	case Label::TEXTDOCK_TOPLEFT:
-		relposition = Vector2f(0, m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight);
+	case TEXTDOCK_TOPLEFT:
+		relposition = Vector2f(0, m_parent->GP(PROPVCT2_SIZE).y - m_charHeight);
 		break;
-	case Label::TEXTDOCK_TOPCENTER:
-		relposition = Vector2f((m_parent->GP(Control::PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth)) / 2, m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight);
+	case TEXTDOCK_TOPCENTER:
+		relposition = Vector2f((m_parent->GP(PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth)) / 2, m_parent->GP(PROPVCT2_SIZE).y - m_charHeight);
 		break;
-	case Label::TEXTDOCK_TOPRIGHT:
-		relposition = Vector2f(m_parent->GP(Control::PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth), m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight);
+	case TEXTDOCK_TOPRIGHT:
+		relposition = Vector2f(m_parent->GP(PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth), m_parent->GP(PROPVCT2_SIZE).y - m_charHeight);
 		break;
-	case Label::TEXTDOCK_MIDDLELEFT:
-		relposition = Vector2f(0, (m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight) / 2);
+	case TEXTDOCK_MIDDLELEFT:
+		relposition = Vector2f(0, (m_parent->GP(PROPVCT2_SIZE).y - m_charHeight) / 2);
 		break;
-	case Label::TEXTDOCK_MIDDLECENTER:
-		relposition = Vector2f((m_parent->GP(Control::PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth)) / 2, (m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight) / 2);
+	case TEXTDOCK_MIDDLECENTER:
+		relposition = Vector2f((m_parent->GP(PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth)) / 2, (m_parent->GP(PROPVCT2_SIZE).y - m_charHeight) / 2);
 		break;
-	case Label::TEXTDOCK_MIDDLERIGHT:
-		relposition = Vector2f(m_parent->GP(Control::PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth), (m_parent->GP(Control::PROPVCT2_SIZE).y - m_charHeight) / 2);
+	case TEXTDOCK_MIDDLERIGHT:
+		relposition = Vector2f(m_parent->GP(PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth), (m_parent->GP(PROPVCT2_SIZE).y - m_charHeight) / 2);
 		break;
-	case Label::TEXTDOCK_BOTTOMLEFT:
+	case TEXTDOCK_BOTTOMLEFT:
 		relposition = Vector2f(0, 0);
 		break;
-	case Label::TEXTDOCK_BOTTOMCENTER:
-		relposition = Vector2f((m_parent->GP(Control::PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth)) / 2, 0);
+	case TEXTDOCK_BOTTOMCENTER:
+		relposition = Vector2f((m_parent->GP(PROPVCT2_SIZE).x - (length * m_charInterval * m_charWidth)) / 2, 0);
 		break;
-	case Label::TEXTDOCK_BOTTOMRIGHT:
-		relposition = Vector2f(m_parent->GP(Control::PROPVCT2_SIZE).x  / 2 - (length * m_charInterval * m_charWidth), 0);
+	case TEXTDOCK_BOTTOMRIGHT:
+		relposition = Vector2f(m_parent->GP(PROPVCT2_SIZE).x  / 2 - (length * m_charInterval * m_charWidth), 0);
 		break;
 	default:
 		relposition = Vector2f(m_position.x, m_position.y);
@@ -69,16 +69,16 @@ void Label::SP(PropBool boolprop, bool value)
 {
 	switch (boolprop)
 	{
-	case Control::PROPBOL_REPEATTEXTURE:
+	case PROPBOL_REPEATTEXTURE:
 		Control::SP(boolprop, value);
 		break;
-	case Control::PROPBOL_VISIBLE:
+	case PROPBOL_VISIBLE:
 		Control::SP(boolprop, value);
 		break;
-	case Control::PROPBOL_ENABLED:
+	case PROPBOL_ENABLED:
 		Control::SP(boolprop, value);
 		break;
-	case Control::PROPBOL_ITALIC:
+	case PROPBOL_ITALIC:
 		m_italic = value;
 		break;
 	default:
@@ -90,13 +90,13 @@ void Label::SP(PropVector2 vector2prop, Vector2i value)
 {
 	switch (vector2prop)
 	{
-	case Control::PROPVCT2_POSITION:
+	case PROPVCT2_POSITION:
 		Control::SP(vector2prop, value);
 		break;
-	case Control::PROPVCT2_SIZE:
+	case PROPVCT2_SIZE:
 		Control::SP(vector2prop, value);
 		break;
-	case Control::PROPVCT2_TEXTOFFSET:
+	case PROPVCT2_TEXTOFFSET:
 		m_offset = Vector2f(value.x, value.y);
 		break;
 	default:
@@ -108,10 +108,10 @@ void Label::SP(PropString stringprop, string value)
 {
 	switch (stringprop)
 	{
-	case Control::PROPSTR_NAME:
+	case PROPSTR_NAME:
 		Control::SP(stringprop, value);
 		break;
-	case Control::PROPSTR_TEXT:
+	case PROPSTR_TEXT:
 		m_message = value;
 		break;
 	default:
@@ -123,10 +123,10 @@ void Label::SP(PropTexture textureprop, Texture* value)
 {
 	switch (textureprop)
 	{
-	case Control::PROPTEXT_BACKGROUND:
+	case PROPTEXT_BACKGROUND:
 		Control::SP(textureprop, value);
 		break;
-	case Control::PROPTEXT_FONT_COLOR:
+	case PROPTEXT_FONT_COLOR:
 		m_fontColor = value;
 		break;
 	default:
@@ -138,13 +138,13 @@ void Label::SP(PropFloat floatprop, float value)
 {
 	switch (floatprop)
 	{
-	case Control::PROPFLT_FONTW:
+	case PROPFLT_FONTW:
 		m_charWidth = value;
 		break;
-	case Control::PROPFLT_FONTH:
+	case PROPFLT_FONTH:
 		m_charHeight = value;
 		break;
-	case Control::PROPFLT_FONTI:
+	case PROPFLT_FONTI:
 		m_charInterval = value;
 		break;
 	default:
@@ -156,7 +156,7 @@ void Label::SP(PropDock dockprop, Docking value)
 {
 	switch (dockprop)
 	{
-	case Label::PROPDOCK_DOCKING:
+	case PROPDOCK_DOCKING:
 		m_docking = value;
 		break;
 	default:
@@ -169,13 +169,13 @@ bool Label::GP(PropBool boolprop) const
 {
 	switch (boolprop)
 	{
-	case Control::PROPBOL_REPEATTEXTURE:
+	case PROPBOL_REPEATTEXTURE:
 		return Control::GP(boolprop);
-	case Control::PROPBOL_VISIBLE:
+	case PROPBOL_VISIBLE:
 		return Control::GP(boolprop);
-	case Control::PROPBOL_ENABLED:
+	case PROPBOL_ENABLED:
 		return Control::GP(boolprop);
-	case Control::PROPBOL_ITALIC:
+	case PROPBOL_ITALIC:
 		return m_italic;
 	default:
 		assert(false);
@@ -186,11 +186,11 @@ Vector2i Label::GP(PropVector2 vector2prop) const
 {
 	switch (vector2prop)
 	{
-	case Control::PROPVCT2_POSITION:
+	case PROPVCT2_POSITION:
 		return Control::GP(vector2prop);
-	case Control::PROPVCT2_SIZE:
+	case PROPVCT2_SIZE:
 		return Control::GP(vector2prop);
-	case Control::PROPVCT2_TEXTOFFSET:
+	case PROPVCT2_TEXTOFFSET:
 		return Vector2i((int)m_offset.x, (int)m_offset.y);
 	default:
 		assert(false);
@@ -201,9 +201,9 @@ string Label::GP(PropString stringprop) const
 {
 	switch (stringprop)
 	{
-	case Control::PROPSTR_NAME:
+	case PROPSTR_NAME:
 		return Control::GP(stringprop);
-	case Control::PROPSTR_TEXT:
+	case PROPSTR_TEXT:
 		return m_message;
 	default:
 		assert(false);
@@ -214,9 +214,9 @@ Texture* Label::GP(PropTexture textureprop) const
 {
 	switch (textureprop)
 	{
-	case Control::PROPTEXT_BACKGROUND:
+	case PROPTEXT_BACKGROUND:
 		return Control::GP(textureprop);
-	case Control::PROPTEXT_FONT_COLOR:
+	case PROPTEXT_FONT_COLOR:
 		return m_fontColor;
 	default:
 		assert(false);
@@ -227,22 +227,22 @@ float Label::GP(PropFloat floatprop) const
 {
 	switch (floatprop)
 	{
-	case Control::PROPFLT_FONTW:
+	case PROPFLT_FONTW:
 		return m_charWidth;
-	case Control::PROPFLT_FONTH:
+	case PROPFLT_FONTH:
 		return m_charHeight;
-	case Control::PROPFLT_FONTI:
+	case PROPFLT_FONTI:
 		return m_charInterval;
 	default:
 		assert(false);
 		return 0.f;
 	}
 }
-Label::Docking Label::GP(PropDock dockprop) const
+Docking Label::GP(PropDock dockprop) const
 {
 	switch (dockprop)
 	{
-	case Label::PROPDOCK_DOCKING:
+	case PROPDOCK_DOCKING:
 		return m_docking;
 	default:
 		assert(false);

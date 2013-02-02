@@ -1,6 +1,6 @@
 #include "listbox.h"
 #include <sstream>
-#include "../../info.h"
+#include "engine/info.h"
 
 ListBox::ListBox() : Control(CTRLTYPE_LISTBOX), IText(), m_lines(0), m_lineNbr(0), m_gapBetLines(0), 
 	m_curLineIndex(0), m_scrollable(false), m_upArrow(0), m_downArrow(0)
@@ -42,7 +42,7 @@ void ListBox::Init(unsigned short lineNbr, short gap, Vector2i offset, bool scro
 		m_lines[i]->CtrlInit(this, Vector2i(offset.x, (m_charHeight + m_gapBetLines) * i + offset.y), 
 			Vector2i(), 0, ss.str());
 		m_lines[i]->TextInit("", m_fontColor, m_italic, m_charHeight, m_charWidth, m_charInterval);
-		m_lines[i]->Init(Label::TEXTDOCK_NONE, Vector2f());
+		m_lines[i]->Init(TEXTDOCK_NONE, Vector2f());
 		ss.str("");
 	}
 	if (m_updownButtons)

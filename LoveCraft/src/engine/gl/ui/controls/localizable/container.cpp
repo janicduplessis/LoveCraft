@@ -1,4 +1,4 @@
-#include "icontainer.h"
+#include "container.h"
 
 
 IContainer::IContainer() : m_ctrlNbr(0), m_capacity(0)

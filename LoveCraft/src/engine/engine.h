@@ -102,7 +102,7 @@ public:
 	* @param y		coordonnée en Y
 	* @param t		texte à afficher
 	*/
-	virtual void PrintText(unsigned int x, unsigned int y, const std::string& t);
+	virtual void PrintText(unsigned int x, unsigned int y, const string& t);
 
 	virtual void TextenteredEvent(unsigned int val);
 
@@ -151,8 +151,8 @@ public:
 	void RemoveBlock();
 
 private:
-	bool LoadTexture(Texture& texture, const std::string& filename, bool stopOnError = true);
-	void LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, std::string path);
+	bool LoadTexture(Texture& texture, const string& filename, bool stopOnError = true);
+	void LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, string path);
 	/**
 	* Render les elements 2D en premier plan
 	* 
@@ -174,8 +174,8 @@ private:
 	virtual void RenderSpells();
 	void StartBlendPNG(bool value = true) const;
 	void OnClick(Control* sender);
-	void CW(const std::string& line);
-	void CWL(const std::string& line);
+	void CW(const string& line);
+	void CWL(const string& line);
 
 
 	bool m_wireframe;

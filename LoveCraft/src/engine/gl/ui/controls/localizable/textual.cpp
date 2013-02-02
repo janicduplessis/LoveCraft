@@ -1,4 +1,4 @@
-#include "itext.h"
+#include "textual.h"
 
 
 IText::IText() : m_message(""), m_italic(false), m_charHeight(0.f), 

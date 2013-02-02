@@ -1,5 +1,5 @@
-#ifndef ICONTAINER_H_
-#define ICONTAINER_H_
+#ifndef CONTAINER_H_
+#define CONTAINER_H_
 
 #include "define.h"
 #include "util/vector2.h"

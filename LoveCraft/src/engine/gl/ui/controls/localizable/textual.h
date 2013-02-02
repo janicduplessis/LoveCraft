@@ -1,5 +1,5 @@
-#ifndef ITEXT_H__
-#define ITEXT_H__
+#ifndef TEXTUAL_H__
+#define TEXTUAL_H__
 
 #include "../../../texture.h"
 

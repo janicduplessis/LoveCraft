@@ -4,11 +4,11 @@
 #include "define.h"
 #include "engine/info.h"
 #include "../texture.h"
-#include "util/vector2.h"
 #include "object.h"
 #include <cassert>
 #include <cmath>
 #include <string>
+#include <sstream>
 #include <iostream>
 #include <map>
 
@@ -116,14 +116,14 @@ class Control : public Object
 public:
 	Control(CONTROLTYPE type);
 	virtual ~Control();
-	void Init(string name, Control* parent = 0);
+	void InitControl(string name, Control* parent = 0);
 
-	bool IsEnabled() const;
-	void Enable();
-	void Disable();
+	virtual bool IsEnabled() const;
+	virtual void Enable();
+	virtual void Disable();
 
-	Control* GetParent() const;
-	CONTROLTYPE GetType() const;
+	virtual Control* GetParent() const;
+	virtual CONTROLTYPE GetType() const;
 
 protected:
 	CONTROLTYPE m_type;

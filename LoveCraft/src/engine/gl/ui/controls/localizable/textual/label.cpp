@@ -35,7 +35,7 @@ void Label::Render()
 			glLoadIdentity();
 			glTranslatef(abspos.x, abspos.y, 0);
 
-			for (unsigned int i = 0; i < m_message.length(); ++i)
+			for (uint16 i = 0; i < m_message.length(); ++i)
 			{
 				float left = (float)((m_message[i] - 32) % 16) / 16.0f;
 				float top = (float)((m_message[i] - 32) / 16) / 16.0f;

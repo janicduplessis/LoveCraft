@@ -126,7 +126,7 @@ public:
 	Texture* GetTexture(uint8 index) const;
 
 	Theme* GetTheme(uint8 index) const;
-	Dice* Dice() const;
+	Dice& Dic();
 
 private:
 	Info();
@@ -153,7 +153,7 @@ private:
 	int m_lstatus;
 	Shader* m_shader;
 	Vector2i m_offsetMap;
-	Dice* m_dice;
+	Dice m_dice;
 };
 
 #endif

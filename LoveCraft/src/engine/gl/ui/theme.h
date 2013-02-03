@@ -30,7 +30,7 @@ private:
 	float m_charI;
 	bool m_italicText;
 	Texture* m_foreColor;
-	Texture* m_backColor
+	Texture* m_backColor;
 
 };
 

@@ -10,21 +10,12 @@ Container::~Container()
 	delete [] m_controls;
 }
 
-void Container::Init(uint8 capacity)
+void Container::InitContainer(uint8 capacity)
 {
 	m_capacity = capacity;
 	m_controls = new Localizable*[capacity];
 	for (uint8 i = 0; i < m_capacity; i++)
 		m_controls[i] = 0;
-}
-
-void Container::Render()
-{
-	if (m_controls != 0)
-	{
-		for (uint8 i = 0; i < m_ctrlNbr; i++)
-			m_controls[i]->Render();
-	}
 }
 
 void Container::AddControl(Localizable* control)
@@ -37,7 +28,7 @@ void Container::AddControl(Localizable* control)
 	}
 	else
 	{
-		Init(m_capacity);
+		InitContainer(m_capacity);
 		AddControl(control);
 	}
 }

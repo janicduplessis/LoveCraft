@@ -81,10 +81,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\spellbutton.cpp" />
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext.cpp" />
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.cpp" />
     <ClCompile Include="src\game\entity.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\drawable\bubble.cpp" />
-    <ClCompile Include="src\engine\gl\ui\controls\localizable\container\dialogbox.cpp" />
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\container\dialogwindow.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\drawable.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable.cpp" />
     <ClCompile Include="src\engine\gl\ui\object.cpp" />
@@ -94,10 +95,10 @@
     <ClCompile Include="src\engine\gl\ui\controls\localizable\drawable\progressbar.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\container.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual.cpp" />
-    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\button.cpp" />
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\button.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\label.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\listbox.cpp" />
-    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\textbox.cpp" />
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\textbox.cpp" />
     <ClCompile Include="src\engine\gl\ui\gameinterface.cpp" />
     <ClCompile Include="src\engine\gl\ui\interface.cpp" />
     <ClCompile Include="src\engine\gl\skybox.cpp" />
@@ -144,10 +145,11 @@
     <ClCompile Include="src\engine\gl\ui\controls\workable\timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\spellbutton.h" />
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext.h" />
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.h" />
     <ClInclude Include="src\game\entity.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\drawable\bubble.h" />
-    <ClInclude Include="src\engine\gl\ui\controls\localizable\container\dialogbox.h" />
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\container\dialogwindow.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\drawable.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable.h" />
     <ClInclude Include="src\engine\gl\ui\object.h" />
@@ -157,10 +159,10 @@
     <ClInclude Include="src\engine\gl\ui\controls\localizable\drawable\progressbar.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\container.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual.h" />
-    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\button.h" />
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\button.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\label.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\listbox.h" />
-    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\textbox.h" />
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\textbox.h" />
     <ClInclude Include="src\engine\gl\ui\gameinterface.h" />
     <ClInclude Include="src\engine\gl\ui\interface.h" />
     <ClInclude Include="src\engine\gl\ui\menuinterface.h" />

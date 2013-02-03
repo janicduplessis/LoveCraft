@@ -8,14 +8,16 @@ class Textual : public Localizable
 public:
 	Textual(CONTROLTYPE type);
 	virtual ~Textual();
-	virtual void Init(Texture* color, bool italic, float charHeight, float charWidth, float charinterval, Texture* background = 0);
-	virtual void Init(Theme* theme);
+	virtual void InitTextual(Texture* color, bool italic, float charHeight, float charWidth, float charinterval, Texture* background = 0);
+	virtual void InitTextual(ThemeSet theme);
 
 	virtual void Render() = 0;
 
 	virtual void SetMsg(string message);
 	virtual string GetMsg() const;
 	virtual bool IsMsg(string message) const;
+	virtual bool HasMsg() const;
+	virtual void ResetMsg();
 
 	virtual void SetColor(Texture* color);
 	virtual Texture* GetColor() const;
@@ -32,7 +34,7 @@ public:
 	virtual void SetCharWidth(float width);
 	virtual float GetCharWidh() const;
 	virtual float IsCharWidth(float width) const;
-	
+
 	virtual void SetCharInterval(float interval);
 	virtual float GetCharInterval() const;
 	virtual float IsCharInterval(float interval) const;

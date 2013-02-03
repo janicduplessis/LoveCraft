@@ -9,6 +9,7 @@
 #include "son.h"
 #include <SFML/Network.hpp>
 #include "interfaceinfos.h"
+#include "gl/ui/controls/localizable/textual/singletext/textbox.h"
 #include "util/tool.h"
 
 
@@ -202,8 +203,8 @@ void Engine::GameInit()
 #define MONSTERS_INIALIZED
 #endif
 	for (int i = 0; i < MONSTER_MAX_NUMBER; i++)
-		m_monsters[i] = new Animal(Vector3f(m_dice->Next((int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*1.5f)), 0,
-		m_dice->Next((int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*1.5f))));
+		m_monsters[i] = new Animal(Vector3f(Info::Get().Dic().Next((int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*1.5f)), 0,
+		Info::Get().Dic().Next((int)(VIEW_DISTANCE*0.5f), (int)(VIEW_DISTANCE*1.5f))));
 	m_monsters[0]->Init(Animal::ANL_GRD_ALIGATR, m_player);
 
 #ifdef LOAD_MODELS
@@ -363,8 +364,8 @@ void Engine::LoadMenuResource()
 
 	//Cursor
 	m_pb_cursor = new PictureBox();
-	m_pb_cursor->CtrlInit(0, Vector2i(), Vector2i(50, 50), m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], "pb_cursor");
-	m_pb_cursor->Init();
+	m_pb_cursor->InitControl("pb_cursor", 0);
+	m_pb_cursor->InitLocalizable(Point(), Size(50, 50), m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR]);
 	m_menuUI.m_menu_fullscreen->OnClick.Attach(this, &Engine::OnClick);
 	m_menuUI.m_menu_start->OnClick.Attach(this, &Engine::OnClick);
 	m_menuUI.m_menu_close->OnClick.Attach(this, &Engine::OnClick);
@@ -399,7 +400,7 @@ void Engine::LoadGameResource()
 
 }
 
-void Engine::LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, std::string path)
+void Engine::LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, string path)
 {
 	int index;
 	switch (faces)
@@ -464,12 +465,12 @@ void Engine::RenderMenu(float elapsedTime)
 
 	if (!IsFirstRun())
 	{
-		if (m_menuUI.m_menu_fullscreen->GetText() != STRING_BUTTON_NORM_CONT)
-			m_menuUI.m_menu_fullscreen->SetTextTo(STRING_BUTTON_NORM_CONT);
-		if (m_menuUI.m_menu_start->GetText() != STRING_BUTTON_DEBUG_ON && !Info::Get().Options().GetOptDebug())
-			m_menuUI.m_menu_start->SetTextTo(STRING_BUTTON_DEBUG_ON);
-		else if (m_menuUI.m_menu_start->GetText() != STRING_BUTTON_DEBUG_OFF && Info::Get().Options().GetOptDebug())
-			m_menuUI.m_menu_start->SetTextTo(STRING_BUTTON_DEBUG_OFF);
+		if (m_menuUI.m_menu_fullscreen->IsMsg(STRING_BUTTON_NORM_CONT))
+			m_menuUI.m_menu_fullscreen->SetMsg(STRING_BUTTON_NORM_CONT);
+		if (m_menuUI.m_menu_start->IsMsg(STRING_BUTTON_DEBUG_ON) && !Info::Get().Options().GetOptDebug())
+			m_menuUI.m_menu_start->SetMsg(STRING_BUTTON_DEBUG_ON);
+		else if (m_menuUI.m_menu_start->IsMsg(STRING_BUTTON_DEBUG_OFF) && Info::Get().Options().GetOptDebug())
+			m_menuUI.m_menu_start->SetMsg(STRING_BUTTON_DEBUG_OFF);
 	}
 
 #pragma endregion
@@ -521,7 +522,7 @@ void Engine::Update(float elapsedTime)
 		m_character->SetHealth(m_character->HealthMax());
 		Info::Get().Sound().PlaySnd(Son::SON_DEATH, Son::CHANNEL_INTERFACE, true);
 		CW("Vous etes mort!");
-
+		m_character->SetExp(-100000);
 	}
 
 	m_mutex.unlock();
@@ -600,9 +601,9 @@ void Engine::Render(float elapsedTime)
 	if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON ) {
 		// hide/show cursor
 		if (!m_rightClick && !m_leftClick)
-			m_pb_cursor->SP(PROPBOL_VISIBLE, true);
+			m_pb_cursor->Show();
 		else
-			m_pb_cursor->SP(PROPBOL_VISIBLE, false);
+			m_pb_cursor->Hide();
 
 		// recule la camera
 		glTranslatef(0,0,-m_camRadius);
@@ -738,7 +739,7 @@ void Engine::Render(float elapsedTime)
 	if (ttt)
 	{
 		Info::Get().Sound().PlayMusic(Son::MUSIC_PLAY1);
-		m_menuUI.m_menu_loading->SP(PROPBOL_VISIBLE, false);
+		m_menuUI.m_menu_loading->Hide();
 		CW("Premier Render de l'engine termine avec succes.");
 		ttt = false;
 	}
@@ -1020,11 +1021,12 @@ void Engine::KeyReleaseEvent(unsigned char key)
 			if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON) 
 			{
 				m_camera->SetMode(Camera::CAM_THIRD_PERSON);
+				m_pb_cursor->Show();
 				ss << "Affichage de la camera a la troisieme personne";
 			}
 			else 
 			{
-				m_pb_cursor->SP(PROPBOL_VISIBLE, false);
+				m_pb_cursor->Hide();
 				m_camera->SetMode(Camera::CAM_FIRST_PERSON);
 				ss << "Affichage de la camera a la premiere personne";
 			}
@@ -1108,7 +1110,7 @@ void Engine::MouseMoveEvent(int x, int y)
 		}
 	}
 
-	m_pb_cursor->SP(PROPVCT2_POSITION, (Vector2i(MousePosition().x, MousePosition().y - m_pb_cursor->GP(PROPVCT2_SIZE).y)));
+	m_pb_cursor->SetPosition(Point(MousePosition().x, MousePosition().y - m_pb_cursor->GetSize().h));
 }
 
 void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
@@ -1169,9 +1171,9 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		switch (button)
 		{
 		case MOUSE_BUTTON_LEFT:
-			m_menuUI.m_menu_close->MousePressEvents(x, m_menuUI.m_menu_screen->GP(PROPVCT2_SIZE).y - y);
-			m_menuUI.m_menu_start->MousePressEvents(x, m_menuUI.m_menu_screen->GP(PROPVCT2_SIZE).y - y);
-			m_menuUI.m_menu_fullscreen->MousePressEvents(x, m_menuUI.m_menu_screen->GP(PROPVCT2_SIZE).y - y);
+			m_menuUI.m_menu_close->MousePressEvents(x, m_menuUI.m_menu_screen->GetSize().h - y);
+			m_menuUI.m_menu_start->MousePressEvents(x, m_menuUI.m_menu_screen->GetSize().h - y);
+			m_menuUI.m_menu_fullscreen->MousePressEvents(x, m_menuUI.m_menu_screen->GetSize().h - y);
 			break;
 		}
 	}
@@ -1179,7 +1181,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 
 void Engine::OnClick(Control* sender)
 {
-	string n = sender->GP(PROPSTR_NAME);
+	string n = sender->GetName();
 	Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE, true);
 
 	if (n == MENU_BUTTON_START_FULL_NAME)
@@ -1190,7 +1192,7 @@ void Engine::OnClick(Control* sender)
 		{
 			Info::Get().Options().SetOptDebug(false);
 			ActivateFirstRun();
-			m_menuUI.m_menu_loading->SP(PROPBOL_VISIBLE, true);
+			m_menuUI.m_menu_loading->Show();
 			SetMenuStatus(false);
 		}
 	}
@@ -1202,12 +1204,22 @@ void Engine::OnClick(Control* sender)
 		{
 			Info::Get().Options().SetOptDebug(true);
 			ActivateFirstRun();
-			m_menuUI.m_menu_loading->SP(PROPBOL_VISIBLE, true);
+			m_menuUI.m_menu_loading->Show();
 			SetMenuStatus(false);
 		}
 	}
 	if (n == MENU_BUTTON_CLOSE)
 		Stop();
+}
+
+void Engine::GainedFocus(Textbox* sender)
+{
+	
+}
+
+void Engine::LostFocus(Textbox* sender)
+{
+	CWL(sender->GetMsg());
 }
 
 void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)

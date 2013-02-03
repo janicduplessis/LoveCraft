@@ -11,7 +11,7 @@ Panel::~Panel()
 
 void Panel::Init(Texture* background)
 {
-
+	m_background = background;
 }
 
 void Panel::DrawingBindTexture()
@@ -25,6 +25,10 @@ void Panel::Render()
 	{
 		if (m_background)
 			DrawSquare();
-		Container::Render();
+		if (m_controls != 0)
+		{
+			for (uint8 i = 0; i < m_ctrlNbr; i++)
+				m_controls[i]->Render();
+		}
 	}
 }

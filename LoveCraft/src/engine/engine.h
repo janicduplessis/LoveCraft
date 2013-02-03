@@ -174,6 +174,8 @@ private:
 	virtual void RenderSpells();
 	void StartBlendPNG(bool value = true) const;
 	void OnClick(Control* sender);
+	void GainedFocus(Textbox* sender);
+	void LostFocus(Textbox* sender);
 	void CW(const string& line);
 	void CWL(const string& line);
 

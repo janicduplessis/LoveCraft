@@ -42,7 +42,7 @@ public:
 	ListBox* m_lb_console;
 	Textbox* m_txb_console;
 
-	Panel* m_pnl_playerImage;
+	PictureBox* m_pnl_playerImage;
 	Label* m_lbl_playerLevel;
 
 	Label* m_lbl_plrPos;

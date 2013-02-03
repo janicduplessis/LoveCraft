@@ -13,7 +13,7 @@ public:
 	* Dessine l'objet à l'écran
 	*/
 	virtual void Render() = 0;
-	void Init(Point &position, Size &size, ORIGIN origin = ORIGIN_BOTTOMLEFT);
+	void InitLocalizable(Point &position, Size &size, Texture* background, ORIGIN origin = ORIGIN_BOTTOMLEFT);
 
 	virtual void SetPosition(Point &position);
 	virtual Point GetPosition() const;
@@ -37,6 +37,7 @@ public:
 	virtual bool IsVisible() const;
 
 	virtual void SetBackground(Texture* texture);
+	virtual void RemoveBackground();
 	virtual Texture* GetBackground() const;
 	virtual bool IsBackground(Texture* texture);
 
@@ -47,7 +48,7 @@ public:
 protected:
 	virtual void DrawSquare();
 	virtual void DrawingActivateBlend() const;
-	virtual void DrawingBindTexture() = 0;
+	virtual void DrawingBindTexture();
 	virtual void DrawingGetGraphicReady() const;
 	virtual void DrawingDrawSquare() const;
 	virtual void DrawingDesactivateBlend() const;

@@ -139,16 +139,10 @@
     <ClCompile Include="src\engine\gl\ui\controls\localizable\drawable\progressbar.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\button.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\label.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\listbox.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\textbox.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\gl\ui\control.cpp">
@@ -178,9 +172,6 @@
     <ClCompile Include="src\engine\gl\ui\controls\workable.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\ui\controls\localizable\container\dialogbox.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\gl\ui\controls\localizable\container\window.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -193,13 +184,25 @@
     <ClCompile Include="src\game\entity.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\spellbutton.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\gl\ui\controls\localizable\container.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\button.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\textbox.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\container\dialogwindow.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -357,16 +360,10 @@
     <ClInclude Include="src\engine\gl\ui\controls\localizable\drawable\progressbar.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\button.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\label.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\listbox.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\textbox.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\gl\ui\control.h">
@@ -402,9 +399,6 @@
     <ClInclude Include="src\engine\gl\ui\controls\workable.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\ui\controls\localizable\container\dialogbox.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\gl\ui\controls\localizable\container\window.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -417,13 +411,25 @@
     <ClInclude Include="src\game\entity.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\spellbutton.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\gl\ui\controls\localizable\container.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\button.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\textbox.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\container\dialogwindow.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

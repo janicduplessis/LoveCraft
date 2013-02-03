@@ -4,13 +4,7 @@
 Textual::Textual(CONTROLTYPE type) : Localizable(type), m_message(""), m_italic(false), m_charHeight(0.f), 
 	m_charWidth(0.f), m_charInterval(0.f), m_fontColor(0)
 {
-	Theme* theme = Info::Get().GetTheme(THEME_DEFAULT);
-	m_charHeight = theme->GetHeight();
-	m_charWidth = theme->GetWidth();
-	m_charInterval = theme->GetInterval();
-	m_background = theme->GetBackColor();
-	m_fontColor = theme->GetForeColor();
-	m_italic = theme->GetItalic();
+	InitTextual(THEME_DEFAULT);
 }
 
 
@@ -18,7 +12,7 @@ Textual::~Textual()
 {
 }
 
-void Textual::Init(Texture* color, bool italic, float charHeight, float charWidth, float charinterval, Texture* background)
+void Textual::InitTextual(Texture* color, bool italic, float charHeight, float charWidth, float charinterval, Texture* background)
 {
 	m_fontColor = color;
 	m_italic = italic;
@@ -28,14 +22,11 @@ void Textual::Init(Texture* color, bool italic, float charHeight, float charWidt
 	m_background = background;
 }
 
-void Textual::Init(Theme* theme)
+void Textual::InitTextual(ThemeSet theme)
 {
-	m_charHeight = theme->GetHeight();
-	m_charWidth = theme->GetWidth();
-	m_charInterval = theme->GetInterval();
-	m_background = theme->GetBackColor();
-	m_fontColor = theme->GetForeColor();
-	m_italic = theme->GetItalic();
+	Theme* t = Info::Get().GetTheme(theme);
+	InitTextual(t->GetForeColor(), t->GetItalic(), t->GetHeight(), 
+		t->GetWidth(), t->GetInterval(), t->GetBackColor());
 }
 
 // Propriétés
@@ -53,6 +44,14 @@ string Textual::GetMsg() const
 bool Textual::IsMsg(string message) const
 {
 	return m_message == message;
+}
+bool Textual::HasMsg() const
+{
+	return m_message != "";
+}
+void Textual::ResetMsg()
+{
+	m_message = "";
 }
 
 #pragma endregion

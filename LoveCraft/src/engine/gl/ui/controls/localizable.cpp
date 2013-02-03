@@ -10,10 +10,11 @@ Localizable::~Localizable()
 {
 }
 
-void Localizable::Init(Point &position, Size &size, ORIGIN origin)
+void Localizable::InitLocalizable(Point &position, Size &size, Texture* background, ORIGIN origin)
 {
 	m_position = position;
 	m_size = size;
+	m_background = background;
 	SetOrigin(origin);
 }
 
@@ -70,6 +71,8 @@ void Localizable::SetOrigin(ORIGIN origin)
 		break;
 	case ORIGIN_TOPRIGHT:
 		m_size = Size(m_size.w * -1, m_size.h * -1);
+		break;
+	default:
 		break;
 	}
 }
@@ -141,6 +144,10 @@ void Localizable::SetBackground(Texture* texture)
 {
 	m_background = texture;
 }
+void Localizable::RemoveBackground()
+{
+	m_background = 0;
+}
 Texture* Localizable::GetBackground() const
 {
 	return m_background;
@@ -193,6 +200,11 @@ void Localizable::DrawingGetGraphicReady() const
 {
 	glLoadIdentity();
 	glTranslated(m_position.x, m_position.y, 0);
+}
+void Localizable::DrawingBindTexture()
+{
+	if (m_background)
+		m_background->Bind();
 }
 void Localizable::DrawingDrawSquare() const
 {

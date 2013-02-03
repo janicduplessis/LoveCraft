@@ -1,5 +1,6 @@
 ﻿#include "info.h"
 #include "engine/gl/ui/controls/localizable/textual/label.h"
+#include "interfaceinfos.h"
 
 Info::Info() : m_lineToPrint(""), m_console(0), m_lstatus(0), m_offsetMap(0),
 	m_textInterface(0), m_fontColors(0)
@@ -7,7 +8,6 @@ Info::Info() : m_lineToPrint(""), m_console(0), m_lstatus(0), m_offsetMap(0),
 	GenerateBlocInfos();
 	if (!m_sound.LoadSounds())
 		std::cout << "Une erreur est survenue lors du chargement des sons en memoire" << std::endl;
-	m_dice = new Dice();
 	m_themes = new Theme*[THEME_LAST];
 	for (uint8 i = 0; i < THEME_LAST; i++)
 		m_themes[i] = new Theme();
@@ -234,13 +234,16 @@ void Info::InitThemes()
 	m_themes[THEME_CONSOLE]->Init("console");
 	m_themes[THEME_CONSOLE]->Set(THEME_CONSOLE_CHAR_H, THEME_CONSOLE_CHAR_W, THEME_CONSOLE_CHAR_I,
 		THEME_CONSOLE_ITALIC, GetFontColor(THEME_CONSOLE_COLOR), GetTexture(THEME_CONSOLE_BACK));
+	m_themes[THEME_PLAYER_VALUES]->Init("playervalues");
+	m_themes[THEME_PLAYER_VALUES]->Set(THEME_PLAYERVALUES_CHAR_H, THEME_PLAYERVALUES_CHAR_W, THEME_PLAYERVALUES_CHAR_I,
+		THEME_PLAYERVALUES_ITALIC, GetFontColor(THEME_PLAYERVALUES_COLOR), THEME_PLAYERVALUES_BACK);
 }
 Theme* Info::GetTheme(uint8 index) const
 {
 	return m_themes[index];
 }
 
-Dice* Info::Dice() const
+Dice& Info::Dic()
 {
 	return m_dice;
 }

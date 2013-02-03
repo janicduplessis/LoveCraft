@@ -18,12 +18,11 @@ public:
 	virtual void SetDocking(Docking dock);
 	virtual Docking GetDocking() const;
 	virtual bool IsDocking(Docking dock) const;
+	virtual void UseNextDocking();
 
 	virtual void SetOffset(Point offset);
 	virtual Point GetOffset() const;
 	virtual bool IsOffset(Point &offset) const;
-
-	virtual void UseNextDocking();
 
 	virtual Point AbsolutePosition() const;
 protected:

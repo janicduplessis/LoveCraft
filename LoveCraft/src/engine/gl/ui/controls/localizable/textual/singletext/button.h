@@ -1,24 +1,20 @@
 ﻿#ifndef BUTTON_H__
 #define BUTTON_H__
 
-#include "label.h"
+#include "../singletext.h"
 
-/**
- * Class bouton
- */
-class Button : public Textual
+class Button : public SingleText
 {
 public:
 	Button();
-	~Button();
-	void Init();
+	virtual ~Button();
+	virtual void Render();
 
 	/**
 	 * Évenement On Click trigger si le bouton est cliqué
 	 * @param pointeur vers le bouton
 	 */
 	Event<void, Control*> OnClick;
-
 	/**
 	 * Test si le bouton est cliqué
 	 * Trigger le event OnClick et la metode Press
@@ -28,27 +24,17 @@ public:
 	 * @return si l'event a été géré
 	 */
 	virtual bool MousePressEvents(int x, int y);
-
-	void SetTextTo(string text);
-	string GetText() const;
-
-	Label* TLabel();
-
 	/**
 	 * Relache le bouton
 	 */
 	virtual bool MouseReleaseEvents(int x, int y);
-
 	/**
 	 * Pèse sur le bouton
 	 */
 	void Press();
-
-	void Render();
-
-private:
+protected:
+	Button(CONTROLTYPE type);
 	bool m_clicked;
-	Label* m_label;
 };
 
 #endif

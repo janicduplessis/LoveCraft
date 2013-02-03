@@ -1,11 +1,8 @@
 #include "listbox.h"
-#include <sstream>
-#include "engine/info.h"
 
 ListBox::ListBox() : Textual(CTRLTYPE_LISTBOX), m_lines(0), m_lineNbr(0), m_gapBetLines(0), 
-	m_curLineIndex(0), m_scrollable(false), m_upArrow(0), m_downArrow(0)
+	m_curLineIndex(0), m_scrollable(false), m_upArrow(0), m_downArrow(0), m_showButtons(false)
 {
-
 }
 
 ListBox::~ListBox()
@@ -19,44 +16,46 @@ ListBox::~ListBox()
 	delete m_downArrow;
 }
 
-void ListBox::Init(unsigned short lineNbr, short gap, Vector2i offset, bool scrollable)
+void ListBox::InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable)
 {
-	Init(lineNbr, gap, offset, scrollable, 0, 0);
+	InitListBox(lineNbr, gap, offset, scrollable, 0, 0);
 }
 
-void ListBox::Init(unsigned short lineNbr, short gap, Vector2i offset, bool scrollable, Texture* uptext, Texture* downtext)
+void ListBox::InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable, Texture* uptext, Texture* downtext)
 {
 	m_lineNbr = lineNbr;
 	m_gapBetLines = gap;
 	m_scrollable = scrollable;
-	m_updownButtons = uptext != 0 && downtext != 0;
+	m_showButtons = uptext != 0 || downtext != 0;
 
-	m_size = Vector2i(m_size.x + offset.x * 2, (m_charHeight + gap) * lineNbr + offset.y * 2);
+
+	SetSize(Size(GetSize().w + offset.x * 2, (GetCharHeight() + gap) * lineNbr + offset.y * 2 - gap));
 
 	m_lines = new Label*[lineNbr];
 	std::ostringstream ss;
-	for (unsigned short i = 0; i < m_lineNbr; i++)
+	for (uint8 i = 0; i < m_lineNbr; i++)
 	{
 		m_lines[i] = new Label();
-		ss << m_name << "_line" << (m_lineNbr - i - 1);
-		m_lines[i]->CtrlInit(this, Vector2i(offset.x, (m_charHeight + m_gapBetLines) * i + offset.y), 
-			Vector2i(), 0, ss.str());
-		m_lines[i]->TextInit("", m_fontColor, m_italic, m_charHeight, m_charWidth, m_charInterval);
-		m_lines[i]->Init(TEXTDOCK_NONE, Vector2f());
+		ss << GetName() << "_line" << (m_lineNbr - i - 1);
+		m_lines[i]->InitControl(ss.str(), this);
+		m_lines[i]->InitLocalizable(Point(offset.x, (GetCharHeight() + m_gapBetLines) * i + offset.y), Size());
+		m_lines[i]->InitTextual(THEME_CONSOLE);
 		ss.str("");
 	}
-	if (m_updownButtons)
+	if (m_showButtons)
 	{
 		// Init boutons
 		m_upArrow = new Button();
 		ss << m_name << "_uparrow";
-		m_upArrow->CtrlInit(this, Vector2i(m_size.x - 30, 30), Vector2i(30,20), uptext, ss.str());
-		m_upArrow->Init();
+		m_upArrow->InitControl(ss.str(), this);
+		m_upArrow->InitLocalizable(Point(GetSize().w - 30, 30), Size(30, 20));
+		m_upArrow->InitTextual(THEME_CONSOLE);
 		ss.str("");
 		m_downArrow = new Button();
 		ss << m_name << "_downarrow";
-		m_downArrow->CtrlInit(this, Vector2i(m_size.x - 30, 0), Vector2i(30,20), downtext, ss.str());
-		m_downArrow->Init();
+		m_downArrow->InitControl(ss.str(), this);
+		m_downArrow->InitLocalizable(Point(GetSize().w - 30, 0), Size(30, 20));
+		m_downArrow->InitTextual(THEME_CONSOLE);
 		ss.str("");
 		// Events
 		m_upArrow->OnClick.Attach(this, &ListBox::ScrollUp);
@@ -64,48 +63,141 @@ void ListBox::Init(unsigned short lineNbr, short gap, Vector2i offset, bool scro
 	}
 }
 
+void ListBox::UpdateValues()
+{
+	SetSize(Size(GetSize().w + m_lineOffset.x * 2, 
+		(m_charHeight + m_gapBetLines) * m_lineNbr + m_lineOffset.y * 2 - m_gapBetLines));
+	for (uint8 i = 0; i < m_lineNbr; i++)
+	{
+		m_lines[i]->SetPosition(Point(m_lineOffset.x, (GetCharHeight() + m_gapBetLines) * i + m_lineOffset.y));
+		m_lines[i]->SetColor(m_fontColor);
+		m_lines[i]->SetCharHeight(GetCharHeight());
+		m_lines[i]->SetCharWidth(GetCharWidh());
+		m_lines[i]->SetCharInterval(GetCharInterval());
+		if (IsItalic())
+			m_lines[i]->SetItalic();
+		else m_lines[i]->RemoveItalic();
+	}
+}
+
 void ListBox::Render()
 {
 	if (m_visible)
 	{
-		Control::Render();
-		for (unsigned short i = 0; i < m_lineNbr; i++)
+		DrawSquare();
+		for (uint8 i = 0; i < m_lineNbr; i++)
 			m_lines[i]->Render();
-		if (m_upArrow != 0 && m_downArrow != 0)
+		if (m_showButtons)
 		{
-			m_upArrow->Render();
-			m_downArrow->Render();
+			if (m_upArrow)
+				m_upArrow->Render();
+			if (m_downArrow)
+				m_downArrow->Render();
 		}
 	}
+}
+
+void ListBox::SetSize(Size size)
+{
+	Localizable::SetSize(size);
+	UpdateValues();
+}
+
+void ListBox::MakeScrollable()
+{
+	m_scrollable = true;
+}
+void ListBox::MakeUnscrollable()
+{
+	m_scrollable = false;
+}
+bool ListBox::IsScrollable() const
+{
+	return m_scrollable;
+}
+
+void ListBox::ShowScrollButtons()
+{
+	m_showButtons = true;
+}
+void ListBox::HideScrollButtons()
+{
+	m_showButtons = false;
+}
+bool ListBox::IsScrollButtons()
+{
+	return m_showButtons;
+}
+
+void ListBox::SetGap(uint8 gap)
+{
+	m_gapBetLines = gap;
+	UpdateValues();
+}
+uint8 ListBox::GetGap() const
+{
+	return m_gapBetLines;
+}
+bool ListBox::IsGap(uint8 gap) const
+{
+	return m_gapBetLines == gap;
+}
+
+void ListBox::SetOffset(Point offset)
+{
+	m_lineOffset = offset;
+	UpdateValues();
+}
+Point ListBox::GetOffset() const
+{
+	return m_lineOffset;
+}
+bool ListBox::IsOffset(Point offset) const
+{
+	return m_lineOffset == offset;
+}
+
+void ListBox::SetFontColor(Texture* color)
+{
+	m_fontColor = color;
+	UpdateValues();
+}
+Texture* ListBox::GetFontColor() const
+{
+	return m_fontColor;
+}
+bool ListBox::IsFontColor(Texture* color) const
+{
+	return m_fontColor == color;
 }
 
 void ListBox::Update()
 {
 	StringList::iterator it = m_messages.begin();
-	for (int i = 0; i < m_curLineIndex; i++)
+	for (uint16 i = 0; i < m_curLineIndex; i++)
 	{
 		if (it != m_messages.end())
 			++it;
 	}
-	for(int i = 0; i < m_lineNbr; ++i)
+	for(uint16 i = 0; i < m_lineNbr; ++i)
 	{
 		if (it == m_messages.end())
-			m_lines[i]->SP(PropString::PROPSTR_TEXT, "");
+			m_lines[i]->SetMsg("");
 		else {
-			m_lines[i]->SP(PropString::PROPSTR_TEXT, it->data());
+			m_lines[i]->SetMsg(it->data());
 			++it;
 		}
 	}
 }
 
-void ListBox::SetLine(unsigned short line, const std::string& message)
+void ListBox::SetLine(unsigned short line, const string& message)
 {
 	assert(line < m_lineNbr);
 	m_messages.assign(line, message);
 	Update();
 }
 
-void ListBox::AddLine(const std::string& message)
+void ListBox::AddLine(const string& message)
 {
 	m_messages.push_front(message);
 	Update();
@@ -145,12 +237,6 @@ bool ListBox::MouseReleaseEvents(int x, int y)
 {
 	return m_downArrow->MouseReleaseEvents(x,y) ||
 		m_upArrow->MouseReleaseEvents(x,y);
-}
-
-ListBox& ListBox::operator<<( const string& text )
-{
-	AddLine(text);
-	return *this;
 }
 
 string ListBox::GetLine( int index )

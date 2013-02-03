@@ -8,9 +8,9 @@ class Drawable : public Localizable
 public:
 	Drawable(CONTROLTYPE type);
 	virtual ~Drawable();
-	virtual void Render();
+	virtual void Render() = 0;
 protected:
-	virtual void DrawingBindTexture();
+	
 };
 
 #endif

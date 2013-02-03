@@ -5,13 +5,13 @@
 #include "define.h"
 #include "engine/gl/ui/valuesinterface.h"
 #include "engine/gl/ui/control.h"
-#include "engine/gl/ui/controls/localizable/textual/button.h"
+#include "engine/gl/ui/controls/localizable/textual/singletext/button.h"
 #include "engine/gl/ui/controls/localizable/container/panel.h"
 #include "engine/gl/ui/controls/localizable/textual/label.h"
 #include "engine/gl/ui/controls/localizable/textual/listbox.h"
 #include "engine/gl/ui/controls/localizable/drawable/picturebox.h"
 #include "engine/gl/ui/controls/localizable/drawable/progressbar.h"
-#include "engine/gl/ui/controls/localizable/textual/textbox.h"
+#include "engine/gl/ui/controls/localizable/textual/singletext/textbox.h"
 
 class Interface
 {

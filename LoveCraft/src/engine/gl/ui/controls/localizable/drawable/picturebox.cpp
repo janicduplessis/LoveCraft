@@ -14,3 +14,8 @@ void PictureBox::Init()
 {
 
 }
+
+void PictureBox::Render()
+{
+	DrawSquare();
+}

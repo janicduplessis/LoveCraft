@@ -9,7 +9,8 @@ public:
 	PictureBox();
 	virtual ~PictureBox();
 
-	void Init();
+	virtual void Init();
+	virtual void Render();
 };
 
 #endif

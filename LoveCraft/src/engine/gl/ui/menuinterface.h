@@ -21,6 +21,9 @@ public:
 	Button* m_menu_start;
 	Button* m_menu_fullscreen;
 	Button* m_menu_close;
+
+	Panel* m_timertest;
+	Label* m_timertesttext;
 };
 
 #endif

@@ -36,6 +36,15 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	Info::Get().StatusOn(Info::LSTATUS_PLAYER);
 	m_character = new Character;
 	Info::Get().StatusOn(Info::LSTATUS_CHARACTER);
+
+	m_timertest = new Timer();
+	m_timertest->Init(2.0f);
+	m_timeranimationplus = new Timer();
+	m_timeranimationplus->Init(0.01f);
+	m_timeranimationplus->InitControl("plus");
+	m_timeranimationmoins = new Timer();
+	m_timeranimationmoins->Init(0.01f);
+	m_timeranimationmoins->InitControl("moins");
 }
 
 Engine::~Engine()
@@ -369,6 +378,10 @@ void Engine::LoadMenuResource()
 	m_menuUI.m_menu_fullscreen->OnClick.Attach(this, &Engine::OnClick);
 	m_menuUI.m_menu_start->OnClick.Attach(this, &Engine::OnClick);
 	m_menuUI.m_menu_close->OnClick.Attach(this, &Engine::OnClick);
+	m_timertest->OnTick.Attach(this, &Engine::Timertest_OnTick);
+	m_timeranimationplus->OnTick.Attach(this, &Engine::TimerAnimation_OnTick);
+	m_timeranimationmoins->OnTick.Attach(this, &Engine::TimerAnimation_OnTick);
+
 
 #pragma endregion
 
@@ -455,13 +468,22 @@ void Engine::RenderMenu(float elapsedTime)
 	glPushMatrix();
 
 #pragma endregion
-
+	m_timertest->Update(elapsedTime);
+	m_timeranimationmoins->Update(elapsedTime);
+	m_timeranimationplus->Update(elapsedTime);
 	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
 	m_menuUI.Render();
 	m_pb_cursor->Render();
 	m_menuUI.m_menu_loading->Render();
 
 #pragma region Premier render
+
+	static bool first = true;
+	if (first)
+	{
+		m_timeranimationplus->Start();
+		first = false;
+	}
 
 	if (!IsFirstRun())
 	{
@@ -1063,6 +1085,16 @@ void Engine::KeyReleaseEvent(unsigned char key)
 				Stop();
 			else SetMenuStatus(!IsMenuOpen());
 		}
+		if (c.Space())
+		{
+			if (m_timertest->IsEnabled())
+				m_timertest->Stop();
+			else m_timertest->Start();
+		}
+		if (c.n1())
+			m_timertest->SetIntervaltime(m_timertest->GetIntervalTime() - 0.05f);
+		if (c.n2())
+			m_timertest->SetIntervaltime(m_timertest->GetIntervalTime() + 0.05f);
 		c.Set(key, false);
 #pragma endregion
 	}
@@ -1214,12 +1246,43 @@ void Engine::OnClick(Control* sender)
 
 void Engine::GainedFocus(Textbox* sender)
 {
-	
+
 }
 
 void Engine::LostFocus(Textbox* sender)
 {
 	CWL(sender->GetMsg());
+}
+
+void Engine::Timertest_OnTick(Timer* sender)
+{
+	if (sender->GetLaps() <= 1)
+		m_menuUI.m_timertesttext->SetMsg("1 - plus vite. 2 - moins vite");
+	m_menuUI.m_timertesttext->UseNextDocking();
+}
+
+void Engine::TimerAnimation_OnTick(Timer* sender)
+{
+	if (sender->GetName() == "plus")
+	{
+		if (m_menuUI.m_menu_logo->GetSize().h <= MENU_LOGO_SIZE_Y + 30)
+			m_menuUI.m_menu_logo->SetSize(Size(m_menuUI.m_menu_logo->GetSize().w, m_menuUI.m_menu_logo->GetSize().h + 3));
+		else
+		{
+			m_timeranimationmoins->Start();
+			sender->Stop();
+		}
+	}
+	if (sender->GetName() == "moins")
+	{
+		if (m_menuUI.m_menu_logo->GetSize().h > MENU_LOGO_SIZE_Y)
+			m_menuUI.m_menu_logo->SetSize(Size(m_menuUI.m_menu_logo->GetSize().w, m_menuUI.m_menu_logo->GetSize().h - 2));
+		else
+		{
+			m_timeranimationplus->Start();
+			sender->Stop();
+		}
+	}
 }
 
 void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)

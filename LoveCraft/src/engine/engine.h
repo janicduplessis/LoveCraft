@@ -21,6 +21,7 @@
 #include "gl/ui/gameinterface.h"
 #include "gl/ui/menuinterface.h"
 #include "gl/ui/controls/localizable/drawable/picturebox.h"
+#include "gl/ui/controls/workable/timer.h"
 
 #include "game/animal.h"
 #include "game/character.h"
@@ -178,7 +179,8 @@ private:
 	void LostFocus(Textbox* sender);
 	void CW(const string& line);
 	void CWL(const string& line);
-
+	void Timertest_OnTick(Timer* sender);
+	void TimerAnimation_OnTick(Timer* sender);
 
 	bool m_wireframe;
 	float m_angle;
@@ -234,6 +236,9 @@ private:
 	ChunkLoader m_chunkLoader;
 
 	time_t m_time;
+	Timer* m_timertest;
+	Timer* m_timeranimationplus;
+	Timer* m_timeranimationmoins;
 
 	sf::Mutex m_mutex;
 };

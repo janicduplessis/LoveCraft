@@ -3,6 +3,7 @@
 
 Timer::Timer() : Workable(CTRLTYPE_TIMER), m_interval(1.0f), m_laps(0), m_time(0)
 {
+	Disable();
 }
 
 
@@ -40,6 +41,10 @@ uint16 Timer::Stop()
 	Disable();
 	m_laps = 0;
 	return laps;
+}
+void Timer::Reset()
+{
+	m_laps = 0;
 }
 
 void Timer::SetIntervaltime(float intervaltime)

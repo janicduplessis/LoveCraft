@@ -190,7 +190,7 @@ void GameInterface::Init(const ValuesGameInterface& val)
 	// Informations
 	m_lb_infos = new ListBox();
 	m_lb_infos->InitControl("lb_infos", m_pnl_playscreen);
-	m_lb_infos->InitLocalizable(Point(5, m_pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 6), Size(), 0, ORIGIN_TOPLEFT);
+	m_lb_infos->InitLocalizable(Point(5, m_pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 6 - 26 * (2 + 12)), Size(), 0);
 	m_lb_infos->InitTextual(val.FontTextures[TEXTCOLOR_RED], false, 12.f, 12.f, 0.5f);
 	m_lb_infos->InitListBox(26, 2, Point(), false);
 	m_pnl_playscreen->AddControl(m_lb_infos);

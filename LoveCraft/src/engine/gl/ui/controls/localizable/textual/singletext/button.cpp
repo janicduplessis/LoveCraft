@@ -24,7 +24,7 @@ bool Button::MousePressEvents( int x, int y )
 	if (m_clicked)
 		return true;
 
-	if (m_visible && m_enabled)
+	if (IsVisible() && IsEnabled())
 	{
 		Point& pos = AbsolutePosition();
 		if (x >= pos.x && x <= pos.x + m_size.h && y >= pos.y && y <= pos.y + m_size.h)

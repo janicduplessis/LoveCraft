@@ -20,7 +20,7 @@ void Localizable::InitLocalizable(Point position, Size size, Texture* background
 
 void Localizable::DrawSquare()
 {
-	if (m_visible && m_background)
+	if (IsVisible())
 	{
 		DrawingActivateBlend();
 		DrawingBindTexture();

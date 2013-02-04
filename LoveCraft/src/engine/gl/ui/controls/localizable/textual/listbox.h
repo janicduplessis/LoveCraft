@@ -34,6 +34,10 @@ public:
 	virtual Point GetOffset() const;
 	virtual bool IsOffset(Point offset) const;
 
+	virtual void SetWidth(uint16 width);
+	virtual uint16 GetWidth() const;
+	virtual bool IsWidth(uint16 width) const;
+
 	virtual void SetFontColor(Texture* color);
 	virtual Texture* GetFontColor() const;
 	virtual bool IsFontColor(Texture* color) const;
@@ -52,6 +56,7 @@ protected:
 	Label** m_lines;
 	StringList m_messages;
 	Point m_lineOffset;
+	uint16 m_width;
 	bool m_showButtons;
 	Button* m_upArrow;
 	Button* m_downArrow;

@@ -1,6 +1,6 @@
 #include "listbox.h"
 
-ListBox::ListBox() : Textual(CTRLTYPE_LISTBOX), m_lines(0), m_lineNbr(0), m_gapBetLines(0), 
+ListBox::ListBox() : Textual(CTRLTYPE_LISTBOX), m_lines(0), m_lineNbr(0), m_gapBetLines(0), m_width(0),
 	m_curLineIndex(0), m_scrollable(false), m_upArrow(0), m_downArrow(0), m_showButtons(false)
 {
 }
@@ -26,6 +26,8 @@ void ListBox::InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable
 	m_lineNbr = lineNbr;
 	m_gapBetLines = gap;
 	m_scrollable = scrollable;
+	m_lineOffset = offset;
+	m_width = GetSize().w;
 	m_showButtons = uptext != 0 || downtext != 0;
 
 	m_lines = new Label*[lineNbr];
@@ -39,7 +41,7 @@ void ListBox::InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable
 		m_lines[i]->InitTextual(GetColor(), IsItalic(), GetCharHeight(), GetCharWidh(), GetCharInterval());
 		ss.str("");
 	}
-	SetSize(Size(GetSize().w + offset.x * 2, (GetCharHeight() + gap) * lineNbr + offset.y * 2 - gap));
+	SetSize(Size(m_width, (GetCharHeight() + gap) * lineNbr + offset.y * 2 - gap));
 	if (m_showButtons)
 	{
 		// Init boutons
@@ -61,14 +63,13 @@ void ListBox::InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable
 
 void ListBox::UpdateValues()
 {
-	Size newSize = Size(GetSize().w + m_lineOffset.x * 2, 
-		(m_charHeight + m_gapBetLines) * m_lineNbr + m_lineOffset.y * 2 - m_gapBetLines);
-	if (GetSize() != newSize)
+	Size newSize = Size(m_width, (m_charHeight + m_gapBetLines) * m_lineNbr + m_lineOffset.y * 2 - m_gapBetLines);
+	if (!IsSize(newSize))
 		SetSize(newSize);
 	for (uint8 i = 0; i < m_lineNbr; i++)
 	{
 		m_lines[i]->SetPosition(Point(m_lineOffset.x, (GetCharHeight() + m_gapBetLines) * i + m_lineOffset.y));
-		m_lines[i]->SetColor(m_fontColor);
+		m_lines[i]->SetColor(GetColor());
 		m_lines[i]->SetCharHeight(GetCharHeight());
 		m_lines[i]->SetCharWidth(GetCharWidh());
 		m_lines[i]->SetCharInterval(GetCharInterval());
@@ -101,6 +102,8 @@ void ListBox::SetSize(Size size)
 	UpdateValues();
 }
 
+#pragma region Scrollable
+
 void ListBox::MakeScrollable()
 {
 	m_scrollable = true;
@@ -114,6 +117,10 @@ bool ListBox::IsScrollable() const
 	return m_scrollable;
 }
 
+#pragma endregion
+
+#pragma region Show buttons
+
 void ListBox::ShowScrollButtons()
 {
 	m_showButtons = true;
@@ -126,6 +133,10 @@ bool ListBox::IsScrollButtons()
 {
 	return m_showButtons;
 }
+
+#pragma endregion
+
+#pragma region Gap
 
 void ListBox::SetGap(uint8 gap)
 {
@@ -141,6 +152,10 @@ bool ListBox::IsGap(uint8 gap) const
 	return m_gapBetLines == gap;
 }
 
+#pragma endregion
+
+#pragma region Line offset
+
 void ListBox::SetOffset(Point offset)
 {
 	m_lineOffset = offset;
@@ -155,6 +170,27 @@ bool ListBox::IsOffset(Point offset) const
 	return m_lineOffset == offset;
 }
 
+#pragma endregion
+
+#pragma region Width
+
+void ListBox::SetWidth(uint16 width)
+{
+	m_width = width;
+}
+uint16 ListBox::GetWidth() const
+{
+	return m_width;
+}
+bool ListBox::IsWidth(uint16 width) const
+{
+	return m_width == width;
+}
+
+#pragma endregion
+
+#pragma region Font color
+
 void ListBox::SetFontColor(Texture* color)
 {
 	m_fontColor = color;
@@ -168,6 +204,8 @@ bool ListBox::IsFontColor(Texture* color) const
 {
 	return m_fontColor == color;
 }
+
+#pragma endregion
 
 void ListBox::Update()
 {
@@ -225,6 +263,7 @@ void ListBox::ScrollDown(Control* sender)
 {
 	Scroll(-1);
 }
+
 bool ListBox::MousePressEvents(int x, int y)
 {
 	return m_downArrow->MousePressEvents(x,y) ||

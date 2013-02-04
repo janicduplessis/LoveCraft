@@ -234,7 +234,7 @@ void GameInterface::Init(const ValuesGameInterface& val)
 	m_txb_console = new Textbox();
 	m_txb_console->InitControl(TXB_CONSOLE_NAME, m_pnl_playscreen);
 	m_txb_console->InitLocalizable(Point(m_pnl_playscreen->GetSize().w - 64 - LB_CONSOLE_SIZE_W, 0),
-		Size(TXB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H), val.UITextures[CUSTIMAGE_CONSOLE_TEXTBOX_BACK]);
+		Size(TXB_CONSOLE_SIZE_W, 0), val.UITextures[CUSTIMAGE_CONSOLE_TEXTBOX_BACK]);
 	m_txb_console->InitTextual(THEME_CONSOLE);
 	m_txb_console->SetColor(val.FontTextures[TEXTCOLOR_WHITE]);
 	m_txb_console->SetOffset(Point(TXB_CONSOLE_OFFSET_X, TXB_CONSOLE_OFFSET_Y));

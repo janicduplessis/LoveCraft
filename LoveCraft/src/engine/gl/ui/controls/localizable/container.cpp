@@ -22,7 +22,7 @@ void Container::AddControl(Localizable* control)
 {
 	if (m_controls)
 	{
-		assert(m_ctrlNbr < 6);
+		assert(m_ctrlNbr < m_capacity);
 		m_controls[m_ctrlNbr] = control;
 		m_ctrlNbr++;
 	}

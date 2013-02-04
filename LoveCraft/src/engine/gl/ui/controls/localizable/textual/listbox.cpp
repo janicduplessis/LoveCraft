@@ -28,9 +28,6 @@ void ListBox::InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable
 	m_scrollable = scrollable;
 	m_showButtons = uptext != 0 || downtext != 0;
 
-
-	SetSize(Size(GetSize().w + offset.x * 2, (GetCharHeight() + gap) * lineNbr + offset.y * 2 - gap));
-
 	m_lines = new Label*[lineNbr];
 	std::ostringstream ss;
 	for (uint8 i = 0; i < m_lineNbr; i++)
@@ -42,6 +39,7 @@ void ListBox::InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable
 		m_lines[i]->InitTextual(GetColor(), IsItalic(), GetCharHeight(), GetCharWidh(), GetCharInterval());
 		ss.str("");
 	}
+	SetSize(Size(GetSize().w + offset.x * 2, (GetCharHeight() + gap) * lineNbr + offset.y * 2 - gap));
 	if (m_showButtons)
 	{
 		// Init boutons
@@ -63,8 +61,10 @@ void ListBox::InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable
 
 void ListBox::UpdateValues()
 {
-	SetSize(Size(GetSize().w + m_lineOffset.x * 2, 
-		(m_charHeight + m_gapBetLines) * m_lineNbr + m_lineOffset.y * 2 - m_gapBetLines));
+	Size newSize = Size(GetSize().w + m_lineOffset.x * 2, 
+		(m_charHeight + m_gapBetLines) * m_lineNbr + m_lineOffset.y * 2 - m_gapBetLines);
+	if (GetSize() != newSize)
+		SetSize(newSize);
 	for (uint8 i = 0; i < m_lineNbr; i++)
 	{
 		m_lines[i]->SetPosition(Point(m_lineOffset.x, (GetCharHeight() + m_gapBetLines) * i + m_lineOffset.y));

@@ -10,7 +10,7 @@ Localizable::~Localizable()
 {
 }
 
-void Localizable::InitLocalizable(Point &position, Size &size, Texture* background, ORIGIN origin)
+void Localizable::InitLocalizable(Point position, Size size, Texture* background, ORIGIN origin)
 {
 	m_position = position;
 	m_size = size;
@@ -34,7 +34,7 @@ void Localizable::DrawSquare()
 
 #pragma region Position
 
-void Localizable::SetPosition(Point &position)
+void Localizable::SetPosition(Point position)
 {
 	m_position = position;
 }
@@ -43,7 +43,7 @@ Point Localizable::GetPosition() const
 	return m_position;
 }
 
-bool Localizable::IsPosition(Point &position) const
+bool Localizable::IsPosition(Point position) const
 {
 	return m_position == position;
 }
@@ -89,7 +89,7 @@ bool Localizable::IsOrigin(ORIGIN origin) const
 
 #pragma region Size
 
-void Localizable::SetSize(Size &size)
+void Localizable::SetSize(Size size)
 {
 	m_size = size;
 }
@@ -97,7 +97,7 @@ Size Localizable::GetSize() const
 {
 	return m_size;
 }
-bool Localizable::IsSize(Size &size) const
+bool Localizable::IsSize(Size size) const
 {
 	return m_size == size;
 }

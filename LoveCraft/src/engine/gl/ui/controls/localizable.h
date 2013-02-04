@@ -13,20 +13,20 @@ public:
 	* Dessine l'objet à l'écran
 	*/
 	virtual void Render() = 0;
-	void InitLocalizable(Point &position, Size &size, Texture* background, ORIGIN origin = ORIGIN_BOTTOMLEFT);
+	void InitLocalizable(Point position, Size size, Texture* background, ORIGIN origin = ORIGIN_BOTTOMLEFT);
 
-	virtual void SetPosition(Point &position);
+	virtual void SetPosition(Point position);
 	virtual Point GetPosition() const;
-	virtual bool IsPosition(Point &position) const;
+	virtual bool IsPosition(Point position) const;
 	virtual Point AbsolutePosition() const;
 
 	virtual void SetOrigin(ORIGIN origin);
 	virtual ORIGIN GetOrigin() const;
 	virtual bool IsOrigin(ORIGIN origin) const;
 
-	virtual void SetSize(Size &size);
+	virtual void SetSize(Size size);
 	virtual Size GetSize() const;
-	virtual bool IsSize(Size &size) const;
+	virtual bool IsSize(Size size) const;
 
 	virtual void SetBlend(BLENDTYPE btype);
 	virtual BLENDTYPE GetBlend() const;

@@ -141,16 +141,17 @@ void ProgressBar::DrawingBindTexture()
 
 void ProgressBar::DrawingDrawSquareLTR()
 {
+	float filled = FilledWidth();
 	glBegin(GL_QUADS);
 
 	glTexCoord2f(0, 0);
 	glVertex2f(0, 0);
 
-	glTexCoord2f(m_foreground->GetWidth(), 0);
-	glVertex2f(FilledWidth(), 0);
+	glTexCoord2f(filled / m_foreground->GetWidth(), 0);
+	glVertex2f(filled, 0);
 
-	glTexCoord2f(m_foreground->GetWidth(), 1);
-	glVertex2f(FilledWidth(), GetSize().h);
+	glTexCoord2f(filled / m_foreground->GetWidth(), 1);
+	glVertex2f(filled, GetSize().h);
 
 	glTexCoord2f(0, 1);
 	glVertex2f(0, GetSize().h);
@@ -159,19 +160,20 @@ void ProgressBar::DrawingDrawSquareLTR()
 }
 void ProgressBar::DrawingDrawSquareDTU()
 {
+	float filled = FilledHeight();
 	glBegin(GL_QUADS);
 
-	glTexCoord2f(m_foreground->GetWidth(), 0);
+	glTexCoord2f(filled / m_foreground->GetWidth(), 0);
 	glVertex2f(0, 0);
 
-	glTexCoord2f(m_foreground->GetWidth(), 1);
+	glTexCoord2f(filled / m_foreground->GetWidth(), 1);
 	glVertex2f(GetSize().w, 0);
 
 	glTexCoord2f(0, 1);
-	glVertex2f(GetSize().w, FilledHeight());
+	glVertex2f(GetSize().w, filled);
 
 	glTexCoord2f(0, 0);
-	glVertex2f(0, FilledHeight());
+	glVertex2f(0, filled);
 
 	glEnd();
 }

@@ -8,10 +8,7 @@ class Panel : public Container
 public:
 	Panel();
 	~Panel();
-	virtual void Init(Texture* background);
 	virtual void Render();
-protected:
-	virtual void DrawingBindTexture();
 };
 
 #endif

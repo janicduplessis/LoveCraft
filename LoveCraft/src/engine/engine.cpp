@@ -799,12 +799,12 @@ void Engine::Render2D(float elapsedTime)
 	//============================================
 
 	//Bottom
-	RenderSquare(
-		Vector2i(0, 0), 
-		Vector2i(Width(), INTERFACE_BOTTOM_HEIGHT), 
-		m_textureInterface[CUSTIMAGE_INTERFACE_FRAME]);
+	//RenderSquare(
+	//	Vector2i(0, 0), 
+	//	Vector2i(Width(), INTERFACE_BOTTOM_HEIGHT), 
+	//	m_textureInterface[CUSTIMAGE_INTERFACE_FRAME]);
 	//============================================
-	RenderSpells();
+	//RenderSpells();
 	//============================================
 
 

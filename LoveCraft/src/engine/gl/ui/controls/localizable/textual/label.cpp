@@ -22,7 +22,7 @@ void Label::Render()
 	if (m_visible && !IsMsg(""))
 	{
 		Point& abspos = AbsolutePosition();
-		m_size = Size(m_message.length() * m_charWidth * m_charInterval - m_charWidth * m_charInterval, m_charHeight);
+		SetSize(Size(m_message.length() * m_charWidth * m_charInterval - m_charWidth * m_charInterval, m_charHeight));
 
 		if (m_background)
 			DrawSquare();
@@ -150,11 +150,4 @@ Point Label::AbsolutePosition() const
 	//Position absolue prete à être dessinée
 	Point posparent = parent->AbsolutePosition();
 	return relposition + posparent;
-}
-
-// Preotected
-
-void Label::DrawingBindTexture()
-{
-	m_background->Bind();
 }

@@ -20,7 +20,7 @@ void Localizable::InitLocalizable(Point position, Size size, Texture* background
 
 void Localizable::DrawSquare()
 {
-	if (m_visible)
+	if (m_visible && m_background)
 	{
 		DrawingActivateBlend();
 		DrawingBindTexture();
@@ -198,8 +198,9 @@ void Localizable::DrawingActivateBlend() const
 }
 void Localizable::DrawingGetGraphicReady() const
 {
+	Point& abspos = AbsolutePosition();
 	glLoadIdentity();
-	glTranslated(m_position.x, m_position.y, 0);
+	glTranslated(abspos.x, abspos.y, 0);
 }
 void Localizable::DrawingBindTexture()
 {

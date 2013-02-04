@@ -35,6 +35,7 @@ public:
 
 private:
 	virtual void DrawSquare();
+	virtual void DrawingBindTexture();
 	virtual void DrawingDrawSquareLTR();
 	virtual void DrawingDrawSquareDTU();
 	virtual float FilledWidth() const;

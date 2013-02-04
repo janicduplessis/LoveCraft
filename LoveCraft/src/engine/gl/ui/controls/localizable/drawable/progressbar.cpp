@@ -22,8 +22,8 @@ void ProgressBar::Init(BarMode mode, Texture* foreground, uint8 bordersize)
 	m_borderSize = bordersize;
 
 	m_backImage->InitControl("backimage", this);
-	m_backImage->InitLocalizable(Point(GetPosition().x - bordersize, GetPosition().y - bordersize),
-		Size(GetSize().w + bordersize, GetSize().h + bordersize), GetBackground());
+	m_backImage->InitLocalizable(Point(-bordersize, -bordersize),
+		Size(GetSize().w + bordersize * 2, GetSize().h + bordersize * 2), GetBackground());
 
 	//Lorsque la bar doit être horizontale, inversion des valeurs de largeur longueur
 	//afin d'accomoder l'appel du glRotate dans le Render
@@ -132,6 +132,11 @@ void ProgressBar::DrawSquare()
 		break;
 	}
 	DrawingDesactivateBlend();
+}
+
+void ProgressBar::DrawingBindTexture()
+{
+	m_foreground->Bind();
 }
 
 void ProgressBar::DrawingDrawSquareLTR()

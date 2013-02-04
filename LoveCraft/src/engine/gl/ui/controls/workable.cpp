@@ -1,7 +1,7 @@
 #include "workable.h"
 
 
-Workable::Workable()
+Workable::Workable(CONTROLTYPE type) : Control(type)
 {
 }
 

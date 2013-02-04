@@ -9,23 +9,13 @@ Panel::~Panel()
 
 }
 
-void Panel::Init(Texture* background)
-{
-	m_background = background;
-}
-
-void Panel::DrawingBindTexture()
-{
-	m_background->Bind();
-}
-
 void Panel::Render()
 {
-	if (m_visible)
+	if (IsVisible())
 	{
-		if (m_background)
+		if (GetBackground())
 			DrawSquare();
-		if (m_controls != 0)
+		if (m_controls)
 		{
 			for (uint8 i = 0; i < m_ctrlNbr; i++)
 				m_controls[i]->Render();

@@ -80,7 +80,7 @@ void ListBox::UpdateValues()
 
 void ListBox::Render()
 {
-	if (m_visible)
+	if (IsVisible())
 	{
 		DrawSquare();
 		for (uint8 i = 0; i < m_lineNbr; i++)

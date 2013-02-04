@@ -26,7 +26,6 @@ public:
 
 	virtual Point AbsolutePosition() const;
 protected:
-	virtual void DrawingBindTexture();
 	Docking m_docking;
 	Point m_offset;
 };

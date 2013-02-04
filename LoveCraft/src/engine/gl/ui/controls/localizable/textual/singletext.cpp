@@ -12,25 +12,19 @@ SingleText::~SingleText()
 	delete m_label;
 }
 
-void SingleText::InitTextual(Texture* color, bool italic, float charHeight, float charWidth, float charinterval, Texture* background)
+void SingleText::InitTextual(Texture* color, bool italic, float charHeight, float charWidth, float charinterval)
 {
-	Textual::InitTextual(color, italic, charHeight, charWidth, charinterval, background);
-
-	m_label->SetColor(color);
-	if (italic)
-		m_label->SetItalic();
-	else m_label->RemoveItalic();
-	m_label->SetCharHeight(charHeight);
-	m_label->SetCharWidth(charWidth);
-	m_label->SetCharInterval(charinterval);
-	m_label->SetBackground(background);
+	Textual::InitTextual(color, italic, charHeight, charWidth, charinterval);
+	m_label->InitControl("textlabel", this);
+	m_label->InitLocalizable(GetPosition(), Size(), 0);
+	m_label->InitTextual(color, italic, charHeight, charWidth, charinterval);
 }
 
 void SingleText::InitTextual(ThemeSet theme)
 {
-	Theme* t = Info::Get().GetTheme(theme);
+	Theme* t = Theme::GetTheme(theme);
 	InitTextual(t->GetForeColor(), t->GetItalic(), t->GetHeight(), 
-		t->GetWidth(), t->GetInterval(), t->GetBackColor());
+		t->GetWidth(), t->GetInterval());
 }
 
 #pragma region Label properties

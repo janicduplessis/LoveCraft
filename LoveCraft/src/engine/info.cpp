@@ -8,10 +8,6 @@ Info::Info() : m_lineToPrint(""), m_console(0), m_lstatus(0), m_offsetMap(0),
 	GenerateBlocInfos();
 	if (!m_sound.LoadSounds())
 		std::cout << "Une erreur est survenue lors du chargement des sons en memoire" << std::endl;
-	m_themes = new Theme*[THEME_LAST];
-	for (uint8 i = 0; i < THEME_LAST; i++)
-		m_themes[i] = new Theme();
-	InitThemes();
 }
 
 Info::Info( Info const& copy )
@@ -221,26 +217,6 @@ void Info::SetTexturesInterface(Texture** textures)
 Texture* Info::GetTexture(uint8 index) const
 {
 	return m_textInterface[index];
-}
-
-void Info::InitThemes()
-{
-	m_themes[THEME_DEFAULT]->Init("default");
-	m_themes[THEME_DEFAULT]->Set(THEME_DEFAULT_CHAR_H, THEME_DEFAULT_CHAR_W, THEME_DEFAULT_CHAR_I, 
-		THEME_DEFAULT_ITALIC, GetFontColor(THEME_DEFAULT_COLOR), THEME_DEFAULT_BACK);
-	m_themes[THEME_MAINMENU]->Init("mainmenu");
-	m_themes[THEME_MAINMENU]->Set(THEME_MAIN_MENU_CHAR_H, THEME_MAIN_MENU_CHAR_W, THEME_MAIN_MENU_CHAR_I,
-		THEME_MAIN_MENU_ITALIC, GetFontColor(THEME_MAIN_MENU_COLOR), GetTexture(THEME_MAIN_MENU_BACK));
-	m_themes[THEME_CONSOLE]->Init("console");
-	m_themes[THEME_CONSOLE]->Set(THEME_CONSOLE_CHAR_H, THEME_CONSOLE_CHAR_W, THEME_CONSOLE_CHAR_I,
-		THEME_CONSOLE_ITALIC, GetFontColor(THEME_CONSOLE_COLOR), GetTexture(THEME_CONSOLE_BACK));
-	m_themes[THEME_PLAYER_VALUES]->Init("playervalues");
-	m_themes[THEME_PLAYER_VALUES]->Set(THEME_PLAYERVALUES_CHAR_H, THEME_PLAYERVALUES_CHAR_W, THEME_PLAYERVALUES_CHAR_I,
-		THEME_PLAYERVALUES_ITALIC, GetFontColor(THEME_PLAYERVALUES_COLOR), THEME_PLAYERVALUES_BACK);
-}
-Theme* Info::GetTheme(uint8 index) const
-{
-	return m_themes[index];
 }
 
 Dice& Info::Dic()

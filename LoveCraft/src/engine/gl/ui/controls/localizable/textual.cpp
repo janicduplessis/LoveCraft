@@ -24,7 +24,7 @@ void Textual::InitTextual(Texture* color, bool italic, float charHeight, float c
 
 void Textual::InitTextual(ThemeSet theme)
 {
-	Theme* t = Info::Get().GetTheme(theme);
+	Theme* t = Theme::GetTheme(theme);
 	InitTextual(t->GetForeColor(), t->GetItalic(), t->GetHeight(), 
 		t->GetWidth(), t->GetInterval(), t->GetBackColor());
 }

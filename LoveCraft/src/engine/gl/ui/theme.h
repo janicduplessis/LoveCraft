@@ -3,7 +3,7 @@
 
 #include "define.h"
 #include "../texture.h"
-#include "util/vector2.h"
+#include "engine/info.h"
 #include <cassert>
 #include <string>
 #include <iostream>
@@ -13,9 +13,9 @@ class Theme
 public:
 	Theme();
 	~Theme();
-	static Theme* Default();
 	void Init(string name);
 	void Set(float height, float width, float interval, bool italic, Texture* color, Texture* background);
+	static Theme* GetTheme(ThemeSet theme);
 	string GetName() const;
 	float GetHeight() const;
 	float GetWidth() const;
@@ -24,6 +24,8 @@ public:
 	Texture* GetForeColor() const;
 	Texture* GetBackColor() const;
 private:
+	static void InitThemes();
+	static Theme** m_themes;
 	string m_name;
 	float m_charH;
 	float m_charW;
@@ -31,7 +33,6 @@ private:
 	bool m_italicText;
 	Texture* m_foreColor;
 	Texture* m_backColor;
-
 };
 
 #endif

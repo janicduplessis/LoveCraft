@@ -1,7 +1,7 @@
 #include "container.h"
 
 
-Container::Container(CONTROLTYPE type) : Localizable(type), m_ctrlNbr(0), m_capacity(6)
+Container::Container(CONTROLTYPE type) : Localizable(type), m_ctrlNbr(0), m_capacity(6), m_controls(0)
 {
 }
 
@@ -20,7 +20,7 @@ void Container::InitContainer(uint8 capacity)
 
 void Container::AddControl(Localizable* control)
 {
-	if (m_controls != 0)
+	if (m_controls)
 	{
 		assert(m_ctrlNbr < 6);
 		m_controls[m_ctrlNbr] = control;

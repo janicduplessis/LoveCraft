@@ -12,14 +12,12 @@
 #include "controls.h"
 #include "gl/shaders/shader.h"
 
-#include "engine/gl/ui/controls/localizable/textual/listbox.h"
-#include "engine/gl/ui/theme.h"
-
 #include <util/vector3.h>
 #include <util/array2d.h>
 #include "util/dice.h"
 
 class Chunk;
+class ListBox;
 
 /**
 * @brief Singleton qui contient tout les informations générales du jeu
@@ -125,7 +123,6 @@ public:
 	void SetTexturesInterface(Texture** textures);
 	Texture* GetTexture(uint8 index) const;
 
-	Theme* GetTheme(uint8 index) const;
 	Dice& Dic();
 
 private:
@@ -138,7 +135,6 @@ private:
 private:
 	Texture** m_fontColors;
 	Texture** m_textInterface;
-	Theme** m_themes;
 	Array2d<Chunk*>* m_chunks;
 	static Info* m_info;
 	BlockInfo** m_blocInfos;

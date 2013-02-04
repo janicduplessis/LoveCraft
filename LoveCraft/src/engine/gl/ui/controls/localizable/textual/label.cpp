@@ -19,9 +19,9 @@ void Label::Init(Docking dock, Point offset)
 
 void Label::Render()
 {
-	if (m_visible)
+	if (m_visible && !IsMsg(""))
 	{
-		Point abspos = AbsolutePosition();
+		Point& abspos = AbsolutePosition();
 		m_size = Size(m_message.length() * m_charWidth * m_charInterval - m_charWidth * m_charInterval, m_charHeight);
 
 		if (m_background)

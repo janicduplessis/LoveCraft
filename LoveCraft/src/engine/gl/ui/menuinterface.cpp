@@ -49,7 +49,7 @@ void MenuInterface::Init(const ValuesInterface& val)
 	m_menu_logo = new PictureBox();
 	m_menu_logo->InitControl("logo", m_menu_panel);
 	m_menu_logo->InitLocalizable(Point(controlPosX, m_menu_panel->GetSize().h - MENU_LOGO_SIZE_Y - controlPosX),
-		Size(controlWidth, MENU_LOGO_SIZE_Y), val.UITextures[CUSTIMAGE_MENU_LOGO];
+		Size(controlWidth, MENU_LOGO_SIZE_Y), val.UITextures[CUSTIMAGE_MENU_LOGO]);
 	m_menu_panel->AddControl(m_menu_logo);
 
 	//Panneau de controle utilisateur

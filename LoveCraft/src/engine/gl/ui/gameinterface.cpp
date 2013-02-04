@@ -471,6 +471,7 @@ bool GameInterface::KeyReleaseEvent( unsigned char key )
 bool GameInterface::TextenteredEvent( unsigned int val )
 {
 	m_txb_console->Update(val);
+	return true;
 }
 
 bool GameInterface::KeyPressEvent( unsigned char key )

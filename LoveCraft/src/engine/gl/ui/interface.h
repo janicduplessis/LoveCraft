@@ -4,8 +4,8 @@
 #include "interfaceinfos.h"
 #include "define.h"
 #include "engine/gl/ui/valuesinterface.h"
-#include "engine/gl/ui/control.h"
 #include "engine/gl/ui/controls/localizable/textual/singletext/button.h"
+#include "engine/gl/ui/controls/localizable/textual/singletext/spellbutton.h"
 #include "engine/gl/ui/controls/localizable/container/panel.h"
 #include "engine/gl/ui/controls/localizable/textual/label.h"
 #include "engine/gl/ui/controls/localizable/textual/listbox.h"
@@ -22,6 +22,7 @@ public:
 	virtual void Render() = 0;
 protected:
 	bool m_loaded;
+
 };
 
 #endif

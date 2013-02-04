@@ -9,7 +9,7 @@ class SingleText : public Textual
 public:
 	SingleText(CONTROLTYPE type);
 	virtual ~SingleText();
-	virtual void InitTextual(Texture* color, bool italic, float charHeight, float charWidth, float charinterval, Texture* background = 0);
+	virtual void InitTextual(Texture* color, bool italic, float charHeight, float charWidth, float charinterval);
 	virtual void InitTextual(ThemeSet theme);
 	virtual void Render() = 0;
 	virtual void SetMsg(string message);

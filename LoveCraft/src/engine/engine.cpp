@@ -94,7 +94,7 @@ Engine::~Engine()
 #endif
 	}
 	if (Info::Get().GetStatus(Info::LSTATUS_SKYBOX))
-		delete m_skybox;
+		//delete m_skybox;
 	delete [] m_monsters;
 	delete m_textureArray;
 }
@@ -404,6 +404,23 @@ void Engine::LoadMenuResource()
 		std::cout << " Failed to load cube shader" << std::endl;
 		exit(1) ;
 	}
+	DirectionalLight dirLight;
+	dirLight.AmbientIntensity = 0.2;
+	dirLight.Color = Vector3f(1,1,1);
+	dirLight.DiffuseIntensity = 0.5;
+	dirLight.Direction = Vector3f(0, -1, 0);
+
+	m_lightingShader.Init();
+	m_lightingShader.Use();
+	m_lightingShader.SetDirectionalLight(dirLight);
+	m_lightingShader.SetMatSpecualarIntensity(0.5);
+	m_lightingShader.SetMatSpecularPower(0.2);
+	m_lightingShader.SetTextureUnit(4);
+
+	Shader::Disable();
+
+	CHECK_GL_ERROR();
+
 #pragma endregion
 
 }
@@ -668,8 +685,11 @@ void Engine::Render(float elapsedTime)
 #pragma region Render les cubes
 
 	Shader::Disable();
-	m_shaderCube.Use();
-	m_textureArray->Use();
+	m_textureArray->Use(GL_TEXTURE4);
+	m_lightingShader.Use();
+	m_lightingShader.SetEyeWorldPos(m_camera->GetRealPosition());
+	m_lightingShader.SetWorld(modelView);
+	m_lightingShader.SetWVP(vp);
 	m_mutex.lock();
 	int updated = 0;
 
@@ -679,7 +699,7 @@ void Engine::Render(float elapsedTime)
 		{
 			Chunk* c = m_chunks->Get(i,j);
 			if (c->IsReady()) {
-				if (c->IsDirty() && updated < 3) {
+				if (c->IsDirty() && updated < 2) {
 					c->Update();
 					updated++;
 				}

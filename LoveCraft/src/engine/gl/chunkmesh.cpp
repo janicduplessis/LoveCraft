@@ -3,14 +3,11 @@
 #include "util/tool.h"
 
 
-ChunkMesh::ChunkMesh(Shader* shader) : m_shader(shader)
-{
-
-}
+ChunkMesh::ChunkMesh()
+{}
 
 ChunkMesh::~ChunkMesh()
 {
-	glDeleteBuffers(1, &m_textureVboId);
 }
 
 bool ChunkMesh::IsValid() const
@@ -18,10 +15,8 @@ bool ChunkMesh::IsValid() const
 	return Mesh::IsValid();
 }
 
-void ChunkMesh::SetMeshData(VertexData* vd, int vertexCount, TextureData* td)
+void ChunkMesh::SetMeshData(VertexData* vertexData, int vertexCount)
 {
-	glewInit();
-
 	assert(vertexCount <= USHRT_MAX);
 	if(vertexCount == 0)
 		return;
@@ -41,33 +36,22 @@ void ChunkMesh::SetMeshData(VertexData* vd, int vertexCount, TextureData* td)
 		indexData[indexCount++] = v + 2;
 		indexData[indexCount++] = v + 3;
 	}
-	CHECK_GL_ERROR();
 
 	if(!m_isValid)
 	{
 		glGenBuffers(1, &m_vertexVboId);
 		glGenBuffers(1, &m_indexVboId);
-		glGenBuffers(1, &m_textureVboId);
 	}
-
-	m_textureLoc = glGetAttribLocation(m_shader->GetProgram(), "Texture");
-	glUniform1i(glGetUniformLocation(m_shader->GetProgram(), "tex"), 4);
-
-	CHECK_GL_ERROR();
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexVboId);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexData) * vertexCount, vd, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexData) * vertexCount, vertexData, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, m_textureVboId);
-	glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(TextureData), td, GL_STATIC_DRAW);
 	
 	m_indicesCount = indexCount;
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16) * m_indicesCount, indexData, GL_STATIC_DRAW);
-
-	CHECK_GL_ERROR();
 
 	m_isValid = true;
 }
@@ -77,21 +61,20 @@ void ChunkMesh::Render(bool wireFrame) const
 {
 	if(IsValid())
 	{
-		glClientActiveTexture(GL_TEXTURE4);
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
 		glBindBuffer(GL_ARRAY_BUFFER, m_vertexVboId);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(3, GL_FLOAT, sizeof(VertexData), (char*)0);
-		glEnableClientState(GL_COLOR_ARRAY);
-		glColorPointer(3, GL_FLOAT, sizeof(VertexData), (char*)12);
-		glBindBuffer(GL_ARRAY_BUFFER, m_textureVboId);
-		glEnableVertexAttribArray(m_textureLoc);
-		glVertexAttribPointer(m_textureLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const GLvoid*)12);
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const GLvoid*)24);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
 		glDrawElements(wireFrame ? GL_LINES : GL_TRIANGLES, m_indicesCount, GL_UNSIGNED_SHORT, (char*)0);
 
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glDisableClientState(GL_COLOR_ARRAY);
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
 	}
 }
 

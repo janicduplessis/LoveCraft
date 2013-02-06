@@ -10,6 +10,8 @@ struct DirectionalLight
 {
 	Vector3f Color;
 	float AmbientIntensity;
+	Vector3f Direction;
+	float DiffuseIntensity;
 };
 
 class LightingShader : public Shader
@@ -21,14 +23,30 @@ public:
 	virtual bool Init();
 
 	void SetWVP(const Matrix4f& WVP);
-	void SetTextureUnit(unsigned int TextureUnit);
-	void SetDirectionalLight(const DirectionalLight& Light);
+	void SetWorld(const Matrix4f& world);
+	void SetTextureUnit(unsigned int textureUnit);
+	void SetDirectionalLight(const DirectionalLight& light);
+	void SetEyeWorldPos(const Vector3f& eyePos);
+	void SetMatSpecualarIntensity(float intensity);
+	void SetMatSpecularPower(float power);
 
 private:
-	GLuint m_WVPLocation;
-	GLuint m_samplerLocation;
-	GLuint m_dirLightColorLocation;
-	GLuint m_dirLightAmbientIntensityLocation;
+	// ----------------------------------------------------------------------
+	// Program uniform locations
+	GLuint m_WVPLocation;					// World viewport
+	GLuint m_worldLocation;					// World position
+	GLuint m_samplerLocation;				// Texture sampler
+	GLuint m_eyeWorldPosLocation;			// Camera position
+	GLuint m_matSpecularIntensityLocation;	// Material specular intensity
+	GLuint m_matSpecularPowerLocation;		// Material specular power
+
+	// Light struct
+	struct {
+		GLuint Color;
+		GLuint AmbientIntensity;
+		GLuint Direction;
+		GLuint DiffuseIntensity;
+	} m_dirLightLocation;
 };
 
 #endif

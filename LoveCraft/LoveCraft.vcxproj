@@ -101,7 +101,6 @@
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\textbox.cpp" />
     <ClCompile Include="src\engine\gl\ui\gameinterface.cpp" />
     <ClCompile Include="src\engine\gl\ui\interface.cpp" />
-    <ClCompile Include="src\engine\gl\skybox.cpp" />
     <ClCompile Include="src\engine\chunkloader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\billboardshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\lightingshader.cpp" />
@@ -170,7 +169,6 @@
     <ClInclude Include="src\engine\gl\ui\valuesgameinterface.h" />
     <ClInclude Include="src\engine\gl\ui\valuesinterface.h" />
     <ClInclude Include="src\enumerators.h" />
-    <ClInclude Include="src\engine\gl\skybox.h" />
     <ClInclude Include="src\engine\chunkloader.h" />
     <ClInclude Include="src\engine\gl\shaders\billboardshader.h" />
     <ClInclude Include="src\engine\gl\shaders\lightingshader.h" />

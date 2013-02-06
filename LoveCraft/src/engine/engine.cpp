@@ -405,16 +405,16 @@ void Engine::LoadMenuResource()
 		exit(1) ;
 	}
 	DirectionalLight dirLight;
-	dirLight.AmbientIntensity = 0.2;
+	dirLight.AmbientIntensity = 0.5;
 	dirLight.Color = Vector3f(1,1,1);
-	dirLight.DiffuseIntensity = 0.5;
-	dirLight.Direction = Vector3f(0, -1, 0);
+	dirLight.DiffuseIntensity = 0.3;
+	dirLight.Direction = Vector3f(0.3, -1, 0.5).Normalise();
 
 	m_lightingShader.Init();
 	m_lightingShader.Use();
 	m_lightingShader.SetDirectionalLight(dirLight);
-	m_lightingShader.SetMatSpecualarIntensity(0.5);
-	m_lightingShader.SetMatSpecularPower(0.2);
+	m_lightingShader.SetMatSpecualarIntensity(1);
+	m_lightingShader.SetMatSpecularPower(32);
 	m_lightingShader.SetTextureUnit(4);
 
 	Shader::Disable();
@@ -680,7 +680,8 @@ void Engine::Render(float elapsedTime)
 		p[8], p[9], p[10], p[11],
 		p[12], p[13], p[14], p[15]);
 
-	Matrix4f vp = modelView * projection;
+	Matrix4f WVP = modelView * projection;
+	Matrix4f world = Matrix4f::IDENTITY;
 
 #pragma endregion
 
@@ -690,8 +691,8 @@ void Engine::Render(float elapsedTime)
 	m_textureArray->Use(GL_TEXTURE4);
 	m_lightingShader.Use();
 	m_lightingShader.SetEyeWorldPos(m_camera->GetRealPosition());
-	m_lightingShader.SetWorld(modelView);
-	m_lightingShader.SetWVP(vp);
+	m_lightingShader.SetWorld(world);
+	m_lightingShader.SetWVP(WVP);
 	m_mutex.lock();
 	int updated = 0;
 
@@ -752,7 +753,7 @@ void Engine::Render(float elapsedTime)
 	for (SpellList::iterator it = m_spells.begin(); it != m_spells.end(); ++it) {
 		it->SetDestination(m_monsters[0]->Position());
 		it->Update(elapsedTime);
-		it->Render(vp);
+		it->Render(WVP);
 		if (it->HasHit())
 		{
 			//m_spells.erase(it);

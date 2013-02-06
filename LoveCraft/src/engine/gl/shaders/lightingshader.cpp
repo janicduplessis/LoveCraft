@@ -54,7 +54,7 @@ void LightingShader::SetDirectionalLight( const DirectionalLight& Light )
 
 void LightingShader::SetWorld( const Matrix4f& world )
 {
-	glUniformMatrix4fv(m_WVPLocation, 1, GL_TRUE, (const GLfloat*)world.GetInternalValues());
+	glUniformMatrix4fv(m_worldLocation, 1, GL_TRUE, (const GLfloat*)world.GetInternalValues());
 }
 
 void LightingShader::SetEyeWorldPos( const Vector3f& eyePos )

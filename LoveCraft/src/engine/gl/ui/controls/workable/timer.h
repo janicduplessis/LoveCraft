@@ -18,7 +18,8 @@ public:
 	virtual uint16 Stop();
 	virtual void Reset();
 
-	virtual void SetIntervaltime(float intervaltime);
+	virtual void SetIntervalTime(float intervaltime);
+	virtual void AddIntervalTime(float value);
 	virtual float GetIntervalTime() const;
 	virtual bool IsIntervalTime(float intervaltime);
 

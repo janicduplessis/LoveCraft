@@ -1,12 +1,11 @@
 #include "textual.h"
 
 
-Textual::Textual(CONTROLTYPE type) : Localizable(type), m_message(""), m_italic(false), m_charHeight(0.f), 
-	m_charWidth(0.f), m_charInterval(0.f), m_fontColor(0)
+Textual::Textual(CONTROLTYPE type) : Localizable(type), m_message(""), m_italic(false), 
+	m_charHeight(0.f), m_charWidth(0.f), m_charInterval(0.f), m_fontColor(0)
 {
 	InitTextual(THEME_DEFAULT);
 }
-
 
 Textual::~Textual()
 {
@@ -26,7 +25,7 @@ void Textual::InitTextual(ThemeSet theme)
 {
 	Theme* t = Theme::GetTheme(theme);
 	InitTextual(t->GetForeColor(), t->GetItalic(), t->GetHeight(), 
-		t->GetWidth(), t->GetInterval(), t->GetBackColor());
+		t->GetWidth(), t->GetInterval(), t->GetBackground());
 }
 
 // Propriétés
@@ -36,6 +35,13 @@ void Textual::InitTextual(ThemeSet theme)
 void Textual::SetMsg(string message)
 {
 	m_message = message;
+}
+void Textual::AddMsg(string value)
+{
+	static std::ostringstream ss;
+	ss << m_message << value;
+	m_message = ss.str();
+	ss.str("");
 }
 string Textual::GetMsg() const
 {
@@ -96,6 +102,10 @@ void Textual::SetCharHeight(float height)
 {
 	m_charHeight = height;
 }
+void Textual::AddCharHeight(float value)
+{
+	m_charHeight += value;
+}
 float Textual::GetCharHeight() const
 {
 	return m_charHeight;
@@ -114,6 +124,10 @@ void Textual::SetCharWidth(float width)
 {
 	m_charWidth = width;
 }
+void Textual::AddCharWidth(float value)
+{
+	m_charWidth += value;
+}
 float Textual::GetCharWidh() const
 {
 	return m_charWidth;
@@ -131,6 +145,10 @@ float Textual::IsCharWidth(float width) const
 void Textual::SetCharInterval(float interval)
 {
 	m_charInterval = interval;
+}
+void Textual::AddCharInterval(float value)
+{
+	m_charInterval += value;
 }
 float Textual::GetCharInterval() const
 {

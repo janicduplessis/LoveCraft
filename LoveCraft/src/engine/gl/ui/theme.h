@@ -22,7 +22,7 @@ public:
 	float GetInterval() const;
 	bool GetItalic() const;
 	Texture* GetForeColor() const;
-	Texture* GetBackColor() const;
+	Texture* GetBackground() const;
 private:
 	static void InitThemes();
 	static Theme** m_themes;

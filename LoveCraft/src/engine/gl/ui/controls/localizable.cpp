@@ -38,6 +38,10 @@ void Localizable::SetPosition(Point position)
 {
 	m_position = position;
 }
+void Localizable::AddPosition(Point value)
+{
+	m_position = m_position + value;
+}
 Point Localizable::GetPosition() const
 {
 	return m_position;
@@ -92,6 +96,10 @@ bool Localizable::IsOrigin(ORIGIN origin) const
 void Localizable::SetSize(Size size)
 {
 	m_size = size;
+}
+void Localizable::AddSize(Size value)
+{
+	m_size = m_size + value;
 }
 Size Localizable::GetSize() const
 {

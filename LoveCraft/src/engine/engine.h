@@ -20,6 +20,7 @@
 #include "gl/ui/valuesgameinterface.h"
 #include "gl/ui/gameinterface.h"
 #include "gl/ui/menuinterface.h"
+#include "gl/ui/debuginterface.h"
 #include "gl/ui/controls/localizable/drawable/picturebox.h"
 #include "gl/ui/controls/workable/timer.h"
 
@@ -215,6 +216,7 @@ private:
 
 	MenuInterface m_menuUI;
 	GameInterface m_gameUI;
+	DebugInterface m_debugUI;
 
 	PictureBox* m_pb_cursor;
 

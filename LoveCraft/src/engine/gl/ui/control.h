@@ -116,19 +116,18 @@ class Control : public Object
 public:
 	Control(CONTROLTYPE type);
 	virtual ~Control();
-	void InitControl(string name, Control* parent = 0);
+	void InitControl(string name);
 
 	virtual bool IsEnabled() const;
 	virtual void Enable();
 	virtual void Disable();
 
-	virtual Control* GetParent() const;
 	virtual CONTROLTYPE GetType() const;
+	virtual bool IsType(CONTROLTYPE type) const;
 
 protected:
 	CONTROLTYPE m_type;
 	bool m_enabled;
-	Control* m_parent;
 };
 
 #endif

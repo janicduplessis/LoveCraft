@@ -14,25 +14,30 @@ void Label::Init(Docking dock, Point offset)
 {
 	m_docking = dock;
 	m_offset = offset;
-	m_position = m_position + offset;
+	AddPosition(offset);
+}
+
+void Label::InitLocalizable(Point position, Localizable* parent)
+{
+	Localizable::InitLocalizable(position, Size(), 0, parent);
 }
 
 void Label::Render()
 {
-	if (m_visible && !IsMsg(""))
+	if (IsVisible() && !IsMsg(""))
 	{
 		string message = Replace();
 		Point& abspos = AbsolutePosition();
 		SetSize(Size(message.length() * m_charWidth * m_charInterval - m_charWidth * m_charInterval, m_charHeight));
 
-		if (m_background)
+		if (GetBackground())
 			DrawSquare();
 
-		if (m_fontColor)
+		if (GetColor())
 		{
 			DrawingActivateBlend();
 
-			m_fontColor->Bind();
+			GetColor()->Bind();
 			glLoadIdentity();
 			glTranslatef(abspos.x, abspos.y, 0);
 
@@ -148,7 +153,7 @@ void Label::UseNextDocking()
 Point Label::AbsolutePosition() const
 {
 	Point relposition;
-	Localizable* parent = dynamic_cast<Localizable*>(m_parent);
+	Localizable* parent = GetParent();
 	Size& size = parent->GetSize();
 	int width = m_message.length() * m_charInterval * m_charWidth + m_charWidth * m_charInterval;
 

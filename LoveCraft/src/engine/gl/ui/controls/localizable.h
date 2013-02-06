@@ -13,7 +13,7 @@ public:
 	* Dessine l'objet à l'écran
 	*/
 	virtual void Render() = 0;
-	void InitLocalizable(Point position, Size size, Texture* background, ORIGIN origin = ORIGIN_BOTTOMLEFT);
+	virtual void InitLocalizable(Point position, Size size, Texture* background, Localizable* parent, ORIGIN origin = ORIGIN_BOTTOMLEFT);
 
 	virtual void SetPosition(Point position);
 	virtual void AddPosition(Point value);
@@ -43,6 +43,8 @@ public:
 	virtual Texture* GetBackground() const;
 	virtual bool IsBackground(Texture* texture);
 
+	virtual Localizable* GetParent() const;
+
 	virtual bool MousePressEvents( int x, int y );
 	virtual bool MouseReleaseEvents(int x, int y);
 	virtual bool KeyPressEvents(int keycode);
@@ -55,6 +57,7 @@ protected:
 	virtual void DrawingDrawSquare() const;
 	virtual void DrawingDesactivateBlend() const;
 
+	Localizable* m_parent;
 	Point m_position;
 	ORIGIN m_origin;
 	Size m_size;

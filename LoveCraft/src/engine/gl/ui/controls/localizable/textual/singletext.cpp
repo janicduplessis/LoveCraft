@@ -15,8 +15,8 @@ SingleText::~SingleText()
 void SingleText::InitTextual(Texture* color, bool italic, float charHeight, float charWidth, float charinterval)
 {
 	Textual::InitTextual(color, italic, charHeight, charWidth, charinterval);
-	m_label->InitControl("textlabel", this);
-	m_label->InitLocalizable(GetPosition(), Size(), 0);
+	m_label->InitControl("textlabel");
+	m_label->InitLocalizable(GetPosition(), this);
 	m_label->InitTextual(color, italic, charHeight, charWidth, charinterval);
 	m_label->SetDocking(TEXTDOCK_MIDDLECENTER);
 }

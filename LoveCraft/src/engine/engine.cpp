@@ -370,11 +370,12 @@ void Engine::LoadMenuResource()
 
 	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
 	m_menuUI.Init(m_valuesMenuInterface);
+	m_debugUI.Init(m_valuesMenuInterface);
 
 	//Cursor
 	m_pb_cursor = new PictureBox();
-	m_pb_cursor->InitControl("pb_cursor", 0);
-	m_pb_cursor->InitLocalizable(Point(), Size(50, 50), m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR]);
+	m_pb_cursor->InitControl("pb_cursor");
+	m_pb_cursor->InitLocalizable(Point(), Size(50, 50), m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], 0);
 	m_menuUI.m_menu_fullscreen->OnClick.Attach(this, &Engine::OnClick);
 	m_menuUI.m_menu_start->OnClick.Attach(this, &Engine::OnClick);
 	m_menuUI.m_menu_close->OnClick.Attach(this, &Engine::OnClick);
@@ -470,11 +471,12 @@ void Engine::RenderMenu(float elapsedTime)
 #pragma endregion
 
 	m_timertest->Update(elapsedTime);
-	m_menuUI.m_timertesttime->SetVariableMsg(m_timertest->GetIntervalTime());
+	m_debugUI.m_timertesttime->SetVariableMsg(m_timertest->GetIntervalTime());
 	m_timeranimationmoins->Update(elapsedTime);
 	m_timeranimationplus->Update(elapsedTime);
 	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
 	m_menuUI.Render();
+	m_debugUI.Render();
 	m_pb_cursor->Render();
 	m_menuUI.m_menu_loading->Render();
 
@@ -1259,8 +1261,8 @@ void Engine::LostFocus(Textbox* sender)
 void Engine::Timertest_OnTick(Timer* sender)
 {
 	if (sender->GetLaps() <= 1)
-		m_menuUI.m_timertesttext->SetMsg("1 - plus vite. 2 - moins vite");
-	m_menuUI.m_timertesttext->UseNextDocking();
+		m_debugUI.m_timertesttext->SetMsg("1 - plus vite. 2 - moins vite");
+	m_debugUI.m_timertesttext->UseNextDocking();
 }
 
 void Engine::TimerAnimation_OnTick(Timer* sender)
@@ -1268,7 +1270,7 @@ void Engine::TimerAnimation_OnTick(Timer* sender)
 	if (sender->GetName() == "plus")
 	{
 		if (m_menuUI.m_menu_logo->GetSize().h <= MENU_LOGO_SIZE_Y + 30)
-			m_menuUI.m_menu_logo->SetSize(Size(m_menuUI.m_menu_logo->GetSize().w, m_menuUI.m_menu_logo->GetSize().h + 3));
+			m_menuUI.m_menu_logo->AddSize(Size(0, 3));
 		else
 		{
 			m_timeranimationmoins->Start();
@@ -1278,7 +1280,7 @@ void Engine::TimerAnimation_OnTick(Timer* sender)
 	if (sender->GetName() == "moins")
 	{
 		if (m_menuUI.m_menu_logo->GetSize().h > MENU_LOGO_SIZE_Y)
-			m_menuUI.m_menu_logo->SetSize(Size(m_menuUI.m_menu_logo->GetSize().w, m_menuUI.m_menu_logo->GetSize().h - 2));
+			m_menuUI.m_menu_logo->AddSize(Size(0, -2));
 		else
 		{
 			m_timeranimationplus->Start();

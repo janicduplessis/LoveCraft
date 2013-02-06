@@ -171,17 +171,17 @@ void GameInterface::Init(const ValuesGameInterface& val)
 {
 	// Écran
 	m_pnl_screen = new Panel();
-	m_pnl_screen->InitControl("main", 0);
-	m_pnl_screen->InitLocalizable(Point(), Size(val.Width, val.Height), 0);
+	m_pnl_screen->InitControl("main");
+	m_pnl_screen->InitLocalizable(Point(), Size(val.Width, val.Height), 0, 0);
 
 #pragma region Enfants de Main
 
 	// Zone de jeu
 	m_pnl_playscreen = new Panel();
-	m_pnl_playscreen->InitControl("playscreen", m_pnl_screen);
+	m_pnl_playscreen->InitControl("playscreen");
 	m_pnl_playscreen->InitLocalizable(Point(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
 		Size(m_pnl_screen->GetSize().w - INTERFACE_SIDE_LEFT_WIDTH - INTERFACE_SIDE_RIGHT_WIDTH, 
-		m_pnl_screen->GetSize().h - INTERFACE_BOTTOM_HEIGHT - INTERFACE_TOP_HEIGHT), 0);
+		m_pnl_screen->GetSize().h - INTERFACE_BOTTOM_HEIGHT - INTERFACE_TOP_HEIGHT), 0, m_pnl_screen);
 	m_pnl_playscreen->InitContainer(PNL_PLAYSCREEN_CONTROLS_NBR);
 	m_pnl_screen->AddControl(m_pnl_playscreen);
 
@@ -189,8 +189,8 @@ void GameInterface::Init(const ValuesGameInterface& val)
 
 	// Informations
 	m_lb_infos = new ListBox();
-	m_lb_infos->InitControl("lb_infos", m_pnl_playscreen);
-	m_lb_infos->InitLocalizable(Point(5, m_pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 6 - 26 * (2 + 12)), Size(), 0);
+	m_lb_infos->InitControl("lb_infos");
+	m_lb_infos->InitLocalizable(Point(5, m_pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 6 - 26 * (2 + 12)), Size(), 0, m_pnl_playscreen);
 	m_lb_infos->InitTextual(val.FontTextures[TEXTCOLOR_RED], false, 12.f, 12.f, 0.5f);
 	m_lb_infos->InitListBox(26, 2, Point(), false);
 	m_pnl_playscreen->AddControl(m_lb_infos);
@@ -222,9 +222,9 @@ void GameInterface::Init(const ValuesGameInterface& val)
 
 	//Fenetre de console
 	m_lb_console = new ListBox();
-	m_lb_console->InitControl(LB_CONSOLE_NAME, m_pnl_playscreen);
+	m_lb_console->InitControl(LB_CONSOLE_NAME);
 	m_lb_console->InitLocalizable(Point(m_pnl_playscreen->GetSize().w - 64 - LB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H + 5), 
-		Size(LB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H), val.UITextures[CUSTIMAGE_CONSOLE_BACK]);
+		Size(LB_CONSOLE_SIZE_W, TXB_CONSOLE_SIZE_H), val.UITextures[CUSTIMAGE_CONSOLE_BACK], m_pnl_playscreen);
 	m_lb_console->InitTextual(THEME_CONSOLE);
 	m_lb_console->InitListBox(LB_CONSOLE_LINE_NUMBER, LB_CONSOLE_LINE_GAP, Point(LB_CONSOLE_BODER_OFFSET_S, LB_CONSOLE_BODER_OFFSET_B),
 		true, val.UITextures[CUSTIMAGE_ARROWBUTTON_UP], val.UITextures[CUSTIMAGE_ARROWBUTTON_DOWN]);
@@ -232,9 +232,9 @@ void GameInterface::Init(const ValuesGameInterface& val)
 	Info::Get().SetConsole(m_lb_console);
 	//Texbox de la console
 	m_txb_console = new Textbox();
-	m_txb_console->InitControl(TXB_CONSOLE_NAME, m_pnl_playscreen);
+	m_txb_console->InitControl(TXB_CONSOLE_NAME);
 	m_txb_console->InitLocalizable(Point(m_pnl_playscreen->GetSize().w - 64 - LB_CONSOLE_SIZE_W, 0),
-		Size(TXB_CONSOLE_SIZE_W, 0), val.UITextures[CUSTIMAGE_CONSOLE_TEXTBOX_BACK]);
+		Size(TXB_CONSOLE_SIZE_W, 0), val.UITextures[CUSTIMAGE_CONSOLE_TEXTBOX_BACK], m_pnl_playscreen);
 	m_txb_console->InitTextual(THEME_CONSOLE);
 	m_txb_console->SetColor(val.FontTextures[TEXTCOLOR_WHITE]);
 	m_txb_console->SetOffset(Point(TXB_CONSOLE_OFFSET_X, TXB_CONSOLE_OFFSET_Y));
@@ -242,9 +242,9 @@ void GameInterface::Init(const ValuesGameInterface& val)
 	m_txb_console->Hide();
 	// Frame portrait
 	m_pnl_portrait = new Panel();
-	m_pnl_portrait->InitControl(PNL_PORTRAIT_NAME, m_pnl_playscreen);
+	m_pnl_portrait->InitControl(PNL_PORTRAIT_NAME);
 	m_pnl_portrait->InitLocalizable(Point(PNL_PORTRAIT_POSITION_X, PNL_PORTRAIT_POSITION_Y),
-		Size(PNL_PORTRAIT_SIZE_W, PNL_PORTRAIT_SIZE_H), val.UITextures[CUSTIMAGE_PORTRAIT_FRAME]);
+		Size(PNL_PORTRAIT_SIZE_W, PNL_PORTRAIT_SIZE_H), val.UITextures[CUSTIMAGE_PORTRAIT_FRAME], m_pnl_playscreen);
 	m_pnl_portrait->InitContainer(PNL_PORTRAIT_CONTROLS_NBR);
 	m_pnl_playscreen->AddControl(m_pnl_portrait);
 
@@ -252,59 +252,59 @@ void GameInterface::Init(const ValuesGameInterface& val)
 
 	// Barre de vie
 	m_pgb_health = new ProgressBar();
-	m_pgb_health->InitControl(PGB_HEALTH_NAME, m_pnl_portrait);
+	m_pgb_health->InitControl(PGB_HEALTH_NAME);
 	m_pgb_health->InitLocalizable(Point(PGB_HEALTH_POSITION_X, PGB_HEALTH_POSITION_Y),
-		Size(PGB_HEALTH_SIZE_W, PGB_HEALTH_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_HEALTH_BACK]);
+		Size(PGB_HEALTH_SIZE_W, PGB_HEALTH_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_HEALTH_BACK], m_pnl_portrait);
 	m_pgb_health->Init(ProgressBar::BARMODE_HORIZONTAL_LTR, val.UITextures[CUSTIMAGE_PGBTEXT_HEALTH], PGB_HEALTH_BORDER_SIZE);
 	m_pnl_portrait->AddControl(m_pgb_health);
 	// Barre de mana
 	m_pgb_mana = new ProgressBar();
-	m_pgb_mana->InitControl(PGB_MANA_NAME, m_pnl_portrait);
+	m_pgb_mana->InitControl(PGB_MANA_NAME);
 	m_pgb_mana->InitLocalizable(Point(PGB_MANA_POSITION_X, PGB_MANA_POSITION_Y),
-		Size(PGB_MANA_SIZE_W, PGB_MANA_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_MANA_BACK]);
+		Size(PGB_MANA_SIZE_W, PGB_MANA_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_MANA_BACK], m_pnl_portrait);
 	m_pgb_mana->Init(ProgressBar::BARMODE_HORIZONTAL_LTR, val.UITextures[CUSTIMAGE_PGBTEXT_MANA], PGB_MANA_BORDER_SIZE);
 	m_pnl_portrait->AddControl(m_pgb_mana);
 	// Barre d'expérience
 	m_pgb_exp = new ProgressBar();
-	m_pgb_exp->InitControl(PGB_EXP_NAME, m_pnl_portrait);
+	m_pgb_exp->InitControl(PGB_EXP_NAME);
 	m_pgb_exp->InitLocalizable(Point(PGB_EXP_POSITION_X, PGB_EXP_POSITION_Y),
-		Size(PGB_EXP_SIZE_W, PGB_EXP_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_EXP_BACK]);
+		Size(PGB_EXP_SIZE_W, PGB_EXP_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_EXP_BACK], m_pnl_portrait);
 	m_pgb_exp->Init(ProgressBar::BARMODE_HORIZONTAL_LTR, val.UITextures[CUSTIMAGE_PGBTEXT_EXP], PGB_EXP_BORDER_SIZE);
 	m_pnl_portrait->AddControl(m_pgb_exp);
 	// Label de vie
 	m_lbl_health = new Label();
-	m_lbl_health->InitControl(LBL_HEALTH_NAME, m_pnl_portrait);
-	m_lbl_health->InitLocalizable(Point(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), Size(), 0);
+	m_lbl_health->InitControl(LBL_HEALTH_NAME);
+	m_lbl_health->InitLocalizable(Point(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), m_pnl_portrait);
 	m_lbl_health->InitTextual(THEME_PLAYER_VALUES);
 	m_lbl_health->SetColor(val.FontTextures[TEXTCOLOR_RED]);
 	m_pnl_portrait->AddControl(m_lbl_health);
 	// Label de mana
 	m_lbl_mana = new Label();
-	m_lbl_mana->InitControl(LBL_MANA_NAME, m_pnl_portrait);
-	m_lbl_mana->InitLocalizable(Point(LBL_MANA_POSITION_X, LBL_MANA_POSITION_Y), Size(), 0);
+	m_lbl_mana->InitControl(LBL_MANA_NAME);
+	m_lbl_mana->InitLocalizable(Point(LBL_MANA_POSITION_X, LBL_MANA_POSITION_Y), m_pnl_portrait);
 	m_lbl_mana->InitTextual(THEME_PLAYER_VALUES);
 	m_lbl_mana->SetColor(val.FontTextures[TEXTCOLOR_BLUE]);
 	m_pnl_portrait->AddControl(m_lbl_mana);
 	// Label d'exp
 	m_lbl_exp = new Label();
-	m_lbl_exp->InitControl(LBL_EXP_NAME, m_pnl_portrait);
-	m_lbl_exp->InitLocalizable(Point(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), Size(), 0);
+	m_lbl_exp->InitControl(LBL_EXP_NAME);
+	m_lbl_exp->InitLocalizable(Point(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), m_pnl_portrait);
 	m_lbl_exp->InitTextual(THEME_PLAYER_VALUES);
 	m_lbl_exp->SetColor(val.FontTextures[TEXTCOLOR_YELLOW]);
 	m_pnl_portrait->AddControl(m_lbl_exp);
 
 	// Image du joueur
 	m_pnl_playerImage = new PictureBox();
-	m_pnl_playerImage->InitControl(PB_PORTRAIT_NAME, m_pnl_portrait);
+	m_pnl_playerImage->InitControl(PB_PORTRAIT_NAME);
 	m_pnl_playerImage->InitLocalizable(Point(PB_PORTRAIT_POSITION_X, PB_PORTRAIT_POSITION_Y),
-		Size(PB_PORTRAIT_SIZE_W, PB_PORTRAIT_SIZE_H), val.UITextures[CUSTIMAGE_PORTRAIT_MALE]);
+		Size(PB_PORTRAIT_SIZE_W, PB_PORTRAIT_SIZE_H), val.UITextures[CUSTIMAGE_PORTRAIT_MALE], m_pnl_portrait);
 	m_pnl_portrait->AddControl(m_pnl_playerImage);
 
 #pragma region Enfants de m_pnl_playerImage
 
 	m_lbl_playerLevel = new Label();
-	m_lbl_playerLevel->InitControl(LBL_PLAYER_LEVEL_NAME, m_pnl_playerImage);
-	m_lbl_playerLevel->InitLocalizable(Point(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), Size(), 0);
+	m_lbl_playerLevel->InitControl(LBL_PLAYER_LEVEL_NAME);
+	m_lbl_playerLevel->InitLocalizable(Point(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), m_pnl_playerImage);
 	m_lbl_playerLevel->InitTextual(val.FontTextures[TEXTCOLOR_YELLOW], false, LBL_PLAYER_LEVEL_H, LBL_PLAYER_LEVEL_W, LBL_PLAYER_LEVEL_I);
 	m_lbl_playerLevel->Init(TEXTDOCK_TOPLEFT, Point(20, -5));
 	m_pnl_portrait->AddControl(m_lbl_playerLevel);
@@ -312,32 +312,32 @@ void GameInterface::Init(const ValuesGameInterface& val)
 #pragma endregion
 
 	m_lbl_currentBlockType = new Label();
-	m_lbl_currentBlockType->InitControl("lbl_blocinfo", m_pnl_playscreen);
-	m_lbl_currentBlockType->InitLocalizable(m_pnl_playerImage->GetPosition() + Point(0, 200), Size(), 0);
+	m_lbl_currentBlockType->InitControl("lbl_blocinfo");
+	m_lbl_currentBlockType->InitLocalizable(m_pnl_playerImage->GetPosition() + Point(0, 200), m_pnl_playscreen);
 	m_lbl_currentBlockType->InitTextual(val.FontTextures[TEXTCOLOR_BLUE], false, 
 		LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
 	m_lbl_currentBlockType->SetMsg("Bloc : ");
 	m_pnl_playscreen->AddControl(m_lbl_currentBlockType);
 
 	m_pb_currentBlockType = new PictureBox();
-	m_pb_currentBlockType->InitControl("pbcurbloc", m_pnl_playscreen);
+	m_pb_currentBlockType->InitControl("pbcurbloc");
 	m_pb_currentBlockType->InitLocalizable(Point(m_lbl_currentBlockType->GetPosition().x + 84, 
-		m_lbl_currentBlockType->GetPosition().y), Size(40,40), 0);
+		m_lbl_currentBlockType->GetPosition().y), Size(40,40), 0, m_pnl_playscreen);
 	m_pnl_playscreen->AddControl(m_pb_currentBlockType);
 
 #pragma endregion
 
 	//Barre d'énergie verticale
 	m_pgb_energy = new ProgressBar();
-	m_pgb_energy->InitControl(PGB_ENERGY_NAME, m_pnl_playscreen);
+	m_pgb_energy->InitControl(PGB_ENERGY_NAME);
 	m_pgb_energy->InitLocalizable(Point(PGB_ENERGY_POSITION_X, PGB_ENERGY_POSITION_Y),
-		Size(PGB_ENERGY_SIZE_W, PGB_ENERGY_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_ENERGY_BACK]);
+		Size(PGB_ENERGY_SIZE_W, PGB_ENERGY_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_ENERGY_BACK], m_pnl_playscreen);
 	m_pgb_energy->Init(ProgressBar::BARMODE_VERTICAL_DTU, val.UITextures[CUSTIMAGE_PGBTEXT_ENERGY], PGB_ENERGY_BORDER_SIZE);
 	m_pnl_playscreen->AddControl(m_pgb_energy);
 	//Label d'énergie
 	m_lbl_energy = new Label();
-	m_lbl_energy->InitControl(LBL_ENERGY_NAME, m_pnl_playscreen);
-	m_lbl_energy->InitLocalizable(Point(LBL_ENERGY_POSITION_X, LBL_ENERGY_POSITION_Y), Size(), 0);
+	m_lbl_energy->InitControl(LBL_ENERGY_NAME);
+	m_lbl_energy->InitLocalizable(Point(LBL_ENERGY_POSITION_X, LBL_ENERGY_POSITION_Y), m_pnl_playscreen);
 	m_lbl_energy->InitTextual(val.FontTextures[TEXTCOLOR_GREEN], LBL_ENERGY_ITALIC, LBL_ENERGY_CHAR_H, LBL_ENERGY_CHAR_W, LBL_ENERGY_CHAR_I);
 	m_pnl_playscreen->AddControl(m_lbl_energy);
 
@@ -345,32 +345,32 @@ void GameInterface::Init(const ValuesGameInterface& val)
 
 	//Label Position
 	m_lbl_plrPos = new Label();
-	m_lbl_plrPos->InitControl("pos", m_pnl_playscreen);
-	m_lbl_plrPos->InitLocalizable(Point(5, m_pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H), Size(), 0);
+	m_lbl_plrPos->InitControl("pos");
+	m_lbl_plrPos->InitLocalizable(Point(5, m_pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H), m_pnl_playscreen);
 	m_lbl_plrPos->InitTextual(val.FontTextures[TEXTCOLOR_GREEN], LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
 	m_pnl_playscreen->AddControl(m_lbl_plrPos);
 	//Label Vitesse
 	m_lbl_plrSpd = new Label();
-	m_lbl_plrSpd->InitControl("spd", m_pnl_playscreen);
-	m_lbl_plrSpd->InitLocalizable(Point(5, m_pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 2), Size(), 0);
+	m_lbl_plrSpd->InitControl("spd");
+	m_lbl_plrSpd->InitLocalizable(Point(5, m_pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 2), m_pnl_playscreen);
 	m_lbl_plrSpd->InitTextual(val.FontTextures[TEXTCOLOR_BLUE], LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
 	m_pnl_playscreen->AddControl(m_lbl_plrSpd);
 	//Label Acceleration
 	m_lbl_plrAcc = new Label();
-	m_lbl_plrAcc->InitControl("acc", m_pnl_playscreen);
-	m_lbl_plrAcc->InitLocalizable(Point(5, m_pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 3), Size(), 0);
+	m_lbl_plrAcc->InitControl("acc");
+	m_lbl_plrAcc->InitLocalizable(Point(5, m_pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 3), m_pnl_playscreen);
 	m_lbl_plrAcc->InitTextual(val.FontTextures[TEXTCOLOR_RED], LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
 	m_pnl_playscreen->AddControl(m_lbl_plrAcc);
 	//Label mouse position
 	m_lbl_mousePos = new Label();
-	m_lbl_mousePos->InitControl("mpos", m_pnl_playscreen);
-	m_lbl_mousePos->InitLocalizable(Point(5, m_pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 4), Size(), 0);
+	m_lbl_mousePos->InitControl("mpos");
+	m_lbl_mousePos->InitLocalizable(Point(5, m_pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 4), m_pnl_playscreen);
 	m_lbl_mousePos->InitTextual(val.FontTextures[TEXTCOLOR_WHITE], LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
 	m_pnl_playscreen->AddControl(m_lbl_mousePos);
 	//Label FPS
 	m_lbl_FPS = new Label();
-	m_lbl_FPS->InitControl("fps", m_pnl_playscreen);
-	m_lbl_FPS->InitLocalizable(Point(5, m_pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 5), Size(), 0);
+	m_lbl_FPS->InitControl("fps");
+	m_lbl_FPS->InitLocalizable(Point(5, m_pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 5), m_pnl_playscreen);
 	m_lbl_FPS->InitTextual(val.FontTextures[TEXTCOLOR_YELLOW], LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
 	m_pnl_playscreen->AddControl(m_lbl_FPS);
 
@@ -378,19 +378,19 @@ void GameInterface::Init(const ValuesGameInterface& val)
 
 	//Heure
 	m_pnl_time = new Panel();
-	m_pnl_time->InitControl("clock", m_pnl_playscreen);
+	m_pnl_time->InitControl("clock");
 	m_pnl_time->InitLocalizable(Point(m_pnl_playscreen->GetSize().w - 128, m_pnl_playscreen->GetSize().h - 64), 
-		Size(128, 64), val.UITextures[CUSTIMAGE_CLOCK_BG]);
+		Size(128, 64), val.UITextures[CUSTIMAGE_CLOCK_BG], m_pnl_playscreen);
 	m_pnl_time->InitContainer(1);
 	m_pnl_playscreen->AddControl(m_pnl_time);
 
 #pragma region Enfants de m_pnl_time
 
 	m_lbl_time = new Label();
-	m_lbl_time->InitControl("time", m_pnl_time);
-	m_lbl_time->InitLocalizable(Point(), Size(), 0);
+	m_lbl_time->InitControl("time");
+	m_lbl_time->InitLocalizable(Point(), m_pnl_time);
 	m_lbl_time->InitTextual(THEME_DEFAULT);
-	m_lbl_time->Init(TEXTDOCK_MIDDLECENTER, Point());
+	m_lbl_time->Init(TEXTDOCK_MIDDLECENTER);
 	m_pnl_time->AddControl(m_lbl_time);
 
 #pragma endregion

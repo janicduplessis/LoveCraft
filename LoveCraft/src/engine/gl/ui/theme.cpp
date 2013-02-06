@@ -78,7 +78,7 @@ Texture* Theme::GetForeColor() const
 {
 	return m_foreColor;
 }
-Texture* Theme::GetBackColor() const
+Texture* Theme::GetBackground() const
 {
 	return m_backColor;
 }

@@ -24,6 +24,7 @@ public:
 
 	Panel* m_timertest;
 	Label* m_timertesttext;
+	Label* m_timertesttime;
 };
 
 #endif

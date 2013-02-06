@@ -47,9 +47,13 @@ void Timer::Reset()
 	m_laps = 0;
 }
 
-void Timer::SetIntervaltime(float intervaltime)
+void Timer::SetIntervalTime(float intervaltime)
 {
 	m_interval = intervaltime;
+}
+void Timer::AddIntervalTime(float value)
+{
+	m_interval += value;
 }
 float Timer::GetIntervalTime() const
 {

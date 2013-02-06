@@ -26,6 +26,7 @@ void SingleText::InitTextual(ThemeSet theme)
 	Theme* t = Theme::GetTheme(theme);
 	InitTextual(t->GetForeColor(), t->GetItalic(), t->GetHeight(), 
 		t->GetWidth(), t->GetInterval());
+	SetBackground(t->GetBackground());
 }
 
 #pragma region Label properties
@@ -34,6 +35,14 @@ void SingleText::SetMsg(string message)
 {
 	Textual::SetMsg(message);
 	m_label->SetMsg(message);
+}
+void SingleText::AddMsg(string value)
+{
+	static std::ostringstream ss;
+	ss << m_message << value;
+	Textual::SetMsg(ss.str());
+	m_label->SetMsg(ss.str());
+	ss.str("");
 }
 void SingleText::SetColor(Texture* color)
 {
@@ -55,15 +64,30 @@ void SingleText::SetCharHeight(float height)
 	Textual::SetCharHeight(height);
 	m_label->SetCharHeight(height);
 }
+void SingleText::AddCharHeight(float value)
+{
+	Textual::AddCharHeight(value);
+	m_label->AddCharHeight(value);
+}
 void SingleText::SetCharWidth(float width)
 {
 	Textual::SetCharWidth(width);
 	m_label->SetCharWidth(width);
 }
+void SingleText::AddCharWidth(float value)
+{
+	Textual::AddCharWidth(value);
+	m_label->AddCharWidth(value);
+}
 void SingleText::SetCharInterval(float interval)
 {
 	Textual::SetCharInterval(interval);
 	m_label->SetCharInterval(interval);
+}
+void SingleText::AddCharInterval(float value)
+{
+	Textual::AddCharInterval(value);
+	m_label->AddCharInterval(value);
 }
 void SingleText::SetOffset(Point offset)
 {

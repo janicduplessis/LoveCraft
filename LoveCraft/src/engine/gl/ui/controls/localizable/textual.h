@@ -14,6 +14,7 @@ public:
 	virtual void Render() = 0;
 
 	virtual void SetMsg(string message);
+	virtual void AddMsg(string value);
 	virtual string GetMsg() const;
 	virtual bool IsMsg(string message) const;
 	virtual bool HasMsg() const;
@@ -28,14 +29,17 @@ public:
 	virtual bool IsItalic() const;
 
 	virtual void SetCharHeight(float height);
+	virtual void AddCharHeight(float value);
 	virtual float GetCharHeight() const;
 	virtual float IsCharHeight(float height) const;
 
 	virtual void SetCharWidth(float width);
+	virtual void AddCharWidth(float value);
 	virtual float GetCharWidh() const;
 	virtual float IsCharWidth(float width) const;
 
 	virtual void SetCharInterval(float interval);
+	virtual void AddCharInterval(float value);
 	virtual float GetCharInterval() const;
 	virtual float IsCharInterval(float interval) const;
 protected:

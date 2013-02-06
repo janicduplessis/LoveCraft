@@ -468,7 +468,9 @@ void Engine::RenderMenu(float elapsedTime)
 	glPushMatrix();
 
 #pragma endregion
+
 	m_timertest->Update(elapsedTime);
+	m_menuUI.m_timertesttime->SetVariableMsg(m_timertest->GetIntervalTime());
 	m_timeranimationmoins->Update(elapsedTime);
 	m_timeranimationplus->Update(elapsedTime);
 	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
@@ -1092,9 +1094,9 @@ void Engine::KeyReleaseEvent(unsigned char key)
 			else m_timertest->Start();
 		}
 		if (c.n1())
-			m_timertest->SetIntervaltime(m_timertest->GetIntervalTime() - 0.05f);
+			m_timertest->AddIntervalTime(-0.05f);
 		if (c.n2())
-			m_timertest->SetIntervaltime(m_timertest->GetIntervalTime() + 0.05f);
+			m_timertest->AddIntervalTime(0.05f);
 		c.Set(key, false);
 #pragma endregion
 	}

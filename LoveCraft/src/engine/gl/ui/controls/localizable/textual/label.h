@@ -15,6 +15,12 @@ public:
 	virtual void Init(Docking dock, Point offset = Point(0, 0));
 	virtual void Render();
 
+	virtual void SetVariableMsg(string variable);
+	virtual void SetVariableMsg(float variable);
+	virtual void SetVariableMsg(int variable);
+	virtual void SetVariableMsg(uint32 variable);
+	virtual void SetVariableMsg(bool variable);
+
 	virtual void SetDocking(Docking dock);
 	virtual Docking GetDocking() const;
 	virtual bool IsDocking(Docking dock) const;
@@ -26,6 +32,8 @@ public:
 
 	virtual Point AbsolutePosition() const;
 protected:
+	string m_variableMsg;
+	string Replace();
 	Docking m_docking;
 	Point m_offset;
 };

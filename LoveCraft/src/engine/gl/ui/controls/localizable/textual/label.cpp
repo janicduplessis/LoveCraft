@@ -1,7 +1,7 @@
 #include "label.h"
 
 
-Label::Label() : Textual(CTRLTYPE_LABEL), m_docking(TEXTDOCK_NONE), m_offset(Point(0, 0))
+Label::Label() : Textual(CTRLTYPE_LABEL), m_docking(TEXTDOCK_NONE), m_offset(Point(0, 0)), m_variableMsg("")
 {
 	SetBlend(CBLEND_BLUR);
 }
@@ -21,8 +21,9 @@ void Label::Render()
 {
 	if (m_visible && !IsMsg(""))
 	{
+		string message = Replace();
 		Point& abspos = AbsolutePosition();
-		SetSize(Size(m_message.length() * m_charWidth * m_charInterval - m_charWidth * m_charInterval, m_charHeight));
+		SetSize(Size(message.length() * m_charWidth * m_charInterval - m_charWidth * m_charInterval, m_charHeight));
 
 		if (m_background)
 			DrawSquare();
@@ -35,10 +36,10 @@ void Label::Render()
 			glLoadIdentity();
 			glTranslatef(abspos.x, abspos.y, 0);
 
-			for (uint16 i = 0; i < m_message.length(); ++i)
+			for (uint16 i = 0; i < message.length(); ++i)
 			{
-				float left = (float)((m_message[i] - 32) % 16) / 16.0f;
-				float top = (float)((m_message[i] - 32) / 16) / 16.0f;
+				float left = (float)((message[i] - 32) % 16) / 16.0f;
+				float top = (float)((message[i] - 32) / 16) / 16.0f;
 				top += m_italic ? 0.5f : 1.0f;
 				glBegin(GL_QUADS);
 				glTexCoord2f(left, 1.0f - top - 0.0625f);
@@ -56,6 +57,47 @@ void Label::Render()
 			DrawingDesactivateBlend();
 		}
 	}
+}
+
+void Label::SetVariableMsg(string variable)
+{
+	m_variableMsg = variable;
+}
+void Label::SetVariableMsg(float variable)
+{
+	std::ostringstream ss;
+	ss << variable;
+	SetVariableMsg(ss.str());
+}
+void Label::SetVariableMsg(int variable)
+{
+	std::ostringstream ss;
+	ss << variable;
+	SetVariableMsg(ss.str());
+}
+void Label::SetVariableMsg(uint32 variable)
+{
+	std::ostringstream ss;
+	ss << variable;
+	SetVariableMsg(ss.str());
+}
+void Label::SetVariableMsg(bool variable)
+{
+	std::ostringstream ss;
+	ss << variable ? "True" : "False";
+	SetVariableMsg(ss.str());
+}
+
+string Label::Replace()
+{
+	string newmsg = m_message;
+	size_t pos = 0;
+	while((pos = newmsg.find("&var", pos)) != std::string::npos)
+	{
+		newmsg.replace(pos, 4, m_variableMsg);
+		pos += m_variableMsg.length();
+	}
+	return newmsg;
 }
 
 // Propriétés
@@ -108,7 +150,7 @@ Point Label::AbsolutePosition() const
 	Point relposition;
 	Localizable* parent = dynamic_cast<Localizable*>(m_parent);
 	Size& size = parent->GetSize();
-	int width = m_message.length() * m_charInterval * m_charWidth - m_charWidth * m_charInterval;
+	int width = m_message.length() * m_charInterval * m_charWidth + m_charWidth * m_charInterval;
 
 	// Vérification de l'ancrage et assignation de la position relative au parent
 	switch (m_docking)

@@ -1,7 +1,7 @@
 #include "timer.h"
 
 
-Timer::Timer() : Workable(CTRLTYPE_TIMER), m_interval(1.0f), m_laps(0), m_time(0)
+Timer::Timer() : Workable(CTRLTYPE_TIMER), m_interval(1.0f), m_laps(0), m_time(0), m_thread(0)
 {
 	Disable();
 }
@@ -14,6 +14,14 @@ Timer::~Timer()
 void Timer::Init(float intervaltime)
 {
 	m_interval = intervaltime;
+}
+
+template <typename ReturnT,typename ParamT>
+template <typename ListenerT>
+void Timer::Attach(ListenerT* object, ReturnT (ListenerT::*member)(ParamT))
+{
+	typedef ReturnT (ListenerT::*PtrMember)(ParamT);
+	
 }
 
 void Timer::Update(float elapsedtime)

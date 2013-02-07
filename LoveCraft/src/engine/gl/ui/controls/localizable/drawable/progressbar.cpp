@@ -61,6 +61,10 @@ void ProgressBar::SetValue(float value)
 {
 	m_value = value > m_maximum ? m_maximum : (value <= m_minimum ? m_minimum : value);
 }
+void ProgressBar::AddValue(float value)
+{
+	SetValue(GetValue() + value);
+}
 float ProgressBar::GetValue() const
 {
 	return m_value;

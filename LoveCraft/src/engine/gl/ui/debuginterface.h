@@ -3,13 +3,14 @@
 
 #include "interface.h"
 
-class DebugInterface
+class DebugInterface : Interface
 {
 public:
 	DebugInterface();
-	~DebugInterface();
+	virtual ~DebugInterface();
 	virtual void Init(const ValuesInterface& val);
-	void Render();
+	virtual void DeInit();
+	virtual void Render();
 
 	Panel* m_timertest;
 	Label* m_timertesttext;

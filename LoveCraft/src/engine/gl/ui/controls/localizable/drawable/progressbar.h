@@ -25,6 +25,7 @@ public:
 	virtual bool IsMode(BarMode mode) const;
 
 	virtual void SetValue(float value);
+	virtual void AddValue(float value);
 	virtual float GetValue() const;
 	virtual bool IsValue(float value) const;
 	virtual bool IsValue(float first, float second) const;

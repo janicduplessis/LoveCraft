@@ -9,14 +9,14 @@
 #include "son.h"
 #include <SFML/Network.hpp>
 #include "interfaceinfos.h"
-#include "gl/ui/controls/localizable/textual/singletext/textbox.h"
 #include "util/tool.h"
 
-
+#pragma region Constructeur et reference
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0),
-	m_clickTimer(0), m_currentBlockType(0), m_chunkLoader(&m_mutex)
+	m_clickTimer(0), m_currentBlockType(0), m_chunkLoader(&m_mutex),
+	m_mxWorld(Matrix4f()), m_mxWVP(Matrix4f())
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
@@ -32,19 +32,10 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 
 	m_camera = new Camera;
 	Info::Get().StatusOn(Info::LSTATUS_CAMERA);
-	m_player = new Player(Vector3f(VIEW_DISTANCE,0,VIEW_DISTANCE));
+	m_player = new Player(Vector3f(VIEW_DISTANCE, 0, VIEW_DISTANCE));
 	Info::Get().StatusOn(Info::LSTATUS_PLAYER);
 	m_character = new Character;
 	Info::Get().StatusOn(Info::LSTATUS_CHARACTER);
-
-	m_timertest = new Timer();
-	m_timertest->Init(2.0f);
-	m_timeranimationplus = new Timer();
-	m_timeranimationplus->Init(0.01f);
-	m_timeranimationplus->InitControl("plus");
-	m_timeranimationmoins = new Timer();
-	m_timeranimationmoins->Init(0.01f);
-	m_timeranimationmoins->InitControl("moins");
 }
 
 Engine::~Engine()
@@ -95,7 +86,7 @@ Engine::~Engine()
 	}
 	if (Info::Get().GetStatus(Info::LSTATUS_SKYBOX))
 		//delete m_skybox;
-	delete [] m_monsters;
+			delete [] m_monsters;
 	delete m_textureArray;
 }
 
@@ -109,14 +100,16 @@ Engine& Engine::Get()
 	return *this;
 }
 
-void Engine::MenuInit()
+#pragma endregion
+
+#pragma region Initialisation
+
+void Engine::GlobalInit()
 {
 	//seed random number generator
 	srand((unsigned)time(0));
 	//Donne une référence vers la camera a info
 	Info::Get().SetCamera(m_camera);
-
-	m_valuesMenuInterface.Init(m_textureInterface, m_texturefontColor);
 
 #pragma region Initilisation de Glew
 
@@ -165,8 +158,35 @@ void Engine::MenuInit()
 
 #pragma endregion
 
+	m_player->Init();
+
+#pragma region Initialisation des timers
+
+	m_timertest = new Timer();
+	m_timertest->Init(2.0f);
+	m_timeranimationplus = new Timer();
+	m_timeranimationplus->Init(0.01f);
+	m_timeranimationplus->InitControl("plus");
+	m_timeranimationmoins = new Timer();
+	m_timeranimationmoins->Init(0.01f);
+	m_timeranimationmoins->InitControl("moins");
+
+	m_timertest->OnTick.Attach(this, &Engine::Timertest_OnTick);
+	m_timeranimationplus->OnTick.Attach(this, &Engine::TimerAnimation_OnTick);
+	m_timeranimationmoins->OnTick.Attach(this, &Engine::TimerAnimation_OnTick);
+
+#pragma endregion
+
 	CenterMouse();
 	HideCursor();
+}
+
+void Engine::MenuInit()
+{
+	m_valuesMenuInterface.Init(m_textureInterface, m_texturefontColor);
+	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
+	m_menuUI.Init(m_valuesMenuInterface);
+	m_debugUI.Init(m_valuesMenuInterface);
 }
 
 void Engine::GameInit()
@@ -251,19 +271,23 @@ void Engine::GameInit()
 
 #pragma endregion
 
-	m_player->Init();
-
 	m_valuesGameInterface.Init(m_textureInterface, m_texturefontColor, m_textureArray, m_player, m_character);
 	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_gameUI.Init(m_valuesGameInterface);
-
 }
 
 void Engine::DeInit()
 {
+	m_menuUI.DeInit();
+	m_gameUI.DeInit();
+	m_debugUI.DeInit();
 }
 
-void Engine::LoadMenuResource()
+#pragma endregion
+
+#pragma region Resources
+
+void Engine::LoadGlobalResource()
 {
 
 #pragma region Chargement des textures
@@ -364,29 +388,10 @@ void Engine::LoadMenuResource()
 
 #pragma endregion
 
-#pragma region Chargement des elements de l interface
-
-#pragma region Controles du menu
-
-	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
-	m_menuUI.Init(m_valuesMenuInterface);
-	m_debugUI.Init(m_valuesMenuInterface);
-
 	//Cursor
 	m_pb_cursor = new PictureBox();
 	m_pb_cursor->InitControl("pb_cursor");
 	m_pb_cursor->InitLocalizable(Point(), Size(50, 50), m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], 0);
-	m_menuUI.m_menu_fullscreen->OnClick.Attach(this, &Engine::OnClick);
-	m_menuUI.m_menu_start->OnClick.Attach(this, &Engine::OnClick);
-	m_menuUI.m_menu_close->OnClick.Attach(this, &Engine::OnClick);
-	m_timertest->OnTick.Attach(this, &Engine::Timertest_OnTick);
-	m_timeranimationplus->OnTick.Attach(this, &Engine::TimerAnimation_OnTick);
-	m_timeranimationmoins->OnTick.Attach(this, &Engine::TimerAnimation_OnTick);
-
-
-#pragma endregion
-
-#pragma endregion
 
 #pragma region Load et compile les shaders
 	std::cout << " Loading and compiling shaders ..." << std::endl;
@@ -441,114 +446,39 @@ void Engine::LoadMenuResource()
 
 }
 
-void Engine::LoadGameResource()
+void Engine::LoadMenuResource()
 {
+
+#pragma region Controles du menu
+
+	m_menuUI.btn_debugStart->OnClick.Attach(this, &Engine::OnClick);
+	m_menuUI.btn_normStart->OnClick.Attach(this, &Engine::OnClick);
+	m_menuUI.btn_close->OnClick.Attach(this, &Engine::OnClick);
+
+
+#pragma endregion
 
 }
 
-void Engine::LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, string path)
+void Engine::LoadGameResource()
 {
-	int index;
-	switch (faces)
-	{
-	case BFACE_ALL:
-		index = m_textureArray->AddTexture(path);
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(0, index);
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(1, index);
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(2, index);
-		break;
-	case BFACE_TOP_AND_BOT:
-		index = m_textureArray->AddTexture(path);
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(0, index);
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(2, index);
-		break;
-	case BFACE_TOP:
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(0, m_textureArray->AddTexture(path));
-		break;
-	case BFACE_SIDES:
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(1, m_textureArray->AddTexture(path));
-		break;
-	case BFACE_BOTTOM:
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(2, m_textureArray->AddTexture(path));
-		break;
-	}
-
+	m_gameUI.txb_console->GainedFocus.Attach(this, &Engine::GainedFocus);
+	m_gameUI.txb_console->LostFocus.Attach(this, &Engine::LostFocus);
 }
 
 void Engine::UnloadResource()
 {
-}
-
-void Engine::RenderMenu(float elapsedTime)
-{
-
-#pragma region OpenGl
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	// Transformations initiales
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	glDisable(GL_LIGHTING);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glDisable(GL_DEPTH_TEST);
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	glOrtho(0, Width(), 0, Height(), -1, 1);
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-
-#pragma endregion
-
-	m_timertest->Update(elapsedTime);
-	m_debugUI.m_timertesttime->SetVariableMsg(m_timertest->GetIntervalTime());
-	m_timeranimationmoins->Update(elapsedTime);
-	m_timeranimationplus->Update(elapsedTime);
-	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
-	m_menuUI.Render();
-	m_debugUI.Render();
-	m_pb_cursor->Render();
-	m_menuUI.m_menu_loading->Render();
-
-#pragma region Premier render
-
-	static bool first = true;
-	if (first)
-	{
-		m_timeranimationplus->Start();
-		first = false;
-	}
-
-	if (!IsFirstRun())
-	{
-		if (m_menuUI.m_menu_fullscreen->IsMsg(STRING_BUTTON_NORM_CONT))
-			m_menuUI.m_menu_fullscreen->SetMsg(STRING_BUTTON_NORM_CONT);
-		if (m_menuUI.m_menu_start->IsMsg(STRING_BUTTON_DEBUG_ON) && !Info::Get().Options().GetOptDebug())
-			m_menuUI.m_menu_start->SetMsg(STRING_BUTTON_DEBUG_ON);
-		else if (m_menuUI.m_menu_start->IsMsg(STRING_BUTTON_DEBUG_OFF) && Info::Get().Options().GetOptDebug())
-			m_menuUI.m_menu_start->SetMsg(STRING_BUTTON_DEBUG_OFF);
-	}
-
-#pragma endregion
-
-#pragma region OpenGl
-
-	glEnable(GL_LIGHTING);
-	glEnable(GL_DEPTH_TEST);
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
-
-#pragma endregion
 
 }
 
-void Engine::Update(float elapsedTime)
+#pragma endregion
+
+#pragma region Update
+
+void Engine::UpdateGame(float elapsedTime)
 {
 	m_mutex.lock();
+
 #pragma region GameTime
 
 	static float gameTime = elapsedTime;
@@ -557,12 +487,8 @@ void Engine::Update(float elapsedTime)
 	if (m_clickTimerOn)
 		m_clickTimer += elapsedTime;
 
-	//if (gameTime > 45)
-	//	m_gameUI.m_pnl_welcome->SP(Control::PROPBOL_VISIBLE, false);
-
 #pragma endregion
 
-	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
 	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_gameUI.Update(m_valuesGameInterface);
 	//m_skybox->Update(m_player->Position());
@@ -584,6 +510,69 @@ void Engine::Update(float elapsedTime)
 	}
 
 	m_mutex.unlock();
+
+#pragma endregion
+
+#pragma region Calcul de la position des monstres
+
+	for (uint8 i = 0; i < MONSTER_MAX_NUMBER; i++)
+	{
+		if (m_monsters[i]->Initialized())
+			m_monsters[i]->Update(elapsedTime);
+	}
+
+#pragma endregion
+
+	// Update tous les spells
+	for (SpellList::iterator it = m_spells.begin(); it != m_spells.end(); ++it)
+		it->Update(elapsedTime);
+
+#pragma region Elements de la camera
+
+	// 3rd person
+	if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON ) {
+		// hide/show cursor
+		if (!m_rightClick && !m_leftClick)
+			m_pb_cursor->Show();
+		else
+			m_pb_cursor->Hide();
+
+		// recule la camera
+		glTranslatef(0,0,-m_camRadius);
+		// applique les transformations normales de la camera
+		m_camera->ApplyRotation();
+		m_camera->ApplyTranslation();
+
+		// render le modele du player
+		m_shaderModel.Use();
+		m_player->Render(m_wireframe);
+		Shader::Disable();
+	} 
+	// first person
+	else
+	{
+		m_camera->ApplyRotation();
+		m_camera->ApplyTranslation();
+	}
+
+	// Différentes matrices de opengl
+	// pour utiliser avec render (fix batard)
+	GLfloat mv[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mv);
+	Matrix4f modelView(mv[0], mv[1], mv[2], mv[3],
+		mv[4], mv[5], mv[6], mv[7],
+		mv[8], mv[9], mv[10], mv[11],
+		mv[12], mv[13], mv[14], mv[15]);
+
+	GLfloat p[16];
+	glGetFloatv(GL_PROJECTION_MATRIX, p);
+	Matrix4f projection(p[0], p[1], p[2], p[3],
+		p[4], p[5], p[6], p[7],
+		p[8], p[9], p[10], p[11],
+		p[12], p[13], p[14], p[15]);
+
+	Matrix4f m_mxWVP = modelView * projection;
+	Matrix4f m_mxWorld = Matrix4f::IDENTITY;
 
 #pragma endregion
 
@@ -633,15 +622,92 @@ void Engine::Update(float elapsedTime)
 
 }
 
-void Engine::Render(float elapsedTime)
+void Engine::UpdateMenu(float elapsedTime)
 {
-
-#pragma region Game time
-
 	static float gameTime = elapsedTime;
 	gameTime += elapsedTime;
 
+#pragma region Premier tour
+
+	static bool first = true;
+	if (first)
+	{
+		m_timeranimationplus->Start();
+		first = false;
+	}
+
+	if (!IsFirstRun())
+	{
+		if (!m_menuUI.btn_debugStart->IsMsg(STRING_BUTTON_NORM_CONT))
+			m_menuUI.btn_debugStart->SetMsg(STRING_BUTTON_NORM_CONT);
+		if (!m_menuUI.btn_normStart->IsMsg(STRING_BUTTON_DEBUG_ON) && !Info::Get().Options().GetOptDebug())
+			m_menuUI.btn_normStart->SetMsg(STRING_BUTTON_DEBUG_ON);
+		else if (!m_menuUI.btn_normStart->IsMsg(STRING_BUTTON_DEBUG_OFF) && Info::Get().Options().GetOptDebug())
+			m_menuUI.btn_normStart->SetMsg(STRING_BUTTON_DEBUG_OFF);
+	}
+
 #pragma endregion
+
+	// Met les controles à jour
+	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
+	m_timertest->Update(elapsedTime);
+	m_timeranimationmoins->Update(elapsedTime);
+	m_timeranimationplus->Update(elapsedTime);
+	m_debugUI.m_timertesttime->SetVariableMsg(m_timertest->GetIntervalTime());
+}
+
+#pragma endregion
+
+#pragma region Render
+
+void Engine::RenderMenu()
+{
+
+#pragma region OpenGl
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Transformations initiales
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glDisable(GL_LIGHTING);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glDisable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0, Width(), 0, Height(), -1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+
+#pragma endregion
+
+	if (m_wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	m_menuUI.Render();
+	m_debugUI.Render();
+	m_pb_cursor->Render();
+
+	if (m_wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+#pragma region OpenGl
+
+	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+
+#pragma endregion
+
+}
+
+void Engine::RenderGame()
+{
 
 #pragma region OpenGl
 
@@ -653,63 +719,14 @@ void Engine::Render(float elapsedTime)
 
 #pragma endregion
 
-#pragma region Elements de la camera
-
-	// 3rd person
-	if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON ) {
-		// hide/show cursor
-		if (!m_rightClick && !m_leftClick)
-			m_pb_cursor->Show();
-		else
-			m_pb_cursor->Hide();
-
-		// recule la camera
-		glTranslatef(0,0,-m_camRadius);
-		// applique les transformations normales de la camera
-		m_camera->ApplyRotation();
-		m_camera->ApplyTranslation();
-
-		// render le modele du player
-		m_shaderModel.Use();
-		m_player->Render(m_wireframe);
-		Shader::Disable();
-	} 
-	// first person
-	else
-	{
-		m_camera->ApplyRotation();
-		m_camera->ApplyTranslation();
-	}
-
-	// Différentes matrices de opengl
-	// pour utiliser avec render (fix batard)
-	GLfloat mv[16];
-	glGetFloatv(GL_MODELVIEW_MATRIX, mv);
-	Matrix4f modelView(mv[0], mv[1], mv[2], mv[3],
-		mv[4], mv[5], mv[6], mv[7],
-		mv[8], mv[9], mv[10], mv[11],
-		mv[12], mv[13], mv[14], mv[15]);
-
-	GLfloat p[16];
-	glGetFloatv(GL_PROJECTION_MATRIX, p);
-	Matrix4f projection(p[0], p[1], p[2], p[3],
-		p[4], p[5], p[6], p[7],
-		p[8], p[9], p[10], p[11],
-		p[12], p[13], p[14], p[15]);
-
-	Matrix4f WVP = modelView * projection;
-	Matrix4f world = Matrix4f::IDENTITY;
-
-#pragma endregion
-
 #pragma region Render les cubes
 
 	Shader::Disable();
 	m_textureArray->Use(GL_TEXTURE4);
 	m_lightingShader.Use();
 	m_lightingShader.SetEyeWorldPos(m_camera->GetRealPosition());
-	m_lightingShader.SetWorld(world);
-	m_lightingShader.SetWVP(WVP);
+	m_lightingShader.SetWorld(m_mxWorld);
+	m_lightingShader.SetWVP(m_mxWVP);
 	m_mutex.lock();
 	int updated = 0;
 
@@ -746,13 +763,10 @@ void Engine::Render(float elapsedTime)
 	m_shaderModel.Use();
 
 	m_mutex.lock();
-	for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
+	for (uint8 i = 0; i < MONSTER_MAX_NUMBER; i++)
 	{
 		if (m_monsters[i]->Initialized())
-		{
-			m_monsters[i]->Update(elapsedTime);
 			m_monsters[i]->Render();
-		}
 	}
 	Shader::Disable();
 	m_mutex.unlock();
@@ -766,11 +780,10 @@ void Engine::Render(float elapsedTime)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-	// Update et render tous les spells
+	// Render tous les spells
 	for (SpellList::iterator it = m_spells.begin(); it != m_spells.end(); ++it) {
 		it->SetDestination(m_monsters[0]->Position());
-		it->Update(elapsedTime);
-		it->Render(WVP);
+		it->Render(m_mxWVP);
 		if (it->HasHit())
 		{
 			//m_spells.erase(it);
@@ -789,7 +802,31 @@ void Engine::Render(float elapsedTime)
 	// HUD
 	if (m_wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	Render2D(elapsedTime);
+
+#pragma region OpenGL
+	glDisable(GL_LIGHTING);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glDisable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0, Width(), 0, Height(), -1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+#pragma endregion
+
+	m_gameUI.Render();
+	m_pb_cursor->Render();
+
+#pragma region OpenGL
+	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+#pragma endregion
+
 	if (m_wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -800,8 +837,9 @@ void Engine::Render(float elapsedTime)
 	static bool ttt = true;
 	if (ttt)
 	{
+		m_player->ResetPosition();
 		Info::Get().Sound().PlayMusic(Son::MUSIC_PLAY1);
-		m_menuUI.m_menu_loading->Hide();
+		m_menuUI.pnl_loading->Hide();
 		CW("Premier Render de l'engine termine avec succes.");
 		ttt = false;
 	}
@@ -810,82 +848,9 @@ void Engine::Render(float elapsedTime)
 
 }
 
-void Engine::Render2D(float elapsedTime)
-{
-
-#pragma region OpenGl
-
-	glDisable(GL_LIGHTING);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glDisable(GL_DEPTH_TEST);
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	glOrtho(0, Width(), 0, Height(), -1, 1);
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-
 #pragma endregion
 
-#pragma region Affichage des controles
-
-	//Render de l'écran au complet avec tous ses contrôles.
-	m_gameUI.Render();
-
-#pragma endregion
-
-#pragma region Images qui subissent le blend par le contraste
-
-	//Activation du blend normal
-	StartBlendPNG(false);
-
-
-#pragma region Crosshair
-
-	if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON)
-	{
-		RenderSquare(
-			Vector2i(Width() / 2 - CROSSHAIR_SIZE / 2, Height() / 2 - CROSSHAIR_SIZE / 2),
-			Vector2i(CROSSHAIR_SIZE, CROSSHAIR_SIZE),
-			m_textureInterface[CUSTIMAGE_CROSSHAIR], false);
-	}
-
-#pragma endregion
-
-	glDisable(GL_BLEND);
-
-#pragma endregion
-
-#pragma region Affichage de l interface sans transparence
-
-	//============================================
-
-	//Bottom
-	//RenderSquare(
-	//	Vector2i(0, 0), 
-	//	Vector2i(Width(), INTERFACE_BOTTOM_HEIGHT), 
-	//	m_textureInterface[CUSTIMAGE_INTERFACE_FRAME]);
-	//============================================
-	//RenderSpells();
-	//============================================
-
-
-#pragma endregion
-
-	m_pb_cursor->Render();
-
-#pragma region OpenGl
-
-	glEnable(GL_LIGHTING);
-	glEnable(GL_DEPTH_TEST);
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
-
-#pragma endregion
-
-}
+#pragma region Evenements SFML
 
 void Engine::TextenteredEvent(unsigned int val)
 {
@@ -1243,84 +1208,10 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 		switch (button)
 		{
 		case MOUSE_BUTTON_LEFT:
-			m_menuUI.m_menu_close->MousePressEvents(x, m_menuUI.m_menu_screen->GetSize().h - y);
-			m_menuUI.m_menu_start->MousePressEvents(x, m_menuUI.m_menu_screen->GetSize().h - y);
-			m_menuUI.m_menu_fullscreen->MousePressEvents(x, m_menuUI.m_menu_screen->GetSize().h - y);
+			m_menuUI.btn_close->MousePressEvents(x, m_menuUI.pnl_screen->GetSize().h - y);
+			m_menuUI.btn_normStart->MousePressEvents(x, m_menuUI.pnl_screen->GetSize().h - y);
+			m_menuUI.btn_debugStart->MousePressEvents(x, m_menuUI.pnl_screen->GetSize().h - y);
 			break;
-		}
-	}
-}
-
-void Engine::OnClick(Control* sender)
-{
-	string n = sender->GetName();
-	Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE, true);
-
-	if (n == MENU_BUTTON_START_FULL_NAME)
-	{
-		if (!IsFirstRun())
-			SetMenuStatus(false);
-		else
-		{
-			Info::Get().Options().SetOptDebug(false);
-			ActivateFirstRun();
-			m_menuUI.m_menu_loading->Show();
-			SetMenuStatus(false);
-		}
-	}
-	if (n == MENU_BUTTON_DEBUG)
-	{
-		if (!IsFirstRun())
-			Info::Get().Options().SetOptDebug(!Info::Get().Options().GetOptDebug());
-		else
-		{
-			Info::Get().Options().SetOptDebug(true);
-			ActivateFirstRun();
-			m_menuUI.m_menu_loading->Show();
-			SetMenuStatus(false);
-		}
-	}
-	if (n == MENU_BUTTON_CLOSE)
-		Stop();
-}
-
-void Engine::GainedFocus(Textbox* sender)
-{
-
-}
-
-void Engine::LostFocus(Textbox* sender)
-{
-	CWL(sender->GetMsg());
-}
-
-void Engine::Timertest_OnTick(Timer* sender)
-{
-	if (sender->GetLaps() <= 1)
-		m_debugUI.m_timertesttext->SetMsg("1 - plus vite. 2 - moins vite");
-	m_debugUI.m_timertesttext->UseNextDocking();
-}
-
-void Engine::TimerAnimation_OnTick(Timer* sender)
-{
-	if (sender->GetName() == "plus")
-	{
-		if (m_menuUI.m_menu_logo->GetSize().h <= MENU_LOGO_SIZE_Y + 30)
-			m_menuUI.m_menu_logo->AddSize(Size(0, 3));
-		else
-		{
-			m_timeranimationmoins->Start();
-			sender->Stop();
-		}
-	}
-	if (sender->GetName() == "moins")
-	{
-		if (m_menuUI.m_menu_logo->GetSize().h > MENU_LOGO_SIZE_Y)
-			m_menuUI.m_menu_logo->AddSize(Size(0, -2));
-		else
-		{
-			m_timeranimationplus->Start();
-			sender->Stop();
 		}
 	}
 }
@@ -1354,13 +1245,96 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 		switch (button)
 		{
 		case MOUSE_BUTTON_LEFT:
-			m_menuUI.m_menu_close->MouseReleaseEvents(x,y);
-			m_menuUI.m_menu_start->MouseReleaseEvents(x,y);
-			m_menuUI.m_menu_fullscreen->MouseReleaseEvents(x,y);
+			m_menuUI.btn_close->MouseReleaseEvents(x,y);
+			m_menuUI.btn_normStart->MouseReleaseEvents(x,y);
+			m_menuUI.btn_debugStart->MouseReleaseEvents(x,y);
 			break;
 		}
 	}
 }
+
+#pragma endregion
+
+#pragma region Evenements Controles
+
+void Engine::OnClick(Control* sender)
+{
+	string n = sender->GetName();
+	Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE, true);
+
+	if (n == MENU_BUTTON_START_FULL_NAME)
+	{
+		if (!IsFirstRun())
+			SetMenuStatus(false);
+		else
+		{
+			Info::Get().Options().SetOptDebug(false);
+			ActivateFirstRun();
+			m_menuUI.pnl_loading->Show();
+			SetMenuStatus(false);
+		}
+	}
+	if (n == MENU_BUTTON_DEBUG)
+	{
+		if (!IsFirstRun())
+			Info::Get().Options().SetOptDebug(!Info::Get().Options().GetOptDebug());
+		else
+		{
+			Info::Get().Options().SetOptDebug(true);
+			ActivateFirstRun();
+			m_menuUI.pnl_loading->Show();
+			SetMenuStatus(false);
+		}
+	}
+	if (n == MENU_BUTTON_CLOSE)
+		Stop();
+}
+
+void Engine::GainedFocus(Textbox* sender)
+{
+
+}
+
+void Engine::LostFocus(Textbox* sender)
+{
+	if (!sender->IsMsg(""))
+		CW(sender->GetMsg());
+}
+
+void Engine::Timertest_OnTick(Timer* sender)
+{
+	if (sender->GetLaps() <= 1)
+		m_debugUI.m_timertesttext->SetMsg("1 - plus vite. 2 - moins vite");
+	m_debugUI.m_timertesttext->UseNextDocking();
+}
+
+void Engine::TimerAnimation_OnTick(Timer* sender)
+{
+	if (sender->GetName() == "plus")
+	{
+		if (m_menuUI.pb_logo->GetSize().h <= MENU_LOGO_SIZE_Y + 30)
+			m_menuUI.pb_logo->AddSize(Size(0, 3));
+		else
+		{
+			m_timeranimationmoins->Start();
+			sender->Stop();
+		}
+	}
+	if (sender->GetName() == "moins")
+	{
+		if (m_menuUI.pb_logo->GetSize().h > MENU_LOGO_SIZE_Y)
+			m_menuUI.pb_logo->AddSize(Size(0, -2));
+		else
+		{
+			m_timeranimationplus->Start();
+			sender->Stop();
+		}
+	}
+}
+
+#pragma endregion
+
+#pragma region Fonctions de bloc
 
 void Engine::AddBlock(BlockType type)
 {
@@ -1403,101 +1377,6 @@ void Engine::RemoveBlock()
 		iPos.z - chunkZ * CHUNK_SIZE_Z);
 
 	c->SetBloc(bloc.x, bloc.y, bloc.z, BTYPE_AIR);
-}
-
-//Private
-
-void Engine::RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture, bool repeat)
-{
-	texture->Bind();
-	glLoadIdentity();
-	glTranslated(position.x, position.y, 0);
-
-	glBegin(GL_QUADS);
-
-	glTexCoord2f(0, 0);
-	glVertex2f(0, 0);
-
-	glTexCoord2f((repeat ? size.x / texture->GetWidth() : 1), 0);
-	glVertex2i(size.x, 0);
-
-	glTexCoord2f((repeat ? size.x / texture->GetWidth() : 1), (repeat ? size.y / texture->GetHeight() : 1));
-	glVertex2i(size.x, size.y);
-
-	glTexCoord2f(0, (repeat ? size.y / texture->GetHeight() : 1));
-	glVertex2i(0, size.y);
-
-	glEnd();
-}
-
-void Engine::RenderSpells()
-{
-	static short spellSize = SPELL_ICON_SIZE;
-	static short spellPadding = SPELL_ICON_PADDING;
-	static short spellBarWidth = SPELL_BAR_SPELL_NUMBER * (spellSize + spellPadding);
-	static short spellBarPosX = Width() / 2 - spellBarWidth / 2;
-	static short spellBarPosY = INTERFACE_BOTTOM_HEIGHT;
-	std::string nombre;
-
-	for (int i = 0; i < SPELL_BAR_SPELL_NUMBER; i++)
-	{
-		if (m_textureSpell[i].IsValid())
-		{
-			RenderSquare(Vector2i(i == 0 ? spellBarPosX : (spellBarPosX + i * (spellSize + spellPadding)), 0), Vector2i(spellSize, spellSize), &m_textureSpell[i], false);
-
-			std::ostringstream convertisseur;
-			convertisseur << (i + 1) % 10;
-			nombre = convertisseur.str();
-			PrintText(spellBarPosX + i * (spellSize + spellPadding), spellSize - 12, nombre);
-			nombre = "";
-		}
-	}
-}
-
-void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
-{
-	m_texturefontColor[TEXTCOLOR_WHITE]->Bind();
-	glLoadIdentity();
-	glTranslated(x, y, 0);
-	for (unsigned int i = 0; i < t.length(); ++i)
-	{
-		float left = (float)((t[i] - 32) % 16) / 16.0f;
-		float top = (float)((t[i] - 32) / 16) / 16.0f;
-		top += 1.0f;
-		glBegin(GL_QUADS);
-		glTexCoord2f(left, 1.0f - top - 0.0625f);
-		glTexCoord2f(left + 0.0625f, 1.0f - top - 0.0625f);
-		glVertex2i(12 , 0);
-		glTexCoord2f(left + 0.0625f, 1.0f - top);
-		glVertex2i(12, 12);
-		glTexCoord2f(left , 1.0f - top);
-		glVertex2i(0, 12);
-		glEnd();
-		glTranslated(8, 0, 0);
-	}
-}
-
-void Engine::StartBlendPNG(bool value) const
-{
-	glEnable(GL_BLEND);
-	if (value)
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Blend PNG
-	else glBlendFunc(GL_SRC_ALPHA, GL_ONE); //Blend original
-}
-
-bool Engine::LoadTexture(Texture& texture, const std::string& filename, bool stopOnError)
-{
-	texture.Load(filename);
-	if(!texture.IsValid())
-	{
-		std::cerr << "Unable to load texture (" << filename << ")" << std::endl;
-		if(stopOnError)
-			Stop();
-
-		return false;
-	}
-
-	return true;
 }
 
 void Engine::GetBlocAtCursor()
@@ -1597,6 +1476,54 @@ void Engine::GetBlocAtCursor()
 	}
 }
 
+#pragma endregion
+
+#pragma region Fonctions privees
+
+void Engine::LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, string path)
+{
+	int index;
+	switch (faces)
+	{
+	case BFACE_ALL:
+		index = m_textureArray->AddTexture(path);
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(0, index);
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(1, index);
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(2, index);
+		break;
+	case BFACE_TOP_AND_BOT:
+		index = m_textureArray->AddTexture(path);
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(0, index);
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(2, index);
+		break;
+	case BFACE_TOP:
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(0, m_textureArray->AddTexture(path));
+		break;
+	case BFACE_SIDES:
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(1, m_textureArray->AddTexture(path));
+		break;
+	case BFACE_BOTTOM:
+		Info::Get().GetBlocInfo(type)->SetTextureIndex(2, m_textureArray->AddTexture(path));
+		break;
+	}
+
+}
+
+bool Engine::LoadTexture(Texture& texture, const string& filename, bool stopOnError)
+{
+	texture.Load(filename);
+	if(!texture.IsValid())
+	{
+		std::cerr << "Unable to load texture (" << filename << ")" << std::endl;
+		if(stopOnError)
+			Stop();
+
+		return false;
+	}
+
+	return true;
+}
+
 void Engine::CW(const std::string& line)
 {
 	m_gameUI.ConsoleWriteLine(line);
@@ -1604,5 +1531,7 @@ void Engine::CW(const std::string& line)
 
 void Engine::CWL(const std::string& line)
 {
-	//m_lb_console->SetLine(0, m_lb_console->GetLine(0) + line);
+	//lbx_console->SetLine(0, lbx_console->GetLine(0) + line);
 }
+
+#pragma endregion

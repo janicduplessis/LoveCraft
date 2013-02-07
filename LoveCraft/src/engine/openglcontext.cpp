@@ -21,6 +21,10 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 
 	while (m_app.isOpen())
 	{
+		GlobalInit();
+		LoadGlobalResource();
+
+		// Jeu
 		while (!m_menu && !m_sentClose)
 		{
 			clock.restart();
@@ -80,13 +84,15 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 				}
 			}
 #pragma endregion
+
 			m_app.setActive();
-			Update(m_lastFrameTime);
-			Render(m_lastFrameTime);
+			UpdateGame(m_lastFrameTime);
+			RenderGame();
 			m_app.display();
 			m_lastFrameTime = clock.getElapsedTime().asSeconds();
 		}
 
+		// Menu
 		while(m_menu && !m_sentClose)
 		{
 			clock.restart();
@@ -148,7 +154,8 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 #pragma endregion
 
 			m_app.setActive();
-			RenderMenu(m_lastFrameTime);
+			UpdateMenu(m_lastFrameTime);
+			RenderMenu();
 			m_app.display();
 			m_lastFrameTime = clock.getElapsedTime().asSeconds();
 		}
@@ -238,9 +245,9 @@ void OpenglContext::MakeRelativeToMouse(int& x, int& y) const
 	y = y - m_mousePos.y;
 }
 
-Vector2i OpenglContext::MousePosition() const
+Point OpenglContext::MousePosition() const
 {
-	return Vector2i(sf::Mouse::getPosition(m_app).x, Height() - sf::Mouse::getPosition(m_app).y);
+	return Point(sf::Mouse::getPosition(m_app).x, Height() - sf::Mouse::getPosition(m_app).y);
 }
 
 void OpenglContext::ShowCursor()

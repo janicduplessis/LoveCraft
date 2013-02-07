@@ -27,7 +27,6 @@ public:
 	virtual uint16 GetLaps() const;
 	virtual float GetTime() const;
 protected:
-	sf::Thread* m_thread;
 	float m_interval;
 	uint16 m_laps;
 	float m_time;

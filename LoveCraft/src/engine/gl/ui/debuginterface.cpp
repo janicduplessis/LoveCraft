@@ -1,13 +1,14 @@
 #include "debuginterface.h"
 
 
-DebugInterface::DebugInterface()
+DebugInterface::DebugInterface() : Interface()
 {
 }
 
 
 DebugInterface::~DebugInterface()
 {
+	DeInit();
 }
 
 void DebugInterface::Init(const ValuesInterface& val)
@@ -38,6 +39,19 @@ void DebugInterface::Init(const ValuesInterface& val)
 	m_timertesttime->SetColor(val.FontTextures[TEXTCOLOR_BLUE]);
 	m_timertesttime->SetMsg("Interval du label: &var");
 	m_timertest->AddControl(m_timertesttime);
+
+	m_loaded = true;
+}
+
+void DebugInterface::DeInit()
+{
+	if (IsLoaded())
+	{
+		delete m_timertest;
+		delete m_timertesttext;
+		delete m_timertesttime;
+	}
+	m_loaded = false;
 }
 
 void DebugInterface::Render()

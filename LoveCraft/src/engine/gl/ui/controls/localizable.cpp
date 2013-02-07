@@ -55,7 +55,7 @@ bool Localizable::IsPosition(Point position) const
 
 Point Localizable::AbsolutePosition() const
 {
-	return m_position + (m_parent != 0 ? m_parent->AbsolutePosition() : Point(0, 0));
+	return m_position + (m_parent ? m_parent->AbsolutePosition() : Point(0, 0));
 }
 
 #pragma endregion

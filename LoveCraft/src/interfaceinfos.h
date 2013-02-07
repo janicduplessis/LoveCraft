@@ -61,7 +61,7 @@
 #define STRING_BUTTON_DEBUG_ON		"Activer le mode debug"
 #define STRING_BUTTON_DEBUG_OFF		"Desactiver le mode debug"
 
-#define MENU_PANEL_NAME				"menu_panel"
+#define MENU_PANEL_NAME				"pnl_main"
 #define MENU_PANEL_SIZE_X			500
 #define MENU_PANEL_SIZE_Y			600
 
@@ -138,10 +138,10 @@
 #define PGB_EXP_SIZE_W				225
 #define PGB_EXP_SIZE_H				20
 // Labels dans le panel portrait
-#define LBL_HEALTH_NAME				"lbl_health"
+#define LBL_HEALTH_NAME				"lbl_plrHealth"
 #define LBL_HEALTH_POSITION_X		410
 #define LBL_HEALTH_POSITION_Y		86
-#define LBL_MANA_NAME				"lbl_mana"
+#define LBL_MANA_NAME				"lbl_plrMana"
 #define LBL_MANA_POSITION_X			410
 #define LBL_MANA_POSITION_Y			56
 #define LBL_EXP_NAME				"lbl_exp"

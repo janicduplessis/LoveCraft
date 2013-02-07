@@ -14,6 +14,7 @@ public:
 	virtual void Render() = 0;
 	virtual void SetMsg(string message);
 	virtual void AddMsg(string value);
+	virtual void ResetMsg();
 	virtual void SetColor(Texture* color);
 	virtual void SetItalic();
 	virtual void RemoveItalic();

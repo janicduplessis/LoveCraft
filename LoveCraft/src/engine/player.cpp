@@ -21,7 +21,6 @@ void Player::Init()
 	m_model.Load(MODEL_PATH_HUMANS "squirrel.lcm");
 	m_model.Scale(0.1f, 0.1f, 0.1f);
 	m_model.Translate(Vector3f(0, -1.05f, 0));
-	ResetPosition();
 }
 
 void Player::TurnLeftRight ( float value )
@@ -51,9 +50,7 @@ void Player::ResetPosition()
 
 	Info& info = Info::Get();
 	while (info.GetBlocFromWorld(m_pos) != BTYPE_AIR)
-	{
 		m_pos += Vector3f(0,1,0);
-	}
 	
 }
 

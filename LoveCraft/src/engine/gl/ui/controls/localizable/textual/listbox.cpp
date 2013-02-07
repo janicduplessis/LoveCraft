@@ -267,14 +267,14 @@ void ListBox::ScrollDown(Control* sender)
 
 bool ListBox::MousePressEvents(int x, int y)
 {
-	return m_downArrow->MousePressEvents(x,y) ||
-		m_upArrow->MousePressEvents(x,y);
+	return m_upArrow->MousePressEvents(x,y) |
+		m_downArrow->MousePressEvents(x,y);
 }
 
 bool ListBox::MouseReleaseEvents(int x, int y)
 {
-	return m_downArrow->MouseReleaseEvents(x,y) ||
-		m_upArrow->MouseReleaseEvents(x,y);
+	return m_upArrow->MouseReleaseEvents(x,y) |
+		m_downArrow->MouseReleaseEvents(x,y);
 }
 
 string ListBox::GetLine( int index )

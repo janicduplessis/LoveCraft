@@ -44,6 +44,11 @@ void SingleText::AddMsg(string value)
 	m_label->SetMsg(ss.str());
 	ss.str("");
 }
+void SingleText::ResetMsg()
+{
+	Textual::ResetMsg();
+	m_label->ResetMsg();
+}
 void SingleText::SetColor(Texture* color)
 {
 	Textual::SetColor(color);

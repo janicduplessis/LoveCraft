@@ -17,7 +17,7 @@ struct ValuesGameInterface : ValuesInterface
 		BlocTextures = _blocs;
 	}
 
-	virtual void Update(const Vector2i& _mousepos, int _width, int _height, BlockType _curBlockType, float _fps)
+	virtual void Update(const Point& _mousepos, int _width, int _height, BlockType _curBlockType, float _fps)
 	{
 		ValuesInterface::Update(_mousepos, _width, _height);
 		if (Fps != _fps)

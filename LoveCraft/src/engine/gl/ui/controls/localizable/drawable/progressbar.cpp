@@ -21,9 +21,9 @@ void ProgressBar::Init(BarMode mode, Texture* foreground, uint8 bordersize)
 	m_foreground = foreground;
 	m_borderSize = bordersize;
 
-	m_backImage->InitControl("backimage", this);
+	m_backImage->InitControl("backimage");
 	m_backImage->InitLocalizable(Point(-bordersize, -bordersize),
-		Size(GetSize().w + bordersize * 2, GetSize().h + bordersize * 2), GetBackground());
+		Size(GetSize().w + bordersize * 2, GetSize().h + bordersize * 2), GetBackground(), this);
 
 	//Lorsque la bar doit être horizontale, inversion des valeurs de largeur longueur
 	//afin d'accomoder l'appel du glRotate dans le Render
@@ -60,6 +60,10 @@ bool ProgressBar::IsMode(BarMode mode) const
 void ProgressBar::SetValue(float value)
 {
 	m_value = value > m_maximum ? m_maximum : (value <= m_minimum ? m_minimum : value);
+}
+void ProgressBar::AddValue(float value)
+{
+	SetValue(GetValue() + value);
 }
 float ProgressBar::GetValue() const
 {

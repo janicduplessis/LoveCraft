@@ -13,6 +13,7 @@ public:
 	Label();
 	virtual ~Label();
 	virtual void Init(Docking dock, Point offset = Point(0, 0));
+	virtual void InitLocalizable(Point position, Localizable* parent);
 	virtual void Render();
 
 	virtual void SetVariableMsg(string variable);

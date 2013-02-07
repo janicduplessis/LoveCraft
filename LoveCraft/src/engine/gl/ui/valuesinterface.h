@@ -2,7 +2,6 @@
 #define VALUES_INTERFACE_H__
 
 #include "define.h"
-#include "util/vector2.h"
 #include "engine/gl/texture.h"
 
 struct ValuesInterface
@@ -13,7 +12,7 @@ struct ValuesInterface
 		FontTextures = _fonts;
 	}
 
-	virtual void Update(const Vector2i& _mousepos, int _width, int _height) 
+	virtual void Update(const Point& _mousepos, int _width, int _height) 
 	{
 		if (Mousepos != _mousepos)
 			Mousepos = _mousepos;
@@ -26,7 +25,7 @@ struct ValuesInterface
 	Texture** UITextures;
 	Texture** FontTextures;
 
-	Vector2i Mousepos;
+	Point Mousepos;
 
 	int Width;
 	int Height;

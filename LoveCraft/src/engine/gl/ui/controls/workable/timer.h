@@ -2,6 +2,7 @@
 #define TIMER_H__
 
 #include "../workable.h"
+#include "SFML/System.hpp"
 
 class Timer : public Workable
 {

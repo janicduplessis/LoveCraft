@@ -13,7 +13,7 @@ Timer::~Timer()
 
 void Timer::Init(float intervaltime)
 {
-	m_interval = intervaltime;
+	m_interval = intervaltime > 0 ? intervaltime : 0;
 }
 
 void Timer::Update(float elapsedtime)

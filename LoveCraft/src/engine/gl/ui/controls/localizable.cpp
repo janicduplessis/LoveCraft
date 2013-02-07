@@ -1,17 +1,18 @@
 #include "localizable.h"
 
 
-Localizable::Localizable(CONTROLTYPE type) : Control(type), m_blend(CBLEND_PNG), m_visible(true), m_background(0)
+Localizable::Localizable(CONTROLTYPE type) : Control(type), m_blend(CBLEND_PNG), m_visible(true), 
+	m_parent(0), m_background(0)
 {
 }
-
 
 Localizable::~Localizable()
 {
 }
 
-void Localizable::InitLocalizable(Point position, Size size, Texture* background, ORIGIN origin)
+void Localizable::InitLocalizable(Point position, Size size, Texture* background, Localizable* parent, ORIGIN origin)
 {
+	m_parent = parent;
 	m_position = position;
 	m_size = size;
 	m_background = background;
@@ -54,7 +55,7 @@ bool Localizable::IsPosition(Point position) const
 
 Point Localizable::AbsolutePosition() const
 {
-	return m_position + (m_parent != 0 ? dynamic_cast<Localizable*>(m_parent)->AbsolutePosition() : Point(0, 0));
+	return m_position + (m_parent ? m_parent->AbsolutePosition() : Point(0, 0));
 }
 
 #pragma endregion
@@ -163,6 +164,15 @@ Texture* Localizable::GetBackground() const
 bool Localizable::IsBackground(Texture* texture)
 {
 	return m_background == texture;
+}
+
+#pragma endregion
+
+#pragma region Parent
+
+Localizable* Localizable::GetParent() const
+{
+	return m_parent;
 }
 
 #pragma endregion

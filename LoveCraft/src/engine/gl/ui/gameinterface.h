@@ -10,11 +10,12 @@ class GameInterface : public Interface
 {
 public:
 	GameInterface();
-	~GameInterface();
+	virtual ~GameInterface();
 
 	virtual void Init(const ValuesGameInterface& val);
 	virtual void Update(const ValuesGameInterface& val);
 	virtual void Render();
+	virtual void DeInit();
 
 	virtual void ConsoleWriteLine(const std::string& line);
 
@@ -28,41 +29,38 @@ private:
 	virtual void TextUpdate(const ValuesGameInterface& val);
 
 public:
-	Panel* m_pnl_screen;
-	Panel* m_pnl_playscreen;
-	Panel* m_pnl_portrait;
-	Panel* m_pnl_welcome;
+	Panel* pnl_screen;
+	Panel* pnl_playscreen;
+	Panel* pnl_portrait;
 
-	ProgressBar* m_pgb_health;
-	ProgressBar* m_pgb_energy;
-	ProgressBar* m_pgb_mana;
-	ProgressBar* m_pgb_exp;
+	ProgressBar* pgb_health;
+	ProgressBar* pgb_energy;
+	ProgressBar* pgb_mana;
+	ProgressBar* pgb_exp;
 
-	ListBox* m_lb_infos;
-	ListBox* m_lb_console;
-	Textbox* m_txb_console;
+	ListBox* lbx_infos;
+	ListBox* lbx_console;
+	Textbox* txb_console;
 
-	PictureBox* m_pnl_playerImage;
-	Label* m_lbl_playerLevel;
+	PictureBox* pnl_playerImage;
+	Label* lbl_playerLevel;
 
-	Label* m_lbl_plrPos;
-	Label* m_lbl_plrSpd;
-	Label* m_lbl_plrAcc;
-	Label* m_lbl_mousePos;
-	Label* m_lbl_FPS;
+	Label* lbl_plrPos;
+	Label* lbl_plrSpd;
+	Label* lbl_plrAcc;
+	Label* lbl_mousePos;
+	Label* lbl_FPS;
 
-	Panel* m_pnl_time;
-	Label* m_lbl_time;
+	Panel* pnl_time;
+	Label* lbl_time;
 
-	Label* m_lbl_health;
-	Label* m_lbl_mana;
-	Label* m_lbl_exp;
-	Label* m_lbl_energy;
+	Label* lbl_plrHealth;
+	Label* lbl_plrMana;
+	Label* lbl_plrExp;
+	Label* lbl_plrEnergy;
 
-	Label* m_lbl_currentBlockType;
-	PictureBox* m_pb_currentBlockType;
-	PictureBox* m_pb_welcomeface;
-	Label* m_lbl_welcomemessage;
+	Label* lbl_crntBT;
+	PictureBox* pb_crntBT;
 };
 
 #endif

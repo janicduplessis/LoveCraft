@@ -15,16 +15,22 @@ public:
     OpenglContext();
     virtual ~OpenglContext();
 
-    virtual void GameInit() = 0;
+	virtual void GlobalInit() = 0;
 	virtual void MenuInit() = 0;
+    virtual void GameInit() = 0;
     virtual void DeInit() = 0;
+
+	virtual void LoadGlobalResource() = 0;
     virtual void LoadMenuResource() = 0;
 	virtual void LoadGameResource() = 0;
     virtual void UnloadResource() = 0;
-	virtual void RenderMenu(float elapsedTime) = 0;
-	virtual void Update(float elapsedTime) = 0;
-    virtual void Render(float elapsedTime) = 0;
-	virtual void Render2D( float elapsedTime ) = 0;
+
+	virtual void UpdateMenu(float elapsedtime) = 0;
+	virtual void RenderMenu() = 0;
+
+	virtual void UpdateGame(float elapsedTime) = 0;
+    virtual void RenderGame() = 0;
+
 	virtual void TextenteredEvent(unsigned int val) = 0;
     virtual void KeyPressEvent(unsigned char key) = 0;
     virtual void KeyReleaseEvent(unsigned char key) = 0;
@@ -52,7 +58,7 @@ protected:
 	bool MousePosChanged(int x, int y);
     void MakeRelativeToCenter(int& x, int& y) const;
 	void MakeRelativeToMouse(int& x, int& y) const;
-	Vector2i MousePosition() const;
+	Point MousePosition() const;
     void ShowCursor();
     void HideCursor();
 	bool IsMenuOpen() const;

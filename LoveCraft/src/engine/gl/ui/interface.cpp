@@ -10,7 +10,7 @@ Interface::~Interface()
 {
 }
 
-void Interface::DeInit()
+bool Interface::IsLoaded() const
 {
-
+	return m_loaded;
 }

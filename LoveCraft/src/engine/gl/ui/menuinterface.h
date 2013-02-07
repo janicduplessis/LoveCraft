@@ -7,24 +7,22 @@ class MenuInterface : public Interface
 {
 public:
 	MenuInterface();
-	~MenuInterface();
+	virtual ~MenuInterface();
 	virtual void Init(const ValuesInterface& val);
-	void Render();
+	virtual void Render();
+	virtual void DeInit();
 
 	//Controles
 
-	Panel* m_menu_screen;
-	PictureBox* m_menu_loading;
-	Panel* m_menu_panel;
-	PictureBox* m_menu_logo;
-	Panel* m_menu_controls;
-	Button* m_menu_start;
-	Button* m_menu_fullscreen;
-	Button* m_menu_close;
+	Panel* pnl_screen;
+	Panel* pnl_main;
+	PictureBox* pb_logo;
+	Panel* pnl_controls;
+	Button* btn_normStart;
+	Button* btn_debugStart;
+	Button* btn_close;
 
-	Panel* m_timertest;
-	Label* m_timertesttext;
-	Label* m_timertesttime;
+	Panel* pnl_loading;
 };
 
 #endif

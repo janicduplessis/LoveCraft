@@ -21,6 +21,7 @@
 #include "gl/ui/valuesgameinterface.h"
 #include "gl/ui/gameinterface.h"
 #include "gl/ui/menuinterface.h"
+#include "gl/ui/debuginterface.h"
 #include "gl/ui/controls/localizable/drawable/picturebox.h"
 #include "gl/ui/controls/workable/timer.h"
 
@@ -31,8 +32,6 @@
 #include "util/array2d.h"
 #include "util/vector2.h"
 #include "util/dice.h"
-
-#include "gl/testbillboard.h"
 
 //#define LOAD_MODELS
 
@@ -46,40 +45,37 @@ public:
 	* Constructeur par défaut de la classe
 	*/
 	Engine();
-
 	/**
 	* Destructeur par défaut de la classe
 	*/
 	virtual ~Engine();
-
 	/**
 	* Retourne une reference en lecture seule vers l'engine
 	*/
 	virtual const Engine& Get() const;
-
 	/**
 	* Retourne une reference vers l'engine
 	*/
 	virtual Engine& Get();
 
+	virtual void GlobalInit();
 	virtual void MenuInit();
-
 	/**
 	* Initialisation des composantes du jeu
 	*/
 	virtual void GameInit();
-
 	virtual void DeInit();
+
+	virtual void LoadGlobalResource();
 	/**
 	* Chargement des ressources en mémoire
 	*/
 	virtual void LoadMenuResource();
-
 	virtual void LoadGameResource();
-
 	virtual void UnloadResource();
 
-	virtual void RenderMenu(float elapsedTime);
+	virtual void UpdateMenu(float elapsedTime);
+	virtual void RenderMenu();
 
 	/**
 	* Met à jour toutes les valeurs du jeu (Game loop)
@@ -87,41 +83,28 @@ public:
 	* @param elapsedTime	Temps en millisecondes depuis le dernier
 	*						tour de boucle
 	*/
-	virtual void Update(float elapsedTime);
-
+	virtual void UpdateGame(float elapsedTime);
 	/**
 	* Render tous les vertex du jeu (Game loop)
 	*
 	* @param elapsedTime	Temps en millisecondes depuis le dernier
 	*						tour de boucle
 	*/
-	virtual void Render(float elapsedTime);
-
-	/**
-	* Affiche le texte donné à l'écran 
-	* 
-	* @param x		coordonnée en X
-	* @param y		coordonnée en Y
-	* @param t		texte à afficher
-	*/
-	virtual void PrintText(unsigned int x, unsigned int y, const string& t);
+	virtual void RenderGame();
 
 	virtual void TextenteredEvent(unsigned int val);
-
 	/**
 	* Évènement appelé lorsqu'une touche du clavier est enfoncée
 	*
 	* @param key	 Touche qui a déclenché l'évènement
 	*/
 	virtual void KeyPressEvent(unsigned char key);
-
 	/**
 	* Évènement appelé lorsqu'une touche du clavier est relâchée
 	*
 	* @param key	Touche qui a déclenché l'évènement
 	*/
 	virtual void KeyReleaseEvent(unsigned char key);
-
 	/**
 	* Évènement appelé lorsque la position de la souris est modifiée
 	*
@@ -129,7 +112,6 @@ public:
 	* @param y Position en Y de la souris au moment du déclenchement de l'évènement
 	*/
 	virtual void MouseMoveEvent(int x, int y);
-
 	/**
 	* Évènement appelé lorsqu'une touche de la souris est enfoncée
 	*
@@ -138,7 +120,6 @@ public:
 	* @param y Coordonnée en Y de l'endroit d'où l'évènement a été déclenché
 	*/
 	virtual void MousePressEvent(const MOUSE_BUTTON &button, int x, int y);
-
 	/**
 	* Évènement appelé lorsqu'une touche de la souris est relâchée
 	*
@@ -148,6 +129,12 @@ public:
 	*/
 	virtual void MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y);
 
+	void OnClick(Control* sender);
+	void GainedFocus(Textbox* sender);
+	void LostFocus(Textbox* sender);
+	void Timertest_OnTick(Timer* sender);
+	void TimerAnimation_OnTick(Timer* sender);
+
 	void GetBlocAtCursor();
 	void AddBlock(BlockType type);
 	void RemoveBlock();
@@ -155,34 +142,12 @@ public:
 private:
 	bool LoadTexture(Texture& texture, const string& filename, bool stopOnError = true);
 	void LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, string path);
-	/**
-	* Render les elements 2D en premier plan
-	* 
-	* @param elapsedTime	Temps en millisecondes depuis le dernier
-	*						tour de boucle
-	*/
-	virtual void Render2D(float elapsedTime);
-	/**
-	* Render un element au niveau de l'interface
-	* avec les données spécifiées. La position doit debutee
-	* a partir du point en bas a droite de l'element
-	*
-	* @param position		Vector2<float> Position en X et Y de l'element
-	* @param size			Vector2<float> Taille de l'element (largeur, hauteur)
-	* @param texture		Texture qui doit être utiliser avec l'element
-	* 
-	*/
-	virtual void RenderSquare(const Vector2i& position, const Vector2i& size, Texture* texture, bool repeat = true);
-	virtual void RenderSpells();
-	void StartBlendPNG(bool value = true) const;
-	void OnClick(Control* sender);
-	void GainedFocus(Textbox* sender);
-	void LostFocus(Textbox* sender);
+
 	void CW(const string& line);
 	void CWL(const string& line);
-	void Timertest_OnTick(Timer* sender);
-	void TimerAnimation_OnTick(Timer* sender);
 
+
+private:
 	bool m_wireframe;
 	float m_angle;
 	float m_camRadius;
@@ -217,6 +182,7 @@ private:
 
 	MenuInterface m_menuUI;
 	GameInterface m_gameUI;
+	DebugInterface m_debugUI;
 
 	PictureBox* m_pb_cursor;
 
@@ -229,6 +195,9 @@ private:
 	float m_clickTimer;
 	bool m_clickTimerOn;
 	Vector2f m_lastRot;
+	Matrix4f m_mxWorld;
+	Matrix4f m_mxWVP;
+	Matrix4f m_mxProjection;
 
 	BlockType m_currentBlockType;
 

@@ -1,6 +1,6 @@
 #include "control.h"
 
-Control::Control(CONTROLTYPE type) : Object(), m_type(type), m_parent(0), m_enabled(true)
+Control::Control(CONTROLTYPE type) : Object(), m_type(type), m_enabled(true)
 {
 }
 
@@ -9,9 +9,8 @@ Control::~Control()
 
 }
 
-void Control::InitControl(string name, Control* parent)
+void Control::InitControl(string name)
 {
-	m_parent = parent;
 	m_name = name;
 }
 
@@ -32,12 +31,15 @@ void Control::Disable()
 
 #pragma endregion
 
-Control* Control::GetParent() const
-{
-	return m_parent;
-}
+#pragma region Type
 
 CONTROLTYPE Control::GetType() const
 {
 	return m_type;
 }
+bool Control::IsType(CONTROLTYPE type) const
+{
+	return m_type == type;
+}
+
+#pragma endregion

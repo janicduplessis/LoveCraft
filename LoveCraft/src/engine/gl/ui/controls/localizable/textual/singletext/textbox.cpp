@@ -1,6 +1,6 @@
 #include "textbox.h"
 
-Textbox::Textbox() : SingleText(CTRLTYPE_TEXTBOX), m_hasFocus(false)
+Textbox::Textbox() : SingleText(CTRLTYPE_TEXTBOX), m_hasFocus(false), m_maxLength(64)
 {
 }
 
@@ -34,10 +34,10 @@ void Textbox::Update(unsigned int val)
 	if (HasFocus())
 	{
 		//Vérification qu'il s'agit d'un caractère valide
-		if (val >= 32 && val <= 126)
+		if (val >= 32 && val <= 126 && GetMsg().length() <= m_maxLength)
 		{
-			ss << GetMsg() << static_cast<char>(val);
-			SetMsg(ss.str());
+			ss << static_cast<char>(val);
+			AddMsg(ss.str());
 			ss.str("");
 			return;
 		}
@@ -62,6 +62,7 @@ void Textbox::Update(unsigned int val)
 	}
 }
 
+#pragma region Focus
 
 void Textbox::GiveFocus()
 {
@@ -77,3 +78,28 @@ bool Textbox::HasFocus() const
 {
 	return m_hasFocus;
 }
+
+#pragma endregion
+
+#pragma region MaxLength
+
+void Textbox::SetMaxLength(uint16 maxlength)
+{
+	m_maxLength = maxlength;
+}
+uint16 Textbox::GetMaxLength() const
+{
+	return m_maxLength;
+}
+bool Textbox::IsMaxLength(uint16 maxlength) const
+{
+	return m_maxLength == maxlength;
+}
+void Textbox::AddMaxLength(uint16 value)
+{
+	if ((int)m_maxLength + value < 0)
+		return;
+	m_maxLength += value;
+}
+
+#pragma endregion

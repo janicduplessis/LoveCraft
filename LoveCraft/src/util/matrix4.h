@@ -6,7 +6,8 @@
 #include <ostream>
 
 #include "define.h"
-#include "util/vector3.h"
+#include "vector3.h"
+#include "tool.h"
 
 template <class T>
 class Matrix4

@@ -29,7 +29,9 @@ bool LightingShader::Init()
 
 	m_WVPLocation = BindUniform("gWVP");
 	m_worldLocation = BindUniform("gWorld");
+	m_samplerTypeLocation = BindUniform("gSamplerType");
 	m_samplerLocation = BindUniform("gSampler");
+	m_arraySamplerLocation = BindUniform("gArraySampler");
 	m_dirLightLocation.Color = BindUniform("gDirectionalLight.Base.Color");
 	m_dirLightLocation.AmbientIntensity = BindUniform("gDirectionalLight.Base.AmbientIntensity");
 	m_dirLightLocation.DiffuseIntensity = BindUniform("gDirectionalLight.Base.DiffuseIntensity");
@@ -43,25 +45,25 @@ bool LightingShader::Init()
 	{
 		char Name[128];
 		memset(Name, 0, sizeof(Name));
-		_snprintf(Name, sizeof(Name), "gPointLights[%d].Base.Color", i);
+		_snprintf_s(Name, sizeof(Name), "gPointLights[%d].Base.Color", i);
 		m_pointLightsLocation[i].Color = BindUniform(Name);
 
-		_snprintf(Name, sizeof(Name), "gPointLights[%d].Base.AmbientIntensity", i);
+		_snprintf_s(Name, sizeof(Name), "gPointLights[%d].Base.AmbientIntensity", i);
 		m_pointLightsLocation[i].AmbientIntensity = BindUniform(Name);
 
-		_snprintf(Name, sizeof(Name), "gPointLights[%d].Position", i);
+		_snprintf_s(Name, sizeof(Name), "gPointLights[%d].Position", i);
 		m_pointLightsLocation[i].Position = BindUniform(Name);
 
-		_snprintf(Name, sizeof(Name), "gPointLights[%d].Base.DiffuseIntensity", i);
+		_snprintf_s(Name, sizeof(Name), "gPointLights[%d].Base.DiffuseIntensity", i);
 		m_pointLightsLocation[i].DiffuseIntensity = BindUniform(Name);
 
-		_snprintf(Name, sizeof(Name), "gPointLights[%d].Atten.Constant", i);
+		_snprintf_s(Name, sizeof(Name), "gPointLights[%d].Atten.Constant", i);
 		m_pointLightsLocation[i].Atten.Constant = BindUniform(Name);
 
-		_snprintf(Name, sizeof(Name), "gPointLights[%d].Atten.Linear", i);
+		_snprintf_s(Name, sizeof(Name), "gPointLights[%d].Atten.Linear", i);
 		m_pointLightsLocation[i].Atten.Linear = BindUniform(Name);
 
-		_snprintf(Name, sizeof(Name), "gPointLights[%d].Atten.Exp", i);
+		_snprintf_s(Name, sizeof(Name), "gPointLights[%d].Atten.Exp", i);
 		m_pointLightsLocation[i].Atten.Exp = BindUniform(Name);
 
 		// Valide les uniforms
@@ -81,6 +83,8 @@ bool LightingShader::Init()
 		m_WVPLocation == INVALID_UNIFORM_LOCATION ||
 		m_worldLocation == INVALID_UNIFORM_LOCATION ||
 		m_samplerLocation == INVALID_UNIFORM_LOCATION ||
+		m_samplerTypeLocation == INVALID_UNIFORM_LOCATION ||
+		m_arraySamplerLocation == INVALID_UNIFORM_LOCATION ||
 		m_eyeWorldPosLocation == INVALID_UNIFORM_LOCATION ||
 		m_dirLightLocation.Color == INVALID_UNIFORM_LOCATION ||
 		m_dirLightLocation.DiffuseIntensity == INVALID_UNIFORM_LOCATION ||
@@ -102,6 +106,7 @@ void LightingShader::SetWVP( const Matrix4f& WVP )
 void LightingShader::SetTextureUnit( unsigned int TextureUnit )
 {
 	glUniform1i(m_samplerLocation, TextureUnit);
+	glUniform1i(m_arraySamplerLocation, TextureUnit + 1);
 }
 
 void LightingShader::SetDirectionalLight( const DirectionalLight& Light )
@@ -147,5 +152,10 @@ void LightingShader::SetPointLights( unsigned int numLights, const PointLight* p
 		glUniform1f(m_pointLightsLocation[i].Atten.Linear, pLights[i].Attenuation.Linear);
 		glUniform1f(m_pointLightsLocation[i].Atten.Exp, pLights[i].Attenuation.Exp);
 	}
+}
+
+void LightingShader::SetTextureUnitType( int type )
+{
+	glUniform1i(m_samplerTypeLocation, type);
 }
 

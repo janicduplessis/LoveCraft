@@ -43,7 +43,9 @@ uniform DirectionalLight gDirectionalLight;
 uniform int gNumPointLights;
 uniform PointLight gPointLights[MAX_POINT_LIGHTS];
 
-uniform sampler2DArray gSampler;
+uniform sampler2DArray gArraySampler;
+uniform sampler2D gSampler;
+uniform int gSamplerType;
 
 
 vec4 CalcLightInternal(BaseLight Light, vec3 LightDirection, vec3 Normal)
@@ -90,10 +92,18 @@ vec4 CalcPointLight(int Index, vec3 Normal)
 
 void main()
 {
-	vec4 texel = texture2DArray(gSampler, TexCoord0);
-	if (texel.x == 0.f && texel.y == 0.f && texel.z == 0.f) {
-        discard;
-    }
+	vec4 texel = vec4(0,0,0,0);
+	if (gSamplerType == 0) {
+		texel = texture2D(gSampler, TexCoord0.xy);
+	} else {
+		texel = texture2DArray(gArraySampler, TexCoord0);
+	}
+
+
+	//vec4 texel = vec4(0.4,0.4,0.4, 1);
+	//if (texel.x == 0.f && texel.y == 0.f && texel.z == 0.f) {
+    //    discard;
+    //}
 
 	vec3 Normal = normalize(Normal0);
 	vec4 TotalLight = CalcDirectionalLight(Normal);

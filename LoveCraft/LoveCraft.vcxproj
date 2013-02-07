@@ -41,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>external/devil178_vstudio2k10/include;external/sfml20_vstudio2k10/include;$(IncludePath)</IncludePath>
-    <LibraryPath>external/devil178_vstudio2k10/lib;external/sfml20_vstudio2k10/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>external\ImageMagick;external/assimp/include;external/devil178_vstudio2k10/include;external/sfml20_vstudio2k10/include;$(IncludePath)</IncludePath>
+    <LibraryPath>external\ImageMagick\lib;external/assimp/lib/x86;external/devil178_vstudio2k10/lib;external/sfml20_vstudio2k10/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -59,7 +59,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>sfml-audio-d.lib;sfml-main-d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;sfml-network-d.lib;GlU32.Lib;OpenGL32.Lib;DevIL.lib;ILU.lib;ILUT.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-audio-d.lib;sfml-main-d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;sfml-network-d.lib;GlU32.Lib;OpenGL32.Lib;DevIL.lib;ILU.lib;ILUT.lib;glew32.lib;assimp.lib;CORE_DB_Magick++_.lib;CORE_RL_Magick++_.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../lovecraft/external/glew-1.7.0/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -81,6 +81,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\gl\modelmesh.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.cpp" />
     <ClCompile Include="src\game\entity.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="src\engine\gl\ui\controls\workable\timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\gl\modelmesh.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.h" />
     <ClInclude Include="src\game\entity.h" />

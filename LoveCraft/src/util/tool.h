@@ -15,6 +15,8 @@
 #endif
 
 #define ARRAY_SIZE_IN_ELEMENTS(a) (sizeof(a)/sizeof(a[0]))
+#define DEGTORAD(a) (a * PII / 180)
+#define RADTODEG(a) (a * 180 / PII)
 
 class Tool
 {

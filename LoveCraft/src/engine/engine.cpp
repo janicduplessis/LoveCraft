@@ -666,11 +666,6 @@ void Engine::Render(float elapsedTime)
 		// applique les transformations normales de la camera
 		m_camera->ApplyRotation();
 		m_camera->ApplyTranslation();
-
-		// render le modele du player
-		m_shaderModel.Use();
-		m_player->Render(m_wireframe);
-		Shader::Disable();
 	} 
 	// first person
 	else
@@ -681,6 +676,11 @@ void Engine::Render(float elapsedTime)
 
 	// Différentes matrices de opengl
 	// pour utiliser avec render (fix batard)
+
+	////////////////////////////////////////////////////////////////////////////////
+	// BE ASHAMED OF THIS CODE
+	//////////////////////////////////////////////////////////////////////////////// 
+
 	GLfloat mv[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, mv);
 	Matrix4f modelView(mv[0], mv[1], mv[2], mv[3],
@@ -697,17 +697,47 @@ void Engine::Render(float elapsedTime)
 
 	Matrix4f WVP = modelView * projection;
 	Matrix4f world = Matrix4f::IDENTITY;
+	Matrix4f test = m_player->GetWorldMatrix();
+	//std::cout << test.ToString() << std::endl;
+
+	// render le modele du player
+	m_lightingShader.Use();
+	m_lightingShader.SetTextureUnitType(0);
+	m_lightingShader.SetEyeWorldPos(m_camera->GetRealPosition());
+	glPushMatrix();
+	glTranslatef(m_player->Position().x, m_player->Position().y - 1.7f, m_player->Position().z);
+	glRotatef(-m_player->Rotation().y + 180, 0,1,0);
+	glRotatef(-90, 1,0,0);
+	glScalef(0.05, 0.05, 0.05);
+
+	GLfloat mv2[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mv2);
+	Matrix4f modelView2(mv2[0], mv2[1], mv2[2], mv2[3],
+		mv2[4], mv2[5], mv2[6], mv2[7],
+		mv2[8], mv2[9], mv2[10], mv2[11],
+		mv2[12], mv2[13], mv2[14], mv2[15]);
+
+	m_player->Update();
+	m_lightingShader.SetWVP(modelView2 * projection);
+	m_lightingShader.SetWorld(m_player->GetWorldMatrix());
+	m_player->Render();
+	glPopMatrix();
+
+	CHECK_GL_ERROR();
+
+	Shader::Disable();
+
 
 #pragma endregion
 
 #pragma region Render les cubes
 
 	Shader::Disable();
-	m_textureArray->Use(GL_TEXTURE4);
+	m_textureArray->Use(GL_TEXTURE5);
 	m_lightingShader.Use();
-	m_lightingShader.SetEyeWorldPos(m_camera->GetRealPosition());
-	m_lightingShader.SetWorld(world);
+	m_lightingShader.SetTextureUnitType(1);
 	m_lightingShader.SetWVP(WVP);
+	m_lightingShader.SetWorld(world);
 	m_mutex.lock();
 	int updated = 0;
 
@@ -726,6 +756,8 @@ void Engine::Render(float elapsedTime)
 		}
 	}
 	m_mutex.unlock();
+
+	CHECK_GL_ERROR();
 
 	Shader::Disable();
 

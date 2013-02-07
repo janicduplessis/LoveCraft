@@ -27,8 +27,8 @@ void ChunkLoader::CheckPlayerPosition( Player* player )
 		//delete m_thread;
 		//m_thread = new sf::Thread(LoadFrontChunks(m_mutex, m_loading));
 		//m_thread->launch();
-		LoadFrontChunks l(m_mutex, m_loading);
-		l();
+		//LoadFrontChunks l(m_mutex, m_loading);
+		//l();
 	}
 	if (player->Position().z < VIEW_DISTANCE + Info::Get().GetOffsetMap().y * CHUNK_SIZE_Z - CHUNK_SIZE_Z && !m_loading) {
 		m_loading = true;

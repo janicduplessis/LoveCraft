@@ -4,7 +4,7 @@
 #include "define.h"
 
 #include "controls.h"
-#include "gl/model.h"
+#include "gl/modelmesh.h"
 
 #include <util/vector2.h>
 #include <util/vector3.h>
@@ -82,12 +82,14 @@ public:
 	void Move(bool ghost, Character* cter, float elapsedTime);
 	void Teleport();
 	void Render (bool wireFrame = false);
+	void Update();
 	void SetRotation( Vector2f rot );
 	void ResetPosition();
 
+	Matrix4f GetWorldMatrix();
 private:
 	bool CheckCollision(const Vector3f& pos) const;
-
+	
 
 private:
 	float m_energy; // Energie pour pouvoir courir (0 à 100)
@@ -96,7 +98,7 @@ private:
 	Vector3f m_lastPos; // Position au frame precedent
 	Vector2f m_rot; // Rotation en x et y;
 
-	Model m_model;
+	ModelMesh m_model;
 
 	Vector3f m_speed;
 	Vector3f m_accel;

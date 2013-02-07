@@ -46,13 +46,14 @@ void TextureArray::Generate()
 			ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
 			ilEnable(IL_ORIGIN_SET);
 
-			if (!ilLoadImage((const ILstring)it->texPath.c_str()))
+			if (!ilLoadImage((const ILstring)it->texPath.c_str())) {
+				std::cout << "Failed loading texture : " << it->texPath << std::endl;
 				return;
+			}
 
 			if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
 				return;
 
-			// Resize avec le texture size
 			iluScale(m_textureSize, m_textureSize, 1);
 
 			it->texId = texid;

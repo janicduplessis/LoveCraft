@@ -526,54 +526,6 @@ void Engine::UpdateGame(float elapsedTime)
 	for (SpellList::iterator it = m_spells.begin(); it != m_spells.end(); ++it)
 		it->Update(elapsedTime);
 
-#pragma region Elements de la camera
-
-	// 3rd person
-	if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON ) {
-		// hide/show cursor
-		if (!m_rightClick && !m_leftClick)
-			m_pb_cursor->Show();
-		else
-			m_pb_cursor->Hide();
-
-		// recule la camera
-		glTranslatef(0,0,-m_camRadius);
-		// applique les transformations normales de la camera
-		m_camera->ApplyRotation();
-		m_camera->ApplyTranslation();
-
-		// render le modele du player
-		m_shaderModel.Use();
-		m_player->Render(m_wireframe);
-		Shader::Disable();
-	} 
-	// first person
-	else
-	{
-		m_camera->ApplyRotation();
-		m_camera->ApplyTranslation();
-	}
-
-	// Différentes matrices de opengl
-	// pour utiliser avec render (fix batard)
-	GLfloat mv[16];
-	glGetFloatv(GL_MODELVIEW_MATRIX, mv);
-	Matrix4f modelView(mv[0], mv[1], mv[2], mv[3],
-		mv[4], mv[5], mv[6], mv[7],
-		mv[8], mv[9], mv[10], mv[11],
-		mv[12], mv[13], mv[14], mv[15]);
-
-	GLfloat p[16];
-	glGetFloatv(GL_PROJECTION_MATRIX, p);
-	Matrix4f projection(p[0], p[1], p[2], p[3],
-		p[4], p[5], p[6], p[7],
-		p[8], p[9], p[10], p[11],
-		p[12], p[13], p[14], p[15]);
-
-	m_mxProjection = projection;
-	m_mxWVP = modelView * projection;
-	m_mxWorld = Matrix4f::IDENTITY;
-
 #pragma endregion
 
 #pragma region Reseau
@@ -692,6 +644,17 @@ void Engine::RenderMenu()
 
 	if (m_wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+#pragma region OpenGl
+
+	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+
+#pragma endregion
 }
 
 void Engine::RenderGame()
@@ -700,11 +663,69 @@ void Engine::RenderGame()
 #pragma region OpenGl
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Transformations initiales
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+#pragma endregion
+
+#pragma region Elements de la camera
+
+	// 3rd person
+	if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON ) {
+		// hide/show cursor
+		if (!m_rightClick && !m_leftClick)
+			m_pb_cursor->Show();
+		else
+			m_pb_cursor->Hide();
+
+		// recule la camera
+		glTranslatef(0,0,-m_camRadius);
+		// applique les transformations normales de la camera
+		m_camera->ApplyRotation();
+		m_camera->ApplyTranslation();
+
+		// render le modele du player
+		m_shaderModel.Use();
+		m_player->Render(m_wireframe);
+		Shader::Disable();
+	} 
+	// first person
+	else
+	{
+		m_camera->ApplyRotation();
+		m_camera->ApplyTranslation();
+	}
+
+	// Différentes matrices de opengl
+	// pour utiliser avec render (fix batard)
+	GLfloat mv[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mv);
+	Matrix4f modelView(mv[0], mv[1], mv[2], mv[3],
+		mv[4], mv[5], mv[6], mv[7],
+		mv[8], mv[9], mv[10], mv[11],
+		mv[12], mv[13], mv[14], mv[15]);
+
+	GLfloat p[16];
+	glGetFloatv(GL_PROJECTION_MATRIX, p);
+	Matrix4f projection(p[0], p[1], p[2], p[3],
+		p[4], p[5], p[6], p[7],
+		p[8], p[9], p[10], p[11],
+		p[12], p[13], p[14], p[15]);
+
+	m_mxProjection = projection;
+	m_mxWVP = modelView * projection;
+	m_mxWorld = Matrix4f::IDENTITY;
+
+#pragma endregion
+
+#pragma region Player
+
 	////////////////////////////////////////////////////////////////////////////////
 	// BE ASHAMED OF THIS CODE
 	//////////////////////////////////////////////////////////////////////////////// 
 
-#pragma endregion
 
 	Matrix4f test = m_player->GetWorldMatrix();
 	//std::cout << test.ToString() << std::endl;
@@ -735,7 +756,6 @@ void Engine::RenderGame()
 	CHECK_GL_ERROR();
 
 	Shader::Disable();
-
 
 #pragma endregion
 
@@ -817,6 +837,40 @@ void Engine::RenderGame()
 	glEnable(GL_CULL_FACE);
 
 	GetBlocAtCursor();
+
+#pragma endregion
+
+#pragma region Render l interface
+	// HUD
+	if (m_wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+#pragma region OpenGL
+	glDisable(GL_LIGHTING);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glDisable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0, Width(), 0, Height(), -1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+#pragma endregion
+
+	m_gameUI.Render();
+	m_pb_cursor->Render();
+
+#pragma region OpenGL
+	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+#pragma endregion
+
+	if (m_wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 #pragma endregion
 

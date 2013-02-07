@@ -54,7 +54,7 @@ public:
 	/**
 	 * Bind la texture
 	 */
-	void Use();
+	void Use(GLenum textureUnit);
 	Texture* GetTexture(unsigned int index);
 private:
 	struct TextureInfo

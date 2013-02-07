@@ -4,6 +4,8 @@
 #include "define.h"
 #include <list>
 
+#define INVALID_UNIFORM_LOCATION 0xFFFFFFFF
+
 class Shader
 {
 public:    

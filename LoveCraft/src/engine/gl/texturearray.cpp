@@ -7,9 +7,9 @@ TextureArray::TextureArray(int textureSize ) : m_textureSize(textureSize), m_cur
 	
 }
 
-void TextureArray::Use()
+void TextureArray::Use(GLenum textureUnit)
 {
-	glActiveTexture(GL_TEXTURE4);
+	glActiveTexture(textureUnit);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, m_texture);
 }
 

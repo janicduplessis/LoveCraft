@@ -6,12 +6,57 @@
 #include <util/vector3.h>
 #include <util/matrix4.h>
 
-struct DirectionalLight
+#define MAX_POINT_LIGHTS 2
+
+/**
+ * Structure de base d'une light
+ */
+struct BaseLight
 {
 	Vector3f Color;
 	float AmbientIntensity;
+	float DiffuseIntensity;
+
+	BaseLight() : Color(0), AmbientIntensity(0), DiffuseIntensity(0) {}
 };
 
+/**
+ * Directional Light
+ * Light avec seulement une direction,
+ * appliqué également partout
+ */
+struct DirectionalLight : public BaseLight
+{
+	Vector3f Direction;
+
+	DirectionalLight() : BaseLight(), Direction(0) {}
+};
+
+/**
+ * Point Light
+ * Light avec une position et une atténuation
+ * Son intensité diminue plus on est loin de sa position
+ */
+struct PointLight : public BaseLight
+{
+	Vector3f Position;
+
+	struct {
+		float Constant;
+		float Linear;
+		float Exp;
+	} Attenuation;
+
+	PointLight() : BaseLight(), Position(0) {
+		Attenuation.Constant = 0;
+		Attenuation.Linear = 0;
+		Attenuation.Exp = 0;
+	}
+};
+
+/**
+ * Shader pour calculer l'éclairage
+ */
 class LightingShader : public Shader
 {
 public:
@@ -20,15 +65,53 @@ public:
 
 	virtual bool Init();
 
+	// Propriétés globales
 	void SetWVP(const Matrix4f& WVP);
-	void SetTextureUnit(unsigned int TextureUnit);
-	void SetDirectionalLight(const DirectionalLight& Light);
+	void SetWorld(const Matrix4f& world);
+	void SetEyeWorldPos(const Vector3f& eyePos);
+	void SetTextureUnit(unsigned int textureUnit);
+
+	// Directional lighting
+	void SetDirectionalLight(const DirectionalLight& light);
+
+	// Point lights
+	void SetPointLights(unsigned int numLights, const PointLight* pLights);
+
+	// Proprétés du specular lighting
+	void SetMatSpecualarIntensity(float intensity);
+	void SetMatSpecularPower(float power);
 
 private:
-	GLuint m_WVPLocation;
-	GLuint m_samplerLocation;
-	GLuint m_dirLightColorLocation;
-	GLuint m_dirLightAmbientIntensityLocation;
+	// ----------------------------------------------------------------------
+	// Program uniform locations
+	GLuint m_WVPLocation;					// World viewport
+	GLuint m_worldLocation;					// World position
+	GLuint m_samplerLocation;				// Texture sampler
+	GLuint m_eyeWorldPosLocation;			// Camera position
+	GLuint m_matSpecularIntensityLocation;	// Material specular intensity
+	GLuint m_matSpecularPowerLocation;		// Material specular power
+
+	// Directional light location struct
+	struct {
+		GLuint Color;
+		GLuint AmbientIntensity;
+		GLuint Direction;
+		GLuint DiffuseIntensity;
+	} m_dirLightLocation;
+
+	// Point light location struct
+	struct {
+		GLuint Color;
+		GLuint AmbientIntensity;
+		GLuint DiffuseIntensity;
+		GLuint Position;
+		struct {
+			GLuint Constant;
+			GLuint Linear;
+			GLuint Exp;
+		} Atten;
+	} m_pointLightsLocation[MAX_POINT_LIGHTS];
+	GLuint m_numPointLightsLocation;
 };
 
 #endif

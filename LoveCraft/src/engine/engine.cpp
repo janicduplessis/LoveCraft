@@ -94,7 +94,7 @@ Engine::~Engine()
 #endif
 	}
 	if (Info::Get().GetStatus(Info::LSTATUS_SKYBOX))
-		delete m_skybox;
+		//delete m_skybox;
 	delete [] m_monsters;
 	delete m_textureArray;
 }
@@ -405,6 +405,38 @@ void Engine::LoadMenuResource()
 		std::cout << " Failed to load cube shader" << std::endl;
 		exit(1) ;
 	}
+	DirectionalLight dirLight;
+	dirLight.AmbientIntensity = 0.5;
+	dirLight.Color = Vector3f(1,1,1);
+	dirLight.DiffuseIntensity = 0.3;
+	dirLight.Direction = Vector3f(0.3, -1, 0.5).Normalise();
+
+	PointLight* pointLights = new PointLight[2];
+	PointLight& p1 = pointLights[0];
+	p1.Color = Vector3f(1,1,1);
+	p1.DiffuseIntensity = 0.5;
+	p1.Position = Vector3f(64,65,64);
+	p1.Attenuation.Linear = 0.1f;
+	PointLight& p2 = pointLights[1];
+	p2.Color = Vector3f(1,1,1);
+	p2.DiffuseIntensity = 0.5;
+	p2.Position = Vector3f(32,70,32);
+	p2.Attenuation.Linear = 0.1f;
+
+	if (!m_lightingShader.Init())
+		std::cout << "Error initializing lighting shader" << std::endl;
+
+	m_lightingShader.Use();
+	m_lightingShader.SetDirectionalLight(dirLight);
+	m_lightingShader.SetMatSpecualarIntensity(1);
+	m_lightingShader.SetMatSpecularPower(32);
+	m_lightingShader.SetTextureUnit(4);
+	m_lightingShader.SetPointLights(2, pointLights);
+
+	Shader::Disable();
+
+	CHECK_GL_ERROR();
+
 #pragma endregion
 
 }
@@ -665,15 +697,19 @@ void Engine::Render(float elapsedTime)
 		p[8], p[9], p[10], p[11],
 		p[12], p[13], p[14], p[15]);
 
-	Matrix4f vp = modelView * projection;
+	Matrix4f WVP = modelView * projection;
+	Matrix4f world = Matrix4f::IDENTITY;
 
 #pragma endregion
 
 #pragma region Render les cubes
 
 	Shader::Disable();
-	m_shaderCube.Use();
-	m_textureArray->Use();
+	m_textureArray->Use(GL_TEXTURE4);
+	m_lightingShader.Use();
+	m_lightingShader.SetEyeWorldPos(m_camera->GetRealPosition());
+	m_lightingShader.SetWorld(world);
+	m_lightingShader.SetWVP(WVP);
 	m_mutex.lock();
 	int updated = 0;
 
@@ -683,7 +719,7 @@ void Engine::Render(float elapsedTime)
 		{
 			Chunk* c = m_chunks->Get(i,j);
 			if (c->IsReady()) {
-				if (c->IsDirty() && updated < 3) {
+				if (c->IsDirty() && updated < 2) {
 					c->Update();
 					updated++;
 				}
@@ -734,7 +770,7 @@ void Engine::Render(float elapsedTime)
 	for (SpellList::iterator it = m_spells.begin(); it != m_spells.end(); ++it) {
 		it->SetDestination(m_monsters[0]->Position());
 		it->Update(elapsedTime);
-		it->Render(vp);
+		it->Render(WVP);
 		if (it->HasHit())
 		{
 			//m_spells.erase(it);

@@ -436,18 +436,18 @@ void Chunk::CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* v
 	// Crée les vertices de la face
 	if(face == FACE_FRONT)
 	{
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y + h-1 + 0.5f,		z - 0.5f, 0, h, iFront, 0, 0, 1);	//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y + h-1 + 0.5f,		z - 0.5f, w, h, iFront, 0, 0, 1);	//1
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y - 0.5f,			z - 0.5f, w, 0, iFront, 0, 0, 1);	//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y - 0.5f,			z - 0.5f, 0, 0, iFront, 0, 0, 1);	//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y + h-1 + 0.5f,		z - 0.5f, 0, h, iFront, 0, 0, -1);	//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y + h-1 + 0.5f,		z - 0.5f, w, h, iFront, 0, 0, -1);	//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y - 0.5f,			z - 0.5f, w, 0, iFront, 0, 0, -1);	//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y - 0.5f,			z - 0.5f, 0, 0, iFront, 0, 0, -1);	//3
 
 	}
 	else if(face == FACE_BACK)
 	{
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y + h-1 + 0.5f,		z + 0.5f, w, h, iBack, 0, 0, -1);		//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y - 0.5f,			z + 0.5f, w, 0, iBack, 0, 0, -1);		//1
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y - 0.5f,			z + 0.5f, 0, 0, iBack, 0, 0, -1);		//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y + h-1 + 0.5f,		z + 0.5f, 0, h, iBack, 0, 0, -1);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y + h-1 + 0.5f,		z + 0.5f, w, h, iBack, 0, 0, 1);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y - 0.5f,			z + 0.5f, w, 0, iBack, 0, 0, 1);		//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y - 0.5f,			z + 0.5f, 0, 0, iBack, 0, 0, 1);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y + h-1 + 0.5f,		z + 0.5f, 0, h, iBack, 0, 0, 1);		//3
 	}
 	else
 	{
@@ -521,17 +521,17 @@ void Chunk::CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* v
 	// Crée les vertices de la face
 	if(face == FACE_LEFT)
 	{
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f,		z + w-1 + 0.5f, 0, 0, iLeft, 1, 0, 0);	//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + h-1 + 0.5f,	z + w-1 + 0.5f, 0, h, iLeft, 1, 0, 0);	//1
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + h-1 + 0.5f,	z - 0.5f,		w, h, iLeft, 1, 0, 0);	//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f,		z - 0.5f,		w, 0, iLeft, 1, 0, 0);	//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f,		z + w-1 + 0.5f, 0, 0, iLeft, -1, 0, 0);	//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + h-1 + 0.5f,	z + w-1 + 0.5f, 0, h, iLeft, -1, 0, 0);	//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + h-1 + 0.5f,	z - 0.5f,		w, h, iLeft, -1, 0, 0);	//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f,		z - 0.5f,		w, 0, iLeft, -1, 0, 0);	//3
 	}
 	else if(face == FACE_RIGHT)
 	{
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f,		z + w-1 + 0.5f, 0, 0, iRight, -1, 0, 0);	//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f,		z - 0.5f,		w, 0, iRight, -1, 0, 0);	//1
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + h-1 + 0.5f,	z - 0.5f,		w, h, iRight, -1, 0, 0);	//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + h-1 + 0.5f,	z + w-1 + 0.5f, 0, h, iRight, -1, 0, 0);	//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f,		z + w-1 + 0.5f, 0, 0, iRight, 1, 0, 0);	//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f,		z - 0.5f,		w, 0, iRight, 1, 0, 0);	//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + h-1 + 0.5f,	z - 0.5f,		w, h, iRight, 1, 0, 0);	//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + h-1 + 0.5f,	z + w-1 + 0.5f, 0, h, iRight, 1, 0, 0);	//3
 	}
 	else
 	{

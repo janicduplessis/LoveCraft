@@ -22,9 +22,6 @@ void ChunkLoader::CheckPlayerPosition( Player* player )
 	Array2d<Chunk*>* chunks = Info::Get().GetChunkArray();
 	Vector2i& size = chunks->Size();
 
-	std::cout << player->Position().z << std::endl;
-	std::cout << VIEW_DISTANCE + Info::Get().GetOffsetMap().y * CHUNK_SIZE_Z << std::endl;
-
 	if (player->Position().z > VIEW_DISTANCE + Info::Get().GetOffsetMap().y * CHUNK_SIZE_Z + CHUNK_SIZE_Z && !m_loading) {
 		m_loading = true;
 		//delete m_thread;

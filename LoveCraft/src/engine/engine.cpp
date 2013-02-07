@@ -735,6 +735,7 @@ void Engine::RenderGame()
 	m_lightingShader.SetTextureUnitType(0);
 	m_lightingShader.SetEyeWorldPos(m_camera->GetRealPosition());
 	glPushMatrix();
+	glLoadIdentity();
 	glTranslatef(m_player->Position().x, m_player->Position().y - 1.7f, m_player->Position().z);
 	glRotatef(-m_player->Rotation().y + 180, 0,1,0);
 	glRotatef(-90, 1,0,0);
@@ -748,8 +749,8 @@ void Engine::RenderGame()
 		mv2[12], mv2[13], mv2[14], mv2[15]);
 
 	m_player->Update();
-	m_lightingShader.SetWVP(modelView2 * m_mxProjection);
-	m_lightingShader.SetWorld(m_player->GetWorldMatrix());
+	m_lightingShader.SetWVP(modelView2 * modelView * m_mxProjection);
+	m_lightingShader.SetWorld(modelView2);
 	m_player->Render();
 	glPopMatrix();
 

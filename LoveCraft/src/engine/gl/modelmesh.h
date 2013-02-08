@@ -16,17 +16,19 @@
 
 struct Vertex
 {
-	Vector3f m_pos;
-	Vector3f m_tex;
-	Vector3f m_normal;
+	Vector3f pos;
+	Vector3f tex;
+	Vector3f normal;
+	Vector3f tangents;
 
 	Vertex() {}
 
-	Vertex(const Vector3f& pos, const Vector3f& tex, const Vector3f& normal)
+	Vertex(const Vector3f& _pos, const Vector3f& _tex, const Vector3f& _normal, const Vector3f& _tangents)
 	{
-		m_pos    = pos;
-		m_tex    = tex;
-		m_normal = normal;
+		pos    = _pos;
+		tex    = _tex;
+		normal = _normal;
+		tangents = _tangents;
 	}
 };
 

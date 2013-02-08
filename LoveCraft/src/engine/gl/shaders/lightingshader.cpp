@@ -30,7 +30,8 @@ bool LightingShader::Init()
 	m_WVPLocation = BindUniform("gWVP");
 	m_worldLocation = BindUniform("gWorld");
 	m_samplerTypeLocation = BindUniform("gSamplerType");
-	m_samplerLocation = BindUniform("gSampler");
+	m_colorSamplerLocation = BindUniform("gColorSampler");
+	m_normalSamplerLocation = BindUniform("gNormalSampler");
 	m_arraySamplerLocation = BindUniform("gArraySampler");
 	m_dirLightLocation.Color = BindUniform("gDirectionalLight.Base.Color");
 	m_dirLightLocation.AmbientIntensity = BindUniform("gDirectionalLight.Base.AmbientIntensity");
@@ -82,7 +83,7 @@ bool LightingShader::Init()
 	if (m_dirLightLocation.AmbientIntensity == INVALID_UNIFORM_LOCATION ||
 		m_WVPLocation == INVALID_UNIFORM_LOCATION ||
 		m_worldLocation == INVALID_UNIFORM_LOCATION ||
-		m_samplerLocation == INVALID_UNIFORM_LOCATION ||
+		m_colorSamplerLocation == INVALID_UNIFORM_LOCATION ||
 		m_samplerTypeLocation == INVALID_UNIFORM_LOCATION ||
 		m_arraySamplerLocation == INVALID_UNIFORM_LOCATION ||
 		m_eyeWorldPosLocation == INVALID_UNIFORM_LOCATION ||
@@ -103,9 +104,9 @@ void LightingShader::SetWVP( const Matrix4f& WVP )
 	glUniformMatrix4fv(m_WVPLocation, 1, GL_TRUE, (const GLfloat*)WVP.GetInternalValues());
 }
 
-void LightingShader::SetTextureUnit( unsigned int TextureUnit )
+void LightingShader::SetColorTextureUnit( unsigned int TextureUnit )
 {
-	glUniform1i(m_samplerLocation, TextureUnit);
+	glUniform1i(m_colorSamplerLocation, TextureUnit);
 	glUniform1i(m_arraySamplerLocation, TextureUnit + 1);
 }
 
@@ -157,5 +158,11 @@ void LightingShader::SetPointLights( unsigned int numLights, const PointLight* p
 void LightingShader::SetTextureUnitType( int type )
 {
 	glUniform1i(m_samplerTypeLocation, type);
+}
+
+void LightingShader::SetNormalTextureUnit( unsigned int textureUnit )
+{
+	glUniform1i(m_normalSamplerLocation, textureUnit);
+	//glUniform1i(m_arraySamplerLocation, textureUnit + 1);
 }
 

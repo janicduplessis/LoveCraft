@@ -54,7 +54,7 @@ bool ModelMesh::LoadMesh( const std::string& Filename )
 	bool Ret = false;
 	Assimp::Importer Importer;
 
-	const aiScene* pScene = Importer.ReadFile(Filename.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
+	const aiScene* pScene = Importer.ReadFile(Filename.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
 
 	if (pScene) {
 		Ret = InitFromScene(pScene, Filename);
@@ -93,10 +93,12 @@ void ModelMesh::InitMesh( unsigned int Index, const aiMesh* paiMesh )
 		const aiVector3D* pPos      = &(paiMesh->mVertices[i]);
 		const aiVector3D* pNormal   = &(paiMesh->mNormals[i]);
 		const aiVector3D* pTexCoord = paiMesh->HasTextureCoords(0) ? &(paiMesh->mTextureCoords[0][i]) : &Zero3D;
+		const aiVector3D* pTangent	= &(paiMesh->mTangents[i]);
 
 		Vertex v(Vector3f(pPos->x, pPos->y, pPos->z),
 			Vector3f(pTexCoord->x, pTexCoord->y, 0),
-			Vector3f(pNormal->x, pNormal->y, pNormal->z));
+			Vector3f(pNormal->x, pNormal->y, pNormal->z),
+			Vector3f(pTangent->x, pTangent->y, pTangent->z));
 
 		Vertices.push_back(v);
 	}
@@ -164,19 +166,21 @@ void ModelMesh::Render()
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
 
 	for (unsigned int i = 0 ; i < m_entries.size() ; i++) {
 		glBindBuffer(GL_ARRAY_BUFFER, m_entries[i].VB);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)24);
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)36);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_entries[i].IB);
 
 		const unsigned int MaterialIndex = m_entries[i].MaterialIndex;
 
 		if (MaterialIndex < m_textures.size() && m_textures[MaterialIndex]) {
-			m_textures[MaterialIndex]->Bind(GL_TEXTURE4);
+			m_textures[MaterialIndex]->Bind(GL_TEXTURE0);
 		}
 
 		glDrawElements(GL_TRIANGLES, m_entries[i].NumIndices, GL_UNSIGNED_INT, 0);
@@ -185,6 +189,7 @@ void ModelMesh::Render()
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
+	glDisableVertexAttribArray(3);
 }
 
 void ModelMesh::Clear()

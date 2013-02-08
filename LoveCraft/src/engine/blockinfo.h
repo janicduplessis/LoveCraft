@@ -25,16 +25,19 @@ public:
 	 * 1 = sides
 	 * 2 = bottom
 	 */
-	void SetTextureIndex(int index, TextureArray::TextureIndex coords);
-	TextureArray::TextureIndex GetTextureIndex(int index) const;
+	void SetColorTextureIndex(int index, TextureArray::TextureIndex texIndex);
+	void SetNormalTextureIndex(int index, TextureArray::TextureIndex texIndex);
+	TextureArray::TextureIndex GetColorTextureIndex(int index) const;
+	TextureArray::TextureIndex GetNormalTextureIndex(int index) const;
 
     void Afficher() const;
-
+	
 private:
     BlockType m_type;
     std::string m_nom;
     int m_durabilite;
-	TextureArray::TextureIndex m_textureIndex[3];
+	TextureArray::TextureIndex m_colorTextureIndex[3];
+	TextureArray::TextureIndex m_normalTextureIndex[3];
 	bool m_isSolid;
 };
 

@@ -350,23 +350,23 @@ void Chunk::CreateOptimizedTopBottomFace(MeshFace face, ChunkMesh::VertexData* v
 	y -= 2.f;
 	z += pos.y;
 
-	float iTop = Info::Get().GetBlocInfo(bt)->GetTextureIndex(0);
-	float iBot = Info::Get().GetBlocInfo(bt)->GetTextureIndex(2);
+	float iTop = Info::Get().GetBlocInfo(bt)->GetColorTextureIndex(0);
+	float iBot = Info::Get().GetBlocInfo(bt)->GetColorTextureIndex(2);
 
 	// Crée les vertices de la face
 	if(face == FACE_TOP)
 	{
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y + 0.5f, z + h-1 + 0.5f,	0, 0, iTop, 0, 1, 0);	//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y + 0.5f, z + h-1 + 0.5f,	w, 0, iTop, 0, 1, 0);	//1
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y + 0.5f, z - 0.5f,			w, h, iTop, 0, 1, 0);	//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y + 0.5f, z - 0.5f,			0, h, iTop, 0, 1, 0);	//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y + 0.5f, z + h-1 + 0.5f,	0, 0, iTop, 0, 1, 0, 1, 0, 0);	//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y + 0.5f, z + h-1 + 0.5f,	w, 0, iTop, 0, 1, 0, 1, 0, 0);	//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y + 0.5f, z - 0.5f,			w, h, iTop, 0, 1, 0, 1, 0, 0);	//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y + 0.5f, z - 0.5f,			0, h, iTop, 0, 1, 0, 1, 0, 0);	//3
 	}
 	else if(face == FACE_BOTTOM)
 	{
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y - 0.5f, z + 0.5f + h-1,	0, 0, iBot, 0, -1, 0);	//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y - 0.5f, z - 0.5f,			h, 0, iBot, 0, -1, 0);	//1
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y - 0.5f, z - 0.5f,			h, w, iBot, 0, -1, 0);	//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y - 0.5f, z + 0.5f + h-1,	0, w, iBot, 0, -1, 0);	//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y - 0.5f, z + 0.5f + h-1,	0, 0, iBot, 0, -1, 0, 0, 0, 1);	//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y - 0.5f, z - 0.5f,			h, 0, iBot, 0, -1, 0, 0, 0, 1);	//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y - 0.5f, z - 0.5f,			h, w, iBot, 0, -1, 0, 0, 0, 1);	//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y - 0.5f, z + 0.5f + h-1,	0, w, iBot, 0, -1, 0, 0, 0, 1);	//3
 	}
 	else
 	{
@@ -431,23 +431,23 @@ void Chunk::CreateOptimizedFrontBackFace(MeshFace face, ChunkMesh::VertexData* v
 	float iFront;
 	float iBack;
 
-	iFront = iBack = Info::Get().GetBlocInfo(bt)->GetTextureIndex(1);
+	iFront = iBack = Info::Get().GetBlocInfo(bt)->GetColorTextureIndex(1);
 
 	// Crée les vertices de la face
 	if(face == FACE_FRONT)
 	{
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y + h-1 + 0.5f,		z - 0.5f, 0, h, iFront, 0, 0, -1);	//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y + h-1 + 0.5f,		z - 0.5f, w, h, iFront, 0, 0, -1);	//1
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y - 0.5f,			z - 0.5f, w, 0, iFront, 0, 0, -1);	//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y - 0.5f,			z - 0.5f, 0, 0, iFront, 0, 0, -1);	//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y + h-1 + 0.5f,		z - 0.5f, 0, h, iFront, 0, 0, -1, 1, 0, 0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y + h-1 + 0.5f,		z - 0.5f, w, h, iFront, 0, 0, -1, 1, 0, 0);		//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y - 0.5f,			z - 0.5f, w, 0, iFront, 0, 0, -1, 1, 0, 0);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y - 0.5f,			z - 0.5f, 0, 0, iFront, 0, 0, -1, 1, 0, 0);		//3
 
 	}
 	else if(face == FACE_BACK)
 	{
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y + h-1 + 0.5f,		z + 0.5f, w, h, iBack, 0, 0, 1);		//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y - 0.5f,			z + 0.5f, w, 0, iBack, 0, 0, 1);		//1
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y - 0.5f,			z + 0.5f, 0, 0, iBack, 0, 0, 1);		//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y + h-1 + 0.5f,		z + 0.5f, 0, h, iBack, 0, 0, 1);		//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y + h-1 + 0.5f,		z + 0.5f, w, h, iBack, 0, 0, 1, 0, -1, 0);		//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f,			y - 0.5f,			z + 0.5f, w, 0, iBack, 0, 0, 1, 0, -1, 0);		//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y - 0.5f,			z + 0.5f, 0, 0, iBack, 0, 0, 1, 0, -1, 0);		//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + w-1 + 0.5f,	y + h-1 + 0.5f,		z + 0.5f, 0, h, iBack, 0, 0, 1, 0, -1, 0);		//3
 	}
 	else
 	{
@@ -516,22 +516,22 @@ void Chunk::CreateOptimizedLeftRightFace(MeshFace face, ChunkMesh::VertexData* v
 	float iLeft;
 	float iRight;
 
-	iLeft = iRight = Info::Get().GetBlocInfo(bt)->GetTextureIndex(1);
+	iLeft = iRight = Info::Get().GetBlocInfo(bt)->GetColorTextureIndex(1);
 
 	// Crée les vertices de la face
 	if(face == FACE_LEFT)
 	{
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f,		z + w-1 + 0.5f, 0, 0, iLeft, -1, 0, 0);	//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + h-1 + 0.5f,	z + w-1 + 0.5f, 0, h, iLeft, -1, 0, 0);	//1
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + h-1 + 0.5f,	z - 0.5f,		w, h, iLeft, -1, 0, 0);	//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f,		z - 0.5f,		w, 0, iLeft, -1, 0, 0);	//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f,		z + w-1 + 0.5f, 0, 0, iLeft, -1, 0, 0, 0, 0, -1);	//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + h-1 + 0.5f,	z + w-1 + 0.5f, 0, h, iLeft, -1, 0, 0, 0, 0, -1);	//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y + h-1 + 0.5f,	z - 0.5f,		w, h, iLeft, -1, 0, 0, 0, 0, -1);	//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x - 0.5f, y - 0.5f,		z - 0.5f,		w, 0, iLeft, -1, 0, 0, 0, 0, -1);	//3
 	}
 	else if(face == FACE_RIGHT)
 	{
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f,		z + w-1 + 0.5f, 0, 0, iRight, 1, 0, 0);	//0
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f,		z - 0.5f,		w, 0, iRight, 1, 0, 0);	//1
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + h-1 + 0.5f,	z - 0.5f,		w, h, iRight, 1, 0, 0);	//2
-		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + h-1 + 0.5f,	z + w-1 + 0.5f, 0, h, iRight, 1, 0, 0);	//3
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f,		z + w-1 + 0.5f, 0, 0, iRight, 1, 0, 0, 0, 0, -1);	//0
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y - 0.5f,		z - 0.5f,		w, 0, iRight, 1, 0, 0, 0, 0, -1);	//1
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + h-1 + 0.5f,	z - 0.5f,		w, h, iRight, 1, 0, 0, 0, 0, -1);	//2
+		vd[ vertexCount ++] = ChunkMesh::VertexData (x + 0.5f, y + h-1 + 0.5f,	z + w-1 + 0.5f, 0, h, iRight, 1, 0, 0, 0, 0, -1);	//3
 	}
 	else
 	{

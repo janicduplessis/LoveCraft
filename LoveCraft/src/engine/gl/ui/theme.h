@@ -13,8 +13,6 @@ class Theme
 public:
 	Theme();
 	~Theme();
-	void Init(string name);
-	void Set(float height, float width, float interval, bool italic, Texture* color, Texture* background);
 	static Theme* GetTheme(ThemeSet theme);
 	string GetName() const;
 	float GetHeight() const;
@@ -25,6 +23,8 @@ public:
 	Texture* GetBackground() const;
 private:
 	static void InitThemes();
+	void Init(string name);
+	void Set(float height, float width, float interval, bool italic, Texture* color, Texture* background);
 	static Theme** m_themes;
 	string m_name;
 	float m_charH;

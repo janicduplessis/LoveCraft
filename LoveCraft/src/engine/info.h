@@ -5,7 +5,6 @@
 
 #include "blockinfo.h"
 #include "chunk.h"
-#include "son.h"
 #include "network.h"
 #include "options.h"
 #include "camera.h"
@@ -47,11 +46,6 @@ public:
 	* Retourne un pointeur vers l'instance Info
 	*/
 	static Info* GetPtr();
-
-	/**
-	* Retourne une référence vers l'instance de son
-	*/
-	Son& Sound();
 
 	/**
 	* Retourne une référence vers l'instance des options
@@ -139,7 +133,6 @@ private:
 	static Info* m_info;
 	BlockInfo** m_blocInfos;
 	Option m_options;
-	Son m_sound;
 	Nwork m_network;
 	Camera* m_cam;
 	Controls m_controls;

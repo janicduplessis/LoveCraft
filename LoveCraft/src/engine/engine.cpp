@@ -506,7 +506,7 @@ void Engine::UpdateGame(float elapsedTime)
 	{
 		m_player->ResetPosition();
 		m_character->SetHealth(m_character->HealthMax());
-		Info::Get().Sound().PlaySnd(Son::SON_DEATH, Son::CHANNEL_INTERFACE, true);
+		Son::PlaySnd(SON_DEATH, CHANNEL_INTERFACE, true);
 		CW("Vous etes mort!");
 		m_character->SetExp(-100000);
 	}
@@ -883,7 +883,7 @@ void Engine::RenderGame()
 	if (ttt)
 	{
 		m_player->ResetPosition();
-		Info::Get().Sound().PlayMusic(Son::MUSIC_PLAY1);
+		Son::PlayMusic(MUSIC_PLAY1);
 		m_menuUI.pnl_loading->Hide();
 		CW("Premier Render de l'engine termine avec succes.");
 		ttt = false;
@@ -908,7 +908,6 @@ void Engine::TextenteredEvent(unsigned int val)
 
 void Engine::KeyPressEvent(unsigned char key)
 {
-	Son& sound = Info::Get().Sound();
 	static std::ostringstream ss;
 	Controls& c = Info::Get().Ctrls();
 
@@ -934,7 +933,7 @@ void Engine::KeyPressEvent(unsigned char key)
 				newSpell->Init(4.f, m_player->RotationQ());
 				newSpell->Shoot();
 				m_spells.push_back(*newSpell);
-				sound.PlaySnd(Son::SON_BOLT, Son::CHANNEL_SPELL);
+				Son::PlaySnd(SON_BOLT, CHANNEL_SPELL);
 				m_character->ResetGlobalCooldown();
 				ss << "Lancement de sort: Test  de particule!";
 			}
@@ -943,25 +942,25 @@ void Engine::KeyPressEvent(unsigned char key)
 			{
 				for (unsigned short i = 0; i < MONSTER_MAX_NUMBER; i++)
 					m_monsters[i]->SetPosition(Vector3f(m_monsters[i]->Position().x, 10, m_monsters[i]->Position().z));
-				sound.PlaySnd(Son::SON_FIRE, Son::CHANNEL_SPELL);
+				Son::PlaySnd(SON_FIRE, CHANNEL_SPELL);
 				m_character->ResetGlobalCooldown();
 				ss << "Lancement de sort: teleportation de NPC!";
 			}
 			if (c.n3())
 			{
-				sound.PlaySnd(Son::SON_FREEZE, Son::CHANNEL_SPELL);
+				Son::PlaySnd(SON_FREEZE, CHANNEL_SPELL);
 				m_character->ResetGlobalCooldown();
 				ss << "Lancement de sort: Glace";
 			}
 			if (c.n4())
 			{
-				sound.PlaySnd(Son::SON_SHOCK, Son::CHANNEL_SPELL);
+				Son::PlaySnd(SON_SHOCK, CHANNEL_SPELL);
 				m_character->ResetGlobalCooldown();
 				ss << "Lancement de sort: Shock";
 			}
 			if (c.n5())
 			{
-				sound.PlaySnd(Son::SON_POISON, Son::CHANNEL_SPELL);
+				Son::PlaySnd(SON_POISON, CHANNEL_SPELL);
 				m_character->ResetGlobalCooldown();
 				ss << "Lancement de sort: Poison";
 			}
@@ -969,7 +968,7 @@ void Engine::KeyPressEvent(unsigned char key)
 			{
 				if (m_character->Mana() - 15 >= 0)
 				{
-					sound.PlaySnd(Son::SON_HEAL1, Son::CHANNEL_SPELL);
+					Son::PlaySnd(SON_HEAL1, CHANNEL_SPELL);
 					m_character->ResetGlobalCooldown();
 					m_character->SetHealth(15);
 					m_character->SetMana(-15);
@@ -980,7 +979,7 @@ void Engine::KeyPressEvent(unsigned char key)
 			{
 				if (m_character->Mana() - 10 >= 0)
 				{
-					sound.PlaySnd(Son::SON_HEAL2, Son::CHANNEL_SPELL);
+					Son::PlaySnd(SON_HEAL2, CHANNEL_SPELL);
 					m_character->ResetGlobalCooldown();
 					m_character->SetEnergy(10);
 					m_character->SetMana(-10);
@@ -989,13 +988,13 @@ void Engine::KeyPressEvent(unsigned char key)
 			}
 			if (c.n9())
 			{
-				sound.PlaySnd(Son::SON_DEFEND, Son::CHANNEL_SPELL);
+				Son::PlaySnd(SON_DEFEND, CHANNEL_SPELL);
 				m_character->ResetGlobalCooldown();
 				ss << "Lancement de sort: Defense";
 			}
 			if (c.n0())
 			{
-				sound.PlaySnd(Son::SON_SHIELD, Son::CHANNEL_SPELL);
+				Son::PlaySnd(SON_SHIELD, CHANNEL_SPELL);
 				m_character->ResetGlobalCooldown();
 				ss << "Lancement de sort: Bouclier magique";
 			}
@@ -1005,7 +1004,7 @@ void Engine::KeyPressEvent(unsigned char key)
 		{
 			if (m_character->Mana() - 5 >= 0)
 			{
-				sound.PlaySnd(Son::SON_STORM, Son::CHANNEL_SPELL);
+				Son::PlaySnd(SON_STORM, CHANNEL_SPELL);
 				m_character->SetMana(-5);
 				m_player->Teleport();
 				ss << "Lancement de sort: Teleportation";
@@ -1104,7 +1103,7 @@ void Engine::KeyReleaseEvent(unsigned char key)
 			}
 		}
 		if (c.M())
-			Info::Get().Sound().PlayNextTrack();
+			Son::PlayNextTrack();
 		if (c.O())
 		{
 			Info::Get().Options().SetOptMusic(!Info::Get().Options().GetOptMusic());
@@ -1221,7 +1220,7 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 				SetMousePos(x, y);
 			}
 			if (m_camera->GetMode() == Camera::CAM_FIRST_PERSON)
-				Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE);
+				Son::PlaySnd(SON_CLICK, CHANNEL_INTERFACE);
 			m_lastRot = m_camera->GetRotation();
 			break;
 		case MOUSE_BUTTON_WHEEL_UP:
@@ -1305,7 +1304,7 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 void Engine::OnClick(Control* sender)
 {
 	string n = sender->GetName();
-	Info::Get().Sound().PlaySnd(Son::SON_CLICK, Son::CHANNEL_INTERFACE, true);
+	Son::PlaySnd(SON_CLICK, CHANNEL_INTERFACE, true);
 
 	if (n == MENU_BUTTON_START_FULL_NAME)
 	{

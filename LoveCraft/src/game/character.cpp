@@ -1,6 +1,7 @@
 ﻿#include "character.h"
 #include <sstream>
 #include <string>
+#include "engine/son.h"
 
 Character::Character() : m_name("DeFacto"), m_healthMax(HEALTH_MAX), m_energyMax(ENERGY_MAX), m_manaMax(MANA_MAX),
 	m_health(m_healthMax), m_energy(m_energyMax), m_mana(m_manaMax), m_exp(0), m_globalCooldown(0), m_level(1)
@@ -196,7 +197,7 @@ bool Character::CheckLevelUp()
 			m_exp -= m_expTable[m_level-1];
 			m_level++;
 			ApplyBonus();
-			Info::Get().Sound().PlaySnd(Son::SON_LEVELUP, Son::CHANNEL_INTERFACE, true);
+			Son::PlaySnd(SON_LEVELUP, CHANNEL_INTERFACE, true);
 			std::ostringstream ss;
 			ss << "Felicitations! Vous etes passe(e) au niveau " << m_level << "!";
 			Info::Get().NextPrint(ss.str());

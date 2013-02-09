@@ -6,8 +6,6 @@ Info::Info() : m_lineToPrint(""), m_console(0), m_lstatus(0), m_offsetMap(0),
 	m_textInterface(0), m_fontColors(0)
 {
 	GenerateBlocInfos();
-	if (!m_sound.LoadSounds())
-		std::cout << "Une erreur est survenue lors du chargement des sons en memoire" << std::endl;
 }
 
 Info::Info( Info const& copy )
@@ -46,11 +44,6 @@ Info* Info::GetPtr()
 	}
 
 	return m_info;
-}
-
-Son& Info::Sound()
-{
-	return m_sound;
 }
 
 Option& Info::Options()

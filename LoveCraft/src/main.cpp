@@ -11,7 +11,7 @@ int main()
     Tool::CheckTypes();
 
     Engine engine;
-	Info::Get().Sound().PlayMusic(Son::MUSIC_MENU);
+	Son::PlayMusic(MUSIC_MENU);
     engine.SetMaxFps(60);
 	int resX = GetSystemMetrics(SM_CXSCREEN);
 	int resY = GetSystemMetrics(SM_CYSCREEN);

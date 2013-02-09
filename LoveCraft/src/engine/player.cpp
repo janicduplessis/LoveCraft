@@ -91,13 +91,13 @@ void Player::Move(bool ghost, Character* cter, float elapsedTime)
 		else
 		{
 			if (m_speed.y > 0)
-				Info::Get().Sound().PlayStep(Info::Get().GetBlocFromWorld(m_pos), 
+				Son::PlayStep(Info::Get().GetBlocFromWorld(m_pos), 
 				elapsedTime, SOUND_FOOT_TIMEOUT, true);
 			//Perte de vie quand on tombe de trop haut
 			if (m_speed.y > 8)
 			{
 				cter->SetHealth(-(int)(m_speed.y * m_speed.y * HEALTH_GRAVITY_LOST));
-				Info::Get().Sound().PlaySnd(Son::SON_FALLPAIN, Son::CHANNEL_STEP);
+				Son::PlaySnd(SON_FALLPAIN, CHANNEL_STEP);
 			}
 			m_speed.y = 0;
 		}
@@ -118,7 +118,7 @@ void Player::Move(bool ghost, Character* cter, float elapsedTime)
 				if ((!a && !d) && m_speed.x != 0)
 					m_speed.x *= 0.6f;
 				m_speed.y = -MOUVEMENT_SPEED_JUMP;
-				Info::Get().Sound().PlaySnd(Son::SON_JUMP, Son::CHANNEL_PLAYER, false);
+				Son::PlaySnd(SON_JUMP, CHANNEL_PLAYER, false);
 			}
 		}
 		else m_pos.y += MOUVEMENT_SPEED_MAX * elapsedTime;
@@ -358,7 +358,7 @@ void Player::Move(bool ghost, Character* cter, float elapsedTime)
 		{
 			//Appel de la fonction qui joue le son avec le BlockType qui se trouve
 			//juste en dessous du joueur (position = 0x, 0y, 0z)
-			Info::Get().Sound().PlayStep(Info::Get().GetBlocFromWorld(m_pos), 
+			Son::PlayStep(Info::Get().GetBlocFromWorld(m_pos), 
 				elapsedTime, fabs(m_speed.x) + fabs(m_speed.z));
 		}
 	}

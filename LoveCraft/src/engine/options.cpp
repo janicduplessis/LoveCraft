@@ -1,5 +1,6 @@
 ﻿#include "options.h"
 #include "info.h"
+#include "engine/son.h"
 
 Option::Option() : m_music(OPTION_MUSIC_STARTING_VALUE), m_sound(OPTION_SOUND_STARTING_VALUE), 
 	m_showInfo(OPTION_INFO_STARTING_VALUE)
@@ -29,8 +30,8 @@ void Option::SetOptMusic(const bool value)
 {
 	m_music = value;
 	if (m_music)
-		Info::Get().Sound().PlayNextTrack();
-	else Info::Get().Sound().StopMusic();
+		Son::PlayNextTrack();
+	else Son::StopMusic();
 }
 
 void Option::SetOptSound(const bool value)

@@ -141,7 +141,7 @@ public:
 
 private:
 	bool LoadTexture(Texture& texture, const string& filename, bool stopOnError = true);
-	void LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, string path);
+	void LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, string colorMapPath, string normalMapPath = "");
 
 	void CW(const string& line);
 	void CWL(const string& line);
@@ -162,6 +162,7 @@ private:
 	Texture** m_textureInterface;
 	Texture** m_texturefontColor;
 	Texture m_texSpell;
+	Texture m_noNormalMap;
 
 	Player* m_player;
 	Camera* m_camera;

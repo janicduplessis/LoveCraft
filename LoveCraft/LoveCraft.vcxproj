@@ -82,6 +82,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\gl\modelmesh.cpp" />
+    <ClCompile Include="src\engine\gl\shadowmapfbo.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.cpp" />
     <ClCompile Include="src\engine\gl\ui\debuginterface.cpp" />
@@ -147,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\gl\modelmesh.h" />
+    <ClInclude Include="src\engine\gl\shadowmapfbo.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.h" />
     <ClInclude Include="src\engine\gl\ui\debuginterface.h" />

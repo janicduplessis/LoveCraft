@@ -311,6 +311,8 @@ void Engine::LoadGlobalResource()
 
 #pragma endregion
 
+	m_noNormalMap.Load(TEXTURE_PATH "normal_map.jpg", true);
+
 #pragma region Boutons des spells
 
 	//Texture des spells
@@ -432,9 +434,10 @@ void Engine::LoadGlobalResource()
 
 	m_lightingShader.Use();
 	m_lightingShader.SetDirectionalLight(dirLight);
-	m_lightingShader.SetMatSpecualarIntensity(1);
-	m_lightingShader.SetMatSpecularPower(32);
-	m_lightingShader.SetTextureUnit(4);
+	m_lightingShader.SetMatSpecualarIntensity(0.5);
+	m_lightingShader.SetMatSpecularPower(16);
+	m_lightingShader.SetColorTextureUnit(0);
+	m_lightingShader.SetNormalTextureUnit(2);
 	m_lightingShader.SetPointLights(2, pointLights);
 
 	Shader::Disable();
@@ -729,6 +732,7 @@ void Engine::RenderGame()
 	//std::cout << test.ToString() << std::endl;
 
 	// render le modele du player
+	m_noNormalMap.Bind(GL_TEXTURE2);
 	m_lightingShader.Use();
 	m_lightingShader.SetTextureUnitType(0);
 	m_lightingShader.SetEyeWorldPos(m_camera->GetRealPosition());
@@ -761,7 +765,7 @@ void Engine::RenderGame()
 #pragma region Render les cubes
 
 	Shader::Disable();
-	m_textureArray->Use(GL_TEXTURE5);
+	m_textureArray->Use(GL_TEXTURE1);
 	m_lightingShader.Use();
 	m_lightingShader.SetTextureUnitType(1);
 	m_lightingShader.SetWVP(m_mxWVP);
@@ -1521,33 +1525,48 @@ void Engine::GetBlocAtCursor()
 
 #pragma region Fonctions privees
 
-void Engine::LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, string path)
+void Engine::LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, string colorMapPath, string normalMapPath)
 {
-	int index;
+	int colorIndex;
+	int normalIndex;
+
+	BlockInfo* blocInfo = Info::Get().GetBlocInfo(type);
+
+	colorIndex = m_textureArray->AddTexture(colorMapPath);
+	if (normalMapPath == "")
+		normalIndex = m_textureArray->AddTexture(TEXTURE_PATH "normal_up.jpg");
+	else
+		normalIndex = m_textureArray->AddTexture(normalMapPath);
+
 	switch (faces)
 	{
 	case BFACE_ALL:
-		index = m_textureArray->AddTexture(path);
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(0, index);
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(1, index);
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(2, index);
+		blocInfo->SetColorTextureIndex(0, colorIndex);
+		blocInfo->SetColorTextureIndex(1, colorIndex);
+		blocInfo->SetColorTextureIndex(2, colorIndex);
+		blocInfo->SetNormalTextureIndex(0, normalIndex);
+		blocInfo->SetNormalTextureIndex(1, normalIndex);
+		blocInfo->SetNormalTextureIndex(2, normalIndex);
 		break;
 	case BFACE_TOP_AND_BOT:
-		index = m_textureArray->AddTexture(path);
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(0, index);
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(2, index);
+		blocInfo->SetColorTextureIndex(0, colorIndex);
+		blocInfo->SetColorTextureIndex(2, colorIndex);
+		blocInfo->SetNormalTextureIndex(0, normalIndex);
+		blocInfo->SetNormalTextureIndex(2, normalIndex);
 		break;
 	case BFACE_TOP:
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(0, m_textureArray->AddTexture(path));
+		blocInfo->SetColorTextureIndex(0, colorIndex);
+		blocInfo->SetNormalTextureIndex(0, normalIndex);
 		break;
 	case BFACE_SIDES:
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(1, m_textureArray->AddTexture(path));
+		blocInfo->SetColorTextureIndex(1, colorIndex);
+		blocInfo->SetNormalTextureIndex(1, normalIndex);
 		break;
 	case BFACE_BOTTOM:
-		Info::Get().GetBlocInfo(type)->SetTextureIndex(2, m_textureArray->AddTexture(path));
+		blocInfo->SetColorTextureIndex(2, colorIndex);
+		blocInfo->SetNormalTextureIndex(2, normalIndex);
 		break;
 	}
-
 }
 
 bool Engine::LoadTexture(Texture& texture, const string& filename, bool stopOnError)

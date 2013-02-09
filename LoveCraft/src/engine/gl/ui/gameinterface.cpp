@@ -20,7 +20,7 @@ void GameInterface::Update(const ValuesGameInterface& val)
 
 	// Update le picturebox du current blocktype
 	pb_crntBT->SetBackground(val.BlocTextures->GetTexture(
-		Info::Get().GetBlocInfo(val.CurrentBlocType)->GetTextureIndex(0)));
+		Info::Get().GetBlocInfo(val.CurrentBlocType)->GetColorTextureIndex(0)));
 	//Affiche ou cache les infos s'il y a un changement
 	if (lbx_infos->IsVisible() && !Info::Get().Options().GetOptInfos())
 		lbx_infos->Hide();

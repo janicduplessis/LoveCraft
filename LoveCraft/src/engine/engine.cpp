@@ -526,8 +526,6 @@ void Engine::UpdateGame(float elapsedTime)
 	for (SpellList::iterator it = m_spells.begin(); it != m_spells.end(); ++it)
 		it->Update(elapsedTime);
 
-#pragma endregion
-
 #pragma region Reseau
 
 	//Test réseau - Dessigne un carré en haut de la position du joueur

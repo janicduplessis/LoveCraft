@@ -3,6 +3,7 @@
 
 #include "interfaceinfos.h"
 #include "define.h"
+#include "enumerators.h"
 #include "engine/gl/ui/valuesinterface.h"
 #include "engine/gl/ui/controls/localizable/textual/singletext/spellbutton.h"
 #include "engine/gl/ui/controls/localizable/container/panel.h"
@@ -19,6 +20,8 @@ public:
 	virtual ~Interface();
 	virtual void DeInit() = 0;
 	virtual void Render() = 0;
+	virtual void Show() = 0;
+	virtual void Hide() = 0;
 	virtual bool IsLoaded() const;
 protected:
 	bool m_loaded;

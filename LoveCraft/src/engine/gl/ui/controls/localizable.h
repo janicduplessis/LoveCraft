@@ -3,17 +3,27 @@
 
 #include "../control.h"
 #include "../theme.h"
+#include "../effects/effect.h"
+
+class Container;
 
 class Localizable : public Control
 {
 public:
-	Localizable(CONTROLTYPE type);
+	Localizable(CONTROLTYPE type, CONTROLGENERICTYPE gentype);
 	~Localizable();
 	/**
 	* Dessine l'objet à l'écran
 	*/
 	virtual void Render() = 0;
-	virtual void InitLocalizable(Point position, Size size, Texture* background, Localizable* parent, ORIGIN origin = ORIGIN_BOTTOMLEFT);
+	virtual void InitLocalizable(Point position, Size size, Texture* background, Container* parent, ORIGIN origin = ORIGIN_BOTTOMLEFT);
+
+	virtual void SetParent(Container* parent);
+	virtual Container* GetParent() const;
+	virtual bool IsParent(Container* parent);
+
+	virtual CONTROLGENERICTYPE GetGenType() const;
+	virtual bool IsGenType(CONTROLGENERICTYPE gentype) const;
 
 	virtual void SetPosition(Point position);
 	virtual void AddPosition(Point value);
@@ -43,12 +53,16 @@ public:
 	virtual Texture* GetBackground() const;
 	virtual bool IsBackground(Texture* texture);
 
-	virtual Localizable* GetParent() const;
+	virtual void AddEffect(Effect* effect);
 
-	virtual bool MousePressEvents( int x, int y );
+	virtual bool MouseMoveEvents(int x, int y);
+	virtual bool MousePressEvents(int x, int y);
 	virtual bool MouseReleaseEvents(int x, int y);
 	virtual bool KeyPressEvents(int keycode);
 	virtual bool KeyReleaseEvents(int keycode);
+
+	virtual bool IsWithinRange(int x, int y);
+
 protected:
 	virtual void DrawSquare();
 	virtual void DrawingActivateBlend() const;
@@ -57,13 +71,17 @@ protected:
 	virtual void DrawingDrawSquare() const;
 	virtual void DrawingDesactivateBlend() const;
 
-	Localizable* m_parent;
+	CONTROLGENERICTYPE m_gentype;
+	Container* m_parent;
 	Point m_position;
 	ORIGIN m_origin;
 	Size m_size;
 	BLENDTYPE m_blend;
 	bool m_visible;
 	Texture* m_background;
+
+	uint8 m_effectNbr;
+	Effect** m_effects;
 };
 
 #endif

@@ -11,10 +11,14 @@ public:
 	virtual void Init(const ValuesInterface& val);
 	virtual void DeInit();
 	virtual void Render();
-
+	virtual void Show();
+	virtual void Hide();
+	
 	Panel* m_timertest;
 	Label* m_timertesttext;
 	Label* m_timertesttime;
+
+	
 };
 
 #endif

@@ -17,8 +17,12 @@ public:
 	virtual void Render();
 	virtual void DeInit();
 
-	virtual void ConsoleWriteLine(const std::string& line);
+	virtual void Show();
+	virtual void Hide();
 
+	virtual void ConsoleWriteLine(const string& line);
+
+	virtual bool MouseMoveEvents(int x, int y);
 	virtual bool MousePressEvent(const MOUSE_BUTTON &button, int x, int y);
 	virtual bool MouseRleaseEvent(const MOUSE_BUTTON &button, int x, int y);
 	virtual bool KeyPressEvent(unsigned char key);
@@ -50,6 +54,7 @@ public:
 	Label* lbl_plrAcc;
 	Label* lbl_mousePos;
 	Label* lbl_FPS;
+	Label* m_controlmousetest;
 
 	Panel* pnl_time;
 	Label* lbl_time;

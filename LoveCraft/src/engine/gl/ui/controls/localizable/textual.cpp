@@ -1,7 +1,7 @@
 #include "textual.h"
 
 
-Textual::Textual(CONTROLTYPE type) : Localizable(type), m_message(""), m_italic(false), 
+Textual::Textual(CONTROLTYPE type) : Localizable(type, CTRLGENERIC_TEXTUAL), m_message(""), m_italic(false), 
 	m_charHeight(0.f), m_charWidth(0.f), m_charInterval(0.f), m_fontColor(0)
 {
 	InitTextual(THEME_DEFAULT);

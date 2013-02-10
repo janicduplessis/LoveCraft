@@ -19,7 +19,7 @@ void Button::Render()
 	m_label->Render();
 }
 
-bool Button::MousePressEvents( int x, int y )
+bool Button::MousePressEvents(int x, int y)
 {
 	if (m_clicked)
 		return true;
@@ -27,7 +27,7 @@ bool Button::MousePressEvents( int x, int y )
 	if (IsVisible() && IsEnabled())
 	{
 		Point& pos = AbsolutePosition();
-		if (x >= pos.x && x <= pos.x + m_size.h && y >= pos.y && y <= pos.y + m_size.h)
+		if (IsWithinRange(x, y))
 		{
 			OnClick.Notify(this);
 			Press();

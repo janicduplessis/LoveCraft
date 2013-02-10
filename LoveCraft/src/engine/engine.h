@@ -6,6 +6,7 @@
 
 #include "define.h"
 #include "openglcontext.h"
+#include "enumerators.h"
 
 #include "gl/texture.h"
 #include "gl/shaders/shader.h"

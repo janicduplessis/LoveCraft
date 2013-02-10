@@ -1,7 +1,7 @@
 #include "timer.h"
 
 
-Timer::Timer() : Workable(CTRLTYPE_TIMER), m_interval(1.0f), m_laps(0), m_time(0)
+Timer::Timer() : Workable(CTRLTYPE_TIMER), m_interval(1000), m_laps(0), m_time(0), m_intervalf(1.0f)
 {
 	Disable();
 }
@@ -11,16 +11,16 @@ Timer::~Timer()
 {
 }
 
-void Timer::Init(float intervaltime)
+void Timer::Init(uint16 intervaltime)
 {
-	m_interval = intervaltime > 0 ? intervaltime : 0;
+	SetIntervalTime(intervaltime);
 }
 
 void Timer::Update(float elapsedtime)
 {
 	if (IsEnabled())
 	{
-		if (m_time >= m_interval)
+		if (m_time >= m_intervalf)
 		{
 			OnTick.Notify(this);
 			m_time = 0;
@@ -47,21 +47,31 @@ void Timer::Reset()
 	m_laps = 0;
 }
 
-void Timer::SetIntervalTime(float intervaltime)
+void Timer::Enable()
 {
-	m_interval = intervaltime;
+	Control::Enable();
 }
-void Timer::AddIntervalTime(float value)
+void Timer::Disable()
 {
-	m_interval += value;
+	Control::Disable();
 }
-float Timer::GetIntervalTime() const
+
+void Timer::SetIntervalTime(int16 intervaltime)
+{
+	m_interval = intervaltime > 0 ? intervaltime : 0;
+	m_intervalf = (float)m_interval / 1000;
+}
+void Timer::AddIntervalTime(int16 value)
+{
+	SetIntervalTime((int16)GetIntervalTime() + value);
+}
+uint16 Timer::GetIntervalTime() const
 {
 	return m_interval;
 }
-bool Timer::IsIntervalTime(float intervaltime)
+bool Timer::IsIntervalTime(uint16 intervaltime)
 {
-	return fabs(m_interval) - fabs(intervaltime) <= 0.0001f;
+	return m_interval == intervaltime;
 }
 
 uint16 Timer::GetLaps() const

@@ -1,5 +1,8 @@
+#include <iomanip>
 #include "label.h"
-
+#include "engine/gl/ui/controls/localizable/container.h"
+#include "util/vector2.h"
+#include "util/vector3.h"
 
 Label::Label() : Textual(CTRLTYPE_LABEL), m_docking(TEXTDOCK_NONE), m_offset(Point(0, 0)), m_variableMsg("")
 {
@@ -17,9 +20,10 @@ void Label::Init(Docking dock, Point offset)
 	AddPosition(offset);
 }
 
-void Label::InitLocalizable(Point position, Localizable* parent)
+void Label::InitLocalizable(Point position, Container* parent, Localizable* anchor)
 {
 	Localizable::InitLocalizable(position, Size(), 0, parent);
+	m_anchor = anchor;
 }
 
 void Label::Render()
@@ -71,7 +75,7 @@ void Label::SetVariableMsg(string variable)
 void Label::SetVariableMsg(float variable)
 {
 	std::ostringstream ss;
-	ss << variable;
+	ss << std::setprecision(4) << variable;
 	SetVariableMsg(ss.str());
 }
 void Label::SetVariableMsg(int variable)
@@ -89,7 +93,57 @@ void Label::SetVariableMsg(uint32 variable)
 void Label::SetVariableMsg(bool variable)
 {
 	std::ostringstream ss;
-	ss << variable ? "True" : "False";
+	ss << (variable ? "True" : "False");
+	SetVariableMsg(ss.str());
+}
+void Label::SetVariableMsg(Control* variable)
+{
+	std::ostringstream ss;
+	ss << (variable ? variable->GetName() : "Aucun");
+	SetVariableMsg(ss.str());
+}
+void Label::SetVariableMsg(Vector3<float> variable)
+{
+	std::ostringstream ss;
+	ss << "X: " << std::setprecision(4) << std::setw(8) << std::left << variable.x << 
+		" Y: " << std::setprecision(4) << std::setw(8) << std::left << variable.y << 
+		" Z: " << std::setprecision(4) << std::setw(8) << std::left << variable.z;
+	SetVariableMsg(ss.str());
+}
+void Label::SetVariableMsg(Vector2<float> variable)
+{
+	std::ostringstream ss;
+	ss << "X: " << std::setprecision(4) << std::setw(8) << std::left << variable.x << 
+		" Y: " << std::setprecision(4) << std::setw(8) << std::left << variable.y;
+	SetVariableMsg(ss.str());
+}
+void Label::SetVariableMsg(Vector3<int> variable)
+{
+	std::ostringstream ss;
+	ss << "X: " << std::setprecision(4) << std::setw(8) << std::left << variable.x << 
+		" Y: " << std::setprecision(4) << std::setw(8) << std::left << variable.y << 
+		" Z: " << std::setprecision(4) << std::setw(8) << std::left << variable.z;
+	SetVariableMsg(ss.str());
+}
+void Label::SetVariableMsg(Vector2<int> variable)
+{
+	std::ostringstream ss;
+	ss << "X: " << std::setprecision(4) << std::setw(8) << std::left << variable.x << 
+		" Y: " << std::setprecision(4) << std::setw(8) << std::left << variable.y;
+	SetVariableMsg(ss.str());
+}
+void Label::SetVariableMsg(Point variable)
+{
+	std::ostringstream ss;
+	ss << "X: " << std::setprecision(4) << std::setw(8) << std::left << variable.x << 
+		" Y: " << std::setprecision(4) << std::setw(8) << std::left << variable.y;
+	SetVariableMsg(ss.str());
+}
+void Label::SetVariableMsg(Size variable)
+{
+	std::ostringstream ss;
+	ss << "W: " << std::setprecision(4) << std::setw(8) << std::left << variable.w << 
+		" H: " << std::setprecision(4) << std::setw(8) << std::left << variable.h;
 	SetVariableMsg(ss.str());
 }
 
@@ -154,6 +208,8 @@ Point Label::AbsolutePosition() const
 {
 	Point relposition;
 	Localizable* parent = GetParent();
+	if (!parent)
+		parent = m_anchor;
 	Size& size = parent->GetSize();
 	int width = m_message.length() * m_charInterval * m_charWidth + m_charWidth * m_charInterval;
 

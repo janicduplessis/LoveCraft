@@ -26,7 +26,6 @@ void DebugInterface::Init(const ValuesInterface& val)
 	m_timertesttext->SetCharInterval(0.5f);
 	m_timertesttext->SetColor(val.FontTextures[TEXTCOLOR_BLUE]);
 	m_timertesttext->SetMsg("Appuyez sur espace pour tester.");
-	m_timertest->AddControl(m_timertesttext);
 
 	m_timertesttime = new Label();
 	m_timertesttime->InitControl("text");
@@ -38,7 +37,7 @@ void DebugInterface::Init(const ValuesInterface& val)
 	m_timertesttime->SetDocking(TEXTDOCK_MIDDLECENTER);
 	m_timertesttime->SetColor(val.FontTextures[TEXTCOLOR_BLUE]);
 	m_timertesttime->SetMsg("Interval du label: &var");
-	m_timertest->AddControl(m_timertesttime);
+
 
 	m_loaded = true;
 }
@@ -57,4 +56,14 @@ void DebugInterface::DeInit()
 void DebugInterface::Render()
 {
 	m_timertest->Render();
+}
+
+void DebugInterface::Show()
+{
+	m_timertest->Show();
+}
+
+void DebugInterface::Hide()
+{
+	m_timertest->Hide();
 }

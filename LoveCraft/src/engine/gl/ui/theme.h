@@ -2,6 +2,7 @@
 #define THEME_H__
 
 #include "define.h"
+#include "enumerators.h"
 #include "../texture.h"
 #include "engine/info.h"
 #include <cassert>

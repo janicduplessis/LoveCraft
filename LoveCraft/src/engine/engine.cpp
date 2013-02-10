@@ -10,6 +10,7 @@
 #include <SFML/Network.hpp>
 #include "interfaceinfos.h"
 #include "util/tool.h"
+#include "util/vector3.h"
 
 #pragma region Constructeur et reference
 
@@ -160,12 +161,12 @@ void Engine::GlobalInit()
 #pragma region Initialisation des timers
 
 	m_timertest = new Timer();
-	m_timertest->Init(2.0f);
+	m_timertest->Init(1000);
 	m_timeranimationplus = new Timer();
-	m_timeranimationplus->Init(0.01f);
+	m_timeranimationplus->Init(20);
 	m_timeranimationplus->InitControl("plus");
 	m_timeranimationmoins = new Timer();
-	m_timeranimationmoins->Init(0.01f);
+	m_timeranimationmoins->Init(20);
 	m_timeranimationmoins->InitControl("moins");
 
 	m_timertest->OnTick.Attach(this, &Engine::Timertest_OnTick);
@@ -370,6 +371,7 @@ void Engine::LoadGlobalResource()
 	m_textureInterface[CUSTIMAGE_WELCOME_FACE]->Load(TEXTURE_PATH "i_welcomeface.png");
 	m_textureInterface[CUSTIMAGE_ARROWBUTTON_UP]->Load(TEXTURE_PATH "i_arrowbutton_up.jpg");
 	m_textureInterface[CUSTIMAGE_ARROWBUTTON_DOWN]->Load(TEXTURE_PATH "i_arrowbutton_down.jpg");
+	m_textureInterface[CUSTIMAGE_TOOLTIP_BACK]->Load(TEXTURE_PATH "i_tooltip_back.png");
 	Info::Get().SetTexturesInterface(m_textureInterface);
 
 	Info::Get().StatusOn(Info::LSTATUS_TEXTURE_IMAGE);
@@ -451,7 +453,7 @@ void Engine::LoadGlobalResource()
 void Engine::LoadMenuResource()
 {
 
-#pragma region Controles du menu
+#pragma region Evenements du menu
 
 	m_menuUI.btn_debugStart->OnClick.Attach(this, &Engine::OnClick);
 	m_menuUI.btn_normStart->OnClick.Attach(this, &Engine::OnClick);
@@ -464,8 +466,14 @@ void Engine::LoadMenuResource()
 
 void Engine::LoadGameResource()
 {
+
+#pragma region Evenements du jeu
+
 	m_gameUI.txb_console->GainedFocus.Attach(this, &Engine::GainedFocus);
 	m_gameUI.txb_console->LostFocus.Attach(this, &Engine::LostFocus);
+
+#pragma endregion
+
 }
 
 void Engine::UnloadResource()
@@ -1141,9 +1149,9 @@ void Engine::KeyReleaseEvent(unsigned char key)
 			else m_timertest->Start();
 		}
 		if (c.n1())
-			m_timertest->AddIntervalTime(-0.05f);
+			m_timertest->AddIntervalTime(-50);
 		if (c.n2())
-			m_timertest->AddIntervalTime(0.05f);
+			m_timertest->AddIntervalTime(50);
 		c.Set(key, false);
 #pragma endregion
 	}
@@ -1159,6 +1167,7 @@ void Engine::MouseMoveEvent(int x, int y)
 
 	if (!IsMenuOpen())
 	{
+		m_gameUI.MouseMoveEvents(x, Height() - y);
 		// Camera 3rd person
 		if (m_camera->GetMode() == Camera::CAM_THIRD_PERSON && m_rightClick || m_leftClick)
 		{
@@ -1190,7 +1199,10 @@ void Engine::MouseMoveEvent(int x, int y)
 			CenterMouse();
 		}
 	}
-
+	else
+	{
+		m_menuUI.MouseMoveEvents(x, Height() - y);
+	}
 	m_pb_cursor->SetPosition(Point(MousePosition().x, MousePosition().y - m_pb_cursor->GetSize().h));
 }
 
@@ -1198,7 +1210,8 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 {
 	if (!IsMenuOpen())
 	{
-		if (m_gameUI.MousePressEvent(button, x, y))
+#pragma region Jeu
+		if (m_gameUI.MousePressEvent(button, x, Height() - y))
 			return;
 
 		switch (button)
@@ -1246,17 +1259,15 @@ void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 			break;
 			}
 		}
+#pragma endregion
 	}
 	else
 	{
-		switch (button)
-		{
-		case MOUSE_BUTTON_LEFT:
-			m_menuUI.btn_close->MousePressEvents(x, m_menuUI.pnl_screen->GetSize().h - y);
-			m_menuUI.btn_normStart->MousePressEvents(x, m_menuUI.pnl_screen->GetSize().h - y);
-			m_menuUI.btn_debugStart->MousePressEvents(x, m_menuUI.pnl_screen->GetSize().h - y);
-			break;
-		}
+#pragma region Menu
+
+		m_menuUI.MousePressEvents(button, x, Height() - y);
+
+#pragma endregion
 	}
 }
 
@@ -1264,36 +1275,35 @@ void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 {
 	if (!IsMenuOpen())
 	{
-		m_gameUI.MouseRleaseEvent(button, x, y);
+		m_gameUI.MouseRleaseEvent(button, x, Height() - y);
 
 		switch (button)
 		{
 		case MOUSE_BUTTON_RIGHT:
 			m_rightClick = false;
 			m_clickTimerOn = false;
-			if (m_clickTimer < 0.5f && abs(m_lastRot.x - m_camera->GetRotation().x) <= 1 
-				&& abs(m_lastRot.y - m_camera->GetRotation().y) <= 1 && m_currentBlock.y != 0)
-				RemoveBlock();
+			if (!m_gameUI.pnl_playscreen->GetTopControl(x, y))
+			{
+				if (m_clickTimer < 0.5f && abs(m_lastRot.x - m_camera->GetRotation().x) <= 1 
+					&& abs(m_lastRot.y - m_camera->GetRotation().y) <= 1 && m_currentBlock.y != 0)
+					RemoveBlock();
+			}
 			break;
 		case MOUSE_BUTTON_LEFT:
 			m_leftClick = false;
 			m_clickTimerOn = false;
-			std::cout << (float)m_currentBlockType << std::endl;
-			if (m_clickTimer < 0.5f && m_lastRot == m_camera->GetRotation())
-				AddBlock(m_currentBlockType);
+			if (!m_gameUI.pnl_playscreen->GetTopControl(x, y))
+			{
+				std::cout << (float)m_currentBlockType << std::endl;
+				if (m_clickTimer < 0.5f && m_lastRot == m_camera->GetRotation())
+					AddBlock(m_currentBlockType);
+			}
 			break;
 		}
 	}
 	else
 	{
-		switch (button)
-		{
-		case MOUSE_BUTTON_LEFT:
-			m_menuUI.btn_close->MouseReleaseEvents(x,y);
-			m_menuUI.btn_normStart->MouseReleaseEvents(x,y);
-			m_menuUI.btn_debugStart->MouseReleaseEvents(x,y);
-			break;
-		}
+		m_menuUI.MouseReleaseEvents(button, x, Height() - y);
 	}
 }
 

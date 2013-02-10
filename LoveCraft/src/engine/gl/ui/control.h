@@ -2,7 +2,9 @@
 #define CONTROL_H_
 
 #include "define.h"
+#include "enumerators.h"
 #include "engine/info.h"
+#include "util/array.h"
 #include "../texture.h"
 #include "object.h"
 #include <cassert>

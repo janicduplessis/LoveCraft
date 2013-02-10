@@ -3,6 +3,7 @@
 
 #include "define.h"
 #include "blockinfo.h"
+#include "enumerators.h"
 
 class Son
 {

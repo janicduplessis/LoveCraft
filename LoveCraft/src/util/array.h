@@ -16,16 +16,21 @@ public:
 	void Reset(const T& valeur);
 	T Get(unsigned int position) const;
 	void Set(unsigned int position, const T& valeur);
+	void Add(const T& valeur);
+
+	void Show();
 
 	void Resize(unsigned int size);
+	void Fuse(const Array<T> &arr);
 
 private:
 	unsigned int m_size;
+	unsigned int m_tNbr;
 	T* m_data;
 };
 
 template <class T>
-Array<T>::Array(unsigned int size, const T& valeur) : m_size(size)
+Array<T>::Array(unsigned int size, const T& valeur) : m_size(size), m_tNbr(0)
 {
 	m_data = new T[size];
 	Reset(valeur);
@@ -77,6 +82,27 @@ void Array<T>::Set(unsigned int position, const T& valeur)
 	m_data[position] = valeur;
 }
 
+
+template <class T>
+void Array<T>::Add(const T& valeur)
+{
+	if (m_tNbr < m_size)
+		Set(m_tNbr, valeur);
+	else
+	{
+		Resize(m_tNbr + 1);
+		Add(valeur);
+	}
+}
+
+template <class T>
+void Array<T>::Show()
+{
+	for (int i = 0; i < m_size; i++)
+		std::cout << Get(i) << " - ";
+	std::cout << std::endl;
+}
+
 template <class T>
 void Array<T>::Resize(unsigned int size)
 {
@@ -86,6 +112,15 @@ void Array<T>::Resize(unsigned int size)
 		m_data[i] = arr[i];
 	m_size = size;
 	delete [] arr;
+}
+
+template <class T>
+void Array<T>::Fuse(const Array<T> &arr)
+{
+	int oldsize = m_size;
+	Resize(oldsize + arr.Size());
+	for (int i = oldsize; i < m_size; i++)
+		Set(i, arr.Get(i - oldsize));
 }
 
 #endif

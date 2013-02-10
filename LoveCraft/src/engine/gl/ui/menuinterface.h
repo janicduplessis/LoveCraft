@@ -11,6 +11,11 @@ public:
 	virtual void Init(const ValuesInterface& val);
 	virtual void Render();
 	virtual void DeInit();
+	virtual void Show();
+	virtual void Hide();
+	virtual bool MouseMoveEvents(int x, int y);
+	virtual bool MousePressEvents(const MOUSE_BUTTON &button, int x, int y);
+	virtual bool MouseReleaseEvents(const MOUSE_BUTTON &button, int x, int y);
 
 	//Controles
 
@@ -23,6 +28,9 @@ public:
 	Button* btn_close;
 
 	Panel* pnl_loading;
+
+	Label* m_mousepostest;
+	Label* m_controlmousetest;
 };
 
 #endif

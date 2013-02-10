@@ -1,8 +1,8 @@
 #include "localizable.h"
+#include "engine/gl/ui/controls/localizable/container.h"
 
-
-Localizable::Localizable(CONTROLTYPE type) : Control(type), m_blend(CBLEND_PNG), m_visible(true), 
-	m_parent(0), m_background(0)
+Localizable::Localizable(CONTROLTYPE type, CONTROLGENERICTYPE gentype) : Control(type), m_blend(CBLEND_PNG), m_visible(true), 
+	m_parent(0), m_background(0), m_effects(0), m_effectNbr(0), m_gentype(gentype)
 {
 }
 
@@ -10,13 +10,15 @@ Localizable::~Localizable()
 {
 }
 
-void Localizable::InitLocalizable(Point position, Size size, Texture* background, Localizable* parent, ORIGIN origin)
+void Localizable::InitLocalizable(Point position, Size size, Texture* background, Container* parent, ORIGIN origin)
 {
 	m_parent = parent;
 	m_position = position;
 	m_size = size;
 	m_background = background;
 	SetOrigin(origin);
+	if (parent)
+		parent->AddControl(this);
 }
 
 void Localizable::DrawSquare()
@@ -33,6 +35,36 @@ void Localizable::DrawSquare()
 
 // Propriétés
 
+#pragma region Parent
+
+void Localizable::SetParent(Container* parent)
+{
+	m_parent = parent;
+}
+Container* Localizable::GetParent() const
+{
+	return m_parent;
+}
+bool Localizable::IsParent(Container* parent)
+{
+	return m_parent == parent;
+}
+
+#pragma endregion
+
+#pragma region Generic type
+
+CONTROLGENERICTYPE Localizable::GetGenType() const
+{
+	return m_gentype;
+}
+bool Localizable::IsGenType(CONTROLGENERICTYPE gentype) const
+{
+	return m_gentype == gentype;
+}
+
+#pragma endregion
+
 #pragma region Position
 
 void Localizable::SetPosition(Point position)
@@ -47,7 +79,6 @@ Point Localizable::GetPosition() const
 {
 	return m_position;
 }
-
 bool Localizable::IsPosition(Point position) const
 {
 	return m_position == position;
@@ -168,34 +199,60 @@ bool Localizable::IsBackground(Texture* texture)
 
 #pragma endregion
 
-#pragma region Parent
+#pragma region Effects
 
-Localizable* Localizable::GetParent() const
+void Localizable::AddEffect(Effect* effect)
 {
-	return m_parent;
+	if (!effect)
+		return;
+
+	Effect** effects = m_effects;
+	m_effects = new Effect*[++m_effectNbr];
+	for (uint8 i = 0; i < m_effectNbr - 1; i++)
+		m_effects[i] = effects[i];
+	m_effects[m_effectNbr - 1] = effect;
+	delete [] effects;
 }
 
 #pragma endregion
 
 #pragma region Mouse Events
 
-bool Localizable::MousePressEvents( int x, int y )
+bool Localizable::MouseMoveEvents(int x, int y)
+{
+	return IsWithinRange(x, y);
+}
+
+bool Localizable::MousePressEvents(int x, int y)
 {
 	return false;
 }
 
-bool Localizable::KeyPressEvents( int keycode )
+bool Localizable::KeyPressEvents(int keycode)
 {
 	return false;
 }
 
-bool Localizable::KeyReleaseEvents( int keycode )
+bool Localizable::KeyReleaseEvents(int keycode)
 {
 	return false;
 }
 
-bool Localizable::MouseReleaseEvents( int x, int y )
+bool Localizable::MouseReleaseEvents(int x, int y)
 {
+	return false;
+}
+
+#pragma endregion
+
+#pragma region Cursor position
+
+bool Localizable::IsWithinRange(int x, int y)
+{
+	Point& fstpos = AbsolutePosition();
+	Point& sndpos = Point(fstpos.x + GetSize().w, fstpos.y + GetSize().h);
+	if (x >= fstpos.x && x <= sndpos.x && y >= fstpos.y && y <= sndpos.y)
+		return true;
 	return false;
 }
 

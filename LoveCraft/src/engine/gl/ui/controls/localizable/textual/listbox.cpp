@@ -37,7 +37,7 @@ void ListBox::InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable
 		m_lines[i] = new Label();
 		ss << GetName() << "_line" << (m_lineNbr - i - 1);
 		m_lines[i]->InitControl(ss.str());
-		m_lines[i]->InitLocalizable(Point(offset.x, (GetCharHeight() + m_gapBetLines) * i + offset.y), this);
+		m_lines[i]->InitLocalizable(Point(offset.x, (GetCharHeight() + m_gapBetLines) * i + offset.y) + GetPosition(), 0, this);
 		m_lines[i]->InitTextual(GetColor(), IsItalic(), GetCharHeight(), GetCharWidh(), GetCharInterval());
 		ss.str("");
 	}
@@ -48,12 +48,12 @@ void ListBox::InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable
 		m_upArrow = new Button();
 		ss << m_name << "_uparrow";
 		m_upArrow->InitControl(ss.str());
-		m_upArrow->InitLocalizable(Point(GetSize().w - 30, 30), Size(30, 20), uptext, this);
+		m_upArrow->InitLocalizable(Point(GetSize().w - 30, 30) + GetPosition(), Size(30, 20), uptext, GetParent());
 		ss.str("");
 		m_downArrow = new Button();
 		ss << m_name << "_downarrow";
 		m_downArrow->InitControl(ss.str());
-		m_downArrow->InitLocalizable(Point(GetSize().w - 30, 0), Size(30, 20), downtext, this);
+		m_downArrow->InitLocalizable(Point(GetSize().w - 30, 0) + GetPosition(), Size(30, 20), downtext, GetParent());
 		ss.str("");
 		// Events
 		m_upArrow->OnClick.Attach(this, &ListBox::ScrollUp);

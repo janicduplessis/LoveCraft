@@ -6,7 +6,6 @@
 
 GameInterface::GameInterface() : Interface()
 {
-
 }
 
 GameInterface::~GameInterface()
@@ -106,30 +105,17 @@ void GameInterface::TextUpdate(const ValuesGameInterface& val)
 	lbl_plrExp->SetMsg(ss.str());
 	ss.str("");
 	//Niveau
-	ss << val.Character->Level();
-	lbl_playerLevel->SetMsg(ss.str());
-	ss.str("");
+	lbl_playerLevel->SetVariableMsg(val.Character->Level());
 	//Position
-	ss << "Position :     ( " << std::setprecision(4) << val.Player->Position().x << ", " << std::setprecision(4) <<
-		val.Player->Position().y << ", " << std::setprecision(4) << val.Player->Position().z << " )";
-	lbl_plrPos->SetMsg(ss.str());
-	ss.str("");
+	lbl_plrPos->SetVariableMsg(val.Player->Position());
 	//Vitesse
-	ss << "Vitesse :      " << val.Player->Speed();
-	lbl_plrSpd->SetMsg(ss.str());
-	ss.str("");
+	lbl_plrSpd->SetVariableMsg(val.Player->Speed());
 	//Accélération
-	ss << "Acceleration : " << val.Player->Acceleration();
-	lbl_plrAcc->SetMsg(ss.str());
-	ss.str("");
+	lbl_plrAcc->SetVariableMsg(val.Player->Acceleration());
 	//Psotion souris
-	ss << "Pos. Souris :  " << "( " << val.Mousepos.x << ", " << val.Mousepos.y << " )";
-	lbl_mousePos->SetMsg(ss.str());
-	ss.str("");
+	lbl_mousePos->SetVariableMsg(val.Mousepos);
 	//FPS
-	ss << "Fps :          " << std::setprecision(2) << val.Fps;
-	lbl_FPS->SetMsg(ss.str());
-	ss.str("");
+	lbl_FPS->SetVariableMsg(val.Fps);
 	//Heure
 	time_t currentTime;
 	time (&currentTime);
@@ -137,7 +123,7 @@ void GameInterface::TextUpdate(const ValuesGameInterface& val)
 	localtime_s(&ptm, &currentTime);
 	ss << std::setfill('0');
 	ss << std::setw(2) << ptm.tm_hour << ":" << std::setw(2) << ptm.tm_min;
-	lbl_time->SetMsg(ss.str());
+	lbl_time->SetVariableMsg(ss.str());
 	ss.str("");
 }
 
@@ -156,43 +142,40 @@ void GameInterface::Init(const ValuesGameInterface& val)
 	pnl_playscreen->InitLocalizable(Point(INTERFACE_SIDE_LEFT_WIDTH, INTERFACE_BOTTOM_HEIGHT),
 		Size(pnl_screen->GetSize().w - INTERFACE_SIDE_LEFT_WIDTH - INTERFACE_SIDE_RIGHT_WIDTH, 
 		pnl_screen->GetSize().h - INTERFACE_BOTTOM_HEIGHT - INTERFACE_TOP_HEIGHT), 0, pnl_screen);
-	pnl_playscreen->InitContainer(PNL_PLAYSCREEN_CONTROLS_NBR);
-	pnl_screen->AddControl(pnl_playscreen);
 
 #pragma region Enfants de Playscreen
 
 	// Informations
 	lbx_infos = new ListBox();
 	lbx_infos->InitControl("lb_infos");
-	lbx_infos->InitLocalizable(Point(5, pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 6 - 26 * (2 + 12)), Size(), 0, pnl_playscreen);
-	lbx_infos->InitTextual(val.FontTextures[TEXTCOLOR_RED], false, 12.f, 12.f, 0.5f);
+	lbx_infos->InitLocalizable(Point(pnl_playscreen->GetSize().w - 250, pnl_playscreen->GetSize().h - 64 - 26 * (2 + 15)), Size(), 0, pnl_playscreen);
+	lbx_infos->InitTextual(val.FontTextures[TEXTCOLOR_RED], false, 15.f, 15.f, 0.5f);
 	lbx_infos->InitListBox(26, 2, Point(), false);
-	pnl_playscreen->AddControl(lbx_infos);
 	lbx_infos->AddLine("Controles Mouvements");
-	lbx_infos->AddLine("Avancer:           W");
-	lbx_infos->AddLine("Reculer:           S");
-	lbx_infos->AddLine("Droite:            D");
-	lbx_infos->AddLine("Gauche:            A");
-	lbx_infos->AddLine("Sauter:            Espace");
-	lbx_infos->AddLine("Marcher:           Ctrl");
-	lbx_infos->AddLine("Se pencher:        C");
-	lbx_infos->AddLine("Courir:            Shift");
+	lbx_infos->AddLine("Avancer:                    W");
+	lbx_infos->AddLine("Reculer:                    S");
+	lbx_infos->AddLine("Droite:                     D");
+	lbx_infos->AddLine("Gauche:                     A");
+	lbx_infos->AddLine("Sauter:                     Espace");
+	lbx_infos->AddLine("Marcher:                    Ctrl");
+	lbx_infos->AddLine("Se pencher:                 C");
+	lbx_infos->AddLine("Courir:                     Shift");
 	lbx_infos->AddLine("");
 	lbx_infos->AddLine("Controles Debug");
-	lbx_infos->AddLine("Tirer:             1");
-	lbx_infos->AddLine("Cochon:            2");
-	lbx_infos->AddLine("Teleporter:        6");
-	lbx_infos->AddLine("Remplir Vie:       7");
-	lbx_infos->AddLine("Remplir Energie:   8");
-	lbx_infos->AddLine("Augmenter Exp:     P");
+	lbx_infos->AddLine("Tirer:                      1");
+	lbx_infos->AddLine("Cochon:                     2");
+	lbx_infos->AddLine("Teleporter:                 6");
+	lbx_infos->AddLine("Remplir Vie:                7");
+	lbx_infos->AddLine("Remplir Energie:            8");
+	lbx_infos->AddLine("Augmenter Exp:              P");
 	lbx_infos->AddLine("");
 	lbx_infos->AddLine("Options");
-	lbx_infos->AddLine("Wireframe:         Y");
-	lbx_infos->AddLine("Music On/off       O");
-	lbx_infos->AddLine("Music Next         M");
-	lbx_infos->AddLine("Aff/Cach Infos:    F9");
-	//lbx_infos->AddLine("Fullscreen         F10");
-	lbx_infos->AddLine("Quitter            Esc");
+	lbx_infos->AddLine("Wireframe:                  Y");
+	lbx_infos->AddLine("Music On/off                O");
+	lbx_infos->AddLine("Music Next                  M");
+	lbx_infos->AddLine("Aff/Cach Infos:             F9");
+	//lbx_infos->AddLine("Fullscreen                  F10");
+	lbx_infos->AddLine("Quitter                     Esc");
 
 	//Fenetre de console
 	lbx_console = new ListBox();
@@ -202,26 +185,22 @@ void GameInterface::Init(const ValuesGameInterface& val)
 	lbx_console->InitTextual(THEME_CONSOLE);
 	lbx_console->InitListBox(LB_CONSOLE_LINE_NUMBER, LB_CONSOLE_LINE_GAP, Point(LB_CONSOLE_BODER_OFFSET_S, LB_CONSOLE_BODER_OFFSET_B),
 		true, val.UITextures[CUSTIMAGE_ARROWBUTTON_UP], val.UITextures[CUSTIMAGE_ARROWBUTTON_DOWN]);
-	pnl_playscreen->AddControl(lbx_console);
 	Info::Get().SetConsole(lbx_console);
 	//Texbox de la console
 	txb_console = new Textbox();
 	txb_console->InitControl(TXB_CONSOLE_NAME);
 	txb_console->InitLocalizable(Point(pnl_playscreen->GetSize().w - 64 - LB_CONSOLE_SIZE_W, 0),
-		Size(TXB_CONSOLE_SIZE_W, 16), val.UITextures[CUSTIMAGE_CONSOLE_TEXTBOX_BACK], pnl_playscreen);
+		Size(TXB_CONSOLE_SIZE_W, 40), val.UITextures[CUSTIMAGE_CONSOLE_TEXTBOX_BACK], pnl_playscreen);
 	txb_console->InitTextual(THEME_CONSOLE);
 	txb_console->SetDocking(TEXTDOCK_MIDDLELEFT);
 	txb_console->SetColor(val.FontTextures[TEXTCOLOR_WHITE]);
-	txb_console->SetOffset(Point(TXB_CONSOLE_OFFSET_X, TXB_CONSOLE_OFFSET_Y));
-	pnl_playscreen->AddControl(txb_console);
+	txb_console->SetOffset(Point(TXB_CONSOLE_OFFSET_X, 0));
 	txb_console->Hide();
 	// Frame portrait
 	pnl_portrait = new Panel();
 	pnl_portrait->InitControl(PNL_PORTRAIT_NAME);
 	pnl_portrait->InitLocalizable(Point(PNL_PORTRAIT_POSITION_X, PNL_PORTRAIT_POSITION_Y),
 		Size(PNL_PORTRAIT_SIZE_W, PNL_PORTRAIT_SIZE_H), val.UITextures[CUSTIMAGE_PORTRAIT_FRAME], pnl_playscreen);
-	pnl_portrait->InitContainer(PNL_PORTRAIT_CONTROLS_NBR);
-	pnl_playscreen->AddControl(pnl_portrait);
 
 #pragma region Enfants pnl portrait
 
@@ -231,74 +210,61 @@ void GameInterface::Init(const ValuesGameInterface& val)
 	pgb_health->InitLocalizable(Point(PGB_HEALTH_POSITION_X, PGB_HEALTH_POSITION_Y),
 		Size(PGB_HEALTH_SIZE_W, PGB_HEALTH_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_HEALTH_BACK], pnl_portrait);
 	pgb_health->Init(ProgressBar::BARMODE_HORIZONTAL_LTR, val.UITextures[CUSTIMAGE_PGBTEXT_HEALTH], PGB_HEALTH_BORDER_SIZE);
-	pnl_portrait->AddControl(pgb_health);
 	// Barre de mana
 	pgb_mana = new ProgressBar();
 	pgb_mana->InitControl(PGB_MANA_NAME);
 	pgb_mana->InitLocalizable(Point(PGB_MANA_POSITION_X, PGB_MANA_POSITION_Y),
 		Size(PGB_MANA_SIZE_W, PGB_MANA_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_MANA_BACK], pnl_portrait);
 	pgb_mana->Init(ProgressBar::BARMODE_HORIZONTAL_LTR, val.UITextures[CUSTIMAGE_PGBTEXT_MANA], PGB_MANA_BORDER_SIZE);
-	pnl_portrait->AddControl(pgb_mana);
 	// Barre d'expérience
 	pgb_exp = new ProgressBar();
 	pgb_exp->InitControl(PGB_EXP_NAME);
 	pgb_exp->InitLocalizable(Point(PGB_EXP_POSITION_X, PGB_EXP_POSITION_Y),
 		Size(PGB_EXP_SIZE_W, PGB_EXP_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_EXP_BACK], pnl_portrait);
 	pgb_exp->Init(ProgressBar::BARMODE_HORIZONTAL_LTR, val.UITextures[CUSTIMAGE_PGBTEXT_EXP], PGB_EXP_BORDER_SIZE);
-	pnl_portrait->AddControl(pgb_exp);
 	// Label de vie
 	lbl_plrHealth = new Label();
 	lbl_plrHealth->InitControl(LBL_HEALTH_NAME);
 	lbl_plrHealth->InitLocalizable(Point(LBL_HEALTH_POSITION_X, LBL_HEALTH_POSITION_Y), pnl_portrait);
 	lbl_plrHealth->InitTextual(THEME_PLAYER_VALUES);
 	lbl_plrHealth->SetColor(val.FontTextures[TEXTCOLOR_RED]);
-	pnl_portrait->AddControl(lbl_plrHealth);
 	// Label de mana
 	lbl_plrMana = new Label();
 	lbl_plrMana->InitControl(LBL_MANA_NAME);
 	lbl_plrMana->InitLocalizable(Point(LBL_MANA_POSITION_X, LBL_MANA_POSITION_Y), pnl_portrait);
 	lbl_plrMana->InitTextual(THEME_PLAYER_VALUES);
 	lbl_plrMana->SetColor(val.FontTextures[TEXTCOLOR_BLUE]);
-	pnl_portrait->AddControl(lbl_plrMana);
 	// Label d'exp
 	lbl_plrExp = new Label();
 	lbl_plrExp->InitControl(LBL_EXP_NAME);
 	lbl_plrExp->InitLocalizable(Point(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), pnl_portrait);
 	lbl_plrExp->InitTextual(THEME_PLAYER_VALUES);
 	lbl_plrExp->SetColor(val.FontTextures[TEXTCOLOR_YELLOW]);
-	pnl_portrait->AddControl(lbl_plrExp);
 
 	// Image du joueur
 	pnl_playerImage = new PictureBox();
 	pnl_playerImage->InitControl(PB_PORTRAIT_NAME);
 	pnl_playerImage->InitLocalizable(Point(PB_PORTRAIT_POSITION_X, PB_PORTRAIT_POSITION_Y),
 		Size(PB_PORTRAIT_SIZE_W, PB_PORTRAIT_SIZE_H), val.UITextures[CUSTIMAGE_PORTRAIT_MALE], pnl_portrait);
-	pnl_portrait->AddControl(pnl_playerImage);
-
-#pragma region Enfants de pnl_playerImage
 
 	lbl_playerLevel = new Label();
 	lbl_playerLevel->InitControl(LBL_PLAYER_LEVEL_NAME);
-	lbl_playerLevel->InitLocalizable(Point(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), pnl_playerImage);
+	lbl_playerLevel->InitLocalizable(Point(LBL_EXP_POSITION_X, LBL_EXP_POSITION_Y), pnl_portrait);
 	lbl_playerLevel->InitTextual(val.FontTextures[TEXTCOLOR_YELLOW], false, LBL_PLAYER_LEVEL_H, LBL_PLAYER_LEVEL_W, LBL_PLAYER_LEVEL_I);
-	lbl_playerLevel->Init(TEXTDOCK_TOPLEFT, Point(20, -5));
-	pnl_portrait->AddControl(lbl_playerLevel);
-
-#pragma endregion
+	lbl_playerLevel->Init(TEXTDOCK_TOPLEFT, Point(0, -5));
+	lbl_playerLevel->SetMsg("&var");
 
 	lbl_crntBT = new Label();
 	lbl_crntBT->InitControl("lbl_blocinfo");
-	lbl_crntBT->InitLocalizable(pnl_playerImage->GetPosition() + Point(0, 200), pnl_playscreen);
+	lbl_crntBT->InitLocalizable(pnl_playerImage->GetPosition() + Point(50, pnl_playerImage->GetSize().h + 20), pnl_playscreen);
 	lbl_crntBT->InitTextual(val.FontTextures[TEXTCOLOR_BLUE], false, 
 		LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
 	lbl_crntBT->SetMsg("Bloc : ");
-	pnl_playscreen->AddControl(lbl_crntBT);
 
 	pb_crntBT = new PictureBox();
 	pb_crntBT->InitControl("pbcurbloc");
 	pb_crntBT->InitLocalizable(Point(lbl_crntBT->GetPosition().x + 84, 
-		lbl_crntBT->GetPosition().y), Size(40,40), 0, pnl_playscreen);
-	pnl_playscreen->AddControl(pb_crntBT);
+		lbl_crntBT->GetPosition().y), Size(60,60), 0, pnl_playscreen);
 
 #pragma endregion
 
@@ -308,13 +274,11 @@ void GameInterface::Init(const ValuesGameInterface& val)
 	pgb_energy->InitLocalizable(Point(PGB_ENERGY_POSITION_X, PGB_ENERGY_POSITION_Y),
 		Size(PGB_ENERGY_SIZE_W, PGB_ENERGY_SIZE_H), val.UITextures[CUSTIMAGE_PGBTEXT_ENERGY_BACK], pnl_playscreen);
 	pgb_energy->Init(ProgressBar::BARMODE_VERTICAL_DTU, val.UITextures[CUSTIMAGE_PGBTEXT_ENERGY], PGB_ENERGY_BORDER_SIZE);
-	pnl_playscreen->AddControl(pgb_energy);
 	//Label d'énergie
 	lbl_plrEnergy = new Label();
 	lbl_plrEnergy->InitControl(LBL_ENERGY_NAME);
 	lbl_plrEnergy->InitLocalizable(Point(LBL_ENERGY_POSITION_X, LBL_ENERGY_POSITION_Y), pnl_playscreen);
 	lbl_plrEnergy->InitTextual(val.FontTextures[TEXTCOLOR_GREEN], LBL_ENERGY_ITALIC, LBL_ENERGY_CHAR_H, LBL_ENERGY_CHAR_W, LBL_ENERGY_CHAR_I);
-	pnl_playscreen->AddControl(lbl_plrEnergy);
 
 #pragma region Controles de debug
 
@@ -323,31 +287,37 @@ void GameInterface::Init(const ValuesGameInterface& val)
 	lbl_plrPos->InitControl("pos");
 	lbl_plrPos->InitLocalizable(Point(5, pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H), pnl_playscreen);
 	lbl_plrPos->InitTextual(val.FontTextures[TEXTCOLOR_GREEN], LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
-	pnl_playscreen->AddControl(lbl_plrPos);
+	lbl_plrPos->SetMsg("Position:         &var");
 	//Label Vitesse
 	lbl_plrSpd = new Label();
 	lbl_plrSpd->InitControl("spd");
 	lbl_plrSpd->InitLocalizable(Point(5, pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 2), pnl_playscreen);
 	lbl_plrSpd->InitTextual(val.FontTextures[TEXTCOLOR_BLUE], LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
-	pnl_playscreen->AddControl(lbl_plrSpd);
+	lbl_plrSpd->SetMsg("Vitesse:          &var");
 	//Label Acceleration
 	lbl_plrAcc = new Label();
 	lbl_plrAcc->InitControl("acc");
 	lbl_plrAcc->InitLocalizable(Point(5, pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 3), pnl_playscreen);
 	lbl_plrAcc->InitTextual(val.FontTextures[TEXTCOLOR_RED], LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
-	pnl_playscreen->AddControl(lbl_plrAcc);
+	lbl_plrAcc->SetMsg("Acceleration:     &var");
 	//Label mouse position
 	lbl_mousePos = new Label();
 	lbl_mousePos->InitControl("mpos");
 	lbl_mousePos->InitLocalizable(Point(5, pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 4), pnl_playscreen);
 	lbl_mousePos->InitTextual(val.FontTextures[TEXTCOLOR_WHITE], LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
-	pnl_playscreen->AddControl(lbl_mousePos);
+	lbl_mousePos->SetMsg("Pos. souris:      &var");
 	//Label FPS
 	lbl_FPS = new Label();
 	lbl_FPS->InitControl("fps");
 	lbl_FPS->InitLocalizable(Point(5, pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 5), pnl_playscreen);
 	lbl_FPS->InitTextual(val.FontTextures[TEXTCOLOR_YELLOW], LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
-	pnl_playscreen->AddControl(lbl_FPS);
+	lbl_FPS->SetMsg("                  &var FPS");
+
+	m_controlmousetest = new Label();
+	m_controlmousetest->InitControl("lbl_controltest");
+	m_controlmousetest->InitLocalizable(Point(5, pnl_playscreen->GetSize().h - LBL_GENERIC_CHAR_H * 6), pnl_playscreen);
+	m_controlmousetest->InitTextual(val.FontTextures[TEXTCOLOR_YELLOW], LBL_GENERIC_ITALIC, LBL_GENERIC_CHAR_H, LBL_GENERIC_CHAR_W, LBL_GENERIC_CHAR_I);
+	m_controlmousetest->SetMsg("Vous pointez sur: &var");
 
 #pragma endregion
 
@@ -356,8 +326,6 @@ void GameInterface::Init(const ValuesGameInterface& val)
 	pnl_time->InitControl("clock");
 	pnl_time->InitLocalizable(Point(pnl_playscreen->GetSize().w - 128, pnl_playscreen->GetSize().h - 64), 
 		Size(128, 64), val.UITextures[CUSTIMAGE_CLOCK_BG], pnl_playscreen);
-	pnl_time->InitContainer(1);
-	pnl_playscreen->AddControl(pnl_time);
 
 #pragma region Enfants de pnl_time
 
@@ -366,7 +334,7 @@ void GameInterface::Init(const ValuesGameInterface& val)
 	lbl_time->InitLocalizable(Point(), pnl_time);
 	lbl_time->InitTextual(THEME_DEFAULT);
 	lbl_time->Init(TEXTDOCK_MIDDLECENTER);
-	pnl_time->AddControl(lbl_time);
+	lbl_time->SetMsg("&var");
 
 #pragma endregion
 
@@ -416,30 +384,45 @@ void GameInterface::Render()
 	pnl_playscreen->Render();
 }
 
+void GameInterface::Show()
+{
+	pnl_screen->Show();
+}
+
+void GameInterface::Hide()
+{
+	pnl_screen->Hide();
+}
+
+bool GameInterface::MouseMoveEvents(int x, int y)
+{
+	m_controlmousetest->SetVariableMsg(pnl_playscreen->GetTopControl(x, y));
+	return false;
+}
+
 bool GameInterface::MousePressEvent( const MOUSE_BUTTON &button, int x, int y )
 {
-	Point& pos = lbx_console->AbsolutePosition();
-	Size& size = lbx_console->GetSize();
-	Size& play = pnl_screen->GetSize();
 	switch (button)
 	{
 	case MOUSE_BUTTON_RIGHT:
 		break;
 
 	case MOUSE_BUTTON_LEFT:
-		if (lbx_console->MousePressEvents(x, pnl_screen->GetSize().h - y))
+		if (lbx_console->MousePressEvents(x, y))
 			return true;
 		break;
 
 	case MOUSE_BUTTON_WHEEL_UP:
-		if (x >= pos.x && x <= pos.x + size.w && play.h - y <= pos.y + size.w && play.h - y >= pos.y) {
+		if (lbx_console->IsWithinRange(x, y))
+		{
 			lbx_console->Scroll(1);
 			return true;
 		} 
 		break;
 
 	case MOUSE_BUTTON_WHEEL_DOWN:
-		if (x >= pos.x && x <= pos.x + size.w && play.h - y <= pos.y + size.w && play.h - y >= pos.y) {
+		if (lbx_console->IsWithinRange(x, y))
+		{
 			lbx_console->Scroll(-1);
 			return true;
 		} 
@@ -456,13 +439,13 @@ bool GameInterface::MouseRleaseEvent( const MOUSE_BUTTON &button, int x, int y )
 		break;
 
 	case MOUSE_BUTTON_LEFT:
-		lbx_console->MouseReleaseEvents(x,y);
+		lbx_console->MouseReleaseEvents(x, y);
 		break;
 	}
 	return false;
 }
 
-void GameInterface::ConsoleWriteLine( const std::string& line )
+void GameInterface::ConsoleWriteLine( const string& line )
 {
 	lbx_console->AddLine(line);
 }

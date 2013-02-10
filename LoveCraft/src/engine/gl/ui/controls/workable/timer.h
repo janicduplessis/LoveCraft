@@ -9,7 +9,7 @@ class Timer : public Workable
 public:
 	Timer();
 	virtual ~Timer();
-	virtual void Init(float intervaltime);
+	virtual void Init(uint16 intervaltime);
 
 	Event<void, Timer*> OnTick;
 
@@ -19,15 +19,21 @@ public:
 	virtual uint16 Stop();
 	virtual void Reset();
 
-	virtual void SetIntervalTime(float intervaltime);
-	virtual void AddIntervalTime(float value);
-	virtual float GetIntervalTime() const;
-	virtual bool IsIntervalTime(float intervaltime);
+	virtual void SetIntervalTime(int16 intervaltime);
+	virtual void AddIntervalTime(int16 value);
+	virtual uint16 GetIntervalTime() const;
+	virtual bool IsIntervalTime(uint16 intervaltime);
 
 	virtual uint16 GetLaps() const;
 	virtual float GetTime() const;
+
 protected:
-	float m_interval;
+	virtual void Enable();
+	virtual void Disable();
+
+protected:
+	uint16 m_interval;
+	float m_intervalf;
 	uint16 m_laps;
 	float m_time;
 };

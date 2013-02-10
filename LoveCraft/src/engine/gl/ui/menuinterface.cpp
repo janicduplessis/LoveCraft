@@ -23,8 +23,6 @@ void MenuInterface::Init(const ValuesInterface& val)
 	pnl_main->InitControl(MENU_PANEL_NAME);
 	pnl_main->InitLocalizable(Point(val.Width / 2 - MENU_PANEL_SIZE_X / 2, val.Height / 2 - MENU_PANEL_SIZE_Y / 2), 
 		Size(MENU_PANEL_SIZE_X, MENU_PANEL_SIZE_Y), val.UITextures[CUSTIMAGE_MENU_MAIN_WINDOW], pnl_screen);
-	pnl_main->InitContainer(2);
-	pnl_screen->AddControl(pnl_main);
 
 	int controlWidth = pnl_main->GetSize().w * 0.8f;
 	int controlPosX = pnl_main->GetSize().w / 2 - controlWidth / 2;
@@ -34,15 +32,12 @@ void MenuInterface::Init(const ValuesInterface& val)
 	pb_logo->InitControl("pb_logo");
 	pb_logo->InitLocalizable(Point(controlPosX, pnl_main->GetSize().h - MENU_LOGO_SIZE_Y - controlPosX),
 		Size(controlWidth, MENU_LOGO_SIZE_Y), val.UITextures[CUSTIMAGE_MENU_LOGO], pnl_main);
-	pnl_main->AddControl(pb_logo);
 
 	//Panneau de controle utilisateur
 	pnl_controls = new Panel();
 	pnl_controls->InitControl("menu_controls");
 	pnl_controls->InitLocalizable(Point(controlPosX, controlPosX),
 		Size(controlWidth, MENU_CONTROLS_SIZE_Y), val.UITextures[CUSTIMAGE_MENU_MAIN_WINDOW], pnl_main);
-	pnl_controls->InitContainer(3);
-	pnl_main->AddControl(pnl_controls);
 
 	int buttonWidth = pnl_controls->GetSize().w * 0.8f;
 	int buttonPosX = pnl_controls->GetSize().w / 2 - buttonWidth / 2;
@@ -54,7 +49,6 @@ void MenuInterface::Init(const ValuesInterface& val)
 		Size(buttonWidth, MENU_BUTTONS_SIZE_Y), val.UITextures[CUSTIMAGE_MENU_BUTTON_BACK], pnl_controls);
 	btn_debugStart->InitTextual(THEME_MAINMENU);
 	btn_debugStart->SetMsg(STRING_BUTTON_NORM_START);
-	pnl_controls->AddControl(btn_debugStart);
 
 	//Button demarrer debug
 	btn_normStart = new Button();
@@ -63,7 +57,6 @@ void MenuInterface::Init(const ValuesInterface& val)
 		Size(buttonWidth, MENU_BUTTONS_SIZE_Y), val.UITextures[CUSTIMAGE_MENU_BUTTON_BACK], pnl_controls);
 	btn_normStart->InitTextual(THEME_MAINMENU);
 	btn_normStart->SetMsg(STRING_BUTTON_DEBUG_START);
-	pnl_controls->AddControl(btn_normStart);
 
 	//Button fermer
 	btn_close = new Button();
@@ -72,14 +65,36 @@ void MenuInterface::Init(const ValuesInterface& val)
 		Size(buttonWidth, MENU_BUTTONS_SIZE_Y), val.UITextures[CUSTIMAGE_MENU_BUTTON_BACK], pnl_controls);
 	btn_close->InitTextual(THEME_MAINMENU);
 	btn_close->SetMsg(STRING_BUTTON_CLOSE);
-	pnl_controls->AddControl(btn_close);
 
 	//Loading screen
 	pnl_loading = new Panel();
 	pnl_loading->InitControl("loading");
 	pnl_loading->InitLocalizable(Point(), Size(val.Width, val.Height), val.UITextures[CUSTIMAGE_LOADING_SCREEN], pnl_screen);
 	pnl_loading->Hide();
-	pnl_screen->AddControl(pnl_loading);
+
+
+
+	m_mousepostest = new Label();
+	m_mousepostest->InitControl("mousetest");
+	m_mousepostest->InitLocalizable(Point(50, 250), pnl_main);
+	m_mousepostest->SetCharHeight(24.f);
+	m_mousepostest->SetCharWidth(14.f);
+	m_mousepostest->SetCharInterval(0.5f);
+	m_mousepostest->SetOffset(Point(0, 70));
+	m_mousepostest->SetDocking(TEXTDOCK_MIDDLECENTER);
+	m_mousepostest->SetColor(val.FontTextures[TEXTCOLOR_BLUE]);
+	m_mousepostest->SetMsg("Est dans le panel principal: &var");
+
+	m_controlmousetest = new Label();
+	m_controlmousetest->InitControl("controltest");
+	m_controlmousetest->InitLocalizable(Point(50, 250), pnl_main);
+	m_controlmousetest->SetCharHeight(24.f);
+	m_controlmousetest->SetCharWidth(14.f);
+	m_controlmousetest->SetCharInterval(0.5f);
+	m_controlmousetest->SetOffset(Point(0, 100));
+	m_controlmousetest->SetDocking(TEXTDOCK_MIDDLECENTER);
+	m_controlmousetest->SetColor(val.FontTextures[TEXTCOLOR_BLUE]);
+	m_controlmousetest->SetMsg("Vous pointez sur: &var");
 
 	m_loaded = true;
 }
@@ -102,4 +117,75 @@ void MenuInterface::DeInit()
 void MenuInterface::Render()
 {
 	pnl_screen->Render();
+}
+
+void MenuInterface::Show()
+{
+	pnl_main->Show();
+}
+
+void MenuInterface::Hide()
+{
+	pnl_main->Hide();
+}
+
+bool MenuInterface::MouseMoveEvents(int x, int y)
+{
+	m_mousepostest->SetVariableMsg(pnl_main->MouseMoveEvents(x, y));
+	m_controlmousetest->SetVariableMsg(pnl_screen->GetTopControl(x, y));
+	if (pnl_main->MouseMoveEvents(x, y))
+		pb_logo->Show();
+	else pb_logo->Hide();
+	return false;
+}
+
+bool MenuInterface::MousePressEvents(const MOUSE_BUTTON &button, int x, int y)
+{
+	switch (button)
+	{
+	case MOUSE_BUTTON_RIGHT:
+		break;
+
+	case MOUSE_BUTTON_LEFT:
+		if (btn_close->MousePressEvents(x, y))
+			return true;
+		if (btn_normStart->MousePressEvents(x, y))
+			return true;
+		if (btn_debugStart->MousePressEvents(x, y))
+			return true;
+		break;
+
+	case MOUSE_BUTTON_WHEEL_UP:
+		break;
+
+	case MOUSE_BUTTON_WHEEL_DOWN:
+		break;
+	}
+	return false;
+
+}
+
+bool MenuInterface::MouseReleaseEvents(const MOUSE_BUTTON &button, int x, int y)
+{
+	switch (button)
+	{
+	case MOUSE_BUTTON_RIGHT:
+		break;
+
+	case MOUSE_BUTTON_LEFT:
+		if (btn_close->MouseReleaseEvents(x, y))
+			return true;
+		if (btn_normStart->MouseReleaseEvents(x, y))
+			return true;
+		if (btn_debugStart->MouseReleaseEvents(x, y))
+			return true;
+		break;
+
+	case MOUSE_BUTTON_WHEEL_UP:
+		break;
+
+	case MOUSE_BUTTON_WHEEL_DOWN:
+		break;
+	}
+	return false;
 }

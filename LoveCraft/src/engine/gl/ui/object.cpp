@@ -1,7 +1,7 @@
 #include "object.h"
 
 
-Object::Object() : m_name("")
+Object::Object() : m_name("noname")
 {
 }
 

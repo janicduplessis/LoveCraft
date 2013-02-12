@@ -217,6 +217,15 @@
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\tooltip.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\gl\cubemaptexture.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\skyboxshader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\skybox.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\util\array.h">
@@ -456,6 +465,15 @@
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\tooltip.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\gl\cubemaptexture.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\skyboxshader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\skybox.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\gl\shaders\billboardshader.frag">
@@ -491,6 +509,12 @@
     </None>
     <None Include="src\engine\gl\shaders\psupdateshader.geom" />
     <None Include="src\engine\gl\shaders\cubeshader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="src\engine\gl\shaders\skyboxshader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="src\engine\gl\shaders\skyboxshader.frag">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

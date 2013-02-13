@@ -6,6 +6,7 @@
 
 #define INVALID_UNIFORM_LOCATION 0xFFFFFFFF
 
+
 class Shader
 {
 public:    
@@ -16,10 +17,7 @@ public:
 	void Use() const;
 
 	bool Init();
-	bool AddShader(GLenum shaderType, const std::string& file, bool verbose = false);
-	bool Link();
 
-	GLuint BindUniform(const std::string& name) const;
 	void UpdateIntUniform(GLint name, GLint value) const;
 	void UpdateFloatUniform(GLint name, GLfloat value) const;
 
@@ -28,14 +26,15 @@ public:
 	static void Disable();
 
 protected:
+	bool AddShader(GLenum shaderType, const std::string& file, bool verbose = false);
+	bool Link();
+	GLuint BindUniform(const std::string& name) const;
 	bool CheckShaderError(GLenum shader, bool verbose);
 	bool CheckProgramError(GLenum program, bool showWarning, bool verbose);
 	std::string ShaderType2ShaderName(GLuint Type);
 
 protected:
 	GLenum m_program;
-
-private:
 	typedef std::list<GLuint> ShaderObjList;
 	ShaderObjList m_shaderObjList;
 };

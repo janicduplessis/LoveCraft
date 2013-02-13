@@ -62,7 +62,7 @@ struct Size
 #define CHUNK_SIZE_Y 128
 #define CHUNK_SIZE_Z 16
 
-#define VIEW_DISTANCE				64
+#define VIEW_DISTANCE				32
 #define MAX_SELECTION_DISTANCE		10
 
 // Options
@@ -183,6 +183,7 @@ enum MOUSE_BUTTON {
 #define MODEL_PATH_HUMANS		MODEL_PATH "humanlike/"
 #define SOUND_PATH				"../lovecraft/media/sound/"
 #define SOUND_FOOT_PATH			SOUND_PATH "footsteps/"
+#define SKYBOX_PATH				"../lovecraft/media/skyboxes"
 
 //Network
 #define NW_PORT				10512

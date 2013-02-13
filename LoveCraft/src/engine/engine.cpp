@@ -499,6 +499,19 @@ void Engine::UpdateGame(float elapsedTime)
 
 #pragma endregion
 
+	DirectionalLight dirLight;
+	dirLight.AmbientIntensity = 0.5;
+	dirLight.Color = Vector3f(1.f, 1.f, 1.f);
+	dirLight.DiffuseIntensity = 0.5;
+	Quaternion rot;
+	rot.FromAxis(gameTime / 5, Vector3f(0, 1, 0));
+	rot.Normalise();
+	dirLight.Direction = (rot * Vector3f(1, 0.5, 0.2)).Normalise();
+
+	m_lightingShader.Use();
+	m_lightingShader.SetDirectionalLight(dirLight);
+	Shader::Disable();
+
 	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_gameUI.Update(m_valuesGameInterface);
 	//m_skybox->Update(m_player->Position());
@@ -778,6 +791,7 @@ void Engine::RenderGame()
 	m_lightingShader.SetTextureUnitType(1);
 	m_lightingShader.SetWVP(m_mxWVP);
 	m_lightingShader.SetWorld(m_mxWorld);
+
 	m_mutex.lock();
 	int updated = 0;
 

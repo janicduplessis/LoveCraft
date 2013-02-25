@@ -6,7 +6,7 @@
 #include <util/vector3.h>
 #include <util/matrix4.h>
 
-#define MAX_POINT_LIGHTS 2
+#define MAX_POINT_LIGHTS 3
 
 /**
  * Structure de base d'une light
@@ -78,6 +78,7 @@ public:
 
 	// Point lights
 	void SetPointLights(unsigned int numLights, const PointLight* pLights);
+	void UpdatePointLight(unsigned int id, const PointLight& pLight);
 
 	// Proprétés du specular lighting
 	void SetMatSpecualarIntensity(float intensity);

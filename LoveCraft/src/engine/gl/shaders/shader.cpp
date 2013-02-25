@@ -76,6 +76,8 @@ bool Shader::AddShader(GLenum shaderType, const std::string& file, bool verbose)
 
 	glAttachShader(m_program, shader);
 	CHECK_GL_ERROR();
+
+	return true;
 }
 
 bool Shader::Link() {

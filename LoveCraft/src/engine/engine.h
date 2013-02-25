@@ -12,7 +12,7 @@
 #include "gl/shaders/shader.h"
 #include "gl/shaders/lightingshader.h"
 #include "gl/texturearray.h"
-//#include "gl/skybox.h"
+#include "gl/skybox.h"
 
 #include "player.h"
 #include "chunkloader.h"
@@ -164,6 +164,7 @@ private:
 	Texture** m_texturefontColor;
 	Texture m_texSpell;
 	Texture m_noNormalMap;
+	Texture m_normalMap;
 
 	Player* m_player;
 	Camera* m_camera;
@@ -177,7 +178,7 @@ private:
 	LightingShader m_lightingShader;
 
 	Array2d<Chunk*>* m_chunks;
-	//Skybox* m_skybox;
+	Skybox* m_skybox;
 
 	ValuesInterface m_valuesMenuInterface;
 	ValuesGameInterface m_valuesGameInterface;

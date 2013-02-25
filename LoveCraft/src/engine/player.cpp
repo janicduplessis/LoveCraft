@@ -19,7 +19,7 @@ Player::~Player()
 void Player::Init()
 {
 	m_model.LoadMesh(MODEL_PATH_HUMANS "boblampclean.md5mesh");
-	//m_model.Scale(Vector3f(.1f, 0.1f, 0.1f));
+	m_model.Scale(Vector3f(.1f, 0.1f, 0.1f));
 	//m_model.Translate(Vector3f(0, -1.05f, 0));
 	ResetPosition();
 }

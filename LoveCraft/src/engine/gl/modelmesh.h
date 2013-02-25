@@ -1,3 +1,6 @@
+#ifndef MODELMESH_H__
+#define MODELMESH_H__
+
 #include "define.h"
 #include "util/vector3.h"
 #include "util/vector2.h"
@@ -38,7 +41,7 @@ public:
 	ModelMesh();
 	~ModelMesh();
 
-	bool LoadMesh(const std::string& Filename);
+	bool LoadMesh(const std::string& Filename, bool flipUV = false);
 
 	void Translate( const Vector3f& trans );
 	void Scale( const Vector3f& scale );
@@ -80,3 +83,5 @@ private:
 	Vector3f m_scale;
 	Vector3f m_translation;
 };
+
+#endif

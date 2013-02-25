@@ -166,3 +166,14 @@ void LightingShader::SetNormalTextureUnit( unsigned int textureUnit )
 	//glUniform1i(m_arraySamplerLocation, textureUnit + 1);
 }
 
+void LightingShader::UpdatePointLight( unsigned int id, const PointLight& pLight )
+{
+	glUniform3f(m_pointLightsLocation[id].Color, pLight.Color.x, pLight.Color.y, pLight.Color.z);
+	glUniform1f(m_pointLightsLocation[id].AmbientIntensity, pLight.AmbientIntensity);
+	glUniform1f(m_pointLightsLocation[id].DiffuseIntensity, pLight.DiffuseIntensity);
+	glUniform3f(m_pointLightsLocation[id].Position, pLight.Position.x, pLight.Position.y, pLight.Position.z);
+	glUniform1f(m_pointLightsLocation[id].Atten.Constant, pLight.Attenuation.Constant);
+	glUniform1f(m_pointLightsLocation[id].Atten.Linear, pLight.Attenuation.Linear);
+	glUniform1f(m_pointLightsLocation[id].Atten.Exp, pLight.Attenuation.Exp);
+}
+

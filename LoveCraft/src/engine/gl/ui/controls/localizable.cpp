@@ -247,7 +247,7 @@ bool Localizable::MouseReleaseEvents(int x, int y)
 
 #pragma region Cursor position
 
-bool Localizable::IsWithinRange(int x, int y)
+bool Localizable::IsWithinRange(int x, int y) const
 {
 	Point& fstpos = AbsolutePosition();
 	Point& sndpos = Point(fstpos.x + GetSize().w, fstpos.y + GetSize().h);

@@ -61,7 +61,7 @@ public:
 	virtual bool KeyPressEvents(int keycode);
 	virtual bool KeyReleaseEvents(int keycode);
 
-	virtual bool IsWithinRange(int x, int y);
+	virtual bool IsWithinRange(int x, int y) const;
 
 protected:
 	virtual void DrawSquare();

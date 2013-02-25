@@ -63,17 +63,3 @@ Localizable* Container::GetTopControl(int x, int y)
 	}
 	return 0;
 }
-
-//
-//Array<Localizable*> Container::GetControlCollectionAt(int x, int y)
-//{
-//	Array<Localizable*> controls = Array<Localizable*>(1, 0);
-//	for (int i = 0; i < m_ctrlNbr; i++)
-//	{
-//		if (m_controls[i]->IsType(CTRLTYPE_PANEL))
-//			controls.Fuse(dynamic_cast<Container*>(m_controls[i])->GetControlCollectionAt(x, y));
-//		else
-//			controls.Add(m_controls[i]);
-//	}
-//	return controls;
-//}

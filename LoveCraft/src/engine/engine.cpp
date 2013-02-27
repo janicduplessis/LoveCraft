@@ -22,7 +22,7 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
 
-	//m_skybox = new Skybox();
+	m_skybox = new Skybox();
 
 	m_camera = new Camera;
 	Info::Get().StatusOn(Info::LSTATUS_CAMERA);
@@ -219,6 +219,7 @@ void Engine::GameInit()
 #pragma endregion
 
 	m_player->Init();
+	m_skybox->Init(SKYBOX_PATH, "sp3left.jpg", "sp3right.jpg", "sp3top.jpg", "sp3bot.jpg", "sp3back.jpg", "sp3front.jpg");
 
 #pragma region Initialisation des entites
 
@@ -254,14 +255,6 @@ void Engine::GameInit()
 #endif
 
 	Info::Get().StatusOn(Info::LSTATUS_MONSTERS);
-
-#pragma region Skybox
-
-	//m_shaderCube.Use();
-	//m_skybox->Init();
-	//Shader::Disable();
-
-#pragma endregion
 
 #pragma endregion
 
@@ -306,7 +299,8 @@ void Engine::LoadGlobalResource()
 
 #pragma endregion
 
-	m_noNormalMap.Load(TEXTURE_PATH "normal_map.jpg", true);
+	m_normalMap.Load(TEXTURE_PATH "normal_map.jpg", true);
+	m_noNormalMap.Load(TEXTURE_PATH "normal_up.jpg", true);
 
 #pragma region Boutons des spells
 
@@ -335,33 +329,36 @@ void Engine::LoadGlobalResource()
 		exit(1) ;
 	}
 	DirectionalLight dirLight;
-	dirLight.AmbientIntensity = 0.5;
+	dirLight.AmbientIntensity = 0.05;
 	dirLight.Color = Vector3f(1,1,1);
-	dirLight.DiffuseIntensity = 0.3;
+	dirLight.DiffuseIntensity = 0.05;
 	dirLight.Direction = Vector3f(0.3, -1, 0.5).Normalise();
 
-	PointLight* pointLights = new PointLight[2];
+	PointLight* pointLights = new PointLight[3];
 	PointLight& p1 = pointLights[0];
 	p1.Color = Vector3f(1,1,1);
 	p1.DiffuseIntensity = 0.5;
 	p1.Position = Vector3f(64,65,64);
 	p1.Attenuation.Linear = 0.1f;
+
 	PointLight& p2 = pointLights[1];
 	p2.Color = Vector3f(1,1,1);
 	p2.DiffuseIntensity = 0.5;
 	p2.Position = Vector3f(32,70,32);
 	p2.Attenuation.Linear = 0.1f;
 
+	PointLight& p3 = pointLights[2];
+
 	if (!m_lightingShader.Init())
 		std::cout << "Error initializing lighting shader" << std::endl;
 
 	m_lightingShader.Use();
 	m_lightingShader.SetDirectionalLight(dirLight);
-	m_lightingShader.SetMatSpecualarIntensity(0.5);
-	m_lightingShader.SetMatSpecularPower(16);
+	m_lightingShader.SetMatSpecualarIntensity(0);
+	m_lightingShader.SetMatSpecularPower(0);
 	m_lightingShader.SetColorTextureUnit(0);
 	m_lightingShader.SetNormalTextureUnit(2);
-	m_lightingShader.SetPointLights(2, pointLights);
+	m_lightingShader.SetPointLights(3, pointLights);
 
 	Shader::Disable();
 
@@ -420,22 +417,8 @@ void Engine::UpdateGame(float elapsedTime)
 
 #pragma endregion
 
-	DirectionalLight dirLight;
-	dirLight.AmbientIntensity = 0.5;
-	dirLight.Color = Vector3f(1.f, 1.f, 1.f);
-	dirLight.DiffuseIntensity = 0.5;
-	Quaternion rot;
-	rot.FromAxis(gameTime / 5, Vector3f(0, 1, 0));
-	rot.Normalise();
-	dirLight.Direction = (rot * Vector3f(1, 0.5, 0.2)).Normalise();
-
-	m_lightingShader.Use();
-	m_lightingShader.SetDirectionalLight(dirLight);
-	Shader::Disable();
-
 	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_gameUI.Update(m_valuesGameInterface);
-	//m_skybox->Update(m_player->Position());
 	m_chunkLoader.CheckPlayerPosition(m_player);
 
 #pragma region Calcul la position du joueur et de la camera
@@ -673,8 +656,28 @@ void Engine::RenderGame()
 	//std::cout << test.ToString() << std::endl;
 
 	// render le modele du player
-	m_noNormalMap.Bind(GL_TEXTURE2);
+	m_normalMap.Bind(GL_TEXTURE2);
 	m_lightingShader.Use();
+
+	// Update lights
+	PointLight p3;
+	p3.Color = Vector3f(1,140/255.f,0);
+	p3.DiffuseIntensity = 0.6;
+	p3.Attenuation.Exp = 0.05f;
+	p3.Attenuation.Linear = 0.2f;
+	p3.Attenuation.Constant = 0.1f;
+	Vector3f toLantern(2, 0, 0);
+	Quaternion rot;
+	rot.FromAxis(DEGTORAD(m_player->Rotation().y), Vector3f(0,1,0));
+	float toLanterLenght = toLantern.Lenght();
+	toLantern = rot * toLantern * toLanterLenght;
+	p3.Position = m_player->Position() + toLantern;
+	m_lightingShader.UpdatePointLight(2, p3);
+
+	// Setup player lighting
+	m_lightingShader.SetMatSpecualarIntensity(0.5);
+	m_lightingShader.SetMatSpecularPower(16);
+	m_lightingShader.SetColorTextureUnit(0);
 	m_lightingShader.SetTextureUnitType(0);
 	m_lightingShader.SetEyeWorldPos(m_camera->GetRealPosition());
 	glPushMatrix();
@@ -699,15 +702,16 @@ void Engine::RenderGame()
 
 	CHECK_GL_ERROR();
 
-	Shader::Disable();
 
 #pragma endregion
 
 #pragma region Render les cubes
 
-	Shader::Disable();
+	// Set cube lighting
+	m_lightingShader.SetMatSpecualarIntensity(0);
+	m_lightingShader.SetMatSpecularPower(0);
 	m_textureArray->Use(GL_TEXTURE1);
-	m_lightingShader.Use();
+	m_noNormalMap.Bind(GL_TEXTURE2);
 	m_lightingShader.SetTextureUnitType(1);
 	m_lightingShader.SetWVP(m_mxWVP);
 	m_lightingShader.SetWorld(m_mxWorld);
@@ -739,9 +743,19 @@ void Engine::RenderGame()
 
 #pragma region Render Skybox
 
-	//m_shaderCube.Use();
-	//m_skybox->Render();
-	//Shader::Disable();
+	glPushMatrix();
+	glLoadIdentity();
+	glTranslatef(VIEW_DISTANCE, VIEW_DISTANCE, VIEW_DISTANCE);
+	glScalef(100, 100, 100);
+	GLfloat mv3[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mv3);
+	Matrix4f modelView3(mv3[0], mv3[1], mv3[2], mv3[3],
+		mv3[4], mv3[5], mv3[6], mv3[7],
+		mv3[8], mv3[9], mv3[10], mv3[11],
+		mv3[12], mv3[13], mv3[14], mv3[15]);
+
+	glPopMatrix();
+	m_skybox->Render(modelView3 * modelView * m_mxProjection);
 
 #pragma endregion
 

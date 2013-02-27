@@ -6,11 +6,11 @@
 #include "cubemaptexture.h"
 #include "modelmesh.h"
 
-class SkyBox
+class Skybox
 {
 public:
-	SkyBox();
-	~SkyBox();
+	Skybox();
+	~Skybox();
 
 	bool Init(const string& Directory,
 		const string& PosXFilename,

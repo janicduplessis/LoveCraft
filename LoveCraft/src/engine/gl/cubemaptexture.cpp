@@ -25,9 +25,11 @@ CubeMapTexture::~CubeMapTexture()
 
 bool CubeMapTexture::Load()
 {
+	CHECK_GL_ERROR();
 	glGenTextures(1, &m_texture);
-	glBindTexture(m_texture, GL_TEXTURE_CUBE_MAP);
-
+	CHECK_GL_ERROR();
+	glBindTexture(GL_TEXTURE_CUBE_MAP, m_texture);
+	CHECK_GL_ERROR();
 	// Initialize Devil only once:
 	static bool alreadyInitialized = false;
 	if(!alreadyInitialized)
@@ -35,7 +37,6 @@ bool CubeMapTexture::Load()
 		ilInit();
 		alreadyInitialized = true;
 	}
-
 	GLenum types[6];
 	types[0] = GL_TEXTURE_CUBE_MAP_POSITIVE_X;
 	types[1] = GL_TEXTURE_CUBE_MAP_NEGATIVE_X;
@@ -59,13 +60,13 @@ bool CubeMapTexture::Load()
 		glTexImage2D(types[i], 0, GL_RGB, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 0, GL_RGBA,
 			GL_UNSIGNED_BYTE, ilGetData());
 	}
-
+	CHECK_GL_ERROR();
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
+	CHECK_GL_ERROR();
 	return true;
 }
 

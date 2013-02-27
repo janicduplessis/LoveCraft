@@ -183,7 +183,7 @@ enum MOUSE_BUTTON {
 #define MODEL_PATH_HUMANS		MODEL_PATH "humanlike/"
 #define SOUND_PATH				"../lovecraft/media/sound/"
 #define SOUND_FOOT_PATH			SOUND_PATH "footsteps/"
-#define SKYBOX_PATH				"../lovecraft/media/skyboxes"
+#define SKYBOX_PATH				"../lovecraft/media/skyboxes/"
 
 //Network
 #define NW_PORT				10512

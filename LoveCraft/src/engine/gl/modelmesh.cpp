@@ -46,15 +46,18 @@ ModelMesh::~ModelMesh()
 	Clear();
 }
 
-bool ModelMesh::LoadMesh( const std::string& Filename )
+bool ModelMesh::LoadMesh( const std::string& Filename, bool flipUV )
 {
 	// Delete l'ancien mesh
 	Clear();
 
 	bool Ret = false;
 	Assimp::Importer Importer;
+	unsigned int postProcess = aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace;
+	if (flipUV)
+		postProcess |= aiProcess_FlipUVs;
 
-	const aiScene* pScene = Importer.ReadFile(Filename.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
+	const aiScene* pScene = Importer.ReadFile(Filename.c_str(), postProcess);
 
 	if (pScene) {
 		Ret = InitFromScene(pScene, Filename);
@@ -93,7 +96,7 @@ void ModelMesh::InitMesh( unsigned int Index, const aiMesh* paiMesh )
 		const aiVector3D* pPos      = &(paiMesh->mVertices[i]);
 		const aiVector3D* pNormal   = &(paiMesh->mNormals[i]);
 		const aiVector3D* pTexCoord = paiMesh->HasTextureCoords(0) ? &(paiMesh->mTextureCoords[0][i]) : &Zero3D;
-		const aiVector3D* pTangent	= &(paiMesh->mTangents[i]);
+		const aiVector3D* pTangent	= (paiMesh->HasTangentsAndBitangents()) ? &(paiMesh->mTangents[i]) : &Zero3D;
 
 		Vertex v(Vector3f(pPos->x, pPos->y, pPos->z),
 			Vector3f(pTexCoord->x, pTexCoord->y, 0),
@@ -222,11 +225,12 @@ void ModelMesh::SetRotation(const Vector3f& rot) {
 Matrix4f ModelMesh::GetWorldMatrix()
 {
 	m_worldPos = Matrix4f::IDENTITY;
-	m_worldPos.ApplyScale(m_scale.x, m_scale.y, m_scale.z);
+	
+	m_worldPos.ApplyTranslation(m_pos.x + m_translation.x, m_pos.y + m_translation.y, m_pos.z + m_translation.z);
 	m_worldPos.ApplyRotation(m_rot.x, 1,0,0);
 	m_worldPos.ApplyRotation(m_rot.y, 0,1,0);
 	m_worldPos.ApplyRotation(m_rot.z, 0,0,1);
-	m_worldPos.ApplyTranslation(m_pos.x + m_translation.x, m_pos.y + m_translation.y, m_pos.z + m_translation.z);
+	m_worldPos.ApplyScale(m_scale.x, m_scale.y, m_scale.z);
 
 	return m_worldPos;
 }

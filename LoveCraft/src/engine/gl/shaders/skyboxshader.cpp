@@ -26,6 +26,9 @@ bool SkyboxShader::Init()
 	if (!Link())
 		return false;
 
+	m_WVPLocation = BindUniform("gWVP");
+	m_textureLocation = BindUniform("gCubemapTexture");
+
 	return true;
 }
 

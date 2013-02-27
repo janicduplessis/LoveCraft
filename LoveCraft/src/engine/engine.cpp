@@ -20,12 +20,6 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
-	m_textureInterface = new Texture*[IMAGE::CUSTIMAGE_LAST];
-	for (unsigned short i = 0; i < IMAGE::CUSTIMAGE_LAST; i++)
-		m_textureInterface[i] = new Texture();
-	m_texturefontColor = new Texture*[COLOR::TEXTCOLOR_LAST];
-	for (unsigned short i = 0; i < COLOR::TEXTCOLOR_LAST; i++)
-		m_texturefontColor[i] = new Texture();
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
 
 	//m_skybox = new Skybox();
@@ -317,84 +311,11 @@ void Engine::LoadGlobalResource()
 #pragma region Boutons des spells
 
 	//Texture des spells
-	m_textureSpell[SPELL_IMAGE_BOLT].Load(TEXTURE_PATH "s_spellbolt.gif");
-	m_textureSpell[SPELL_IMAGE_FIRE].Load(TEXTURE_PATH "s_spellfire.png");
-	m_textureSpell[SPELL_IMAGE_FREEZE].Load(TEXTURE_PATH "s_spellfreeze.png");
-	m_textureSpell[SPELL_IMAGE_SHOCK].Load(TEXTURE_PATH "s_spellshock.png");
-	m_textureSpell[SPELL_IMAGE_POISON].Load(TEXTURE_PATH "s_spellpoison.gif");
-	m_textureSpell[SPELL_IMAGE_STORM].Load(TEXTURE_PATH "s_spellstorm.png");
-	m_textureSpell[SPELL_IMAGE_HEAL].Load(TEXTURE_PATH "s_spellheal.gif");
-	m_textureSpell[SPELL_IMAGE_RAIN].Load(TEXTURE_PATH "s_spellrain.gif");
-	m_textureSpell[SPELL_IMAGE_DEFEND].Load(TEXTURE_PATH "s_spelldefend.gif");
-	m_textureSpell[SPELL_IMAGE_SHIELD].Load(TEXTURE_PATH "s_spellshield.png");
 
-	m_textureSpellX[SPELL_IMAGE_BOLT].Load(TEXTURE_PATH "s_spellboltx.gif");
-	m_textureSpellX[SPELL_IMAGE_FIRE].Load(TEXTURE_PATH "s_spellfirex.png");
-	m_textureSpellX[SPELL_IMAGE_FREEZE].Load(TEXTURE_PATH "s_spellfreezex.png");
-	m_textureSpellX[SPELL_IMAGE_SHOCK].Load(TEXTURE_PATH "s_spellshockx.png");
-	m_textureSpellX[SPELL_IMAGE_POISON].Load(TEXTURE_PATH "s_spellpoisonx.gif");
-	m_textureSpellX[SPELL_IMAGE_STORM].Load(TEXTURE_PATH "s_spellstormx.png");
-	m_textureSpellX[SPELL_IMAGE_HEAL].Load(TEXTURE_PATH "s_spellhealx.gif");
-	m_textureSpellX[SPELL_IMAGE_RAIN].Load(TEXTURE_PATH "s_spellrainx.gif");
-	m_textureSpellX[SPELL_IMAGE_DEFEND].Load(TEXTURE_PATH "s_spelldefendx.gif");
-	m_textureSpellX[SPELL_IMAGE_SHIELD].Load(TEXTURE_PATH "s_spellshieldx.png");
 
 #pragma endregion
 
-#pragma region Images et textures
-
-	m_textureInterface[CUSTIMAGE_BLACK_BACK]->Load(TEXTURE_PATH "noir.jpg");
-	m_textureInterface[CUSTIMAGE_BOO]->Load(TEXTURE_PATH "i_boo.png");
-	m_textureInterface[CUSTIMAGE_RUN]->Load(TEXTURE_PATH "i_bewareofcthulhu.png");
-	m_textureInterface[CUSTIMAGE_CROSSHAIR]->Load(TEXTURE_PATH "i_cross.bmp");
-	m_textureInterface[CUSTIMAGE_INTERFACE_FRAME]->Load(TEXTURE_PATH "b_rock.jpg");
-	m_textureInterface[CUSTIMAGE_PORTRAIT_FRAME]->Load(TEXTURE_PATH "i_portrait-frame.png");
-	m_textureInterface[CUSTIMAGE_PORTRAIT_MALE]->Load(TEXTURE_PATH "i_portrait-male.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH]->Load(TEXTURE_PATH "i_pgb_health.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY]->Load(TEXTURE_PATH "i_pgb_energy.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_MANA]->Load(TEXTURE_PATH "i_pgb_mana.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_EXP]->Load(TEXTURE_PATH "i_pgb_exp.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_BACK]->Load(TEXTURE_PATH "i_pgb_health_back.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_ENERGY_BACK]->Load(TEXTURE_PATH "i_pgb_energy_back.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_MANA_BACK]->Load(TEXTURE_PATH "i_pgb_mana_back.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_EXP_BACK]->Load(TEXTURE_PATH "i_pgb_exp_back.png");
-	m_textureInterface[CUSTIMAGE_PGBTEXT_HEALTH_LOW]->Load(TEXTURE_PATH "i_pgb_health_low.png");
-	m_textureInterface[CUSTIMAGE_CLOCK_BG]->Load(TEXTURE_PATH "i_clock_bg.png");
-	m_textureInterface[CUSTIMAGE_CONSOLE_BACK]->Load(TEXTURE_PATH "i_console_back.png");
-	m_textureInterface[CUSTIMAGE_CONSOLE_TEXTBOX_BACK]->Load(TEXTURE_PATH "i_console_textbox_back.png");
-	m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR]->Load(TEXTURE_PATH "i_cursor.png");
-	m_textureInterface[CUSTIMAGE_LOADING_SCREEN]->Load(TEXTURE_PATH "i_loading.jpg");
-	m_textureInterface[CUSTIMAGE_MENU_BACKGROUND]->Load(TEXTURE_PATH "i_menu_back.png");
-	m_textureInterface[CUSTIMAGE_MENU_MAIN_WINDOW]->Load(TEXTURE_PATH "i_menu_main.png");
-	m_textureInterface[CUSTIMAGE_MENU_BUTTON_BACK]->Load(TEXTURE_PATH "i_menu_button.png");
-	m_textureInterface[CUSTIMAGE_MENU_LOGO]->Load(TEXTURE_PATH "i_menu_logo.png");
-	m_textureInterface[CUSTIMAGE_WELCOME_FACE]->Load(TEXTURE_PATH "i_welcomeface.png");
-	m_textureInterface[CUSTIMAGE_ARROWBUTTON_UP]->Load(TEXTURE_PATH "i_arrowbutton_up.jpg");
-	m_textureInterface[CUSTIMAGE_ARROWBUTTON_DOWN]->Load(TEXTURE_PATH "i_arrowbutton_down.jpg");
-	m_textureInterface[CUSTIMAGE_TOOLTIP_BACK]->Load(TEXTURE_PATH "i_tooltip_back.png");
-	Info::Get().SetTexturesInterface(m_textureInterface);
-
-	Info::Get().StatusOn(Info::LSTATUS_TEXTURE_IMAGE);
 #pragma endregion
-
-#pragma region Couleurs label
-
-	m_texturefontColor[TEXTCOLOR_WHITE]->Load(TEXTURE_PATH "font.png");
-	m_texturefontColor[TEXTCOLOR_RED]->Load(TEXTURE_PATH "font_red.png");
-	m_texturefontColor[TEXTCOLOR_GREEN]->Load(TEXTURE_PATH "font_green.png");
-	m_texturefontColor[TEXTCOLOR_BLUE]->Load(TEXTURE_PATH "font_blue.png");
-	m_texturefontColor[TEXTCOLOR_YELLOW]->Load(TEXTURE_PATH "font_yellow.png");
-	Info::Get().SetFonts(m_texturefontColor);
-
-	Info::Get().StatusOn(Info::LSTATUS_TEXTURE_FONTS);
-#pragma endregion
-
-#pragma endregion
-
-	//Cursor
-	m_pb_cursor = new PictureBox();
-	m_pb_cursor->InitControl("pb_cursor");
-	m_pb_cursor->InitLocalizable(Point(), Size(50, 50), m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], 0);
 
 #pragma region Load et compile les shaders
 	std::cout << " Loading and compiling shaders ..." << std::endl;
@@ -662,7 +583,6 @@ void Engine::RenderMenu()
 
 	m_menuUI.Render();
 	m_debugUI.Render();
-	m_pb_cursor->Render();
 
 	if (m_wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -883,7 +803,6 @@ void Engine::RenderGame()
 #pragma endregion
 
 	m_gameUI.Render();
-	m_pb_cursor->Render();
 
 #pragma region OpenGL
 	glEnable(GL_LIGHTING);
@@ -1217,7 +1136,6 @@ void Engine::MouseMoveEvent(int x, int y)
 	{
 		m_menuUI.MouseMoveEvents(x, Height() - y);
 	}
-	m_pb_cursor->SetPosition(Point(MousePosition().x, MousePosition().y - m_pb_cursor->GetSize().h));
 }
 
 void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)

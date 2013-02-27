@@ -2,20 +2,22 @@
 #define SINGLETEXT_H__
 
 #include "../textual.h"
-#include "label.h"
+
+class Label;
 
 class SingleText : public Textual
 {
 public:
 	SingleText(CONTROLTYPE type);
 	virtual ~SingleText();
-	virtual void InitTextual(Texture* color, bool italic, float charHeight, float charWidth, float charinterval);
+	virtual void InitTextual(COLOR color, bool italic, float charHeight, float charWidth, float charinterval);
 	virtual void InitTextual(ThemeSet theme);
 	virtual void Render() = 0;
+
 	virtual void SetMsg(string message);
 	virtual void AddMsg(string value);
 	virtual void ResetMsg();
-	virtual void SetColor(Texture* color);
+	virtual void SetColor(COLOR color);
 	virtual void SetItalic();
 	virtual void RemoveItalic();
 	virtual void SetCharHeight(float height);

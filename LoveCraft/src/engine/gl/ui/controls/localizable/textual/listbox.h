@@ -2,9 +2,10 @@
 #define LISTBOX_H_
 
 #include "../textual.h"
-#include "label.h"
-#include "singletext/button.h"
 #include <list>
+
+class Button;
+class Label;
 
 class ListBox : public Textual
 {

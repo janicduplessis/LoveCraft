@@ -22,7 +22,7 @@ public:
 	virtual void SetMaxLength(uint16 maxlength);
 	virtual uint16 GetMaxLength() const;
 	virtual bool IsMaxLength(uint16 maxlength) const;
-	virtual void AddMaxLength(uint16 value);
+	virtual void AddMaxLength(int16 value);
 
 protected:
 	bool m_hasFocus;

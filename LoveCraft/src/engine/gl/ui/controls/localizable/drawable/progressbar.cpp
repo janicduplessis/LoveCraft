@@ -10,20 +10,10 @@ ProgressBar::ProgressBar() : Drawable(CTRLTYPE_PROGRESSBAR), m_foreground(0), m_
 {
 	m_backImage = new PictureBox();
 }
+
 ProgressBar::~ProgressBar()
 {
 	delete m_backImage;
-}
-
-void ProgressBar::Init(BarMode mode, Texture* foreground, uint8 bordersize)
-{
-	m_mode = mode;
-	m_foreground = foreground;
-	m_borderSize = bordersize;
-
-	m_backImage->InitControl("backimage");
-	m_backImage->InitLocalizable(Point(-bordersize, -bordersize) + AbsolutePosition(),
-		Size(GetSize().w + bordersize * 2, GetSize().h + bordersize * 2), GetBackground(), 0);
 }
 
 void ProgressBar::Render()
@@ -34,78 +24,6 @@ void ProgressBar::Render()
 		DrawSquare();
 	}
 }
-
-#pragma region Mode
-
-ProgressBar::BarMode ProgressBar::GetMode() const
-{
-	return m_mode;
-}
-bool ProgressBar::IsMode(BarMode mode) const
-{
-	return m_mode;
-}
-
-#pragma endregion
-
-#pragma region Value
-
-void ProgressBar::SetValue(float value)
-{
-	m_value = value > m_maximum ? m_maximum : (value <= m_minimum ? m_minimum : value);
-}
-void ProgressBar::AddValue(float value)
-{
-	SetValue(GetValue() + value);
-}
-float ProgressBar::GetValue() const
-{
-	return m_value;
-}
-bool ProgressBar::IsValue(float value) const
-{
-	return fabs(m_value) - fabs(value) < 0.01f;
-}
-bool ProgressBar::IsValue(float first, float second) const
-{
-	return m_value >= first && m_value <= second;
-}
-
-#pragma endregion
-
-#pragma region Foreground
-
-void ProgressBar::SetForeground(Texture* foreground)
-{
-	m_foreground = foreground;
-}
-Texture* ProgressBar::GetForeground() const
-{
-	return m_foreground;
-}
-bool ProgressBar::IsForeground(Texture* foreground)
-{
-	return m_foreground == foreground;
-}
-
-#pragma endregion
-
-#pragma region Filled
-
-float ProgressBar::FilledWidth() const
-{
-	return (m_value / m_maximum) * m_size.w;
-}
-float ProgressBar::FilledHeight() const
-{
-	return (m_value / m_maximum) * m_size.h;
-}
-float ProgressBar::FilledRadian() const
-{
-	return (m_value / m_maximum) * 360;
-}
-
-#pragma endregion
 
 void ProgressBar::DrawSquare()
 {
@@ -136,6 +54,19 @@ void ProgressBar::DrawingBindTexture()
 	m_foreground->Bind();
 }
 
+#pragma region Class functions
+
+void ProgressBar::Init(BarMode mode, Texture* foreground, uint8 bordersize)
+{
+	m_mode = mode;
+	m_foreground = foreground;
+	m_borderSize = bordersize;
+
+	m_backImage->InitControl("backimage");
+	m_backImage->InitLocalizable(Point(-bordersize, -bordersize) + AbsolutePosition(),
+		Size(GetSize().w + bordersize * 2, GetSize().h + bordersize * 2), GetBackground(), 0);
+}
+
 void ProgressBar::DrawingDrawSquareLTR()
 {
 	float filled = FilledWidth();
@@ -155,6 +86,7 @@ void ProgressBar::DrawingDrawSquareLTR()
 
 	glEnd();
 }
+
 void ProgressBar::DrawingDrawSquareDTU()
 {
 	float filled = FilledHeight();
@@ -179,3 +111,83 @@ void ProgressBar::RenderCircle(const Vector2i& origin, float rayon, Texture* tex
 {
 
 }
+
+#pragma endregion
+
+// Propriétés
+
+#pragma region Mode
+
+ProgressBar::BarMode ProgressBar::GetMode() const
+{
+	return m_mode;
+}
+bool ProgressBar::IsMode(BarMode mode) const
+{
+	return m_mode;
+}
+
+#pragma endregion
+
+#pragma region Value
+
+void ProgressBar::SetValue(float value)
+{
+	if ((int)m_value == (int)value)
+		return;
+	m_value = value > m_maximum ? m_maximum : (value < m_minimum ? m_minimum : value);
+}
+void ProgressBar::AddValue(float value)
+{
+	SetValue(GetValue() + value);
+}
+float ProgressBar::GetValue() const
+{
+	return m_value;
+}
+bool ProgressBar::IsValue(float value) const
+{
+	return fabs(m_value) - fabs(value) < 0.01f;
+}
+bool ProgressBar::IsValue(float first, float second) const
+{
+	return m_value >= first && m_value <= second;
+}
+
+#pragma endregion
+
+#pragma region Foreground
+
+void ProgressBar::SetForeground(Texture* foreground)
+{
+	if (m_foreground == foreground)
+		return;
+	m_foreground = foreground;
+}
+Texture* ProgressBar::GetForeground() const
+{
+	return m_foreground;
+}
+bool ProgressBar::IsForeground(Texture* foreground)
+{
+	return m_foreground == foreground;
+}
+
+#pragma endregion
+
+#pragma region Filled
+
+float ProgressBar::FilledWidth() const
+{
+	return (m_value / m_maximum) * m_size.w;
+}
+float ProgressBar::FilledHeight() const
+{
+	return (m_value / m_maximum) * m_size.h;
+}
+float ProgressBar::FilledRadian() const
+{
+	return (m_value / m_maximum) * 360;
+}
+
+#pragma endregion

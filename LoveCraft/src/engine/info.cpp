@@ -194,24 +194,6 @@ Vector2i Info::GetOffsetMap() const
 	return m_offsetMap;
 }
 
-void Info::SetFonts(Texture** colors)
-{
-	m_fontColors = colors;
-}
-Texture* Info::GetFontColor(uint8 index) const
-{
-	return m_fontColors[index];
-}
-
-void Info::SetTexturesInterface(Texture** textures)
-{
-	m_textInterface = textures;
-}
-Texture* Info::GetTexture(uint8 index) const
-{
-	return m_textInterface[index];
-}
-
 Dice& Info::Dic()
 {
 	return m_dice;

@@ -66,6 +66,8 @@ public:
 
 	Label* lbl_crntBT;
 	PictureBox* pb_crntBT;
+
+	PictureBox* pb_cursor;
 };
 
 #endif

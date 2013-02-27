@@ -1,5 +1,6 @@
 #include "textual.h"
-
+#include "../../fontcolor.h"
+#include "../../uiimage.h"
 
 Textual::Textual(CONTROLTYPE type) : Localizable(type, CTRLGENERIC_TEXTUAL), m_message(""), m_italic(false), 
 	m_charHeight(0.f), m_charWidth(0.f), m_charInterval(0.f), m_fontColor(0)
@@ -11,22 +12,19 @@ Textual::~Textual()
 {
 }
 
-void Textual::InitTextual(Texture* color, bool italic, float charHeight, float charWidth, float charinterval, Texture* background)
+#pragma region Class funtions
+
+void Textual::InitTextual(COLOR color, bool italic, float charHeight, float charWidth, float charinterval, IMAGE background)
 {
-	m_fontColor = color;
+	m_fontColor = FontColor::Get(color);
 	m_italic = italic;
 	m_charHeight = charHeight;
 	m_charWidth = charWidth;
 	m_charInterval = charinterval;
-	m_background = background;
+	m_background = background != CUSTIMAGE_LAST ? UIImage::Get(background) : 0;
 }
 
-void Textual::InitTextual(ThemeSet theme)
-{
-	Theme* t = Theme::GetTheme(theme);
-	InitTextual(t->GetForeColor(), t->GetItalic(), t->GetHeight(), 
-		t->GetWidth(), t->GetInterval(), t->GetBackground());
-}
+#pragma endregion
 
 // Propriétés
 
@@ -64,17 +62,17 @@ void Textual::ResetMsg()
 
 #pragma region Font color
 
-void Textual::SetColor(Texture* color)
+void Textual::SetColor(COLOR color)
 {
 	m_fontColor = color;
 }
-Texture* Textual::GetColor() const
+COLOR Textual::GetColor() const
 {
 	return m_fontColor;
 }
-bool Textual::IsColor(Texture* color) const
+bool Textual::IsColor(COLOR color) const
 {
-	return m_fontColor == color;
+	return m_fontColor == FontColor::Get(color);
 }
 
 #pragma endregion

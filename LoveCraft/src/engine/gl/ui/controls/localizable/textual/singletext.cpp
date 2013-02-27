@@ -1,18 +1,19 @@
 #include "singletext.h"
-
+#include "label.h"
 
 SingleText::SingleText(CONTROLTYPE type) : Textual(type)
 {
 	m_label = new Label();
 }
 
-
 SingleText::~SingleText()
 {
 	delete m_label;
 }
 
-void SingleText::InitTextual(Texture* color, bool italic, float charHeight, float charWidth, float charinterval)
+#pragma region Class funtions
+
+void SingleText::InitTextual(COLOR color, bool italic, float charHeight, float charWidth, float charinterval)
 {
 	Textual::InitTextual(color, italic, charHeight, charWidth, charinterval);
 	m_label->InitControl("textlabel");
@@ -28,6 +29,8 @@ void SingleText::InitTextual(ThemeSet theme)
 		t->GetWidth(), t->GetInterval());
 	SetBackground(t->GetBackground());
 }
+
+#pragma endregion
 
 #pragma region Label properties
 
@@ -49,7 +52,7 @@ void SingleText::ResetMsg()
 	Textual::ResetMsg();
 	m_label->ResetMsg();
 }
-void SingleText::SetColor(Texture* color)
+void SingleText::SetColor(COLOR color)
 {
 	Textual::SetColor(color);
 	m_label->SetColor(color);

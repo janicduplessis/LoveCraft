@@ -16,7 +16,7 @@ public:
 	* Dessine l'objet à l'écran
 	*/
 	virtual void Render() = 0;
-	virtual void InitLocalizable(Point position, Size size, Texture* background, Container* parent, ORIGIN origin = ORIGIN_BOTTOMLEFT);
+	virtual void InitLocalizable(Point position, Size size, IMAGE background, Container* parent, ORIGIN origin = ORIGIN_BOTTOMLEFT);
 
 	virtual void SetParent(Container* parent);
 	virtual Container* GetParent() const;
@@ -40,6 +40,12 @@ public:
 	virtual Size GetSize() const;
 	virtual bool IsSize(Size size) const;
 
+	virtual void SetTheme(ThemeSet theme);
+	virtual void ApplyTheme(ThemeSet theme);
+	virtual void RemoveTheme();
+	virtual Theme* GetTheme() const;
+	virtual bool IsTheme(ThemeSet theme) const;
+
 	virtual void SetBlend(BLENDTYPE btype);
 	virtual BLENDTYPE GetBlend() const;
 	virtual bool IsBlend(BLENDTYPE btype) const;
@@ -52,6 +58,10 @@ public:
 	virtual void RemoveBackground();
 	virtual Texture* GetBackground() const;
 	virtual bool IsBackground(Texture* texture);
+
+	virtual void SetTooltipText(const string& text);
+	virtual string GetTooltipText() const;
+	virtual bool IsTooltipText(const string& text) const;
 
 	virtual void AddEffect(Effect* effect);
 
@@ -76,9 +86,11 @@ protected:
 	Point m_position;
 	ORIGIN m_origin;
 	Size m_size;
+	Theme* m_theme;
 	BLENDTYPE m_blend;
 	bool m_visible;
 	Texture* m_background;
+	string m_tooltipText;
 
 	uint8 m_effectNbr;
 	Effect** m_effects;

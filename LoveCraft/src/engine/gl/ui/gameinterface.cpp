@@ -344,6 +344,11 @@ void GameInterface::Init(const ValuesGameInterface& val)
 
 #pragma endregion
 
+	//Cursor
+	pb_cursor = new PictureBox();
+	pb_cursor->InitControl("pb_cursor");
+	pb_cursor->InitLocalizable(Point(), Size(40, 40), m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], 0);
+
 	m_loaded = true;
 }
 
@@ -382,6 +387,7 @@ void GameInterface::DeInit()
 void GameInterface::Render()
 {
 	pnl_playscreen->Render();
+	pb_cursor->Render();
 }
 
 void GameInterface::Show()
@@ -397,6 +403,9 @@ void GameInterface::Hide()
 bool GameInterface::MouseMoveEvents(int x, int y)
 {
 	m_controlmousetest->SetVariableMsg(pnl_playscreen->GetTopControl(x, y));
+
+	pb_cursor->SetPosition(Point(x, y - pb_cursor->GetSize().h));
+
 	return false;
 }
 

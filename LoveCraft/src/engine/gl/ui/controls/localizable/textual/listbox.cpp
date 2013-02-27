@@ -1,4 +1,6 @@
 #include "listbox.h"
+#include "label.h"
+#include "singletext/button.h"
 
 ListBox::ListBox() : Textual(CTRLTYPE_LISTBOX), m_lines(0), m_lineNbr(0), m_gapBetLines(0), m_width(0),
 	m_curLineIndex(0), m_scrollable(false), m_upArrow(0), m_downArrow(0), m_showButtons(false)
@@ -15,6 +17,26 @@ ListBox::~ListBox()
 	delete m_upArrow;
 	delete m_downArrow;
 }
+
+void ListBox::Render()
+{
+	if (IsVisible())
+	{
+		if (GetBackground())
+			DrawSquare();
+		for (uint8 i = 0; i < m_lineNbr; i++)
+			m_lines[i]->Render();
+		if (m_showButtons)
+		{
+			if (m_upArrow)
+				m_upArrow->Render();
+			if (m_downArrow)
+				m_downArrow->Render();
+		}
+	}
+}
+
+#pragma region Class funtions
 
 void ListBox::InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable)
 {
@@ -64,8 +86,10 @@ void ListBox::InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable
 void ListBox::UpdateValues()
 {
 	Size newSize = Size(m_width, (m_charHeight + m_gapBetLines) * m_lineNbr + m_lineOffset.y * 2 - m_gapBetLines);
-	if (!IsSize(newSize))
-		SetSize(newSize);
+	if (IsSize(newSize))
+		return;
+
+	SetSize(newSize);
 	for (uint8 i = 0; i < m_lineNbr; i++)
 	{
 		m_lines[i]->SetPosition(Point(m_lineOffset.x, (GetCharHeight() + m_gapBetLines) * i + m_lineOffset.y));
@@ -79,29 +103,94 @@ void ListBox::UpdateValues()
 	}
 }
 
-void ListBox::Render()
-{
-	if (IsVisible())
-	{
-		if (GetBackground())
-			DrawSquare();
-		for (uint8 i = 0; i < m_lineNbr; i++)
-			m_lines[i]->Render();
-		if (m_showButtons)
-		{
-			if (m_upArrow)
-				m_upArrow->Render();
-			if (m_downArrow)
-				m_downArrow->Render();
-		}
-	}
-}
-
 void ListBox::SetSize(Size size)
 {
 	Localizable::SetSize(size);
 	UpdateValues();
 }
+
+void ListBox::Update()
+{
+	StringList::iterator it = m_messages.begin();
+	for (uint16 i = 0; i < m_curLineIndex; i++)
+	{
+		if (it != m_messages.end())
+			++it;
+	}
+	for(uint16 i = 0; i < m_lineNbr; ++i)
+	{
+		if (it == m_messages.end())
+			m_lines[i]->SetMsg("");
+		else {
+			m_lines[i]->SetMsg(it->data());
+			++it;
+		}
+	}
+}
+
+void ListBox::SetLine(unsigned short line, const string& message)
+{
+	assert(line < m_lineNbr);
+	m_messages.assign(line, message);
+	Update();
+}
+
+void ListBox::AddLine(const string& message)
+{
+	m_messages.push_front(message);
+	Update();
+}
+
+string ListBox::GetLine( int index )
+{
+	StringList::iterator it = m_messages.begin();
+	return it->data();
+}
+
+#pragma endregion
+
+#pragma region Events
+
+void ListBox::Scroll(int lines)
+{
+	if (m_scrollable)
+	{
+		if (m_curLineIndex + lines < 0) {
+			m_curLineIndex = 0;
+			return;
+		}
+		if (m_curLineIndex + lines > m_messages.size() - m_lineNbr || m_messages.size() <= m_lineNbr)
+			return;
+		m_curLineIndex += lines;
+		Update();
+	}
+}
+
+void ListBox::ScrollUp(Control* sender)
+{
+	Scroll(1);
+}
+
+void ListBox::ScrollDown(Control* sender)
+{
+	Scroll(-1);
+}
+
+bool ListBox::MousePressEvents(int x, int y)
+{
+	return m_upArrow->MousePressEvents(x,y) |
+		m_downArrow->MousePressEvents(x,y);
+}
+
+bool ListBox::MouseReleaseEvents(int x, int y)
+{
+	return m_upArrow->MouseReleaseEvents(x,y) |
+		m_downArrow->MouseReleaseEvents(x,y);
+}
+
+#pragma endregion
+
+// Propriétés
 
 #pragma region Scrollable
 
@@ -207,78 +296,3 @@ bool ListBox::IsFontColor(Texture* color) const
 }
 
 #pragma endregion
-
-void ListBox::Update()
-{
-	StringList::iterator it = m_messages.begin();
-	for (uint16 i = 0; i < m_curLineIndex; i++)
-	{
-		if (it != m_messages.end())
-			++it;
-	}
-	for(uint16 i = 0; i < m_lineNbr; ++i)
-	{
-		if (it == m_messages.end())
-			m_lines[i]->SetMsg("");
-		else {
-			m_lines[i]->SetMsg(it->data());
-			++it;
-		}
-	}
-}
-
-void ListBox::SetLine(unsigned short line, const string& message)
-{
-	assert(line < m_lineNbr);
-	m_messages.assign(line, message);
-	Update();
-}
-
-void ListBox::AddLine(const string& message)
-{
-	m_messages.push_front(message);
-	Update();
-}
-
-void ListBox::Scroll(int lines)
-{
-	if (m_scrollable)
-	{
-		if (m_curLineIndex + lines < 0) {
-			m_curLineIndex = 0;
-			return;
-		}
-		if (m_curLineIndex + lines > m_messages.size() - m_lineNbr || m_messages.size() <= m_lineNbr)
-			return;
-		m_curLineIndex += lines;
-		Update();
-	}
-}
-
-void ListBox::ScrollUp(Control* sender)
-{
-	Scroll(1);
-}
-
-void ListBox::ScrollDown(Control* sender)
-{
-	Scroll(-1);
-}
-
-bool ListBox::MousePressEvents(int x, int y)
-{
-	return m_upArrow->MousePressEvents(x,y) |
-		m_downArrow->MousePressEvents(x,y);
-}
-
-bool ListBox::MouseReleaseEvents(int x, int y)
-{
-	return m_upArrow->MouseReleaseEvents(x,y) |
-		m_downArrow->MouseReleaseEvents(x,y);
-}
-
-string ListBox::GetLine( int index )
-{
-	StringList::iterator it = m_messages.begin();
-	return it->data();
-}

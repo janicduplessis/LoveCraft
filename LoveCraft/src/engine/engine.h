@@ -160,7 +160,6 @@ private:
 
 	Texture* m_textureSpell;
 	Texture* m_textureSpellX;
-	Texture** m_textureInterface;
 	Texture** m_texturefontColor;
 	Texture m_texSpell;
 	Texture m_noNormalMap;

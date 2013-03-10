@@ -226,6 +226,9 @@
     <ClCompile Include="src\engine\gl\skybox.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\shadernew.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\util\array.h">
@@ -474,6 +477,9 @@
     <ClInclude Include="src\engine\gl\skybox.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\shadernew.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\gl\shaders\billboardshader.frag">
@@ -515,6 +521,9 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="src\engine\gl\shaders\skyboxshader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="src\engine\gl\shaders\lighting.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

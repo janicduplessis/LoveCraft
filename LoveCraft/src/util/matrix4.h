@@ -5,6 +5,8 @@
 #include <sstream>
 #include <ostream>
 
+#include <Assimp/types.h>
+
 #include "define.h"
 #include "vector3.h"
 #include "tool.h"
@@ -27,6 +29,9 @@ class Matrix4
                 const T& m_21, const T& m_22, const T& m_23, const T& m_24, 
                 const T& m_31, const T& m_32, const T& m_33, const T& m_34, 
                 const T& m_41, const T& m_42, const T& m_43, const T& m_44);
+
+		Matrix4(const aiMatrix4x4& AssimpMatrix);
+		Matrix4(const aiMatrix3x3& AssimpMatrix);
 
         const T& Get11() const;
         const T& Get12() const;
@@ -160,6 +165,24 @@ Matrix4<T>::Matrix4(const T& m_11, const T& m_12, const T& m_13, const T& m_14,
     this->m_42 = m_42;
     this->m_43 = m_43;
     this->m_44 = m_44;
+}
+
+template <class T>
+Matrix4<T>::Matrix4(const aiMatrix4x4& AssimpMatrix)
+{
+	m_11 = AssimpMatrix.a1; m_12 = AssimpMatrix.a2; m_13 = AssimpMatrix.a3; m_14 = AssimpMatrix.a4;
+	m_21 = AssimpMatrix.b1; m_22 = AssimpMatrix.b2; m_23 = AssimpMatrix.b3; m_24 = AssimpMatrix.b4;
+	m_31 = AssimpMatrix.c1; m_32 = AssimpMatrix.c2; m_33 = AssimpMatrix.c3; m_34 = AssimpMatrix.c4;
+	m_41 = AssimpMatrix.d1; m_42 = AssimpMatrix.d2; m_43 = AssimpMatrix.d3; m_44 = AssimpMatrix.d4;
+}
+
+template <class T>
+Matrix4<T>::Matrix4(const aiMatrix3x3& AssimpMatrix)
+{
+	m_11 = AssimpMatrix.a1; m_12 = AssimpMatrix.a2; m_13 = AssimpMatrix.a3; m_14 = 0.f;
+	m_21 = AssimpMatrix.b1; m_22 = AssimpMatrix.b2; m_23 = AssimpMatrix.b3; m_24 = 0.f;
+	m_31 = AssimpMatrix.c1; m_32 = AssimpMatrix.c2; m_33 = AssimpMatrix.c3; m_34 = 0.f;
+	m_41 = 0.f;				m_42 = 0.f;				m_43 = 0.f;				m_44 = 0.f;
 }
 
 template <class T>

@@ -1,9 +1,10 @@
 ﻿#include "lightingshader.h"
 #include "util/tool.h"
 #include <string>
-#include <stdio.h>
 
-LightingShader::LightingShader()
+static const char* pEffectFile = SHADER_PATH "lighting.glsl";
+
+LightingShader::LightingShader() : ShaderNew(pEffectFile)
 {
 
 }
@@ -15,57 +16,48 @@ LightingShader::~LightingShader()
 
 bool LightingShader::Init()
 {
-	if (!Shader::Init())
+	if (!CompileProgram("Lighting"))
 		return false;
 
-	if (!AddShader(GL_VERTEX_SHADER, SHADER_PATH "lightingshader.vert", true))
-		return false;
-
-	if (!AddShader(GL_FRAGMENT_SHADER, SHADER_PATH "lightingshader.frag", true))
-		return false;
-
-	if (!Link())
-		return false;
-
-	m_WVPLocation = BindUniform("gWVP");
-	m_worldLocation = BindUniform("gWorld");
-	m_samplerTypeLocation = BindUniform("gSamplerType");
-	m_colorSamplerLocation = BindUniform("gColorSampler");
-	m_normalSamplerLocation = BindUniform("gNormalSampler");
-	m_arraySamplerLocation = BindUniform("gArraySampler");
-	m_dirLightLocation.Color = BindUniform("gDirectionalLight.Base.Color");
-	m_dirLightLocation.AmbientIntensity = BindUniform("gDirectionalLight.Base.AmbientIntensity");
-	m_dirLightLocation.DiffuseIntensity = BindUniform("gDirectionalLight.Base.DiffuseIntensity");
-	m_dirLightLocation.Direction = BindUniform("gDirectionalLight.Direction");
-	m_matSpecularIntensityLocation = BindUniform("gMatSpecularIntensity");
-	m_matSpecularPowerLocation = BindUniform("gMatSpecularPower");
-	m_eyeWorldPosLocation = BindUniform("gEyeWorldPos");
-	m_numPointLightsLocation = BindUniform("gNumPointLights");
+	m_WVPLocation = GetUniformLocation("gWVP");
+	m_worldLocation = GetUniformLocation("gWorld");
+	m_samplerTypeLocation = GetUniformLocation("gSamplerType");
+	m_colorSamplerLocation = GetUniformLocation("gColorSampler");
+	m_normalSamplerLocation = GetUniformLocation("gNormalSampler");
+	m_arraySamplerLocation = GetUniformLocation("gArraySampler");
+	m_dirLightLocation.Color = GetUniformLocation("gDirectionalLight.Base.Color");
+	m_dirLightLocation.AmbientIntensity = GetUniformLocation("gDirectionalLight.Base.AmbientIntensity");
+	m_dirLightLocation.DiffuseIntensity = GetUniformLocation("gDirectionalLight.Base.DiffuseIntensity");
+	m_dirLightLocation.Direction = GetUniformLocation("gDirectionalLight.Direction");
+	m_matSpecularIntensityLocation = GetUniformLocation("gMatSpecularIntensity");
+	m_matSpecularPowerLocation = GetUniformLocation("gMatSpecularPower");
+	m_eyeWorldPosLocation = GetUniformLocation("gEyeWorldPos");
+	m_numPointLightsLocation = GetUniformLocation("gNumPointLights");
 
 	for (unsigned int i = 0; i < ARRAY_SIZE_IN_ELEMENTS(m_pointLightsLocation); ++i)
 	{
 		char Name[128];
 		memset(Name, 0, sizeof(Name));
 		_snprintf_s(Name, sizeof(Name), "gPointLights[%d].Base.Color", i);
-		m_pointLightsLocation[i].Color = BindUniform(Name);
+		m_pointLightsLocation[i].Color = GetUniformLocation(Name);
 
 		_snprintf_s(Name, sizeof(Name), "gPointLights[%d].Base.AmbientIntensity", i);
-		m_pointLightsLocation[i].AmbientIntensity = BindUniform(Name);
+		m_pointLightsLocation[i].AmbientIntensity = GetUniformLocation(Name);
 
 		_snprintf_s(Name, sizeof(Name), "gPointLights[%d].Position", i);
-		m_pointLightsLocation[i].Position = BindUniform(Name);
+		m_pointLightsLocation[i].Position = GetUniformLocation(Name);
 
 		_snprintf_s(Name, sizeof(Name), "gPointLights[%d].Base.DiffuseIntensity", i);
-		m_pointLightsLocation[i].DiffuseIntensity = BindUniform(Name);
+		m_pointLightsLocation[i].DiffuseIntensity = GetUniformLocation(Name);
 
 		_snprintf_s(Name, sizeof(Name), "gPointLights[%d].Atten.Constant", i);
-		m_pointLightsLocation[i].Atten.Constant = BindUniform(Name);
+		m_pointLightsLocation[i].Atten.Constant = GetUniformLocation(Name);
 
 		_snprintf_s(Name, sizeof(Name), "gPointLights[%d].Atten.Linear", i);
-		m_pointLightsLocation[i].Atten.Linear = BindUniform(Name);
+		m_pointLightsLocation[i].Atten.Linear = GetUniformLocation(Name);
 
 		_snprintf_s(Name, sizeof(Name), "gPointLights[%d].Atten.Exp", i);
-		m_pointLightsLocation[i].Atten.Exp = BindUniform(Name);
+		m_pointLightsLocation[i].Atten.Exp = GetUniformLocation(Name);
 
 		// Valide les uniforms
 		if (m_pointLightsLocation[i].Color == INVALID_UNIFORM_LOCATION ||

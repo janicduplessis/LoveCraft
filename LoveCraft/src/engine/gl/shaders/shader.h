@@ -1,11 +1,11 @@
 ﻿#ifndef SHADER_H
 #define SHADER_H
-#include <string>
-#include "define.h"
+
 #include <list>
 
-#define INVALID_UNIFORM_LOCATION 0xFFFFFFFF
+#include "define.h"
 
+#define INVALID_UNIFORM_LOCATION 0xFFFFFFFF
 
 class Shader
 {

@@ -1,12 +1,10 @@
 ﻿#ifndef LIGHTING_SHADER_H__
 #define LIGHTING_SHADER_H__
 
-#include "shader.h"
+#include "shadernew.h"
 
 #include <util/vector3.h>
 #include <util/matrix4.h>
-
-#define MAX_POINT_LIGHTS 3
 
 /**
  * Structure de base d'une light
@@ -57,9 +55,11 @@ struct PointLight : public BaseLight
 /**
  * Shader pour calculer l'éclairage
  */
-class LightingShader : public Shader
+class LightingShader : public ShaderNew
 {
 public:
+	static const unsigned int MAX_POINT_LIGHTS = 3;
+
 	LightingShader();
 	~LightingShader();
 

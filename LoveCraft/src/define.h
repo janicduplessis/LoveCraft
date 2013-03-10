@@ -1,7 +1,8 @@
 ﻿#ifndef DEFINE_H__
 #define DEFINE_H__
 
-#include <GL/glew.h>
+#define GLEW_STATIC
+#include "GL/glew.h"
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 

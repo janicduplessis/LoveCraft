@@ -1,4 +1,5 @@
 #include "listbox.h"
+#include "../../../fontcolor.h"
 #include "label.h"
 #include "singletext/button.h"
 
@@ -40,10 +41,10 @@ void ListBox::Render()
 
 void ListBox::InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable)
 {
-	InitListBox(lineNbr, gap, offset, scrollable, 0, 0);
+	InitListBox(lineNbr, gap, offset, scrollable, CUSTIMAGE_NONE, CUSTIMAGE_NONE);
 }
 
-void ListBox::InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable, Texture* uptext, Texture* downtext)
+void ListBox::InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable, IMAGE uptext, IMAGE downtext)
 {
 	m_lineNbr = lineNbr;
 	m_gapBetLines = gap;
@@ -281,18 +282,22 @@ bool ListBox::IsWidth(uint16 width) const
 
 #pragma region Font color
 
-void ListBox::SetFontColor(Texture* color)
+void ListBox::SetFontColor(COLOR color)
 {
 	m_fontColor = color;
 	UpdateValues();
 }
-Texture* ListBox::GetFontColor() const
+COLOR ListBox::GetFontColor() const
 {
 	return m_fontColor;
 }
-bool ListBox::IsFontColor(Texture* color) const
+bool ListBox::IsFontColor(COLOR color) const
 {
 	return m_fontColor == color;
+}
+bool ListBox::GetFontColorTexture() const
+{
+	return m_fontColor != TEXTCOLOR_NONE ? FontColor::Get(m_fontColor) : 0;
 }
 
 #pragma endregion

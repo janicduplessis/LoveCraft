@@ -13,7 +13,7 @@ public:
 	ListBox();
 	virtual ~ListBox();
 	virtual void InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable);
-	virtual void InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable, Texture* uptext, Texture* downtext);
+	virtual void InitListBox(uint8 lineNbr, int8 gap, Point offset, bool scrollable, IMAGE uptext, IMAGE downtext);
 	virtual void SetLine(unsigned short line, const string& message);
 	virtual void Render();
 
@@ -39,9 +39,10 @@ public:
 	virtual uint16 GetWidth() const;
 	virtual bool IsWidth(uint16 width) const;
 
-	virtual void SetFontColor(Texture* color);
-	virtual Texture* GetFontColor() const;
-	virtual bool IsFontColor(Texture* color) const;
+	virtual void SetFontColor(COLOR color);
+	virtual COLOR GetFontColor() const;
+	virtual bool IsFontColor(COLOR color) const;
+	virtual bool GetFontColorTexture() const;
 
 	virtual void AddLine(const string& message);
 	virtual string GetLine(int index);

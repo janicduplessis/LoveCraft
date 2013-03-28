@@ -1,11 +1,11 @@
 #include "progressbar.h"
-
+#include "../../../uiimage.h"
 #include <cmath>
 #include <string>
 #include <iostream>
 #include <sstream>
 
-ProgressBar::ProgressBar() : Drawable(CTRLTYPE_PROGRESSBAR), m_foreground(0), m_borderSize(0),
+ProgressBar::ProgressBar() : Drawable(CTRLTYPE_PROGRESSBAR), m_foreground(CUSTIMAGE_NONE), m_borderSize(0),
 	m_mode(ProgressBar::BARMODE_HORIZONTAL_LTR), m_minimum(0), m_maximum(100), m_value(0)
 {
 	m_backImage = new PictureBox();
@@ -51,12 +51,12 @@ void ProgressBar::DrawSquare()
 
 void ProgressBar::DrawingBindTexture()
 {
-	m_foreground->Bind();
+	GetForegroundTexture()->Bind();
 }
 
 #pragma region Class functions
 
-void ProgressBar::Init(BarMode mode, Texture* foreground, uint8 bordersize)
+void ProgressBar::Init(BarMode mode, IMAGE foreground, uint8 bordersize)
 {
 	m_mode = mode;
 	m_foreground = foreground;
@@ -70,15 +70,16 @@ void ProgressBar::Init(BarMode mode, Texture* foreground, uint8 bordersize)
 void ProgressBar::DrawingDrawSquareLTR()
 {
 	float filled = FilledWidth();
+	Texture* text = GetForegroundTexture();
 	glBegin(GL_QUADS);
 
 	glTexCoord2f(0, 0);
 	glVertex2f(0, 0);
 
-	glTexCoord2f(filled / m_foreground->GetWidth(), 0);
+	glTexCoord2f(filled / text->GetWidth(), 0);
 	glVertex2f(filled, 0);
 
-	glTexCoord2f(filled / m_foreground->GetWidth(), 1);
+	glTexCoord2f(filled / text->GetWidth(), 1);
 	glVertex2f(filled, GetSize().h);
 
 	glTexCoord2f(0, 1);
@@ -90,12 +91,13 @@ void ProgressBar::DrawingDrawSquareLTR()
 void ProgressBar::DrawingDrawSquareDTU()
 {
 	float filled = FilledHeight();
+	Texture* text = GetForegroundTexture();
 	glBegin(GL_QUADS);
 
-	glTexCoord2f(filled / m_foreground->GetWidth(), 0);
+	glTexCoord2f(filled / text->GetWidth(), 0);
 	glVertex2f(0, 0);
 
-	glTexCoord2f(filled / m_foreground->GetWidth(), 1);
+	glTexCoord2f(filled / text->GetWidth(), 1);
 	glVertex2f(GetSize().w, 0);
 
 	glTexCoord2f(0, 1);
@@ -158,19 +160,23 @@ bool ProgressBar::IsValue(float first, float second) const
 
 #pragma region Foreground
 
-void ProgressBar::SetForeground(Texture* foreground)
+void ProgressBar::SetForeground(IMAGE foreground)
 {
 	if (m_foreground == foreground)
 		return;
 	m_foreground = foreground;
 }
-Texture* ProgressBar::GetForeground() const
+IMAGE ProgressBar::GetForeground() const
 {
 	return m_foreground;
 }
-bool ProgressBar::IsForeground(Texture* foreground)
+bool ProgressBar::IsForeground(IMAGE foreground)
 {
 	return m_foreground == foreground;
+}
+Texture* ProgressBar::GetForegroundTexture() const
+{
+	return m_foreground != CUSTIMAGE_NONE ? UIImage::Get(m_foreground) : 0;
 }
 
 #pragma endregion

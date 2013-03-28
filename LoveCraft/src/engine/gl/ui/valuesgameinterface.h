@@ -9,9 +9,8 @@
 
 struct ValuesGameInterface : ValuesInterface
 {
-	virtual void Init(Texture** _textures, Texture** _fonts, TextureArray* _blocs, Player* _player, Character* _char)
+	virtual void Init(TextureArray* _blocs, Player* _player, Character* _char)
 	{
-		ValuesInterface::Init(_textures, _fonts);
 		Player = _player;
 		Character = _char;
 		BlocTextures = _blocs;

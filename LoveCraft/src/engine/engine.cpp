@@ -52,22 +52,6 @@ Engine::~Engine()
 			}
 		}
 	}
-	if (Info::Get().GetStatus(Info::LSTATUS_TEXTURE_IMAGE))
-	{
-		for (int i = 0; i < CUSTIMAGE_LAST; i++)
-		{
-			delete m_textureInterface[i];
-		}
-		delete [] m_textureInterface;
-	}
-	if (Info::Get().GetStatus(Info::LSTATUS_TEXTURE_FONTS))
-	{
-		for (int i = 0; i < TEXTCOLOR_LAST; i++)
-		{
-			delete m_texturefontColor[i];
-		}
-		delete [] m_texturefontColor;
-	}
 	if (Info::Get().GetStatus(Info::LSTATUS_MONSTERS))
 	{
 		// delete les monstres
@@ -175,7 +159,6 @@ void Engine::GlobalInit()
 
 void Engine::MenuInit()
 {
-	m_valuesMenuInterface.Init(m_textureInterface, m_texturefontColor);
 	m_valuesMenuInterface.Update(MousePosition(), Width(), Height());
 	m_menuUI.Init(m_valuesMenuInterface);
 	m_debugUI.Init(m_valuesMenuInterface);
@@ -258,7 +241,7 @@ void Engine::GameInit()
 
 #pragma endregion
 
-	m_valuesGameInterface.Init(m_textureInterface, m_texturefontColor, m_textureArray, m_player, m_character);
+	m_valuesGameInterface.Init(m_textureArray, m_player, m_character);
 	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_gameUI.Init(m_valuesGameInterface);
 }
@@ -376,7 +359,6 @@ void Engine::LoadMenuResource()
 	m_menuUI.btn_debugStart->OnClick.Attach(this, &Engine::OnClick);
 	m_menuUI.btn_normStart->OnClick.Attach(this, &Engine::OnClick);
 	m_menuUI.btn_close->OnClick.Attach(this, &Engine::OnClick);
-
 
 #pragma endregion
 

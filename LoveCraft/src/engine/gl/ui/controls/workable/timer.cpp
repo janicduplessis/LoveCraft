@@ -47,7 +47,7 @@ void Timer::Start()
 uint16 Timer::Stop()
 {
 	if (!IsEnabled())
-		return;
+		return 0;
 
 	uint16 laps = m_laps;
 	Disable();

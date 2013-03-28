@@ -54,10 +54,11 @@ public:
 	virtual void Show();
 	virtual bool IsVisible() const;
 
-	virtual void SetBackground(Texture* texture);
+	virtual void SetBackground(IMAGE image);
 	virtual void RemoveBackground();
-	virtual Texture* GetBackground() const;
-	virtual bool IsBackground(Texture* texture);
+	virtual IMAGE GetBackground() const;
+	virtual bool IsBackground(IMAGE image);
+	virtual Texture* GetBackgroundTexture() const;
 
 	virtual void SetTooltipText(const string& text);
 	virtual string GetTooltipText() const;
@@ -89,7 +90,7 @@ protected:
 	Theme* m_theme;
 	BLENDTYPE m_blend;
 	bool m_visible;
-	Texture* m_background;
+	IMAGE m_background;
 	string m_tooltipText;
 
 	uint8 m_effectNbr;

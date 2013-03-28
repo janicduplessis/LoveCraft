@@ -3,23 +3,24 @@
 
 #include "button.h"
 
+class PictureBox;
+class Label;
+
 class SpellButton : Button
 {
 public:
 	SpellButton();
 	virtual ~SpellButton();
-
-	virtual void SetAlternate(Texture* image);
-	virtual Texture* Getalternate() const;
-	virtual bool IsAlternate(Texture* image) const;
-	virtual void ResetAlternate();
-
-	virtual void ShowAlternate();
-	virtual void HideAlternate();
+	virtual void Init(const uint8 spellNbr);
+	virtual void Render();
+	
+	virtual void Activate();
+	virtual void Desactivate();
+	virtual bool IsActive() const;
 protected:
-	virtual void DrawingBindTexture();
-	Texture* m_alternateImage;
-	bool m_showalternate;
+	PictureBox* m_offIcon;
+	uint8 m_spellNbr;
+	bool m_active;
 };
 
 #endif

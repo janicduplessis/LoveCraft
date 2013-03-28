@@ -3,7 +3,7 @@
 #include "../uiimage.h"
 
 Localizable::Localizable(CONTROLTYPE type, CONTROLGENERICTYPE gentype) : Control(type), m_blend(CBLEND_PNG), m_visible(true), 
-	m_parent(0), m_theme(0), m_background(0), m_effects(0), m_effectNbr(0), m_gentype(gentype), m_tooltipText("")
+	m_parent(0), m_theme(0), m_background(CUSTIMAGE_NONE), m_effects(0), m_effectNbr(0), m_gentype(gentype), m_tooltipText("")
 {
 }
 
@@ -30,7 +30,7 @@ void Localizable::InitLocalizable(Point position, Size size, IMAGE background, C
 	m_parent = parent;
 	m_position = position;
 	m_size = size;
-	m_background = UIImage::Get(background);
+	m_background = background;
 	SetOrigin(origin);
 	if (parent)
 		parent->AddControl(this);
@@ -169,7 +169,8 @@ void Localizable::SetTheme(ThemeSet theme)
 }
 void Localizable::ApplyTheme(ThemeSet theme)
 {
-
+	Theme* t = Theme::GetTheme(theme);
+	
 }
 void Localizable::RemoveTheme()
 {
@@ -230,25 +231,29 @@ bool Localizable::IsVisible() const
 
 #pragma region Background
 
-void Localizable::SetBackground(Texture* texture)
+void Localizable::SetBackground(IMAGE image)
 {
-	if (m_background == texture)
+	if (m_background == image)
 		return;
-	m_background = texture;
+	m_background = image;
 }
 void Localizable::RemoveBackground()
 {
-	if (!m_background)
+	if (m_background == CUSTIMAGE_NONE)
 		return;
-	m_background = 0;
+	m_background = CUSTIMAGE_NONE;
 }
-Texture* Localizable::GetBackground() const
+IMAGE Localizable::GetBackground() const
 {
 	return m_background;
 }
-bool Localizable::IsBackground(Texture* texture)
+bool Localizable::IsBackground(IMAGE image)
 {
-	return m_background == texture;
+	return m_background == image;
+}
+Texture* Localizable::GetBackgroundTexture() const
+{
+	return m_background != CUSTIMAGE_NONE ? UIImage::Get(m_background) : 0;
 }
 
 #pragma endregion
@@ -352,8 +357,8 @@ void Localizable::DrawingGetGraphicReady() const
 }
 void Localizable::DrawingBindTexture()
 {
-	if (m_background)
-		m_background->Bind();
+	if (m_background != CUSTIMAGE_NONE)
+		GetBackgroundTexture()->Bind();
 }
 void Localizable::DrawingDrawSquare() const
 {

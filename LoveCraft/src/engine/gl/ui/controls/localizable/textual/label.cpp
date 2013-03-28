@@ -21,14 +21,14 @@ void Label::Render()
 		Point& abspos = AbsolutePosition();
 		SetSize(Size(message.length() * m_charWidth * m_charInterval - m_charWidth * m_charInterval, m_charHeight));
 
-		if (GetBackground())
+		if (GetBackground() != CUSTIMAGE_NONE)
 			DrawSquare();
 
-		if (GetColor())
+		if (GetColor() != TEXTCOLOR_NONE)
 		{
 			DrawingActivateBlend();
 
-			GetColor()->Bind();
+			GetColorTexture()->Bind();
 			glLoadIdentity();
 			glTranslatef(abspos.x, abspos.y, 0);
 
@@ -66,7 +66,7 @@ void Label::Init(Docking dock, Point offset)
 
 void Label::InitLocalizable(Point position, Container* parent, Localizable* anchor)
 {
-	Localizable::InitLocalizable(position, Size(), 0, parent);
+	Localizable::InitLocalizable(position, Size(), CUSTIMAGE_NONE, parent);
 	m_anchor = anchor;
 }
 

@@ -6,12 +6,10 @@ Texture** UIImage::m_textures = 0;
 
 Texture* UIImage::Get(IMAGE image)
 {
-	assert(image >= 0 && image < CUSTIMAGE_LAST);
-
 	if (!m_textures)
 	{
-		m_textures = new Texture*[CUSTIMAGE_LAST];
-		for (uint8 i = 0; i < CUSTIMAGE_LAST; i++)
+		m_textures = new Texture*[CUSTIMAGE_NONE];
+		for (uint8 i = 0; i < CUSTIMAGE_NONE; i++)
 			m_textures[i] = new Texture();
 		InitImages();
 	}
@@ -60,15 +58,8 @@ void UIImage::InitImages()
 	m_textures[CUSTIMAGE_SPELL_RAIN]->Load(TEXTURE_PATH "s_spellrain.gif");
 	m_textures[CUSTIMAGE_SPELL_DEFEND]->Load(TEXTURE_PATH "s_spelldefend.gif");
 	m_textures[CUSTIMAGE_SPELL_SHIELD]->Load(TEXTURE_PATH "s_spellshield.png");
+	m_textures[CUSTIMAGE_SPELL_OFFLINE]->Load(TEXTURE_PATH "s_offlinespell.png");
 
-	m_textures[CUSTIMAGE_SPELL_BOLT]->Load(TEXTURE_PATH "s_spellboltx.gif");
-	m_textures[CUSTIMAGE_SPELL_FIRE]->Load(TEXTURE_PATH "s_spellfirex.png");
-	m_textures[CUSTIMAGE_SPELL_FREEZE]->Load(TEXTURE_PATH "s_spellfreezex.png");
-	m_textures[CUSTIMAGE_SPELL_SHOCK]->Load(TEXTURE_PATH "s_spellshockx.png");
-	m_textures[CUSTIMAGE_SPELL_POISON]->Load(TEXTURE_PATH "s_spellpoisonx.gif");
-	m_textures[CUSTIMAGE_SPELL_STORM]->Load(TEXTURE_PATH "s_spellstormx.png");
-	m_textures[CUSTIMAGE_SPELL_HEAL]->Load(TEXTURE_PATH "s_spellhealx.gif");
-	m_textures[CUSTIMAGE_SPELL_RAIN]->Load(TEXTURE_PATH "s_spellrainx.gif");
-	m_textures[CUSTIMAGE_SPELL_DEFEND]->Load(TEXTURE_PATH "s_spelldefendx.gif");
-	m_textures[CUSTIMAGE_SPELL_SHIELD]->Load(TEXTURE_PATH "s_spellshieldx.png");
+	for (int i = 0; i < CUSTIMAGE_NONE; i++)
+		assert(m_textures[i]->IsValid());
 }

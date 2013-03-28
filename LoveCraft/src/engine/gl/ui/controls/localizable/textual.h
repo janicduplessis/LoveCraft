@@ -8,7 +8,7 @@ class Textual : public Localizable
 public:
 	Textual(CONTROLTYPE type);
 	virtual ~Textual();
-	virtual void InitTextual(COLOR color, bool italic, float charHeight, float charWidth, float charinterval, IMAGE background = 0);
+	virtual void InitTextual(COLOR color, bool italic, float charHeight, float charWidth, float charinterval, IMAGE background = CUSTIMAGE_NONE);
 
 	virtual void Render() = 0;
 
@@ -22,6 +22,7 @@ public:
 	virtual void SetColor(COLOR color);
 	virtual COLOR GetColor() const;
 	virtual bool IsColor(COLOR color) const;
+	virtual Texture* GetColorTexture() const;
 
 	virtual void SetItalic();
 	virtual void RemoveItalic();
@@ -43,7 +44,7 @@ public:
 	virtual float IsCharInterval(float interval) const;
 protected:
 	string m_message;
-	Texture* m_fontColor;
+	COLOR m_fontColor;
 	bool m_italic;
 	float m_charWidth;
 	float m_charHeight;

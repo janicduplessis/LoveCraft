@@ -21,13 +21,12 @@ public:
 	float GetWidth() const;
 	float GetInterval() const;
 	bool GetItalic() const;
-	Texture* GetForeColor() const;
+	COLOR GetForeColor() const;
 
-	Texture* GetBackBackPanel() const;
-	Texture* GetBackMainPanel() const;
-	Texture* GetBackButton() const;
-	Texture* GetBackTextbox() const;
-	Texture* GetBackListbox() const;
+	IMAGE GetBackBackPanel() const;
+	IMAGE GetBackButton() const;
+	IMAGE GetBackTextbox() const;
+	IMAGE GetBackListbox() const;
 private:
 	static Theme** m_themes;
 	static void InitThemes();
@@ -40,13 +39,13 @@ private:
 	float m_charW;
 	float m_charI;
 	bool m_italicText;
-	Texture* m_foreColor;
+	COLOR m_foreColor;
 	
 	void SetBackgrounds(IMAGE mainpanel, IMAGE button, IMAGE textbox, IMAGE listbox);
-	Texture* m_backPanel;
-	Texture* m_backButton;
-	Texture* m_backTextbox;
-	Texture* m_backListbox;
+	IMAGE m_backPanel;
+	IMAGE m_backButton;
+	IMAGE m_backTextbox;
+	IMAGE m_backListbox;
 };
 
 #endif

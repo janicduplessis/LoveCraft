@@ -1,64 +1,54 @@
 #include "spellbutton.h"
 #include "../label.h"
+#include "../../drawable/picturebox.h"
 
-SpellButton::SpellButton() : Button(CTRLTYPE_SPELLBUTTON), m_alternateImage(0), m_showalternate(false)
+SpellButton::SpellButton() : Button(CTRLTYPE_SPELLBUTTON), m_offIcon(0), m_active(false), m_spellNbr(0)
 {
-	m_alternateImage = m_background;
-	m_label->SetDocking(TEXTDOCK_TOPRIGHT);
 }
 
 SpellButton::~SpellButton()
 {
 }
 
-void SpellButton::DrawingBindTexture()
+void SpellButton::Init(const uint8 spellNbr)
 {
-	if (m_showalternate && m_alternateImage)
-		m_alternateImage->Bind();
-	else if (m_background) 
-		m_background->Bind();
+	m_spellNbr = spellNbr;
+
+	m_offIcon = new PictureBox();
+	m_offIcon->InitControl("offimage");
+	m_offIcon->InitLocalizable(GetPosition(), GetSize(), CUSTIMAGE_SPELL_OFFLINE, GetParent());
+
+	Button::InitTextual(TEXTCOLOR_GREEN, false, 12.0f, 12.0f, 0.6f);
+	Text->SetDocking(TEXTDOCK_TOPRIGHT);
+}
+
+void SpellButton::Render()
+{
+	Button::Render();
+
+	if (m_active)
+		m_offIcon->Render();
 }
 
 // Propriétés
 
-#pragma region Show alternate
+#pragma region Active
 
-void SpellButton::ShowAlternate()
+void SpellButton::Activate()
 {
-	if (m_showalternate)
+	if (m_active)
 		return;
-	m_showalternate = true;
+	m_active = true;
 }
-void SpellButton::HideAlternate()
+void SpellButton::Desactivate()
 {
-	if (!m_showalternate)
+	if (!m_active)
 		return;
-	m_showalternate = false;
+	m_active = false;
 }
-
-#pragma endregion
-
-#pragma region Alternate
-
-void SpellButton::SetAlternate(Texture* image)
+bool SpellButton::IsActive() const
 {
-	if (m_alternateImage == image)
-		return;
-	m_alternateImage = image;
-}
-Texture* SpellButton::Getalternate() const
-{
-	return m_alternateImage;
-}
-bool SpellButton::IsAlternate(Texture* image) const
-{
-	return m_alternateImage == image;
-}
-void SpellButton::ResetAlternate()
-{
-	if (m_alternateImage == m_background)
-		return;
-	m_alternateImage = m_background;
+	return m_active;
 }
 
 #pragma endregion

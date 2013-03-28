@@ -16,7 +16,7 @@ void DebugInterface::Init(const ValuesInterface& val)
 	// controles de test
 	m_timertest = new Panel();
 	m_timertest->InitControl("timertest");
-	m_timertest->InitLocalizable(Point(100, 100), Size(400, 400), val.UITextures[CUSTIMAGE_CONSOLE_BACK], 0);
+	m_timertest->InitLocalizable(Point(100, 100), Size(400, 400), CUSTIMAGE_CONSOLE_BACK, 0);
 
 	m_timertesttext = new Label();
 	m_timertesttext->InitControl("text");
@@ -24,7 +24,7 @@ void DebugInterface::Init(const ValuesInterface& val)
 	m_timertesttext->SetCharHeight(24.f);
 	m_timertesttext->SetCharWidth(14.f);
 	m_timertesttext->SetCharInterval(0.5f);
-	m_timertesttext->SetColor(val.FontTextures[TEXTCOLOR_BLUE]);
+	m_timertesttext->SetColor(TEXTCOLOR_BLUE);
 	m_timertesttext->SetMsg("Appuyez sur espace pour tester.");
 
 	m_timertesttime = new Label();
@@ -35,7 +35,7 @@ void DebugInterface::Init(const ValuesInterface& val)
 	m_timertesttime->SetCharInterval(0.5f);
 	m_timertesttime->SetOffset(Point(0, 70));
 	m_timertesttime->SetDocking(TEXTDOCK_MIDDLECENTER);
-	m_timertesttime->SetColor(val.FontTextures[TEXTCOLOR_BLUE]);
+	m_timertesttime->SetColor(TEXTCOLOR_BLUE);
 	m_timertesttime->SetMsg("Interval du label: &var");
 
 

@@ -14,7 +14,7 @@ void Textbox::Render()
 	if (IsVisible())
 	{
 		DrawSquare();
-		m_label->Render();
+		Text->Render();
 	}
 }
 

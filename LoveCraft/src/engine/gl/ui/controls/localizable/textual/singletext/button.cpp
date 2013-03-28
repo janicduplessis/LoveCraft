@@ -17,7 +17,7 @@ Button::~Button()
 void Button::Render()
 {
 	DrawSquare();
-	m_label->Render();
+	Text->Render();
 }
 
 #pragma region Events

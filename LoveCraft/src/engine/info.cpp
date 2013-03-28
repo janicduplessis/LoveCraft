@@ -2,8 +2,7 @@
 #include "engine/gl/ui/controls/localizable/textual/label.h"
 #include "interfaceinfos.h"
 
-Info::Info() : m_lineToPrint(""), m_console(0), m_lstatus(0), m_offsetMap(0),
-	m_textInterface(0), m_fontColors(0)
+Info::Info() : m_lineToPrint(""), m_console(0), m_lstatus(0), m_offsetMap(0)
 {
 	GenerateBlocInfos();
 }

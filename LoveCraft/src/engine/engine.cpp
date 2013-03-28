@@ -335,7 +335,7 @@ void Engine::LoadGlobalResource()
 	if (!m_lightingShader.Init())
 		std::cout << "Error initializing lighting shader" << std::endl;
 
-	m_lightingShader.Use();
+	m_lightingShader.Enable();
 	m_lightingShader.SetDirectionalLight(dirLight);
 	m_lightingShader.SetMatSpecualarIntensity(0);
 	m_lightingShader.SetMatSpecularPower(0);
@@ -639,7 +639,7 @@ void Engine::RenderGame()
 
 	// render le modele du player
 	m_normalMap.Bind(GL_TEXTURE2);
-	m_lightingShader.Use();
+	m_lightingShader.Enable();
 
 	// Update lights
 	PointLight p3;

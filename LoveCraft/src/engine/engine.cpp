@@ -139,6 +139,12 @@ void Engine::GlobalInit()
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_FOG);
 
+	m_persProjInfo.FOV = 60.f;
+	m_persProjInfo.Height = Height();
+	m_persProjInfo.Width = Width();
+	m_persProjInfo.zNear = 1.f;
+	m_persProjInfo.zFar = 100.f;
+
 	// Light
 	GLfloat light0Pos[4]  = {0.0f, CHUNK_SIZE_Y, 0.0f, 1.0f};
 	GLfloat light0Amb[4]  = {0.9f, 0.9f, 0.9f, 1.0f};
@@ -224,7 +230,7 @@ void Engine::GameInit()
 
 #pragma endregion
 
-	m_player->Init();
+	m_player->Init(&m_modelShader);
 	m_skybox->Init(SKYBOX_PATH, "sp3left.jpg", "sp3right.jpg", "sp3top.jpg", "sp3bot.jpg", "sp3back.jpg", "sp3front.jpg");
 
 #pragma region Initialisation des entites
@@ -431,6 +437,9 @@ void Engine::LoadGlobalResource()
 	if (!m_lightingShader.Init())
 		std::cout << "Error initializing lighting shader" << std::endl;
 
+	if (!m_modelShader.Init())
+		std::cout << "Error initializing model shader" << std::endl;
+
 	m_lightingShader.Enable();
 	m_lightingShader.SetDirectionalLight(dirLight);
 	m_lightingShader.SetMatSpecualarIntensity(0);
@@ -438,6 +447,18 @@ void Engine::LoadGlobalResource()
 	m_lightingShader.SetColorTextureUnit(0);
 	m_lightingShader.SetNormalTextureUnit(2);
 	m_lightingShader.SetPointLights(3, pointLights);
+
+	Shader::Disable();
+
+	CHECK_GL_ERROR();
+
+	m_modelShader.Enable();
+	m_modelShader.SetDirectionalLight(dirLight);
+	m_modelShader.SetColorTextureUnit(0);
+	m_modelShader.SetMatSpecualarIntensity(0);
+	m_modelShader.SetMatSpecualarIntensity(0.5);
+	m_modelShader.SetMatSpecularPower(16);
+	m_modelShader.SetPointLights(3, pointLights);
 
 	Shader::Disable();
 
@@ -490,6 +511,7 @@ void Engine::UpdateGame(float elapsedTime)
 
 	static float gameTime = elapsedTime;
 	gameTime += elapsedTime;
+	m_gameTime = gameTime;
 	m_character->ReduceGlobalCooldown(elapsedTime);
 	if (m_clickTimerOn)
 		m_clickTimer += elapsedTime;
@@ -737,7 +759,6 @@ void Engine::RenderGame()
 
 	// render le modele du player
 	m_normalMap.Bind(GL_TEXTURE2);
-	m_lightingShader.Enable();
 
 	// Update lights
 	PointLight p3;
@@ -752,14 +773,24 @@ void Engine::RenderGame()
 	float toLanterLenght = toLantern.Lenght();
 	toLantern = rot * toLantern * toLanterLenght;
 	p3.Position = m_player->Position() + toLantern;
-	m_lightingShader.UpdatePointLight(2, p3);
 
-	// Setup player lighting
-	m_lightingShader.SetMatSpecualarIntensity(0.5);
-	m_lightingShader.SetMatSpecularPower(16);
-	m_lightingShader.SetColorTextureUnit(0);
-	m_lightingShader.SetTextureUnitType(0);
+	// Update common uniforms
+	m_modelShader.Enable();
+	m_modelShader.UpdatePointLight(2, p3);
+	m_modelShader.SetEyeWorldPos(Vector3f(0,3,-1));
+	m_lightingShader.Enable();
+	m_lightingShader.UpdatePointLight(2, p3);
 	m_lightingShader.SetEyeWorldPos(m_camera->GetRealPosition());
+
+	Pipeline pipeline;
+	pipeline.SetCamera(Vector3f(0, 3, -1), Vector3f(0, 0, 1), Vector3f(0, 1, 0));
+	pipeline.SetPerspectiveProj(m_persProjInfo);
+	Matrix4f test2 = pipeline.GetWVPTrans();
+
+	pipeline.Scale(0.1f, 0.1f, 0.1f);
+	pipeline.WorldPos(Vector3f(0, 0, 6));
+	pipeline.Rotate(270.f, 180.f, 0.f);
+
 	glPushMatrix();
 	glLoadIdentity();
 	glTranslatef(m_player->Position().x, m_player->Position().y - 1.7f, m_player->Position().z);
@@ -774,10 +805,12 @@ void Engine::RenderGame()
 		mv2[8], mv2[9], mv2[10], mv2[11],
 		mv2[12], mv2[13], mv2[14], mv2[15]);
 
+	m_modelShader.Enable();
+	m_modelShader.SetWVP(pipeline.GetWVPTrans());
+	m_modelShader.SetWorld(pipeline.GetWorldTrans());
+
 	m_player->Update();
-	m_lightingShader.SetWVP(modelView2 * modelView * m_mxProjection);
-	m_lightingShader.SetWorld(modelView2);
-	m_player->Render();
+	m_player->Render(m_gameTime);
 	glPopMatrix();
 
 	CHECK_GL_ERROR();
@@ -788,8 +821,7 @@ void Engine::RenderGame()
 #pragma region Render les cubes
 
 	// Set cube lighting
-	m_lightingShader.SetMatSpecualarIntensity(0);
-	m_lightingShader.SetMatSpecularPower(0);
+	m_lightingShader.Enable();
 	m_textureArray->Use(GL_TEXTURE1);
 	m_noNormalMap.Bind(GL_TEXTURE2);
 	m_lightingShader.SetTextureUnitType(1);
@@ -835,7 +867,7 @@ void Engine::RenderGame()
 		mv3[12], mv3[13], mv3[14], mv3[15]);
 
 	glPopMatrix();
-	m_skybox->Render(modelView3 * modelView * m_mxProjection);
+	//m_skybox->Render(modelView3 * modelView * m_mxProjection);
 
 #pragma endregion
 
@@ -926,7 +958,7 @@ void Engine::RenderGame()
 	}
 
 #pragma endregion
-
+	
 }
 
 #pragma endregion

@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>external/assimp/include;external/devil178_vstudio2k10/include;external/glfx/include;external/sfml20_vstudio2k10/include;$(IncludePath)</IncludePath>
-    <LibraryPath>external/assimp/lib/x86;external/glfx/lib;external/devil178_vstudio2k10/lib;external/sfml20_vstudio2k10/lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>external/assimp/lib;external/glfx/lib;external/devil178_vstudio2k10/lib;external/sfml20_vstudio2k10/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -83,6 +83,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\gl\cubemaptexture.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\modelshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\shadernew.cpp" />
     <ClCompile Include="src\engine\gl\shaders\skyboxshader.cpp" />
     <ClCompile Include="src\engine\gl\skybox.cpp" />
@@ -92,6 +93,7 @@
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.cpp" />
     <ClCompile Include="src\engine\gl\ui\debuginterface.cpp" />
+    <ClCompile Include="src\engine\pipeline.cpp" />
     <ClCompile Include="src\game\entity.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\drawable\bubble.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\container\dialogwindow.cpp" />
@@ -140,6 +142,7 @@
     <ClCompile Include="src\engine\openglcontext.cpp" />
     <ClCompile Include="src\engine\player.cpp" />
     <ClCompile Include="src\engine\projectile.cpp" />
+    <ClCompile Include="src\util\matrix42.cpp" />
     <ClCompile Include="src\util\perlin.cpp" />
     <ClCompile Include="src\util\quaternion.cpp" />
     <ClCompile Include="src\engine\gl\shaders\shader.cpp" />
@@ -155,6 +158,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\gl\cubemaptexture.h" />
+    <ClInclude Include="src\engine\gl\shaders\lights.h" />
+    <ClInclude Include="src\engine\gl\shaders\modelshader.h" />
     <ClInclude Include="src\engine\gl\shaders\shadernew.h" />
     <ClInclude Include="src\engine\gl\shaders\skyboxshader.h" />
     <ClInclude Include="src\engine\gl\skybox.h" />
@@ -164,6 +169,7 @@
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.h" />
     <ClInclude Include="src\engine\gl\ui\debuginterface.h" />
+    <ClInclude Include="src\engine\pipeline.h" />
     <ClInclude Include="src\game\entity.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\drawable\bubble.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\container\dialogwindow.h" />
@@ -221,6 +227,7 @@
     <ClInclude Include="src\engine\network.h" />
     <ClInclude Include="src\game\npc.h" />
     <ClInclude Include="src\engine\projectile.h" />
+    <ClInclude Include="src\util\matrix42.h" />
     <ClInclude Include="src\util\perlin.h" />
     <ClInclude Include="src\util\quaternion.h" />
     <ClInclude Include="src\engine\son.h" />
@@ -242,8 +249,6 @@
     <None Include="src\engine\gl\shaders\billboardshader.frag" />
     <None Include="src\engine\gl\shaders\billboardshader.geom" />
     <None Include="src\engine\gl\shaders\billboardshader.vert" />
-    <None Include="src\engine\gl\shaders\lightingshader.frag" />
-    <None Include="src\engine\gl\shaders\lightingshader.vert" />
     <None Include="src\engine\gl\shaders\modelshader.vert" />
     <None Include="src\engine\gl\shaders\modelshader.frag" />
     <None Include="src\engine\gl\shaders\cubeshader.frag" />
@@ -255,6 +260,10 @@
     <None Include="src\engine\gl\shaders\skyboxshader.frag" />
     <None Include="src\engine\gl\shaders\skyboxshader.vert" />
     <None Include="src\engine\gl\shaders\lighting.glsl">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="src\engine\gl\shaders\model.glsl">
       <SubType>
       </SubType>
     </None>

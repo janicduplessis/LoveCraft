@@ -229,6 +229,15 @@
     <ClCompile Include="src\engine\gl\shaders\shadernew.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\modelshader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\pipeline.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\matrix42.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\util\array.h">
@@ -480,6 +489,18 @@
     <ClInclude Include="src\engine\gl\shaders\shadernew.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\modelshader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\lights.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\pipeline.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\matrix42.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\gl\shaders\billboardshader.frag">
@@ -507,12 +528,6 @@
     <None Include="src\engine\gl\shaders\psupdateshader.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="src\engine\gl\shaders\lightingshader.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="src\engine\gl\shaders\lightingshader.frag">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="src\engine\gl\shaders\psupdateshader.geom" />
     <None Include="src\engine\gl\shaders\cubeshader.frag">
       <Filter>Shaders</Filter>
@@ -524,6 +539,9 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="src\engine\gl\shaders\lighting.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="src\engine\gl\shaders\model.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

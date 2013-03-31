@@ -55,7 +55,8 @@ bool ModelMesh::LoadMesh( const std::string& filename, bool flipUV )
 	m_scene = m_importer.ReadFile(filename.c_str(), postProcess);
 
 	if (m_scene) {
-		m_globalInverseTransform = m_scene->mRootNode->mTransformation.Inverse();
+		aiMatrix4x4 global = m_scene->mRootNode->mTransformation;
+		m_globalInverseTransform = global.Inverse();
 		ret = InitFromScene(m_scene, filename);
 	}
 	else {
@@ -303,7 +304,7 @@ void ModelMesh::ReadNodeHeirarchy( float animationTime, const aiNode* pNode, con
 		// Interpolate scaling and generate scaling transformation matrix
 		aiVector3D scaling;
 		CalcInterpolatedScaling(scaling, animationTime, pNodeAnim);
-		Matrix4f scalingM = Matrix4f::IDENTITY;;
+		Matrix4f scalingM = Matrix4f::IDENTITY;
 		scalingM.ApplyScale(scaling.x, scaling.y, scaling.z);
 
 		// Interpolate rotation and generate rotation transformation matrix

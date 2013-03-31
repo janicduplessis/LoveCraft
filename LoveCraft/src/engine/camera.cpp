@@ -87,3 +87,39 @@ Camera::~Camera()
 
 }
 
+Vector3f Camera::GetUp() const
+{
+	const Vector3f Vaxis(0.0f, 1.0f, 0.0f);
+
+	Vector3f view(1.0f, 0.0f, 0.0f);
+	view.Rotate(m_rot.y, Vaxis);
+	view.Normalise();
+
+	// Rotate the view vector by the vertical angle around the horizontal axis
+	Vector3f Haxis = Vaxis.Cross(view);
+	Haxis.Normalise();
+	view.Rotate(m_rot.x, Haxis);
+
+	view.Normalise();
+
+	return view.Cross(Haxis).Normalise();
+}
+
+Vector3f Camera::GetTarget() const
+{
+	const Vector3f Vaxis(0.0f, 1.0f, 0.0f);
+
+	Vector3f view(0.0f, 0.0f, 1.0f);
+	view.Rotate(m_rot.y, Vaxis);
+	view.Normalise();
+
+	// Rotate the view vector by the vertical angle around the horizontal axis
+	Vector3f Haxis = Vaxis.Cross(view);
+	Haxis.Normalise();
+	view.Rotate(m_rot.x, Haxis);
+
+	view.Normalise();
+
+	return view;
+}
+

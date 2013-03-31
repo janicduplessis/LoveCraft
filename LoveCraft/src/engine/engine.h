@@ -8,9 +8,12 @@
 #include "openglcontext.h"
 #include "enumerators.h"
 
+#include "pipeline.h"
+
 #include "gl/texture.h"
 #include "gl/shaders/shader.h"
 #include "gl/shaders/lightingshader.h"
+#include "gl/shaders/modelshader.h"
 #include "gl/texturearray.h"
 #include "gl/skybox.h"
 
@@ -176,6 +179,7 @@ private:
 	Shader m_shaderCube;
 	Shader m_shaderSpells;
 	LightingShader m_lightingShader;
+	ModelShader m_modelShader;
 
 	Array2d<Chunk*>* m_chunks;
 	Skybox* m_skybox;
@@ -215,6 +219,10 @@ private:
 	Timer* m_timeranimationmoins;
 
 	sf::Mutex m_mutex;
+
+	PersProjInfo m_persProjInfo;
+
+	float m_gameTime;
 };
 
 #endif // ENGINE_H__

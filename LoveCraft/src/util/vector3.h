@@ -5,6 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <SFML/Network.hpp>
+#include "tool.h"
 
 /**
 * @brief Template class pour manipuler des vecteurs 3d
@@ -22,6 +23,7 @@ public:
 	Vector3<T> Normalise();
 	Vector3<T> Zero();
 	Vector3<T> Abs();
+	Vector3<T> Rotate(float angle, const Vector3<T>& axe);
 
 	T Dot(const Vector3<T>& v) const;
 	Vector3<T> Cross(const Vector3<T>& v) const;
@@ -57,9 +59,19 @@ public:
 	T z;
 };
 
+
 typedef Vector3<int> Vector3i;
 typedef Vector3<float> Vector3f;
 
+template <class T>
+Vector3<T> Vector3<T>::Rotate( float angle, const Vector3<T>& axe )
+{
+	Quaternion rotationQ;
+	rotationQ.FromAxis(DEGTORAD(angle), axe);
+
+	*this = rotationQ * *this;
+	return *this;
+}
 
 template <class T>
 Vector3<T>::Vector3() : x(0), y(0), z(0) {}

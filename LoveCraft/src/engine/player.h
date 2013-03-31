@@ -5,6 +5,7 @@
 
 #include "controls.h"
 #include "gl/modelmesh.h"
+#include "gl/shaders/modelshader.h"
 
 #include <util/vector2.h>
 #include <util/vector3.h>
@@ -31,7 +32,7 @@ public:
 	 */
 	~Player();
 
-	void Init();
+	void Init(ModelShader* shader);
 
 	/**
 	 * Position du joueur
@@ -81,7 +82,7 @@ public:
 	 */
 	void Move(bool ghost, Character* cter, float elapsedTime);
 	void Teleport();
-	void Render (bool wireFrame = false);
+	void Render (float time, bool wireFrame = false);
 	void Update();
 	void SetRotation( Vector2f rot );
 	void ResetPosition();
@@ -102,6 +103,8 @@ private:
 
 	Vector3f m_speed;
 	Vector3f m_accel;
+
+	ModelShader* m_modelShader;
 };
 
 #endif // PLAYER_H__

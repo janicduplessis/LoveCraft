@@ -53,6 +53,9 @@ public:
 	~Camera();
 	void SetCamRadius(float radius);
 	Vector3f GetRealPosition() const;
+
+	Vector3f GetTarget() const;
+	Vector3f GetUp() const;
 private:
 	Vector3f m_pos;
 	Vector2f m_rot;

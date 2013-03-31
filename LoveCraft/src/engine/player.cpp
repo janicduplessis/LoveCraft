@@ -4,6 +4,8 @@
 #include <cmath>
 #include <iostream>
 #include <SFML/Network.hpp>
+#include <vector>
+#include "util/matrix4.h"
 
 Player::Player(Vector3f position, Vector2f rotation)
 	:m_pos(position), m_rot(rotation), m_speed(Vector3f(0, 0, 0)), 
@@ -16,8 +18,9 @@ Player::~Player()
 
 }
 
-void Player::Init()
+void Player::Init(ModelShader* shader)
 {
+	m_modelShader = shader;
 	m_model.LoadMesh(MODEL_PATH_HUMANS "boblampclean.md5mesh");
 	m_model.Scale(Vector3f(.1f, 0.1f, 0.1f));
 	//m_model.Translate(Vector3f(0, -1.05f, 0));
@@ -379,8 +382,19 @@ void Player::Move(bool ghost, Character* cter, float elapsedTime)
 #pragma endregion
 }
 
-void Player::Render(bool wireFrame)
+void Player::Render(float time, bool wireFrame)
 {
+	m_modelShader->Enable();
+	
+	std::vector<Matrix4f> tranforms;
+
+	m_model.BoneTransform(time, tranforms);
+
+	for (uint32 i = 0; i < tranforms.size(); ++i)
+	{
+		m_modelShader->SetBoneTransform(i, tranforms[i]);
+	}
+
 	m_model.Render();
 }
 

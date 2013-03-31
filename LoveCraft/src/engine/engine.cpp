@@ -16,7 +16,8 @@
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0),
-	m_clickTimer(0), m_currentBlockType(0), m_chunkLoader(&m_mutex)
+	m_clickTimer(0), m_currentBlockType(0), m_chunkLoader(&m_mutex),
+	m_gameUI(GameInterface())
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];

@@ -2,8 +2,7 @@
 #include "engine/gl/ui/controls/localizable/textual/label.h"
 #include "interfaceinfos.h"
 
-Info::Info() : m_lineToPrint(""), m_console(0), m_lstatus(0), m_offsetMap(0),
-	m_textInterface(0), m_fontColors(0)
+Info::Info() : m_lineToPrint(""), m_console(0), m_lstatus(0), m_offsetMap(0)
 {
 	GenerateBlocInfos();
 }
@@ -192,24 +191,6 @@ void Info::SetOffsetMap( const Vector2i& offset )
 Vector2i Info::GetOffsetMap() const
 {
 	return m_offsetMap;
-}
-
-void Info::SetFonts(Texture** colors)
-{
-	m_fontColors = colors;
-}
-Texture* Info::GetFontColor(uint8 index) const
-{
-	return m_fontColors[index];
-}
-
-void Info::SetTexturesInterface(Texture** textures)
-{
-	m_textInterface = textures;
-}
-Texture* Info::GetTexture(uint8 index) const
-{
-	return m_textInterface[index];
 }
 
 Dice& Info::Dic()

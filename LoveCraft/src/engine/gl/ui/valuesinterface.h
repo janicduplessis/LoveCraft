@@ -6,12 +6,6 @@
 
 struct ValuesInterface
 {
-	virtual void Init(Texture** _textures, Texture** _fonts) 
-	{
-		UITextures = _textures;
-		FontTextures = _fonts;
-	}
-
 	virtual void Update(const Point& _mousepos, int _width, int _height) 
 	{
 		if (Mousepos != _mousepos)
@@ -21,9 +15,6 @@ struct ValuesInterface
 		if (Height != _height)
 			Height = _height;
 	}
-
-	Texture** UITextures;
-	Texture** FontTextures;
 
 	Point Mousepos;
 

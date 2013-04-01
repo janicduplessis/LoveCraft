@@ -28,6 +28,7 @@ public:
 	Button* btn_close;
 
 	Panel* pnl_loading;
+	PictureBox* pb_cursor;
 
 	Label* m_mousepostest;
 	Label* m_controlmousetest;

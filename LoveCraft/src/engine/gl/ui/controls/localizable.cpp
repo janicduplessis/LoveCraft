@@ -1,24 +1,14 @@
 #include "localizable.h"
 #include "engine/gl/ui/controls/localizable/container.h"
+#include "../uiimage.h"
 
 Localizable::Localizable(CONTROLTYPE type, CONTROLGENERICTYPE gentype) : Control(type), m_blend(CBLEND_PNG), m_visible(true), 
-	m_parent(0), m_background(0), m_effects(0), m_effectNbr(0), m_gentype(gentype)
+	m_parent(0), m_theme(0), m_background(CUSTIMAGE_NONE), m_effects(0), m_effectNbr(0), m_gentype(gentype), m_tooltipText("")
 {
 }
 
 Localizable::~Localizable()
 {
-}
-
-void Localizable::InitLocalizable(Point position, Size size, Texture* background, Container* parent, ORIGIN origin)
-{
-	m_parent = parent;
-	m_position = position;
-	m_size = size;
-	m_background = background;
-	SetOrigin(origin);
-	if (parent)
-		parent->AddControl(this);
 }
 
 void Localizable::DrawSquare()
@@ -33,12 +23,29 @@ void Localizable::DrawSquare()
 	}
 }
 
+#pragma region Class funtions
+
+void Localizable::InitLocalizable(Point position, Size size, IMAGE background, Container* parent, ORIGIN origin)
+{
+	m_parent = parent;
+	m_position = position;
+	m_size = size;
+	m_background = background;
+	SetOrigin(origin);
+	if (parent)
+		parent->AddControl(this);
+}
+
+#pragma endregion
+
 // Propriétés
 
 #pragma region Parent
 
 void Localizable::SetParent(Container* parent)
 {
+	if (m_parent == parent)
+		return;
 	m_parent = parent;
 }
 Container* Localizable::GetParent() const
@@ -69,11 +76,13 @@ bool Localizable::IsGenType(CONTROLGENERICTYPE gentype) const
 
 void Localizable::SetPosition(Point position)
 {
+	if (m_position == position)
+		return;
 	m_position = position;
 }
 void Localizable::AddPosition(Point value)
 {
-	m_position = m_position + value;
+	SetPosition(GetPosition() + value);
 }
 Point Localizable::GetPosition() const
 {
@@ -95,6 +104,9 @@ Point Localizable::AbsolutePosition() const
 
 void Localizable::SetOrigin(ORIGIN origin)
 {
+	if (m_origin == origin)
+		return;
+
 	m_origin = origin;
 	m_size = Size((int)fabs((float)m_size.w), (int)fabs((float)m_size.h));
 	switch (origin)
@@ -127,11 +139,13 @@ bool Localizable::IsOrigin(ORIGIN origin) const
 
 void Localizable::SetSize(Size size)
 {
+	if (m_size == size)
+		return;
 	m_size = size;
 }
 void Localizable::AddSize(Size value)
 {
-	m_size = m_size + value;
+	SetSize(GetSize() + value);
 }
 Size Localizable::GetSize() const
 {
@@ -144,10 +158,43 @@ bool Localizable::IsSize(Size size) const
 
 #pragma endregion
 
+#pragma region Theme
+
+void Localizable::SetTheme(ThemeSet theme)
+{
+	Theme* newtheme = Theme::GetTheme(theme);
+	if (m_theme == newtheme)
+		return;
+	m_theme = newtheme;
+}
+void Localizable::ApplyTheme(ThemeSet theme)
+{
+	Theme* t = Theme::GetTheme(theme);
+	
+}
+void Localizable::RemoveTheme()
+{
+	if (!m_theme)
+		return;
+	m_theme = 0;
+}
+Theme* Localizable::GetTheme() const
+{
+	return m_theme;
+}
+bool Localizable::IsTheme(ThemeSet theme) const
+{
+	return m_theme == Theme::GetTheme(theme);
+}
+
+#pragma endregion
+
 #pragma region Blend
 
 void Localizable::SetBlend(BLENDTYPE btype)
 {
+	if (m_blend == btype)
+		return;
 	m_blend = btype;
 }
 BLENDTYPE Localizable::GetBlend() const
@@ -165,10 +212,14 @@ bool Localizable::IsBlend(BLENDTYPE btype) const
 
 void Localizable::Hide()
 {
+	if (!m_visible)
+		return;
 	m_visible = false;
 }
 void Localizable::Show()
 {
+	if (m_visible)
+		return;
 	m_visible = true;
 }
 bool Localizable::IsVisible() const
@@ -180,21 +231,48 @@ bool Localizable::IsVisible() const
 
 #pragma region Background
 
-void Localizable::SetBackground(Texture* texture)
+void Localizable::SetBackground(IMAGE image)
 {
-	m_background = texture;
+	if (m_background == image)
+		return;
+	m_background = image;
 }
 void Localizable::RemoveBackground()
 {
-	m_background = 0;
+	if (m_background == CUSTIMAGE_NONE)
+		return;
+	m_background = CUSTIMAGE_NONE;
 }
-Texture* Localizable::GetBackground() const
+IMAGE Localizable::GetBackground() const
 {
 	return m_background;
 }
-bool Localizable::IsBackground(Texture* texture)
+bool Localizable::IsBackground(IMAGE image)
 {
-	return m_background == texture;
+	return m_background == image;
+}
+Texture* Localizable::GetBackgroundTexture() const
+{
+	return m_background != CUSTIMAGE_NONE ? UIImage::Get(m_background) : 0;
+}
+
+#pragma endregion
+
+#pragma region Tooltip text
+
+void Localizable::SetTooltipText(const string& text)
+{
+	if (m_tooltipText == text)
+		return;
+	m_tooltipText = text;
+}
+string Localizable::GetTooltipText() const
+{
+	return m_tooltipText;
+}
+bool Localizable::IsTooltipText(const string& text) const
+{
+	return m_tooltipText == text;
 }
 
 #pragma endregion
@@ -279,8 +357,8 @@ void Localizable::DrawingGetGraphicReady() const
 }
 void Localizable::DrawingBindTexture()
 {
-	if (m_background)
-		m_background->Bind();
+	if (m_background != CUSTIMAGE_NONE)
+		GetBackgroundTexture()->Bind();
 }
 void Localizable::DrawingDrawSquare() const
 {

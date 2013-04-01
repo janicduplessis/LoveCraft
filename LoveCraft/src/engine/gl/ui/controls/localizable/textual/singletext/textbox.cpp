@@ -1,4 +1,5 @@
 #include "textbox.h"
+#include "../label.h"
 
 Textbox::Textbox() : SingleText(CTRLTYPE_TEXTBOX), m_hasFocus(false), m_maxLength(64)
 {
@@ -13,9 +14,11 @@ void Textbox::Render()
 	if (IsVisible())
 	{
 		DrawSquare();
-		m_label->Render();
+		Text->Render();
 	}
 }
+
+#pragma region Class functions
 
 void Textbox::Update(unsigned int val)
 {
@@ -62,15 +65,23 @@ void Textbox::Update(unsigned int val)
 	}
 }
 
+#pragma endregion
+
+// Propriétés
+
 #pragma region Focus
 
 void Textbox::GiveFocus()
 {
+	if (m_hasFocus)
+		return;
 	m_hasFocus = true;
 	GainedFocus.Notify(this);
 }
 void Textbox::RemoveFocus()
 {
+	if (!m_hasFocus)
+		return;
 	m_hasFocus = false;
 	LostFocus.Notify(this);
 }
@@ -81,10 +92,12 @@ bool Textbox::HasFocus() const
 
 #pragma endregion
 
-#pragma region MaxLength
+#pragma region Max length
 
 void Textbox::SetMaxLength(uint16 maxlength)
 {
+	if (m_maxLength == maxlength)
+		return;
 	m_maxLength = maxlength;
 }
 uint16 Textbox::GetMaxLength() const
@@ -95,11 +108,12 @@ bool Textbox::IsMaxLength(uint16 maxlength) const
 {
 	return m_maxLength == maxlength;
 }
-void Textbox::AddMaxLength(uint16 value)
+void Textbox::AddMaxLength(int16 value)
 {
+	int newValue = value;
 	if ((int)m_maxLength + value < 0)
-		return;
-	m_maxLength += value;
+		newValue = 0;
+	SetMaxLength(GetMaxLength() + newValue);
 }
 
 #pragma endregion

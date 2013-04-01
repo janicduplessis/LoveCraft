@@ -1,51 +1,54 @@
 #include "spellbutton.h"
+#include "../label.h"
+#include "../../drawable/picturebox.h"
 
-
-SpellButton::SpellButton() : Button(CTRLTYPE_SPELLBUTTON), m_alternateImage(0), m_showalternate(false)
+SpellButton::SpellButton() : Button(CTRLTYPE_SPELLBUTTON), m_offIcon(0), m_active(false), m_spellNbr(0)
 {
-	m_alternateImage = m_background;
-	m_label->SetDocking(TEXTDOCK_TOPRIGHT);
 }
-
 
 SpellButton::~SpellButton()
 {
 }
 
-void SpellButton::DrawingBindTexture()
+void SpellButton::Init(const uint8 spellNbr)
 {
-	if (m_showalternate && m_alternateImage)
-		m_alternateImage->Bind();
-	else if (m_background) 
-		m_background->Bind();
+	m_spellNbr = spellNbr;
+
+	m_offIcon = new PictureBox();
+	m_offIcon->InitControl("offimage");
+	m_offIcon->InitLocalizable(GetPosition(), GetSize(), CUSTIMAGE_SPELL_OFFLINE, GetParent());
+
+	Button::InitTextual(TEXTCOLOR_GREEN, false, 12.0f, 12.0f, 0.6f);
+	Text->SetDocking(TEXTDOCK_TOPRIGHT);
 }
 
-void SpellButton::ShowAlternate()
+void SpellButton::Render()
 {
-	m_showalternate = true;
-}
-void SpellButton::HideAlternate()
-{
-	m_showalternate = false;
+	Button::Render();
+
+	if (m_active)
+		m_offIcon->Render();
 }
 
-#pragma region Alternate
+// Propriétés
 
-void SpellButton::SetAlternate(Texture* image)
+#pragma region Active
+
+void SpellButton::Activate()
 {
-	m_alternateImage = image;
+	if (m_active)
+		return;
+	m_active = true;
 }
-Texture* SpellButton::Getalternate() const
+void SpellButton::Desactivate()
 {
-	return m_alternateImage;
+	if (!m_active)
+		return;
+	m_active = false;
 }
-bool SpellButton::IsAlternate(Texture* image) const
+bool SpellButton::IsActive() const
 {
-	return m_alternateImage == image;
-}
-void SpellButton::ResetAlternate()
-{
-	m_alternateImage = m_background;
+	return m_active;
 }
 
 #pragma endregion

@@ -82,6 +82,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.cpp" />
+    <ClCompile Include="src\engine\gl\ui\fontcolor.cpp" />
     <ClCompile Include="src\engine\gl\cubemaptexture.cpp" />
     <ClCompile Include="src\engine\gl\shaders\modelshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\shadernew.cpp" />
@@ -91,7 +93,6 @@
     <ClCompile Include="src\engine\gl\modelmesh.cpp" />
     <ClCompile Include="src\engine\gl\shadowmapfbo.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext.cpp" />
-    <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.cpp" />
     <ClCompile Include="src\engine\gl\ui\debuginterface.cpp" />
     <ClCompile Include="src\engine\mouseeventargs.cpp" />
     <ClCompile Include="src\engine\pipeline.cpp" />
@@ -156,8 +157,11 @@
     <ClCompile Include="src\engine\gl\ui\controls\workable.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\workable\timer.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\tooltip.cpp" />
+    <ClCompile Include="src\engine\gl\ui\uiimage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.h" />
+    <ClInclude Include="src\engine\gl\ui\fontcolor.h" />
     <ClInclude Include="src\engine\gl\cubemaptexture.h" />
     <ClInclude Include="src\engine\gl\shaders\lights.h" />
     <ClInclude Include="src\engine\gl\shaders\modelshader.h" />
@@ -168,7 +172,6 @@
     <ClInclude Include="src\engine\gl\modelmesh.h" />
     <ClInclude Include="src\engine\gl\shadowmapfbo.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext.h" />
-    <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.h" />
     <ClInclude Include="src\engine\gl\ui\debuginterface.h" />
     <ClInclude Include="src\engine\mouseeventargs.h" />
     <ClInclude Include="src\engine\pipeline.h" />
@@ -246,6 +249,7 @@
     <ClInclude Include="src\engine\gl\ui\controls\workable.h" />
     <ClInclude Include="src\engine\gl\ui\controls\workable\timer.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\tooltip.h" />
+    <ClInclude Include="src\engine\gl\ui\uiimage.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\gl\shaders\billboardshader.frag" />

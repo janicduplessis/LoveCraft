@@ -10,3 +10,4 @@
 *.opensdf
 /lovecraft/Debug
 /modelimport/Debug
+/LoveCraft/src/engine/gl/shaders/lightingshader.vert

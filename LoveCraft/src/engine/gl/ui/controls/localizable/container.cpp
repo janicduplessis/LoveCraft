@@ -11,6 +11,8 @@ Container::~Container()
 	delete [] m_controls;
 }
 
+#pragma region Class funtions
+
 void Container::AddControl(Localizable* control)
 {
 	if (!control)
@@ -43,7 +45,6 @@ Localizable* Container::GetControlByName(const string& name) const
 		assert(false);
 	return ctrl;
 }
-
 Localizable* Container::GetTopControl(int x, int y)
 {
 	for (uint8 i = 0; i < m_ctrlNbr; i++)
@@ -63,3 +64,20 @@ Localizable* Container::GetTopControl(int x, int y)
 	}
 	return 0;
 }
+
+#pragma endregion
+
+// Propriétés
+
+#pragma region Control number
+
+uint8 Container::GetControlNumber() const
+{
+	return m_ctrlNbr;
+}
+bool Container::IsControlNomber(uint8 number) const
+{
+	return m_ctrlNbr == number;
+}
+
+#pragma endregion

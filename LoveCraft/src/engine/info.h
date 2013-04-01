@@ -111,12 +111,6 @@ public:
 	void SetOffsetMap(const Vector2i& offset);
 	Vector2i GetOffsetMap() const;
 
-	void SetFonts(Texture** colors);
-	Texture* GetFontColor(uint8 index) const;
-
-	void SetTexturesInterface(Texture** textures);
-	Texture* GetTexture(uint8 index) const;
-
 	Dice& Dic();
 
 private:
@@ -127,8 +121,6 @@ private:
 	void GenerateBlocInfos();
 	void InitThemes();
 private:
-	Texture** m_fontColors;
-	Texture** m_textInterface;
 	Array2d<Chunk*>* m_chunks;
 	static Info* m_info;
 	BlockInfo** m_blocInfos;

@@ -32,6 +32,8 @@ public:
 	 * Pèse sur le bouton
 	 */
 	void Press();
+
+	virtual bool IsHeld() const;
 protected:
 	Button(CONTROLTYPE type);
 	bool m_clicked;

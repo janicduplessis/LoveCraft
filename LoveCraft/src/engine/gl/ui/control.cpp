@@ -6,13 +6,18 @@ Control::Control(CONTROLTYPE type) : Object(), m_type(type), m_enabled(true)
 
 Control::~Control()
 {
-
 }
+
+#pragma region Class funtions
 
 void Control::InitControl(string name)
 {
 	m_name = name;
 }
+
+#pragma endregion
+
+// Propriétés
 
 #pragma region Enabled
 
@@ -22,10 +27,14 @@ bool Control::IsEnabled() const
 }
 void Control::Enable()
 {
+	if (m_enabled)
+		return;
 	m_enabled = true;
 }
 void Control::Disable()
 {
+	if (!m_enabled)
+		return;
 	m_enabled = false;
 }
 

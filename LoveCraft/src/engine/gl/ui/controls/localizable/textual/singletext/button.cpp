@@ -1,4 +1,5 @@
 ﻿#include "button.h"
+#include "../label.h"
 
 Button::Button() : SingleText(CTRLTYPE_BOUTON), m_clicked(false)
 {
@@ -16,8 +17,10 @@ Button::~Button()
 void Button::Render()
 {
 	DrawSquare();
-	m_label->Render();
+	Text->Render();
 }
+
+#pragma region Events
 
 bool Button::MousePressEvents(int x, int y)
 {
@@ -26,7 +29,6 @@ bool Button::MousePressEvents(int x, int y)
 
 	if (IsVisible() && IsEnabled())
 	{
-		Point& pos = AbsolutePosition();
 		if (IsWithinRange(x, y))
 		{
 			OnClick.Notify(this);
@@ -47,3 +49,16 @@ void Button::Press()
 {
 	m_clicked = true;
 }
+
+#pragma endregion
+
+// Propriétés
+
+#pragma region Clicked
+
+bool Button::IsHeld() const
+{
+	return m_clicked;
+}
+
+#pragma endregion

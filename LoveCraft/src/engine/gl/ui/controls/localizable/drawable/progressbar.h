@@ -18,7 +18,7 @@ public:
 	};
 	ProgressBar();
 	virtual ~ProgressBar();
-	virtual void Init(BarMode mode, Texture* foreground, uint8 bordersize = 0);
+	virtual void Init(BarMode mode, IMAGE foreground, uint8 bordersize = 0);
 	virtual void Render();
 
 	virtual BarMode GetMode() const;
@@ -30,9 +30,10 @@ public:
 	virtual bool IsValue(float value) const;
 	virtual bool IsValue(float first, float second) const;
 
-	virtual void SetForeground(Texture* foreground);
-	virtual Texture* GetForeground() const;
-	virtual bool IsForeground(Texture* foreground);
+	virtual void SetForeground(IMAGE foreground);
+	virtual IMAGE GetForeground() const;
+	virtual bool IsForeground(IMAGE foreground);
+	virtual Texture* GetForegroundTexture() const;
 
 private:
 	virtual void DrawSquare();
@@ -46,7 +47,7 @@ private:
 	PictureBox* m_backImage;
 	uint8 m_borderSize;
 	BarMode m_mode;
-	Texture* m_foreground;
+	IMAGE m_foreground;
 	float m_minimum;
 	float m_maximum;
 	float m_value;

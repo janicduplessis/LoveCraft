@@ -208,9 +208,9 @@ void OpenglContext::ResetMouse()
 	sf::Mouse::setPosition(m_mousePos, m_app);
 }
 
-void OpenglContext::SetMousePos(int x, int y) 
+void OpenglContext::SetMousePos(const Vector2i& pos) 
 {
-	m_mousePos = sf::Vector2i(x, y);
+	m_mousePos = pos;
 }
 
 bool OpenglContext::MousePosChanged(int x, int y)

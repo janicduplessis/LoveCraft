@@ -55,7 +55,7 @@ public:
 protected:
     void CenterMouse();
 	void ResetMouse();
-	void SetMousePos(int x, int y);
+	void SetMousePos(const Vector2i& pos);
 	bool MousePosChanged(int x, int y);
     void MakeRelativeToCenter(int& x, int& y) const;
 	void MakeRelativeToMouse(int& x, int& y) const;
@@ -81,7 +81,7 @@ private:
     std::string m_title;
 	float m_lastFrameTime;
 protected:
-	sf::Vector2i m_mousePos; // position de la souris pour calculer la position relative
+	Vector2i m_mousePos; // position de la souris pour calculer la position relative
 	sf::Sprite* m_cursor;
 };
 

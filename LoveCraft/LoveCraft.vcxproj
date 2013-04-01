@@ -93,7 +93,9 @@
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.cpp" />
     <ClCompile Include="src\engine\gl\ui\debuginterface.cpp" />
+    <ClCompile Include="src\engine\mouseeventargs.cpp" />
     <ClCompile Include="src\engine\pipeline.cpp" />
+    <ClCompile Include="src\engine\thirdpersoncamera.cpp" />
     <ClCompile Include="src\game\entity.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\drawable\bubble.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\container\dialogwindow.cpp" />
@@ -142,7 +144,6 @@
     <ClCompile Include="src\engine\openglcontext.cpp" />
     <ClCompile Include="src\engine\player.cpp" />
     <ClCompile Include="src\engine\projectile.cpp" />
-    <ClCompile Include="src\util\matrix42.cpp" />
     <ClCompile Include="src\util\perlin.cpp" />
     <ClCompile Include="src\util\quaternion.cpp" />
     <ClCompile Include="src\engine\gl\shaders\shader.cpp" />
@@ -169,7 +170,9 @@
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.h" />
     <ClInclude Include="src\engine\gl\ui\debuginterface.h" />
+    <ClInclude Include="src\engine\mouseeventargs.h" />
     <ClInclude Include="src\engine\pipeline.h" />
+    <ClInclude Include="src\engine\thirdpersoncamera.h" />
     <ClInclude Include="src\game\entity.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\drawable\bubble.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\container\dialogwindow.h" />
@@ -227,7 +230,6 @@
     <ClInclude Include="src\engine\network.h" />
     <ClInclude Include="src\game\npc.h" />
     <ClInclude Include="src\engine\projectile.h" />
-    <ClInclude Include="src\util\matrix42.h" />
     <ClInclude Include="src\util\perlin.h" />
     <ClInclude Include="src\util\quaternion.h" />
     <ClInclude Include="src\engine\son.h" />

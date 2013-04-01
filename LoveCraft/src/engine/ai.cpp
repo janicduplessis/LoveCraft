@@ -109,7 +109,7 @@ bool AI::CheckPlayer(float detectionRange, bool enableLOS)
 	if (enableLOS) {
 		Vector3f npcPos = m_npc->Position();
 		Vector3f iterator = distance;
-		iterator = iterator.Normalise() / 5;
+		iterator = iterator.Normalize() / 5;
 
 		// itère sur le vecteur distance et regarde si il y a
 		// collision a chaque 0.2m

@@ -40,8 +40,6 @@ public:
 	void SetPosition(const Vector3f& pos);
 	void SetRotation(const Vector3f& rot);
 
-	Matrix4f GetWorldMatrix();
-
 private:
 
 	#define MAX_BONES_PER_VERTEX 4
@@ -83,7 +81,7 @@ private:
 	uint32 FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
 	uint32 FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
 	uint32 FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
-	const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const string NodeName);
+	const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName);
 	void ReadNodeHeirarchy(float animationTime, const aiNode* pNode, const Matrix4f& parentTransform);
 
 	bool InitFromScene(const aiScene* pScene, const std::string& Filename);

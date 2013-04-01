@@ -159,7 +159,7 @@ void Particles::Render(const Matrix4f& VP, bool wireFrame)
 {
 	Shader::Disable();
 	m_billboardShader.Use();
-	m_billboardShader.SetCameraPosition(Info::Get().GetCamera()->GetRealPosition());
+	m_billboardShader.SetCameraPosition(Info::Get().GetCamera()->GetPosition());
 	m_billboardShader.SetVP(VP);
 	m_texture->Bind();
 

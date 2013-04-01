@@ -394,9 +394,9 @@ void GameInterface::Hide()
 	pnl_screen->Hide();
 }
 
-bool GameInterface::MouseMoveEvents(int x, int y)
+bool GameInterface::MouseMoveEvents(const MouseEventArgs& e)
 {
-	m_controlmousetest->SetVariableMsg(pnl_playscreen->GetTopControl(x, y));
+	m_controlmousetest->SetVariableMsg(pnl_playscreen->GetTopControl(e.GetPosition().x, e.GetPosition().y));
 	return false;
 }
 

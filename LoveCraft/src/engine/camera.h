@@ -1,68 +1,36 @@
 ﻿#ifndef CAMERA_H__
 #define CAMERA_H__
 
-#include "util/vector2.h"
-#include "util/vector3.h"
 #include "define.h"
+
+#include "util/vector3.h"
+#include "util/vector2.h"
+
+#include "mouseeventargs.h"
 
 class Camera
 {
-public:
-	enum Mode {CAM_FIRST_PERSON, CAM_THIRD_PERSON};
+    public:
+        Camera();
+        virtual ~Camera();
 
-	/**
-	 * Constructeur de la classe.  Valeurs par defaut a 0
-	 * 
-	 * @param posisiton Position initiale de la camera
-	 * @param rotation Angle de rotation initial de la camera
-	 */
-	Camera(Vector3f position = Vector3f(), Vector2f rotation = Vector2f());
+        virtual void KeyPressEvent(unsigned char key);
+        virtual void KeyReleaseEvent(unsigned char key);
+        virtual void MouseMoveEvent(const MouseEventArgs& e);
+        virtual void MousePressEvent(const MouseEventArgs& e);
+        virtual void MouseReleaseEvent(const MouseEventArgs& e);
+        virtual void WindowFocusEvent(bool hasFocus);
+        virtual void WindowResizeEvent(int width, int height);
 
-	Vector2f GetRotation () const;
+        virtual void Update(float elapsedTime) = 0;
+		Vector3f GetPosition() const;
+		Vector3f GetTarget() const;
+		Vector3f GetUp() const;
 
-	void SetRotation (Vector2f rot);
-
-	/**
-	 * Position de la camera
-	 * @return Vector3f
-	 */
-	Vector3f GetPosition() const;
-
-	void SetPosition (Vector3f pos);
-
-	/**
-	 * Applique la rotation de la caméra en fonction des données de
-	 * positionnement et d'angle du joueur. À appeler après la déclaration
-	 * de la matrice identitée principale
-	 */
-	void ApplyRotation () const ;
-
-	/**
-	 * Applique la translation du joueur en fonction des données de
-	 * positionnement et d'angle du joueur. À appeler après la déclaration
-	 * de la matrice identitée principale
-	 */
-	void ApplyTranslation () const ;
-
-	Mode GetMode() const;
-	void SetMode(Mode mode);
-
-	void TurnTopBottom ( float value );
-	void TurnLeftRight ( float value );
-
-	~Camera();
-	void SetCamRadius(float radius);
-	Vector3f GetRealPosition() const;
-
-	Vector3f GetTarget() const;
-	Vector3f GetUp() const;
-private:
-	Vector3f m_pos;
-	Vector2f m_rot;
-
-	float m_camRadius;
-
-	Mode m_mode;
+    protected:
+        Vector3f m_pos;
+		Vector3f m_target;
+		Vector3f m_up;
 };
 
-#endif // !CAMERA_H__
+#endif // CAMERA_H__

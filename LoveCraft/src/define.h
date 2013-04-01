@@ -165,15 +165,6 @@ enum BLOCK_FACE {
 	BFACE_BOTTOM
 };
 
-enum MOUSE_BUTTON {
-	MOUSE_BUTTON_NONE       = 0x00,
-	MOUSE_BUTTON_LEFT       = 0x01,
-	MOUSE_BUTTON_MIDDLE     = 0x02,
-	MOUSE_BUTTON_RIGHT      = 0x04,
-	MOUSE_BUTTON_WHEEL_UP   = 0x08,
-	MOUSE_BUTTON_WHEEL_DOWN = 0x10
-};
-
 //Chemins d'accès
 #define TEXTURE_PATH			"../lovecraft/media/textures/"
 #define SHADER_PATH				"../lovecraft/src/engine/gl/shaders/"

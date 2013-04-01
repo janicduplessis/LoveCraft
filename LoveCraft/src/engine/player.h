@@ -86,8 +86,6 @@ public:
 	void Update();
 	void SetRotation( Vector2f rot );
 	void ResetPosition();
-
-	Matrix4f GetWorldMatrix();
 private:
 	bool CheckCollision(const Vector3f& pos) const;
 	

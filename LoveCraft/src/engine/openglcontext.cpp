@@ -48,6 +48,7 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 			sf::Event Event;
 			while (m_app.pollEvent(Event))
 			{
+				MouseEventArgs mouseArgs;
 				switch(Event.type)
 				{
 				case sf::Event::Closed:
@@ -64,22 +65,33 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 					KeyReleaseEvent(Event.key.code);
 					break;
 				case sf::Event::MouseMoved:
-					MouseMoveEvent(Event.mouseMove.x, Event.mouseMove.y);
+
+					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
+					mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
+					MouseMoveEvent(mouseArgs);
 					break;
 				case sf::Event::TextEntered:
 					TextenteredEvent(Event.text.unicode);
 					break;
 				case sf::Event::MouseButtonPressed:
-					MousePressEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
+					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
+					mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
+					MousePressEvent(mouseArgs);
 					break;
 				case sf::Event::MouseButtonReleased:
-					MouseReleaseEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
+					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
+					mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
+					MouseReleaseEvent(mouseArgs);
 					break;
 				case sf::Event::MouseWheelMoved:
-					if(Event.mouseWheel.delta > 0)
-						MousePressEvent(MOUSE_BUTTON_WHEEL_UP, Event.mouseButton.x, Event.mouseButton.y);
-					else
-						MousePressEvent(MOUSE_BUTTON_WHEEL_DOWN, Event.mouseButton.x, Event.mouseButton.y);
+					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
+					if(Event.mouseWheel.delta > 0) {
+						mouseArgs.SetMouseButtons(MOUSE_BUTTON_WHEEL_UP);
+					}
+					else {
+						mouseArgs.SetMouseButtons(MOUSE_BUTTON_WHEEL_DOWN);
+					}
+					MousePressEvent(mouseArgs);
 					break;
 				}
 			}
@@ -115,6 +127,7 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 			sf::Event Event;
 			while (m_app.pollEvent(Event))
 			{
+				MouseEventArgs mouseArgs;
 				switch(Event.type)
 				{
 				case sf::Event::Closed:
@@ -131,22 +144,33 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 					KeyReleaseEvent(Event.key.code);
 					break;
 				case sf::Event::MouseMoved:
-					MouseMoveEvent(Event.mouseMove.x, Event.mouseMove.y);
+					
+					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
+					mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
+					MouseMoveEvent(mouseArgs);
 					break;
 				case sf::Event::TextEntered:
 					TextenteredEvent(Event.text.unicode);
 					break;
 				case sf::Event::MouseButtonPressed:
-					MousePressEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
+					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
+					mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
+					MousePressEvent(mouseArgs);
 					break;
 				case sf::Event::MouseButtonReleased:
-					MouseReleaseEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
+					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
+					mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
+					MouseReleaseEvent(mouseArgs);
 					break;
 				case sf::Event::MouseWheelMoved:
-					if(Event.mouseWheel.delta > 0)
-						MousePressEvent(MOUSE_BUTTON_WHEEL_UP, Event.mouseButton.x, Event.mouseButton.y);
-					else
-						MousePressEvent(MOUSE_BUTTON_WHEEL_DOWN, Event.mouseButton.x, Event.mouseButton.y);
+					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
+					if(Event.mouseWheel.delta > 0) {
+						mouseArgs.SetMouseButtons(MOUSE_BUTTON_WHEEL_UP);
+					}
+					else {
+						mouseArgs.SetMouseButtons(MOUSE_BUTTON_WHEEL_DOWN);
+					}
+					MousePressEvent(mouseArgs);
 					break;
 				}
 			}

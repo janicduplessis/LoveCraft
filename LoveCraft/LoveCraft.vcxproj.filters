@@ -235,7 +235,10 @@
     <ClCompile Include="src\engine\pipeline.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\matrix42.cpp">
+    <ClCompile Include="src\engine\thirdpersoncamera.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\mouseeventargs.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -498,7 +501,10 @@
     <ClInclude Include="src\engine\pipeline.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\matrix42.h">
+    <ClInclude Include="src\engine\thirdpersoncamera.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\mouseeventargs.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

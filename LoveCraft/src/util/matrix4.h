@@ -6,12 +6,230 @@
 #include <ostream>
 
 #include <Assimp/types.h>
-
-#include "define.h"
-#include "vector3.h"
-#include "matrix42.h"
 #include "tool.h"
+#include <cassert>
 
+#include "vector3.h"
+
+struct PersProjInfo
+{
+	float FOV;
+	float Width; 
+	float Height;
+	float zNear;
+	float zFar;
+};
+
+template <class T>
+class Matrix4
+{
+public:
+	typedef T Type;
+
+public:
+	static const Matrix4<T> ZERO;
+	static const Matrix4<T> IDENTITY;
+
+public:
+	Matrix4()
+	{        
+	}
+
+	// constructor from Assimp matrix
+	Matrix4(const aiMatrix4x4& AssimpMatrix)
+	{
+		m[0][0] = AssimpMatrix.a1; m[0][1] = AssimpMatrix.a2; m[0][2] = AssimpMatrix.a3; m[0][3] = AssimpMatrix.a4;
+		m[1][0] = AssimpMatrix.b1; m[1][1] = AssimpMatrix.b2; m[1][2] = AssimpMatrix.b3; m[1][3] = AssimpMatrix.b4;
+		m[2][0] = AssimpMatrix.c1; m[2][1] = AssimpMatrix.c2; m[2][2] = AssimpMatrix.c3; m[2][3] = AssimpMatrix.c4;
+		m[3][0] = AssimpMatrix.d1; m[3][1] = AssimpMatrix.d2; m[3][2] = AssimpMatrix.d3; m[3][3] = AssimpMatrix.d4;
+	}
+
+	Matrix4(const aiMatrix3x3& AssimpMatrix)
+	{
+		m[0][0] = AssimpMatrix.a1; m[0][1] = AssimpMatrix.a2; m[0][2] = AssimpMatrix.a3; m[0][3] = 0.0f;
+		m[1][0] = AssimpMatrix.b1; m[1][1] = AssimpMatrix.b2; m[1][2] = AssimpMatrix.b3; m[1][3] = 0.0f;
+		m[2][0] = AssimpMatrix.c1; m[2][1] = AssimpMatrix.c2; m[2][2] = AssimpMatrix.c3; m[2][3] = 0.0f;
+		m[3][0] = 0.0f           ; m[3][1] = 0.0f           ; m[3][2] = 0.0f           ; m[3][3] = 1.0f;
+	}   
+
+	Matrix4(float a00, float a01, float a02, float a03,
+		float a10, float a11, float a12, float a13,
+		float a20, float a21, float a22, float a23,
+		float a30, float a31, float a32, float a33)
+	{
+		m[0][0] = a00; m[0][1] = a01; m[0][2] = a02; m[0][3] = a03;
+		m[1][0] = a10; m[1][1] = a11; m[1][2] = a12; m[1][3] = a13;
+		m[2][0] = a20; m[2][1] = a21; m[2][2] = a22; m[2][3] = a23;
+		m[3][0] = a30; m[3][1] = a31; m[3][2] = a32; m[3][3] = a33;        
+	}
+
+	void SetZero()
+	{
+		ZERO_MEM(m);
+	}
+
+
+	Matrix4<T> Transpose() const
+	{
+		Matrix4<T> n;
+
+		for (unsigned int i = 0 ; i < 4 ; i++) {
+			for (unsigned int j = 0 ; j < 4 ; j++) {
+				n.m[i][j] = m[j][i];
+			}
+		}
+
+		return n;
+	}
+
+
+	inline void InitIdentity()
+	{
+		m[0][0] = 1.0f; m[0][1] = 0.0f; m[0][2] = 0.0f; m[0][3] = 0.0f;
+		m[1][0] = 0.0f; m[1][1] = 1.0f; m[1][2] = 0.0f; m[1][3] = 0.0f;
+		m[2][0] = 0.0f; m[2][1] = 0.0f; m[2][2] = 1.0f; m[2][3] = 0.0f;
+		m[3][0] = 0.0f; m[3][1] = 0.0f; m[3][2] = 0.0f; m[3][3] = 1.0f;
+	}
+
+	inline Matrix4<T> operator*(const Matrix4<T>& Right) const
+	{
+		Matrix4f Ret;
+
+		for (unsigned int i = 0 ; i < 4 ; i++) {
+			for (unsigned int j = 0 ; j < 4 ; j++) {
+				Ret.m[i][j] = m[i][0] * Right.m[0][j] +
+					m[i][1] * Right.m[1][j] +
+					m[i][2] * Right.m[2][j] +
+					m[i][3] * Right.m[3][j];
+			}
+		}
+
+		return Ret;
+	}
+
+	void Print() const
+	{
+		for (int i = 0 ; i < 4 ; i++) {
+			printf("%f %f %f %f\n", m[i][0], m[i][1], m[i][2], m[i][3]);
+		}       
+	}
+
+	void InitScaleTransform(float ScaleX, float ScaleY, float ScaleZ);
+	void InitRotateTransform(float RotateX, float RotateY, float RotateZ);
+	void InitTranslationTransform(float x, float y, float z);
+	void InitCameraTransform(const Vector3f& Target, const Vector3f& Up);
+	void InitPersProjTransform(const PersProjInfo& p);
+
+	T* GetInternalValues();
+	const T* GetInternalValues() const;
+
+public:
+	T m[4][4];
+};
+
+typedef Matrix4<int> Matrix4i;
+typedef Matrix4<float> Matrix4f;
+typedef Matrix4<double> Matrix4d;
+
+template <class T>
+const Matrix4<T> Matrix4<T>::ZERO = Matrix4<T>(0);
+
+template <class T>
+const Matrix4<T> Matrix4<T>::IDENTITY = Matrix4<T>(
+	1, 0, 0, 0,
+	0, 1, 0, 0,
+	0, 0, 1, 0,
+	0, 0, 0, 1);
+
+template <class T>
+void Matrix4<T>::InitScaleTransform(float ScaleX, float ScaleY, float ScaleZ)
+{
+	m[0][0] = ScaleX; m[0][1] = 0.0f;   m[0][2] = 0.0f;   m[0][3] = 0.0f;
+	m[1][0] = 0.0f;   m[1][1] = ScaleY; m[1][2] = 0.0f;   m[1][3] = 0.0f;
+	m[2][0] = 0.0f;   m[2][1] = 0.0f;   m[2][2] = ScaleZ; m[2][3] = 0.0f;
+	m[3][0] = 0.0f;   m[3][1] = 0.0f;   m[3][2] = 0.0f;   m[3][3] = 1.0f;
+}
+
+template <class T>
+void Matrix4<T>::InitRotateTransform(float RotateX, float RotateY, float RotateZ)
+{
+	Matrix4f rx, ry, rz;
+
+	const float x = ToRadian(RotateX);
+	const float y = ToRadian(RotateY);
+	const float z = ToRadian(RotateZ);
+
+	rx.m[0][0] = 1.0f; rx.m[0][1] = 0.0f   ; rx.m[0][2] = 0.0f    ; rx.m[0][3] = 0.0f;
+	rx.m[1][0] = 0.0f; rx.m[1][1] = cosf(x); rx.m[1][2] = -sinf(x); rx.m[1][3] = 0.0f;
+	rx.m[2][0] = 0.0f; rx.m[2][1] = sinf(x); rx.m[2][2] = cosf(x) ; rx.m[2][3] = 0.0f;
+	rx.m[3][0] = 0.0f; rx.m[3][1] = 0.0f   ; rx.m[3][2] = 0.0f    ; rx.m[3][3] = 1.0f;
+
+	ry.m[0][0] = cosf(y); ry.m[0][1] = 0.0f; ry.m[0][2] = -sinf(y); ry.m[0][3] = 0.0f;
+	ry.m[1][0] = 0.0f   ; ry.m[1][1] = 1.0f; ry.m[1][2] = 0.0f    ; ry.m[1][3] = 0.0f;
+	ry.m[2][0] = sinf(y); ry.m[2][1] = 0.0f; ry.m[2][2] = cosf(y) ; ry.m[2][3] = 0.0f;
+	ry.m[3][0] = 0.0f   ; ry.m[3][1] = 0.0f; ry.m[3][2] = 0.0f    ; ry.m[3][3] = 1.0f;
+
+	rz.m[0][0] = cosf(z); rz.m[0][1] = -sinf(z); rz.m[0][2] = 0.0f; rz.m[0][3] = 0.0f;
+	rz.m[1][0] = sinf(z); rz.m[1][1] = cosf(z) ; rz.m[1][2] = 0.0f; rz.m[1][3] = 0.0f;
+	rz.m[2][0] = 0.0f   ; rz.m[2][1] = 0.0f    ; rz.m[2][2] = 1.0f; rz.m[2][3] = 0.0f;
+	rz.m[3][0] = 0.0f   ; rz.m[3][1] = 0.0f    ; rz.m[3][2] = 0.0f; rz.m[3][3] = 1.0f;
+
+	*this = rz * ry * rx;
+}
+
+template <class T>
+void Matrix4<T>::InitTranslationTransform(float x, float y, float z)
+{
+	m[0][0] = 1.0f; m[0][1] = 0.0f; m[0][2] = 0.0f; m[0][3] = x;
+	m[1][0] = 0.0f; m[1][1] = 1.0f; m[1][2] = 0.0f; m[1][3] = y;
+	m[2][0] = 0.0f; m[2][1] = 0.0f; m[2][2] = 1.0f; m[2][3] = z;
+	m[3][0] = 0.0f; m[3][1] = 0.0f; m[3][2] = 0.0f; m[3][3] = 1.0f;
+}
+
+template <class T>
+void Matrix4<T>::InitCameraTransform(const Vector3f& Target, const Vector3f& Up)
+{
+	Vector3f N = Target;
+	N.Normalize();
+	Vector3f U = Up;
+	U.Normalize();
+	U = U.Cross(N);
+	Vector3f V = N.Cross(U);
+
+	m[0][0] = U.x;   m[0][1] = U.y;   m[0][2] = U.z;   m[0][3] = 0.0f;
+	m[1][0] = V.x;   m[1][1] = V.y;   m[1][2] = V.z;   m[1][3] = 0.0f;
+	m[2][0] = N.x;   m[2][1] = N.y;   m[2][2] = N.z;   m[2][3] = 0.0f;
+	m[3][0] = 0.0f;  m[3][1] = 0.0f;  m[3][2] = 0.0f;  m[3][3] = 1.0f;
+}
+
+template <class T>
+void Matrix4<T>::InitPersProjTransform(const PersProjInfo& p)
+{
+	const float ar         = p.Width / p.Height;
+	const float zRange     = p.zNear - p.zFar;
+	const float tanHalfFOV = tanf(ToRadian(p.FOV / 2.0f));
+
+	m[0][0] = 1.0f/(tanHalfFOV * ar); m[0][1] = 0.0f;            m[0][2] = 0.0f;            m[0][3] = 0.0;
+	m[1][0] = 0.0f;                   m[1][1] = 1.0f/tanHalfFOV; m[1][2] = 0.0f;            m[1][3] = 0.0;
+	m[2][0] = 0.0f;                   m[2][1] = 0.0f;            m[2][2] = (-p.zNear - p.zFar)/zRange ; m[2][3] = 2.0f*p.zFar*p.zNear/zRange;
+	m[3][0] = 0.0f;                   m[3][1] = 0.0f;            m[3][2] = 1.0f;            m[3][3] = 0.0;    
+}
+
+template <class T>
+T* Matrix4<T>::GetInternalValues()
+{
+	return &m[0][0];
+}
+
+template <class T>
+const T* Matrix4<T>::GetInternalValues() const
+{
+	return &m[0][0];
+}
+
+
+
+/*
 template <class T>
 class Matrix4
 {
@@ -33,7 +251,6 @@ public:
 
 	Matrix4(const aiMatrix4x4& AssimpMatrix);
 	Matrix4(const aiMatrix3x3& AssimpMatrix);
-	Matrix4(const Matrix42& m);
 
 	const T& Get11() const;
 	const T& Get12() const;
@@ -78,15 +295,30 @@ public:
 	void SetPerspectiveProjection(const T& fov, const T& aspect, const T& nearPlane, const T& farPlane);
 	void SetOrthographicProjection(const T& left, const T& right, const T& bottom, const T& top, const T& nearPlane, const T& farPlane);
 
+	void InitPersProjTransform(const PersProjInfo& p)
+	{
+		const float ar         = p.Width / p.Height;
+		const float zRange     = p.zNear - p.zFar;
+		const float tanHalfFOV = tanf(ToRadian(p.FOV / 2.0f));
+
+		SetZero();
+
+		m_11 = 1.0f/(tanHalfFOV * ar);	                        
+        m_22 = 1.0f/tanHalfFOV;           
+        m_33 = (-p.zNear - p.zFar)/zRange ; 
+		m_34 = 2.0f*p.zFar*p.zNear/zRange;
+        m_43 = 1.0f;              
+	}
+
 	void SetLookAt(const Vector3<T>& eyePosition, const Vector3<T>& lookAtPosition, Vector3<T> upVector = Vector3<T>(T(0), T(1), T(0)));
 
 	bool IsZero() const;
 	bool IsIdentity() const;
 
-	void ApplyTranslation(const T& x, const T& y, const T&z);
-	void ApplyRotation(const T& angle, const T& x, const T& y, const T&z);
-	void ApplyRotation(const T& _x, const T& _y, const T& _z);
-	void ApplyScale(const T& x, const T& y, const T&z);
+	void InitTranslationTransform(const T& x, const T& y, const T&z);
+	void InitRotateTransform(const T& angle, const T& x, const T& y, const T&z);
+	void InitRotateTransform(const T& _x, const T& _y, const T& _z);
+	void InitScaleTransform(const T& x, const T& y, const T&z);
 
 	Vector3<T> GetTranslation() const;
 
@@ -107,13 +339,13 @@ private:
 };
 
 template <class T>
-void Matrix4<T>::ApplyRotation( const T& _x, const T& _y, const T& _z )
+void Matrix4<T>::InitRotateTransform( const T& _x, const T& _y, const T& _z )
 {
 	Matrix4f rx, ry, rz;
 
-	const float x = DEGTORAD(_x);
-	const float y = DEGTORAD(_y);
-	const float z = DEGTORAD(_z);
+	const float x = ToRadian(_x);
+	const float y = ToRadian(_y);
+	const float z = ToRadian(_z);
 
 	rx.m_11 = 1.0f; rx.m_12 = 0.0f   ; rx.m_13 = 0.0f    ; rx.m_14 = 0.0f;
 	rx.m_21 = 0.0f; rx.m_22 = cosf(x); rx.m_23 = -sinf(x); rx.m_24 = 0.0f;
@@ -215,15 +447,6 @@ Matrix4<T>::Matrix4(const aiMatrix3x3& AssimpMatrix)
 	m_21 = AssimpMatrix.b1; m_22 = AssimpMatrix.b2; m_23 = AssimpMatrix.b3; m_24 = 0.f;
 	m_31 = AssimpMatrix.c1; m_32 = AssimpMatrix.c2; m_33 = AssimpMatrix.c3; m_34 = 0.f;
 	m_41 = 0.f;				m_42 = 0.f;				m_43 = 0.f;				m_44 = 1.f;
-}
-
-template <class T>
-Matrix4<T>::Matrix4(const Matrix42& m)
-{
-	m_11 = m.m[0][0]; m_12 = m.m[0][1]; m_13 = m.m[0][2]; m_14 = m.m[0][3];
-	m_21 = m.m[1][0]; m_22 = m.m[1][1]; m_23 = m.m[1][2]; m_24 = m.m[1][3];
-	m_31 = m.m[2][0]; m_32 = m.m[2][1]; m_33 = m.m[2][2]; m_34 = m.m[2][3];
-	m_41 = m.m[3][0]; m_42 = m.m[3][1];	m_43 = m.m[3][2]; m_44 = m.m[3][3];
 }
 
 template <class T>
@@ -477,9 +700,9 @@ template <class T>
 void Matrix4<T>::InitCameraTransform(const Vector3f& Target, const Vector3f& Up)
 {
 	Vector3f N = Target;
-	N.Normalise();
+	N.Normalize();
 	Vector3f U = Up;
-	U.Normalise();
+	U.Normalize();
 	U = U.Cross(N);
 	Vector3f V = N.Cross(U);
 
@@ -493,7 +716,7 @@ void Matrix4<T>::InitCameraTransform(const Vector3f& Target, const Vector3f& Up)
 template <class T>
 void Matrix4<T>::SetPerspectiveProjection(const T& fov, const T& aspect, const T& nearPlane, const T& farPlane)
 {
-	const float h = T(1) / tan(DEGTORAD(fov / 2.f));
+	const float h = T(1) / tan(ToRadian(fov / 2.f));
 	T negDepth = nearPlane - farPlane;
 
 	SetZero();
@@ -533,11 +756,11 @@ template <class T>
 void Matrix4<T>::SetLookAt(const Vector3<T>& eyePosition, const Vector3<T>& lookAtPosition, Vector3<T> upVector)
 {
 	Vector3f L = lookAtPosition - eyePosition;
-	L.Normalise();
+	L.Normalize();
 
-	upVector.Normalise();
+	upVector.Normalize();
 	Vector3f S = L.Cross(upVector);
-	S.Normalise();
+	S.Normalize();
 
 	Vector3f U = S.Cross(L);
 
@@ -565,11 +788,11 @@ void Matrix4<T>::SetLookAt(const Vector3<T>& eyePosition, const Vector3<T>& look
 
 	SetIdentity();
 	*this *= M;
-	ApplyTranslation(-eyePosition.x, -eyePosition.y, -eyePosition.z);
+	InitTranslationTransform(-eyePosition.x, -eyePosition.y, -eyePosition.z);
 }
 
 template <class T>
-void Matrix4<T>::ApplyTranslation(const T& x, const T& y, const T&z)
+void Matrix4<T>::InitTranslationTransform(const T& x, const T& y, const T&z)
 {
 	Matrix4<T> tmp(
 		1, 0, 0, x,
@@ -581,7 +804,7 @@ void Matrix4<T>::ApplyTranslation(const T& x, const T& y, const T&z)
 }
 
 template <class T>
-void Matrix4<T>::ApplyRotation(const T& angle, const T& x, const T& y, const T&z)
+void Matrix4<T>::InitRotateTransform(const T& angle, const T& x, const T& y, const T&z)
 {
 	// TODO axis (x, y, z) must be normalized...
 
@@ -599,7 +822,7 @@ void Matrix4<T>::ApplyRotation(const T& angle, const T& x, const T& y, const T&z
 }
 
 template <class T>
-void Matrix4<T>::ApplyScale(const T& x, const T& y, const T&z)
+void Matrix4<T>::InitScaleTransform(const T& x, const T& y, const T&z)
 {
 	Matrix4<T> tmp(
 		x, 0, 0, 0,
@@ -645,5 +868,7 @@ std::string Matrix4<T>::ToString(const std::string& lineBegin, const std::string
 
 	return ss.str();
 }
+
+*/
 
 #endif // MATRIX4_H__

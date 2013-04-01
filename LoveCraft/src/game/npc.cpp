@@ -62,7 +62,7 @@ void Npc::Move(const Vector3f& destination, float elapsedTime)
 			n = -1;
 		float angleA = acos(n);
 		Vector3f axis = distance.Cross(deplacement);
-		axis.Normalise();
+		axis.Normalize();
 		// rotation autour de laxe
 		float rotation;
 		if (abs(angleA) >= m_maxRot && abs(angleA) < PII - m_maxRot)

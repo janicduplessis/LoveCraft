@@ -305,7 +305,7 @@ void ModelMesh::ReadNodeHeirarchy( float animationTime, const aiNode* pNode, con
 		aiVector3D scaling;
 		CalcInterpolatedScaling(scaling, animationTime, pNodeAnim);
 		Matrix4f scalingM = Matrix4f::IDENTITY;
-		scalingM.ApplyScale(scaling.x, scaling.y, scaling.z);
+		scalingM.InitScaleTransform(scaling.x, scaling.y, scaling.z);
 
 		// Interpolate rotation and generate rotation transformation matrix
 		aiQuaternion rotationQ;
@@ -316,7 +316,7 @@ void ModelMesh::ReadNodeHeirarchy( float animationTime, const aiNode* pNode, con
 		aiVector3D translation;
 		CalcInterpolatedPosition(translation, animationTime, pNodeAnim);
 		Matrix4f translationM = Matrix4f::IDENTITY;
-		translationM.ApplyTranslation(translation.x, translation.y, translation.z);
+		translationM.InitTranslationTransform(translation.x, translation.y, translation.z);
 
 		// Combine the above transformations
 		nodeTransformation = translationM * rotationM * scalingM;
@@ -434,12 +434,12 @@ uint32 ModelMesh::FindPosition( float AnimationTime, const aiNodeAnim* pNodeAnim
 	return 0;
 }
 
-const aiNodeAnim* ModelMesh::FindNodeAnim( const aiAnimation* pAnimation, const string NodeName )
+const aiNodeAnim* ModelMesh::FindNodeAnim( const aiAnimation* pAnimation, const std::string NodeName )
 {
 	for (uint32 i = 0 ; i < pAnimation->mNumChannels ; i++) {
 		const aiNodeAnim* pNodeAnim = pAnimation->mChannels[i];
 
-		if (string(pNodeAnim->mNodeName.data) == NodeName) {
+		if (std::string(pNodeAnim->mNodeName.data) == NodeName) {
 			return pNodeAnim;
 		}
 	}
@@ -482,18 +482,3 @@ void ModelMesh::SetPosition(const Vector3f& pos) {
 void ModelMesh::SetRotation(const Vector3f& rot) {
 	m_rot = rot;
 }
-
-Matrix4f ModelMesh::GetWorldMatrix()
-{
-	m_worldPos = Matrix4f::IDENTITY;
-	
-	m_worldPos.ApplyTranslation(m_pos.x + m_translation.x, m_pos.y + m_translation.y, m_pos.z + m_translation.z);
-	m_worldPos.ApplyRotation(m_rot.x, 1,0,0);
-	m_worldPos.ApplyRotation(m_rot.y, 0,1,0);
-	m_worldPos.ApplyRotation(m_rot.z, 0,0,1);
-	m_worldPos.ApplyScale(m_scale.x, m_scale.y, m_scale.z);
-
-	return m_worldPos;
-}
-
-

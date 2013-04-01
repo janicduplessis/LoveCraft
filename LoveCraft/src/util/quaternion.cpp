@@ -60,7 +60,7 @@ Quaternion Quaternion::operator* ( const Quaternion& q ) const
 Vector3f Quaternion::operator* ( const Vector3f &vec ) const
 {
 	Vector3f vn = vec;
-	vn.Normalise();
+	vn.Normalize();
 
 	Quaternion vecQuat, resQuat;
 	vecQuat.m_x = vn.x;
@@ -79,7 +79,7 @@ void Quaternion::FromAxis( float angle, const Vector3f& axis )
 	float sinAngle;
 	angle *= 0.5f;
 	Vector3f vn = axis;
-	vn.Normalise();
+	vn.Normalize();
 
 	sinAngle = sin(angle);
 

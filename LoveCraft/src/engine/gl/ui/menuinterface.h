@@ -13,7 +13,7 @@ public:
 	virtual void DeInit();
 	virtual void Show();
 	virtual void Hide();
-	virtual bool MouseMoveEvents(int x, int y);
+	virtual bool MouseMoveEvents(const MouseEventArgs& e);
 	virtual bool MousePressEvents(const MOUSE_BUTTON &button, int x, int y);
 	virtual bool MouseReleaseEvents(const MOUSE_BUTTON &button, int x, int y);
 

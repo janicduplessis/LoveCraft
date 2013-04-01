@@ -55,7 +55,7 @@ void Projectile::Update(float elapsedTime)
 	float angleA = acos(n);
 	std::cout << angleA << std::endl;
 	Vector3f axis = distance.Cross(speed);
-	axis.Normalise();
+	axis.Normalize();
 	// rotation autour de laxe
 	float rotation;
 	if (abs(angleA) >= m_maxRot && abs(angleA) < PII - m_maxRot) {

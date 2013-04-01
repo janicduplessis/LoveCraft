@@ -22,8 +22,6 @@ void Player::Init(ModelShader* shader)
 {
 	m_modelShader = shader;
 	m_model.LoadMesh(MODEL_PATH_HUMANS "boblampclean.md5mesh");
-	m_model.Scale(Vector3f(.1f, 0.1f, 0.1f));
-	//m_model.Translate(Vector3f(0, -1.05f, 0));
 	ResetPosition();
 }
 
@@ -398,9 +396,9 @@ void Player::Render(float time, bool wireFrame)
 	m_model.Render();
 }
 
-void Player::Update() {
-	m_model.SetPosition(Vector3f(m_pos.x, m_pos.y - 0.5, m_pos.z));
-	m_model.SetRotation(Vector3f(0, m_rot.y, 0));
+void Player::Update() 
+{
+	
 }
 
 Vector3f Player::Position() const
@@ -463,9 +461,4 @@ Quaternion Player::RotationQ() const
 void Player::SetPosition( Vector3f pos )
 {
 	m_pos = pos;
-}
-
-Matrix4f Player::GetWorldMatrix()
-{
-	return m_model.GetWorldMatrix();
 }

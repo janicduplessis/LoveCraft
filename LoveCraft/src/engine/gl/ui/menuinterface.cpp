@@ -129,11 +129,11 @@ void MenuInterface::Hide()
 	pnl_main->Hide();
 }
 
-bool MenuInterface::MouseMoveEvents(int x, int y)
+bool MenuInterface::MouseMoveEvents(const MouseEventArgs& e)
 {
-	m_mousepostest->SetVariableMsg(pnl_main->MouseMoveEvents(x, y));
-	m_controlmousetest->SetVariableMsg(pnl_screen->GetTopControl(x, y));
-	if (pnl_main->MouseMoveEvents(x, y))
+	m_mousepostest->SetVariableMsg(pnl_main->MouseMoveEvents(e.GetPosition().x, e.GetPosition().y));
+	m_controlmousetest->SetVariableMsg(pnl_screen->GetTopControl(e.GetPosition().x, e.GetPosition().y));
+	if (pnl_main->MouseMoveEvents(e.GetPosition().x, e.GetPosition().y))
 		pb_logo->Show();
 	else pb_logo->Hide();
 	return false;

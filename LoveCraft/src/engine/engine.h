@@ -19,7 +19,7 @@
 
 #include "player.h"
 #include "chunkloader.h"
-#include "camera.h"
+#include "thirdpersoncamera.h"
 #include "chunk.h"
 #include "info.h"
 #include "gl/ui/valuesgameinterface.h"
@@ -115,7 +115,7 @@ public:
 	* @param x Position en X de la souris au moment du déclenchement de l'évènement
 	* @param y Position en Y de la souris au moment du déclenchement de l'évènement
 	*/
-	virtual void MouseMoveEvent(int x, int y);
+	virtual void MouseMoveEvent(const MouseEventArgs& e);
 	/**
 	* Évènement appelé lorsqu'une touche de la souris est enfoncée
 	*
@@ -123,7 +123,7 @@ public:
 	* @param x Coordonnée en X de l'endroit d'où l'évènement a été déclenché
 	* @param y Coordonnée en Y de l'endroit d'où l'évènement a été déclenché
 	*/
-	virtual void MousePressEvent(const MOUSE_BUTTON &button, int x, int y);
+	virtual void MousePressEvent(const MouseEventArgs& e);
 	/**
 	* Évènement appelé lorsqu'une touche de la souris est relâchée
 	*
@@ -131,7 +131,7 @@ public:
 	* @param x Coordonnée en X de l'endroit d'où l'évènement a été déclenché
 	* @param y Coordonnée en Y de l'endroit d'où l'évènement a été déclenché
 	*/
-	virtual void MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y);
+	virtual void MouseReleaseEvent(const MouseEventArgs& e);
 
 	void OnClick(Control* sender);
 	void GainedFocus(Textbox* sender);
@@ -170,7 +170,7 @@ private:
 	Texture m_normalMap;
 
 	Player* m_player;
-	Camera* m_camera;
+	ThirdPersonCamera* m_camera;
 
 	Character* m_character;
 	Animal** m_monsters;
@@ -202,9 +202,6 @@ private:
 	float m_clickTimer;
 	bool m_clickTimerOn;
 	Vector2f m_lastRot;
-	Matrix4f m_mxWorld;
-	Matrix4f m_mxWVP;
-	Matrix4f m_mxProjection;
 
 	BlockType m_currentBlockType;
 

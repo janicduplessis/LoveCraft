@@ -107,7 +107,7 @@ void LightingShader::SetDirectionalLight( const DirectionalLight& Light )
 	glUniform3f(m_dirLightLocation.Color, Light.Color.x, Light.Color.y, Light.Color.z);
 	glUniform1f(m_dirLightLocation.AmbientIntensity, Light.AmbientIntensity);
 	Vector3f direction = Light.Direction;
-	direction.Normalise();
+	direction.Normalize();
 	glUniform3f(m_dirLightLocation.Direction, direction.x, direction.y, direction.z);
 	glUniform1f(m_dirLightLocation.DiffuseIntensity, Light.DiffuseIntensity);
 }

@@ -20,7 +20,7 @@ public:
 	~Vector3();
 
 	T Lenght() const;
-	Vector3<T> Normalise();
+	Vector3<T> Normalize();
 	Vector3<T> Zero();
 	Vector3<T> Abs();
 	Vector3<T> Rotate(float angle, const Vector3<T>& axe);
@@ -67,7 +67,7 @@ template <class T>
 Vector3<T> Vector3<T>::Rotate( float angle, const Vector3<T>& axe )
 {
 	Quaternion rotationQ;
-	rotationQ.FromAxis(DEGTORAD(angle), axe);
+	rotationQ.FromAxis(ToRadian(angle), axe);
 
 	*this = rotationQ * *this;
 	return *this;
@@ -214,7 +214,7 @@ Vector3<T> Vector3<T>::Abs()
 }
 
 template <class T>
-Vector3<T> Vector3<T>::Normalise()
+Vector3<T> Vector3<T>::Normalize()
 {
 	T len = Lenght();
 	if(len != 0) {

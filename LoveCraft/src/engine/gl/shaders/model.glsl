@@ -35,10 +35,10 @@ shader VSmain(in VSInput VSin:0, out VSOutput VSout)
     BoneTransform     += gBones[VSin.BoneIDs[2]] * VSin.Weights[2];
     BoneTransform     += gBones[VSin.BoneIDs[3]] * VSin.Weights[3];
 
-    vec4 PosL      = /**BoneTransform ***/ vec4(VSin.Position, 1.0);
+    vec4 PosL      = BoneTransform * vec4(VSin.Position, 1.0);
     gl_Position    = gWVP * PosL;
     VSout.TexCoord = VSin.TexCoord;
-    vec4 NormalL   = /**BoneTransform ***/ vec4(VSin.Normal, 0.0);
+    vec4 NormalL   = BoneTransform * vec4(VSin.Normal, 0.0);
     VSout.Normal   = (gWorld * NormalL).xyz;
     VSout.WorldPos = (gWorld * PosL).xyz;                                
 }

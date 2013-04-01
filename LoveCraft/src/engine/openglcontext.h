@@ -7,6 +7,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include "util/vector2.h"
+#include "mouseeventargs.h"
 
 // Documentation de SFML: http://www.sfml-dev.org/documentation/index-fr.php
 class OpenglContext
@@ -34,9 +35,9 @@ public:
 	virtual void TextenteredEvent(unsigned int val) = 0;
     virtual void KeyPressEvent(unsigned char key) = 0;
     virtual void KeyReleaseEvent(unsigned char key) = 0;
-    virtual void MouseMoveEvent(int x, int y) = 0;
-    virtual void MousePressEvent(const MOUSE_BUTTON &button, int x, int y) = 0;
-    virtual void MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y) = 0;
+    virtual void MouseMoveEvent(const MouseEventArgs& e) = 0;
+    virtual void MousePressEvent(const MouseEventArgs& e) = 0;
+    virtual void MouseReleaseEvent(const MouseEventArgs& e) = 0;
 
 
     bool Start(const std::string& title, int width, int height, bool fullscreen);

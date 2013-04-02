@@ -7,36 +7,22 @@
 #include <vector>
 #include "util/matrix4.h"
 
-Player::Player(Vector3f position, Vector2f rotation)
-	:m_pos(position), m_rot(rotation), m_speed(Vector3f(0, 0, 0)), 
-	m_accel(Vector3f(0, 0, 0))
+Player::Player(Vector3f position, Vector3f rotation)
+	: m_pos(position), m_rot(rotation), m_speed(0, 0, 0), 
+	m_accel(0, 0, 0), m_scale(1, 1, 1)
 {
 }
 
 Player::~Player()
 {
-
 }
 
 void Player::Init(ModelShader* shader)
 {
 	m_modelShader = shader;
 	m_model.LoadMesh(MODEL_PATH_HUMANS "boblampclean.md5mesh");
+	Scale(Vector3f(0.1f, 0.1f, 0.1f));
 	ResetPosition();
-}
-
-void Player::TurnLeftRight ( float value )
-{
-	m_rot.y += value * MOUSE_SENSIBILITY;
-}
-
-void Player::TurnTopBottom ( float value )
-{
-	//Assignation de la nouvelle rotation
-	float newRotation = m_rot.x + value * MOUSE_SENSIBILITY;
-	//Test de la rotation entre les limites établies
-	if (newRotation >= -85.f && newRotation <= 85.f)
-		m_rot.x = newRotation;
 }
 
 void Player::Teleport()
@@ -47,7 +33,7 @@ void Player::Teleport()
 void Player::ResetPosition()
 {
 	m_pos = Vector3f(VIEW_DISTANCE, 0, VIEW_DISTANCE);
-	m_rot = Vector2f(0, 0);
+	m_rot = Vector3f(0, 0, 0);
 	m_speed = Vector3f(0, 0, 0);
 
 	Info& info = Info::Get();
@@ -380,25 +366,35 @@ void Player::Move(bool ghost, Character* cter, float elapsedTime)
 #pragma endregion
 }
 
-void Player::Render(float time, bool wireFrame)
+void Player::Render(Pipeline p)
+{
+	p.WorldPos(m_pos + Vector3f(0,-2.3,0));
+	p.Rotate(m_rot + Vector3f(270, 180, 0));
+	p.Scale(m_scale);
+
+	m_modelShader->Enable();
+	m_modelShader->SetWorld(p.GetWorldTrans());
+	m_modelShader->SetWVP(p.GetWVPTrans());
+
+	m_model.Render();
+
+	Shader::Disable();
+}
+
+void Player::Update(float gameTime) 
 {
 	m_modelShader->Enable();
-	
+
 	std::vector<Matrix4f> tranforms;
 
-	m_model.BoneTransform(time, tranforms);
+	m_model.BoneTransform(gameTime, tranforms);
 
 	for (uint32 i = 0; i < tranforms.size(); ++i)
 	{
 		m_modelShader->SetBoneTransform(i, tranforms[i]);
 	}
 
-	m_model.Render();
-}
-
-void Player::Update() 
-{
-	
+	Shader::Disable();
 }
 
 Vector3f Player::Position() const
@@ -406,7 +402,7 @@ Vector3f Player::Position() const
 	return m_pos;
 }
 
-Vector2f Player::Rotation() const
+Vector3f Player::Rotation() const
 {
 	return m_rot;
 }
@@ -421,7 +417,7 @@ Vector3f Player::Acceleration() const
 	return m_accel;
 }
 
-void Player::SetRotation( Vector2f rot )
+void Player::SetRotation( Vector3f rot )
 {
 	m_rot = rot;
 }
@@ -461,4 +457,19 @@ Quaternion Player::RotationQ() const
 void Player::SetPosition( Vector3f pos )
 {
 	m_pos = pos;
+}
+
+void Player::MouseMoveEvent( const MouseEventArgs& e )
+{
+	m_rot.y += -e.GetDeltaPosition().x * MOUSE_SENSIBILITY;
+}
+
+void Player::Scale( Vector3f val )
+{
+	m_scale = val;
+}
+
+Vector3f Player::Scale() const
+{
+	return m_scale;
 }

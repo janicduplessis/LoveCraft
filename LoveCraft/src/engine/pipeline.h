@@ -16,29 +16,33 @@ public:
 
     void Scale(float ScaleX, float ScaleY, float ScaleZ)
     {
-        m_scale.x = ScaleX;
-        m_scale.y = ScaleY;
-        m_scale.z = ScaleZ;
+        Scale(Vector3f(ScaleX, ScaleY, ScaleZ));
     }
+
+	void Scale(const Vector3f& scale)
+	{
+		m_scale = scale;
+	}
 
     void WorldPos(float x, float y, float z)
     {
-        m_worldPos.x = x;
-        m_worldPos.y = y;
-        m_worldPos.z = z;
+        WorldPos(Vector3f(x, y, z));
     }
-    
-    void WorldPos(const Vector3f& Pos)
-    {
-        m_worldPos = Pos;
-    }
+
+	void WorldPos(const Vector3f& pos)
+	{
+		m_worldPos = pos;
+	}
 
     void Rotate(float RotateX, float RotateY, float RotateZ)
     {
-        m_rotateInfo.x = RotateX;
-        m_rotateInfo.y = RotateY;
-        m_rotateInfo.z = RotateZ;
+        Rotate(Vector3f(RotateX, RotateY, RotateZ));
     }
+
+	void Rotate(const Vector3f& rot)
+	{
+		m_rotateInfo = rot;
+	}
 
     void SetPerspectiveProj(const PersProjInfo& p)
     {

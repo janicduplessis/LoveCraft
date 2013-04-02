@@ -16,7 +16,7 @@
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0),
-	m_clickTimer(0), m_currentBlockType(0), m_chunkLoader(&m_mutex)
+	m_clickTimer(0), m_currentBlockType(0), m_chunkLoader(&m_mutex), m_player(0)
 {
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
@@ -30,10 +30,10 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 
 	m_skybox = new Skybox();
 
-	m_camera = new ThirdPersonCamera(m_player, 10);
-	Info::Get().StatusOn(Info::LSTATUS_CAMERA);
 	m_player = new Player(Vector3f(VIEW_DISTANCE, 0, VIEW_DISTANCE));
 	Info::Get().StatusOn(Info::LSTATUS_PLAYER);
+	m_camera = new ThirdPersonCamera(m_player, 10);
+	Info::Get().StatusOn(Info::LSTATUS_CAMERA);
 	m_character = new Character;
 	Info::Get().StatusOn(Info::LSTATUS_CHARACTER);
 }
@@ -137,6 +137,7 @@ void Engine::GlobalInit()
 	glEnable(GL_LIGHTING);
 	glEnable (GL_LINE_SMOOTH);
 	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT);
 	glEnable(GL_FOG);
 
 	m_persProjInfo.FOV = 60.f;
@@ -525,6 +526,7 @@ void Engine::UpdateGame(float elapsedTime)
 #pragma region Calcul la position du joueur et de la camera
 
 	m_player->Move(m_ghostMode, m_character, elapsedTime);
+	m_player->Update(gameTime);
 	m_camera->Update(elapsedTime);
 
 	//Vérification de la mort du personnage
@@ -651,6 +653,7 @@ void Engine::RenderMenu()
 	glLoadIdentity();
 
 	glDisable(GL_LIGHTING);
+	glCullFace(GL_BACK);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glDisable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
@@ -686,32 +689,15 @@ void Engine::RenderMenu()
 
 void Engine::RenderGame()
 {
-
-#pragma region OpenGl
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glCullFace(GL_FRONT);
 
-	// Transformations initiales
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-#pragma endregion
-
-#pragma region Elements de la camera
+	m_normalMap.Bind(GL_TEXTURE2);
 
 	if (!m_rightClick && !m_leftClick)
 		m_pb_cursor->Show();
 	else
 		m_pb_cursor->Hide();
-
-	m_camera->Update(0);
-
-#pragma endregion
-
-#pragma region Player
-
-	// render le modele du player
-	m_normalMap.Bind(GL_TEXTURE2);
 
 	// Update lights
 	PointLight p3;
@@ -735,27 +721,12 @@ void Engine::RenderGame()
 	m_lightingShader.UpdatePointLight(2, p3);
 	m_lightingShader.SetEyeWorldPos(m_camera->GetPosition());
 
+	// Render
 	Pipeline pipeline;
 	pipeline.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
 	pipeline.SetPerspectiveProj(m_persProjInfo);
 
-	pipeline.Scale(0.1f, 0.1f, 0.1f);                
-	pipeline.WorldPos(Vector3f(20,0,0));        
-	pipeline.Rotate(270.0f, 90.0f, 0.0f);    
-
-	m_modelShader.Enable();
-	m_modelShader.SetWVP(pipeline.GetWVPTrans());
-	m_modelShader.SetWorld(pipeline.GetWorldTrans());
-
-	m_player->Update();
-	m_player->Render(m_gameTime);
-
-	CHECK_GL_ERROR();
-
-
-#pragma endregion
-
-#pragma region Render les cubes
+	m_player->Render(pipeline);
 
 	// Set cube lighting
 	m_lightingShader.Enable();
@@ -786,10 +757,7 @@ void Engine::RenderGame()
 
 	Shader::Disable();
 
-#pragma endregion
-
-
-	m_skybox->Render(pipeline.GetWVPTrans());
+	m_skybox->Render(pipeline);
 
 	m_shaderModel.Use();
 
@@ -836,6 +804,7 @@ void Engine::RenderGame()
 	glOrtho(0, Width(), 0, Height(), -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
+	glCullFace(GL_BACK);
 #pragma endregion
 
 	m_gameUI.Render();
@@ -1118,25 +1087,21 @@ void Engine::KeyReleaseEvent(unsigned char key)
 
 void Engine::MouseMoveEvent(const MouseEventArgs& e)
 {
-	// Centrer la souris seulement si elle n'est pas déjà centrée
-	// Il est nécessaire de faire la vérification pour éviter de tomber
-	// dans une boucle infinie où l'appel à CenterMouse génère un
-	// MouseMoveEvent, qui rapelle CenterMouse qui rapelle un autre 
-	// MouseMoveEvent, etc
-	 
-
 	if (!IsMenuOpen())
 	{
 		m_gameUI.MouseMoveEvents(e);
 
-		m_camera->MouseMoveEvent(e);
+		if (m_leftClick)
+		{
+			m_camera->MouseMoveEvent(e);
+			
+		}
 
 		if (m_rightClick) 
 		{
-			//m_player->SetRotation(m_camera->GetRotation());
+			m_player->MouseMoveEvent(e);
+			m_camera->MouseMoveEvent(e);
 		}
-
-		ResetMouse();
 	}
 	else
 	{
@@ -1151,7 +1116,7 @@ void Engine::MousePressEvent(const MouseEventArgs& e)
 	if (!IsMenuOpen())
 	{
 #pragma region Jeu
-		if (m_gameUI.MousePressEvent(e.GetMouseButtons(), e.GetPosition().x, Height() - e.GetPosition().y))
+		if (m_gameUI.MousePressEvent(e.GetMouseButtons(), e.GetPosition().x, e.GetPosition().y))
 			return;
 
 		switch (e.GetMouseButtons())
@@ -1160,17 +1125,15 @@ void Engine::MousePressEvent(const MouseEventArgs& e)
 			m_clickTimerOn = true;
 			m_clickTimer = 0;
 			m_rightClick = true;
-			m_player->SetRotation(m_camera->GetRotation());
-			SetMousePos(x, y);
-			m_lastRot = m_camera->GetRotation();
+			m_lastTarget = m_camera->GetTarget();
+			SetMousePos(e.GetLastPosition().x, e.GetLastPosition().y);
 			break;
 		case MOUSE_BUTTON_LEFT:
 			m_clickTimerOn = true;
 			m_clickTimer = 0;
-
+			SetMousePos(e.GetLastPosition().x, e.GetLastPosition().y);
 			m_leftClick = true;
-			SetMousePos(x, y);
-			m_lastRot = m_camera->GetRotation();
+			m_lastTarget = m_camera->GetTarget();
 			break;
 		case MOUSE_BUTTON_WHEEL_UP:
 			// Zoom in camera
@@ -1181,7 +1144,6 @@ void Engine::MousePressEvent(const MouseEventArgs& e)
 			m_camera->SetCamRadius(m_camRadius);
 			break;
 		case MOUSE_BUTTON_WHEEL_DOWN:
-
 			// Zoom out camera
 			if (m_camRadius < 20)
 			{
@@ -1197,7 +1159,7 @@ void Engine::MousePressEvent(const MouseEventArgs& e)
 	{
 #pragma region Menu
 
-		m_menuUI.MousePressEvents(e.GetMouseButtons(), e.GetPosition().x, Height() - e.GetPosition().y);
+		m_menuUI.MousePressEvents(e.GetMouseButtons(), e.GetPosition().x, e.GetPosition().y);
 
 #pragma endregion
 	}
@@ -1207,7 +1169,7 @@ void Engine::MouseReleaseEvent(const MouseEventArgs& e)
 {
 	if (!IsMenuOpen())
 	{
-		m_gameUI.MouseRleaseEvent(e.GetMouseButtons(), e.GetPosition().x, Height() - e.GetPosition().y);
+		m_gameUI.MouseRleaseEvent(e.GetMouseButtons(), e.GetPosition().x, e.GetPosition().y);
 
 		switch (e.GetMouseButtons())
 		{
@@ -1216,18 +1178,18 @@ void Engine::MouseReleaseEvent(const MouseEventArgs& e)
 			m_clickTimerOn = false;
 			if (!m_gameUI.pnl_playscreen->GetTopControl(e.GetPosition().x, e.GetPosition().y))
 			{
-				if (m_clickTimer < 0.5f && abs(m_lastRot.x - m_camera->GetRotation().x) <= 1 
-					&& abs(m_lastRot.y - m_camera->GetRotation().y) <= 1 && m_currentBlock.y != 0)
+				if (m_clickTimer < 0.5f && abs(m_lastTarget.x - m_camera->GetTarget().x) <= 1 
+					&& abs(m_lastTarget.y - m_camera->GetTarget().y) <= 1 && m_currentBlock.y != 0)
 					RemoveBlock();
 			}
 			break;
 		case MOUSE_BUTTON_LEFT:
 			m_leftClick = false;
 			m_clickTimerOn = false;
-			if (!m_gameUI.pnl_playscreen->GetTopControl(x, y))
+			if (!m_gameUI.pnl_playscreen->GetTopControl(e.GetPosition().x, e.GetPosition().y))
 			{
 				std::cout << (float)m_currentBlockType << std::endl;
-				if (m_clickTimer < 0.5f && m_lastRot == m_camera->GetRotation())
+				if (m_clickTimer < 0.5f && m_lastTarget == m_camera->GetTarget())
 					AddBlock(m_currentBlockType);
 			}
 			break;
@@ -1235,7 +1197,7 @@ void Engine::MouseReleaseEvent(const MouseEventArgs& e)
 	}
 	else
 	{
-		m_menuUI.MouseReleaseEvents(e.GetMouseButtons(), e.GetPosition().x, Height() - e.GetPosition().y);
+		m_menuUI.MouseReleaseEvents(e.GetMouseButtons(), e.GetPosition().x, e.GetPosition().y);
 	}
 }
 

@@ -201,7 +201,7 @@ private:
 	float m_fps;
 	float m_clickTimer;
 	bool m_clickTimerOn;
-	Vector2f m_lastRot;
+	Vector3f m_lastTarget;
 
 	BlockType m_currentBlockType;
 

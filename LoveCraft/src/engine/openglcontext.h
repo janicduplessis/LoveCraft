@@ -69,7 +69,7 @@ protected:
 
 private:
     void InitWindow(int width, int height);
-    MOUSE_BUTTON ConvertMouseButton(sf::Mouse::Button button) const;
+    MouseButton ConvertMouseButton(sf::Mouse::Button button) const;
 
 private:
     sf::Window	m_app;
@@ -80,6 +80,7 @@ private:
 	bool		m_sentClose;
     std::string m_title;
 	float m_lastFrameTime;
+	MouseEventArgs m_mouseArgs;
 protected:
 	sf::Vector2i m_mousePos; // position de la souris pour calculer la position relative
 	sf::Sprite* m_cursor;

@@ -6,12 +6,12 @@ MouseEventArgs::MouseEventArgs() : m_mouseButtons(MOUSE_BUTTON_NONE), m_position
 
 }
 
-void MouseEventArgs::SetMouseButtons( MOUSE_BUTTON val )
+void MouseEventArgs::SetMouseButtons( const MouseButton& val )
 {
 	m_mouseButtons = val;
 }
 
-MOUSE_BUTTON MouseEventArgs::GetMouseButtons() const
+MouseButton MouseEventArgs::GetMouseButtons() const
 {
 	return m_mouseButtons;
 }
@@ -21,7 +21,7 @@ Vector2i MouseEventArgs::GetLastPosition() const
 	return m_lastPosition;
 }
 
-void MouseEventArgs::SetPosition( Vector2i val )
+void MouseEventArgs::SetPosition( const Vector2i& val )
 {
 	m_lastPosition = m_position;
 	m_position = val;

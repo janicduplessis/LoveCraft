@@ -5,6 +5,7 @@
 #include "shaders/skyboxshader.h"
 #include "cubemaptexture.h"
 #include "modelmesh.h"
+#include "engine/pipeline.h"
 
 class Skybox
 {
@@ -20,7 +21,7 @@ public:
 		const string& PosZFilename,
 		const string& NegZFilename);
 
-	void Render(const Matrix4f& wvp);
+	void Render(Pipeline p);
 
 private: 
 	SkyboxShader* m_skyboxShader;

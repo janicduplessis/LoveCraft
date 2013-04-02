@@ -48,7 +48,6 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 			sf::Event Event;
 			while (m_app.pollEvent(Event))
 			{
-				MouseEventArgs mouseArgs;
 				switch(Event.type)
 				{
 				case sf::Event::Closed:
@@ -65,33 +64,32 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 					KeyReleaseEvent(Event.key.code);
 					break;
 				case sf::Event::MouseMoved:
-
-					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
-					mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
-					MouseMoveEvent(mouseArgs);
+					m_mouseArgs.SetPosition(Vector2i(Event.mouseMove.x, Height() - Event.mouseMove.y));
+					m_mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
+					MouseMoveEvent(m_mouseArgs);
 					break;
 				case sf::Event::TextEntered:
 					TextenteredEvent(Event.text.unicode);
 					break;
 				case sf::Event::MouseButtonPressed:
-					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
-					mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
-					MousePressEvent(mouseArgs);
+					m_mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Height() - Event.mouseButton.y));
+					m_mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
+					MousePressEvent(m_mouseArgs);
 					break;
 				case sf::Event::MouseButtonReleased:
-					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
-					mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
-					MouseReleaseEvent(mouseArgs);
+					m_mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Height() - Event.mouseButton.y));
+					m_mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
+					MouseReleaseEvent(m_mouseArgs);
 					break;
 				case sf::Event::MouseWheelMoved:
-					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
+					m_mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Height() - Event.mouseButton.y));
 					if(Event.mouseWheel.delta > 0) {
-						mouseArgs.SetMouseButtons(MOUSE_BUTTON_WHEEL_UP);
+						m_mouseArgs.SetMouseButtons(MOUSE_BUTTON_WHEEL_UP);
 					}
 					else {
-						mouseArgs.SetMouseButtons(MOUSE_BUTTON_WHEEL_DOWN);
+						m_mouseArgs.SetMouseButtons(MOUSE_BUTTON_WHEEL_DOWN);
 					}
-					MousePressEvent(mouseArgs);
+					MousePressEvent(m_mouseArgs);
 					break;
 				}
 			}
@@ -127,7 +125,6 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 			sf::Event Event;
 			while (m_app.pollEvent(Event))
 			{
-				MouseEventArgs mouseArgs;
 				switch(Event.type)
 				{
 				case sf::Event::Closed:
@@ -144,33 +141,32 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 					KeyReleaseEvent(Event.key.code);
 					break;
 				case sf::Event::MouseMoved:
-					
-					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
-					mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
-					MouseMoveEvent(mouseArgs);
+					m_mouseArgs.SetPosition(Vector2i(Event.mouseMove.x, Height() - Event.mouseMove.y));
+					m_mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
+					MouseMoveEvent(m_mouseArgs);
 					break;
 				case sf::Event::TextEntered:
 					TextenteredEvent(Event.text.unicode);
 					break;
 				case sf::Event::MouseButtonPressed:
-					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
-					mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
-					MousePressEvent(mouseArgs);
+					m_mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Height() - Event.mouseButton.y));
+					m_mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
+					MousePressEvent(m_mouseArgs);
 					break;
 				case sf::Event::MouseButtonReleased:
-					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
-					mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
-					MouseReleaseEvent(mouseArgs);
+					m_mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Height() - Event.mouseButton.y));
+					m_mouseArgs.SetMouseButtons(ConvertMouseButton(Event.mouseButton.button));
+					MouseReleaseEvent(m_mouseArgs);
 					break;
 				case sf::Event::MouseWheelMoved:
-					mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Event.mouseButton.y));
+					m_mouseArgs.SetPosition(Vector2i(Event.mouseButton.x, Height() - Event.mouseButton.y));
 					if(Event.mouseWheel.delta > 0) {
-						mouseArgs.SetMouseButtons(MOUSE_BUTTON_WHEEL_UP);
+						m_mouseArgs.SetMouseButtons(MOUSE_BUTTON_WHEEL_UP);
 					}
 					else {
-						mouseArgs.SetMouseButtons(MOUSE_BUTTON_WHEEL_DOWN);
+						m_mouseArgs.SetMouseButtons(MOUSE_BUTTON_WHEEL_DOWN);
 					}
-					MousePressEvent(mouseArgs);
+					MousePressEvent(m_mouseArgs);
 					break;
 				}
 			}
@@ -308,7 +304,7 @@ void OpenglContext::InitWindow(int width, int height)
 	m_app.create(sf::VideoMode(width, height, 32), m_title.c_str(), m_fullscreen ? sf::Style::Fullscreen : (sf::Style::Resize|sf::Style::Close), sf::ContextSettings(32, 8, 0));
 }
 
-MOUSE_BUTTON OpenglContext::ConvertMouseButton(sf::Mouse::Button button) const
+MouseButton OpenglContext::ConvertMouseButton(sf::Mouse::Button button) const
 {
 	switch(button)
 	{

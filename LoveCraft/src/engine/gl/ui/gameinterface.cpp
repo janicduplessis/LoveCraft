@@ -400,7 +400,7 @@ bool GameInterface::MouseMoveEvents(const MouseEventArgs& e)
 	return false;
 }
 
-bool GameInterface::MousePressEvent( const MOUSE_BUTTON &button, int x, int y )
+bool GameInterface::MousePressEvent( const MouseButton &button, int x, int y )
 {
 	switch (button)
 	{
@@ -431,7 +431,7 @@ bool GameInterface::MousePressEvent( const MOUSE_BUTTON &button, int x, int y )
 	return false;
 }
 
-bool GameInterface::MouseRleaseEvent( const MOUSE_BUTTON &button, int x, int y )
+bool GameInterface::MouseRleaseEvent( const MouseButton &button, int x, int y )
 {
 	switch (button)
 	{

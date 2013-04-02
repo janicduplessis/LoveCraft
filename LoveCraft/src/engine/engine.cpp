@@ -28,6 +28,8 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 		m_texturefontColor[i] = new Texture();
 	m_monsters = new Animal*[MONSTER_MAX_NUMBER];
 
+	m_chunks = new Chunks(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
+
 	m_skybox = new Skybox();
 
 	m_player = new Player(Vector3f(VIEW_DISTANCE, 0, VIEW_DISTANCE));
@@ -201,31 +203,8 @@ void Engine::GameInit()
 #pragma region Initialisation des chunks
 
 	Info::Get().SetCubeShader(&m_shaderCube);
-
-	m_chunks = new Array2d<Chunk*>(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
 	Info::Get().SetChunkArray(m_chunks);
-
-	int test = VIEW_DISTANCE / CHUNK_SIZE_X * 2;
-
-	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; ++i)
-	{
-		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
-		{
-			Chunk* c = new Chunk(Vector2i(i,j), Vector2f(i,j));
-			m_chunks->Set(i, j, c);
-		}
-	}
-
-	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; ++i)
-	{
-		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
-		{
-			Chunk* c = m_chunks->Get(i,j);
-			c->SetSurroundings(Vector2i(i,j));
-			c->GenerateTrees();
-			c->SetIsReady(true);
-		}
-	}
+	m_chunks->Init(&m_lightingShader);
 
 	Info::Get().StatusOn(Info::LSTATUS_CHUNK);
 
@@ -506,28 +485,27 @@ void Engine::UnloadResource()
 
 void Engine::UpdateGame(float elapsedTime)
 {
-	m_mutex.lock();
-
-#pragma region GameTime
-
+	// Game Time
 	static float gameTime = elapsedTime;
 	gameTime += elapsedTime;
-	m_gameTime = gameTime;
-	m_character->ReduceGlobalCooldown(elapsedTime);
 	if (m_clickTimerOn)
 		m_clickTimer += elapsedTime;
 
-#pragma endregion
+	// Mouse Cursor
+	if (!m_rightClick && !m_leftClick)
+		m_pb_cursor->Show();
+	else
+		m_pb_cursor->Hide();
 
+	// Update
+	m_character->ReduceGlobalCooldown(elapsedTime);
 	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_gameUI.Update(m_valuesGameInterface);
 	m_chunkLoader.CheckPlayerPosition(m_player);
-
-#pragma region Calcul la position du joueur et de la camera
-
 	m_player->Move(m_ghostMode, m_character, elapsedTime);
 	m_player->Update(gameTime);
 	m_camera->Update(elapsedTime);
+	m_chunks->Update();
 
 	//Vérification de la mort du personnage
 	if (m_character->Health() <= 0.999f)
@@ -539,58 +517,18 @@ void Engine::UpdateGame(float elapsedTime)
 		m_character->SetExp(-100000);
 	}
 
-	m_mutex.unlock();
-
-#pragma endregion
-
-#pragma region Calcul de la position des monstres
-
+	// Position des monstres
 	for (uint8 i = 0; i < MONSTER_MAX_NUMBER; i++)
 	{
 		if (m_monsters[i]->Initialized())
 			m_monsters[i]->Update(elapsedTime);
 	}
 
-#pragma endregion
-
 	// Update tous les spells
 	for (SpellList::iterator it = m_spells.begin(); it != m_spells.end(); ++it)
 		it->Update(elapsedTime);
 
-#pragma region Reseau
-
-	//Test réseau - Dessigne un carré en haut de la position du joueur
-	//sf::Packet p;
-	//if (Info::Get().Network().Receive(p))
-	//{
-	//	float x;
-	//	float y;
-	//	float z;
-	//	p >> x >> y >> z;
-	//	glLoadIdentity();
-	//	glTranslated(x, y+5, z);
-	//	m_textureFloor.Bind();
-	//	glBegin(GL_QUADS);
-
-	//	glTexCoord2f(0, 0);
-	//	glVertex3f(x - 0.5f, y, z - 0.5f);
-
-	//	glTexCoord2f(0, 1);
-	//	glVertex3f(x + 0.5f, y, z - 0.5f);
-
-	//	glTexCoord2f(1, 1);
-	//	glVertex3f(x + 0.5f, y, z + 0.5f);
-
-	//	glTexCoord2f(1, 0);
-	//	glVertex3f(x - 0.5f, y, z + 0.5f);
-
-	//	glEnd();
-	//}
-
-#pragma endregion
-
-#pragma region FPS
-
+	// Fps
 	m_fpstmr += elapsedTime;
 	if (m_fpstmr > 1.5f)
 	{
@@ -599,8 +537,7 @@ void Engine::UpdateGame(float elapsedTime)
 		m_fpstmr = 0;
 	}
 
-#pragma endregion
-
+	GetBlocAtCursor();
 }
 
 void Engine::UpdateMenu(float elapsedTime)
@@ -636,8 +573,6 @@ void Engine::UpdateMenu(float elapsedTime)
 	m_timeranimationplus->Update(elapsedTime);
 	m_debugUI.m_timertesttime->SetVariableMsg(m_timertest->GetIntervalTime());
 }
-
-#pragma endregion
 
 #pragma region Render
 
@@ -694,34 +629,9 @@ void Engine::RenderGame()
 
 	m_normalMap.Bind(GL_TEXTURE2);
 
-	if (!m_rightClick && !m_leftClick)
-		m_pb_cursor->Show();
-	else
-		m_pb_cursor->Hide();
+	UpdateLighting();
 
-	// Update lights
-	PointLight p3;
-	p3.Color = Vector3f(1,140/255.f,0);
-	p3.DiffuseIntensity = 0.6;
-	p3.Attenuation.Exp = 0.05f;
-	p3.Attenuation.Linear = 0.2f;
-	p3.Attenuation.Constant = 0.1f;
-	Vector3f toLantern(2, 0, 0);
-	Quaternion rot;
-	rot.FromAxis(ToRadian(m_player->Rotation().y), Vector3f(0,1,0));
-	float toLanterLenght = toLantern.Lenght();
-	toLantern = rot * toLantern * toLanterLenght;
-	p3.Position = m_player->Position() + toLantern;
-
-	// Update common uniforms
-	m_modelShader.Enable();
-	m_modelShader.UpdatePointLight(2, p3);
-	m_modelShader.SetEyeWorldPos(Vector3f(0,0,0));
-	m_lightingShader.Enable();
-	m_lightingShader.UpdatePointLight(2, p3);
-	m_lightingShader.SetEyeWorldPos(m_camera->GetPosition());
-
-	// Render
+	// Render !
 	Pipeline pipeline;
 	pipeline.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
 	pipeline.SetPerspectiveProj(m_persProjInfo);
@@ -732,30 +642,8 @@ void Engine::RenderGame()
 	m_lightingShader.Enable();
 	m_textureArray->Use(GL_TEXTURE1);
 	m_noNormalMap.Bind(GL_TEXTURE2);
-	m_lightingShader.SetTextureUnitType(1);
-	m_lightingShader.SetWVP(pipeline.GetWVPTrans());
-	m_lightingShader.SetWorld(pipeline.GetWorldTrans());
 
-	m_mutex.lock();
-	int updated = 0;
-
-	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
-	{
-		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
-		{
-			Chunk* c = m_chunks->Get(i,j);
-			if (c->IsReady()) {
-				if (c->IsDirty() && updated < 2) {
-					c->Update();
-					updated++;
-				}
-				c->Render();
-			}
-		}
-	}
-	m_mutex.unlock();
-
-	Shader::Disable();
+	m_chunks->Render(pipeline);
 
 	m_skybox->Render(pipeline);
 
@@ -787,14 +675,9 @@ void Engine::RenderGame()
 	glDisable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
 
-	GetBlocAtCursor();
-
 #pragma region Render l interface
-	// HUD
-	if (m_wireframe)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-#pragma region OpenGL
+	// TODO : Clean this shit too
 	glDisable(GL_LIGHTING);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glDisable(GL_DEPTH_TEST);
@@ -805,12 +688,10 @@ void Engine::RenderGame()
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glCullFace(GL_BACK);
-#pragma endregion
 
 	m_gameUI.Render();
 	m_pb_cursor->Render();
 
-#pragma region OpenGL
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
@@ -819,10 +700,6 @@ void Engine::RenderGame()
 	glPopMatrix();
 #pragma endregion
 
-	if (m_wireframe)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-#pragma endregion
 
 #pragma region Fin du premier Render
 
@@ -1485,6 +1362,31 @@ bool Engine::LoadTexture(Texture& texture, const string& filename, bool stopOnEr
 	}
 
 	return true;
+}
+
+void Engine::UpdateLighting()
+{
+	// Update lights
+	PointLight p3;
+	p3.Color = Vector3f(1,140/255.f,0);
+	p3.DiffuseIntensity = 0.6;
+	p3.Attenuation.Exp = 0.05f;
+	p3.Attenuation.Linear = 0.2f;
+	p3.Attenuation.Constant = 0.1f;
+	Vector3f toLantern(2, 0, 0);
+	Quaternion rot;
+	rot.FromAxis(ToRadian(m_player->Rotation().y), Vector3f(0,1,0));
+	float toLanterLenght = toLantern.Lenght();
+	toLantern = rot * toLantern * toLanterLenght;
+	p3.Position = m_player->Position() + toLantern;
+
+	// Update common uniforms
+	m_modelShader.Enable();
+	m_modelShader.UpdatePointLight(2, p3);
+	m_modelShader.SetEyeWorldPos(m_camera->GetPosition());
+	m_lightingShader.Enable();
+	m_lightingShader.UpdatePointLight(2, p3);
+	m_lightingShader.SetEyeWorldPos(m_camera->GetPosition());
 }
 
 void Engine::CW(const std::string& line)

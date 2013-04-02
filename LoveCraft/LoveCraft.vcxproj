@@ -82,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\chunks.cpp" />
     <ClCompile Include="src\engine\gl\cubemaptexture.cpp" />
     <ClCompile Include="src\engine\gl\shaders\modelshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\shadernew.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\tooltip.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\chunks.h" />
     <ClInclude Include="src\engine\gl\cubemaptexture.h" />
     <ClInclude Include="src\engine\gl\shaders\lights.h" />
     <ClInclude Include="src\engine\gl\shaders\modelshader.h" />

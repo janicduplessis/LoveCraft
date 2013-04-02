@@ -14,7 +14,7 @@ class Array2d
 public:
 	Array2d(uint32 x, uint32 y);
 	Array2d(const Array2d& array);
-	~Array2d();
+	virtual ~Array2d();
 
 	void Set(uint32 x, uint32 y, const T& value);
 	T& Get(uint32 x, uint32 y);

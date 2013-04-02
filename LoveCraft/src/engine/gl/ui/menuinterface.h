@@ -14,8 +14,8 @@ public:
 	virtual void Show();
 	virtual void Hide();
 	virtual bool MouseMoveEvents(const MouseEventArgs& e);
-	virtual bool MousePressEvents(const MOUSE_BUTTON &button, int x, int y);
-	virtual bool MouseReleaseEvents(const MOUSE_BUTTON &button, int x, int y);
+	virtual bool MousePressEvents(const MouseButton &button, int x, int y);
+	virtual bool MouseReleaseEvents(const MouseButton &button, int x, int y);
 
 	//Controles
 

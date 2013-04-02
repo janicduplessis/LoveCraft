@@ -4,8 +4,10 @@
 #include "define.h"
 
 #include "controls.h"
+#include "pipeline.h"
 #include "gl/modelmesh.h"
 #include "gl/shaders/modelshader.h"
+
 
 #include <util/vector2.h>
 #include <util/vector3.h>
@@ -25,7 +27,7 @@ public:
 	 * @param posX Position initiale du joueur
 	 * @param rotY Angle de rotation initial du joueur
 	 */
-	Player(Vector3f position = Vector3f(), Vector2f rotation = Vector2f());
+	Player(Vector3f position = Vector3f(), Vector3f rotation = Vector3f());
 
 	/**
 	 * Destructeur par défaut de la classe
@@ -45,7 +47,7 @@ public:
 	 * Rotation du joueur
 	 * @return Vector2f
 	 */
-	Vector2f Rotation() const;
+	Vector3f Rotation() const;
 	Quaternion RotationQ() const;
 
 	/**
@@ -60,19 +62,8 @@ public:
 	*/
 	Vector3f Acceleration() const;
 
-	/**
-	* Applique les valeurs de l'angle de rotation sur l'axe des Y
-	* 
-	* @param value Valeur de l'angle à modifier
-	*/
-	void TurnLeftRight ( float value );
-
-	/**
-	 * Applique les valeurs de l'angle de rotation sur l'axe des X
-	 * 
-	 * @param value Valeur de l'angle à modifier
-	 */
-	void TurnTopBottom ( float value );
+	Vector3f Scale() const;
+	void Scale(Vector3f val);
 
 	/**
 	 * Fait bouger le personnage en fonction des touches enfoncées
@@ -82,20 +73,22 @@ public:
 	 */
 	void Move(bool ghost, Character* cter, float elapsedTime);
 	void Teleport();
-	void Render (float time, bool wireFrame = false);
-	void Update();
-	void SetRotation( Vector2f rot );
+	void Render(Pipeline p);
+	void Update(float gameTime);
+	void SetRotation( Vector3f rot );
 	void ResetPosition();
+	void MouseMoveEvent( const MouseEventArgs& e );
+
 private:
 	bool CheckCollision(const Vector3f& pos) const;
 	
-
 private:
-	float m_energy; // Energie pour pouvoir courir (0 à 100)
+	float m_energy;		// Energie pour pouvoir courir (0 à 100)
 
-	Vector3f m_pos; // Position du joueur
+	Vector3f m_pos;		// Position du joueur
 	Vector3f m_lastPos; // Position au frame precedent
-	Vector2f m_rot; // Rotation en x et y;
+	Vector3f m_rot;		// Rotation en x,y,z;
+	Vector3f m_scale;
 
 	ModelMesh m_model;
 

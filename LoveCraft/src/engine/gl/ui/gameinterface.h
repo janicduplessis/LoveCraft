@@ -23,8 +23,8 @@ public:
 	virtual void ConsoleWriteLine(const string& line);
 
 	virtual bool MouseMoveEvents(const MouseEventArgs& e);
-	virtual bool MousePressEvent(const MOUSE_BUTTON &button, int x, int y);
-	virtual bool MouseRleaseEvent(const MOUSE_BUTTON &button, int x, int y);
+	virtual bool MousePressEvent(const MouseButton &button, int x, int y);
+	virtual bool MouseRleaseEvent(const MouseButton &button, int x, int y);
 	virtual bool KeyPressEvent(unsigned char key);
 	virtual bool KeyReleaseEvent(unsigned char key);
 	virtual bool TextenteredEvent(unsigned int val);

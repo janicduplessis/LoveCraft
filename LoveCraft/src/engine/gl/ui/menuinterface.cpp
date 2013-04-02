@@ -147,7 +147,7 @@ bool MenuInterface::MouseMoveEvents(const MouseEventArgs& e)
 	return false;
 }
 
-bool MenuInterface::MousePressEvents(const MOUSE_BUTTON &button, int x, int y)
+bool MenuInterface::MousePressEvents(const MouseButton &button, int x, int y)
 {
 	switch (button)
 	{
@@ -173,7 +173,7 @@ bool MenuInterface::MousePressEvents(const MOUSE_BUTTON &button, int x, int y)
 
 }
 
-bool MenuInterface::MouseReleaseEvents(const MOUSE_BUTTON &button, int x, int y)
+bool MenuInterface::MouseReleaseEvents(const MouseButton &button, int x, int y)
 {
 	switch (button)
 	{

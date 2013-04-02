@@ -38,7 +38,7 @@ bool Skybox::Init( const string& Directory, const string& PosXFilename, const st
 	return true;
 }
 
-void Skybox::Render( const Matrix4f& wvp )
+void Skybox::Render(Pipeline p)
 {
 	GLint OldCullFaceMode;
 	glGetIntegerv(GL_CULL_FACE_MODE, &OldCullFaceMode);
@@ -46,13 +46,16 @@ void Skybox::Render( const Matrix4f& wvp )
 	glGetIntegerv(GL_DEPTH_FUNC, &OldDepthFuncMode);
 
 	
-	glCullFace(GL_FRONT);
+	glCullFace(GL_BACK);
 	glDepthFunc(GL_LEQUAL);
 	CHECK_GL_ERROR();
 
+	p.Scale(100,100,100);
+	p.WorldPos(0,64,0);
+
 	m_cubemapTexture->Bind(GL_TEXTURE0);
 	m_skyboxShader->Use();
-	m_skyboxShader->SetWVP(wvp);
+	m_skyboxShader->SetWVP(p.GetWVPTrans());
 
 	m_skyboxMesh->Render();
 

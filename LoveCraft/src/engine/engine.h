@@ -21,6 +21,7 @@
 #include "chunkloader.h"
 #include "thirdpersoncamera.h"
 #include "chunk.h"
+#include "chunks.h"
 #include "info.h"
 #include "gl/ui/valuesgameinterface.h"
 #include "gl/ui/gameinterface.h"
@@ -146,6 +147,7 @@ public:
 private:
 	bool LoadTexture(Texture& texture, const string& filename, bool stopOnError = true);
 	void LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, string colorMapPath, string normalMapPath = "");
+	void UpdateLighting();
 
 	void CW(const string& line);
 	void CWL(const string& line);
@@ -180,7 +182,7 @@ private:
 	LightingShader m_lightingShader;
 	ModelShader m_modelShader;
 
-	Array2d<Chunk*>* m_chunks;
+	Chunks* m_chunks;
 	Skybox* m_skybox;
 
 	ValuesInterface m_valuesMenuInterface;
@@ -200,7 +202,7 @@ private:
 	float m_fps;
 	float m_clickTimer;
 	bool m_clickTimerOn;
-	Vector2f m_lastRot;
+	Vector3f m_lastTarget;
 
 	BlockType m_currentBlockType;
 

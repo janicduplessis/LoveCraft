@@ -2,6 +2,7 @@
 #include "util/tool.h"
 #include <string>
 #include <cassert>
+#include "glfx.h"
 
 static const char* pEffectFile = SHADER_PATH "model.glsl";
 
@@ -20,10 +21,9 @@ bool ModelShader::Init()
 	if (!CompileProgram("Lighting"))
 		return false;
 
+	glfxGenerateSampler(m_effect, "Sampler");
 	m_WVPLocation = GetUniformLocation("gWVP");
 	m_worldLocation = GetUniformLocation("gWorld");
-	m_colorSamplerLocation = GetUniformLocation("gColorSampler");
-	//m_normalSamplerLocation = GetUniformLocation("gNormalSampler");
 	m_dirLightLocation.Color = GetUniformLocation("gDirectionalLight.Base.Color");
 	m_dirLightLocation.AmbientIntensity = GetUniformLocation("gDirectionalLight.Base.AmbientIntensity");
 	m_dirLightLocation.DiffuseIntensity = GetUniformLocation("gDirectionalLight.Base.DiffuseIntensity");
@@ -37,7 +37,6 @@ bool ModelShader::Init()
 	if (m_dirLightLocation.AmbientIntensity == INVALID_UNIFORM_LOCATION ||
 		m_WVPLocation == INVALID_UNIFORM_LOCATION ||
 		m_worldLocation == INVALID_UNIFORM_LOCATION ||
-		m_colorSamplerLocation == INVALID_UNIFORM_LOCATION ||
 		m_eyeWorldPosLocation == INVALID_UNIFORM_LOCATION ||
 		m_dirLightLocation.Color == INVALID_UNIFORM_LOCATION ||
 		m_dirLightLocation.DiffuseIntensity == INVALID_UNIFORM_LOCATION ||
@@ -100,11 +99,6 @@ bool ModelShader::Init()
 void ModelShader::SetWVP( const Matrix4f& WVP )
 {
 	glUniformMatrix4fv(m_WVPLocation, 1, GL_TRUE, (const GLfloat*)WVP.GetInternalValues());
-}
-
-void ModelShader::SetColorTextureUnit( unsigned int TextureUnit )
-{
-	glUniform1i(m_colorSamplerLocation, TextureUnit);
 }
 
 void ModelShader::SetDirectionalLight( const DirectionalLight& Light )

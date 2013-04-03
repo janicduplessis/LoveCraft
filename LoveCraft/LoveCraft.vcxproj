@@ -94,6 +94,7 @@
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.cpp" />
     <ClCompile Include="src\engine\gl\ui\debuginterface.cpp" />
+    <ClCompile Include="src\engine\material.cpp" />
     <ClCompile Include="src\engine\mouseeventargs.cpp" />
     <ClCompile Include="src\engine\pipeline.cpp" />
     <ClCompile Include="src\engine\thirdpersoncamera.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.h" />
     <ClInclude Include="src\engine\gl\ui\debuginterface.h" />
+    <ClInclude Include="src\engine\material.h" />
     <ClInclude Include="src\engine\mouseeventargs.h" />
     <ClInclude Include="src\engine\pipeline.h" />
     <ClInclude Include="src\engine\thirdpersoncamera.h" />

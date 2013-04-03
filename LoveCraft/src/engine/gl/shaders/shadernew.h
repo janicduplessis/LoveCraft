@@ -21,7 +21,7 @@ protected:
 
 	GLint GetProgramParam(GLint param);
 
-private:    
+protected:    
 	GLint m_effect;    
 	GLint m_shaderProg;
 	const char* m_pEffectFile;

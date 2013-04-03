@@ -9,10 +9,11 @@
 #include <assimp/postprocess.h>
 
 #include "define.h"
+#include "shaders/modelshader.h"
 #include "util/vector3.h"
 #include "util/vector2.h"
 #include "util/matrix4.h"
-#include "texture.h"
+#include "engine/material.h"
 
 
 #define INVALID_MATERIAL 0xFFFFFFFF
@@ -25,7 +26,7 @@ public:
 	ModelMesh();
 	~ModelMesh();
 
-	bool LoadMesh(const std::string& Filename, bool flipUV = false);
+	bool Init(const std::string& Filename, ModelShader* shader, bool flipUV = false);
 
 	void Render();
 
@@ -34,11 +35,6 @@ public:
 	}
 
 	void BoneTransform(float timeInSeconds, std::vector<Matrix4f>& transforms);
-
-	void Translate( const Vector3f& trans );
-	void Scale( const Vector3f& scale );
-	void SetPosition(const Vector3f& pos);
-	void SetRotation(const Vector3f& rot);
 
 private:
 
@@ -89,6 +85,7 @@ private:
 				  const aiMesh* paiMesh,
 				  std::vector<Vector3f>& positions,
 				  std::vector<Vector3f>& normals,
+				  std::vector<Vector3f>& tangents,
 				  std::vector<Vector2f>& texCoords,
 				  std::vector<VertexBoneData>& bones,
 				  std::vector<uint32>& indices);
@@ -100,6 +97,7 @@ private:
 		VB_INDEX,
 		VB_POS,
 		VB_NORMAL,
+		VB_TANGENTS,
 		VB_TEXCOORD,
 		VB_BONE,
 		VB_COUNT
@@ -118,7 +116,7 @@ private:
 	};
 
 	std::vector<MeshEntry> m_entries;
-	std::vector<Texture*> m_textures;
+	std::vector<Material> m_materials;
 
 	std::map<std::string, uint32> m_boneMapping;
 	uint32 m_numBones;
@@ -128,11 +126,7 @@ private:
 	Assimp::Importer m_importer;
 	const aiScene* m_scene;
 
-	Matrix4f m_worldPos;
-	Vector3f m_rot;
-	Vector3f m_pos;
-	Vector3f m_scale;
-	Vector3f m_translation;
+	ModelShader* m_shader;
 };
 
 #endif

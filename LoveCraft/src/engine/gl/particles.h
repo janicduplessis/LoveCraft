@@ -25,6 +25,7 @@ private:
 		Vector3f pos; // Position
 		Vector3f velocity; // Vitesse initiale
 		float lifespan; // Durée de vie
+		float alpha;
 	};
 
 	/**
@@ -62,7 +63,7 @@ public:
 	* Update la position des particules
 	* Doit être appelé a chaque frame
 	*/
-	void Update(int deltaTimeMilli);
+	void Update(float deltaTimeMilli);
 
 	/**
 	* Position du lanceur de particules
@@ -101,15 +102,12 @@ public:
 	/**
 	* Vitesse initiale moyenne des particules
 	*/
-	void SetAverageVelocity(float velocity);
-
-private:
-	Vector3f AvgVelocity() const;
+	void SetAverageVelocity(const Vector3f& velocity);
 
 private:
 	// Propriétés des particules
 	float m_particlesSize;
-	float m_averageVelocity;
+	Vector3f m_averageVelocity;
 	float m_averageLifespan;
 	Vector3f m_color;
 	Texture* m_texture;

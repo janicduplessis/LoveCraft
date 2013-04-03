@@ -14,8 +14,8 @@
 #define PARTICLE_TYPE_SECONDARY_SHELL 2.0f
 
 Particles::Particles(unsigned int particlesNumber) : m_particlesNumber(particlesNumber), 
-	m_pos(0), m_range(0.5f), m_color(0.5f), m_angle(Quaternion(1,0,0,0)), m_averageVelocity(2),
-	m_particlesSize(0.1f), m_averageLifespan(1.5), m_texture(0), m_isFirst(true), m_time(0), 
+	m_pos(0), m_range(1), m_color(0.5f), m_angle(Quaternion(1,0,0,0)), m_averageVelocity(0,1,0),
+	m_particlesSize(0.2f), m_averageLifespan(1000), m_texture(0), m_isFirst(true), m_time(0), 
 	m_currTFB(1), m_currVB(0)
 {
 
@@ -50,6 +50,7 @@ bool Particles::Init()
 	particles[0].pos = Vector3f(0);
 	particles[0].velocity = Vector3f(0.f, 0.01f, 0.f);
 	particles[0].lifespan = 0.f;
+	particles[0].alpha = 1.f;
 
 	glGenTransformFeedbacks(2, m_transformFeedback);
 	glGenBuffers(2, m_particleBuffer);
@@ -71,11 +72,13 @@ bool Particles::Init()
 
 	m_updateShader.SetRandomTextureUnit(3);
 	m_updateShader.SetLauncherLifetime(10.0f);
-	m_updateShader.SetShellLifetime(3000.0f);
-	m_updateShader.SetSecondaryShellLifetime(2000.0f);
+	m_updateShader.SetShellLifetime(m_averageLifespan);
+	m_updateShader.SetSecondaryShellLifetime(0);
 	m_updateShader.SetLauncherPosition(m_pos);
+	m_updateShader.SetAvgVelocity(m_averageVelocity);
+	m_updateShader.SetRange(m_range);
 
-	//Shader::Disable();
+	Shader::Disable();
 
 	if (!m_randomTexture.InitRandomTexture(1000)) {
 		return false;
@@ -87,9 +90,9 @@ bool Particles::Init()
 
 	m_billboardShader.Use();
 
-	//m_billboardTechnique.SetColorTextureUnit(COLOR_TEXTURE_UNIT_INDEX);
-
-	m_billboardShader.SetBillboardSize(0.02f);
+	m_billboardShader.SetColorTextureUnit(0);
+	m_billboardShader.SetColor(m_color);
+	m_billboardShader.SetBillboardSize(m_particlesSize);
 
 	//Shader::Disable();
 
@@ -101,8 +104,9 @@ bool Particles::Init()
 	return true;
 }
 
-void Particles::Update(int deltaTimeMilli)
+void Particles::Update(float deltaTimeMilli)
 {
+	deltaTimeMilli *= 1000;
 	m_time += deltaTimeMilli;
 
 	m_updateShader.Use();
@@ -110,29 +114,25 @@ void Particles::Update(int deltaTimeMilli)
 	m_updateShader.SetDeltaTimeMillis(deltaTimeMilli);
 
 	m_randomTexture.Bind(GL_TEXTURE3);
-	CHECK_GL_ERROR();
 
 	glEnable(GL_RASTERIZER_DISCARD);
-	CHECK_GL_ERROR();
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_particleBuffer[m_currVB]);    
 	glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, m_transformFeedback[m_currTFB]);
-	CHECK_GL_ERROR();
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 	glEnableVertexAttribArray(3);
-	CHECK_GL_ERROR();
+	glEnableVertexAttribArray(4);
 
 	glVertexAttribPointer(0, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), 0);                          // type
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)4);         // position
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)16);        // velocity
 	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)28);          // lifetime
-	CHECK_GL_ERROR();
+	glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)32);          // lifetime
 
 	glBeginTransformFeedback(GL_POINTS);
-	CHECK_GL_ERROR();
 
 	if (m_isFirst) {
 		glDrawArrays(GL_POINTS, 0, 1);
@@ -144,15 +144,16 @@ void Particles::Update(int deltaTimeMilli)
 	}            
 
 	glEndTransformFeedback();
-	CHECK_GL_ERROR();
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
 	glDisableVertexAttribArray(3);
-	CHECK_GL_ERROR();
+	glDisableVertexAttribArray(4);
 
-	//Shader::Disable();
+	glDisable(GL_RASTERIZER_DISCARD);
+
+	Shader::Disable();
 }
 
 void Particles::Render(const Matrix4f& VP, bool wireFrame)
@@ -161,31 +162,29 @@ void Particles::Render(const Matrix4f& VP, bool wireFrame)
 	m_billboardShader.Use();
 	m_billboardShader.SetCameraPosition(Info::Get().GetCamera()->GetPosition());
 	m_billboardShader.SetVP(VP);
-	m_texture->Bind();
+	m_texture->Bind(GL_TEXTURE0);
 
 	glDisable(GL_RASTERIZER_DISCARD);
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_particleBuffer[m_currTFB]);    
 
 	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)4);  // position
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)4);		// position
+	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (const GLvoid*)32);       // lifetime
+
 
 	glDrawTransformFeedback(GL_POINTS, m_transformFeedback[m_currTFB]);
 
 	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
 
 	m_currVB = m_currTFB;
 	m_currTFB = (m_currTFB + 1) & 0x1;
 
 	Shader::Disable();
 }
-
-Vector3f Particles::AvgVelocity() const
-{
-	return m_angle * Vector3f(-1,0,0) * m_averageVelocity;
-}
-
 
 void Particles::SetPosition( const Vector3f& pos )
 {
@@ -229,7 +228,7 @@ void Particles::SetAverageLifespan( float lifespan )
 	m_averageLifespan = lifespan;
 }
 
-void Particles::SetAverageVelocity( float velocity )
+void Particles::SetAverageVelocity( const Vector3f& velocity )
 {
 	m_averageVelocity = velocity;
 }

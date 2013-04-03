@@ -24,6 +24,9 @@ public:
 
 	void SetShellLifetime(float lifetime);
 
+	void SetRange(float range);
+	void SetAvgVelocity(const Vector3f& vel);
+
 	void SetSecondaryShellLifetime(float lifetime);
 	void SetLauncherPosition( Vector3f pos );
 private:
@@ -34,6 +37,8 @@ private:
 	GLuint m_shellLifetimeLocation;
 	GLuint m_secondaryShellLifetimeLocation;
 	GLuint m_launcherPosLocation;
+	GLuint m_avgVelocityLocation;
+	GLuint m_rangeLocation;
 };
 
 

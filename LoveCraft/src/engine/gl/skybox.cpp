@@ -19,12 +19,10 @@ bool Skybox::Init( const string& Directory, const string& PosXFilename, const st
 		return false;
 	}
 	m_skyboxMesh = new ModelMesh;
-	if (!m_skyboxMesh->LoadMesh(SKYBOX_PATH "sphere.obj", true)) {
+	if (!m_skyboxMesh->Init(SKYBOX_PATH "sphere.obj", 0, true)) {
 		std::cout << "Failed to load skybox mesh" << std::endl;
 		return false;
 	}
-
-	m_skyboxMesh->Scale(Vector3f(10,10,10));
 
 	m_skyboxShader = new SkyboxShader;
 	if (!m_skyboxShader->Init()) {

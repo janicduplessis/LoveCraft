@@ -23,8 +23,6 @@ public:
 	void SetWVP(const Matrix4f& WVP);
 	void SetWorld(const Matrix4f& world);
 	void SetEyeWorldPos(const Vector3f& eyePos);
-	void SetColorTextureUnit(unsigned int textureUnit);
-	//void SetNormalTextureUnit(unsigned int textureUnit);
 
 	// Directional lighting
 	void SetDirectionalLight(const DirectionalLight& light);
@@ -48,9 +46,6 @@ private:
 	GLuint m_eyeWorldPosLocation;			// Camera position
 	GLuint m_matSpecularIntensityLocation;	// Material specular intensity
 	GLuint m_matSpecularPowerLocation;		// Material specular power
-
-	GLuint m_colorSamplerLocation;			// Color texture sampler
-	//GLuint m_normalSamplerLocation;			// Normal texture sampler
 
 	// Directional light location struct
 	struct {

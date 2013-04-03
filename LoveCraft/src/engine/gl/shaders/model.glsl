@@ -3,6 +3,7 @@ struct VSInput
     vec3  Position;                                             
     vec2  TexCoord;                                             
     vec3  Normal;    
+	vec3  Tangent;
     ivec4 BoneIDs;
     vec4  Weights;
 };
@@ -10,14 +11,16 @@ struct VSInput
 interface VSOutput
 {                                                                                    
     vec2 TexCoord;                                                                 
-    vec3 Normal;                                                                   
+    vec3 Normal;
+	vec3 Tangent;
     vec3 WorldPos;                                                                 
 };
 
 struct VSOutput1
 {                                                                                    
     vec2 TexCoord;                                                                 
-    vec3 Normal;                                                                   
+    vec3 Normal;
+	vec3 Tangent;
     vec3 WorldPos;                                                                 
 };
 
@@ -40,6 +43,7 @@ shader VSmain(in VSInput VSin:0, out VSOutput VSout)
     VSout.TexCoord = VSin.TexCoord;
     vec4 NormalL   = BoneTransform * vec4(VSin.Normal, 0.0);
     VSout.Normal   = (gWorld * NormalL).xyz;
+	VSout.Tangent  = (gWorld * vec4(VSin.Tangent, 0.0)).xyz;
     VSout.WorldPos = (gWorld * PosL).xyz;                                
 }
 
@@ -70,15 +74,18 @@ struct PointLight
     Attenuation Atten;                                                                      
 };                                                                                          
 
+sampler Sampler {
+	Dim = 2;
+} ColorTexture:0, NormalTexture:2;     
 
 uniform int gNumPointLights;                                                                                                                              
 uniform DirectionalLight gDirectionalLight;                                                 
-uniform PointLight gPointLights[MAX_POINT_LIGHTS];                                                                                  
-uniform sampler2D gColorSampler;                                                                
+uniform PointLight gPointLights[MAX_POINT_LIGHTS];                                                                                                                                    
 uniform vec3 gEyeWorldPos;                                                                  
 uniform float gMatSpecularIntensity;                                                        
 uniform float gSpecularPower; 
 
+// Common light calculations
 vec4 CalcLightInternal(BaseLight Light, vec3 LightDirection, VSOutput1 In)            
 {                                                                                           
     vec4 AmbientColor = vec4(Light.Color, 1.0f) * Light.AmbientIntensity;                   
@@ -103,11 +110,13 @@ vec4 CalcLightInternal(BaseLight Light, vec3 LightDirection, VSOutput1 In)
     return (AmbientColor + DiffuseColor + SpecularColor);                                   
 }                                                                                           
 
+// Calculate directional light
 vec4 CalcDirectionalLight(VSOutput1 In)                                                      
 {                                                                                           
     return CalcLightInternal(gDirectionalLight.Base, gDirectionalLight.Direction, In);  
 }                                                                                           
  
+// Calculate point light
 vec4 CalcPointLight(PointLight l, VSOutput1 In)                                       
 {                                                                                           
     vec3 LightDirection = In.WorldPos - l.Position;                                           
@@ -120,26 +129,48 @@ vec4 CalcPointLight(PointLight l, VSOutput1 In)
                          l.Atten.Exp * Distance * Distance;                                 
 
     return Color / Attenuation;                                                             
-}                                                                                           
+}     
+
+// Calculate bumb map
+vec3 CalcBumpedNormal(VSOutput1 In)
+{
+    vec3 Tangent = normalize(In.Tangent - dot(In.Tangent, In.Normal) * In.Normal);
+    vec3 Bitangent = cross(Tangent, In.Normal);
+    vec3 BumpMapNormal = texture(NormalTexture, In.TexCoord.xy).xyz;
+    BumpMapNormal = 2.0 * BumpMapNormal - vec3(1.0, 1.0, 1.0);
+    vec3 NewNormal;
+    mat3 TBN = mat3(Tangent, Bitangent, In.Normal);
+    NewNormal = TBN * BumpMapNormal;
+    NewNormal = normalize(NewNormal);
+    return NewNormal;
+}                                                                                      
 
 shader FSmain(in VSOutput FSin, out vec4 FragColor)
 {                                    
     VSOutput1 In;
     In.TexCoord = FSin.TexCoord;
     In.Normal = normalize(FSin.Normal);
-    In.WorldPos = FSin.WorldPos;                                                                 
+	In.Tangent = normalize(FSin.Tangent);
+    In.WorldPos = FSin.WorldPos;          
+	
+	// TODO find better way for transparency
+	vec4 texel = texture(ColorTexture, In.TexCoord.xy);
+	if (texel.x == 1.f && texel.y == 1.f && texel.z == 1.f) {
+        discard;
+    }
   
+	In.Normal = CalcBumpedNormal(In);
     vec4 TotalLight = CalcDirectionalLight(In);                                         
 
     for (int i = 0 ; i < gNumPointLights ; i++) {                                           
         TotalLight += CalcPointLight(gPointLights[i], In);                              
-    }                                                                                                                                                                         
+    }
 
-    FragColor = texture(gColorSampler, In.TexCoord.xy) * TotalLight;     
+    FragColor = texel * TotalLight;     
 }
 
 program Lighting
 {
-    vs(410)=VSmain();
-    fs(410)=FSmain();
+    vs(420)=VSmain();
+    fs(420)=FSmain();
 };

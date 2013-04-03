@@ -19,7 +19,7 @@ Spell::~Spell()
 void Spell::Update( float elapsedTime )
 {
 	Projectile::Update(elapsedTime);
-	m_particles.Update(elapsedTime * 1000);
+	m_particles.Update(elapsedTime);
 	m_particles.SetPosition(m_pos);
 	m_particles.SetRotation(m_rot);
 }
@@ -42,7 +42,6 @@ void Spell::Init( float speed, const Quaternion& rot)
 	m_spellTexture = new Texture;
 	m_spellTexture->Load(TEXTURE_PATH "particle1.png");
 	m_particles.SetTexture(m_spellTexture);
-	m_particles.SetColor(Vector3f(1,0,0));
 	m_particles.SetParticlesSize(0.1);
 	m_particles.SetAverageVelocity(0.01);
 	m_particles.SetColor(Vector3f(1, 153/255.f, 0));

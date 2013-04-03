@@ -78,6 +78,8 @@ public:
 	void SetRotation( Vector3f rot );
 	void ResetPosition();
 	void MouseMoveEvent( const MouseEventArgs& e );
+	Matrix4f LanternBoneTrans() const { return m_lanternBoneTrans; }
+	Matrix4f World() const { return m_world; }
 
 private:
 	bool CheckCollision(const Vector3f& pos) const;
@@ -94,6 +96,9 @@ private:
 
 	Vector3f m_speed;
 	Vector3f m_accel;
+
+	Matrix4f m_lanternBoneTrans;
+	Matrix4f m_world;
 
 	ModelShader* m_modelShader;
 };

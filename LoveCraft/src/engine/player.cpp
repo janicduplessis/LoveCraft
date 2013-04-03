@@ -20,7 +20,7 @@ Player::~Player()
 void Player::Init(ModelShader* shader)
 {
 	m_modelShader = shader;
-	m_model.LoadMesh(MODEL_PATH_HUMANS "boblampclean.md5mesh");
+	m_model.Init(MODEL_PATH_HUMANS "boblampclean.md5mesh", shader);
 	Scale(Vector3f(0.1f, 0.1f, 0.1f));
 	ResetPosition();
 }
@@ -368,13 +368,15 @@ void Player::Move(bool ghost, Character* cter, float elapsedTime)
 
 void Player::Render(Pipeline p)
 {
-	p.WorldPos(m_pos + Vector3f(0,-2.3,0));
+	p.WorldPos(m_pos + Vector3f(0,-1.5,0));
 	p.Rotate(m_rot + Vector3f(270, 180, 0));
 	p.Scale(m_scale);
 
 	m_modelShader->Enable();
 	m_modelShader->SetWorld(p.GetWorldTrans());
 	m_modelShader->SetWVP(p.GetWVPTrans());
+
+	m_world = p.GetWorldTrans();
 
 	m_model.Render();
 
@@ -393,6 +395,8 @@ void Player::Update(float gameTime)
 	{
 		m_modelShader->SetBoneTransform(i, tranforms[i]);
 	}
+
+	m_lanternBoneTrans = tranforms[29];
 
 	Shader::Disable();
 }

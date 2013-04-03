@@ -74,6 +74,10 @@ uniform DirectionalLight gDirectionalLight;
 uniform int gNumPointLights;
 uniform PointLight gPointLights[MAX_POINT_LIGHTS];
 
+sampler Sampler {
+	Dim = 2;
+} NormalTexture:2; 
+
 uniform sampler2DArray gArraySampler;
 uniform sampler2D gColorSampler;
 uniform sampler2D gNormalSampler;
@@ -172,6 +176,6 @@ shader FSmain(in VSOutput FSin, out vec4 FragColor)
 
 program Lighting
 {
-	vs(330)=VSmain();
-	fs(330)=FSmain();
+	vs(420)=VSmain();
+	fs(420)=FSmain();
 };

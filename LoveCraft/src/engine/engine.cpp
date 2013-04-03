@@ -16,8 +16,9 @@
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0),
-	m_clickTimer(0), m_currentBlockType(0), m_chunkLoader(&m_mutex), m_player(0)
+	m_clickTimer(0), m_currentBlockType(0), m_chunkLoader(&m_mutex), m_player(0), m_lanternFire(100)
 {
+	m_particleSpell = new Texture;
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureSpellX = new Texture[SPELL_BAR_SPELL_NUMBER];
 	m_textureInterface = new Texture*[IMAGE::CUSTIMAGE_LAST];
@@ -50,15 +51,7 @@ Engine::~Engine()
 		delete m_character;
 	if (Info::Get().GetStatus(Info::LSTATUS_CHUNK))
 	{
-		// delete les chunks
-		for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2 - 1; i++)
-		{
-			for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2 - 1; ++j)
-			{
-				if (m_chunks != 0)
-					delete m_chunks->Get(i, j);
-			}
-		}
+		delete m_chunks;
 	}
 	if (Info::Get().GetStatus(Info::LSTATUS_TEXTURE_IMAGE))
 	{
@@ -198,20 +191,23 @@ void Engine::MenuInit()
 
 void Engine::GameInit()
 {
-	m_currentBlockType = BTYPE_DIRT;
-
-#pragma region Initialisation des chunks
-
 	Info::Get().SetCubeShader(&m_shaderCube);
 	Info::Get().SetChunkArray(m_chunks);
+
+	m_currentBlockType = BTYPE_DIRT;
+	
 	m_chunks->Init(&m_lightingShader);
-
 	Info::Get().StatusOn(Info::LSTATUS_CHUNK);
-
-#pragma endregion
 
 	m_player->Init(&m_modelShader);
 	m_skybox->Init(SKYBOX_PATH, "sp3left.jpg", "sp3right.jpg", "sp3top.jpg", "sp3bot.jpg", "sp3back.jpg", "sp3front.jpg");
+	m_lanternFire.SetTexture(m_particleSpell);
+	m_lanternFire.SetParticlesSize(0.3);
+	m_lanternFire.SetColor(Vector3f(1, 153/255.f, 0));
+	m_lanternFire.SetAverageVelocity(Vector3f(0,3,0));
+	m_lanternFire.SetRange(2);
+	m_lanternFire.SetAverageLifespan(150);
+	m_lanternFire.Init();
 
 #pragma region Initialisation des entites
 
@@ -291,8 +287,9 @@ void Engine::LoadGlobalResource()
 
 #pragma endregion
 
-	m_normalMap.Load(TEXTURE_PATH "normal_map.jpg", true);
+	m_normalMap.Load(TEXTURE_PATH "guard1_body_normal.tga", true);
 	m_noNormalMap.Load(TEXTURE_PATH "normal_up.jpg", true);
+	m_particleSpell->Load(TEXTURE_PATH "particle1.png");
 
 #pragma region Boutons des spells
 
@@ -430,19 +427,13 @@ void Engine::LoadGlobalResource()
 
 	Shader::Disable();
 
-	CHECK_GL_ERROR();
-
 	m_modelShader.Enable();
 	m_modelShader.SetDirectionalLight(dirLight);
-	m_modelShader.SetColorTextureUnit(0);
-	m_modelShader.SetMatSpecualarIntensity(0);
 	m_modelShader.SetMatSpecualarIntensity(0.5);
 	m_modelShader.SetMatSpecularPower(16);
 	m_modelShader.SetPointLights(3, pointLights);
 
 	Shader::Disable();
-
-	CHECK_GL_ERROR();
 
 #pragma endregion
 
@@ -485,6 +476,8 @@ void Engine::UnloadResource()
 
 void Engine::UpdateGame(float elapsedTime)
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	// Game Time
 	static float gameTime = elapsedTime;
 	gameTime += elapsedTime;
@@ -506,6 +499,7 @@ void Engine::UpdateGame(float elapsedTime)
 	m_player->Update(gameTime);
 	m_camera->Update(elapsedTime);
 	m_chunks->Update();
+	m_lanternFire.Update(elapsedTime);
 
 	//Vérification de la mort du personnage
 	if (m_character->Health() <= 0.999f)
@@ -544,6 +538,7 @@ void Engine::UpdateMenu(float elapsedTime)
 {
 	static float gameTime = elapsedTime;
 	gameTime += elapsedTime;
+	m_gameTime = elapsedTime;
 
 #pragma region Premier tour
 
@@ -624,13 +619,12 @@ void Engine::RenderMenu()
 
 void Engine::RenderGame()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 	glCullFace(GL_FRONT);
-
-	m_normalMap.Bind(GL_TEXTURE2);
-
+	glDisable(GL_CULL_FACE);
 	UpdateLighting();
-
+	m_noNormalMap.Bind(GL_TEXTURE2);
+	m_noNormalMap.Bind(GL_TEXTURE0);
 	// Render !
 	Pipeline pipeline;
 	pipeline.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
@@ -658,8 +652,10 @@ void Engine::RenderGame()
 
 	glEnable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	glDepthMask(GL_FALSE);
 
+	m_lanternFire.Render(pipeline.GetWVPTrans());
 
 	// Render tous les spells
 	for (SpellList::iterator it = m_spells.begin(); it != m_spells.end(); ++it) {
@@ -672,6 +668,7 @@ void Engine::RenderGame()
 		}
 	}
 
+	glDepthMask(GL_TRUE);
 	glDisable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
 
@@ -1369,16 +1366,14 @@ void Engine::UpdateLighting()
 	// Update lights
 	PointLight p3;
 	p3.Color = Vector3f(1,140/255.f,0);
+	p3.AmbientIntensity = 0.1;
 	p3.DiffuseIntensity = 0.6;
 	p3.Attenuation.Exp = 0.05f;
 	p3.Attenuation.Linear = 0.2f;
 	p3.Attenuation.Constant = 0.1f;
-	Vector3f toLantern(2, 0, 0);
-	Quaternion rot;
-	rot.FromAxis(ToRadian(m_player->Rotation().y), Vector3f(0,1,0));
-	float toLanterLenght = toLantern.Lenght();
-	toLantern = rot * toLantern * toLanterLenght;
-	p3.Position = m_player->Position() + toLantern;
+	Vector3f toLantern = m_player->World() * (m_player->LanternBoneTrans() * Vector3f(-39.749374f, -6.182379f, 35.334176f));
+	p3.Position = toLantern;
+	m_lanternFire.SetPosition(toLantern);
 
 	// Update common uniforms
 	m_modelShader.Enable();

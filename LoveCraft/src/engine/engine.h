@@ -163,6 +163,7 @@ private:
 
 	TextureArray* m_textureArray;
 
+	Texture* m_particleSpell;
 	Texture* m_textureSpell;
 	Texture* m_textureSpellX;
 	Texture** m_textureInterface;
@@ -209,6 +210,7 @@ private:
 
 	typedef std::list<Spell> SpellList;
 	SpellList m_spells;
+	Particles m_lanternFire;
 
 	ChunkLoader m_chunkLoader;
 

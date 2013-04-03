@@ -25,6 +25,8 @@ bool BillboardShader::Init()
 	m_VPLocation = BindUniform("gVP");
 	m_cameraPosLocation = BindUniform("gCameraPos");
 	m_sizeLocation = BindUniform("gBillboardSize");
+	m_colorTextureUnitLocation = BindUniform("gColorMap");
+	m_colorLocation = BindUniform("gColor");
 
 	return true;
 }
@@ -42,4 +44,14 @@ void BillboardShader::SetVP( const Matrix4f& vp )
 void BillboardShader::SetBillboardSize( float size )
 {
 	glUniform1f(m_sizeLocation, size);
+}
+
+void BillboardShader::SetColorTextureUnit( int unit )
+{
+	glUniform1i(m_colorTextureUnitLocation, unit);
+}
+
+void BillboardShader::SetColor( const Vector3f& color )
+{
+	glUniform3f(m_colorLocation, color.x, color.y, color.z);
 }

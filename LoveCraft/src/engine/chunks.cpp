@@ -8,7 +8,14 @@ Chunks::Chunks( uint32 x, uint32 y ) : Array2d<Chunk*>(x, y)
 
 Chunks::~Chunks()
 {
-
+	// delete les chunks
+	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2 - 1; i++)
+	{
+		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2 - 1; ++j)
+		{
+			delete Get(i, j);
+		}
+	}
 }
 
 void Chunks::Render(Pipeline p)

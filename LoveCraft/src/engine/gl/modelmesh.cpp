@@ -4,8 +4,9 @@
 #define POSITION_LOCATION    0
 #define TEX_COORD_LOCATION   1
 #define NORMAL_LOCATION      2
-#define BONE_ID_LOCATION     3
-#define BONE_WEIGHT_LOCATION 4
+#define TANGENTS_LOCATION	 3
+#define BONE_ID_LOCATION     4
+#define BONE_WEIGHT_LOCATION 5
 
 
 void ModelMesh::VertexBoneData::AddBoneData(uint32 boneID, float weight)
@@ -22,8 +23,7 @@ void ModelMesh::VertexBoneData::AddBoneData(uint32 boneID, float weight)
 	assert(0);
 }
 
-ModelMesh::ModelMesh() : m_scale(1,1,1), m_translation(0,0,0), m_rot(0,0,0), m_pos(0,0,0), m_VAO(0),
-						 m_numBones(0), m_scene(0) 
+ModelMesh::ModelMesh() :  m_VAO(0), m_numBones(0), m_scene(0) 
 {
 	ZERO_MEM(m_buffers);
 }
@@ -34,8 +34,10 @@ ModelMesh::~ModelMesh()
 	Clear();
 }
 
-bool ModelMesh::LoadMesh( const std::string& filename, bool flipUV )
+bool ModelMesh::Init( const std::string& filename, ModelShader* shader, bool flipUV )
 {
+	m_shader = shader;
+
 	// Delete l'ancien mesh
 	Clear();
 
@@ -72,10 +74,11 @@ bool ModelMesh::LoadMesh( const std::string& filename, bool flipUV )
 bool ModelMesh::InitFromScene( const aiScene* pScene, const std::string& Filename )
 {
 	m_entries.resize(pScene->mNumMeshes);
-	m_textures.resize(pScene->mNumMaterials);
+	m_materials.resize(pScene->mNumMaterials);
 
 	std::vector<Vector3f> positions;
 	std::vector<Vector3f> normals;
+	std::vector<Vector3f> tangents;
 	std::vector<Vector2f> texCoords;
 	std::vector<VertexBoneData> bones;
 	std::vector<uint32> indices;
@@ -97,6 +100,7 @@ bool ModelMesh::InitFromScene( const aiScene* pScene, const std::string& Filenam
 	// Reserve space in the vectors for the vertex attributes and indices
 	positions.reserve(numVertices);
 	normals.reserve(numVertices);
+	tangents.reserve(numVertices);
 	texCoords.reserve(numVertices);
 	bones.resize(numVertices);
 	indices.reserve(numIndices);
@@ -104,7 +108,7 @@ bool ModelMesh::InitFromScene( const aiScene* pScene, const std::string& Filenam
 	// Initialise tout les mesh du modele
 	for (unsigned int i = 0 ; i < m_entries.size() ; i++) {
 		const aiMesh* paiMesh = pScene->mMeshes[i];
-		InitMesh(i, paiMesh, positions, normals, texCoords, bones, indices);
+		InitMesh(i, paiMesh, positions, normals, tangents, texCoords, bones, indices);
 	}
 
 	if  (!InitMaterials(pScene, Filename))
@@ -126,6 +130,11 @@ bool ModelMesh::InitFromScene( const aiScene* pScene, const std::string& Filenam
 	glEnableVertexAttribArray(NORMAL_LOCATION);
 	glVertexAttribPointer(NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
+	glBindBuffer(GL_ARRAY_BUFFER, m_buffers[VB_TANGENTS]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(tangents[0]) * tangents.size(), &tangents[0], GL_STATIC_DRAW);
+	glEnableVertexAttribArray(TANGENTS_LOCATION);
+	glVertexAttribPointer(TANGENTS_LOCATION, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
 	glBindBuffer(GL_ARRAY_BUFFER, m_buffers[VB_BONE]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(bones[0]) * bones.size(), &bones[0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(BONE_ID_LOCATION);
@@ -136,8 +145,6 @@ bool ModelMesh::InitFromScene( const aiScene* pScene, const std::string& Filenam
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffers[VB_INDEX]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), &indices[0], GL_STATIC_DRAW);
 
-	CHECK_GL_ERROR();
-
 	return true;
 }
 
@@ -145,6 +152,7 @@ void ModelMesh::InitMesh( uint32 meshIndex,
 						 const aiMesh* paiMesh,
 						 std::vector<Vector3f>& positions,
 						 std::vector<Vector3f>& normals,
+						 std::vector<Vector3f>& tangents,
 						 std::vector<Vector2f>& texCoords,
 						 std::vector<VertexBoneData>& bones,
 						 std::vector<uint32>& indices )
@@ -155,11 +163,13 @@ void ModelMesh::InitMesh( uint32 meshIndex,
 	for (uint32 i = 0 ; i < paiMesh->mNumVertices ; i++) {
 		const aiVector3D* pPos      = &(paiMesh->mVertices[i]);
 		const aiVector3D* pNormal   = &(paiMesh->mNormals[i]);
+		const aiVector3D* pTangents = (paiMesh->HasTangentsAndBitangents()) ? &(paiMesh->mTangents[i]) : &aiVector3D(0,0,0);
 		const aiVector3D* pTexCoord = paiMesh->HasTextureCoords(0) ? &(paiMesh->mTextureCoords[0][i]) : &Zero3D;
 
 		positions.push_back(Vector3f(pPos->x, pPos->y, pPos->z));
 		normals.push_back(Vector3f(pNormal->x, pNormal->y, pNormal->z));
-		texCoords.push_back(Vector2f(pTexCoord->x, pTexCoord->y));        
+		tangents.push_back(Vector3f(pTangents->x, pTangents->y, pTangents->z));
+		texCoords.push_back(Vector2f(pTexCoord->x, pTexCoord->y));       
 	}
 
 	LoadBones(meshIndex, paiMesh, bones);
@@ -190,7 +200,7 @@ bool ModelMesh::InitMaterials( const aiScene* pScene, const std::string& Filenam
 		Dir = Filename.substr(0, SlashIndex);
 	}
 
-	bool Ret = true;
+	bool ret = true;
 
 	// Initialize the materials
 	for (unsigned int i = 0 ; i < pScene->mNumMaterials ; i++) {
@@ -201,26 +211,30 @@ bool ModelMesh::InitMaterials( const aiScene* pScene, const std::string& Filenam
 
 			if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
 				std::string FullPath = Dir + "/" + Path.data;
-				m_textures[i] = new Texture;
-				if (!m_textures[i]->Load(FullPath.c_str())) {
+				if (!m_materials[i].LoadDiffuseMap(FullPath.c_str())) {
 					std::cout << "Error loading texture : " << FullPath << std::endl;
-					delete m_textures[i];
-					m_textures[i] = 0;
-					Ret = false;
+					ret = false;
+				}
+				std::string normalPath = FullPath.substr(0, FullPath.find_last_of('.')) + "_normal" + FullPath.substr(FullPath.find_last_of('.'), FullPath.npos);
+				if (!m_materials[i].LoadNormalMap(normalPath.c_str())) {
+					std::cout << "No normal map for texture : " << FullPath << std::endl;
+					ret = false;
 				}
 			}
 		}
 
-		// Load a white texture in case the model does not include its own texture
-		if (!m_textures[i]) {
-			m_textures[i] = new Texture;
-			Ret = m_textures[i]->Load(TEXTURE_PATH "white.png");
+		// Load white texture and up normal map if the material doesn't include it
+		if (!m_materials[i].GetDiffuseMap()) {
+			ret = m_materials[i].LoadDiffuseMap(TEXTURE_PATH "white.png");
+		}
+		if (!m_materials[i].GetNormalMap()) {
+			ret = m_materials[i].LoadNormalMap(TEXTURE_PATH "normal_up.jpg");
+			m_materials[i].SetSpecularIntensity(0);
 		}
 	}
 
-	return Ret;
+	return ret;
 }
-
 
 void ModelMesh::LoadBones( uint32 meshIndex, const aiMesh* paiMesh, std::vector<VertexBoneData>& bones )
 {
@@ -256,8 +270,12 @@ void ModelMesh::Render()
 	for (uint32 i = 0 ; i < m_entries.size() ; i++) {
 		const uint32 materialIndex = m_entries[i].MaterialIndex;
 
-		if (materialIndex < m_textures.size() && m_textures[materialIndex]) {
-			m_textures[materialIndex]->Bind(GL_TEXTURE0);
+		if (materialIndex < m_materials.size()) {
+			m_materials[materialIndex].Bind();
+			if (m_shader) {
+				m_shader->SetMatSpecualarIntensity(m_materials[materialIndex].GetSpecularIntensity());
+				m_shader->SetMatSpecularPower(m_materials[materialIndex].GetSpecularPower());
+			}
 		}
 
 		glDrawElementsBaseVertex(GL_TRIANGLES, 
@@ -269,7 +287,6 @@ void ModelMesh::Render()
 
 	glBindVertexArray(0);
 }
-
 
 void ModelMesh::BoneTransform( float timeInSeconds, std::vector<Matrix4f>& transforms )
 {
@@ -288,7 +305,6 @@ void ModelMesh::BoneTransform( float timeInSeconds, std::vector<Matrix4f>& trans
 		transforms[i] = m_boneInfo[i].FinalTransformation;
 	}
 }
-
 
 void ModelMesh::ReadNodeHeirarchy( float animationTime, const aiNode* pNode, const Matrix4f& parentTransform )
 {
@@ -449,10 +465,6 @@ const aiNodeAnim* ModelMesh::FindNodeAnim( const aiAnimation* pAnimation, const 
 
 void ModelMesh::Clear()
 {
-	for (unsigned int i = 0 ; i < m_textures.size() ; i++) {
-		delete m_textures[i];
-	}
-
 	if (m_buffers[0] != 0) {
 		glDeleteBuffers(ARRAY_SIZE_IN_ELEMENTS(m_buffers), m_buffers);
 	}
@@ -461,24 +473,4 @@ void ModelMesh::Clear()
 		glDeleteVertexArrays(1, &m_VAO);
 		m_VAO = 0;
 	}
-}
-
-void ModelMesh::Translate( const Vector3f& trans )
-{
-	m_translation += trans;
-}
-
-void ModelMesh::Scale( const Vector3f& scale )
-{
-	m_scale.x *= scale.x;
-	m_scale.y *= scale.y;
-	m_scale.z *= scale.z;
-}
-
-void ModelMesh::SetPosition(const Vector3f& pos) {
-	m_pos = pos;
-}
-
-void ModelMesh::SetRotation(const Vector3f& rot) {
-	m_rot = rot;
 }

@@ -23,7 +23,6 @@ public:
 	void SetEyeWorldPos(const Vector3f& eyePos);
 	void SetTextureUnitType(int type);
 	void SetColorTextureUnit(unsigned int textureUnit);
-	void SetNormalTextureUnit(unsigned int textureUnit);
 
 	// Directional lighting
 	void SetDirectionalLight(const DirectionalLight& light);
@@ -46,8 +45,6 @@ private:
 	GLuint m_matSpecularPowerLocation;		// Material specular power
 
 	GLuint m_samplerTypeLocation;			// Type du sampler 0 = texture, 1 = array
-	GLuint m_colorSamplerLocation;			// Color texture sampler
-	GLuint m_normalSamplerLocation;			// Normal texture sampler
 	GLuint m_arraySamplerLocation;			// Texture array sampler
 
 	// Directional light location struct

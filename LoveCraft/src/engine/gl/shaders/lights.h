@@ -13,6 +13,10 @@ struct BaseLight
 	float AmbientIntensity;
 	float DiffuseIntensity;
 
+	float TotalIntensity() {
+		return AmbientIntensity + DiffuseIntensity;
+	}
+
 	BaseLight() : Color(0), AmbientIntensity(0), DiffuseIntensity(0) {}
 };
 
@@ -48,6 +52,14 @@ struct PointLight : public BaseLight
 		Attenuation.Linear = 0;
 		Attenuation.Exp = 0;
 	}
+};
+
+struct SpotLight : public PointLight
+{
+	Vector3f Direction;
+	float Cutoff;
+
+	SpotLight() : Direction(0), Cutoff(0) {}
 };
 
 #endif

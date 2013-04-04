@@ -44,7 +44,7 @@ void Skybox::Render(Pipeline p)
 	glGetIntegerv(GL_DEPTH_FUNC, &OldDepthFuncMode);
 
 	
-	glCullFace(GL_BACK);
+	glCullFace(GL_FRONT);
 	glDepthFunc(GL_LEQUAL);
 	CHECK_GL_ERROR();
 

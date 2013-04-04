@@ -27,6 +27,7 @@ public:
 	static bool LoadTextFile(const std::string& filename, std::string& buffer);
 	static void CheckGLError(const char* file, int line);
 	static float RandomFloat();
+	static float Max(float a, float b);
 
 	template <class T>
 	static bool EqualWithEpsilon(const T& v1, const T& v2, T epsilon = T(0.0001))

@@ -16,6 +16,11 @@
 #include "gl/shaders/modelshader.h"
 #include "gl/texturearray.h"
 #include "gl/skybox.h"
+#include "gl/shaders/gbuffer.h"
+#include "gl/shaders/lights.h"
+#include "gl/shaders/dsdirlightingpassshader.h"
+#include "gl/shaders/dspointlightingpassshader.h"
+#include "gl/shaders/nullshader.h"
 
 #include "player.h"
 #include "chunkloader.h"
@@ -36,7 +41,9 @@
 
 #include "util/array2d.h"
 #include "util/vector2.h"
+#include "util/tool.h"
 #include "util/dice.h"
+
 
 //#define LOAD_MODELS
 
@@ -147,12 +154,17 @@ public:
 private:
 	bool LoadTexture(Texture& texture, const string& filename, bool stopOnError = true);
 	void LoadBlocTexture(BLOCK_TYPE type, BLOCK_FACE faces, string colorMapPath, string normalMapPath = "");
-	void UpdateLighting();
+	void UpdateLights();
+	void InitLights();
 
 	void CW(const string& line);
 	void CWL(const string& line);
-
-
+	void DSGeometryPass();
+	void DSStencilPass(uint32 index);
+	void DSPointLightPass(uint32 index);
+	void DSDirectionalLightPass();
+	void DSFinalPass();
+	float CalcPointLightBSphere(const Vector3f& Color, float Intensity);
 private:
 	bool m_wireframe;
 	float m_angle;
@@ -218,6 +230,16 @@ private:
 	Timer* m_timertest;
 	Timer* m_timeranimationplus;
 	Timer* m_timeranimationmoins;
+
+	// Deffered Shading objects
+	GBuffer m_gBuffer;
+	DSDirLightingPassShader m_DSDirLightingPassShader;
+	DSPointLightingPassShader m_DSPointLightingPassShader;
+	NullShader m_nullShader;
+	PointLight m_pointLights[3];
+	DirectionalLight m_dirLight;
+	ModelMesh m_bsphere;
+	ModelMesh m_quad;
 
 	sf::Mutex m_mutex;
 

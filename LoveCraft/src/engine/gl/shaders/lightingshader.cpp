@@ -1,6 +1,7 @@
 ﻿#include "lightingshader.h"
 #include "util/tool.h"
 #include <string>
+#include "glfx.h"
 
 static const char* pEffectFile = SHADER_PATH "lighting.glsl";
 
@@ -19,21 +20,20 @@ bool LightingShader::Init()
 	if (!CompileProgram("Lighting"))
 		return false;
 
+	glfxGenerateSampler(m_effect, "Sampler");
 	m_WVPLocation = GetUniformLocation("gWVP");
 	m_worldLocation = GetUniformLocation("gWorld");
 	m_samplerTypeLocation = GetUniformLocation("gSamplerType");
-	m_colorSamplerLocation = GetUniformLocation("gColorSampler");
-	m_normalSamplerLocation = GetUniformLocation("gNormalSampler");
 	m_arraySamplerLocation = GetUniformLocation("gArraySampler");
-	m_dirLightLocation.Color = GetUniformLocation("gDirectionalLight.Base.Color");
+	/*m_dirLightLocation.Color = GetUniformLocation("gDirectionalLight.Base.Color");
 	m_dirLightLocation.AmbientIntensity = GetUniformLocation("gDirectionalLight.Base.AmbientIntensity");
 	m_dirLightLocation.DiffuseIntensity = GetUniformLocation("gDirectionalLight.Base.DiffuseIntensity");
 	m_dirLightLocation.Direction = GetUniformLocation("gDirectionalLight.Direction");
 	m_matSpecularIntensityLocation = GetUniformLocation("gMatSpecularIntensity");
 	m_matSpecularPowerLocation = GetUniformLocation("gMatSpecularPower");
 	m_eyeWorldPosLocation = GetUniformLocation("gEyeWorldPos");
-	m_numPointLightsLocation = GetUniformLocation("gNumPointLights");
-
+	m_numPointLightsLocation = GetUniformLocation("gNumPointLights");/*
+	/*
 	for (unsigned int i = 0; i < ARRAY_SIZE_IN_ELEMENTS(m_pointLightsLocation); ++i)
 	{
 		char Name[128];
@@ -86,7 +86,7 @@ bool LightingShader::Init()
 		m_matSpecularPowerLocation == INVALID_UNIFORM_LOCATION ||
 		m_numPointLightsLocation == INVALID_UNIFORM_LOCATION) {
 			return false;
-	}
+	}*/
 
 	return true;
 }
@@ -98,18 +98,17 @@ void LightingShader::SetWVP( const Matrix4f& WVP )
 
 void LightingShader::SetColorTextureUnit( unsigned int TextureUnit )
 {
-	glUniform1i(m_colorSamplerLocation, TextureUnit);
 	glUniform1i(m_arraySamplerLocation, TextureUnit + 1);
 }
 
 void LightingShader::SetDirectionalLight( const DirectionalLight& Light )
 {
-	glUniform3f(m_dirLightLocation.Color, Light.Color.x, Light.Color.y, Light.Color.z);
+	/*glUniform3f(m_dirLightLocation.Color, Light.Color.x, Light.Color.y, Light.Color.z);
 	glUniform1f(m_dirLightLocation.AmbientIntensity, Light.AmbientIntensity);
 	Vector3f direction = Light.Direction;
 	direction.Normalize();
 	glUniform3f(m_dirLightLocation.Direction, direction.x, direction.y, direction.z);
-	glUniform1f(m_dirLightLocation.DiffuseIntensity, Light.DiffuseIntensity);
+	glUniform1f(m_dirLightLocation.DiffuseIntensity, Light.DiffuseIntensity);*/
 }
 
 void LightingShader::SetWorld( const Matrix4f& world )
@@ -119,22 +118,22 @@ void LightingShader::SetWorld( const Matrix4f& world )
 
 void LightingShader::SetEyeWorldPos( const Vector3f& eyePos )
 {
-	glUniform3f(m_eyeWorldPosLocation, eyePos.x, eyePos.y, eyePos.z);
+	//glUniform3f(m_eyeWorldPosLocation, eyePos.x, eyePos.y, eyePos.z);
 }
 
 void LightingShader::SetMatSpecualarIntensity( float intensity )
 {
-	glUniform1f(m_matSpecularIntensityLocation, intensity);
+	//glUniform1f(m_matSpecularIntensityLocation, intensity);
 }
 
 void LightingShader::SetMatSpecularPower( float power )
 {
-	glUniform1f(m_matSpecularPowerLocation, power);
+	//glUniform1f(m_matSpecularPowerLocation, power);
 }
 
 void LightingShader::SetPointLights( unsigned int numLights, const PointLight* pLights )
 {
-	glUniform1i(m_numPointLightsLocation, numLights);
+	/*glUniform1i(m_numPointLightsLocation, numLights);
 
 	for (unsigned int i = 0; i < numLights; i++) {
 		glUniform3f(m_pointLightsLocation[i].Color, pLights[i].Color.x, pLights[i].Color.y, pLights[i].Color.z);
@@ -144,7 +143,7 @@ void LightingShader::SetPointLights( unsigned int numLights, const PointLight* p
 		glUniform1f(m_pointLightsLocation[i].Atten.Constant, pLights[i].Attenuation.Constant);
 		glUniform1f(m_pointLightsLocation[i].Atten.Linear, pLights[i].Attenuation.Linear);
 		glUniform1f(m_pointLightsLocation[i].Atten.Exp, pLights[i].Attenuation.Exp);
-	}
+	}*/
 }
 
 void LightingShader::SetTextureUnitType( int type )
@@ -152,20 +151,14 @@ void LightingShader::SetTextureUnitType( int type )
 	glUniform1i(m_samplerTypeLocation, type);
 }
 
-void LightingShader::SetNormalTextureUnit( unsigned int textureUnit )
-{
-	glUniform1i(m_normalSamplerLocation, textureUnit);
-	//glUniform1i(m_arraySamplerLocation, textureUnit + 1);
-}
-
 void LightingShader::UpdatePointLight( unsigned int id, const PointLight& pLight )
 {
-	glUniform3f(m_pointLightsLocation[id].Color, pLight.Color.x, pLight.Color.y, pLight.Color.z);
+	/*glUniform3f(m_pointLightsLocation[id].Color, pLight.Color.x, pLight.Color.y, pLight.Color.z);
 	glUniform1f(m_pointLightsLocation[id].AmbientIntensity, pLight.AmbientIntensity);
 	glUniform1f(m_pointLightsLocation[id].DiffuseIntensity, pLight.DiffuseIntensity);
 	glUniform3f(m_pointLightsLocation[id].Position, pLight.Position.x, pLight.Position.y, pLight.Position.z);
 	glUniform1f(m_pointLightsLocation[id].Atten.Constant, pLight.Attenuation.Constant);
 	glUniform1f(m_pointLightsLocation[id].Atten.Linear, pLight.Attenuation.Linear);
-	glUniform1f(m_pointLightsLocation[id].Atten.Exp, pLight.Attenuation.Exp);
+	glUniform1f(m_pointLightsLocation[id].Atten.Exp, pLight.Attenuation.Exp);*/
 }
 

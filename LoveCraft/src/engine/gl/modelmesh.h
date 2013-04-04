@@ -36,6 +36,8 @@ public:
 
 	void BoneTransform(float timeInSeconds, std::vector<Matrix4f>& transforms);
 
+	void LoadDefaultMaterials(bool val);
+
 private:
 
 	#define MAX_BONES_PER_VERTEX 4
@@ -127,6 +129,8 @@ private:
 	const aiScene* m_scene;
 
 	ModelShader* m_shader;
+
+	bool m_loadDefaultMaterials;
 };
 
 #endif

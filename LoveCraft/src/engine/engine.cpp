@@ -123,25 +123,26 @@ void Engine::GlobalInit()
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glEnable( GL_TEXTURE_2D );
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective( 45.0f, (float)Width() / (float)Height(), 0.1f, 1000.0f);
+	//glMatrixMode(GL_PROJECTION);
+	//glLoadIdentity();
+	//gluPerspective( 45.0f, (float)Width() / (float)Height(), 0.1f, 1000.0f);
 	glEnable(GL_DEPTH_TEST);
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	glShadeModel(GL_SMOOTH);
-	glEnable(GL_LIGHTING);
-	glEnable (GL_LINE_SMOOTH);
+	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	//glShadeModel(GL_SMOOTH);
+	//glEnable(GL_LIGHTING);
+	//glEnable (GL_LINE_SMOOTH);
 	glEnable(GL_CULL_FACE);
-	glCullFace(GL_FRONT);
-	glEnable(GL_FOG);
+	glFrontFace(GL_CW);
+	//glCullFace(GL_FRONT);
+	//glEnable(GL_FOG);
 
 	m_persProjInfo.FOV = 60.f;
 	m_persProjInfo.Height = Height();
 	m_persProjInfo.Width = Width();
-	m_persProjInfo.zNear = 1.f;
+	m_persProjInfo.zNear = 0.1f;
 	m_persProjInfo.zFar = 1000.f;
 
-	// Light
+	/*// Light
 	GLfloat light0Pos[4]  = {0.0f, CHUNK_SIZE_Y, 0.0f, 1.0f};
 	GLfloat light0Amb[4]  = {0.9f, 0.9f, 0.9f, 1.0f};
 	GLfloat light0Diff[4] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -153,7 +154,7 @@ void Engine::GlobalInit()
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0Diff);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0Spec);
 
-	glFogf(GL_FOG_DENSITY, 1.f / VIEW_DISTANCE);
+	glFogf(GL_FOG_DENSITY, 1.f / VIEW_DISTANCE);*/
 	//glFogf(GL_FOG_DENSITY, 1.f / 3);
 	//float fogCol[3] = {0.8f, 0.8f, 0.8f};
 	//glFogfv(GL_FOG_COLOR, fogCol);
@@ -195,7 +196,7 @@ void Engine::GameInit()
 	Info::Get().SetChunkArray(m_chunks);
 
 	m_currentBlockType = BTYPE_DIRT;
-	
+
 	m_chunks->Init(&m_lightingShader);
 	Info::Get().StatusOn(Info::LSTATUS_CHUNK);
 
@@ -249,6 +250,75 @@ void Engine::GameInit()
 	m_valuesGameInterface.Init(m_textureInterface, m_texturefontColor, m_textureArray, m_player, m_character);
 	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_gameUI.Init(m_valuesGameInterface);
+
+	// Init deferred shading
+	InitLights();
+
+	if(!m_gBuffer.Init(Width(), Height())) {
+		std::cout << "Error loading gbuffer" << std::endl;
+	}
+	if(!m_DSDirLightingPassShader.Init()) {
+		std::cout << "Error loading deffered directional lighting shader" << std::endl;
+	}
+	if(!m_nullShader.Init()) {
+		std::cout << "Error loading deffered null shader, what a baddie =/" << std::endl;
+	}
+
+	m_DSDirLightingPassShader.Enable();
+
+	m_DSDirLightingPassShader.SetPositionTextureUnit(GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
+	m_DSDirLightingPassShader.SetColorTextureUnit(GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
+	m_DSDirLightingPassShader.SetNormalTextureUnit(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+	m_DSDirLightingPassShader.SetScreenSize(Width(), Height());
+	m_DSDirLightingPassShader.SetDirectionalLight(m_dirLight);
+	m_DSDirLightingPassShader.SetWVP(Matrix4f::IDENTITY);
+
+	if(!m_DSPointLightingPassShader.Init()) {
+		std::cout << "Error loading deffered point lighting shader" << std::endl;
+	}
+
+	m_DSPointLightingPassShader.Enable();
+
+	m_DSPointLightingPassShader.SetPositionTextureUnit(GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
+	m_DSPointLightingPassShader.SetColorTextureUnit(GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
+	m_DSPointLightingPassShader.SetNormalTextureUnit(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+	m_DSPointLightingPassShader.SetScreenSize(Width(), Height());
+	m_bsphere.LoadDefaultMaterials(false);
+	m_quad.LoadDefaultMaterials(false);
+	if(!m_bsphere.Init(MODEL_PATH "sphere.obj", 0)) {
+		std::cout << "Error loading " MODEL_PATH "sphere.obj" << std::endl;
+	}
+	if(!m_quad.Init(MODEL_PATH "quad.obj", 0)) {
+		std::cout << "Error loading " MODEL_PATH "quad.obj" << std::endl;
+	}
+}
+
+void Engine::InitLights()
+{
+	m_dirLight.AmbientIntensity = 0.1;
+	m_dirLight.Color = Vector3f(1,1,1);
+	m_dirLight.DiffuseIntensity = 0.1;
+	m_dirLight.Direction = Vector3f(0.3, -1, 0.5).Normalize();
+
+	m_pointLights[0].Color = Vector3f(1,1,1);
+	m_pointLights[0].DiffuseIntensity = 20;
+	m_pointLights[0].Position = Vector3f(64,65,64);
+	m_pointLights[0].Attenuation.Exp = 1.f;
+	m_pointLights[0].Attenuation.Linear = 0.0f;
+
+	m_pointLights[1].Color = Vector3f(1,1,1);
+	m_pointLights[1].DiffuseIntensity = 10;
+	m_pointLights[1].Position = Vector3f(32,70,32);
+	m_pointLights[1].Attenuation.Exp = 1.f;
+	m_pointLights[1].Attenuation.Linear = 0.0f;
+
+	// Lantern light
+	m_pointLights[2].Color = Vector3f(1,140/255.f,0);
+	m_pointLights[2].AmbientIntensity = 0.2;
+	m_pointLights[2].DiffuseIntensity = 2;
+	m_pointLights[2].Attenuation.Exp = 1.f;
+	m_pointLights[2].Attenuation.Linear = 0.0f;
+	m_pointLights[2].Attenuation.Constant = 0;
 }
 
 void Engine::DeInit()
@@ -390,50 +460,12 @@ void Engine::LoadGlobalResource()
 		std::cout << " Failed to load cube shader" << std::endl;
 		exit(1) ;
 	}
-	DirectionalLight dirLight;
-	dirLight.AmbientIntensity = 0.05;
-	dirLight.Color = Vector3f(1,1,1);
-	dirLight.DiffuseIntensity = 0.05;
-	dirLight.Direction = Vector3f(0.3, -1, 0.5).Normalize();
-
-	PointLight* pointLights = new PointLight[3];
-	PointLight& p1 = pointLights[0];
-	p1.Color = Vector3f(1,1,1);
-	p1.DiffuseIntensity = 0.5;
-	p1.Position = Vector3f(64,65,64);
-	p1.Attenuation.Linear = 0.1f;
-
-	PointLight& p2 = pointLights[1];
-	p2.Color = Vector3f(1,1,1);
-	p2.DiffuseIntensity = 0.5;
-	p2.Position = Vector3f(32,70,32);
-	p2.Attenuation.Linear = 0.1f;
-
-	PointLight& p3 = pointLights[2];
 
 	if (!m_lightingShader.Init())
 		std::cout << "Error initializing lighting shader" << std::endl;
 
 	if (!m_modelShader.Init())
 		std::cout << "Error initializing model shader" << std::endl;
-
-	m_lightingShader.Enable();
-	m_lightingShader.SetDirectionalLight(dirLight);
-	m_lightingShader.SetMatSpecualarIntensity(0);
-	m_lightingShader.SetMatSpecularPower(0);
-	m_lightingShader.SetColorTextureUnit(0);
-	m_lightingShader.SetNormalTextureUnit(2);
-	m_lightingShader.SetPointLights(3, pointLights);
-
-	Shader::Disable();
-
-	m_modelShader.Enable();
-	m_modelShader.SetDirectionalLight(dirLight);
-	m_modelShader.SetMatSpecualarIntensity(0.5);
-	m_modelShader.SetMatSpecularPower(16);
-	m_modelShader.SetPointLights(3, pointLights);
-
-	Shader::Disable();
 
 #pragma endregion
 
@@ -476,7 +508,7 @@ void Engine::UnloadResource()
 
 void Engine::UpdateGame(float elapsedTime)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Game Time
 	static float gameTime = elapsedTime;
@@ -494,12 +526,14 @@ void Engine::UpdateGame(float elapsedTime)
 	m_character->ReduceGlobalCooldown(elapsedTime);
 	m_valuesGameInterface.Update(MousePosition(), Width(), Height(), m_currentBlockType, m_fps);
 	m_gameUI.Update(m_valuesGameInterface);
-	m_chunkLoader.CheckPlayerPosition(m_player);
+	//m_chunkLoader.CheckPlayerPosition(m_player);
 	m_player->Move(m_ghostMode, m_character, elapsedTime);
 	m_player->Update(gameTime);
 	m_camera->Update(elapsedTime);
 	m_chunks->Update();
-	m_lanternFire.Update(elapsedTime);
+	//m_lanternFire.Update(elapsedTime);
+
+	UpdateLights();
 
 	//Vérification de la mort du personnage
 	if (m_character->Health() <= 0.999f)
@@ -512,15 +546,15 @@ void Engine::UpdateGame(float elapsedTime)
 	}
 
 	// Position des monstres
-	for (uint8 i = 0; i < MONSTER_MAX_NUMBER; i++)
-	{
-		if (m_monsters[i]->Initialized())
-			m_monsters[i]->Update(elapsedTime);
-	}
+	//for (uint8 i = 0; i < MONSTER_MAX_NUMBER; i++)
+	//{
+	//	if (m_monsters[i]->Initialized())
+	//		m_monsters[i]->Update(elapsedTime);
+	//}
 
 	// Update tous les spells
-	for (SpellList::iterator it = m_spells.begin(); it != m_spells.end(); ++it)
-		it->Update(elapsedTime);
+	//for (SpellList::iterator it = m_spells.begin(); it != m_spells.end(); ++it)
+	//	it->Update(elapsedTime);
 
 	// Fps
 	m_fpstmr += elapsedTime;
@@ -532,6 +566,13 @@ void Engine::UpdateGame(float elapsedTime)
 	}
 
 	GetBlocAtCursor();
+}
+
+void Engine::UpdateLights()
+{
+	Vector3f toLantern = m_player->World() * (m_player->LanternBoneTrans() * Vector3f(-39.749374f, -6.182379f, 35.334176f));
+	m_pointLights[2].Position = toLantern;
+	m_lanternFire.SetPosition(toLantern);
 }
 
 void Engine::UpdateMenu(float elapsedTime)
@@ -568,6 +609,7 @@ void Engine::UpdateMenu(float elapsedTime)
 	m_timeranimationplus->Update(elapsedTime);
 	m_debugUI.m_timertesttime->SetVariableMsg(m_timertest->GetIntervalTime());
 }
+#pragma endregion
 
 #pragma region Render
 
@@ -576,106 +618,61 @@ void Engine::RenderMenu()
 
 #pragma region OpenGl
 
+	glDepthMask(GL_FALSE);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glDisable(GL_BLEND);
 
 	// Transformations initiales
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glDisable(GL_LIGHTING);
-	glCullFace(GL_BACK);
+	glCullFace(GL_FRONT);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glDisable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
 	glLoadIdentity();
 	glOrtho(0, Width(), 0, Height(), -1, 1);
 	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
 
 #pragma endregion
-
-	if (m_wireframe)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	m_menuUI.Render();
 	m_debugUI.Render();
 	m_pb_cursor->Render();
 
-	if (m_wireframe)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
 #pragma region OpenGl
 
-	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
 
 #pragma endregion
 }
 
 void Engine::RenderGame()
 {
-	
-	glCullFace(GL_FRONT);
-	glDisable(GL_CULL_FACE);
-	UpdateLighting();
-	m_noNormalMap.Bind(GL_TEXTURE2);
-	m_noNormalMap.Bind(GL_TEXTURE0);
-	// Render !
-	Pipeline pipeline;
-	pipeline.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
-	pipeline.SetPerspectiveProj(m_persProjInfo);
+	m_gBuffer.StartFrame();
 
-	m_player->Render(pipeline);
+	DSGeometryPass();
 
-	// Set cube lighting
-	m_lightingShader.Enable();
-	m_textureArray->Use(GL_TEXTURE1);
-	m_noNormalMap.Bind(GL_TEXTURE2);
+	glEnable(GL_STENCIL_TEST);
 
-	m_chunks->Render(pipeline);
-
-	m_skybox->Render(pipeline);
-
-	m_shaderModel.Use();
-
-	for (uint8 i = 0; i < MONSTER_MAX_NUMBER; i++)
-	{
-		if (m_monsters[i]->Initialized())
-			m_monsters[i]->Render();
-	}
-	Shader::Disable();
-
-	glEnable(GL_BLEND);
-	glDisable(GL_CULL_FACE);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	glDepthMask(GL_FALSE);
-
-	m_lanternFire.Render(pipeline.GetWVPTrans());
-
-	// Render tous les spells
-	for (SpellList::iterator it = m_spells.begin(); it != m_spells.end(); ++it) {
-		it->SetDestination(m_monsters[0]->Position());
-		it->Render(pipeline.GetWVPTrans());
-		if (it->HasHit())
-		{
-			//m_spells.erase(it);
-			break;
-		}
+	for (uint32 i = 0; i < ARRAY_SIZE_IN_ELEMENTS(m_pointLights); ++i) {
+		DSStencilPass(i);
+		DSPointLightPass(i);
 	}
 
-	glDepthMask(GL_TRUE);
-	glDisable(GL_BLEND);
-	glEnable(GL_CULL_FACE);
+	glDisable(GL_STENCIL_TEST);
+
+	DSDirectionalLightPass();
+
+	DSFinalPass();
+
+	CHECK_GL_ERROR();
 
 #pragma region Render l interface
 
 	// TODO : Clean this shit too
-	glDisable(GL_LIGHTING);
+	/*glDisable(GL_LIGHTING);
+	glDisable(GL_BLEND);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glDisable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
@@ -684,34 +681,174 @@ void Engine::RenderGame()
 	glOrtho(0, Width(), 0, Height(), -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-	glCullFace(GL_BACK);
+	glCullFace(GL_FRONT);
 
 	m_gameUI.Render();
 	m_pb_cursor->Render();
 
-	glEnable(GL_LIGHTING);
-	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
-#pragma endregion
 
-
-#pragma region Fin du premier Render
-
-	static bool ttt = true;
-	if (ttt)
+	static bool firstRender = true;
+	if (firstRender)
 	{
 		m_player->ResetPosition();
 		Son::PlayMusic(MUSIC_PLAY1);
 		m_menuUI.pnl_loading->Hide();
 		CW("Premier Render de l'engine termine avec succes.");
-		ttt = false;
+		firstRender = false;
+	}*/
+#pragma endregion
+}
+
+void Engine::DSGeometryPass() 
+{
+	m_gBuffer.BindForGeometryPass();
+
+	glDisable(GL_BLEND);
+
+	glDepthMask(GL_TRUE);
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	glEnable(GL_DEPTH_TEST);
+
+	glCullFace(GL_BACK);
+
+	// Render !
+	Pipeline p;
+	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
+	p.SetPerspectiveProj(m_persProjInfo);
+
+	m_player->Render(p);
+	//Set cube lighting
+	m_lightingShader.Enable();
+	m_lightingShader.SetColorTextureUnit(0);
+	m_lightingShader.SetTextureUnitType(1);
+	m_textureArray->Use(GL_TEXTURE1);
+	m_noNormalMap.Bind(GL_TEXTURE2);
+	m_chunks->Render(p);
+
+	//m_skybox->Render(p);
+
+	//m_shaderModel.Use();
+
+	/*for (uint8 i = 0; i < MONSTER_MAX_NUMBER; i++)
+	{
+	if (m_monsters[i]->Initialized())
+	m_monsters[i]->Render();
+	}
+	Shader::Disable();*/
+
+	/*glEnable(GL_BLEND);
+	glDisable(GL_CULL_FACE);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	glDepthMask(GL_FALSE);
+
+	//m_lanternFire.Render(p.GetWVPTrans());
+
+	// Render tous les spells
+	for (SpellList::iterator it = m_spells.begin(); it != m_spells.end(); ++it) {
+	it->SetDestination(m_monsters[0]->Position());
+	it->Render(p.GetWVPTrans());
+	if (it->HasHit())
+	{
+	//m_spells.erase(it);
+	break;
+	}
 	}
 
-#pragma endregion
+	glDepthMask(GL_TRUE);
+	glDisable(GL_BLEND);*/
 
+	glDepthMask(GL_FALSE);
+}
+
+void Engine::DSStencilPass(uint32 index)
+{
+	m_nullShader.Enable();
+
+	m_gBuffer.BindForStencilPass();
+
+	glEnable(GL_DEPTH_TEST);
+
+	glDisable(GL_CULL_FACE);
+
+	glClear(GL_STENCIL_BUFFER_BIT);
+
+	glStencilFunc(GL_ALWAYS, 0, 0);
+
+	glStencilOpSeparate(GL_BACK, GL_KEEP, GL_INCR, GL_KEEP);
+	glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_DECR, GL_KEEP);
+
+	Pipeline p;
+	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
+	p.SetPerspectiveProj(m_persProjInfo);
+	p.WorldPos(m_pointLights[index].Position);
+	float BSphereScale = CalcPointLightBSphere(m_pointLights[index].Color, 
+		m_pointLights[index].TotalIntensity());
+	p.Scale(BSphereScale, BSphereScale, BSphereScale);
+
+	m_nullShader.SetWVP(p.GetWVPTrans());
+	m_bsphere.Render();
+}
+
+void Engine::DSPointLightPass(uint32 index)
+{
+	m_gBuffer.BindForLightPass();
+
+	m_DSPointLightingPassShader.Enable();
+	m_DSPointLightingPassShader.SetEyeWorldPos(m_camera->GetPosition());
+
+	glStencilFunc(GL_NOTEQUAL, 0, 0xFF);
+
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendEquation(GL_FUNC_ADD);
+	glBlendFunc(GL_ONE, GL_ONE);
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT);
+
+	Pipeline p;
+	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
+	p.SetPerspectiveProj(m_persProjInfo);
+	p.WorldPos(m_pointLights[index].Position);
+	float BSphereScale = CalcPointLightBSphere(m_pointLights[index].Color, 
+		m_pointLights[index].TotalIntensity());
+	p.Scale(BSphereScale, BSphereScale, BSphereScale);	
+	m_DSPointLightingPassShader.SetWVP(p.GetWVPTrans());
+	m_DSPointLightingPassShader.SetPointLight(m_pointLights[index]);
+	m_bsphere.Render();
+
+	glCullFace(GL_BACK);
+	glDisable(GL_BLEND);
+}
+
+void Engine::DSDirectionalLightPass()
+{
+	m_gBuffer.BindForLightPass();
+
+	m_DSDirLightingPassShader.Enable();
+	m_DSDirLightingPassShader.SetEyeWorldPos(m_camera->GetPosition());
+
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendEquation(GL_FUNC_ADD);
+	glBlendFunc(GL_ONE, GL_ONE);
+
+	m_quad.Render(); 
+
+	glDisable(GL_BLEND);
+}
+
+void Engine::DSFinalPass()
+{
+	m_gBuffer.BindForFinalPass();
+	glBlitFramebuffer(0, 0, Width(), Height(),
+					  0, 0, Width(), Height(), GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
 
 #pragma endregion
@@ -968,7 +1105,7 @@ void Engine::MouseMoveEvent(const MouseEventArgs& e)
 		if (m_leftClick)
 		{
 			m_camera->MouseMoveEvent(e);
-			
+
 		}
 
 		if (m_rightClick) 
@@ -1361,29 +1498,6 @@ bool Engine::LoadTexture(Texture& texture, const string& filename, bool stopOnEr
 	return true;
 }
 
-void Engine::UpdateLighting()
-{
-	// Update lights
-	PointLight p3;
-	p3.Color = Vector3f(1,140/255.f,0);
-	p3.AmbientIntensity = 0.1;
-	p3.DiffuseIntensity = 0.6;
-	p3.Attenuation.Exp = 0.05f;
-	p3.Attenuation.Linear = 0.2f;
-	p3.Attenuation.Constant = 0.1f;
-	Vector3f toLantern = m_player->World() * (m_player->LanternBoneTrans() * Vector3f(-39.749374f, -6.182379f, 35.334176f));
-	p3.Position = toLantern;
-	m_lanternFire.SetPosition(toLantern);
-
-	// Update common uniforms
-	m_modelShader.Enable();
-	m_modelShader.UpdatePointLight(2, p3);
-	m_modelShader.SetEyeWorldPos(m_camera->GetPosition());
-	m_lightingShader.Enable();
-	m_lightingShader.UpdatePointLight(2, p3);
-	m_lightingShader.SetEyeWorldPos(m_camera->GetPosition());
-}
-
 void Engine::CW(const std::string& line)
 {
 	m_gameUI.ConsoleWriteLine(line);
@@ -1392,6 +1506,13 @@ void Engine::CW(const std::string& line)
 void Engine::CWL(const std::string& line)
 {
 	//lbx_console->SetLine(0, lbx_console->GetLine(0) + line);
+}
+
+float Engine::CalcPointLightBSphere(const Vector3f& color, float intensity)
+{
+	float maxChannel = Tool::Max(Tool::Max(color.x, color.y), color.z);
+	float c = maxChannel * intensity;
+	return (8.0f * sqrtf(c) + 1.0f);
 }
 
 #pragma endregion

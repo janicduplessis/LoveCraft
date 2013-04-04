@@ -24,12 +24,13 @@ void Chunks::Render(Pipeline p)
 	m_shader->SetTextureUnitType(1);
 	m_shader->SetWVP(p.GetWVPTrans());
 	m_shader->SetWorld(p.GetWorldTrans());
-
+	CHECK_GL_ERROR();
 	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
 	{
 		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
 		{
 			Get(i,j)->Render();
+			CHECK_GL_ERROR();
 		}
 	}
 

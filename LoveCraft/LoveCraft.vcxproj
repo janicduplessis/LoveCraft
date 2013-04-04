@@ -84,9 +84,14 @@
   <ItemGroup>
     <ClCompile Include="src\engine\chunks.cpp" />
     <ClCompile Include="src\engine\gl\cubemaptexture.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\dsdirlightingpassshader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\dspointlightingpassshader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\gbuffer.cpp" />
     <ClCompile Include="src\engine\gl\shaders\modelshader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\nullshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\shadernew.cpp" />
     <ClCompile Include="src\engine\gl\shaders\skyboxshader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\dslightingpassshader.cpp" />
     <ClCompile Include="src\engine\gl\skybox.cpp" />
     <ClCompile Include="src\engine\gl\ui\effects\effect.cpp" />
     <ClCompile Include="src\engine\gl\modelmesh.cpp" />
@@ -162,8 +167,13 @@
   <ItemGroup>
     <ClInclude Include="src\engine\chunks.h" />
     <ClInclude Include="src\engine\gl\cubemaptexture.h" />
+    <ClInclude Include="src\engine\gl\shaders\dsdirlightingpassshader.h" />
+    <ClInclude Include="src\engine\gl\shaders\dslightingpassshader.h" />
+    <ClInclude Include="src\engine\gl\shaders\dspointlightingpassshader.h" />
+    <ClInclude Include="src\engine\gl\shaders\gbuffer.h" />
     <ClInclude Include="src\engine\gl\shaders\lights.h" />
     <ClInclude Include="src\engine\gl\shaders\modelshader.h" />
+    <ClInclude Include="src\engine\gl\shaders\nullshader.h" />
     <ClInclude Include="src\engine\gl\shaders\shadernew.h" />
     <ClInclude Include="src\engine\gl\shaders\skyboxshader.h" />
     <ClInclude Include="src\engine\gl\skybox.h" />
@@ -255,6 +265,18 @@
     <None Include="src\engine\gl\shaders\billboardshader.frag" />
     <None Include="src\engine\gl\shaders\billboardshader.geom" />
     <None Include="src\engine\gl\shaders\billboardshader.vert" />
+    <None Include="src\engine\gl\shaders\null.glsl">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="src\engine\gl\shaders\lightingpass.glsl">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="src\engine\gl\shaders\geometrypass.glsl">
+      <SubType>
+      </SubType>
+    </None>
     <None Include="src\engine\gl\shaders\modelshader.vert" />
     <None Include="src\engine\gl\shaders\modelshader.frag" />
     <None Include="src\engine\gl\shaders\cubeshader.frag" />

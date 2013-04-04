@@ -23,7 +23,7 @@ void ModelMesh::VertexBoneData::AddBoneData(uint32 boneID, float weight)
 	assert(0);
 }
 
-ModelMesh::ModelMesh() :  m_VAO(0), m_numBones(0), m_scene(0) 
+ModelMesh::ModelMesh() :  m_VAO(0), m_numBones(0), m_scene(0), m_loadDefaultMaterials(true)
 {
 	ZERO_MEM(m_buffers);
 }
@@ -223,13 +223,15 @@ bool ModelMesh::InitMaterials( const aiScene* pScene, const std::string& Filenam
 			}
 		}
 
-		// Load white texture and up normal map if the material doesn't include it
-		if (!m_materials[i].GetDiffuseMap()) {
-			ret = m_materials[i].LoadDiffuseMap(TEXTURE_PATH "white.png");
-		}
-		if (!m_materials[i].GetNormalMap()) {
-			ret = m_materials[i].LoadNormalMap(TEXTURE_PATH "normal_up.jpg");
-			m_materials[i].SetSpecularIntensity(0);
+		if (m_loadDefaultMaterials) {
+			// Load white texture and up normal map if the material doesn't include it
+			if (!m_materials[i].GetDiffuseMap()) {
+				ret = m_materials[i].LoadDiffuseMap(TEXTURE_PATH "white.png");
+			}
+			if (!m_materials[i].GetNormalMap()) {
+				ret = m_materials[i].LoadNormalMap(TEXTURE_PATH "normal_up.jpg");
+				m_materials[i].SetSpecularIntensity(0);
+			}
 		}
 	}
 
@@ -293,7 +295,7 @@ void ModelMesh::BoneTransform( float timeInSeconds, std::vector<Matrix4f>& trans
 	Matrix4f identity = Matrix4f::IDENTITY;
 
 	float ticksPerSecond = m_scene->mAnimations[0]->mTicksPerSecond != 0 ?
-						   m_scene->mAnimations[0]->mTicksPerSecond : 25.0f;
+		m_scene->mAnimations[0]->mTicksPerSecond : 25.0f;
 	float timeInTicks = timeInSeconds * ticksPerSecond;
 	float animationTime = fmod(timeInTicks, m_scene->mAnimations[0]->mDuration);
 
@@ -473,4 +475,9 @@ void ModelMesh::Clear()
 		glDeleteVertexArrays(1, &m_VAO);
 		m_VAO = 0;
 	}
+}
+
+void ModelMesh::LoadDefaultMaterials( bool val )
+{
+	m_loadDefaultMaterials = val;
 }

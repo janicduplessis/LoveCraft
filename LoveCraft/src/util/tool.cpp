@@ -85,4 +85,12 @@ float Tool::RandomFloat()
 	return (float)rand() / (float)RAND_MAX;
 }
 
+float Tool::Max( float a, float b )
+{
+	if (a > b)
+		return a;
+	else
+		return b;
+}
+
 

@@ -247,6 +247,21 @@
     <ClCompile Include="src\engine\material.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\gbuffer.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\dslightingpassshader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\dsdirlightingpassshader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\dspointlightingpassshader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\nullshader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\util\array.h">
@@ -519,6 +534,21 @@
     <ClInclude Include="src\engine\material.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\gbuffer.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\dslightingpassshader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\dsdirlightingpassshader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\dspointlightingpassshader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\nullshader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\gl\shaders\billboardshader.frag">
@@ -560,6 +590,15 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="src\engine\gl\shaders\model.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="src\engine\gl\shaders\geometrypass.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="src\engine\gl\shaders\lightingpass.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="src\engine\gl\shaders\null.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

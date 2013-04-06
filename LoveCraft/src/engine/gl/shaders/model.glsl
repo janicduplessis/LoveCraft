@@ -4,7 +4,11 @@ struct VSInput
     vec2  TexCoord;                                             
     vec3  Normal;    
 	vec3  Tangent;
-    ivec4 BoneIDs;
+};
+
+struct VSInputBoneInfo
+{
+	ivec4 BoneIDs;
     vec4  Weights;
 };
 
@@ -22,12 +26,12 @@ uniform mat4 gWVP;
 uniform mat4 gWorld;
 uniform mat4 gBones[MAX_BONES];
 
-shader VSmain(in VSInput VSin:0, out VSOutput VSout)
+shader VSBoneMain(in VSInput VSin:0, in VSInputBoneInfo BoneInfo:4, out VSOutput VSout)
 {       
-    mat4 BoneTransform = gBones[VSin.BoneIDs[0]] * VSin.Weights[0];
-    BoneTransform     += gBones[VSin.BoneIDs[1]] * VSin.Weights[1];
-    BoneTransform     += gBones[VSin.BoneIDs[2]] * VSin.Weights[2];
-    BoneTransform     += gBones[VSin.BoneIDs[3]] * VSin.Weights[3];
+    mat4 BoneTransform = gBones[BoneInfo.BoneIDs[0]] * BoneInfo.Weights[0];
+    BoneTransform     += gBones[BoneInfo.BoneIDs[1]] * BoneInfo.Weights[1];
+    BoneTransform     += gBones[BoneInfo.BoneIDs[2]] * BoneInfo.Weights[2];
+    BoneTransform     += gBones[BoneInfo.BoneIDs[3]] * BoneInfo.Weights[3];
 
     vec4 PosL      = BoneTransform * vec4(VSin.Position, 1.0);
     gl_Position    = gWVP * PosL;
@@ -35,7 +39,16 @@ shader VSmain(in VSInput VSin:0, out VSOutput VSout)
     vec4 NormalL   = BoneTransform * vec4(VSin.Normal, 0.0);
     VSout.Normal   = (gWorld * NormalL).xyz;
 	VSout.Tangent  = (gWorld * vec4(VSin.Tangent, 0.0)).xyz;
-    VSout.WorldPos = (gWorld * PosL).xyz;                                
+    VSout.WorldPos = (gWorld * PosL).xyz;
+}
+
+shader VSStaticMain(in VSInput VSin:0, out VSOutput VSout)
+{       
+    gl_Position    = gWVP * vec4(VSin.Position, 1.0);
+    VSout.TexCoord = VSin.TexCoord;
+    VSout.Normal   = (gWorld * vec4(VSin.Normal, 0.0)).xyz;
+	VSout.Tangent  = (gWorld * vec4(VSin.Tangent, 0.0)).xyz;
+    VSout.WorldPos = (gWorld * vec4(VSin.Position, 1.0)).xyz;                                
 }
 
 struct FSOutput
@@ -76,8 +89,14 @@ shader FSmain(in VSOutput FSin, out FSOutput FSout)
 	FSout.TexCoord = vec3(FSin.TexCoord, 1);
 }
 
-program ModelGeometryPass
+program StaticModelGeometryPass
 {
-    vs(420)=VSmain();
+	vs(420)=VSStaticMain();
+	fs(420)=FSmain();
+};
+
+program BoneModelGeometryPass
+{
+    vs(420)=VSBoneMain();
     fs(420)=FSmain();
 };

@@ -17,10 +17,12 @@ Player::~Player()
 {
 }
 
-void Player::Init(ModelShader* shader)
+void Player::Init(BoneModelShader* modelShader, BoneNullShader* nullShader, ShadowVolumeShader* shadowShader)
 {
-	m_modelShader = shader;
-	m_model.Init(MODEL_PATH_HUMANS "boblampclean.md5mesh", true, shader);
+	m_modelShader = modelShader;
+	m_boneNullShader = nullShader;
+	m_shadowVolumeShader = shadowShader;
+	m_model.Init(MODEL_PATH_HUMANS "boblampclean.md5mesh", true, modelShader);
 	Scale(Vector3f(0.1f, 0.1f, 0.1f));
 	ResetPosition();
 }
@@ -380,47 +382,55 @@ void Player::Render(Pipeline p)
 	m_model.Render();
 }
 
-void Player::RenderDepth( Pipeline p, NullShader* shader)
+void Player::RenderDepth( Pipeline p)
 {
 	p.WorldPos(m_pos + Vector3f(0,-1.5,0));
 	p.Rotate(m_rot + Vector3f(270, 180, 0));
 	p.Scale(m_scale);
 
-	shader->Enable();
-	shader->SetWVP(p.GetWVPTrans());
+	m_boneNullShader->Enable();
+	m_boneNullShader->SetWVP(p.GetWVPTrans());
 
 	m_model.RenderDepth();
 }
 
-void Player::RenderShadowVolume( Pipeline p, ShadowVolumeShader* shader )
+void Player::RenderShadowVolume( Pipeline p)
 {
 	p.WorldPos(m_pos + Vector3f(0,-1.5,0));
 	p.Rotate(m_rot + Vector3f(270, 180, 0));
 	p.Scale(m_scale);
 
-	shader->SetVP(p.GetVPTrans());
-	shader->SetWorldMatrix(p.GetWorldTrans());
+	m_shadowVolumeShader->Enable();
+	m_shadowVolumeShader->SetVP(p.GetVPTrans());
+	m_shadowVolumeShader->SetWorldMatrix(p.GetWorldTrans());
 
 	m_model.RenderShadowVolume();
 }
 
 void Player::Update(float gameTime) 
 {
-	m_modelShader->Enable();
-
 	std::vector<Matrix4f> tranforms;
-
 	m_model.BoneTransform(gameTime, tranforms);
 
+	m_modelShader->Enable();
 	for (uint32 i = 0; i < tranforms.size(); ++i)
 	{
 		m_modelShader->SetBoneTransform(i, tranforms[i]);
+	}
+	m_boneNullShader->Enable();
+	for (uint32 i = 0; i < tranforms.size(); ++i)
+	{
+		m_boneNullShader->SetBoneTransform(i, tranforms[i]);
+	}
+	m_shadowVolumeShader->Enable();
+	for (uint32 i = 0; i < tranforms.size(); ++i)
+	{
+		m_shadowVolumeShader->SetBoneTransform(i, tranforms[i]);
 	}
 
 	m_lanternBoneTrans = tranforms[29];
 
 	Shader::Disable();
-	//m_modelShader->SetBoneTransform(0, Matrix4f::IDENTITY);
 }
 
 Vector3f Player::Position() const

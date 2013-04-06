@@ -2,13 +2,13 @@
 
 static const char* pEffectFile = SHADER_PATH "null.glsl";
 
-NullShader::NullShader() : ShaderNew(pEffectFile)
+StaticNullShader::StaticNullShader() : ShaderNew(pEffectFile)
 {   
 }
 
-bool NullShader::Init()
+bool StaticNullShader::Init()
 {
-    if (!CompileProgram("NullShader")) {
+    if (!CompileProgram("StaticNullShader")) {
         return false;
     }
 
@@ -22,7 +22,7 @@ bool NullShader::Init()
 }
 
 
-void NullShader::SetWVP(const Matrix4f& WVP)
+void StaticNullShader::SetWVP(const Matrix4f& WVP)
 {
     glUniformMatrix4fv(m_WVPLocation, 1, GL_TRUE, (const GLfloat*)WVP.m);    
 }

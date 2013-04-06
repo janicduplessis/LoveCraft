@@ -5,6 +5,12 @@ struct VSInput
     vec3  Normal;    
 };
 
+struct VSInputBoneInfo
+{
+	ivec4 BoneIDs;
+    vec4  Weights;
+};
+
 interface VSOutput
 {         
     vec3 WorldPos;                                                                 
@@ -15,14 +21,21 @@ struct sVSOutput
     vec3 WorldPos;                                                                 
 };
 
+const int MAX_BONES = 100;
 
 uniform mat4 gVP;
 uniform mat4 gWorld;
+uniform mat4 gBones[100];
 
-shader VSmain(in VSInput VSin:0, out VSOutput VSout)
-{       
-    vec4 PosL      = vec4(VSin.Position, 1.0);
-    VSout.WorldPos = (gWorld * PosL).xyz;                                
+shader VSmain(in VSInput VSin:0, in VSInputBoneInfo BoneInfo:4, out VSOutput VSout)
+{
+	mat4 BoneTransform = gBones[BoneInfo.BoneIDs[0]] * BoneInfo.Weights[0];
+    BoneTransform     += gBones[BoneInfo.BoneIDs[1]] * BoneInfo.Weights[1];
+    BoneTransform     += gBones[BoneInfo.BoneIDs[2]] * BoneInfo.Weights[2];
+    BoneTransform     += gBones[BoneInfo.BoneIDs[3]] * BoneInfo.Weights[3];
+	
+    vec4 PosL      = BoneTransform * vec4(VSin.Position, 1.0);
+    VSout.WorldPos = (gWorld * PosL).xyz;
 }
 
 uniform vec3 gLightPos;

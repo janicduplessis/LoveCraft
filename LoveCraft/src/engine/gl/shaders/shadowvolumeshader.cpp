@@ -23,6 +23,13 @@ bool ShadowVolumeShader::Init()
         m_lightPosLocation == INVALID_UNIFORM_LOCATION) {
         return false;
     }
+
+	for (uint32 i = 0 ; i < ARRAY_SIZE_IN_ELEMENTS(m_boneLocation) ; i++) {
+		char Name[128];
+		memset(Name, 0, sizeof(Name));
+		_snprintf_s(Name, sizeof(Name), "gBones[%d]", i);
+		m_boneLocation[i] = GetUniformLocation(Name);
+	}
             
     return true;
 }
@@ -41,4 +48,10 @@ void ShadowVolumeShader::SetWorldMatrix(const Matrix4f& WorldInverse)
 void ShadowVolumeShader::SetLightPos(const Vector3f& Pos)
 {
     glUniform3f(m_lightPosLocation, Pos.x, Pos.y, Pos.z);
+}
+
+void ShadowVolumeShader::SetBoneTransform( uint32 index, const Matrix4f& transform )
+{
+	assert(index < MAX_BONES);
+	glUniformMatrix4fv(m_boneLocation[index], 1, GL_TRUE, (const GLfloat*)transform.GetInternalValues()); 
 }

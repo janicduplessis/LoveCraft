@@ -202,7 +202,7 @@ void Engine::GameInit()
 	m_chunks->Init(&m_lightingShader);
 	Info::Get().StatusOn(Info::LSTATUS_CHUNK);
 
-	m_player->Init(&m_modelShader);
+	m_player->Init(&m_modelShader, &m_boneNullShader, &m_shadowVolShader);
 	m_skybox->Init(SKYBOX_PATH, "sp3left.jpg", "sp3right.jpg", "sp3top.jpg", "sp3bot.jpg", "sp3back.jpg", "sp3front.jpg");
 	m_lanternFire.SetTexture(m_particleSpell);
 	m_lanternFire.SetParticlesSize(0.3);
@@ -262,8 +262,11 @@ void Engine::GameInit()
 	if(!m_DSDirLightingPassShader.Init()) {
 		std::cout << "Error loading deffered directional lighting shader" << std::endl;
 	}
-	if(!m_nullShader.Init()) {
-		std::cout << "Error loading deffered null shader, what a baddie =/" << std::endl;
+	if(!m_staticNullShader.Init()) {
+		std::cout << "Error loading static null shader, what a baddie =/" << std::endl;
+	}
+	if(!m_boneNullShader.Init()) {
+		std::cout << "Error loading bone null shader, what a baddie =/" << std::endl;
 	}
 	if(!m_shadowVolShader.Init()) {
 		std::cout << "Error loading shadow volume shader" << std::endl;
@@ -519,8 +522,6 @@ void Engine::UnloadResource()
 
 void Engine::UpdateGame(float elapsedTime)
 {
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	// Game Time
 	static float gameTime = elapsedTime;
 	gameTime += elapsedTime;
@@ -544,7 +545,7 @@ void Engine::UpdateGame(float elapsedTime)
 	m_chunks->Update();
 	//m_lanternFire.Update(elapsedTime);
 
-	//UpdateLights();
+	UpdateLights();
 
 	//Vérification de la mort du personnage
 	if (m_character->Health() <= 0.999f)
@@ -741,14 +742,12 @@ void Engine::RenderSceneIntoDepth()
 	glDrawBuffer(GL_NONE);
 	glDepthMask(GL_TRUE);
 
-	m_nullShader.Enable();
-
 	Pipeline p;
 	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
 	p.SetPerspectiveProj(m_persProjInfo);
 
-	m_player->RenderDepth(p, &m_nullShader);
-	m_chunks->Render(p, &m_nullShader);
+	m_player->RenderDepth(p);
+	m_chunks->Render(p, &m_staticNullShader);
 }
 
 void Engine::RenderShadowVolIntoStencil(uint32 index)
@@ -774,7 +773,7 @@ void Engine::RenderShadowVolIntoStencil(uint32 index)
 	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
 	p.SetPerspectiveProj(m_persProjInfo);
 	
-	m_player->RenderShadowVolume(p, &m_shadowVolShader);
+	m_player->RenderShadowVolume(p);
 
 	glEnable(GL_CULL_FACE);
 }
@@ -836,7 +835,7 @@ void Engine::RenderShadowedScene()
 
 void Engine::DSStencilPass(uint32 index)
 {
-	m_nullShader.Enable();
+	m_staticNullShader.Enable();
 
 	m_gBuffer.BindForStencilPass();
 
@@ -860,7 +859,7 @@ void Engine::DSStencilPass(uint32 index)
 		m_pointLights[index].TotalIntensity());
 	p.Scale(BSphereScale, BSphereScale, BSphereScale);
 
-	m_nullShader.SetWVP(p.GetWVPTrans());
+	m_staticNullShader.SetWVP(p.GetWVPTrans());
 	m_bsphere.Render();
 }
 

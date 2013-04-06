@@ -135,7 +135,7 @@ public:
 	ModelMesh();
 	~ModelMesh();
 
-	bool Init(const std::string& Filename, bool withAdjacencies, ModelShader* shader, bool flipUV = false);
+	bool Init(const std::string& Filename, bool withAdjacencies, BoneModelShader* shader, bool flipUV = false);
 
 	void Render();
 	void RenderDepth();
@@ -240,7 +240,7 @@ private:
 	Assimp::Importer m_importer;
 	const aiScene* m_scene;
 
-	ModelShader* m_shader;
+	BoneModelShader* m_shader;
 
 	std::map<Edge, Neighbors, CompareEdges> m_indexMap;
 	std::map<aiVector3D, uint32, ComparePositions> m_posMap;

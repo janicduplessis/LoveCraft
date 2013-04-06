@@ -16,6 +16,7 @@
 #include "game/character.h"
 #include "gl/shaders/nullshader.h"
 #include "gl/shaders/shadowvolumeshader.h"
+#include "gl/shaders/bonenullshader.h"
 
 /**
  * @brief classe représentent le joueur dans l'environnement 3D
@@ -36,7 +37,7 @@ public:
 	 */
 	~Player();
 
-	void Init(ModelShader* shader);
+	void Init(BoneModelShader* modelShader, BoneNullShader* nullShader, ShadowVolumeShader* shadowShader);
 
 	/**
 	 * Position du joueur
@@ -76,8 +77,8 @@ public:
 	void Move(bool ghost, Character* cter, float elapsedTime);
 	void Teleport();
 	void Render(Pipeline p);
-	void RenderDepth(Pipeline p, NullShader* shader);
-	void RenderShadowVolume(Pipeline p, ShadowVolumeShader* shader);
+	void RenderDepth(Pipeline p);
+	void RenderShadowVolume(Pipeline p);
 	void Update(float gameTime);
 	void SetRotation( Vector3f rot );
 	void ResetPosition();
@@ -104,7 +105,9 @@ private:
 	Matrix4f m_lanternBoneTrans;
 	Matrix4f m_world;
 
-	ModelShader* m_modelShader;
+	BoneModelShader* m_modelShader;
+	BoneNullShader* m_boneNullShader;
+	ShadowVolumeShader* m_shadowVolumeShader;
 };
 
 #endif // PLAYER_H__

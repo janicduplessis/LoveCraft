@@ -34,7 +34,7 @@ ModelMesh::~ModelMesh()
 	Clear();
 }
 
-bool ModelMesh::Init( const std::string& filename, bool withAdjacencies, ModelShader* shader, bool flipUV )
+bool ModelMesh::Init( const std::string& filename, bool withAdjacencies, BoneModelShader* shader, bool flipUV )
 {
 	m_withAdjacencies = withAdjacencies;
 
@@ -360,10 +360,6 @@ void ModelMesh::Render()
 
 		if (materialIndex < m_materials.size() && m_loadDefaultMaterials) {
 			m_materials[materialIndex].Bind();
-			if (m_shader) {
-				m_shader->SetMatSpecualarIntensity(m_materials[materialIndex].GetSpecularIntensity());
-				m_shader->SetMatSpecularPower(m_materials[materialIndex].GetSpecularPower());
-			}
 		}
 
 		glDrawElementsBaseVertex(topology, 

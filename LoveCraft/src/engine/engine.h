@@ -44,6 +44,7 @@
 #include "util/tool.h"
 #include "util/dice.h"
 #include "gl/shaders/shadowvolumeshader.h"
+#include "gl/shaders/bonenullshader.h"
 
 
 //#define LOAD_MODELS
@@ -198,7 +199,7 @@ private:
 	Shader m_shaderCube;
 	Shader m_shaderSpells;
 	LightingShader m_lightingShader;
-	ModelShader m_modelShader;
+	BoneModelShader m_modelShader;
 
 	Chunks* m_chunks;
 	Skybox* m_skybox;
@@ -240,7 +241,8 @@ private:
 	DSDirLightingPassShader m_DSDirLightingPassShader;
 	DSPointLightingPassShader m_DSPointLightingPassShader;
 	ShadowVolumeShader m_shadowVolShader;
-	NullShader m_nullShader;
+	StaticNullShader m_staticNullShader;
+	BoneNullShader m_boneNullShader;
 	PointLight m_pointLights[3];
 	DirectionalLight m_dirLight;
 	ModelMesh m_bsphere;

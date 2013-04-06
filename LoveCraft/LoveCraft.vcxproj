@@ -84,6 +84,7 @@
   <ItemGroup>
     <ClCompile Include="src\engine\chunks.cpp" />
     <ClCompile Include="src\engine\gl\cubemaptexture.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\bonenullshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\dsdirlightingpassshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\dspointlightingpassshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\gbuffer.cpp" />
@@ -93,6 +94,7 @@
     <ClCompile Include="src\engine\gl\shaders\shadowvolumeshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\skyboxshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\dslightingpassshader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\staticmodelshader.cpp" />
     <ClCompile Include="src\engine\gl\skybox.cpp" />
     <ClCompile Include="src\engine\gl\ui\effects\effect.cpp" />
     <ClCompile Include="src\engine\gl\modelmesh.cpp" />
@@ -168,6 +170,7 @@
   <ItemGroup>
     <ClInclude Include="src\engine\chunks.h" />
     <ClInclude Include="src\engine\gl\cubemaptexture.h" />
+    <ClInclude Include="src\engine\gl\shaders\bonenullshader.h" />
     <ClInclude Include="src\engine\gl\shaders\dsdirlightingpassshader.h" />
     <ClInclude Include="src\engine\gl\shaders\dslightingpassshader.h" />
     <ClInclude Include="src\engine\gl\shaders\dspointlightingpassshader.h" />
@@ -178,6 +181,7 @@
     <ClInclude Include="src\engine\gl\shaders\shadernew.h" />
     <ClInclude Include="src\engine\gl\shaders\shadowvolumeshader.h" />
     <ClInclude Include="src\engine\gl\shaders\skyboxshader.h" />
+    <ClInclude Include="src\engine\gl\shaders\staticmodelshader.h" />
     <ClInclude Include="src\engine\gl\skybox.h" />
     <ClInclude Include="src\engine\gl\ui\effects\effect.h" />
     <ClInclude Include="src\engine\gl\modelmesh.h" />

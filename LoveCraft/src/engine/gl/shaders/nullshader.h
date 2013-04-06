@@ -1,15 +1,15 @@
-#ifndef NULLSHADER_H__
-#define	NULLSHADER_H__
+#ifndef STATIC_NULLSHADER_H__
+#define	STATIC_NULLSHADER_H__
 
 #include "define.h"
 
 #include "shadernew.h"
 #include "util/matrix4.h"
 
-class NullShader : public ShaderNew {
+class StaticNullShader : public ShaderNew {
 public:
 
-    NullShader();
+    StaticNullShader();
 
     virtual bool Init();
 

@@ -33,7 +33,7 @@ void Chunks::Render(Pipeline p)
 	}
 }
 
-void Chunks::Render(Pipeline p, NullShader* nullShader)
+void Chunks::Render(Pipeline p, StaticNullShader* nullShader)
 {
 	nullShader->Enable();
 	nullShader->SetWVP(p.GetWVPTrans());

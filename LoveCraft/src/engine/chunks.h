@@ -17,7 +17,7 @@ public:
 	void Init(LightingShader* shader);
 
 	void Render(Pipeline p);
-	void Render(Pipeline p, NullShader* nullShader);
+	void Render(Pipeline p, StaticNullShader* nullShader);
 	void Update();
 
 private:

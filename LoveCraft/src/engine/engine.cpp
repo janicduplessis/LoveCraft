@@ -133,14 +133,16 @@ void Engine::GlobalInit()
 	//glEnable (GL_LINE_SMOOTH);
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CW);
+	glDepthFunc(GL_LEQUAL);
+	glEnable(GL_DEPTH_CLAMP);
 	//glCullFace(GL_FRONT);
 	//glEnable(GL_FOG);
 
 	m_persProjInfo.FOV = 60.f;
 	m_persProjInfo.Height = Height();
 	m_persProjInfo.Width = Width();
-	m_persProjInfo.zNear = 0.1f;
-	m_persProjInfo.zFar = 1000.f;
+	m_persProjInfo.zNear = 1.f;
+	m_persProjInfo.zFar = 100.f;
 
 	/*// Light
 	GLfloat light0Pos[4]  = {0.0f, CHUNK_SIZE_Y, 0.0f, 1.0f};
@@ -263,6 +265,9 @@ void Engine::GameInit()
 	if(!m_nullShader.Init()) {
 		std::cout << "Error loading deffered null shader, what a baddie =/" << std::endl;
 	}
+	if(!m_shadowVolShader.Init()) {
+		std::cout << "Error loading shadow volume shader" << std::endl;
+	}
 
 	m_DSDirLightingPassShader.Enable();
 
@@ -285,12 +290,17 @@ void Engine::GameInit()
 	m_DSPointLightingPassShader.SetScreenSize(Width(), Height());
 	m_bsphere.LoadDefaultMaterials(false);
 	m_quad.LoadDefaultMaterials(false);
-	if(!m_bsphere.Init(MODEL_PATH "sphere.obj", 0)) {
+	if(!m_bsphere.Init(MODEL_PATH "sphere.obj", false, 0)) {
 		std::cout << "Error loading " MODEL_PATH "sphere.obj" << std::endl;
 	}
-	if(!m_quad.Init(MODEL_PATH "quad.obj", 0)) {
+	if(!m_quad.Init(MODEL_PATH "quad.obj", false, 0)) {
 		std::cout << "Error loading " MODEL_PATH "quad.obj" << std::endl;
 	}
+
+	//Set cube lighting
+	m_lightingShader.Enable();
+	m_lightingShader.SetColorTextureUnit(0);
+	m_lightingShader.SetTextureUnitType(1);
 }
 
 void Engine::InitLights()
@@ -319,6 +329,7 @@ void Engine::InitLights()
 	m_pointLights[2].Attenuation.Exp = 1.f;
 	m_pointLights[2].Attenuation.Linear = 0.0f;
 	m_pointLights[2].Attenuation.Constant = 0;
+	m_pointLights[2].Position = Vector3f(50,70,40);
 }
 
 void Engine::DeInit()
@@ -533,7 +544,7 @@ void Engine::UpdateGame(float elapsedTime)
 	m_chunks->Update();
 	//m_lanternFire.Update(elapsedTime);
 
-	UpdateLights();
+	//UpdateLights();
 
 	//Vérification de la mort du personnage
 	if (m_character->Health() <= 0.999f)
@@ -619,7 +630,7 @@ void Engine::RenderMenu()
 #pragma region OpenGl
 
 	glDepthMask(GL_FALSE);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glDisable(GL_BLEND);
 
 	// Transformations initiales
@@ -656,7 +667,8 @@ void Engine::RenderGame()
 	glEnable(GL_STENCIL_TEST);
 
 	for (uint32 i = 0; i < ARRAY_SIZE_IN_ELEMENTS(m_pointLights); ++i) {
-		DSStencilPass(i);
+		RenderShadowVolIntoStencil(i);
+		//DSStencilPass(i);
 		DSPointLightPass(i);
 	}
 
@@ -707,6 +719,8 @@ void Engine::DSGeometryPass()
 {
 	m_gBuffer.BindForGeometryPass();
 
+	glCullFace(GL_BACK);
+
 	glDisable(GL_BLEND);
 
 	glDepthMask(GL_TRUE);
@@ -715,14 +729,70 @@ void Engine::DSGeometryPass()
 
 	glEnable(GL_DEPTH_TEST);
 
-	glCullFace(GL_BACK);
+	RenderSceneIntoDepth();
 
-	// Render !
+	RenderShadowedScene();
+
+	glDepthMask(GL_FALSE);
+}
+
+void Engine::RenderSceneIntoDepth()
+{
+	glDrawBuffer(GL_NONE);
+	glDepthMask(GL_TRUE);
+
+	m_nullShader.Enable();
+
 	Pipeline p;
 	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
 	p.SetPerspectiveProj(m_persProjInfo);
 
+	m_player->RenderDepth(p, &m_nullShader);
+	m_chunks->Render(p, &m_nullShader);
+}
+
+void Engine::RenderShadowVolIntoStencil(uint32 index)
+{
+	
+	glDrawBuffer(GL_NONE);
+	glDepthMask(GL_FALSE);
+	glClear(GL_STENCIL_BUFFER_BIT);
+
+	glEnable(GL_DEPTH_TEST);
+
+	glDisable(GL_CULL_FACE);
+
+	glStencilFunc(GL_ALWAYS, 0, 0xff);
+
+	glStencilOpSeparate(GL_BACK, GL_KEEP, GL_INCR_WRAP, GL_KEEP);
+	glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_DECR_WRAP, GL_KEEP);
+
+	m_shadowVolShader.Enable();
+	m_shadowVolShader.SetLightPos(m_pointLights[index].Position);
+
+	Pipeline p;
+	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
+	p.SetPerspectiveProj(m_persProjInfo);
+	
+	m_player->RenderShadowVolume(p, &m_shadowVolShader);
+
+	glEnable(GL_CULL_FACE);
+}
+
+void Engine::RenderShadowedScene()
+{
+	m_gBuffer.BindForGeometryPass();
+
+	glDepthMask(GL_FALSE);
+
+	// prevent update to the stencil buffer
+	//glStencilOpSeparate(GL_BACK, GL_KEEP, GL_KEEP, GL_KEEP);
+	//glStencilFunc(GL_EQUAL, 0x0, 0xff);
+	Pipeline p;
+	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
+	p.SetPerspectiveProj(m_persProjInfo);
 	m_player->Render(p);
+
 	//Set cube lighting
 	m_lightingShader.Enable();
 	m_lightingShader.SetColorTextureUnit(0);
@@ -762,8 +832,6 @@ void Engine::DSGeometryPass()
 
 	glDepthMask(GL_TRUE);
 	glDisable(GL_BLEND);*/
-
-	glDepthMask(GL_FALSE);
 }
 
 void Engine::DSStencilPass(uint32 index)
@@ -772,16 +840,17 @@ void Engine::DSStencilPass(uint32 index)
 
 	m_gBuffer.BindForStencilPass();
 
+	//glClear(GL_STENCIL_BUFFER_BIT);
+
 	glEnable(GL_DEPTH_TEST);
 
 	glDisable(GL_CULL_FACE);
 
-	glClear(GL_STENCIL_BUFFER_BIT);
+	//glStencilFunc(GL_ALWAYS, 0x0, 0xff);
+	glStencilFunc(GL_NOTEQUAL, 0x0, 0xff);
 
-	glStencilFunc(GL_ALWAYS, 0, 0);
-
-	glStencilOpSeparate(GL_BACK, GL_KEEP, GL_INCR, GL_KEEP);
-	glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_DECR, GL_KEEP);
+	glStencilOpSeparate(GL_BACK, GL_ZERO, GL_INCR, GL_KEEP);
+	glStencilOpSeparate(GL_FRONT, GL_ZERO, GL_DECR, GL_KEEP);
 
 	Pipeline p;
 	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
@@ -802,7 +871,8 @@ void Engine::DSPointLightPass(uint32 index)
 	m_DSPointLightingPassShader.Enable();
 	m_DSPointLightingPassShader.SetEyeWorldPos(m_camera->GetPosition());
 
-	glStencilFunc(GL_NOTEQUAL, 0, 0xFF);
+	glStencilFunc(GL_EQUAL, 0x0, 0xff);
+	//glStencilFunc(GL_NOTEQUAL, 0, 0xFF);
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);

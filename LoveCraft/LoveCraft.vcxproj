@@ -90,6 +90,7 @@
     <ClCompile Include="src\engine\gl\shaders\modelshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\nullshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\shadernew.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\shadowvolumeshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\skyboxshader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\dslightingpassshader.cpp" />
     <ClCompile Include="src\engine\gl\skybox.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="src\engine\gl\shaders\modelshader.h" />
     <ClInclude Include="src\engine\gl\shaders\nullshader.h" />
     <ClInclude Include="src\engine\gl\shaders\shadernew.h" />
+    <ClInclude Include="src\engine\gl\shaders\shadowvolumeshader.h" />
     <ClInclude Include="src\engine\gl\shaders\skyboxshader.h" />
     <ClInclude Include="src\engine\gl\skybox.h" />
     <ClInclude Include="src\engine\gl\ui\effects\effect.h" />
@@ -265,6 +267,10 @@
     <None Include="src\engine\gl\shaders\billboardshader.frag" />
     <None Include="src\engine\gl\shaders\billboardshader.geom" />
     <None Include="src\engine\gl\shaders\billboardshader.vert" />
+    <None Include="src\engine\gl\shaders\shadowvolume.glsl">
+      <SubType>
+      </SubType>
+    </None>
     <None Include="src\engine\gl\shaders\null.glsl">
       <SubType>
       </SubType>

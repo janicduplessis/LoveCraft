@@ -17,7 +17,6 @@ interface VSOutput
 };
 
 const int MAX_BONES = 100;
-const int MAX_POINT_LIGHTS = 3;
 
 uniform mat4 gWVP;
 uniform mat4 gWorld;
@@ -73,6 +72,7 @@ shader FSmain(in VSOutput FSin, out FSOutput FSout)
 	FSout.WorldPos = FSin.WorldPos;
 	FSout.Diffuse = texel.xyz;
 	FSout.Normal = NewNormal;
+	//FSout.Normal = FSin.Normal;
 	FSout.TexCoord = vec3(FSin.TexCoord, 1);
 }
 

@@ -20,15 +20,126 @@
 #define INVALID_OGL_VALUE 0xFFFFFFFF
 
 
+// Stores an edge by its vertices and force an order between them
+struct Edge
+{
+	Edge(uint32 _a, uint32 _b)
+	{
+		assert(_a != _b);
+
+		if (_a < _b)
+		{
+			a = _a;
+			b = _b;                   
+		}
+		else
+		{
+			a = _b;
+			b = _a;
+		}
+	}
+
+	uint32 a;
+	uint32 b;
+};
+
+struct Neighbors
+{
+	uint32 n1;
+	uint32 n2;
+
+	Neighbors()
+	{
+		n1 = n2 = (uint32)-1;
+	}
+
+	void AddNeigbor(uint32 n)
+	{
+		if (n1 == -1) {
+			n1 = n;
+		}
+		else if (n2 == -1) {
+			n2 = n;
+		}
+		else {
+			assert(0);
+		}
+	}
+
+	uint32 GetOther(uint32 me) const
+	{
+		if (n1 == me) {
+			return n2;
+		}
+		else if (n2 == me) {
+			return n1;
+		}
+		else {
+			assert(0);
+		}
+
+		return 0;
+	}
+};
+
+struct CompareEdges
+{
+	bool operator()(const Edge& Edge1, const Edge& Edge2)
+	{
+		if (Edge1.a < Edge2.a) {
+			return true;
+		}
+		else if (Edge1.a == Edge2.a) {
+			return (Edge1.b < Edge2.b);
+		}        
+		else {
+			return false;
+		}            
+	}
+};
+
+struct ComparePositions
+{
+	bool operator()(const aiVector3D& pos1, const aiVector3D& pos2)
+	{
+		if (pos1.x < pos2.x) {
+			return true;
+		}
+		else if (pos1.x == pos2.x) {
+			if (pos1.y < pos2.y) {
+				return true;
+			}
+			else if (pos1.y == pos2.y) {
+				return (pos1.z < pos2.z);
+			}
+			else {
+				return false;
+			}
+		}        
+		else {
+			return false;
+		}          
+	}
+};
+
+struct Face
+{
+	uint32 Indices[3];
+	uint32 GetOppositeIndex( const Edge& e ) const;
+};
+
+
 class ModelMesh
 {
 public:
 	ModelMesh();
 	~ModelMesh();
 
-	bool Init(const std::string& Filename, ModelShader* shader, bool flipUV = false);
+	bool Init(const std::string& Filename, bool withAdjacencies, ModelShader* shader, bool flipUV = false);
 
 	void Render();
+	void RenderDepth();
+	void RenderShadowVolume();
 
 	uint32 NumBones() const {
 		return m_numBones;
@@ -94,6 +205,7 @@ private:
 	void LoadBones(uint32 meshIndex, const aiMesh* paiMesh, std::vector<VertexBoneData>& bones);
 	bool InitMaterials(const aiScene* pScene, const std::string& Filename);
 	void Clear();
+	void FindAdjacencies(const aiMesh* paiMesh, std::vector<uint32>& indices);
 
 	enum VB_TYPES {
 		VB_INDEX,
@@ -129,6 +241,11 @@ private:
 	const aiScene* m_scene;
 
 	ModelShader* m_shader;
+
+	std::map<Edge, Neighbors, CompareEdges> m_indexMap;
+	std::map<aiVector3D, uint32, ComparePositions> m_posMap;
+	std::vector<Face> m_uniqueFaces;
+	bool m_withAdjacencies;
 
 	bool m_loadDefaultMaterials;
 };

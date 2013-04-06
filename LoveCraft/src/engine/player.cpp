@@ -20,7 +20,7 @@ Player::~Player()
 void Player::Init(ModelShader* shader)
 {
 	m_modelShader = shader;
-	m_model.Init(MODEL_PATH_HUMANS "boblampclean.md5mesh", shader);
+	m_model.Init(MODEL_PATH_HUMANS "boblampclean.md5mesh", true, shader);
 	Scale(Vector3f(0.1f, 0.1f, 0.1f));
 	ResetPosition();
 }
@@ -39,7 +39,7 @@ void Player::ResetPosition()
 	Info& info = Info::Get();
 	while (info.GetBlocFromWorld(m_pos) != BTYPE_AIR)
 		m_pos += Vector3f(0,1,0);
-	
+
 }
 
 void Player::Move(bool ghost, Character* cter, float elapsedTime)
@@ -377,10 +377,31 @@ void Player::Render(Pipeline p)
 	m_modelShader->SetWVP(p.GetWVPTrans());
 
 	m_world = p.GetWorldTrans();
-
 	m_model.Render();
+}
 
-	Shader::Disable();
+void Player::RenderDepth( Pipeline p, NullShader* shader)
+{
+	p.WorldPos(m_pos + Vector3f(0,-1.5,0));
+	p.Rotate(m_rot + Vector3f(270, 180, 0));
+	p.Scale(m_scale);
+
+	shader->Enable();
+	shader->SetWVP(p.GetWVPTrans());
+
+	m_model.RenderDepth();
+}
+
+void Player::RenderShadowVolume( Pipeline p, ShadowVolumeShader* shader )
+{
+	p.WorldPos(m_pos + Vector3f(0,-1.5,0));
+	p.Rotate(m_rot + Vector3f(270, 180, 0));
+	p.Scale(m_scale);
+
+	shader->SetVP(p.GetVPTrans());
+	shader->SetWorldMatrix(p.GetWorldTrans());
+
+	m_model.RenderShadowVolume();
 }
 
 void Player::Update(float gameTime) 
@@ -399,6 +420,7 @@ void Player::Update(float gameTime)
 	m_lanternBoneTrans = tranforms[29];
 
 	Shader::Disable();
+	//m_modelShader->SetBoneTransform(0, Matrix4f::IDENTITY);
 }
 
 Vector3f Player::Position() const

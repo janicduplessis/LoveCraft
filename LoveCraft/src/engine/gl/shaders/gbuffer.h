@@ -20,6 +20,7 @@ public:
 	bool Init(uint32 windowWidth, uint32 windowHeight);
 
 	void StartFrame();
+	void DrawBind();
 	void BindForGeometryPass();
 	void BindForStencilPass();
 	void BindForLightPass();

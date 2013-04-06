@@ -23,7 +23,7 @@ void ModelMesh::VertexBoneData::AddBoneData(uint32 boneID, float weight)
 	assert(0);
 }
 
-ModelMesh::ModelMesh() :  m_VAO(0), m_numBones(0), m_scene(0), m_loadDefaultMaterials(true)
+ModelMesh::ModelMesh() :  m_VAO(0), m_numBones(0), m_scene(0), m_loadDefaultMaterials(true), m_withAdjacencies(false)
 {
 	ZERO_MEM(m_buffers);
 }
@@ -34,8 +34,10 @@ ModelMesh::~ModelMesh()
 	Clear();
 }
 
-bool ModelMesh::Init( const std::string& filename, ModelShader* shader, bool flipUV )
+bool ModelMesh::Init( const std::string& filename, bool withAdjacencies, ModelShader* shader, bool flipUV )
 {
+	m_withAdjacencies = withAdjacencies;
+
 	m_shader = shader;
 
 	// Delete l'ancien mesh
@@ -86,10 +88,12 @@ bool ModelMesh::InitFromScene( const aiScene* pScene, const std::string& Filenam
 	uint32 numVertices = 0;
 	uint32 numIndices = 0;
 
+	uint32 verticesPerPrim = m_withAdjacencies ? 6 : 3;
+
 	// Count the number of vertices and indices
 	for (uint32 i = 0 ; i < m_entries.size() ; i++) {
 		m_entries[i].MaterialIndex = pScene->mMeshes[i]->mMaterialIndex;        
-		m_entries[i].NumIndices    = pScene->mMeshes[i]->mNumFaces * 3;
+		m_entries[i].NumIndices    = pScene->mMeshes[i]->mNumFaces * verticesPerPrim;
 		m_entries[i].BaseVertex    = numVertices;
 		m_entries[i].BaseIndex     = numIndices;
 
@@ -174,13 +178,17 @@ void ModelMesh::InitMesh( uint32 meshIndex,
 
 	LoadBones(meshIndex, paiMesh, bones);
 
-	// Populate the index buffer
-	for (uint32 i = 0 ; i < paiMesh->mNumFaces ; i++) {
-		const aiFace& Face = paiMesh->mFaces[i];
-		assert(Face.mNumIndices == 3);
-		indices.push_back(Face.mIndices[0]);
-		indices.push_back(Face.mIndices[1]);
-		indices.push_back(Face.mIndices[2]);
+	if(m_withAdjacencies) {
+		FindAdjacencies(paiMesh, indices);
+	} else {
+		// Populate the index buffer
+		for (uint32 i = 0 ; i < paiMesh->mNumFaces ; i++) {
+			const aiFace& Face = paiMesh->mFaces[i];
+			assert(Face.mNumIndices == 3);
+			indices.push_back(Face.mIndices[0]);
+			indices.push_back(Face.mIndices[1]);
+			indices.push_back(Face.mIndices[2]);
+		}
 	}
 }
 
@@ -238,6 +246,82 @@ bool ModelMesh::InitMaterials( const aiScene* pScene, const std::string& Filenam
 	return ret;
 }
 
+static uint32 GetOppositeIndex(const aiFace& Face, const Edge& e)
+{
+	for (uint32 i = 0 ; i < 3 ; i++) {
+		uint32 Index = Face.mIndices[i];
+
+		if (Index != e.a && Index != e.b) {
+			return Index;
+		}
+	}
+
+	assert(0);      
+
+	return 0;
+}
+
+void ModelMesh::FindAdjacencies(const aiMesh* paiMesh, std::vector<uint32>& indices)
+{ 
+	m_posMap.clear();
+	m_uniqueFaces.clear();
+	m_indexMap.clear();
+
+	// Step 1 - find the two triangles that share every edge
+	for (uint32 i = 0 ; i < paiMesh->mNumFaces ; i++) {
+		const aiFace& face = paiMesh->mFaces[i];
+
+		Face Unique;
+
+		// If a position vector is duplicated in the VB we fetch the 
+		// index of the first occurrence.
+		for (uint32 j = 0 ; j < 3 ; j++) { 
+			uint32 Index = face.mIndices[j];
+			aiVector3D& v = paiMesh->mVertices[Index];
+
+			if (m_posMap.find(v) == m_posMap.end()) {
+				m_posMap[v] = Index;
+			}
+			else {
+				Index = m_posMap[v];
+			} 
+
+			Unique.Indices[j] = Index;
+		}
+
+		m_uniqueFaces.push_back(Unique);
+
+		Edge e1(Unique.Indices[0], Unique.Indices[1]);
+		Edge e2(Unique.Indices[1], Unique.Indices[2]);
+		Edge e3(Unique.Indices[2], Unique.Indices[0]);
+
+		m_indexMap[e1].AddNeigbor(i);
+		m_indexMap[e2].AddNeigbor(i);
+		m_indexMap[e3].AddNeigbor(i);
+	}   
+
+	// Step 2 - build the index buffer with the adjacency info
+	for (uint32 i = 0 ; i < paiMesh->mNumFaces ; i++) {        
+		const Face& face = m_uniqueFaces[i];
+
+		for (uint32 j = 0 ; j < 3 ; j++) {            
+			Edge e(face.Indices[j], face.Indices[(j + 1) % 3]);
+			assert(m_indexMap.find(e) != m_indexMap.end());
+			Neighbors n = m_indexMap[e];
+			uint32 OtherTri = n.GetOther(i);
+
+			if (OtherTri == -1)
+				OtherTri = i;
+
+			const Face& OtherFace = m_uniqueFaces[OtherTri];
+			uint32 OppositeIndex = OtherFace.GetOppositeIndex(e);
+
+			indices.push_back(face.Indices[j]);
+			indices.push_back(OppositeIndex);            
+		}
+	}    
+}
+
 void ModelMesh::LoadBones( uint32 meshIndex, const aiMesh* paiMesh, std::vector<VertexBoneData>& bones )
 {
 	for(uint32 i = 0; i < paiMesh->mNumBones; ++i) {
@@ -269,10 +353,12 @@ void ModelMesh::Render()
 {
 	glBindVertexArray(m_VAO);
 
+	uint32 topology = m_withAdjacencies ? GL_TRIANGLES_ADJACENCY : GL_TRIANGLES;
+
 	for (uint32 i = 0 ; i < m_entries.size() ; i++) {
 		const uint32 materialIndex = m_entries[i].MaterialIndex;
 
-		if (materialIndex < m_materials.size()) {
+		if (materialIndex < m_materials.size() && m_loadDefaultMaterials) {
 			m_materials[materialIndex].Bind();
 			if (m_shader) {
 				m_shader->SetMatSpecualarIntensity(m_materials[materialIndex].GetSpecularIntensity());
@@ -280,7 +366,41 @@ void ModelMesh::Render()
 			}
 		}
 
-		glDrawElementsBaseVertex(GL_TRIANGLES, 
+		glDrawElementsBaseVertex(topology, 
+			m_entries[i].NumIndices, 
+			GL_UNSIGNED_INT, 
+			(void*)(sizeof(uint32) * m_entries[i].BaseIndex), 
+			m_entries[i].BaseVertex);
+	}
+
+	glBindVertexArray(0);
+}
+
+void ModelMesh::RenderDepth()
+{
+	glBindVertexArray(m_VAO);
+
+	uint32 topology = m_withAdjacencies ? GL_TRIANGLES_ADJACENCY : GL_TRIANGLES;
+
+	for (uint32 i = 0 ; i < m_entries.size() ; i++) {
+		glDrawElementsBaseVertex(topology, 
+			m_entries[i].NumIndices, 
+			GL_UNSIGNED_INT, 
+			(void*)(sizeof(uint32) * m_entries[i].BaseIndex), 
+			m_entries[i].BaseVertex);
+	}
+
+	glBindVertexArray(0);
+}
+
+void ModelMesh::RenderShadowVolume()
+{
+	glBindVertexArray(m_VAO);
+
+	uint32 topology = m_withAdjacencies ? GL_TRIANGLES_ADJACENCY : GL_TRIANGLES;
+
+	for (uint32 i = 0 ; i < m_entries.size() ; i++) {
+		glDrawElementsBaseVertex(topology, 
 			m_entries[i].NumIndices, 
 			GL_UNSIGNED_INT, 
 			(void*)(sizeof(uint32) * m_entries[i].BaseIndex), 
@@ -480,4 +600,19 @@ void ModelMesh::Clear()
 void ModelMesh::LoadDefaultMaterials( bool val )
 {
 	m_loadDefaultMaterials = val;
+}
+
+uint32 Face::GetOppositeIndex(const Edge& e) const
+{
+	for (uint32 i = 0 ; i < ARRAY_SIZE_IN_ELEMENTS(Indices) ; i++) {
+		uint32 Index = Indices[i];
+
+		if (Index != e.a && Index != e.b) {
+			return Index;
+		}
+	}
+
+	assert(0);
+
+	return 0;
 }

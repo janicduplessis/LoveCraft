@@ -6,6 +6,7 @@
 #include "util/array2d.h"
 #include "chunk.h"
 #include "gl/shaders/lightingshader.h"
+#include "gl/shaders/nullshader.h"
 
 class Chunks : public Array2d<Chunk*>
 {
@@ -16,6 +17,7 @@ public:
 	void Init(LightingShader* shader);
 
 	void Render(Pipeline p);
+	void Render(Pipeline p, NullShader* nullShader);
 	void Update();
 
 private:

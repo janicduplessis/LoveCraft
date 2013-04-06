@@ -14,6 +14,8 @@
 #include <util/quaternion.h>
 
 #include "game/character.h"
+#include "gl/shaders/nullshader.h"
+#include "gl/shaders/shadowvolumeshader.h"
 
 /**
  * @brief classe représentent le joueur dans l'environnement 3D
@@ -74,6 +76,8 @@ public:
 	void Move(bool ghost, Character* cter, float elapsedTime);
 	void Teleport();
 	void Render(Pipeline p);
+	void RenderDepth(Pipeline p, NullShader* shader);
+	void RenderShadowVolume(Pipeline p, ShadowVolumeShader* shader);
 	void Update(float gameTime);
 	void SetRotation( Vector3f rot );
 	void ResetPosition();

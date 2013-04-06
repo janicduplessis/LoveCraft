@@ -111,3 +111,8 @@ void GBuffer::BindForFinalPass()
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
 	glReadBuffer(GL_COLOR_ATTACHMENT4);
 }
+
+void GBuffer::DrawBind()
+{
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
+}

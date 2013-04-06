@@ -43,6 +43,7 @@
 #include "util/vector2.h"
 #include "util/tool.h"
 #include "util/dice.h"
+#include "gl/shaders/shadowvolumeshader.h"
 
 
 //#define LOAD_MODELS
@@ -165,6 +166,9 @@ private:
 	void DSDirectionalLightPass();
 	void DSFinalPass();
 	float CalcPointLightBSphere(const Vector3f& Color, float Intensity);
+	void RenderSceneIntoDepth();
+	void RenderShadowVolIntoStencil(uint32 index);
+	void RenderShadowedScene();
 private:
 	bool m_wireframe;
 	float m_angle;
@@ -235,6 +239,7 @@ private:
 	GBuffer m_gBuffer;
 	DSDirLightingPassShader m_DSDirLightingPassShader;
 	DSPointLightingPassShader m_DSPointLightingPassShader;
+	ShadowVolumeShader m_shadowVolShader;
 	NullShader m_nullShader;
 	PointLight m_pointLights[3];
 	DirectionalLight m_dirLight;

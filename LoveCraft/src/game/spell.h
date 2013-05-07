@@ -1,9 +1,9 @@
 ﻿#ifndef SPELL_H__
 #define SPELL_H__
 
-#include <engine/projectile.h>
-#include <engine/gl/particles.h>
-#include <engine/gl/texture.h>
+#include "engine/projectile.h"
+#include "engine/gl/meshes/particles.h"
+#include "engine/gl/textures/texture.h"
 
 class Spell : public Projectile
 {

@@ -4,7 +4,7 @@
 #include "define.h"
 
 #include "info.h"
-#include "gl/chunkmesh.h"
+#include "gl/meshes/chunkmesh.h"
 #include "gl/shaders/shader.h"
 #include <iostream>
 

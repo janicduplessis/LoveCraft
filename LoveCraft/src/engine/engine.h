@@ -5,29 +5,34 @@
 #include <list>
 
 #include "define.h"
+
 #include "openglcontext.h"
 #include "enumerators.h"
-
 #include "pipeline.h"
-
-#include "gl/texture.h"
-#include "gl/shaders/shader.h"
-#include "gl/shaders/lightingshader.h"
-#include "gl/shaders/modelshader.h"
-#include "gl/texturearray.h"
-#include "gl/skybox.h"
-#include "gl/shaders/gbuffer.h"
-#include "gl/shaders/lights.h"
-#include "gl/shaders/dsdirlightingpassshader.h"
-#include "gl/shaders/dspointlightingpassshader.h"
-#include "gl/shaders/nullshader.h"
-
 #include "player.h"
 #include "chunkloader.h"
 #include "thirdpersoncamera.h"
 #include "chunk.h"
 #include "chunks.h"
 #include "info.h"
+
+#include "gl/textures/texture.h"
+#include "gl/textures/texturearray.h"
+
+#include "gl/buffers/gbuffer.h"
+
+#include "gl/shaders/model/bone_model_shader.h"
+#include "gl/shaders/lighting/lights.h"
+#include "gl/shaders/lighting/lighting_shader.h"
+#include "gl/shaders/lighting/ds_dir_lighting_pass_shader.h"
+#include "gl/shaders/lighting/ds_point_lighting_pass_shader.h"
+#include "gl/shaders/null/static_bone_shader.h"
+#include "gl/shaders/null/bone_null_shader.h"
+#include "gl/shaders/shadow/bone_shadow_volume_shader.h"
+#include "gl/shaders/shadow/static_shadow_volume_shader.h"
+
+//#include "gl/meshes/skybox.h"
+
 #include "gl/ui/valuesgameinterface.h"
 #include "gl/ui/gameinterface.h"
 #include "gl/ui/menuinterface.h"
@@ -43,8 +48,6 @@
 #include "util/vector2.h"
 #include "util/tool.h"
 #include "util/dice.h"
-#include "gl/shaders/shadowvolumeshader.h"
-#include "gl/shaders/bonenullshader.h"
 
 
 //#define LOAD_MODELS
@@ -195,14 +198,13 @@ private:
 	Character* m_character;
 	Animal** m_monsters;
 
-	Shader m_shaderModel;
-	Shader m_shaderCube;
-	Shader m_shaderSpells;
+	//Shader m_shaderModel;
+	//Shader m_shaderSpells;
 	LightingShader m_lightingShader;
 	BoneModelShader m_modelShader;
 
 	Chunks* m_chunks;
-	Skybox* m_skybox;
+	//Skybox* m_skybox;
 
 	ValuesInterface m_valuesMenuInterface;
 	ValuesGameInterface m_valuesGameInterface;
@@ -225,9 +227,9 @@ private:
 
 	BlockType m_currentBlockType;
 
-	typedef std::list<Spell> SpellList;
-	SpellList m_spells;
-	Particles m_lanternFire;
+	//typedef std::list<Spell> SpellList;
+	//SpellList m_spells;
+	//Particles m_lanternFire;
 
 	ChunkLoader m_chunkLoader;
 
@@ -240,7 +242,8 @@ private:
 	GBuffer m_gBuffer;
 	DSDirLightingPassShader m_DSDirLightingPassShader;
 	DSPointLightingPassShader m_DSPointLightingPassShader;
-	ShadowVolumeShader m_shadowVolShader;
+	BoneShadowVolumeShader m_boneShadowVolShader;
+	StaticShadowVolumeShader m_staticShadowVolShader;
 	StaticNullShader m_staticNullShader;
 	BoneNullShader m_boneNullShader;
 	PointLight m_pointLights[3];

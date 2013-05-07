@@ -5,8 +5,9 @@
 #include "pipeline.h"
 #include "util/array2d.h"
 #include "chunk.h"
-#include "gl/shaders/lightingshader.h"
-#include "gl/shaders/nullshader.h"
+#include "gl/shaders/lighting/lighting_shader.h"
+#include "gl/shaders/null/static_bone_shader.h"
+#include "gl/shaders/shadow/static_shadow_volume_shader.h"
 
 class Chunks : public Array2d<Chunk*>
 {
@@ -18,6 +19,7 @@ public:
 
 	void Render(Pipeline p);
 	void Render(Pipeline p, StaticNullShader* nullShader);
+	void Render(Pipeline p, StaticShadowVolumeShader* shadowShader);
 	void Update();
 
 private:

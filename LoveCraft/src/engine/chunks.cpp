@@ -46,6 +46,20 @@ void Chunks::Render(Pipeline p, StaticNullShader* nullShader)
 	}
 }
 
+void Chunks::Render(Pipeline p, StaticShadowVolumeShader* shadowShader)
+{
+	shadowShader->Enable();
+	shadowShader->SetVP(p.GetVPTrans());
+	shadowShader->SetWorldMatrix(p.GetWorldTrans());
+	for (int i = 0; i < VIEW_DISTANCE / CHUNK_SIZE_X * 2; i++)
+	{
+		for (int j = 0; j < VIEW_DISTANCE / CHUNK_SIZE_Z * 2; ++j)
+		{
+			Get(i,j)->Render();
+		}
+	}
+}
+
 void Chunks::Update()
 {
 	int updated = 0;

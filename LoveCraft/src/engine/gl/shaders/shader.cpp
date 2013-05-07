@@ -1,176 +1,73 @@
-﻿#include "shader.h"
-#include "define.h"
-#include "util/tool.h"
+#include "shader.h"
+
+#include <string>
 #include <iostream>
-#include <cassert>
-#include "../../info.h"
+#include <assert.h>
+#include <glfx.h>
 
-#ifndef WINDOWS
 
-Shader::Shader() {}
+#include "util/tool.h"
 
-Shader::~Shader() 
+Shader::Shader(const char* pEffectFile)
 {
-	glDeleteProgram(m_program);
+	m_pEffectFile = pEffectFile;
+	m_shaderProg = 0;
+	m_effect = glfxGenEffect();
 }
 
-std::string Shader::ShaderType2ShaderName(GLuint Type)
+
+Shader::~Shader()
 {
-	switch (Type) {
-	case GL_VERTEX_SHADER:
-		return "Vertex";
-	case GL_GEOMETRY_SHADER:
-		return "Geometry";
-	case GL_FRAGMENT_SHADER:
-		return "Fragment";
-	default:
-		assert(0);
+	if (m_shaderProg != 0)
+	{
+		glDeleteProgram(m_shaderProg);
+		m_shaderProg = 0;
 	}
 
-	return NULL;
+	glfxDeleteEffect(m_effect);
 }
 
-bool Shader::Load(const std::string& vertFile, const std::string& fragFile, bool verbose)
+bool Shader::CompileProgram(const char* pProgram)
 {
-	Init();
-	AddShader(GL_VERTEX_SHADER_ARB, vertFile, verbose);
-	AddShader(GL_FRAGMENT_SHADER_ARB, fragFile, verbose);
-	Link();
-
-	return true;
-}
-
-bool Shader::Init()
-{
-	m_program = glCreateProgram();
-	return true;
-}
-
-bool Shader::AddShader(GLenum shaderType, const std::string& file, bool verbose) 
-{
-	std::string shaderText;
-
-	if(!Tool::LoadTextFile(file, shaderText))
-	{
-		if(verbose)
-			std::cout << "Failed to load " << file << std::endl;
+	if (!glfxParseEffectFromFile(m_effect, m_pEffectFile)) {
+		std::string log = glfxGetEffectLog(m_effect);
+		std::cout << "Error creating effect from file '" << m_pEffectFile << "':" << std::endl;
+		std::cout << log.c_str() << std::endl;
 		return false;
 	}
 
-	const char * my_shader_source = shaderText.c_str();
+	m_shaderProg = glfxCompileProgram(m_effect, pProgram);
 
-	GLuint shader = glCreateShader(shaderType);
-	CHECK_GL_ERROR();
-	assert(glIsShader(shader));
-
-	m_shaderObjList.push_back(shader);
-
-	glShaderSource(shader, 1, (const GLchar**)&my_shader_source, NULL);
-	CHECK_GL_ERROR();
-
-	if(verbose)
-		std::cout << "Compiling " << ShaderType2ShaderName(shaderType) << " shader (" << file << ")..." << std::endl;
-	glCompileShader(shader);
-	if(!CheckShaderError(shader, verbose))
+	if (m_shaderProg < 0) {
+		std::string log = glfxGetEffectLog(m_effect);
+		std::cout << "Error compiling program '" << pProgram << "' in effect file '" << m_pEffectFile << "':" << std::endl;
+		std::cout << log.c_str() << std::endl;
 		return false;
-
-	glAttachShader(m_program, shader);
-	CHECK_GL_ERROR();
-
-	return true;
-}
-
-bool Shader::Link() {
-	glLinkProgram(m_program);
-
-	// Delete the intermediate shader objects that have been added to the program
-	for (ShaderObjList::iterator it = m_shaderObjList.begin() ; it != m_shaderObjList.end() ; it++)
-	{
-		glDeleteShader(*it);
 	}
 
-	m_shaderObjList.clear();
-
 	return true;
 }
 
-void Shader::Use() const
+void Shader::Enable()
 {
-    glUseProgram(m_program);
-}
-
-GLuint Shader::BindUniform(const std::string& name) const
-{
-    return glGetUniformLocation(m_program, name.c_str());
-}
-
-void Shader::UpdateIntUniform(GLint name, GLint value) const
-{
-    glUniform1i(name, value);
-}
-
-void Shader::UpdateFloatUniform(GLint name, GLfloat value) const
-{
-    glUniform1f(name, value);
-}
-
-void Shader::Disable()
-{
-    glUseProgram(0);
-}
-
-bool Shader::CheckShaderError(GLenum shader, bool verbose)
-{
-    GLint compileOk;
-
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileOk);
-    if(verbose && !compileOk)
-    {
-        int maxLength;
-        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
-
-        char* infoLog = new char[maxLength];
-
-        glGetShaderInfoLog(shader, maxLength, &maxLength, infoLog);
-
-        std::cout << infoLog << std::endl;
-        delete [] infoLog;
-        return false;
-    }
-
-    return compileOk;
-}
-
-bool Shader::CheckProgramError(GLenum program, bool showWarning, bool verbose)
-{
-    GLint compileOk;
-
-    glGetProgramiv(program, GL_LINK_STATUS, &compileOk);
-    CHECK_GL_ERROR();
-    if(verbose && (showWarning || !compileOk))
-    {
-        int maxLength;
-        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
-        CHECK_GL_ERROR();
-
-        char* infoLog = new char[maxLength];
-
-        glGetProgramInfoLog(program, maxLength, &maxLength, infoLog);
-        CHECK_GL_ERROR();
-
-        std::cout << infoLog << std::endl;
-        delete [] infoLog;
-    }
-
-    return compileOk;
-}
-
-GLenum& Shader::GetProgram()
-{
-	return m_program;
+	glUseProgram(m_shaderProg);
 }
 
 
+GLint Shader::GetUniformLocation(const char* pUniformName)
+{
+	GLuint Location = glGetUniformLocation(m_shaderProg, pUniformName);
 
+	if (Location == INVALID_OGL_VALUE) {
+		fprintf(stderr, "Warning! Unable to get the location of uniform '%s'\n", pUniformName);
+	}
 
-#endif
+	return Location;
+}
+
+GLint Shader::GetProgramParam(GLint param)
+{
+	GLint ret;
+	glGetProgramiv(m_shaderProg, param, &ret);
+	return ret;
+}

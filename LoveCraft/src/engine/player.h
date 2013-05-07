@@ -5,18 +5,15 @@
 
 #include "controls.h"
 #include "pipeline.h"
-#include "gl/modelmesh.h"
-#include "gl/shaders/modelshader.h"
-
-
-#include <util/vector2.h>
-#include <util/vector3.h>
-#include <util/quaternion.h>
-
+#include "gl/meshes/modelmesh.h"
 #include "game/character.h"
-#include "gl/shaders/nullshader.h"
-#include "gl/shaders/shadowvolumeshader.h"
-#include "gl/shaders/bonenullshader.h"
+#include "gl/shaders/null/bone_null_shader.h"
+#include "gl/shaders/shadow/bone_shadow_volume_shader.h"
+#include "gl/shaders/model/bone_model_shader.h"
+
+#include "util/vector2.h"
+#include "util/vector3.h"
+#include "util/quaternion.h"
 
 /**
  * @brief classe représentent le joueur dans l'environnement 3D
@@ -37,7 +34,7 @@ public:
 	 */
 	~Player();
 
-	void Init(BoneModelShader* modelShader, BoneNullShader* nullShader, ShadowVolumeShader* shadowShader);
+	void Init(BoneModelShader* modelShader, BoneNullShader* nullShader, BoneShadowVolumeShader* shadowShader);
 
 	/**
 	 * Position du joueur
@@ -107,7 +104,7 @@ private:
 
 	BoneModelShader* m_modelShader;
 	BoneNullShader* m_boneNullShader;
-	ShadowVolumeShader* m_shadowVolumeShader;
+	BoneShadowVolumeShader* m_shadowVolumeShader;
 };
 
 #endif // PLAYER_H__

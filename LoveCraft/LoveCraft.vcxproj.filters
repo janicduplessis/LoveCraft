@@ -64,24 +64,6 @@
     <ClCompile Include="src\util\tool.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\texture.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\texturearray.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\textureatlas.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\chunkmesh.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\mesh.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\model.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\game\npc.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -94,28 +76,10 @@
     <ClCompile Include="src\game\spell.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\particles.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\game\animal.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\util\dice.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\randomtexture.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\shaders\billboardshader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\shaders\psupdateshader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\shaders\shader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\shaders\lightingshader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\util\perlin.cpp">
@@ -202,34 +166,13 @@
     <ClCompile Include="src\engine\gl\ui\controls\localizable\container\dialogwindow.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\modelmesh.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\gl\ui\debuginterface.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\shadowmapfbo.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\gl\ui\effects\effect.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\tooltip.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\cubemaptexture.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\shaders\skyboxshader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\skybox.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\shaders\shadernew.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\gl\shaders\modelshader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\pipeline.cpp">
@@ -247,28 +190,85 @@
     <ClCompile Include="src\engine\material.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\shaders\gbuffer.cpp">
+    <ClCompile Include="src\engine\gl\shaders\shadow\bone_shadow_volume_shader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\shaders\dslightingpassshader.cpp">
+    <ClCompile Include="src\engine\gl\shaders\shadow\static_shadow_volume_shader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\shaders\dsdirlightingpassshader.cpp">
+    <ClCompile Include="src\engine\gl\shaders\model\bone_model_shader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\shaders\dspointlightingpassshader.cpp">
+    <ClCompile Include="src\engine\gl\shaders\null\bone_null_shader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\shaders\nullshader.cpp">
+    <ClCompile Include="src\engine\gl\shaders\null\static_bone_shader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\shaders\shadowvolumeshader.cpp">
+    <ClCompile Include="src\engine\gl\shaders\shader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\shaders\staticmodelshader.cpp">
+    <ClCompile Include="src\engine\gl\shaders\model\static_model_shader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\gl\shaders\bonenullshader.cpp">
+    <ClCompile Include="src\engine\gl\buffers\gbuffer.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\buffers\shadowmapfbo.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\textures\texture.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\textures\texturearray.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\textures\textureatlas.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\textures\cubemaptexture.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\meshes\chunkmesh.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\meshes\mesh.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\meshes\model.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\meshes\modelmesh.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\textures\randomtexture.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\meshes\particles.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\meshes\skybox.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\particles\psupdateshader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\skybox\skyboxshader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\lighting\lighting_shader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\lighting\ds_point_lighting_pass_shader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\lighting\ds_dir_lighting_pass_shader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\lighting\ds_lighting_pass_shader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gl\shaders\billboard\billboard_shader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -339,25 +339,7 @@
     <ClInclude Include="src\define.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\texture.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\texturearray.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\textureatlas.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\chunkmesh.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\mesh.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\game\npc.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\model.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\game\character.h">
@@ -369,9 +351,6 @@
     <ClInclude Include="src\game\spell.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\particles.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\game\animal.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -379,24 +358,6 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\util\dice.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\randomtexture.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\testbillboard.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\billboardshader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\psupdateshader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\shader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\lightingshader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\interfaceinfos.h">
@@ -495,37 +456,13 @@
     <ClInclude Include="src\engine\gl\ui\controls\localizable\container\dialogwindow.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\modelmesh.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\gl\ui\debuginterface.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\shadowmapfbo.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\gl\ui\effects\effect.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\tooltip.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\cubemaptexture.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\skyboxshader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\skybox.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\shadernew.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\modelshader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\lights.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\pipeline.h">
@@ -543,83 +480,127 @@
     <ClInclude Include="src\engine\material.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\gbuffer.h">
+    <ClInclude Include="src\engine\gl\shaders\shadow\bone_shadow_volume_shader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\dslightingpassshader.h">
+    <ClInclude Include="src\engine\gl\shaders\shadow\static_shadow_volume_shader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\dsdirlightingpassshader.h">
+    <ClInclude Include="src\engine\gl\shaders\model\bone_model_shader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\dspointlightingpassshader.h">
+    <ClInclude Include="src\engine\gl\shaders\null\bone_null_shader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\nullshader.h">
+    <ClInclude Include="src\engine\gl\shaders\null\static_bone_shader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\shadowvolumeshader.h">
+    <ClInclude Include="src\engine\gl\shaders\shader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\staticmodelshader.h">
+    <ClInclude Include="src\engine\gl\shaders\model\static_model_shader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\gl\shaders\bonenullshader.h">
+    <ClInclude Include="src\engine\gl\shaders\lighting\lights.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\buffers\gbuffer.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\buffers\shadowmapfbo.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\textures\textureatlas.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\textures\texture.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\textures\texturearray.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\textures\cubemaptexture.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\meshes\chunkmesh.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\meshes\mesh.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\meshes\model.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\meshes\modelmesh.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\textures\randomtexture.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\meshes\skybox.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\meshes\particles.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\particles\psupdateshader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\skybox\skyboxshader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\lighting\lighting_shader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\lighting\ds_point_lighting_pass_shader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\lighting\ds_dir_lighting_pass_shader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\lighting\ds_lighting_pass_shader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gl\shaders\billboard\billboard_shader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\engine\gl\shaders\billboardshader.frag">
+    <None Include="src\engine\gl\shaders\billboard\billboard.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="src\engine\gl\shaders\billboardshader.geom" />
-    <None Include="src\engine\gl\shaders\billboardshader.vert">
+    <None Include="src\engine\gl\shaders\shadow\shadow_volume.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="src\engine\gl\shaders\cubeshader.vert">
+    <None Include="src\engine\gl\shaders\lighting\lighting.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="src\engine\gl\shaders\modelshader.frag">
+    <None Include="src\engine\gl\shaders\model\model.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="src\engine\gl\shaders\modelshader.vert">
+    <None Include="src\engine\gl\shaders\null\null.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="src\engine\gl\shaders\particleshader.frag">
+    <None Include="src\engine\gl\shaders\particles\psupdateshader.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="src\engine\gl\shaders\particleshader.vert">
+    <None Include="src\engine\gl\shaders\particles\particleshader.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="src\engine\gl\shaders\psupdateshader.vert">
+    <None Include="src\engine\gl\shaders\particles\particleshader.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="src\engine\gl\shaders\psupdateshader.geom" />
-    <None Include="src\engine\gl\shaders\cubeshader.frag">
+    <None Include="src\engine\gl\shaders\particles\psupdateshader.geom" />
+    <None Include="src\engine\gl\shaders\skybox\skyboxshader.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="src\engine\gl\shaders\skyboxshader.vert">
+    <None Include="src\engine\gl\shaders\skybox\skyboxshader.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="src\engine\gl\shaders\skyboxshader.frag">
+    <None Include="src\engine\gl\shaders\lighting\lighting_pass.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="src\engine\gl\shaders\lighting.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="src\engine\gl\shaders\model.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="src\engine\gl\shaders\geometrypass.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="src\engine\gl\shaders\lightingpass.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="src\engine\gl\shaders\null.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="src\engine\gl\shaders\shadowvolume.glsl">
+    <None Include="src\engine\gl\shaders\shadow\shadow_map.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

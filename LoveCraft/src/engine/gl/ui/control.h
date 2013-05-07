@@ -5,7 +5,7 @@
 #include "enumerators.h"
 #include "engine/info.h"
 #include "util/array.h"
-#include "../texture.h"
+#include "engine/gl/textures/texture.h"
 #include "object.h"
 #include <cassert>
 #include <cmath>

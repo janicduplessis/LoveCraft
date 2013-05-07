@@ -83,22 +83,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\chunks.cpp" />
-    <ClCompile Include="src\engine\gl\cubemaptexture.cpp" />
-    <ClCompile Include="src\engine\gl\shaders\bonenullshader.cpp" />
-    <ClCompile Include="src\engine\gl\shaders\dsdirlightingpassshader.cpp" />
-    <ClCompile Include="src\engine\gl\shaders\dspointlightingpassshader.cpp" />
-    <ClCompile Include="src\engine\gl\shaders\gbuffer.cpp" />
-    <ClCompile Include="src\engine\gl\shaders\modelshader.cpp" />
-    <ClCompile Include="src\engine\gl\shaders\nullshader.cpp" />
-    <ClCompile Include="src\engine\gl\shaders\shadernew.cpp" />
-    <ClCompile Include="src\engine\gl\shaders\shadowvolumeshader.cpp" />
-    <ClCompile Include="src\engine\gl\shaders\skyboxshader.cpp" />
-    <ClCompile Include="src\engine\gl\shaders\dslightingpassshader.cpp" />
-    <ClCompile Include="src\engine\gl\shaders\staticmodelshader.cpp" />
-    <ClCompile Include="src\engine\gl\skybox.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\particles\psupdateshader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\skybox\skyboxshader.cpp" />
+    <ClCompile Include="src\engine\gl\textures\cubemaptexture.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\null\bone_null_shader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\lighting\ds_dir_lighting_pass_shader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\lighting\ds_point_lighting_pass_shader.cpp" />
+    <ClCompile Include="src\engine\gl\buffers\gbuffer.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\model\bone_model_shader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\null\static_bone_shader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\shader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\shadow\bone_shadow_volume_shader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\lighting\ds_lighting_pass_shader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\model\static_model_shader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\shadow\static_shadow_volume_shader.cpp" />
+    <ClCompile Include="src\engine\gl\meshes\skybox.cpp" />
     <ClCompile Include="src\engine\gl\ui\effects\effect.cpp" />
-    <ClCompile Include="src\engine\gl\modelmesh.cpp" />
-    <ClCompile Include="src\engine\gl\shadowmapfbo.cpp" />
+    <ClCompile Include="src\engine\gl\meshes\modelmesh.cpp" />
+    <ClCompile Include="src\engine\gl\buffers\shadowmapfbo.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.cpp" />
     <ClCompile Include="src\engine\gl\ui\debuginterface.cpp" />
@@ -125,30 +127,29 @@
     <ClCompile Include="src\engine\gl\ui\gameinterface.cpp" />
     <ClCompile Include="src\engine\gl\ui\interface.cpp" />
     <ClCompile Include="src\engine\chunkloader.cpp" />
-    <ClCompile Include="src\engine\gl\shaders\billboardshader.cpp" />
-    <ClCompile Include="src\engine\gl\shaders\lightingshader.cpp" />
-    <ClCompile Include="src\engine\gl\shaders\psupdateshader.cpp" />
-    <ClCompile Include="src\engine\gl\randomtexture.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\billboard\billboard_shader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\lighting\lighting_shader.cpp" />
+    <ClCompile Include="src\engine\gl\textures\randomtexture.cpp" />
     <ClCompile Include="src\engine\gl\ui\menuinterface.cpp" />
     <ClCompile Include="src\engine\gl\ui\theme.cpp" />
     <ClCompile Include="src\engine\treegenerator.cpp" />
     <ClCompile Include="src\util\dice.cpp" />
     <ClCompile Include="src\game\animal.cpp" />
-    <ClCompile Include="src\engine\gl\particles.cpp" />
+    <ClCompile Include="src\engine\gl\meshes\particles.cpp" />
     <ClCompile Include="src\engine\options.cpp" />
     <ClCompile Include="src\game\character.cpp" />
     <ClCompile Include="src\engine\ai.cpp" />
     <ClCompile Include="src\engine\blockinfo.cpp" />
     <ClCompile Include="src\engine\camera.cpp" />
     <ClCompile Include="src\engine\chunk.cpp" />
-    <ClCompile Include="src\engine\gl\chunkmesh.cpp" />
+    <ClCompile Include="src\engine\gl\meshes\chunkmesh.cpp" />
     <ClCompile Include="src\engine\controls.cpp" />
     <ClCompile Include="src\engine\info.cpp" />
-    <ClCompile Include="src\engine\gl\mesh.cpp" />
+    <ClCompile Include="src\engine\gl\meshes\mesh.cpp" />
     <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="src\game\spell.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\engine\gl\model.cpp" />
+    <ClCompile Include="src\engine\gl\meshes\model.cpp" />
     <ClCompile Include="src\engine\network.cpp" />
     <ClCompile Include="src\game\npc.cpp" />
     <ClCompile Include="src\engine\openglcontext.cpp" />
@@ -156,11 +157,10 @@
     <ClCompile Include="src\engine\projectile.cpp" />
     <ClCompile Include="src\util\perlin.cpp" />
     <ClCompile Include="src\util\quaternion.cpp" />
-    <ClCompile Include="src\engine\gl\shaders\shader.cpp" />
     <ClCompile Include="src\engine\son.cpp" />
-    <ClCompile Include="src\engine\gl\texture.cpp" />
-    <ClCompile Include="src\engine\gl\texturearray.cpp" />
-    <ClCompile Include="src\engine\gl\textureatlas.cpp" />
+    <ClCompile Include="src\engine\gl\textures\texture.cpp" />
+    <ClCompile Include="src\engine\gl\textures\texturearray.cpp" />
+    <ClCompile Include="src\engine\gl\textures\textureatlas.cpp" />
     <ClCompile Include="src\util\tool.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\localizable\container\window.cpp" />
     <ClCompile Include="src\engine\gl\ui\controls\workable.cpp" />
@@ -169,23 +169,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\chunks.h" />
-    <ClInclude Include="src\engine\gl\cubemaptexture.h" />
-    <ClInclude Include="src\engine\gl\shaders\bonenullshader.h" />
-    <ClInclude Include="src\engine\gl\shaders\dsdirlightingpassshader.h" />
-    <ClInclude Include="src\engine\gl\shaders\dslightingpassshader.h" />
-    <ClInclude Include="src\engine\gl\shaders\dspointlightingpassshader.h" />
-    <ClInclude Include="src\engine\gl\shaders\gbuffer.h" />
-    <ClInclude Include="src\engine\gl\shaders\lights.h" />
-    <ClInclude Include="src\engine\gl\shaders\modelshader.h" />
-    <ClInclude Include="src\engine\gl\shaders\nullshader.h" />
-    <ClInclude Include="src\engine\gl\shaders\shadernew.h" />
-    <ClInclude Include="src\engine\gl\shaders\shadowvolumeshader.h" />
-    <ClInclude Include="src\engine\gl\shaders\skyboxshader.h" />
-    <ClInclude Include="src\engine\gl\shaders\staticmodelshader.h" />
-    <ClInclude Include="src\engine\gl\skybox.h" />
+    <ClInclude Include="src\engine\gl\shaders\particles\psupdateshader.h" />
+    <ClInclude Include="src\engine\gl\shaders\skybox\skyboxshader.h" />
+    <ClInclude Include="src\engine\gl\textures\cubemaptexture.h" />
+    <ClInclude Include="src\engine\gl\shaders\null\bone_null_shader.h" />
+    <ClInclude Include="src\engine\gl\shaders\lighting\ds_dir_lighting_pass_shader.h" />
+    <ClInclude Include="src\engine\gl\shaders\lighting\ds_lighting_pass_shader.h" />
+    <ClInclude Include="src\engine\gl\shaders\lighting\ds_point_lighting_pass_shader.h" />
+    <ClInclude Include="src\engine\gl\buffers\gbuffer.h" />
+    <ClInclude Include="src\engine\gl\shaders\lighting\lights.h" />
+    <ClInclude Include="src\engine\gl\shaders\model\bone_model_shader.h" />
+    <ClInclude Include="src\engine\gl\shaders\null\static_bone_shader.h" />
+    <ClInclude Include="src\engine\gl\shaders\shader.h" />
+    <ClInclude Include="src\engine\gl\shaders\shadow\bone_shadow_volume_shader.h" />
+    <ClInclude Include="src\engine\gl\shaders\model\static_model_shader.h" />
+    <ClInclude Include="src\engine\gl\shaders\shadow\static_shadow_volume_shader.h" />
+    <ClInclude Include="src\engine\gl\meshes\skybox.h" />
     <ClInclude Include="src\engine\gl\ui\effects\effect.h" />
-    <ClInclude Include="src\engine\gl\modelmesh.h" />
-    <ClInclude Include="src\engine\gl\shadowmapfbo.h" />
+    <ClInclude Include="src\engine\gl\meshes\modelmesh.h" />
+    <ClInclude Include="src\engine\gl\buffers\shadowmapfbo.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\spellbutton.h" />
     <ClInclude Include="src\engine\gl\ui\debuginterface.h" />
@@ -217,16 +219,14 @@
     <ClInclude Include="src\engine\gl\ui\valuesinterface.h" />
     <ClInclude Include="src\enumerators.h" />
     <ClInclude Include="src\engine\chunkloader.h" />
-    <ClInclude Include="src\engine\gl\shaders\billboardshader.h" />
-    <ClInclude Include="src\engine\gl\shaders\lightingshader.h" />
-    <ClInclude Include="src\engine\gl\shaders\psupdateshader.h" />
-    <ClInclude Include="src\engine\gl\randomtexture.h" />
-    <ClInclude Include="src\engine\gl\testbillboard.h" />
+    <ClInclude Include="src\engine\gl\shaders\billboard\billboard_shader.h" />
+    <ClInclude Include="src\engine\gl\shaders\lighting\lighting_shader.h" />
+    <ClInclude Include="src\engine\gl\textures\randomtexture.h" />
     <ClInclude Include="src\engine\treegenerator.h" />
     <ClInclude Include="src\util\dice.h" />
     <ClInclude Include="src\npcinfo.h" />
     <ClInclude Include="src\game\animal.h" />
-    <ClInclude Include="src\engine\gl\particles.h" />
+    <ClInclude Include="src\engine\gl\meshes\particles.h" />
     <ClInclude Include="src\game\spell.h" />
     <ClInclude Include="src\interfaceinfos.h" />
     <ClInclude Include="src\engine\options.h" />
@@ -238,28 +238,27 @@
     <ClInclude Include="src\engine\blockinfo.h" />
     <ClInclude Include="src\engine\camera.h" />
     <ClInclude Include="src\engine\chunk.h" />
-    <ClInclude Include="src\engine\gl\chunkmesh.h" />
+    <ClInclude Include="src\engine\gl\meshes\chunkmesh.h" />
     <ClInclude Include="src\engine\controls.h" />
     <ClInclude Include="src\engine\info.h" />
     <ClInclude Include="src\util\matrix4.h" />
-    <ClInclude Include="src\engine\gl\mesh.h" />
+    <ClInclude Include="src\engine\gl\meshes\mesh.h" />
     <ClInclude Include="src\define.h" />
     <ClInclude Include="src\engine\engine.h" />
     <ClInclude Include="src\util\array2d.h" />
-    <ClInclude Include="src\engine\gl\model.h" />
+    <ClInclude Include="src\engine\gl\meshes\model.h" />
     <ClInclude Include="src\engine\network.h" />
     <ClInclude Include="src\game\npc.h" />
     <ClInclude Include="src\engine\projectile.h" />
     <ClInclude Include="src\util\perlin.h" />
     <ClInclude Include="src\util\quaternion.h" />
     <ClInclude Include="src\engine\son.h" />
-    <ClInclude Include="src\engine\gl\texturearray.h" />
-    <ClInclude Include="src\engine\gl\textureatlas.h" />
+    <ClInclude Include="src\engine\gl\textures\texturearray.h" />
+    <ClInclude Include="src\engine\gl\textures\textureatlas.h" />
     <ClInclude Include="src\util\vector2.h" />
     <ClInclude Include="src\engine\openglcontext.h" />
     <ClInclude Include="src\engine\player.h" />
-    <ClInclude Include="src\engine\gl\shaders\shader.h" />
-    <ClInclude Include="src\engine\gl\texture.h" />
+    <ClInclude Include="src\engine\gl\textures\texture.h" />
     <ClInclude Include="src\util\tool.h" />
     <ClInclude Include="src\util\vector3.h" />
     <ClInclude Include="src\engine\gl\ui\controls\localizable\container\window.h" />
@@ -268,43 +267,37 @@
     <ClInclude Include="src\engine\gl\ui\controls\localizable\textual\singletext\tooltip.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\engine\gl\shaders\billboardshader.frag" />
-    <None Include="src\engine\gl\shaders\billboardshader.geom" />
-    <None Include="src\engine\gl\shaders\billboardshader.vert" />
-    <None Include="src\engine\gl\shaders\shadowvolume.glsl">
+    <None Include="src\engine\gl\shaders\billboard\billboard.glsl" />
+    <None Include="src\engine\gl\shaders\particles\particleshader.frag" />
+    <None Include="src\engine\gl\shaders\particles\particleshader.vert" />
+    <None Include="src\engine\gl\shaders\particles\psupdateshader.geom" />
+    <None Include="src\engine\gl\shaders\particles\psupdateshader.vert" />
+    <None Include="src\engine\gl\shaders\shadow\shadow_map.glsl">
       <SubType>
       </SubType>
     </None>
-    <None Include="src\engine\gl\shaders\null.glsl">
+    <None Include="src\engine\gl\shaders\shadow\shadow_volume.glsl">
       <SubType>
       </SubType>
     </None>
-    <None Include="src\engine\gl\shaders\lightingpass.glsl">
+    <None Include="src\engine\gl\shaders\null\null.glsl">
       <SubType>
       </SubType>
     </None>
-    <None Include="src\engine\gl\shaders\geometrypass.glsl">
+    <None Include="src\engine\gl\shaders\lighting\lighting_pass.glsl">
       <SubType>
       </SubType>
     </None>
-    <None Include="src\engine\gl\shaders\modelshader.vert" />
-    <None Include="src\engine\gl\shaders\modelshader.frag" />
-    <None Include="src\engine\gl\shaders\cubeshader.frag" />
-    <None Include="src\engine\gl\shaders\cubeshader.vert" />
-    <None Include="src\engine\gl\shaders\particleshader.frag" />
-    <None Include="src\engine\gl\shaders\particleshader.vert" />
-    <None Include="src\engine\gl\shaders\psupdateshader.geom" />
-    <None Include="src\engine\gl\shaders\psupdateshader.vert" />
-    <None Include="src\engine\gl\shaders\skyboxshader.frag" />
-    <None Include="src\engine\gl\shaders\skyboxshader.vert" />
-    <None Include="src\engine\gl\shaders\lighting.glsl">
+    <None Include="src\engine\gl\shaders\lighting\lighting.glsl">
       <SubType>
       </SubType>
     </None>
-    <None Include="src\engine\gl\shaders\model.glsl">
+    <None Include="src\engine\gl\shaders\model\model.glsl">
       <SubType>
       </SubType>
     </None>
+    <None Include="src\engine\gl\shaders\skybox\skyboxshader.frag" />
+    <None Include="src\engine\gl\shaders\skybox\skyboxshader.vert" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\glew\build\vc10\glew_static.vcxproj">

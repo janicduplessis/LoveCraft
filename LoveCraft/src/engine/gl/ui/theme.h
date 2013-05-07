@@ -3,7 +3,7 @@
 
 #include "define.h"
 #include "enumerators.h"
-#include "../texture.h"
+#include "engine/gl/textures/texture.h"
 #include "engine/info.h"
 #include <cassert>
 #include <string>

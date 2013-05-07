@@ -2,7 +2,7 @@
 #define MATERIAL_H__
 
 #include "define.h"
-#include "gl/texture.h"
+#include "gl/textures/texture.h"
 
 class Material
 {

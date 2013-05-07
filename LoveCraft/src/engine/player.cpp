@@ -17,7 +17,7 @@ Player::~Player()
 {
 }
 
-void Player::Init(BoneModelShader* modelShader, BoneNullShader* nullShader, ShadowVolumeShader* shadowShader)
+void Player::Init(BoneModelShader* modelShader, BoneNullShader* nullShader, BoneShadowVolumeShader* shadowShader)
 {
 	m_modelShader = modelShader;
 	m_boneNullShader = nullShader;
@@ -429,8 +429,6 @@ void Player::Update(float gameTime)
 	}
 
 	m_lanternBoneTrans = tranforms[29];
-
-	Shader::Disable();
 }
 
 Vector3f Player::Position() const

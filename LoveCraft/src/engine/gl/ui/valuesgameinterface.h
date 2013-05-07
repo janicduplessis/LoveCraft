@@ -5,7 +5,7 @@
 
 #include "engine/player.h"
 #include "game/character.h"
-#include "engine/gl/texturearray.h"
+#include "engine/gl/textures/texturearray.h"
 
 struct ValuesGameInterface : ValuesInterface
 {

@@ -2,7 +2,7 @@
 #define VALUES_INTERFACE_H__
 
 #include "define.h"
-#include "engine/gl/texture.h"
+#include "engine/gl/textures/texture.h"
 
 struct ValuesInterface
 {

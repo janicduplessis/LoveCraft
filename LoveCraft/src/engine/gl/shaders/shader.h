@@ -1,44 +1,32 @@
-﻿#ifndef SHADER_H
-#define SHADER_H
-
-#include <list>
+#ifndef SHADER_H__
+#define SHADER_H__
 
 #include "define.h"
 
-#define INVALID_UNIFORM_LOCATION 0xFFFFFFFF
-
 class Shader
 {
-public:    
-	Shader();
+public:
+
+	Shader(const char* pEffectFile);
+
 	~Shader();
 
-	bool Load(const std::string& vertFile, const std::string& fragFile, bool verbose = false);
-	void Use() const;
-
-	bool Init();
-
-	void UpdateIntUniform(GLint name, GLint value) const;
-	void UpdateFloatUniform(GLint name, GLfloat value) const;
-
-	GLenum& GetProgram();
-
-	static void Disable();
+	void Enable();
 
 protected:
-	bool AddShader(GLenum shaderType, const std::string& file, bool verbose = false);
-	bool Link();
-	GLuint BindUniform(const std::string& name) const;
-	bool CheckShaderError(GLenum shader, bool verbose);
-	bool CheckProgramError(GLenum program, bool showWarning, bool verbose);
-	std::string ShaderType2ShaderName(GLuint Type);
 
-protected:
-	GLenum m_program;
-	typedef std::list<GLuint> ShaderObjList;
-	ShaderObjList m_shaderObjList;
+	bool CompileProgram(const char* pProgram);
+
+	GLint GetUniformLocation(const char* pUniformName);
+
+	GLint GetProgramParam(GLint param);
+
+protected:    
+	GLint m_effect;    
+	GLint m_shaderProg;
+	const char* m_pEffectFile;
 };
 
+#define INVALID_UNIFORM_LOCATION 0xFFFFFFFF
 
-
-#endif // SHADER_H
+#endif

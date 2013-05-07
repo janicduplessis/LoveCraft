@@ -3,7 +3,7 @@
 
 #include "define.h"
 
-#include "gl/texturearray.h"
+#include "gl/textures/texturearray.h"
 #include <string>
 
 class BlockInfo

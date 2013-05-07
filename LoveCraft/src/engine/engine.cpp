@@ -16,7 +16,7 @@
 
 Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 	m_rightClick(false), m_leftClick(false), m_camRadius(10), m_fpstmr(0),
-	m_clickTimer(0), m_currentBlockType(0), m_chunkLoader(&m_mutex), m_player(0), m_lanternFire(100)
+	m_clickTimer(0), m_currentBlockType(0), m_chunkLoader(&m_mutex), m_player(0)//, m_lanternFire(100)
 {
 	m_particleSpell = new Texture;
 	m_textureSpell = new Texture[SPELL_BAR_SPELL_NUMBER];
@@ -31,7 +31,7 @@ Engine::Engine() : m_wireframe(false), m_angle(0), m_ghostMode(false),
 
 	m_chunks = new Chunks(VIEW_DISTANCE / CHUNK_SIZE_X * 2, VIEW_DISTANCE / CHUNK_SIZE_Z * 2);
 
-	m_skybox = new Skybox();
+	//m_skybox = new Skybox();
 
 	m_player = new Player(Vector3f(VIEW_DISTANCE, 0, VIEW_DISTANCE));
 	Info::Get().StatusOn(Info::LSTATUS_PLAYER);
@@ -194,7 +194,6 @@ void Engine::MenuInit()
 
 void Engine::GameInit()
 {
-	Info::Get().SetCubeShader(&m_shaderCube);
 	Info::Get().SetChunkArray(m_chunks);
 
 	m_currentBlockType = BTYPE_DIRT;
@@ -202,15 +201,15 @@ void Engine::GameInit()
 	m_chunks->Init(&m_lightingShader);
 	Info::Get().StatusOn(Info::LSTATUS_CHUNK);
 
-	m_player->Init(&m_modelShader, &m_boneNullShader, &m_shadowVolShader);
-	m_skybox->Init(SKYBOX_PATH, "sp3left.jpg", "sp3right.jpg", "sp3top.jpg", "sp3bot.jpg", "sp3back.jpg", "sp3front.jpg");
-	m_lanternFire.SetTexture(m_particleSpell);
-	m_lanternFire.SetParticlesSize(0.3);
-	m_lanternFire.SetColor(Vector3f(1, 153/255.f, 0));
-	m_lanternFire.SetAverageVelocity(Vector3f(0,3,0));
-	m_lanternFire.SetRange(2);
-	m_lanternFire.SetAverageLifespan(150);
-	m_lanternFire.Init();
+	m_player->Init(&m_modelShader, &m_boneNullShader, &m_boneShadowVolShader);
+	//m_skybox->Init(SKYBOX_PATH, "sp3left.jpg", "sp3right.jpg", "sp3top.jpg", "sp3bot.jpg", "sp3back.jpg", "sp3front.jpg");
+	//m_lanternFire.SetTexture(m_particleSpell);
+	//m_lanternFire.SetParticlesSize(0.3);
+	//m_lanternFire.SetColor(Vector3f(1, 153/255.f, 0));
+	//m_lanternFire.SetAverageVelocity(Vector3f(0,3,0));
+	//m_lanternFire.SetRange(2);
+	//m_lanternFire.SetAverageLifespan(150);
+	//m_lanternFire.Init();
 
 #pragma region Initialisation des entites
 
@@ -268,8 +267,11 @@ void Engine::GameInit()
 	if(!m_boneNullShader.Init()) {
 		std::cout << "Error loading bone null shader, what a baddie =/" << std::endl;
 	}
-	if(!m_shadowVolShader.Init()) {
-		std::cout << "Error loading shadow volume shader" << std::endl;
+	if(!m_boneShadowVolShader.Init()) {
+		std::cout << "Error loading bone shadow volume shader" << std::endl;
+	}
+	if(!m_staticShadowVolShader.Init()) {
+		std::cout << "Error loading static shadow volume shader" << std::endl;
 	}
 
 	m_DSDirLightingPassShader.Enable();
@@ -308,9 +310,9 @@ void Engine::GameInit()
 
 void Engine::InitLights()
 {
-	m_dirLight.AmbientIntensity = 0.1;
+	m_dirLight.AmbientIntensity = 0.01;
 	m_dirLight.Color = Vector3f(1,1,1);
-	m_dirLight.DiffuseIntensity = 0.1;
+	m_dirLight.DiffuseIntensity = 0.03;
 	m_dirLight.Direction = Vector3f(0.3, -1, 0.5).Normalize();
 
 	m_pointLights[0].Color = Vector3f(1,1,1);
@@ -327,7 +329,7 @@ void Engine::InitLights()
 
 	// Lantern light
 	m_pointLights[2].Color = Vector3f(1,140/255.f,0);
-	m_pointLights[2].AmbientIntensity = 0.2;
+	m_pointLights[2].AmbientIntensity = 0;
 	m_pointLights[2].DiffuseIntensity = 2;
 	m_pointLights[2].Attenuation.Exp = 1.f;
 	m_pointLights[2].Attenuation.Linear = 0.0f;
@@ -459,21 +461,16 @@ void Engine::LoadGlobalResource()
 
 #pragma region Load et compile les shaders
 	std::cout << " Loading and compiling shaders ..." << std::endl;
-	if (!m_shaderModel.Load(SHADER_PATH "modelshader.vert", SHADER_PATH "modelshader.frag", true))
+	/*if (!m_shaderModel.Load(SHADER_PATH "modelshader.vert", SHADER_PATH "modelshader.frag", true))
 	{
 		std::cout << " Failed to load model shader" << std::endl;
-		exit(1) ;
-	}
-	if (!m_shaderCube.Load(SHADER_PATH "cubeshader.vert", SHADER_PATH "cubeshader.frag", true))
-	{
-		std::cout << " Failed to load cube shader" << std::endl;
 		exit(1) ;
 	}
 	if (!m_shaderSpells.Load(SHADER_PATH "particleshader.vert", SHADER_PATH "particleshader.frag", true))
 	{
 		std::cout << " Failed to load cube shader" << std::endl;
 		exit(1) ;
-	}
+	}*/
 
 	if (!m_lightingShader.Init())
 		std::cout << "Error initializing lighting shader" << std::endl;
@@ -584,7 +581,7 @@ void Engine::UpdateLights()
 {
 	Vector3f toLantern = m_player->World() * (m_player->LanternBoneTrans() * Vector3f(-39.749374f, -6.182379f, 35.334176f));
 	m_pointLights[2].Position = toLantern;
-	m_lanternFire.SetPosition(toLantern);
+	//m_lanternFire.SetPosition(toLantern);
 }
 
 void Engine::UpdateMenu(float elapsedTime)
@@ -766,14 +763,18 @@ void Engine::RenderShadowVolIntoStencil(uint32 index)
 	glStencilOpSeparate(GL_BACK, GL_KEEP, GL_INCR_WRAP, GL_KEEP);
 	glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_DECR_WRAP, GL_KEEP);
 
-	m_shadowVolShader.Enable();
-	m_shadowVolShader.SetLightPos(m_pointLights[index].Position);
+	m_boneShadowVolShader.Enable();
+	m_boneShadowVolShader.SetLightPos(m_pointLights[index].Position);
+	m_staticShadowVolShader.Enable();
+	m_staticShadowVolShader.SetLightPos(m_pointLights[index].Position);
 
 	Pipeline p;
 	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
 	p.SetPerspectiveProj(m_persProjInfo);
 	
 	m_player->RenderShadowVolume(p);
+
+	//m_chunks->Render(p, &m_staticShadowVolShader);
 
 	glEnable(GL_CULL_FACE);
 }
@@ -959,7 +960,7 @@ void Engine::KeyPressEvent(unsigned char key)
 				newSpell->SetPosition(m_player->Position());
 				newSpell->Init(4.f, m_player->RotationQ());
 				newSpell->Shoot();
-				m_spells.push_back(*newSpell);
+				//m_spells.push_back(*newSpell);
 				Son::PlaySnd(SON_BOLT, CHANNEL_SPELL);
 				m_character->ResetGlobalCooldown();
 				ss << "Lancement de sort: Test  de particule!";

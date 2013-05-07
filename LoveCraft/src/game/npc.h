@@ -4,7 +4,7 @@
 #include "define.h"
 #include "npcinfo.h"
 #include "spell.h"
-#include "engine/gl/model.h"
+#include "engine/gl/meshes/model.h"
 #include "engine/info.h"
 #include "engine/ai.h"
 

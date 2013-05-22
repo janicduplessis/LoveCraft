@@ -4,9 +4,9 @@
 #include <cassert>
 #include "glfx.h"
 
-static const char* pEffectFile = SHADER_PATH "model/model.glsl";
+static const char* shaderFile = SHADER_PATH "model/model.glsl";
 
-StaticModelShader::StaticModelShader() : Shader(pEffectFile)
+StaticModelShader::StaticModelShader() : Shader(shaderFile)
 {
 
 }
@@ -21,9 +21,11 @@ bool StaticModelShader::Init()
 	if (!CompileProgram("StaticModelGeometryPass"))
 		return false;
 
-	glfxGenerateSampler(m_effect, "Sampler");
+	//glfxGenerateSampler(m_effect, "Sampler");
 	m_WVPLocation = GetUniformLocation("gWVP");
 	m_worldLocation = GetUniformLocation("gWorld");
+	m_colorSamplerLocation = GetUniformLocation("gColorTexture");
+	m_normalSamplerLocation = GetUniformLocation("gNormalTexture");
 
 	// Valide les uniforms
 	if (m_WVPLocation == INVALID_UNIFORM_LOCATION ||
@@ -43,3 +45,12 @@ void StaticModelShader::SetWorld( const Matrix4f& world )
 	glUniformMatrix4fv(m_worldLocation, 1, GL_TRUE, (const GLfloat*)world.GetInternalValues());
 }
 
+void StaticModelShader::SetColorTextureUnit( unsigned int unit )
+{
+	glUniform1i(m_colorSamplerLocation, unit);
+}
+
+void StaticModelShader::SetNormalTextureUnit( unsigned int unit )
+{
+	glUniform1i(m_normalSamplerLocation, unit);
+}

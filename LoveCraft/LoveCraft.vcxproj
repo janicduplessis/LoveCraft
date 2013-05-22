@@ -84,6 +84,8 @@
   <ItemGroup>
     <ClCompile Include="src\engine\chunks.cpp" />
     <ClCompile Include="src\engine\gl\shaders\particles\psupdateshader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\shadow\bone_shadow_map_shader.cpp" />
+    <ClCompile Include="src\engine\gl\shaders\shadow\static_shadow_map_shader.cpp" />
     <ClCompile Include="src\engine\gl\shaders\skybox\skyboxshader.cpp" />
     <ClCompile Include="src\engine\gl\textures\cubemaptexture.cpp" />
     <ClCompile Include="src\engine\gl\shaders\null\bone_null_shader.cpp" />
@@ -170,6 +172,8 @@
   <ItemGroup>
     <ClInclude Include="src\engine\chunks.h" />
     <ClInclude Include="src\engine\gl\shaders\particles\psupdateshader.h" />
+    <ClInclude Include="src\engine\gl\shaders\shadow\bone_shadow_map_shader.h" />
+    <ClInclude Include="src\engine\gl\shaders\shadow\static_shadow_map_shader.h" />
     <ClInclude Include="src\engine\gl\shaders\skybox\skyboxshader.h" />
     <ClInclude Include="src\engine\gl\textures\cubemaptexture.h" />
     <ClInclude Include="src\engine\gl\shaders\null\bone_null_shader.h" />

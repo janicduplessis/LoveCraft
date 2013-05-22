@@ -3,9 +3,9 @@
 #include <string>
 #include "glfx.h"
 
-static const char* pEffectFile = SHADER_PATH "lighting/lighting.glsl";
+static const char* shaderFile = SHADER_PATH "lighting/lighting.glsl";
 
-LightingShader::LightingShader() : Shader(pEffectFile)
+LightingShader::LightingShader() : Shader(shaderFile)
 {
 
 }
@@ -20,11 +20,13 @@ bool LightingShader::Init()
 	if (!CompileProgram("Lighting"))
 		return false;
 
-	glfxGenerateSampler(m_effect, "Sampler");
+	//glfxGenerateSampler(m_effect, "Sampler");
 	m_WVPLocation = GetUniformLocation("gWVP");
 	m_worldLocation = GetUniformLocation("gWorld");
 	m_samplerTypeLocation = GetUniformLocation("gSamplerType");
 	m_arraySamplerLocation = GetUniformLocation("gArraySampler");
+	m_colorSamplerLocation = GetUniformLocation("gColorTexture");
+	m_normalSamplerLocation = GetUniformLocation("gNormalTexture");
 
 	return true;
 }
@@ -37,6 +39,8 @@ void LightingShader::SetWVP( const Matrix4f& WVP )
 void LightingShader::SetColorTextureUnit( unsigned int TextureUnit )
 {
 	glUniform1i(m_arraySamplerLocation, TextureUnit + 1);
+	glUniform1i(m_colorSamplerLocation, TextureUnit);
+	glUniform1i(m_normalSamplerLocation, TextureUnit + 2);
 }
 
 void LightingShader::SetDirectionalLight( const DirectionalLight& Light )

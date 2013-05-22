@@ -4,9 +4,9 @@
 #include <cassert>
 #include "glfx.h"
 
-static const char* pEffectFile = SHADER_PATH "model/model.glsl";
+static const char* shaderFile = SHADER_PATH "model/model.glsl";
 
-BoneModelShader::BoneModelShader() : Shader(pEffectFile)
+BoneModelShader::BoneModelShader() : Shader(shaderFile)
 {
 
 }
@@ -21,9 +21,11 @@ bool BoneModelShader::Init()
 	if (!CompileProgram("BoneModelGeometryPass"))
 		return false;
 
-	glfxGenerateSampler(m_effect, "Sampler");
+	//glfxGenerateSampler(m_effect, "Sampler");
 	m_WVPLocation = GetUniformLocation("gWVP");
 	m_worldLocation = GetUniformLocation("gWorld");
+	m_colorSamplerLocation = GetUniformLocation("gColorTexture");
+	m_normalSamplerLocation = GetUniformLocation("gNormalTexture");
 
 	// Valide les uniforms
 	if (m_WVPLocation == INVALID_UNIFORM_LOCATION ||
@@ -54,5 +56,15 @@ void BoneModelShader::SetBoneTransform( uint32 index, const Matrix4f& transform 
 {
 	assert(index < MAX_BONES);
 	glUniformMatrix4fv(m_boneLocation[index], 1, GL_TRUE, (const GLfloat*)transform.GetInternalValues()); 
+}
+
+void BoneModelShader::SetColorTextureUnit( unsigned int unit )
+{
+	glUniform1i(m_colorSamplerLocation, unit);
+}
+
+void BoneModelShader::SetNormalTextureUnit( unsigned int unit )
+{
+	glUniform1i(m_normalSamplerLocation, unit);
 }
 

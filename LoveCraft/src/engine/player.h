@@ -8,7 +8,7 @@
 #include "gl/meshes/modelmesh.h"
 #include "game/character.h"
 #include "gl/shaders/null/bone_null_shader.h"
-#include "gl/shaders/shadow/bone_shadow_volume_shader.h"
+#include "gl/shaders/shadow/bone_shadow_map_shader.h"
 #include "gl/shaders/model/bone_model_shader.h"
 
 #include "util/vector2.h"
@@ -34,7 +34,7 @@ public:
 	 */
 	~Player();
 
-	void Init(BoneModelShader* modelShader, BoneNullShader* nullShader, BoneShadowVolumeShader* shadowShader);
+	void Init(BoneModelShader* modelShader, BoneNullShader* nullShader, BoneShadowMapShader* shadowShader);
 
 	/**
 	 * Position du joueur
@@ -75,7 +75,7 @@ public:
 	void Teleport();
 	void Render(Pipeline p);
 	void RenderDepth(Pipeline p);
-	void RenderShadowVolume(Pipeline p);
+	void RenderShadowMap(Pipeline p);
 	void Update(float gameTime);
 	void SetRotation( Vector3f rot );
 	void ResetPosition();
@@ -104,7 +104,7 @@ private:
 
 	BoneModelShader* m_modelShader;
 	BoneNullShader* m_boneNullShader;
-	BoneShadowVolumeShader* m_shadowVolumeShader;
+	BoneShadowMapShader* m_shadowMapShader;
 };
 
 #endif // PLAYER_H__

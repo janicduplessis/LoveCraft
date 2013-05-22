@@ -17,12 +17,12 @@ Player::~Player()
 {
 }
 
-void Player::Init(BoneModelShader* modelShader, BoneNullShader* nullShader, BoneShadowVolumeShader* shadowShader)
+void Player::Init(BoneModelShader* modelShader, BoneNullShader* nullShader, BoneShadowMapShader* shadowShader)
 {
 	m_modelShader = modelShader;
 	m_boneNullShader = nullShader;
-	m_shadowVolumeShader = shadowShader;
-	m_model.Init(MODEL_PATH_HUMANS "boblampclean.md5mesh", true, modelShader);
+	m_shadowMapShader = shadowShader;
+	m_model.Init(MODEL_PATH_HUMANS "boblampclean.md5mesh", false, modelShader);
 	Scale(Vector3f(0.1f, 0.1f, 0.1f));
 	ResetPosition();
 }
@@ -394,15 +394,14 @@ void Player::RenderDepth( Pipeline p)
 	m_model.RenderDepth();
 }
 
-void Player::RenderShadowVolume( Pipeline p)
+void Player::RenderShadowMap( Pipeline p)
 {
 	p.WorldPos(m_pos + Vector3f(0,-1.5,0));
 	p.Rotate(m_rot + Vector3f(270, 180, 0));
 	p.Scale(m_scale);
 
-	m_shadowVolumeShader->Enable();
-	m_shadowVolumeShader->SetVP(p.GetVPTrans());
-	m_shadowVolumeShader->SetWorldMatrix(p.GetWorldTrans());
+	m_shadowMapShader->Enable();
+	m_shadowMapShader->SetWVP(p.GetWVPTrans());
 
 	m_model.RenderShadowVolume();
 }
@@ -422,10 +421,10 @@ void Player::Update(float gameTime)
 	{
 		m_boneNullShader->SetBoneTransform(i, tranforms[i]);
 	}
-	m_shadowVolumeShader->Enable();
+	m_shadowMapShader->Enable();
 	for (uint32 i = 0; i < tranforms.size(); ++i)
 	{
-		m_shadowVolumeShader->SetBoneTransform(i, tranforms[i]);
+		m_shadowMapShader->SetBoneTransform(i, tranforms[i]);
 	}
 
 	m_lanternBoneTrans = tranforms[29];

@@ -51,6 +51,8 @@ private:
 
 	GLuint m_samplerTypeLocation;			// Type du sampler 0 = texture, 1 = array
 	GLuint m_arraySamplerLocation;			// Texture array sampler
+	GLuint m_colorSamplerLocation;
+	GLuint m_normalSamplerLocation;
 
 	// Directional light location struct
 	struct {

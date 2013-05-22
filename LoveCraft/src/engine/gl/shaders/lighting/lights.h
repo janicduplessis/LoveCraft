@@ -13,6 +13,8 @@ struct BaseLight
 	float AmbientIntensity;
 	float DiffuseIntensity;
 
+	Matrix4f WVP;
+
 	float TotalIntensity() {
 		return AmbientIntensity + DiffuseIntensity;
 	}

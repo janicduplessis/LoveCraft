@@ -2,9 +2,9 @@
 
 #include "static_shadow_volume_shader.h"
 
-static const char* pEffectFile = SHADER_PATH "shadow/shadow_volume.glsl";
+static const char* shaderFile = SHADER_PATH "shadow/shadow_volume.glsl";
 
-StaticShadowVolumeShader::StaticShadowVolumeShader() : Shader(pEffectFile)
+StaticShadowVolumeShader::StaticShadowVolumeShader() : Shader(shaderFile)
 {   
 }
 

@@ -65,20 +65,17 @@ void ChunkMesh::Render(bool wireFrame) const
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
 		glEnableVertexAttribArray(3);
-		CHECK_GL_ERROR();
 		glBindBuffer(GL_ARRAY_BUFFER, m_vertexVboId);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const GLvoid*)12);
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const GLvoid*)24);
 		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const GLvoid*)36);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
-		CHECK_GL_ERROR();
 		glDrawElements(wireFrame ? GL_LINES : GL_TRIANGLES, m_indicesCount, GL_UNSIGNED_SHORT, (char*)0);
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(2);
 		glDisableVertexAttribArray(3);
-		CHECK_GL_ERROR();
 	}
 }
 

@@ -25,6 +25,8 @@ public:
     void SetMatSpecularIntensity(float Intensity);
     void SetMatSpecularPower(float Power);
     void SetScreenSize(unsigned int Width, unsigned int Height);
+	void SetLightWVP(const Matrix4f& WVP);
+	void SetShadowMapTextureUnit(unsigned int textureUnit);
     
 private:
 
@@ -36,6 +38,8 @@ private:
     GLuint m_matSpecularIntensityLocation;
     GLuint m_matSpecularPowerLocation;
     GLuint m_screenSizeLocation;
+	GLint m_shadowMapLocation;
+	GLint m_lightWVPLocation;
 };
 
 #endif

@@ -135,13 +135,14 @@ void Engine::GlobalInit()
 	glFrontFace(GL_CW);
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_DEPTH_CLAMP);
+	std::string version = (char*)glGetString(GL_VERSION);
 	//glCullFace(GL_FRONT);
 	//glEnable(GL_FOG);
 
 	m_persProjInfo.FOV = 60.f;
 	m_persProjInfo.Height = Height();
 	m_persProjInfo.Width = Width();
-	m_persProjInfo.zNear = 1.f;
+	m_persProjInfo.zNear = 0.1f;
 	m_persProjInfo.zFar = 100.f;
 
 	/*// Light
@@ -201,7 +202,7 @@ void Engine::GameInit()
 	m_chunks->Init(&m_lightingShader);
 	Info::Get().StatusOn(Info::LSTATUS_CHUNK);
 
-	m_player->Init(&m_modelShader, &m_boneNullShader, &m_boneShadowVolShader);
+	m_player->Init(&m_boneModelShader, &m_boneNullShader, &m_boneShadowMapShader);
 	//m_skybox->Init(SKYBOX_PATH, "sp3left.jpg", "sp3right.jpg", "sp3top.jpg", "sp3bot.jpg", "sp3back.jpg", "sp3front.jpg");
 	//m_lanternFire.SetTexture(m_particleSpell);
 	//m_lanternFire.SetParticlesSize(0.3);
@@ -255,9 +256,24 @@ void Engine::GameInit()
 	// Init deferred shading
 	InitLights();
 
+	
+	if (!m_lightingShader.Init()) {
+		std::cout << "Error initializing lighting shader" << std::endl;
+	}
+	if (!m_boneModelShader.Init()) {
+		std::cout << "Error initializing bone model shader" << std::endl;
+	}
+	m_boneModelShader.Enable();
+	m_boneModelShader.SetColorTextureUnit(0);
+	m_boneModelShader.SetNormalTextureUnit(2);
+
 	if(!m_gBuffer.Init(Width(), Height())) {
 		std::cout << "Error loading gbuffer" << std::endl;
 	}
+	if(!m_shadowMapFBO.Init(Width(), Height())) {
+		std::cout << "Error loading shadow map fbo" << std::endl;
+	}
+
 	if(!m_DSDirLightingPassShader.Init()) {
 		std::cout << "Error loading deffered directional lighting shader" << std::endl;
 	}
@@ -273,12 +289,28 @@ void Engine::GameInit()
 	if(!m_staticShadowVolShader.Init()) {
 		std::cout << "Error loading static shadow volume shader" << std::endl;
 	}
+	if(!m_staticShadowVolShader.Init()) {
+		std::cout << "Error loading static shadow volume shader" << std::endl;
+	}
+	if(!m_boneShadowMapShader.Init()) {
+		std::cout << "Error loading bone shadow map shader" << std::endl;
+	}
+	if(!m_staticModelShader.Init()) {
+		std::cout << "Error loading static model shader" << std::endl;
+	}
+	m_staticModelShader.Enable();
+	m_staticModelShader.SetColorTextureUnit(0);
+	m_staticModelShader.SetNormalTextureUnit(2);
+	if(!m_staticShadowMapShader.Init()) {
+		std::cout << "Error loading static shadow map shader" << std::endl;
+	}
 
 	m_DSDirLightingPassShader.Enable();
 
 	m_DSDirLightingPassShader.SetPositionTextureUnit(GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
 	m_DSDirLightingPassShader.SetColorTextureUnit(GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
 	m_DSDirLightingPassShader.SetNormalTextureUnit(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+	m_DSDirLightingPassShader.SetShadowMapTextureUnit(4);
 	m_DSDirLightingPassShader.SetScreenSize(Width(), Height());
 	m_DSDirLightingPassShader.SetDirectionalLight(m_dirLight);
 	m_DSDirLightingPassShader.SetWVP(Matrix4f::IDENTITY);
@@ -315,26 +347,26 @@ void Engine::InitLights()
 	m_dirLight.DiffuseIntensity = 0.03;
 	m_dirLight.Direction = Vector3f(0.3, -1, 0.5).Normalize();
 
-	m_pointLights[0].Color = Vector3f(1,1,1);
+	/*m_pointLights[0].Color = Vector3f(1,1,1);
 	m_pointLights[0].DiffuseIntensity = 20;
 	m_pointLights[0].Position = Vector3f(64,65,64);
 	m_pointLights[0].Attenuation.Exp = 1.f;
+	m_pointLights[0].Attenuation.Linear = 0.0f;*/
+
+	m_pointLights[0].Color = Vector3f(1,1,1);
+	m_pointLights[0].DiffuseIntensity = 20;
+	m_pointLights[0].Position = Vector3f(32,80,32);
+	m_pointLights[0].Attenuation.Exp = 1.f;
 	m_pointLights[0].Attenuation.Linear = 0.0f;
 
-	m_pointLights[1].Color = Vector3f(1,1,1);
-	m_pointLights[1].DiffuseIntensity = 10;
-	m_pointLights[1].Position = Vector3f(32,70,32);
-	m_pointLights[1].Attenuation.Exp = 1.f;
-	m_pointLights[1].Attenuation.Linear = 0.0f;
-
-	// Lantern light
+	/*// Lantern light
 	m_pointLights[2].Color = Vector3f(1,140/255.f,0);
 	m_pointLights[2].AmbientIntensity = 0;
 	m_pointLights[2].DiffuseIntensity = 2;
 	m_pointLights[2].Attenuation.Exp = 1.f;
 	m_pointLights[2].Attenuation.Linear = 0.0f;
 	m_pointLights[2].Attenuation.Constant = 0;
-	m_pointLights[2].Position = Vector3f(50,70,40);
+	m_pointLights[2].Position = Vector3f(50,70,40);*/
 }
 
 void Engine::DeInit()
@@ -459,27 +491,7 @@ void Engine::LoadGlobalResource()
 	m_pb_cursor->InitControl("pb_cursor");
 	m_pb_cursor->InitLocalizable(Point(), Size(50, 50), m_textureInterface[CUSTIMAGE_PERSONAL_CURSOR], 0);
 
-#pragma region Load et compile les shaders
-	std::cout << " Loading and compiling shaders ..." << std::endl;
-	/*if (!m_shaderModel.Load(SHADER_PATH "modelshader.vert", SHADER_PATH "modelshader.frag", true))
-	{
-		std::cout << " Failed to load model shader" << std::endl;
-		exit(1) ;
-	}
-	if (!m_shaderSpells.Load(SHADER_PATH "particleshader.vert", SHADER_PATH "particleshader.frag", true))
-	{
-		std::cout << " Failed to load cube shader" << std::endl;
-		exit(1) ;
-	}*/
-
-	if (!m_lightingShader.Init())
-		std::cout << "Error initializing lighting shader" << std::endl;
-
-	if (!m_modelShader.Init())
-		std::cout << "Error initializing model shader" << std::endl;
-
-#pragma endregion
-
+	SetMenuStatus(false);
 }
 
 void Engine::LoadMenuResource()
@@ -580,7 +592,7 @@ void Engine::UpdateGame(float elapsedTime)
 void Engine::UpdateLights()
 {
 	Vector3f toLantern = m_player->World() * (m_player->LanternBoneTrans() * Vector3f(-39.749374f, -6.182379f, 35.334176f));
-	m_pointLights[2].Position = toLantern;
+	//m_pointLights[2].Position = toLantern;
 	//m_lanternFire.SetPosition(toLantern);
 }
 
@@ -658,25 +670,32 @@ void Engine::RenderMenu()
 
 void Engine::RenderGame()
 {
+	CHECK_GL_ERROR();
+	// Prepare le gBuffer pour le deferred shading
 	m_gBuffer.StartFrame();
-
+	// Render les objets dans le gBuffer
 	DSGeometryPass();
-
+	
+	// Enable le stencil pour le stencil pass
 	glEnable(GL_STENCIL_TEST);
 
+	// Render localement chaque lumiere
 	for (uint32 i = 0; i < ARRAY_SIZE_IN_ELEMENTS(m_pointLights); ++i) {
-		RenderShadowVolIntoStencil(i);
-		//DSStencilPass(i);
+		DSShadowMapPass(i);
+		DSStencilPass(i);
 		DSPointLightPass(i);
 	}
 
+	// Stencil test n'est plus necessaire
 	glDisable(GL_STENCIL_TEST);
 
+	// Render la lumiere globale
 	DSDirectionalLightPass();
 
+	// Affiche la scene a l'ecran
 	DSFinalPass();
 
-	CHECK_GL_ERROR();
+	//CHECK_GL_ERROR();
 
 #pragma region Render l interface
 
@@ -715,79 +734,16 @@ void Engine::RenderGame()
 
 void Engine::DSGeometryPass() 
 {
+	// Prepare le gBuffer pour le geometry pass
 	m_gBuffer.BindForGeometryPass();
-
-	glCullFace(GL_BACK);
-
-	glDisable(GL_BLEND);
 
 	glDepthMask(GL_TRUE);
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glEnable(GL_DEPTH_TEST);
 
-	RenderSceneIntoDepth();
-
-	RenderShadowedScene();
-
-	glDepthMask(GL_FALSE);
-}
-
-void Engine::RenderSceneIntoDepth()
-{
-	glDrawBuffer(GL_NONE);
-	glDepthMask(GL_TRUE);
-
-	Pipeline p;
-	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
-	p.SetPerspectiveProj(m_persProjInfo);
-
-	m_player->RenderDepth(p);
-	m_chunks->Render(p, &m_staticNullShader);
-}
-
-void Engine::RenderShadowVolIntoStencil(uint32 index)
-{
-	
-	glDrawBuffer(GL_NONE);
-	glDepthMask(GL_FALSE);
-	glClear(GL_STENCIL_BUFFER_BIT);
-
-	glEnable(GL_DEPTH_TEST);
-
-	glDisable(GL_CULL_FACE);
-
-	glStencilFunc(GL_ALWAYS, 0, 0xff);
-
-	glStencilOpSeparate(GL_BACK, GL_KEEP, GL_INCR_WRAP, GL_KEEP);
-	glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_DECR_WRAP, GL_KEEP);
-
-	m_boneShadowVolShader.Enable();
-	m_boneShadowVolShader.SetLightPos(m_pointLights[index].Position);
-	m_staticShadowVolShader.Enable();
-	m_staticShadowVolShader.SetLightPos(m_pointLights[index].Position);
-
-	Pipeline p;
-	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
-	p.SetPerspectiveProj(m_persProjInfo);
-	
-	m_player->RenderShadowVolume(p);
-
-	//m_chunks->Render(p, &m_staticShadowVolShader);
-
-	glEnable(GL_CULL_FACE);
-}
-
-void Engine::RenderShadowedScene()
-{
-	m_gBuffer.BindForGeometryPass();
-
-	glDepthMask(GL_FALSE);
-
-	// prevent update to the stencil buffer
-	//glStencilOpSeparate(GL_BACK, GL_KEEP, GL_KEEP, GL_KEEP);
-	//glStencilFunc(GL_EQUAL, 0x0, 0xff);
+	// Render la scene sans eclairage dans le gBuffer
 	Pipeline p;
 	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
 	p.SetPerspectiveProj(m_persProjInfo);
@@ -832,26 +788,102 @@ void Engine::RenderShadowedScene()
 
 	glDepthMask(GL_TRUE);
 	glDisable(GL_BLEND);*/
+
+	// Empeche l'ecriture dans le depth buffer
+	glDepthMask(GL_FALSE);
 }
 
-void Engine::DSStencilPass(uint32 index)
+void Engine::RenderSceneIntoDepth()
 {
-	m_staticNullShader.Enable();
+	glDrawBuffer(GL_NONE);
+	glDepthMask(GL_TRUE);
 
-	m_gBuffer.BindForStencilPass();
+	Pipeline p;
+	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
+	p.SetPerspectiveProj(m_persProjInfo);
 
-	//glClear(GL_STENCIL_BUFFER_BIT);
+	m_player->RenderDepth(p);
+	m_chunks->Render(p, &m_staticNullShader);
+}
+
+void Engine::RenderShadowVolIntoStencil(uint32 index)
+{
+	
+	glDrawBuffer(GL_NONE);
+	glDepthMask(GL_FALSE);
+	glClear(GL_STENCIL_BUFFER_BIT);
 
 	glEnable(GL_DEPTH_TEST);
 
 	glDisable(GL_CULL_FACE);
 
-	//glStencilFunc(GL_ALWAYS, 0x0, 0xff);
-	glStencilFunc(GL_NOTEQUAL, 0x0, 0xff);
+	glStencilFunc(GL_ALWAYS, 0, 0xff);
 
-	glStencilOpSeparate(GL_BACK, GL_ZERO, GL_INCR, GL_KEEP);
-	glStencilOpSeparate(GL_FRONT, GL_ZERO, GL_DECR, GL_KEEP);
+	glStencilOpSeparate(GL_BACK, GL_KEEP, GL_INCR_WRAP, GL_KEEP);
+	glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_DECR_WRAP, GL_KEEP);
 
+	m_boneShadowVolShader.Enable();
+	m_boneShadowVolShader.SetLightPos(m_pointLights[index].Position);
+	m_staticShadowVolShader.Enable();
+	m_staticShadowVolShader.SetLightPos(m_pointLights[index].Position);
+
+	Pipeline p;
+	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
+	p.SetPerspectiveProj(m_persProjInfo);
+	
+	m_player->RenderShadowMap(p);
+
+	//m_chunks->Render(p, &m_staticShadowVolShader);
+
+	glEnable(GL_CULL_FACE);
+}
+
+void Engine::DSShadowMapPass(uint32 index)
+{
+	m_shadowMapFBO.BindForWriting();
+	glDepthMask(GL_TRUE);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_STENCIL_TEST);
+
+	Pipeline p;
+	p.SetCamera(m_pointLights[index].Position, Vector3f(0.f, -1.f, 0.f), Vector3f(0.f, 1.f, 0.f));
+	PersProjInfo proj;
+	proj.FOV = 30;
+	proj.Width = Width();
+	proj.Height = Height();
+	proj.zNear = 1;
+	proj.zFar = 30;
+	p.SetPerspectiveProj(proj);
+	m_pointLights->WVP = p.GetWVPTrans();
+	m_player->RenderShadowMap(p);
+
+	glEnable(GL_STENCIL_TEST);
+	glDepthMask(GL_FALSE);
+}
+
+void Engine::DSStencilPass(uint32 index)
+{
+	// Shader qui fait rien pour faire le stencil test
+	m_staticNullShader.Enable();
+
+	// Prepare le gBuffer
+	m_gBuffer.BindForStencilPass();
+
+	glEnable(GL_DEPTH_TEST);
+
+	// Pas de cull face pour les calculs de stencil
+	glDisable(GL_CULL_FACE);
+
+	glClear(GL_STENCIL_BUFFER_BIT);
+
+	// Le test doit toujours passer, seulement le resultat est important
+	glStencilFunc(GL_ALWAYS, 0, 0);
+
+	glStencilOpSeparate(GL_BACK, GL_KEEP, GL_INCR, GL_KEEP);
+	glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_DECR, GL_KEEP);
+
+	// Render une sphere autour de la lumiere
 	Pipeline p;
 	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
 	p.SetPerspectiveProj(m_persProjInfo);
@@ -866,22 +898,30 @@ void Engine::DSStencilPass(uint32 index)
 
 void Engine::DSPointLightPass(uint32 index)
 {
+	// Prepare le gBuffer pour render la lumiere
 	m_gBuffer.BindForLightPass();
 
+	// Shader pour calculer l'eclairage d'un point light
 	m_DSPointLightingPassShader.Enable();
 	m_DSPointLightingPassShader.SetEyeWorldPos(m_camera->GetPosition());
 
-	glStencilFunc(GL_EQUAL, 0x0, 0xff);
-	//glStencilFunc(GL_NOTEQUAL, 0, 0xFF);
+	m_shadowMapFBO.BindForReading(GL_TEXTURE4);
+
+	// Render seulement si le stencil test passe
+	glStencilFunc(GL_NOTEQUAL, 0, 0xFF);
 
 	glDisable(GL_DEPTH_TEST);
+
+	// Blend additif pour additioner l'eclairage calcule au precedent
 	glEnable(GL_BLEND);
 	glBlendEquation(GL_FUNC_ADD);
 	glBlendFunc(GL_ONE, GL_ONE);
 
+	// Reactive le cull face
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
 
+	// Render l'eclairage pour la lumiere courante
 	Pipeline p;
 	p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
 	p.SetPerspectiveProj(m_persProjInfo);
@@ -891,6 +931,7 @@ void Engine::DSPointLightPass(uint32 index)
 	p.Scale(BSphereScale, BSphereScale, BSphereScale);	
 	m_DSPointLightingPassShader.SetWVP(p.GetWVPTrans());
 	m_DSPointLightingPassShader.SetPointLight(m_pointLights[index]);
+	m_DSPointLightingPassShader.SetLightWVP(m_pointLights[index].WVP);
 	m_bsphere.Render();
 
 	glCullFace(GL_BACK);
@@ -919,6 +960,18 @@ void Engine::DSFinalPass()
 	m_gBuffer.BindForFinalPass();
 	glBlitFramebuffer(0, 0, Width(), Height(),
 					  0, 0, Width(), Height(), GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	Pipeline p;
+	p.SetCamera(Vector3f(0,0,-6), Vector3f(0,0,1), Vector3f(0,1,0));
+	//p.SetCamera(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp());
+	p.SetPerspectiveProj(m_persProjInfo);
+	p.WorldPos(4,-2,0);
+	p.Scale(1,1,1);
+	m_shadowMapFBO.BindForReading(GL_TEXTURE0);
+	m_staticShadowMapShader.Enable();
+	m_staticShadowMapShader.SetTextureUnit(0);
+	m_staticShadowMapShader.SetWVP(p.GetWVPTrans());
+	
+	m_quad.Render();
 }
 
 #pragma endregion

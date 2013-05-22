@@ -48,6 +48,10 @@
 #include "util/vector2.h"
 #include "util/tool.h"
 #include "util/dice.h"
+#include "gl/buffers/shadowmapfbo.h"
+#include "gl/shaders/shadow/bone_shadow_map_shader.h"
+#include "gl/shaders/model/static_model_shader.h"
+#include "gl/shaders/shadow/static_shadow_map_shader.h"
 
 
 //#define LOAD_MODELS
@@ -165,6 +169,7 @@ private:
 	void CW(const string& line);
 	void CWL(const string& line);
 	void DSGeometryPass();
+	void DSShadowMapPass(uint32 index);
 	void DSStencilPass(uint32 index);
 	void DSPointLightPass(uint32 index);
 	void DSDirectionalLightPass();
@@ -172,7 +177,6 @@ private:
 	float CalcPointLightBSphere(const Vector3f& Color, float Intensity);
 	void RenderSceneIntoDepth();
 	void RenderShadowVolIntoStencil(uint32 index);
-	void RenderShadowedScene();
 private:
 	bool m_wireframe;
 	float m_angle;
@@ -201,7 +205,7 @@ private:
 	//Shader m_shaderModel;
 	//Shader m_shaderSpells;
 	LightingShader m_lightingShader;
-	BoneModelShader m_modelShader;
+	BoneModelShader m_boneModelShader;
 
 	Chunks* m_chunks;
 	//Skybox* m_skybox;
@@ -240,13 +244,17 @@ private:
 
 	// Deffered Shading objects
 	GBuffer m_gBuffer;
+	ShadowMapFBO m_shadowMapFBO;
 	DSDirLightingPassShader m_DSDirLightingPassShader;
 	DSPointLightingPassShader m_DSPointLightingPassShader;
 	BoneShadowVolumeShader m_boneShadowVolShader;
+	BoneShadowMapShader m_boneShadowMapShader;
 	StaticShadowVolumeShader m_staticShadowVolShader;
+	StaticShadowMapShader m_staticShadowMapShader;
 	StaticNullShader m_staticNullShader;
+	StaticModelShader m_staticModelShader;
 	BoneNullShader m_boneNullShader;
-	PointLight m_pointLights[3];
+	PointLight m_pointLights[1];
 	DirectionalLight m_dirLight;
 	ModelMesh m_bsphere;
 	ModelMesh m_quad;

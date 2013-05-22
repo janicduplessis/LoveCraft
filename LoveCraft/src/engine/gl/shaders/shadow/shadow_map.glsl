@@ -13,7 +13,7 @@ struct VSInputBoneInfo
 
 interface VSOutput
 {         
-    vec3 TexCoord;                                                                 
+    vec2 TexCoord;                                                                 
 };
 
 const int MAX_BONES = 100;
@@ -24,7 +24,7 @@ uniform mat4 gBones[MAX_BONES];
 shader VSStaticMain(in VSInput VSin:0, out VSOutput VSout)
 {
     gl_Position = gWVP * vec4(VSin.Position, 1.0);
-    VSout.TexCoord = VSin.TexCoord
+    VSout.TexCoord = VSin.TexCoord;
 }
 
 shader VSBoneMain(in VSInput VSin:0, in VSInputBoneInfo BoneInfo:4, out VSOutput VSout)
@@ -36,26 +36,27 @@ shader VSBoneMain(in VSInput VSin:0, in VSInputBoneInfo BoneInfo:4, out VSOutput
 	
     vec4 PosL      = BoneTransform * vec4(VSin.Position, 1.0);
     gl_Position = gWVP * PosL;
-	VSout.TexCoord = VSin.TexCoord
+	VSout.TexCoord = VSin.TexCoord;
 }
 
 uniform sampler2D gShadowMap;
 
 shader FSMain(in VSOutput FSin, out vec4 FragColor)
 {
-	float Depth = texture(gShadowMap, FSin.TexCoord).x;
-	Depth = 1.0 - (1.0 - Depth) * 25.0;
-	FragColor = vec4(Depth);
+	//float Depth = texture(gShadowMap, FSin.TexCoord).x;
+	//Depth = 1.0 - (1.0 - Depth) * 25.0;
+	//FragColor = vec4(Depth);
+	FragColor = vec4(texture(gShadowMap, FSin.TexCoord).xyz,1);
 }
 
 program BoneShadowMap
 {
 	vs(420)=VSBoneMain();
     fs(420)=FSMain();
-}
+};
 
 program StaticShadowMap
 {
 	vs(420)=VSStaticMain();
     fs(420)=FSMain();
-}
+};

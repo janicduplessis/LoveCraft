@@ -14,10 +14,13 @@ public:
 
 	void BindForWriting();
 
+	void BindForCopy();
+
 	void BindForReading(GLenum textureUnit);
 
 private:
 	GLuint m_fbo;
+	GLuint m_depthBuffer;
 	GLuint m_shadowMap;
 };
 

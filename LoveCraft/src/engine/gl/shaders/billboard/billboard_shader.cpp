@@ -1,9 +1,9 @@
 ﻿#include "billboard_shader.h"
 #include "engine/info.h"
 
-static const char* pEffectFile = SHADER_PATH "billboard/billboard.glsl";
+static const char* shaderFile = SHADER_PATH "billboard/billboard.glsl";
 
-BillboardShader::BillboardShader() : Shader(pEffectFile)
+BillboardShader::BillboardShader() : Shader(shaderFile)
 {
 
 }

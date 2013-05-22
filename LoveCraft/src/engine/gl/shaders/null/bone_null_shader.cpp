@@ -1,8 +1,8 @@
 #include "bone_null_shader.h"
 
-static const char* pEffectFile = SHADER_PATH "null/null.glsl";
+static const char* shaderFile = SHADER_PATH "null/null.glsl";
 
-BoneNullShader::BoneNullShader() : Shader(pEffectFile)
+BoneNullShader::BoneNullShader() : Shader(shaderFile)
 {   
 }
 

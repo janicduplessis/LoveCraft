@@ -2,9 +2,9 @@
 
 #include "bone_shadow_volume_shader.h"
 
-static const char* pEffectFile = SHADER_PATH "shadow/shadow_volume.glsl";
+static const char* shaderFile = SHADER_PATH "shadow/shadow_volume.glsl";
 
-BoneShadowVolumeShader::BoneShadowVolumeShader() : Shader(pEffectFile)
+BoneShadowVolumeShader::BoneShadowVolumeShader() : Shader(shaderFile)
 {   
 }
 
@@ -36,7 +36,7 @@ bool BoneShadowVolumeShader::Init()
 
 void BoneShadowVolumeShader::SetVP(const Matrix4f& VP)
 {
-    glUniformMatrix4fv(m_VPLocation, 1, GL_TRUE, (const GLfloat*)VP.m);    
+    glUniformMatrix4fv(m_VPLocation, 1, GL_TRUE, (const GLfloat*)VP.m);
 }
 
 

@@ -78,10 +78,9 @@ void TextureArray::Generate()
 	glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_T,GL_REPEAT);
 
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_GENERATE_MIPMAP, GL_TRUE);
-	glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
+	//glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
 
 	glTexImage3D(GL_TEXTURE_2D_ARRAY,0,GL_RGBA,m_textureSize,m_textureSize,sliceCount,0,GL_RGBA,GL_UNSIGNED_BYTE,m_data);
-	CHECK_GL_ERROR();
 
 	// Delete le data de la mémoire
 	delete m_data;

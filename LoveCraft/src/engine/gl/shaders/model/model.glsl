@@ -59,17 +59,15 @@ struct FSOutput
 	vec3 TexCoord;
 };                               
 
-sampler Sampler {
-	Dim = 2;
-} ColorTexture:0, NormalTexture:2;
-
+uniform sampler2D gColorTexture;
+uniform sampler2D gNormalTexture;
 
 shader FSmain(in VSOutput FSin, out FSOutput FSout)
 {   
 	// Normal mapping
 	vec3 Tangent = normalize(FSin.Tangent - dot(FSin.Tangent, FSin.Normal) * FSin.Normal);
     vec3 Bitangent = cross(Tangent, FSin.Normal);
-    vec3 BumpMapNormal = texture(NormalTexture, FSin.TexCoord.xy).xyz;
+    vec3 BumpMapNormal = texture(gNormalTexture, FSin.TexCoord.xy).xyz;
     BumpMapNormal = 2.0 * BumpMapNormal - vec3(1.0, 1.0, 1.0);
     vec3 NewNormal;
     mat3 TBN = mat3(Tangent, Bitangent, FSin.Normal);
@@ -77,7 +75,7 @@ shader FSmain(in VSOutput FSin, out FSOutput FSout)
     NewNormal = normalize(NewNormal);
 	
 	// TODO find better way for transparency
-	vec4 texel = texture(ColorTexture, FSin.TexCoord.xy);
+	vec4 texel = texture(gColorTexture, FSin.TexCoord.xy);
 	if (texel.x == 1.f && texel.y == 1.f && texel.z == 1.f) {
         discard;
     }

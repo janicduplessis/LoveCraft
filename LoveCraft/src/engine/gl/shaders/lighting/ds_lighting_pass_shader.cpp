@@ -4,9 +4,9 @@
 #include "ds_lighting_pass_shader.h"
 #include "util/tool.h"
 
-static const char* pEffectFile = SHADER_PATH "lighting/lighting_pass.glsl";
+static const char* shaderFile = SHADER_PATH "lighting/lighting_pass.glsl";
 
-DSLightingPassShader::DSLightingPassShader() : Shader(pEffectFile)
+DSLightingPassShader::DSLightingPassShader() : Shader(shaderFile)
 {   
 }
 
@@ -20,6 +20,8 @@ bool DSLightingPassShader::Init()
     m_matSpecularIntensityLocation = GetUniformLocation("gMatSpecularIntensity");
     m_matSpecularPowerLocation = GetUniformLocation("gSpecularPower");
     m_screenSizeLocation = GetUniformLocation("gScreenSize");
+	m_shadowMapLocation = GetUniformLocation("gShadowMap");
+	m_lightWVPLocation = GetUniformLocation("gLightWVP");
 
 	if (m_WVPLocation == INVALID_UNIFORM_LOCATION ||
         m_posTextureUnitLocation == INVALID_UNIFORM_LOCATION ||
@@ -48,15 +50,15 @@ void DSLightingPassShader::SetPositionTextureUnit(unsigned int TextureUnit)
 }
 
 
-void DSLightingPassShader::SetColorTextureUnit(unsigned int TextureUnit)
+void DSLightingPassShader::SetColorTextureUnit(unsigned int textureUnit)
 {
-    glUniform1i(m_colorTextureUnitLocation, TextureUnit);
+    glUniform1i(m_colorTextureUnitLocation, textureUnit);
 }
 
 
-void DSLightingPassShader::SetNormalTextureUnit(unsigned int TextureUnit)
+void DSLightingPassShader::SetNormalTextureUnit(unsigned int textureUnit)
 {
-    glUniform1i(m_normalTextureUnitLocation, TextureUnit);
+    glUniform1i(m_normalTextureUnitLocation, textureUnit);
 }
 
 
@@ -69,4 +71,14 @@ void DSLightingPassShader::SetEyeWorldPos(const Vector3f& EyePos)
 void DSLightingPassShader::SetScreenSize(unsigned int Width, unsigned int Height)
 {
     glUniform2f(m_screenSizeLocation, (float)Width, (float)Height);
+}
+
+void DSLightingPassShader::SetShadowMapTextureUnit(unsigned int textureUnit)
+{
+	glUniform1i(m_shadowMapLocation, textureUnit);
+}
+
+void DSLightingPassShader::SetLightWVP(const Matrix4f& WVP)
+{
+	glUniformMatrix4fv(m_lightWVPLocation, 1, GL_TRUE, (const GLfloat*)WVP.m);
 }

@@ -27,7 +27,9 @@ bool ShadowMapFBO::Init( unsigned int windowWidth, unsigned int windowHeight )
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
 	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_shadowMap, 0);
+
 	glDrawBuffer(GL_NONE);
+
 	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
 	if (Status != GL_FRAMEBUFFER_COMPLETE) {
@@ -41,11 +43,17 @@ bool ShadowMapFBO::Init( unsigned int windowWidth, unsigned int windowHeight )
 void ShadowMapFBO::BindForWriting()
 {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
+	//glDrawBuffer(GL_NONE);
 }
 
-void ShadowMapFBO::BindForReading( GLenum textureUnit )
+void ShadowMapFBO::BindForReading(GLenum textureUnit)
 {
 	glActiveTexture(textureUnit);
 	glBindTexture(GL_TEXTURE_2D, m_shadowMap);
+}
+
+void ShadowMapFBO::BindForCopy()
+{
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
 }
 
